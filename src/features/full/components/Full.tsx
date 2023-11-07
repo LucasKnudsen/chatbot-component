@@ -8,10 +8,7 @@ const defaultIconColor = 'white'
 
 export type FullProps = BotProps & BubbleParams
 
-export const Full = (
-  props: FullProps,
-  options?: { element: HTMLElement }
-) => {
+export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
   const [isBotDisplayed, setIsBotDisplayed] = createSignal(!options?.element)
 
   const launchBot = () => {
@@ -19,13 +16,12 @@ export const Full = (
   }
 
   const botLauncherObserver = new IntersectionObserver((intersections) => {
-    if (intersections.some((intersection) => intersection.isIntersecting))
-      launchBot()
+    if (intersections.some((intersection) => intersection.isIntersecting)) launchBot()
   })
 
   onMount(() => {
     if (options?.element) {
-      botLauncherObserver.observe(options.element);
+      botLauncherObserver.observe(options.element)
     }
   })
 
@@ -37,17 +33,18 @@ export const Full = (
 
   return (
     <>
-      <style>
-        {styles}
-      </style>
+      <style>{styles}</style>
       <Show when={isBotDisplayed()}>
         <div
           style={{
             'background-color': props.theme?.chatWindow?.backgroundColor || '#ffffff',
-            'height': props.theme?.chatWindow?.height ? `${props.theme?.chatWindow?.height.toString()}px` : '100vh',
-            'width': props.theme?.chatWindow?.width ?
-              `${props.theme?.chatWindow?.width.toString()}px` : '100%',
-            'margin': '0px'
+            height: props.theme?.chatWindow?.height
+              ? `${props.theme?.chatWindow?.height.toString()}px`
+              : '100vh',
+            width: props.theme?.chatWindow?.width
+              ? `${props.theme?.chatWindow?.width.toString()}px`
+              : '100%',
+            margin: '0px',
           }}
         >
           <Bot
@@ -65,7 +62,8 @@ export const Full = (
             chatflowid={props.chatflowid}
             chatflowConfig={props.chatflowConfig}
             apiHost={props.apiHost}
-            isFullPage={true} />
+            isFullPage={true}
+          />
         </div>
       </Show>
     </>

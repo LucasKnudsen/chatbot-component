@@ -7,10 +7,7 @@ export const Avatar = (props: { initialAvatarSrc?: string }) => {
   const [avatarSrc, setAvatarSrc] = createSignal(props.initialAvatarSrc)
 
   createEffect(() => {
-    if (
-      avatarSrc()?.startsWith('{{') &&
-      props.initialAvatarSrc?.startsWith('http')
-    )
+    if (avatarSrc()?.startsWith('{{') && props.initialAvatarSrc?.startsWith('http'))
       setAvatarSrc(props.initialAvatarSrc)
   })
 
@@ -22,11 +19,7 @@ export const Avatar = (props: { initialAvatarSrc?: string }) => {
           (isMobile() ? 'w-6 h-6 text-sm' : 'w-10 h-10 text-xl')
         }
       >
-        <img
-          src={avatarSrc()}
-          alt="Bot avatar"
-          class="rounded-full object-cover w-full h-full"
-        />
+        <img src={avatarSrc()} alt='Bot avatar' class='rounded-full object-cover w-full h-full' />
       </figure>
     </Show>
   )
