@@ -1,7 +1,7 @@
 import { Bot, BotProps } from '@/components/Bot'
 import { BubbleParams } from '@/features/bubble/types'
 import { Show, createSignal, onCleanup, onMount } from 'solid-js'
-import styles from '../../../assets/index.css'
+import styles from '../../../assets/index.css?inline'
 
 const defaultButtonColor = '#3B81F6'
 const defaultIconColor = 'white'
@@ -25,15 +25,13 @@ export const Full = (
 
   onMount(() => {
     if (options?.element) {
-      botLauncherObserver.observe(options.element)
-
+      botLauncherObserver.observe(options.element);
     }
   })
 
   onCleanup(() => {
     if (options?.element) {
       botLauncherObserver.disconnect()
-
     }
   })
 
@@ -47,7 +45,8 @@ export const Full = (
           style={{
             'background-color': props.theme?.chatWindow?.backgroundColor || '#ffffff',
             'height': props.theme?.chatWindow?.height ? `${props.theme?.chatWindow?.height.toString()}px` : '100vh',
-            'width': props.theme?.chatWindow?.width ? `${props.theme?.chatWindow?.width.toString()}px` : '100%',
+            'width': props.theme?.chatWindow?.width ?
+              `${props.theme?.chatWindow?.width.toString()}px` : '100%',
             'margin': '0px'
           }}
         >
