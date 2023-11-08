@@ -12,8 +12,15 @@
       "AmplifyAppId": "d1i4jp82axmvxl"
     },
     "categories": {
+      "function": {
+        "flowiseMiddleware": {
+          "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
+          "s3Key": "amplify-builds/flowiseMiddleware-39794255564b37477468-build.zip"
+        }
+      },
       "api": {
-        "digitaltwin": {}
+        "digitaltwin": {},
+        "digitaltwinRest": {}
       }
     }
   }

@@ -8,7 +8,6 @@ import socketIOClient from 'socket.io-client'
 import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
 import { v4 as uuidv4 } from 'uuid'
 import { Badge } from './Badge'
-// @ts-ignore
 import awsconfig from '../aws-exports'
 import { BotBubble } from './bubbles/BotBubble'
 import { GuestBubble } from './bubbles/GuestBubble'
@@ -275,7 +274,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
       const errorData =
         typeof err === 'string'
           ? err
-          : err.response.data || `${err.response.status}: ${err.response.statusText}`
+          : err.response
+          ? err.response.data || `${err.response.status}: ${err.response.statusText}`
+          : `${err}`
       handleError(errorData)
       return
     }
