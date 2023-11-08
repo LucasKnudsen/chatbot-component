@@ -5,13 +5,29 @@ const axios = require('axios')
  */
 exports.handler = async (event) => {
   console.log(`EVENT: ${JSON.stringify(event)}`)
-  return {
-    statusCode: 200,
-    //  Uncomment below to enable CORS requests
-    //  headers: {
-    //      "Access-Control-Allow-Origin": "*",
-    //      "Access-Control-Allow-Headers": "*"
-    //  },
-    body: JSON.stringify('Hello from Lambda!'),
+
+  const chatflowid = 'ca719387-f573-4989-aea0-21dc07d5ca73'
+  const apiHost = 'https://flowise.testnet.concordium.com'
+
+  const endpoint = `${apiHost}/api/v1/prediction/${chatflowid}`
+
+  try {
+    const result = await axios.post(endpoint, event.body)
+
+    const answer = result.data
+
+    return {
+      statusCode: 200,
+      //  headers: {
+      //      "Access-Control-Allow-Origin": "*",
+      //      "Access-Control-Allow-Headers": "*"
+      //  },
+      body: JSON.stringify(answer),
+    }
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify(error),
+    }
   }
 }

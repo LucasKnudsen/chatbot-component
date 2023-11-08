@@ -1,5 +1,6 @@
 import { MessageType } from '@/components/Bot'
 import { sendRequest } from '@/utils/index'
+// import { API } from 'aws-amplify'
 
 export type IncomingInput = {
   question: string
@@ -15,16 +16,9 @@ export type MessageRequest = {
   body?: IncomingInput
 }
 
-export const sendMessageQuery = ({
-  chatflowid,
-  apiHost = 'http://localhost:3000',
-  body,
-}: MessageRequest) =>
-  sendRequest<any>({
-    method: 'POST',
-    url: `${apiHost}/api/v1/prediction/${chatflowid}`,
-    body,
-  })
+export function sendMessageQuery({ body }: MessageRequest) {
+  // return API.post('digitaltwinRest', '/flowise/middleware', body!)
+}
 
 export const isStreamAvailableQuery = ({
   chatflowid,

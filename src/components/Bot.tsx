@@ -1,4 +1,4 @@
-import { Amplify } from 'aws-amplify'
+// import { Amplify } from 'aws-amplify'
 import { DeleteButton } from '@/components/SendButton'
 import { Avatar } from '@/components/avatars/Avatar'
 import { BotMessageTheme, TextInputTheme, UserMessageTheme } from '@/features/bubble/types'
