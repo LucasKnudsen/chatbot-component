@@ -1,0 +1,20 @@
+{
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-digitaltwin-prod-110407-authRole",
+      "UnauthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-prod-110407-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-prod-110407-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-digitaltwin-prod-110407-deployment",
+      "UnauthRoleName": "amplify-digitaltwin-prod-110407-unauthRole",
+      "StackName": "amplify-digitaltwin-prod-110407",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:047845575339:stack/amplify-digitaltwin-prod-110407/f67b0b70-7570-11ee-8cac-06c582aaa8b4",
+      "AmplifyAppId": "d1s2r03t8refn8"
+    },
+    "categories": {
+      "function": {
+        "flowiseMiddleware": {}
+      }
+    }
+  }
+}

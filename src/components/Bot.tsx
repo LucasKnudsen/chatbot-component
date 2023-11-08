@@ -1,3 +1,4 @@
+import { Amplify } from 'aws-amplify'
 import { DeleteButton } from '@/components/SendButton'
 import { Avatar } from '@/components/avatars/Avatar'
 import { BotMessageTheme, TextInputTheme, UserMessageTheme } from '@/features/bubble/types'
@@ -7,11 +8,15 @@ import socketIOClient from 'socket.io-client'
 import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
 import { v4 as uuidv4 } from 'uuid'
 import { Badge } from './Badge'
+// @ts-ignore
+import awsconfig from '../aws-exports'
 import { BotBubble } from './bubbles/BotBubble'
 import { GuestBubble } from './bubbles/GuestBubble'
 import { LoadingBubble } from './bubbles/LoadingBubble'
 import { SourceBubble } from './bubbles/SourceBubble'
 import { TextInput } from './inputs/textInput'
+
+Amplify.configure(awsconfig)
 
 type messageType = 'apiMessage' | 'userMessage' | 'usermessagewaiting'
 
