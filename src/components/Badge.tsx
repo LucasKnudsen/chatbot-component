@@ -40,7 +40,6 @@ export const Badge = (props: Props) => {
     <span
       style={{
         'font-size': '13px',
-        position: 'absolute',
         bottom: 0,
         padding: '10px',
         margin: 'auto',
@@ -53,14 +52,14 @@ export const Badge = (props: Props) => {
       Powered by
       <a
         ref={liteBadge}
-        href={'https://flowiseai.com'}
+        href='#'
         target='_blank'
         rel='noopener noreferrer'
         class='lite-badge'
         id='lite-badge'
         style={{ 'font-weight': 'bold', color: props.poweredByTextColor ?? defaultTextColor }}
       >
-        <span> Flowise</span>
+        <span> Fraia</span>
       </a>
     </span>
   )
