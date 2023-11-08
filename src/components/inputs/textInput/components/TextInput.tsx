@@ -1,7 +1,7 @@
-import { ShortTextInput } from './ShortTextInput'
-import { isMobile } from '@/utils/isMobileSignal'
-import { createSignal, createEffect, onMount } from 'solid-js'
 import { SendButton } from '@/components/SendButton'
+import { isMobile } from '@/utils/isMobileSignal'
+import { createEffect, createSignal, onMount } from 'solid-js'
+import { ShortTextInput } from './ShortTextInput'
 
 type Props = {
   placeholder?: string
@@ -50,12 +50,7 @@ export const TextInput = (props: Props) => {
       data-testid='input'
       style={{
         'border-top': '1px solid #eeeeee',
-        position: 'absolute',
-        left: '20px',
-        right: '20px',
-        bottom: '40px',
         margin: 'auto',
-        'z-index': 1000,
         'background-color': props.backgroundColor ?? defaultBackgroundColor,
         color: props.textColor ?? defaultTextColor,
       }}

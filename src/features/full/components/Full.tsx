@@ -1,7 +1,7 @@
 import { Bot, BotProps } from '@/components/Bot'
 import { BubbleParams } from '@/features/bubble/types'
 import { Show, createSignal, onCleanup, onMount } from 'solid-js'
-import styles from '../../../assets/index.css?inline'
+import styles from '../../../index.css?inline'
 
 const defaultButtonColor = '#3B81F6'
 const defaultIconColor = 'white'
@@ -9,7 +9,9 @@ const defaultIconColor = 'white'
 export type FullProps = BotProps & BubbleParams
 
 export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
-  const [isBotDisplayed, setIsBotDisplayed] = createSignal(!options?.element)
+  const isWebComponent = !!options
+
+  const [isBotDisplayed, setIsBotDisplayed] = createSignal(!isWebComponent)
 
   const launchBot = () => {
     setIsBotDisplayed(true)
@@ -20,20 +22,20 @@ export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
   })
 
   onMount(() => {
-    if (options?.element) {
+    if (isWebComponent) {
       botLauncherObserver.observe(options.element)
     }
   })
 
   onCleanup(() => {
-    if (options?.element) {
+    if (isWebComponent) {
       botLauncherObserver.disconnect()
     }
   })
 
   return (
     <>
-      <style>{styles}</style>
+      {isWebComponent && <style>{styles}</style>}
       <Show when={isBotDisplayed()}>
         <div
           style={{

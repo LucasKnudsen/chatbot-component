@@ -1,6 +1,6 @@
-import styles from '../../../assets/index.css'
-import { createSignal, Show, splitProps, createEffect, onMount } from 'solid-js'
 import { isNotDefined } from '@/utils/index'
+import { Show, createEffect, createSignal, onMount, splitProps } from 'solid-js'
+import styles from '../../../index.css?inline'
 
 export type PopupProps = {
   value?: any
@@ -31,7 +31,7 @@ function syntaxHighlight(json: any) {
         cls = 'null'
       }
       return '<span class="' + cls + '">' + match + '</span>'
-    },
+    }
   )
 }
 
@@ -48,7 +48,7 @@ export const Popup = (props: PopupProps) => {
 
   const [isBotOpened, setIsBotOpened] = createSignal(
     // eslint-disable-next-line solid/reactivity
-    popupProps.isOpen ?? false,
+    popupProps.isOpen ?? false
   )
 
   createEffect(() => {

@@ -23,6 +23,7 @@ export type MessageType = {
 
 export type BotProps = {
   chatflowid: string
+  promptSuggestions?: string[]
   apiHost?: string
   chatflowConfig?: Record<string, unknown>
   welcomeMessage?: string
@@ -386,103 +387,96 @@ export const Bot = (props: BotProps & { class?: string }) => {
       <div
         ref={botContainer}
         class={
-          'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col items-center chatbot-container ' +
+          'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container' +
           props.class
         }
       >
-        <div class='flex w-full h-full justify-center'>
-          <div
-            style={{ 'padding-bottom': '100px', 'padding-top': '70px' }}
-            ref={chatContainer}
-            class='overflow-y-scroll min-w-full w-full min-h-full px-3 pt-10 relative scrollable-container chatbot-chat-view scroll-smooth'
+        <div
+          style={{
+            background: props.bubbleBackgroundColor,
+            color: props.bubbleTextColor,
+            'border-top-left-radius': props.isFullPage ? '0px' : '6px',
+            'border-top-right-radius': props.isFullPage ? '0px' : '6px',
+          }}
+        >
+          <Show when={props.titleAvatarSrc}>
+            <>
+              <div style={{ width: '15px' }} />
+              <Avatar initialAvatarSrc={props.titleAvatarSrc} />
+            </>
+          </Show>
+          <Show when={props.title}>
+            <span class='px-3 whitespace-pre-wrap font-semibold max-w-full'>{props.title}</span>
+          </Show>
+          <div style={{ flex: 1 }} />
+          <DeleteButton
+            sendButtonColor={props.bubbleTextColor}
+            type='button'
+            isDisabled={messages().length === 1}
+            class='my-2 ml-2'
+            on:click={clearChat}
           >
-            <For each={[...messages()]}>
-              {(message, index) => (
-                <>
-                  {message.type === 'userMessage' && (
-                    <GuestBubble
-                      message={message.message}
-                      backgroundColor={props.userMessage?.backgroundColor}
-                      textColor={props.userMessage?.textColor}
-                      showAvatar={props.userMessage?.showAvatar}
-                      avatarSrc={props.userMessage?.avatarSrc}
-                    />
-                  )}
-                  {message.type === 'apiMessage' && (
-                    <BotBubble
-                      message={message.message}
-                      backgroundColor={props.botMessage?.backgroundColor}
-                      textColor={props.botMessage?.textColor}
-                      showAvatar={props.botMessage?.showAvatar}
-                      avatarSrc={props.botMessage?.avatarSrc}
-                    />
-                  )}
-                  {message.type === 'userMessage' &&
-                    loading() &&
-                    index() === messages().length - 1 && <LoadingBubble />}
-                  {message.sourceDocuments && message.sourceDocuments.length && (
-                    <div style={{ display: 'flex', 'flex-direction': 'row', width: '100%' }}>
-                      <For each={[...removeDuplicateURL(message)]}>
-                        {(src) => {
-                          const URL = isValidURL(src.metadata.source)
-                          return (
-                            <SourceBubble
-                              pageContent={URL ? URL.pathname : src.pageContent}
-                              metadata={src.metadata}
-                              onSourceClick={() => {
-                                if (URL) {
-                                  window.open(src.metadata.source, '_blank')
-                                } else {
-                                  setSourcePopupSrc(src)
-                                  setSourcePopupOpen(true)
-                                }
-                              }}
-                            />
-                          )
-                        }}
-                      </For>
-                    </div>
-                  )}
-                </>
-              )}
-            </For>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              'flex-direction': 'row',
-              'align-items': 'center',
-              height: '50px',
-              position: props.isFullPage ? 'fixed' : 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              background: props.bubbleBackgroundColor,
-              color: props.bubbleTextColor,
-              'border-top-left-radius': props.isFullPage ? '0px' : '6px',
-              'border-top-right-radius': props.isFullPage ? '0px' : '6px',
-            }}
-          >
-            <Show when={props.titleAvatarSrc}>
+            <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
+          </DeleteButton>
+        </div>
+
+        <div
+          ref={chatContainer}
+          class='flex-1 overflow-y-scroll pt-16 px-3 relative scrollable-container max-w-3xl scroll-smooth'
+        >
+          <For each={[...messages()]}>
+            {(message, index) => (
               <>
-                <div style={{ width: '15px' }} />
-                <Avatar initialAvatarSrc={props.titleAvatarSrc} />
+                {message.type === 'userMessage' && (
+                  <GuestBubble
+                    message={message.message}
+                    backgroundColor={props.userMessage?.backgroundColor}
+                    textColor={props.userMessage?.textColor}
+                    showAvatar={props.userMessage?.showAvatar}
+                    avatarSrc={props.userMessage?.avatarSrc}
+                  />
+                )}
+                {message.type === 'apiMessage' && (
+                  <BotBubble
+                    message={message.message}
+                    backgroundColor={props.botMessage?.backgroundColor}
+                    textColor={props.botMessage?.textColor}
+                    showAvatar={props.botMessage?.showAvatar}
+                    avatarSrc={props.botMessage?.avatarSrc}
+                  />
+                )}
+                {message.type === 'userMessage' &&
+                  loading() &&
+                  index() === messages().length - 1 && <LoadingBubble />}
+                {message.sourceDocuments && message.sourceDocuments.length && (
+                  <div style={{ display: 'flex', 'flex-direction': 'row', width: '100%' }}>
+                    <For each={[...removeDuplicateURL(message)]}>
+                      {(src) => {
+                        const URL = isValidURL(src.metadata.source)
+                        return (
+                          <SourceBubble
+                            pageContent={URL ? URL.pathname : src.pageContent}
+                            metadata={src.metadata}
+                            onSourceClick={() => {
+                              if (URL) {
+                                window.open(src.metadata.source, '_blank')
+                              } else {
+                                setSourcePopupSrc(src)
+                                setSourcePopupOpen(true)
+                              }
+                            }}
+                          />
+                        )
+                      }}
+                    </For>
+                  </div>
+                )}
               </>
-            </Show>
-            <Show when={props.title}>
-              <span class='px-3 whitespace-pre-wrap font-semibold max-w-full'>{props.title}</span>
-            </Show>
-            <div style={{ flex: 1 }} />
-            <DeleteButton
-              sendButtonColor={props.bubbleTextColor}
-              type='button'
-              isDisabled={messages().length === 1}
-              class='my-2 ml-2'
-              on:click={clearChat}
-            >
-              <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
-            </DeleteButton>
-          </div>
+            )}
+          </For>
+        </div>
+
+        <div class='w-full pl-5 pr-5 pb-1'>
           <TextInput
             backgroundColor={props.textInput?.backgroundColor}
             textColor={props.textInput?.textColor}
@@ -494,12 +488,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
             onSubmit={handleSubmit}
           />
         </div>
+
         <Badge
           badgeBackgroundColor={props.badgeBackgroundColor}
           poweredByTextColor={props.poweredByTextColor}
           botContainer={botContainer}
         />
-        <BottomSpacer ref={bottomSpacer} />
       </div>
       {sourcePopupOpen() && (
         <Popup
@@ -516,5 +510,5 @@ type BottomSpacerProps = {
   ref: HTMLDivElement | undefined
 }
 const BottomSpacer = (props: BottomSpacerProps) => {
-  return <div ref={props.ref} class='w-full h-32' />
+  return <div ref={props.ref} class='w-full h-[120px]' />
 }
