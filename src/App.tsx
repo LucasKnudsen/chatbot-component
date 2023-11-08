@@ -1,5 +1,6 @@
 import './dev.css'
 import { Full } from './features/full'
+import './index.css'
 
 function App() {
   return (
