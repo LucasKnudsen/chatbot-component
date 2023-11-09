@@ -25,6 +25,14 @@
           ],
           "category": "function",
           "resourceName": "flowiseMiddleware"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "flowiseBroadcast"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -33,6 +41,11 @@
   },
   "auth": {},
   "function": {
+    "flowiseBroadcast": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "flowiseMiddleware": {
       "build": true,
       "providerPlugin": "awscloudformation",
