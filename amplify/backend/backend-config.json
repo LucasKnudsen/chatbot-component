@@ -43,6 +43,17 @@
   "function": {
     "flowiseBroadcast": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
