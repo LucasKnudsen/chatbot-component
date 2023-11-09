@@ -1,11 +1,11 @@
 import { DeleteButton } from '@/components/SendButton'
 import { Avatar } from '@/components/avatars/Avatar'
 import { BotMessageTheme, TextInputTheme, UserMessageTheme } from '@/features/bubble/types'
+import { useSocket } from '@/features/messages/hooks/useSocket'
 import { removeDuplicateURL } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
 import { IncomingInput, isStreamAvailableQuery, sendMessageQuery } from '@/queries/sendMessageQuery'
 import { isValidURL } from '@/utils/isValidUrl'
-import socketIOClient from 'socket.io-client'
 import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
 import { v4 as uuidv4 } from 'uuid'
 import { Badge } from '../../../components/Badge'
@@ -142,22 +142,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
     ],
     { equals: false }
   )
-  const [socketIOClientId, setSocketIOClientId] = createSignal('')
   const [isChatFlowAvailableToStream, setIsChatFlowAvailableToStream] = createSignal(false)
   const [chatId, setChatId] = createSignal(uuidv4())
-
-  onMount(() => {
-    if (!bottomSpacer) return
-    setTimeout(() => {
-      chatContainer?.scrollTo(0, chatContainer.scrollHeight)
-    }, 50)
-  })
-
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      chatContainer?.scrollTo(0, chatContainer.scrollHeight)
-    }, 50)
-  }
 
   /**
    * Add each chat message into localStorage
@@ -195,6 +181,26 @@ export const Bot = (props: BotProps & { class?: string }) => {
       addChatMessage(updated)
       return [...updated]
     })
+  }
+
+  const socketIOClientId = useSocket(
+    props.apiHost as string,
+    () => setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }]),
+    updateLastMessageSourceDocuments,
+    updateLastMessage
+  )
+
+  onMount(() => {
+    if (!bottomSpacer) return
+    setTimeout(() => {
+      chatContainer?.scrollTo(0, chatContainer.scrollHeight)
+    }, 50)
+  })
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      chatContainer?.scrollTo(0, chatContainer.scrollHeight)
+    }, 50)
   }
 
   // Handle errors
@@ -338,20 +344,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
       setIsChatFlowAvailableToStream(data?.isStreaming ?? false)
     }
 
-    const socket = socketIOClient(props.apiHost as string)
-
-    socket.on('connect', () => {
-      setSocketIOClientId(socket.id)
-    })
-
-    socket.on('start', () => {
-      setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }])
-    })
-
-    socket.on('sourceDocuments', updateLastMessageSourceDocuments)
-
-    socket.on('token', updateLastMessage)
-
     // eslint-disable-next-line solid/reactivity
     return () => {
       setUserInput('')
@@ -362,11 +354,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
           type: 'apiMessage',
         },
       ])
-
-      if (socket) {
-        socket.disconnect()
-        setSocketIOClientId('')
-      }
     }
   })
 
