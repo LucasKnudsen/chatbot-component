@@ -2,9 +2,11 @@ import { Amplify } from 'aws-amplify'
 import { DeleteButton } from '@/components/SendButton'
 import { Avatar } from '@/components/avatars/Avatar'
 import { BotMessageTheme, TextInputTheme, UserMessageTheme } from '@/features/bubble/types'
+import { useSocket } from '@/features/messages/hooks/useSocket'
+import { removeDuplicateURL } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
-import { IncomingInput, isStreamAvailableQuery, sendMessageQuery } from '@/queries/sendMessageQuery'
-import socketIOClient from 'socket.io-client'
+import { IncomingInput, sendMessageQuery } from '@/queries/sendMessageQuery'
+import { isValidURL } from '@/utils/isValidUrl'
 import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
 import { v4 as uuidv4 } from 'uuid'
 import { Badge } from '@/components/Badge'
@@ -145,22 +147,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
     ],
     { equals: false }
   )
-  const [socketIOClientId, setSocketIOClientId] = createSignal('')
-  const [isChatFlowAvailableToStream, setIsChatFlowAvailableToStream] = createSignal(false)
+  // const [isChatFlowAvailableToStream, setIsChatFlowAvailableToStream] = createSignal(false)
   const [chatId, setChatId] = createSignal(uuidv4())
-
-  onMount(() => {
-    if (!bottomSpacer) return
-    setTimeout(() => {
-      chatContainer?.scrollTo(0, chatContainer.scrollHeight)
-    }, 50)
-  })
-
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      chatContainer?.scrollTo(0, chatContainer.scrollHeight)
-    }, 50)
-  }
 
   /**
    * Add each chat message into localStorage
@@ -180,7 +168,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
         }
         return item
       })
+
       addChatMessage(updated)
+
       return [...updated]
     })
   }
@@ -196,6 +186,27 @@ export const Bot = (props: BotProps & { class?: string }) => {
       addChatMessage(updated)
       return [...updated]
     })
+  }
+
+  const { socketIOClientId, isChatFlowAvailableToStream } = useSocket(
+    props.chatflowid,
+    props.apiHost as string,
+    () => setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }]),
+    updateLastMessageSourceDocuments,
+    updateLastMessage
+  )
+
+  onMount(() => {
+    if (!bottomSpacer) return
+    setTimeout(() => {
+      chatContainer?.scrollTo(0, chatContainer.scrollHeight)
+    }, 50)
+  })
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      chatContainer?.scrollTo(0, chatContainer.scrollHeight)
+    }, 50)
   }
 
   // Handle errors
@@ -312,42 +323,25 @@ export const Bot = (props: BotProps & { class?: string }) => {
   // eslint-disable-next-line solid/reactivity
   createEffect(async () => {
     const chatMessage = localStorage.getItem(`${props.chatflowid}_EXTERNAL`)
+
     if (chatMessage) {
       const objChatMessage = JSON.parse(chatMessage)
+
       setChatId(objChatMessage.chatId)
+
       const loadedMessages = objChatMessage.chatHistory.map((message: MessageType) => {
         const chatHistory: MessageType = {
           message: message.message,
           type: message.type,
         }
+
         if (message.sourceDocuments) chatHistory.sourceDocuments = message.sourceDocuments
+
         return chatHistory
       })
+
       setMessages([...loadedMessages])
     }
-
-    const { data } = await isStreamAvailableQuery({
-      chatflowid: props.chatflowid,
-      apiHost: props.apiHost,
-    })
-
-    if (data) {
-      setIsChatFlowAvailableToStream(data?.isStreaming ?? false)
-    }
-
-    const socket = socketIOClient(props.apiHost as string)
-
-    socket.on('connect', () => {
-      setSocketIOClientId(socket.id)
-    })
-
-    socket.on('start', () => {
-      setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }])
-    })
-
-    socket.on('sourceDocuments', updateLastMessageSourceDocuments)
-
-    socket.on('token', updateLastMessage)
 
     // eslint-disable-next-line solid/reactivity
     return () => {
@@ -359,35 +353,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
           type: 'apiMessage',
         },
       ])
-      if (socket) {
-        socket.disconnect()
-        setSocketIOClientId('')
-      }
     }
   })
-
-  const isValidURL = (url: string): URL | undefined => {
-    try {
-      return new URL(url)
-    } catch (err) {
-      return undefined
-    }
-  }
-
-  const removeDuplicateURL = (message: MessageType) => {
-    const visitedURLs: string[] = []
-    const newSourceDocuments: any = []
-
-    message.sourceDocuments.forEach((source: any) => {
-      if (isValidURL(source.metadata.source) && !visitedURLs.includes(source.metadata.source)) {
-        visitedURLs.push(source.metadata.source)
-        newSourceDocuments.push(source)
-      } else if (!isValidURL(source.metadata.source)) {
-        newSourceDocuments.push(source)
-      }
-    })
-    return newSourceDocuments
-  }
 
   return (
     <>
@@ -399,6 +366,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
         }
       >
         <div
+          class='flex'
           style={{
             background: props.bubbleBackgroundColor,
             color: props.bubbleTextColor,
@@ -407,15 +375,16 @@ export const Bot = (props: BotProps & { class?: string }) => {
           }}
         >
           <Show when={props.titleAvatarSrc}>
-            <>
-              <div style={{ width: '15px' }} />
-              <Avatar initialAvatarSrc={props.titleAvatarSrc} />
-            </>
+            <div class='w-4' />
+            <Avatar initialAvatarSrc={props.titleAvatarSrc} />
           </Show>
+
           <Show when={props.title}>
             <span class='px-3 whitespace-pre-wrap font-semibold max-w-full'>{props.title}</span>
           </Show>
-          <div style={{ flex: 1 }} />
+
+          <div class='flex-1' />
+
           <DeleteButton
             sendButtonColor={props.bubbleTextColor}
             type='button'
@@ -443,6 +412,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                     avatarSrc={props.userMessage?.avatarSrc}
                   />
                 )}
+
                 {message.type === 'apiMessage' && (
                   <BotBubble
                     message={message.message}
@@ -452,14 +422,18 @@ export const Bot = (props: BotProps & { class?: string }) => {
                     avatarSrc={props.botMessage?.avatarSrc}
                   />
                 )}
+
                 {message.type === 'userMessage' &&
                   loading() &&
                   index() === messages().length - 1 && <LoadingBubble />}
+
+                {/* Popups */}
                 {message.sourceDocuments && message.sourceDocuments.length && (
-                  <div style={{ display: 'flex', 'flex-direction': 'row', width: '100%' }}>
+                  <div class='flex w-full'>
                     <For each={[...removeDuplicateURL(message)]}>
                       {(src) => {
                         const URL = isValidURL(src.metadata.source)
+
                         return (
                           <SourceBubble
                             pageContent={URL ? URL.pathname : src.pageContent}
@@ -511,11 +485,4 @@ export const Bot = (props: BotProps & { class?: string }) => {
       )}
     </>
   )
-}
-
-type BottomSpacerProps = {
-  ref: HTMLDivElement | undefined
-}
-const BottomSpacer = (props: BottomSpacerProps) => {
-  return <div ref={props.ref} class='w-full h-[120px]' />
 }
