@@ -4,7 +4,7 @@ import { BotMessageTheme, TextInputTheme, UserMessageTheme } from '@/features/bu
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { removeDuplicateURL } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
-import { IncomingInput, isStreamAvailableQuery, sendMessageQuery } from '@/queries/sendMessageQuery'
+import { IncomingInput, sendMessageQuery } from '@/queries/sendMessageQuery'
 import { isValidURL } from '@/utils/isValidUrl'
 import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
 import { v4 as uuidv4 } from 'uuid'
@@ -142,7 +142,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     ],
     { equals: false }
   )
-  const [isChatFlowAvailableToStream, setIsChatFlowAvailableToStream] = createSignal(false)
+  // const [isChatFlowAvailableToStream, setIsChatFlowAvailableToStream] = createSignal(false)
   const [chatId, setChatId] = createSignal(uuidv4())
 
   /**
@@ -183,7 +183,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
     })
   }
 
-  const socketIOClientId = useSocket(
+  const { socketIOClientId, isChatFlowAvailableToStream } = useSocket(
+    props.chatflowid,
     props.apiHost as string,
     () => setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }]),
     updateLastMessageSourceDocuments,
@@ -333,15 +334,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
       })
 
       setMessages([...loadedMessages])
-    }
-
-    const { data } = await isStreamAvailableQuery({
-      chatflowid: props.chatflowid,
-      apiHost: props.apiHost,
-    })
-
-    if (data) {
-      setIsChatFlowAvailableToStream(data?.isStreaming ?? false)
     }
 
     // eslint-disable-next-line solid/reactivity
