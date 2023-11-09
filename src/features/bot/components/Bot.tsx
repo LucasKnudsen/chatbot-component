@@ -6,12 +6,12 @@ import { IncomingInput, isStreamAvailableQuery, sendMessageQuery } from '@/queri
 import socketIOClient from 'socket.io-client'
 import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
 import { v4 as uuidv4 } from 'uuid'
-import { Badge } from './Badge'
-import { BotBubble } from './bubbles/BotBubble'
-import { GuestBubble } from './bubbles/GuestBubble'
-import { LoadingBubble } from './bubbles/LoadingBubble'
-import { SourceBubble } from './bubbles/SourceBubble'
-import { TextInput } from './inputs/textInput'
+import { Badge } from '../../../components/Badge'
+import { BotBubble } from '../../../components/bubbles/BotBubble'
+import { GuestBubble } from '../../../components/bubbles/GuestBubble'
+import { LoadingBubble } from '../../../components/bubbles/LoadingBubble'
+import { SourceBubble } from '../../../components/bubbles/SourceBubble'
+import { TextInput } from '../../../components/inputs/textInput'
 
 type messageType = 'apiMessage' | 'userMessage' | 'usermessagewaiting'
 

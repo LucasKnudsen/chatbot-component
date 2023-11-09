@@ -1,4 +1,4 @@
-import { MessageType } from '@/components/Bot'
+import { MessageType } from '@/features/bot/components/Bot'
 import { sendRequest } from '@/utils/index'
 
 export type IncomingInput = {
