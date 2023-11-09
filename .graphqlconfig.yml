@@ -1,0 +1,16 @@
+projects:
+  digitaltwin:
+    schemaPath: src/graphql/schema.json
+    includes:
+      - src/graphql/**/*.ts
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: typescript
+        generatedFileName: src/graphql/types.ts
+        docsFilePath: src/graphql
+        maxDepth: 5
+extensions:
+  amplify:
+    version: 3

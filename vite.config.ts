@@ -10,9 +10,14 @@ export default defineConfig({
       entry: path.resolve(__dirname, 'src/web.ts'),
     },
   },
+  // Fixes the Amplify global issue
+  define: {
+    global: {},
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      './runtimeConfig': './runtimeConfig.browser',
     },
   },
 })

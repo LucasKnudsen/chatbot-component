@@ -1,0 +1,8 @@
+type Channel {
+  sessionId: String!
+  data: AWSJSON!
+}
+
+type Mutation {
+  publish2channel(sessionId: String!, data: AWSJSON!): Channel
+}

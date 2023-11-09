@@ -1,0 +1,27 @@
+{
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-digitaltwin-prod-121451-authRole",
+      "UnauthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-prod-121451-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-prod-121451-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
+      "UnauthRoleName": "amplify-digitaltwin-prod-121451-unauthRole",
+      "StackName": "amplify-digitaltwin-prod-121451",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:047845575339:stack/amplify-digitaltwin-prod-121451/0bced500-7e28-11ee-9459-02fc87cf7948",
+      "AmplifyAppId": "d1i4jp82axmvxl"
+    },
+    "categories": {
+      "function": {
+        "flowiseMiddleware": {
+          "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
+          "s3Key": "amplify-builds/flowiseMiddleware-75385a456c4d704a7169-build.zip"
+        }
+      },
+      "api": {
+        "digitaltwin": {},
+        "digitaltwinRest": {}
+      }
+    }
+  }
+}

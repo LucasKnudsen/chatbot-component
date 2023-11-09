@@ -1,0 +1,60 @@
+{
+  "api": {
+    "digitaltwin": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    },
+    "digitaltwinRest": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "flowiseMiddleware"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "auth": {},
+  "function": {
+    "flowiseMiddleware": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_flowiseMiddleware_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "flowiseMiddleware"
+        }
+      ]
+    },
+    "AMPLIFY_function_flowiseMiddleware_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "flowiseMiddleware"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/flowise/middleware": {
+      "name": "/flowise/middleware",
+      "lambdaFunction": "flowiseMiddleware",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
