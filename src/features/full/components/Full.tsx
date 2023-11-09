@@ -1,4 +1,4 @@
-import { Bot, BotProps } from '@/components/Bot'
+import { Bot, BotProps } from '@/features/bot/components/Bot'
 import { BubbleParams } from '@/features/bubble/types'
 import { Show, createSignal, onCleanup, onMount } from 'solid-js'
 import styles from '../../../index.css?inline'
