@@ -41,6 +41,11 @@
   },
   "auth": {},
   "function": {
+    "broadcastResolver": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "flowiseBroadcast": {
       "build": true,
       "dependsOn": [
@@ -64,6 +69,38 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_broadcastResolver_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "broadcastResolver"
+        }
+      ]
+    },
+    "AMPLIFY_function_broadcastResolver_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "broadcastResolver"
+        }
+      ]
+    },
+    "AMPLIFY_function_flowiseBroadcast_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "flowiseBroadcast"
+        }
+      ]
+    },
+    "AMPLIFY_function_flowiseBroadcast_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "flowiseBroadcast"
+        }
+      ]
+    },
     "AMPLIFY_function_flowiseMiddleware_deploymentBucketName": {
       "usedBy": [
         {

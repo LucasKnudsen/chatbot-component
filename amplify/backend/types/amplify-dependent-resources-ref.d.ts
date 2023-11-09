@@ -12,6 +12,20 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "broadcastResolver": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "flowiseBroadcast": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "flowiseMiddleware": {
       "Arn": "string",
       "LambdaExecutionRole": "string",

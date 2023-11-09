@@ -10,5 +10,5 @@ export type SubscriptionInput<DataType> = {
   authMode?: AuthModeType
   authToken?: string | undefined
   onNext: (data: DataType, subscription: ZenObservable.Subscription) => void | Promise<void>
-  cacheKey: string
+  cacheKey?: string
 }

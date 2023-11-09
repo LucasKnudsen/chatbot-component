@@ -29,7 +29,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       'x-api-key': GRAPHQL_API_KEY,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ query: publish2channel, variables }),
+    body: JSON.stringify({ query: publish2channel, variables, authMode: 'API_KEY' }),
   }
 
   const request = new Request(GRAPHQL_ENDPOINT, options)
