@@ -17,6 +17,7 @@ import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
+import { chatId } from '@/features/bot'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { Prompt, useSuggestedPrompts } from '@/features/prompt'
 
@@ -62,7 +63,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const {
     messages,
-    chatId,
     updateLastMessage,
     updateLastMessageSourceDocuments,
     deleteChat,
