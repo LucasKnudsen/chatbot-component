@@ -25,6 +25,14 @@
           ],
           "category": "function",
           "resourceName": "flowiseMiddleware"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "flowiseBroadcast"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -33,6 +41,27 @@
   },
   "auth": {},
   "function": {
+    "broadcastResolver": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "flowiseBroadcast": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "flowiseMiddleware": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -40,6 +69,38 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_broadcastResolver_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "broadcastResolver"
+        }
+      ]
+    },
+    "AMPLIFY_function_broadcastResolver_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "broadcastResolver"
+        }
+      ]
+    },
+    "AMPLIFY_function_flowiseBroadcast_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "flowiseBroadcast"
+        }
+      ]
+    },
+    "AMPLIFY_function_flowiseBroadcast_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "flowiseBroadcast"
+        }
+      ]
+    },
     "AMPLIFY_function_flowiseMiddleware_deploymentBucketName": {
       "usedBy": [
         {

@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.ts*\"",
     "lint-fix": "eslint --fix \"src/**/*.ts*\"",
-    "amplify:flowiseMiddleware": "cd amplify/backend/function/flowiseMiddleware && tsc -p ./tsconfig.json && cd -"
+    "amplify:flowiseMiddleware": "cd amplify/backend/function/flowiseMiddleware && tsc -p ./tsconfig.json && cd -",
+    "amplify:flowiseBroadcast": "cd amplify/backend/function/flowiseBroadcast && tsc -p ./tsconfig.json && cd -"
   },
   "dependencies": {
     "@ts-stack/markdown": "^1.5.0",

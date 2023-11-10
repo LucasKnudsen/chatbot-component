@@ -7,6 +7,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/broadcast": {
+      "name": "/broadcast",
+      "lambdaFunction": "flowiseBroadcast",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }

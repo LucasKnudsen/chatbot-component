@@ -8,6 +8,17 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const publish2channel = /* GraphQL */ `mutation Publish2channel($sessionId: String!, $data: AWSJSON!) {
+  publish2channel(sessionId: $sessionId, data: $data) {
+    sessionId
+    data
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.Publish2channelMutationVariables,
+  APITypes.Publish2channelMutation
+>;
 export const createCodeItem = /* GraphQL */ `mutation CreateCodeItem(
   $input: CreateCodeItemInput!
   $condition: ModelCodeItemConditionInput

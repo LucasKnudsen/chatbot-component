@@ -5,4 +5,5 @@ type Channel {
 
 type Mutation {
   publish2channel(sessionId: String!, data: AWSJSON!): Channel
+    @function(name: "broadcastResolver-${env}")
 }
