@@ -18,6 +18,7 @@ import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
 import { useMessages } from '@/features/messages/hooks/useMessages'
+import { Prompt } from '@/features/prompt'
 
 Amplify.configure(awsconfig)
 
@@ -195,6 +196,16 @@ export const Bot = (props: BotProps & { class?: string }) => {
           >
             <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
           </DeleteButton>
+        </div>
+
+        <div class='flex flex-wrap pl-5 pr-5'>
+          {props.promptSuggestions?.map((p) => (
+            <Prompt
+              prompt={p}
+              onClick={handleSubmit}
+              backgroundColor={props.bubbleBackgroundColor}
+            />
+          ))}
         </div>
 
         <div
