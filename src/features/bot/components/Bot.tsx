@@ -18,8 +18,7 @@ import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
 import { useMessages } from '@/features/messages/hooks/useMessages'
-import { Prompt } from '@/features/prompt'
-import { useSuggestedPrompts } from '@/features/prompt/hooks/useSuggestedPrompts'
+import { Prompt, useSuggestedPrompts } from '@/features/prompt'
 
 Amplify.configure(awsconfig)
 
