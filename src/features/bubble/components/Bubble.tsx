@@ -1,5 +1,5 @@
 import { createSignal, Show, splitProps } from 'solid-js'
-import styles from '../../../index.css'
+import styles from '../../../index.css?inline'
 import { Bot, BotProps } from '../../bot/components/Bot'
 import { BubbleParams } from '../types'
 import { BubbleButton } from './BubbleButton'

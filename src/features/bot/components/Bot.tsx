@@ -8,16 +8,16 @@ import { SourceBubble } from '@/components/bubbles/SourceBubble'
 import { TextInput } from '@/components/inputs/textInput'
 import { BotMessageTheme, TextInputTheme, UserMessageTheme } from '@/features/bubble/types'
 import { useSocket } from '@/features/messages/hooks/useSocket'
+import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { removeDuplicateURL } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
-import { IncomingInput, sendMessageQuery } from '@/queries/sendMessageQuery'
 import { isValidURL } from '@/utils/isValidUrl'
 
 import { Amplify } from 'aws-amplify'
-import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
-import { v4 as uuidv4 } from 'uuid'
+import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
+import { useMessages } from '@/features/messages/hooks/useMessages'
 
 Amplify.configure(awsconfig)
 
@@ -32,7 +32,7 @@ export type MessageType = {
 export type BotProps = {
   chatflowid: string
   promptSuggestions?: string[]
-  apiHost?: string
+  apiHost: string
   chatflowConfig?: Record<string, unknown>
   welcomeMessage?: string
   botMessage?: BotMessageTheme
@@ -48,178 +48,38 @@ export type BotProps = {
   isFullPage?: boolean
 }
 
-const defaultWelcomeMessage = 'Hi there! How can I help?'
-
-// const sourceDocuments = [
-//   {
-//     pageContent:
-//       'I know some are talking about “living with COVID-19”. Tonight – I say that we will never just accept living with COVID-19. \r\n\r\nWe will continue to combat the virus as we do other diseases. And because this is a virus that mutates and spreads, we will stay on guard. \r\n\r\nHere are four common sense steps as we move forward safely.  \r\n\r\nFirst, stay protected with vaccines and treatments. We know how incredibly effective vaccines are. If you’re vaccinated and boosted you have the highest degree of protection. \r\n\r\nWe will never give up on vaccinating more Americans. Now, I know parents with kids under 5 are eager to see a vaccine authorized for their children. \r\n\r\nThe scientists are working hard to get that done and we’ll be ready with plenty of vaccines when they do. \r\n\r\nWe’re also ready with anti-viral treatments. If you get COVID-19, the Pfizer pill reduces your chances of ending up in the hospital by 90%.',
-//     metadata: {
-//       source: 'blob',
-//       blobType: '',
-//       loc: {
-//         lines: {
-//           from: 450,
-//           to: 462,
-//         },
-//       },
-//     },
-//   },
-//   {
-//     pageContent:
-//       'sistance,  and  polishing  [65].  For  instance,  AI  tools  generate\nsuggestions based on inputting keywords or topics. The tools\nanalyze  search  data,  trending  topics,  and  popular  queries  to\ncreate  fresh  content.  What’s  more,  AIGC  assists  in  writing\narticles and posting blogs on specific topics. While these tools\nmay not be able to produce high-quality content by themselves,\nthey can provide a starting point for a writer struggling with\nwriter’s block.\nH.  Cons of AIGC\nOne of the main concerns among the public is the potential\nlack  of  creativity  and  human  touch  in  AIGC.  In  addition,\nAIGC sometimes lacks a nuanced understanding of language\nand context, which may lead to inaccuracies and misinterpre-\ntations. There are also concerns about the ethics and legality\nof using AIGC, particularly when it results in issues such as\ncopyright  infringement  and  data  privacy.  In  this  section,  we\nwill discuss some of the disadvantages of AIGC (Table IV).',
-//     metadata: {
-//       source: 'blob',
-//       blobType: '',
-//       pdf: {
-//         version: '1.10.100',
-//         info: {
-//           PDFFormatVersion: '1.5',
-//           IsAcroFormPresent: false,
-//           IsXFAPresent: false,
-//           Title: '',
-//           Author: '',
-//           Subject: '',
-//           Keywords: '',
-//           Creator: 'LaTeX with hyperref',
-//           Producer: 'pdfTeX-1.40.21',
-//           CreationDate: 'D:20230414003603Z',
-//           ModDate: 'D:20230414003603Z',
-//           Trapped: {
-//             name: 'False',
-//           },
-//         },
-//         metadata: null,
-//         totalPages: 17,
-//       },
-//       loc: {
-//         pageNumber: 8,
-//         lines: {
-//           from: 301,
-//           to: 317,
-//         },
-//       },
-//     },
-//   },
-//   {
-//     pageContent: 'Main article: Views of Elon Musk',
-//     metadata: {
-//       source: 'https://en.wikipedia.org/wiki/Elon_Musk',
-//       loc: {
-//         lines: {
-//           from: 2409,
-//           to: 2409,
-//         },
-//       },
-//     },
-//   },
-//   {
-//     pageContent:
-//       'First Name: John\nLast Name: Doe\nAddress: 120 jefferson st.\nStates: Riverside\nCode: NJ\nPostal: 8075',
-//     metadata: {
-//       source: 'blob',
-//       blobType: '',
-//       line: 1,
-//       loc: {
-//         lines: {
-//           from: 1,
-//           to: 6,
-//         },
-//       },
-//     },
-//   },
-// ]
-
 export const Bot = (props: BotProps & { class?: string }) => {
   let chatContainer: HTMLDivElement | undefined
-  let bottomSpacer: HTMLDivElement | undefined
   let botContainer: HTMLDivElement | undefined
+
+  const welcomeMessage = props.welcomeMessage ?? 'Hi there! How can I help?'
 
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc, setSourcePopupSrc] = createSignal({})
-  const [messages, setMessages] = createSignal<MessageType[]>(
-    [
-      {
-        message: props.welcomeMessage ?? defaultWelcomeMessage,
-        type: 'apiMessage',
-      },
-    ],
-    { equals: false }
-  )
-  // const [isChatFlowAvailableToStream, setIsChatFlowAvailableToStream] = createSignal(false)
-  const [chatId, setChatId] = createSignal(uuidv4())
 
-  /**
-   * Add each chat message into localStorage
-   */
-  const addChatMessage = (allMessage: MessageType[]) => {
-    localStorage.setItem(
-      `${props.chatflowid}_EXTERNAL`,
-      JSON.stringify({ chatId: chatId(), chatHistory: allMessage })
-    )
-  }
-
-  const updateLastMessage = (text: string) => {
-    setMessages((data) => {
-      const updated = data.map((item, i) => {
-        if (i === data.length - 1) {
-          return { ...item, message: item.message + text }
-        }
-        return item
-      })
-
-      addChatMessage(updated)
-
-      return [...updated]
-    })
-  }
-
-  const updateLastMessageSourceDocuments = (sourceDocuments: any) => {
-    setMessages((data) => {
-      const updated = data.map((item, i) => {
-        if (i === data.length - 1) {
-          return { ...item, sourceDocuments: sourceDocuments }
-        }
-        return item
-      })
-      addChatMessage(updated)
-      return [...updated]
-    })
-  }
-
-  const { socketIOClientId, isChatFlowAvailableToStream } = useSocket(
-    props.chatflowid,
-    props.apiHost as string,
-    () => setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }]),
+  const {
+    messages,
+    chatId,
+    updateLastMessage,
     updateLastMessageSourceDocuments,
-    updateLastMessage
-  )
+    deleteChat,
+    appendMessage,
+  } = useMessages(props.chatflowid, welcomeMessage)
 
-  onMount(() => {
-    if (!bottomSpacer) return
-    setTimeout(() => {
-      chatContainer?.scrollTo(0, chatContainer.scrollHeight)
-    }, 50)
+  const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
+    chatflowid: props.chatflowid,
+    apiHost: props.apiHost,
+    onStart: () => appendMessage({ message: '', type: 'apiMessage' }),
+    onToken: updateLastMessage,
+    onDocuments: updateLastMessageSourceDocuments,
   })
 
   const scrollToBottom = () => {
     setTimeout(() => {
       chatContainer?.scrollTo(0, chatContainer.scrollHeight)
     }, 50)
-  }
-
-  // Handle errors
-  const handleError = (message = 'Oops! There seems to be an error. Please try again.') => {
-    setMessages((prevMessages) => {
-      const messages: MessageType[] = [...prevMessages, { message, type: 'apiMessage' }]
-      addChatMessage(messages)
-      return messages
-    })
-    setLoading(false)
-    setUserInput('')
-    scrollToBottom()
   }
 
   // Handle form submission
@@ -233,15 +93,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
     setLoading(true)
     scrollToBottom()
 
-    // Send user question and history to API
-    const welcomeMessage = props.welcomeMessage ?? defaultWelcomeMessage
+    // Remove welcome message from messages
     const messageList = messages().filter((msg) => msg.message !== welcomeMessage)
 
-    setMessages((prevMessages) => {
-      const messages: MessageType[] = [...prevMessages, { message: value, type: 'userMessage' }]
-      addChatMessage(messages)
-      return messages
-    })
+    appendMessage({ message: value, type: 'userMessage' })
 
     const body: IncomingInput = {
       question: value,
@@ -261,54 +116,30 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
     if (result.data) {
       const data = result.data
+
       if (!isChatFlowAvailableToStream()) {
         let text = ''
         if (data.text) text = data.text
         else if (data.json) text = JSON.stringify(data.json, null, 2)
         else text = JSON.stringify(data, null, 2)
 
-        setMessages((prevMessages) => {
-          const messages: MessageType[] = [
-            ...prevMessages,
-            { message: text, sourceDocuments: data?.sourceDocuments, type: 'apiMessage' },
-          ]
-          addChatMessage(messages)
-          return messages
-        })
+        appendMessage({ message: text, sourceDocuments: data?.sourceDocuments, type: 'apiMessage' })
       }
+
       setLoading(false)
       setUserInput('')
       scrollToBottom()
     }
-    if (result.error) {
-      const error = result.error
-      console.error(error)
-      const err: any = error
-      const errorData =
-        typeof err === 'string'
-          ? err
-          : err.response
-          ? err.response.data || `${err.response.status}: ${err.response.statusText}`
-          : `${err}`
-      handleError(errorData)
-      return
-    }
-  }
 
-  const clearChat = () => {
-    try {
-      localStorage.removeItem(`${props.chatflowid}_EXTERNAL`)
-      setChatId(uuidv4())
-      setMessages([
-        {
-          message: props.welcomeMessage ?? defaultWelcomeMessage,
-          type: 'apiMessage',
-        },
-      ])
-    } catch (error: any) {
-      const errorData =
-        error.response.data || `${error.response.status}: ${error.response.statusText}`
-      console.error(`error: ${errorData}`)
+    if (result.error) {
+      const message = result.error?.message ?? 'Something went wrong. Please try again later.'
+
+      appendMessage({ message, type: 'apiMessage' })
+
+      setLoading(false)
+      setUserInput('')
+      scrollToBottom()
+      return
     }
   }
 
@@ -321,40 +152,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
     if (props.fontSize && botContainer) botContainer.style.fontSize = `${props.fontSize}px`
   })
 
-  // eslint-disable-next-line solid/reactivity
-  createEffect(async () => {
-    const chatMessage = localStorage.getItem(`${props.chatflowid}_EXTERNAL`)
-
-    if (chatMessage) {
-      const objChatMessage = JSON.parse(chatMessage)
-
-      setChatId(objChatMessage.chatId)
-
-      const loadedMessages = objChatMessage.chatHistory.map((message: MessageType) => {
-        const chatHistory: MessageType = {
-          message: message.message,
-          type: message.type,
-        }
-
-        if (message.sourceDocuments) chatHistory.sourceDocuments = message.sourceDocuments
-
-        return chatHistory
-      })
-
-      setMessages([...loadedMessages])
-    }
-
-    // eslint-disable-next-line solid/reactivity
-    return () => {
-      setUserInput('')
-      setLoading(false)
-      setMessages([
-        {
-          message: props.welcomeMessage ?? defaultWelcomeMessage,
-          type: 'apiMessage',
-        },
-      ])
-    }
+  onCleanup(() => {
+    setUserInput('')
+    setLoading(false)
   })
 
   return (
@@ -391,7 +191,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
             type='button'
             isDisabled={messages().length === 1}
             class='my-2 ml-2'
-            on:click={clearChat}
+            on:click={deleteChat}
           >
             <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
           </DeleteButton>
@@ -487,3 +287,83 @@ export const Bot = (props: BotProps & { class?: string }) => {
     </>
   )
 }
+
+// const sourceDocuments = [
+//   {
+//     pageContent:
+//       'I know some are talking about “living with COVID-19”. Tonight – I say that we will never just accept living with COVID-19. \r\n\r\nWe will continue to combat the virus as we do other diseases. And because this is a virus that mutates and spreads, we will stay on guard. \r\n\r\nHere are four common sense steps as we move forward safely.  \r\n\r\nFirst, stay protected with vaccines and treatments. We know how incredibly effective vaccines are. If you’re vaccinated and boosted you have the highest degree of protection. \r\n\r\nWe will never give up on vaccinating more Americans. Now, I know parents with kids under 5 are eager to see a vaccine authorized for their children. \r\n\r\nThe scientists are working hard to get that done and we’ll be ready with plenty of vaccines when they do. \r\n\r\nWe’re also ready with anti-viral treatments. If you get COVID-19, the Pfizer pill reduces your chances of ending up in the hospital by 90%.',
+//     metadata: {
+//       source: 'blob',
+//       blobType: '',
+//       loc: {
+//         lines: {
+//           from: 450,
+//           to: 462,
+//         },
+//       },
+//     },
+//   },
+//   {
+//     pageContent:
+//       'sistance,  and  polishing  [65].  For  instance,  AI  tools  generate\nsuggestions based on inputting keywords or topics. The tools\nanalyze  search  data,  trending  topics,  and  popular  queries  to\ncreate  fresh  content.  What’s  more,  AIGC  assists  in  writing\narticles and posting blogs on specific topics. While these tools\nmay not be able to produce high-quality content by themselves,\nthey can provide a starting point for a writer struggling with\nwriter’s block.\nH.  Cons of AIGC\nOne of the main concerns among the public is the potential\nlack  of  creativity  and  human  touch  in  AIGC.  In  addition,\nAIGC sometimes lacks a nuanced understanding of language\nand context, which may lead to inaccuracies and misinterpre-\ntations. There are also concerns about the ethics and legality\nof using AIGC, particularly when it results in issues such as\ncopyright  infringement  and  data  privacy.  In  this  section,  we\nwill discuss some of the disadvantages of AIGC (Table IV).',
+//     metadata: {
+//       source: 'blob',
+//       blobType: '',
+//       pdf: {
+//         version: '1.10.100',
+//         info: {
+//           PDFFormatVersion: '1.5',
+//           IsAcroFormPresent: false,
+//           IsXFAPresent: false,
+//           Title: '',
+//           Author: '',
+//           Subject: '',
+//           Keywords: '',
+//           Creator: 'LaTeX with hyperref',
+//           Producer: 'pdfTeX-1.40.21',
+//           CreationDate: 'D:20230414003603Z',
+//           ModDate: 'D:20230414003603Z',
+//           Trapped: {
+//             name: 'False',
+//           },
+//         },
+//         metadata: null,
+//         totalPages: 17,
+//       },
+//       loc: {
+//         pageNumber: 8,
+//         lines: {
+//           from: 301,
+//           to: 317,
+//         },
+//       },
+//     },
+//   },
+//   {
+//     pageContent: 'Main article: Views of Elon Musk',
+//     metadata: {
+//       source: 'https://en.wikipedia.org/wiki/Elon_Musk',
+//       loc: {
+//         lines: {
+//           from: 2409,
+//           to: 2409,
+//         },
+//       },
+//     },
+//   },
+//   {
+//     pageContent:
+//       'First Name: John\nLast Name: Doe\nAddress: 120 jefferson st.\nStates: Riverside\nCode: NJ\nPostal: 8075',
+//     metadata: {
+//       source: 'blob',
+//       blobType: '',
+//       line: 1,
+//       loc: {
+//         lines: {
+//           from: 1,
+//           to: 6,
+//         },
+//       },
+//     },
+//   },
+// ]
