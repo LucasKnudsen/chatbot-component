@@ -1,14 +1,20 @@
-import { isStreamAvailableQuery } from '@/queries/sendMessageQuery'
+import { isStreamAvailableQuery } from '@/features/messages/queries/sendMessageQuery'
 import socketIOClient from 'socket.io-client'
 import { createSignal, onCleanup, onMount } from 'solid-js'
 
-export function useSocket(
-  chatflowid: string,
-  apiHost: string,
-  onStart: () => void,
-  onDocuments: (documents: any) => void,
+export function useSocket({
+  chatflowid,
+  apiHost,
+  onStart,
+  onDocuments,
+  onToken,
+}: {
+  chatflowid: string
+  apiHost: string
+  onStart?: () => void
+  onDocuments: (documents: any) => void
   onToken: (token: string) => void
-) {
+}) {
   const [isChatFlowAvailableToStream, setIsChatFlowAvailableToStream] = createSignal(false)
 
   const [socketIOClientId, setSocketIOClientId] = createSignal('')
@@ -29,7 +35,7 @@ export function useSocket(
       setSocketIOClientId(socket.id)
     })
 
-    socket.on('start', onStart)
+    socket.on('start', () => onStart?.())
 
     socket.on('sourceDocuments', onDocuments)
 
