@@ -7,6 +7,12 @@ import { subscribe2channel } from './graphql/subscriptions'
 import './index.css'
 import { SubscriptionHelper } from './utils/subscriptionHelpers'
 
+const promptSuggestions = [
+  'Tell me about concordium',
+  'Tell me about your contract',
+  'Who is CEO of conordium',
+]
+
 function App() {
   // Subscription example
   onMount(() => {
@@ -32,26 +38,12 @@ function App() {
       <Full
         chatflowid='ca719387-f573-4989-aea0-21dc07d5ca73'
         apiHost='https://flowise.testnet.concordium.com'
-        promptSuggestions={[
-          'Do this',
-          'Do that',
-          'Do something else',
-          'Do something else',
-          'Do something else',
-          'Do something else',
-        ]}
+        promptSuggestions={promptSuggestions}
       />
       <Bubble
         chatflowid='ca719387-f573-4989-aea0-21dc07d5ca73'
         apiHost='https://flowise.testnet.concordium.com'
-        promptSuggestions={[
-          'Do this',
-          'Do that',
-          'Do something else',
-          'Do something else',
-          'Do something else',
-          'Do something else',
-        ]}
+        promptSuggestions={promptSuggestions}
       />
     </>
   )

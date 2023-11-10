@@ -19,6 +19,7 @@ import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 import awsconfig from '@/aws-exports'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { Prompt } from '@/features/prompt'
+import { useSuggestedPrompts } from '@/features/prompt/hooks/useSuggestedPrompts'
 
 Amplify.configure(awsconfig)
 
@@ -69,6 +70,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
     appendMessage,
   } = useMessages(props.chatflowid, welcomeMessage)
 
+  const { suggestedPrompts, fetchSuggestedPrompts, clearSuggestions } = useSuggestedPrompts(
+    props.chatflowid,
+    props.apiHost,
+    messages
+  )
+
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
     apiHost: props.apiHost,
@@ -93,6 +100,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
     setLoading(true)
     scrollToBottom()
+    clearSuggestions()
 
     // Remove welcome message from messages
     const messageList = messages().filter((msg) => msg.message !== welcomeMessage)
@@ -127,6 +135,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
         appendMessage({ message: text, sourceDocuments: data?.sourceDocuments, type: 'apiMessage' })
       }
 
+      fetchSuggestedPrompts()
+
       setLoading(false)
       setUserInput('')
       scrollToBottom()
@@ -146,7 +156,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   // Auto scroll chat to bottom
   createEffect(() => {
-    if (messages()) scrollToBottom()
+    if (messages() || suggestedPrompts()) scrollToBottom()
   })
 
   createEffect(() => {
@@ -199,13 +209,15 @@ export const Bot = (props: BotProps & { class?: string }) => {
         </div>
 
         <div class='flex flex-wrap pl-5 pr-5'>
-          {props.promptSuggestions?.map((p) => (
-            <Prompt
-              prompt={p}
-              onClick={handleSubmit}
-              backgroundColor={props.bubbleBackgroundColor}
-            />
-          ))}
+          <For each={props.promptSuggestions}>
+            {(p) => (
+              <Prompt
+                prompt={p}
+                onClick={handleSubmit}
+                backgroundColor={props.bubbleBackgroundColor}
+              />
+            )}
+          </For>
         </div>
 
         <div
@@ -265,6 +277,18 @@ export const Bot = (props: BotProps & { class?: string }) => {
                   </div>
                 )}
               </>
+            )}
+          </For>
+        </div>
+
+        <div class='flex flex-wrap pl-5 pr-5'>
+          <For each={suggestedPrompts()}>
+            {(p) => (
+              <Prompt
+                prompt={p}
+                onClick={handleSubmit}
+                backgroundColor={props.bubbleBackgroundColor}
+              />
             )}
           </For>
         </div>
