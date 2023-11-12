@@ -2,6 +2,12 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type Channel = {
+  __typename: "Channel",
+  sessionId: string,
+  data: string,
+};
+
 export type CreateCodeItemInput = {
   tenantCode: string,
   tableCode: string,
@@ -259,6 +265,19 @@ export type ModelSubscriptionLanguageItemFilterInput = {
   or?: Array< ModelSubscriptionLanguageItemFilterInput | null > | null,
 };
 
+export type Publish2channelMutationVariables = {
+  sessionId: string,
+  data: string,
+};
+
+export type Publish2channelMutation = {
+  publish2channel?:  {
+    __typename: "Channel",
+    sessionId: string,
+    data: string,
+  } | null,
+};
+
 export type CreateCodeItemMutationVariables = {
   input: CreateCodeItemInput,
   condition?: ModelCodeItemConditionInput | null,
@@ -469,6 +488,18 @@ export type ListLanguageItemsQuery = {
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
+  } | null,
+};
+
+export type Subscribe2channelSubscriptionVariables = {
+  sessionId: string,
+};
+
+export type Subscribe2channelSubscription = {
+  subscribe2channel?:  {
+    __typename: "Channel",
+    sessionId: string,
+    data: string,
   } | null,
 };
 

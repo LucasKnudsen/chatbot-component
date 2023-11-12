@@ -11,6 +11,17 @@ export type AmplifyDependentResourcesAttributes = {
       "RootUrl": "string"
     }
   },
+  "auth": {
+    "digitaltwinauth": {
+      "AppClientID": "string",
+      "AppClientIDWeb": "string",
+      "IdentityPoolId": "string",
+      "IdentityPoolName": "string",
+      "UserPoolArn": "string",
+      "UserPoolId": "string",
+      "UserPoolName": "string"
+    }
+  },
   "function": {
     "broadcastResolver": {
       "Arn": "string",

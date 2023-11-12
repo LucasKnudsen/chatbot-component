@@ -29,6 +29,9 @@
       "api": {
         "digitaltwin": {},
         "digitaltwinRest": {}
+      },
+      "auth": {
+        "digitaltwinauth": {}
       }
     }
   }
