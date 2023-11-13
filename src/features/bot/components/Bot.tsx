@@ -89,6 +89,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
     }, 50)
   }
 
+  const clear = () => {
+    deleteChat()
+    clearSuggestions()
+  }
+
   // Handle form submission
   const handleSubmit = async (value: string) => {
     setUserInput(value)
@@ -201,7 +206,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
             type='button'
             isDisabled={messages().length === 1}
             class='my-2 ml-2'
-            on:click={deleteChat}
+            on:click={clear}
           >
             <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
           </DeleteButton>

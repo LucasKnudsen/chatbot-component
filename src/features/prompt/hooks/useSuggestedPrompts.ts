@@ -23,6 +23,8 @@ export function useSuggestedPrompts(
       // chatId: '123',
     }
 
+    console.log('sending message', body)
+
     const response = await sendMessageQuery({
       chatflowid,
       apiHost,
