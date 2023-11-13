@@ -32,7 +32,7 @@ export type MessageType = {
 
 export type BotProps = {
   chatflowid: string
-  promptSuggestions?: string[]
+  initialPrompts?: string[]
   apiHost: string
   chatflowConfig?: Record<string, unknown>
   welcomeMessage?: string
@@ -208,7 +208,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
         </div>
 
         <div class='flex flex-wrap pl-5 pr-5'>
-          <For each={props.promptSuggestions}>
+          <For each={props.initialPrompts}>
             {(p) => (
               <Prompt
                 prompt={p}

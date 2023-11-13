@@ -20,7 +20,7 @@ export function useSuggestedPrompts(
       question:
         'Please give me three concise prompts to ask you about the context. This should be in array format format e.g. ["What is your name?", "What is your age?", "What is your email?"]. Do not say anything else, just send me back an array.',
       history: messages(),
-      chatId: '123',
+      // chatId: '123',
     }
 
     const response = await sendMessageQuery({
