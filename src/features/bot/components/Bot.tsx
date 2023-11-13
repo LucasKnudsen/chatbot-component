@@ -219,6 +219,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                 prompt={p}
                 onClick={handleSubmit}
                 backgroundColor={props.bubbleBackgroundColor}
+                disabled={loading()}
               />
             )}
           </For>
@@ -292,6 +293,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                 prompt={p}
                 onClick={handleSubmit}
                 backgroundColor={props.bubbleBackgroundColor}
+                disabled={loading()}
               />
             )}
           </For>
