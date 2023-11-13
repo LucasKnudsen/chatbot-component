@@ -11,7 +11,7 @@ export function useSocket({
 }: {
   chatflowid: string
   apiHost: string
-  onStart?: () => void
+  onStart: () => void
   onDocuments: (documents: any) => void
   onToken: (token: string) => void
 }) {
@@ -35,7 +35,7 @@ export function useSocket({
       setSocketIOClientId(socket.id)
     })
 
-    socket.on('start', () => onStart?.())
+    socket.on('start', () => onStart())
 
     socket.on('sourceDocuments', onDocuments)
 

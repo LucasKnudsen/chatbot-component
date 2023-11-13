@@ -17,8 +17,9 @@ import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
+import { chatId } from '@/features/bot'
 import { useMessages } from '@/features/messages/hooks/useMessages'
-import { Prompt } from '@/features/prompt'
+import { Prompt, useSuggestedPrompts } from '@/features/prompt'
 
 Amplify.configure(awsconfig)
 
@@ -32,7 +33,7 @@ export type MessageType = {
 
 export type BotProps = {
   chatflowid: string
-  promptSuggestions?: string[]
+  initialPrompts?: string[]
   apiHost: string
   chatflowConfig?: Record<string, unknown>
   welcomeMessage?: string
@@ -62,12 +63,17 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const {
     messages,
-    chatId,
     updateLastMessage,
     updateLastMessageSourceDocuments,
     deleteChat,
     appendMessage,
   } = useMessages(props.chatflowid, welcomeMessage)
+
+  const { suggestedPrompts, fetchSuggestedPrompts, clearSuggestions } = useSuggestedPrompts(
+    props.chatflowid,
+    props.apiHost,
+    messages
+  )
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
@@ -83,6 +89,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
     }, 50)
   }
 
+  const clear = () => {
+    deleteChat()
+    clearSuggestions()
+  }
+
   // Handle form submission
   const handleSubmit = async (value: string) => {
     setUserInput(value)
@@ -93,6 +104,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
     setLoading(true)
     scrollToBottom()
+    clearSuggestions()
 
     // Remove welcome message from messages
     const messageList = messages().filter((msg) => msg.message !== welcomeMessage)
@@ -127,6 +139,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
         appendMessage({ message: text, sourceDocuments: data?.sourceDocuments, type: 'apiMessage' })
       }
 
+      fetchSuggestedPrompts()
+
       setLoading(false)
       setUserInput('')
       scrollToBottom()
@@ -146,7 +160,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   // Auto scroll chat to bottom
   createEffect(() => {
-    if (messages()) scrollToBottom()
+    if (messages() || suggestedPrompts()) scrollToBottom()
   })
 
   createEffect(() => {
@@ -192,20 +206,23 @@ export const Bot = (props: BotProps & { class?: string }) => {
             type='button'
             isDisabled={messages().length === 1}
             class='my-2 ml-2'
-            on:click={deleteChat}
+            on:click={clear}
           >
             <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
           </DeleteButton>
         </div>
 
         <div class='flex flex-wrap pl-5 pr-5'>
-          {props.promptSuggestions?.map((p) => (
-            <Prompt
-              prompt={p}
-              onClick={handleSubmit}
-              backgroundColor={props.bubbleBackgroundColor}
-            />
-          ))}
+          <For each={props.initialPrompts}>
+            {(p) => (
+              <Prompt
+                prompt={p}
+                onClick={handleSubmit}
+                backgroundColor={props.bubbleBackgroundColor}
+                disabled={loading()}
+              />
+            )}
+          </For>
         </div>
 
         <div
@@ -265,6 +282,19 @@ export const Bot = (props: BotProps & { class?: string }) => {
                   </div>
                 )}
               </>
+            )}
+          </For>
+        </div>
+
+        <div class='flex flex-wrap pl-5 pr-5'>
+          <For each={suggestedPrompts()}>
+            {(p) => (
+              <Prompt
+                prompt={p}
+                onClick={handleSubmit}
+                backgroundColor={props.bubbleBackgroundColor}
+                disabled={loading()}
+              />
             )}
           </For>
         </div>

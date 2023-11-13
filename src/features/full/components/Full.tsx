@@ -50,7 +50,7 @@ export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
           }}
         >
           <Bot
-            promptSuggestions={props.promptSuggestions}
+            initialPrompts={props.initialPrompts}
             badgeBackgroundColor={props.theme?.chatWindow?.backgroundColor}
             bubbleBackgroundColor={props.theme?.button?.backgroundColor ?? defaultButtonColor}
             bubbleTextColor={props.theme?.button?.iconColor ?? defaultIconColor}
