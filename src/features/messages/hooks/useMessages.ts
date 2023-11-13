@@ -1,10 +1,10 @@
+import { chatId, setChatId } from '@/features/bot'
 import { MessageType } from '@/features/bot/components/Bot'
 import { createSignal, onCleanup, onMount } from 'solid-js'
 import { v4 as uuidv4 } from 'uuid'
 
 export function useMessages(chatflowid: string, welcomeMessage: string) {
   const storageKey = `${chatflowid}_EXTERNAL`
-  const [chatId, setChatId] = createSignal(uuidv4())
 
   const [messages, _setMessages] = createSignal<MessageType[]>(
     [
@@ -81,9 +81,12 @@ export function useMessages(chatflowid: string, welcomeMessage: string) {
   onMount(() => {
     const chatMessage = localStorage.getItem(storageKey)
 
+    setChatId(uuidv4())
+
     if (chatMessage) {
       const objChatMessage = JSON.parse(chatMessage)
 
+      // get chatId from local storage
       setChatId(objChatMessage.chatId)
 
       const loadedMessages = objChatMessage.chatHistory.map((message: MessageType) => {
@@ -112,7 +115,6 @@ export function useMessages(chatflowid: string, welcomeMessage: string) {
 
   return {
     messages,
-    chatId,
     updateLastMessage,
     updateLastMessageSourceDocuments,
     deleteChat,
