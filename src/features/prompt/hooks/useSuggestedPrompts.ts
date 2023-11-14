@@ -14,7 +14,8 @@ export function useSuggestedPrompts(
   apiHost: string,
   messages: Accessor<MessageType[]>
 ) {
-  const [suggestedPrompts, setSuggestedPrompts] = createSignal<string[]>(dummySuggestions)
+  const [suggestedPrompts, setSuggestedPrompts] = createSignal<string[]>([])
+  const [isFetching, setIsFetching] = createSignal(false)
 
   const clearSuggestions = () => {
     setSuggestedPrompts([])
@@ -23,18 +24,26 @@ export function useSuggestedPrompts(
   const fetchSuggestedPrompts = async () => {
     clearSuggestions()
 
+    // remove sourceDocuments key from messages
+    const history = messages().map((message) => {
+      const { sourceDocuments, ...rest } = message
+      return rest
+    })
+
     const body: IncomingInput = {
       question:
         'Please give me three concise prompts to ask you about the context. This should be in array format format e.g. ["Question 1?", "Question 2?", "Question 3?"]. Do not say anything else, just send me back an array.',
-      history: messages(),
+      history,
       // chatId: '123',
     }
 
+    setIsFetching(true)
     const response = await sendMessageQuery({
       chatflowid,
       apiHost,
       body,
     })
+    setIsFetching(false)
 
     if (response.data) {
       try {
@@ -55,5 +64,5 @@ export function useSuggestedPrompts(
     }
   })
 
-  return { suggestedPrompts, fetchSuggestedPrompts, clearSuggestions }
+  return { suggestedPrompts, fetchSuggestedPrompts, clearSuggestions, isFetching }
 }

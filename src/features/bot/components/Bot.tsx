@@ -13,6 +13,7 @@ import { removeDuplicateURL } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
 import { isValidURL } from '@/utils/isValidUrl'
 
+import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
@@ -61,6 +62,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc, setSourcePopupSrc] = createSignal({})
 
+  const [parent] = createAutoAnimate(/* optional config */)
+
   const {
     messages,
     updateLastMessage,
@@ -69,11 +72,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
     appendMessage,
   } = useMessages(props.chatflowid, welcomeMessage)
 
-  const { suggestedPrompts, fetchSuggestedPrompts, clearSuggestions } = useSuggestedPrompts(
-    props.chatflowid,
-    props.apiHost,
-    messages
-  )
+  const {
+    suggestedPrompts,
+    fetchSuggestedPrompts,
+    clearSuggestions,
+    isFetching: isFetchingSuggestedPrompts,
+  } = useSuggestedPrompts(props.chatflowid, props.apiHost, messages)
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
@@ -220,7 +224,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
                 prompt={p}
                 onClick={handleSubmit}
                 textColor={props.textInput?.textColor}
-                surfaceColor={'#d7dff4' || props.bubbleBackgroundColor}
+                // TODO: Theme it
+                surfaceColor={'#5B93FF14' || props.bubbleBackgroundColor}
                 disabled={loading()}
               />
             )}
@@ -301,18 +306,43 @@ export const Bot = (props: BotProps & { class?: string }) => {
           />
         </div>
 
-        <div class='flex flex-wrap pl-5 pr-5'>
-          <For each={suggestedPrompts()}>
-            {(p) => (
-              <Prompt
-                prompt={p}
-                onClick={handleSubmit}
-                textColor={props.textInput?.textColor}
-                surfaceColor={'#d7dff4' || props.bubbleBackgroundColor}
-                disabled={loading()}
-              />
-            )}
-          </For>
+        {/* Suggested Prompt Container */}
+        <div class='mt-4 flex  items-center pl-5 pr-5' ref={parent} style={{ gap: '6px 24px' }}>
+          <p
+            class='whitespace-nowrap border-r-2  border-gray-200 pr-8 '
+            style={{
+              // TODO: Theme it
+              color: '#231843A1',
+              'font-weight': 700,
+            }}
+          >
+            SUGGESTED QUESTIONS
+          </p>
+
+          {isFetchingSuggestedPrompts() ? (
+            <p>Loading</p>
+          ) : suggestedPrompts().length > 0 ? (
+            <For each={suggestedPrompts()}>
+              {(p) => (
+                <Prompt
+                  prompt={p}
+                  onClick={handleSubmit}
+                  textColor={props.textInput?.textColor}
+                  // TODO: Theme it
+                  surfaceColor={'#5B93FF14' || props.bubbleBackgroundColor}
+                  disabled={loading()}
+                />
+              )}
+            </For>
+          ) : (
+            <button
+              onClick={() => {
+                fetchSuggestedPrompts()
+              }}
+            >
+              Fetch
+            </button>
+          )}
         </div>
 
         <Badge

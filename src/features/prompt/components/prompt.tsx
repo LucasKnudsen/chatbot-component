@@ -10,15 +10,20 @@ export const Prompt = (props: PromptProps) => {
   return (
     <>
       <div
-        class='mr-2 py-1 px-6 my-1 inline-block rounded-xl flex items-center'
+        class='py-2 px-6 my-1 rounded-xl border border-solid'
         style={{
-          height: '55px',
           cursor: props.disabled ? 'not-allowed' : 'pointer',
+          width: 'auto',
+          // TODO: Themme it
           background: props.surfaceColor,
+          'border-color': '#93939340',
         }}
         onClick={() => (props.disabled ? null : props.onClick(props.prompt))}
       >
-        <p class='text-base' style={{ color: props.textColor, 'white-space': 'pre-line' }}>
+        <p
+          class='text-bast whitespace-pre-line'
+          style={{ color: props.textColor, 'font-weight': 300 }}
+        >
           {props.prompt}
         </p>
       </div>
