@@ -1,4 +1,5 @@
 import { MessageType } from '@/features/bot/components/Bot'
+import { extractChatbotResponse } from '@/features/messages'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { Accessor, createSignal, onMount } from 'solid-js'
 
@@ -32,8 +33,8 @@ export function useSuggestedPrompts(
 
     const body: IncomingInput = {
       question:
-        'Please give me three concise prompts to ask you about the context. This should be in array format format e.g. ["Question 1?", "Question 2?", "Question 3?"]. Do not say anything else, just send me back an array.',
-      history,
+        'Based on our history so far, give me 2 short concise follow up prompts that would encourage me to proceed with the conversation. The questions need to be non-repetitive. Please provide the questions in a JSON array format like ["Question 1?", "Question 2?", "Question 3?"]. Do not say anything else, just send me back an array.',
+      history: [],
       // chatId: '123',
     }
 
@@ -46,14 +47,19 @@ export function useSuggestedPrompts(
     setIsFetching(false)
 
     if (response.data) {
+      console.log(response.data)
+
+      const text = extractChatbotResponse(response.data)
+      let questionsArray: string[] = []
+
       try {
-        const items = JSON.parse(response.data)
-
-        if (!Array.isArray(items)) return
-
-        setSuggestedPrompts(items)
+        // In case the response is a stringified JSON array
+        questionsArray = JSON.parse(text)
       } catch (error) {
-        return
+        // In case the response is a string with newlines
+        questionsArray = text.split('\n').map((question) => question.replace(/^\d+\.\s/, ''))
+      } finally {
+        setSuggestedPrompts(questionsArray)
       }
     }
   }
