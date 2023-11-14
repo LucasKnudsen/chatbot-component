@@ -130,6 +130,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     if (result.data) {
       const data = result.data
 
+      console.log('data', data)
       if (!isChatFlowAvailableToStream()) {
         let text = ''
         if (data.text) text = data.text

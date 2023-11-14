@@ -25,7 +25,13 @@ export async function sendMessageQuery({ body, chatflowid, apiHost }: MessageReq
 
   try {
     // TODO: Test timeout of the REST API. (There's a 30 second timeout on AppSync)
-    const answer = await API.post('digitaltwinRest', '/flowise/middleware', { body })
+    const answer = await API.post('digitaltwinRest', '/flowise/middleware', {
+      body: {
+        chatflowid,
+        apiHost,
+        ...body,
+      },
+    })
 
     return {
       data: answer,
