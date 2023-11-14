@@ -219,7 +219,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
               <Prompt
                 prompt={p}
                 onClick={handleSubmit}
-                backgroundColor={props.bubbleBackgroundColor}
+                textColor={props.textInput?.textColor}
+                surfaceColor={'#d7dff4' || props.bubbleBackgroundColor}
                 disabled={loading()}
               />
             )}
@@ -287,19 +288,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </For>
         </div>
 
-        <div class='flex flex-wrap pl-5 pr-5'>
-          <For each={suggestedPrompts()}>
-            {(p) => (
-              <Prompt
-                prompt={p}
-                onClick={handleSubmit}
-                backgroundColor={props.bubbleBackgroundColor}
-                disabled={loading()}
-              />
-            )}
-          </For>
-        </div>
-
         <div class='w-full pl-5 pr-5 pb-1'>
           <TextInput
             backgroundColor={props.textInput?.backgroundColor}
@@ -311,6 +299,20 @@ export const Bot = (props: BotProps & { class?: string }) => {
             defaultValue={userInput()}
             onSubmit={handleSubmit}
           />
+        </div>
+
+        <div class='flex flex-wrap pl-5 pr-5'>
+          <For each={suggestedPrompts()}>
+            {(p) => (
+              <Prompt
+                prompt={p}
+                onClick={handleSubmit}
+                textColor={props.textInput?.textColor}
+                surfaceColor={'#d7dff4' || props.bubbleBackgroundColor}
+                disabled={loading()}
+              />
+            )}
+          </For>
         </div>
 
         <Badge
