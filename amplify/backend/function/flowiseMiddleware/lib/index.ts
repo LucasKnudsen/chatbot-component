@@ -6,7 +6,7 @@ import axios from 'axios'
 const TEST_API_KEY = 'Bearer Z6tQxMs34lQs1kcpOO7bB8bbMrUY9cDo52kjopo/MjM='
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  // console.log(`EVENT: ${JSON.stringify(event)}`)
+  console.log(`EVENT: ${JSON.stringify(event)}`)
 
   const { chatflowid, apiHost } = event.body
     ? JSON.parse(event.body)
@@ -34,8 +34,10 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       body: JSON.stringify(answer),
     }
   } catch (error) {
+    console.log(`ERROR: `, JSON.stringify(error))
+
     return {
-      statusCode: error.status || 500,
+      statusCode: error.response?.status || 500,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
