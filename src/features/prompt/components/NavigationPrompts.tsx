@@ -12,20 +12,24 @@ type NavigationPromptsProps = {
 export const NavigationPrompts = (props: NavigationPromptsProps) => {
   const { theme } = useTheme()
   return (
-    <ul>
-      <For each={props.prompts}>
-        {(p) => (
-          <NavigationPrompt
-            class='w-full'
-            prompt={p}
-            onClick={(prompt) => props.onSelect(prompt)}
-            disabled={props.disabled}
-            borderColor={theme().borderColor}
-            background={theme().promptBackground}
-            color={theme().promptTextColor}
-          />
-        )}
-      </For>
-    </ul>
+    <>
+      <div class='text-lg font-semibold'>What would you like to know?</div>
+
+      <ul>
+        <For each={props.prompts}>
+          {(p) => (
+            <NavigationPrompt
+              class='w-full mt-6'
+              prompt={p}
+              onClick={(prompt) => props.onSelect(prompt)}
+              disabled={props.disabled}
+              borderColor={theme().borderColor}
+              background={theme().promptBackground}
+              color={theme().promptTextColor}
+            />
+          )}
+        </For>
+      </ul>
+    </>
   )
 }
