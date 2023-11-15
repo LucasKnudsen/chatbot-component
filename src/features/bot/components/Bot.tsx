@@ -11,18 +11,17 @@ import { Popup } from '@/features/popup'
 
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
-import { For, createEffect, createSignal, onCleanup } from 'solid-js'
+import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
 
+import { Badge } from '@/components/Badge'
+import { SourceBubble } from '@/components/bubbles/SourceBubble'
 import { Sidebar, chatId } from '@/features/bot'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
-import { SourceBubble } from '@/components/bubbles/SourceBubble'
 import { isValidURL } from '@/utils/isValidUrl'
-
-
 
 Amplify.configure(awsconfig)
 
@@ -74,7 +73,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const { theme } = useTheme()
 
   const [parent] = createAutoAnimate(/* optional config */)
-
 
   const {
     messages,
@@ -212,7 +210,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
             <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
           </DeleteButton>
         </div>
-        
+
         <div class='flex flex-1 overflow-y-scroll'>
           <div
             ref={chatContainer}
@@ -279,12 +277,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
             />
           </Sidebar>
         </div>
-        
+
         <div class='w-full pb-1 px-10'>
           <TextInput disabled={loading()} defaultValue={userInput()} onSubmit={handleSubmit} />
         </div>
-
-     
 
         {/* Suggested Prompt Container */}
         <div class='mt-4 flex  items-center pl-5 pr-5' ref={parent} style={{ gap: '6px 24px' }}>
@@ -308,7 +304,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                   <Prompt
                     prompt={p}
                     onClick={handleSubmit}
-                    color={props.textInput?.textColor}
+                    color={theme().promptTextColor}
                     // TODO: Theme it
                     background={'#5B93FF14' || props.bubbleBackgroundColor}
                     disabled={loading()}
@@ -323,7 +319,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
               >
                 Fetch
               </button>
-   
+            )}
+          </Show>
+        </div>
 
         <Badge
           badgeBackgroundColor={props.badgeBackgroundColor}
@@ -331,14 +329,14 @@ export const Bot = (props: BotProps & { class?: string }) => {
           botContainer={botContainer}
         />
 
+        {sourcePopupOpen() && (
+          <Popup
+            isOpen={sourcePopupOpen()}
+            value={sourcePopupSrc()}
+            onClose={() => setSourcePopupOpen(false)}
+          />
+        )}
       </div>
-      {sourcePopupOpen() && (
-        <Popup
-          isOpen={sourcePopupOpen()}
-          value={sourcePopupSrc()}
-          onClose={() => setSourcePopupOpen(false)}
-        />
-      )}
     </>
   )
 }
