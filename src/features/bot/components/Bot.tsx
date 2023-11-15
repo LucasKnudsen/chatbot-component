@@ -3,22 +3,23 @@ import { Avatar } from '@/components/avatars/Avatar'
 import { BotBubble } from '@/components/bubbles/BotBubble'
 import { GuestBubble } from '@/components/bubbles/GuestBubble'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
-import { SourceBubble } from '@/components/bubbles/SourceBubble'
 import { TextInput } from '@/components/inputs/textInput'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
-import { removeDuplicateURL } from '@/features/messages/utils'
+import { extractChatbotResponse, removeDuplicateURL } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
-import { isValidURL } from '@/utils/isValidUrl'
 
+import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
-import { chatId } from '@/features/bot'
+import { SourceBubble } from '@/components/bubbles/SourceBubble'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { Prompt, useSuggestedPrompts } from '@/features/prompt'
+import { isValidURL } from '@/utils/isValidUrl'
+import { chatId } from '..'
 
 Amplify.configure(awsconfig)
 
@@ -60,6 +61,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc, setSourcePopupSrc] = createSignal({})
 
+  const [parent] = createAutoAnimate(/* optional config */)
+
   const {
     messages,
     updateLastMessage,
@@ -68,11 +71,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
     appendMessage,
   } = useMessages(props.chatflowid, welcomeMessage)
 
-  const { suggestedPrompts, fetchSuggestedPrompts, clearSuggestions } = useSuggestedPrompts(
-    props.chatflowid,
-    props.apiHost,
-    messages
-  )
+  const {
+    suggestedPrompts,
+    fetchSuggestedPrompts,
+    clearSuggestions,
+    isFetching: isFetchingSuggestedPrompts,
+  } = useSuggestedPrompts(props.chatflowid, props.apiHost, messages)
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
@@ -112,7 +116,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
     const body: IncomingInput = {
       question: value,
-      history: messageList,
+      history: [],
       chatId: chatId(),
     }
 
@@ -129,11 +133,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
     if (result.data) {
       const data = result.data
 
+      console.log('data', data)
       if (!isChatFlowAvailableToStream()) {
-        let text = ''
-        if (data.text) text = data.text
-        else if (data.json) text = JSON.stringify(data.json, null, 2)
-        else text = JSON.stringify(data, null, 2)
+        let text = extractChatbotResponse(result.data)
 
         appendMessage({ message: text, sourceDocuments: data?.sourceDocuments, type: 'apiMessage' })
       }
@@ -215,7 +217,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
               <Prompt
                 prompt={p}
                 onClick={handleSubmit}
-                backgroundColor={props.bubbleBackgroundColor}
+                textColor={props.textInput?.textColor}
+                // TODO: Theme it
+                surfaceColor={'#5B93FF14' || props.bubbleBackgroundColor}
                 disabled={loading()}
               />
             )}
@@ -283,22 +287,58 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </For>
         </div>
 
-        <div class='w-full pl-10 pr-10 pb-1'>
+
+         <div class='w-full pl-10 pr-10 pb-1'>
           <TextInput disabled={loading()} defaultValue={userInput()} onSubmit={handleSubmit} />
         </div>
 
-        <div class='flex flex-wrap pl-5 pr-5 h-10'>
-          <For each={suggestedPrompts()}>
-            {(p) => (
-              <Prompt
-                prompt={p}
-                onClick={handleSubmit}
-                backgroundColor={props.bubbleBackgroundColor}
-                disabled={loading()}
-              />
+        {/* Suggested Prompt Container */}
+        <div class='mt-4 flex  items-center pl-5 pr-5' ref={parent} style={{ gap: '6px 24px' }}>
+          <Show when={messages().length > 2}>
+            <p
+              class='whitespace-nowrap border-r-2  border-gray-200 pr-8 '
+              style={{
+                // TODO: Theme it
+                color: '#231843A1',
+                'font-weight': 700,
+              }}
+            >
+              SUGGESTED QUESTIONS
+            </p>
+
+            {isFetchingSuggestedPrompts() ? (
+              <LoadingBubble />
+            ) : suggestedPrompts().length > 0 ? (
+              <For each={suggestedPrompts()}>
+                {(p) => (
+                  <Prompt
+                    prompt={p}
+                    onClick={handleSubmit}
+                    textColor={props.textInput?.textColor}
+                    // TODO: Theme it
+                    surfaceColor={'#5B93FF14' || props.bubbleBackgroundColor}
+                    disabled={loading()}
+                  />
+                )}
+              </For>
+            ) : (
+              <button
+                onClick={() => {
+                  fetchSuggestedPrompts()
+                }}
+              >
+                Fetch
+              </button>
             )}
-          </For>
+          </Show>
         </div>
+
+        <Badge
+          badgeBackgroundColor={props.badgeBackgroundColor}
+          poweredByTextColor={props.poweredByTextColor}
+          botContainer={botContainer}
+        />
+
       </div>
       {sourcePopupOpen() && (
         <Popup

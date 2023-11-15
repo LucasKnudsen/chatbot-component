@@ -13,6 +13,7 @@
     "amplify:flowiseBroadcast": "cd amplify/backend/function/flowiseBroadcast && tsc -p ./tsconfig.json && cd -"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.8.1",
     "@ts-stack/markdown": "^1.5.0",
     "aws-amplify": "^5.3.12",
     "lodash": "^4.17.21",

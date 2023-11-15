@@ -96,6 +96,6 @@
     "domainName": "zg7aws7xvd.execute-api.ap-southeast-1.amazonaws.com",
     "apiId": "zg7aws7xvd"
   },
-  "body": "{\"question\":\"Hey\",\"history\":[{\"message\":\"Hey\",\"type\":\"userMessage\"},{\"message\":\"so\",\"type\":\"userMessage\"},{\"message\":\"AxiosError: Network Error\",\"type\":\"apiMessage\"}],\"chatId\":\"34b17711-0035-40b8-9782-10a0cef5f835\",\"socketIOClientId\":\"9kebSLSoxu_mCEC3AKMp\"}",
+  "body": "{\"chatflowid\":\"ac2aa23a-5c82-4f50-8b7a-76f87887fc38\",\"apiHost\":\"https://lionbrain.softdesign.dk\",\"question\":\"Hey\",\"history\":[{\"message\":\"Hey\",\"type\":\"userMessage\"},{\"message\":\"so\",\"type\":\"userMessage\"},{\"message\":\"AxiosError: Network Error\",\"type\":\"apiMessage\"}],\"chatId\":\"34b17711-0035-40b8-9782-10a0cef5f835\",\"socketIOClientId\":\"9kebSLSoxu_mCEC3AKMp\"}",
   "isBase64Encoded": false
 }
