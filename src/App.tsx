@@ -3,14 +3,24 @@ import './dev.css'
 import { Bubble } from './features/bubble'
 import { Full } from './features/full'
 
+import { PromptType } from './features/bot'
 import { subscribe2channel } from './graphql/subscriptions'
 import './index.css'
 import { SubscriptionHelper } from './utils/subscriptionHelpers'
 
-const initialPrompts = [
-  'Tell me about concordium',
-  'Tell me about your contract',
-  'Who is CEO of conordium',
+const initialPrompts: PromptType[] = [
+  {
+    display: 'Tell me about concordium',
+    prompt: 'Give me a detailed description of the services that concordium offers',
+  },
+  {
+    display: 'Tell me about your products',
+    prompt: 'Give me a detailed description of the products that concordium offers',
+  },
+  {
+    display: 'Who is your CEO',
+    prompt: 'Give me a detailed description of the CEO of concordium',
+  },
 ]
 
 function App() {

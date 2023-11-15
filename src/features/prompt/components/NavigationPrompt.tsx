@@ -3,19 +3,22 @@ import { PromptType } from '@/features/bot'
 type PromptProps = {
   prompt: PromptType
   onClick: (prompt: string) => void
-  color?: string
   background?: string
+  color?: string
+  borderColor?: string
   disabled?: boolean
+  class?: string
 }
 
-export const Prompt = (props: PromptProps) => {
+export const NavigationPrompt = (props: PromptProps) => {
   return (
     <>
       <div
-        class='mr-2 py-1 px-4 text-white my-1 inline-block rounded-full'
+        class={'p-5 text-white my-1 inline-block rounded-[10px] ' + props.class}
         style={{
           cursor: props.disabled ? 'not-allowed' : 'pointer',
           background: props.background,
+          border: `1px solid ${props.borderColor}`,
           color: props.color,
         }}
         onClick={() =>
