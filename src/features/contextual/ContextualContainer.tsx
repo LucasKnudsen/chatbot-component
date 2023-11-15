@@ -16,7 +16,7 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
 
   console.log('contextualElements', contextualElements())
 
-  const [parent] = createAutoAnimate({ duration: 500 })
+  const [parent] = createAutoAnimate()
 
   // // Auto scroll chat to bottom
   createEffect(() => {

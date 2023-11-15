@@ -72,7 +72,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const { theme } = useTheme()
 
-  const [parent] = createAutoAnimate(/* optional config */)
+  const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
+  const [chatParent] = createAutoAnimate(/* optional config */)
+  const [sidebarParent] = createAutoAnimate(/* optional config */)
 
   const { messages, updateLastMessage, deleteChat, appendMessage } = useMessages(
     props.chatflowid,
@@ -216,38 +218,39 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </DeleteButton>
         </div>
 
-        <div class='flex flex-1 overflow-y-scroll flex-nowrap'>
+        <div ref={chatContainer} class='flex flex-1 overflow-y-scroll flex-nowrap'>
           {/* Chat container  */}
-          <div
-            ref={chatContainer}
-            class='m-5 flex-1 overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth border border-gray-300 rounded-md'
-          >
-            <For each={[...messages()]}>
-              {(message, index) => (
-                <>
-                  {message.type === 'userMessage' && (
-                    <GuestBubble
-                      message={message.message}
-                      backgroundColor={props.userMessage?.backgroundColor}
-                      textColor={props.userMessage?.textColor}
-                      showAvatar={props.userMessage?.showAvatar}
-                      avatarSrc={props.userMessage?.avatarSrc}
-                    />
-                  )}
-                  {message.type === 'apiMessage' && (
-                    <BotBubble
-                      message={message.message}
-                      backgroundColor={props.botMessage?.backgroundColor}
-                      textColor={props.botMessage?.textColor}
-                      showAvatar={props.botMessage?.showAvatar}
-                      avatarSrc={props.botMessage?.avatarSrc}
-                    />
-                  )}
-                  {message.type === 'userMessage' &&
-                    loading() &&
-                    index() === messages().length - 1 && <LoadingBubble />}
-                  {/* Popups */}
-                  {/* {message.sourceDocuments && message.sourceDocuments.length && (
+          <Show when={messages().length > 1}>
+            <div
+              ref={chatContainer}
+              class='m-5 flex-1 overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth border border-gray-300 rounded-md'
+            >
+              <For each={[...messages()]}>
+                {(message, index) => (
+                  <>
+                    {message.type === 'userMessage' && (
+                      <GuestBubble
+                        message={message.message}
+                        backgroundColor={props.userMessage?.backgroundColor}
+                        textColor={props.userMessage?.textColor}
+                        showAvatar={props.userMessage?.showAvatar}
+                        avatarSrc={props.userMessage?.avatarSrc}
+                      />
+                    )}
+                    {message.type === 'apiMessage' && (
+                      <BotBubble
+                        message={message.message}
+                        backgroundColor={props.botMessage?.backgroundColor}
+                        textColor={props.botMessage?.textColor}
+                        showAvatar={props.botMessage?.showAvatar}
+                        avatarSrc={props.botMessage?.avatarSrc}
+                      />
+                    )}
+                    {message.type === 'userMessage' &&
+                      loading() &&
+                      index() === messages().length - 1 && <LoadingBubble />}
+                    {/* Popups */}
+                    {/* {message.sourceDocuments && message.sourceDocuments.length && (
                     <div class='flex w-full'>
                       <For each={[...removeDuplicateURL(message)]}>
                         {(src) => {
@@ -270,21 +273,26 @@ export const Bot = (props: BotProps & { class?: string }) => {
                       </For>
                     </div>
                   )} */}
-                </>
-              )}
-            </For>
-          </div>
+                  </>
+                )}
+              </For>
+            </div>
 
-          <ContextualContainer contextualElements={contextualElements} />
+            <ContextualContainer contextualElements={contextualElements} />
+          </Show>
 
           {/* Sidebar container */}
-          <Sidebar class='pt-16 pr-10'>
-            <NavigationPrompts
-              prompts={props.initialPrompts}
-              onSelect={handleSubmit}
-              disabled={loading()}
-            />
-          </Sidebar>
+          <div ref={sidebarParent}>
+            <Show when={messages().length < 2}>
+              <Sidebar class='pt-16 pr-10'>
+                <NavigationPrompts
+                  prompts={props.initialPrompts}
+                  onSelect={handleSubmit}
+                  disabled={loading()}
+                />
+              </Sidebar>
+            </Show>
+          </div>
         </div>
 
         {/* Input Container */}
@@ -293,7 +301,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
         </div>
 
         {/* Suggested Prompt Container */}
-        <div class='mt-4 flex  items-center px-10' ref={parent} style={{ gap: '6px 24px' }}>
+        <div
+          class='mt-4 flex  items-center px-10'
+          ref={suggestedPromptsParent}
+          style={{ gap: '6px 24px' }}
+        >
           <Show when={messages().length > 2}>
             <p
               class='whitespace-nowrap border-r-2  border-gray-200 pr-8 font-bold'
