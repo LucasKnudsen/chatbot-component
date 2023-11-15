@@ -14,12 +14,7 @@ import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
-import {
-  ContextualContainer,
-  ContextualElement,
-  ContextualElementType,
-  SourceDocument,
-} from '@/features/contextual'
+import { ContextualContainer, useContextualElements } from '@/features/contextual'
 
 import { Badge } from '@/components/Badge'
 import { Sidebar, chatId } from '@/features/bot'
@@ -71,7 +66,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
-  const [contextualElements, setContextualElements] = createSignal<ContextualElement[]>([])
 
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc] = createSignal({})
@@ -85,6 +79,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
     welcomeMessage
   )
 
+  const { handleSourceDocuments, contextualElements } = useContextualElements({
+    chatflowid: props.chatflowid,
+    chatId,
+  })
+
   const {
     suggestedPrompts,
     fetchSuggestedPrompts,
@@ -92,46 +91,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
     isFetching: isFetchingSuggestedPrompts,
   } = useSuggestedPrompts(props.chatflowid, props.apiHost, messages)
 
-  const injectSourceDocuments = (documents: SourceDocument[]) => {
-    if (!documents) return
-    if (documents.length === 0) return
-
-    console.log('From socket: ', documents)
-
-    // Loops through documents and injects them into the contextual elements array
-    documents.forEach((doc) => {
-      doc.metadata.facts.forEach((fact, index) => {
-        const { id, name, value } = fact
-
-        // Add elements with 0.5 second delay
-        setTimeout(() => {
-          setContextualElements((prev) => {
-            // Return if element already exists
-            if (prev.find((el) => el.id === id)) return prev
-
-            return [
-              ...prev,
-
-              {
-                id,
-                value,
-                type: ContextualElementType.FACT,
-                source: doc.metadata.source,
-                header: name,
-              },
-            ]
-          })
-        }, 500 * index)
-      })
-    })
-  }
-
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
     apiHost: props.apiHost,
     onStart: () => appendMessage({ message: '', type: 'apiMessage' }),
     onToken: updateLastMessage,
-    onDocuments: injectSourceDocuments,
+    onDocuments: handleSourceDocuments,
   })
 
   const scrollToBottom = () => {
@@ -249,7 +214,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </DeleteButton>
         </div>
 
-        <div class='flex overflow-y-scroll flex-nowrap'>
+        <div class='flex flex-1 overflow-y-scroll flex-nowrap'>
           {/* Chat container  */}
           <div
             ref={chatContainer}
