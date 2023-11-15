@@ -64,21 +64,19 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
-  const [contextualElements, setContextualElements] =
-    createSignal<ContextualElement[]>(dummyContextuals)
+  const [contextualElements, setContextualElements] = createSignal<ContextualElement[]>(
+    dummyContextuals as any[]
+  )
 
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
-  const [sourcePopupSrc, setSourcePopupSrc] = createSignal({})
+  const [sourcePopupSrc] = createSignal({})
 
   const [parent] = createAutoAnimate(/* optional config */)
 
-  const {
-    messages,
-    updateLastMessage,
-    updateLastMessageSourceDocuments,
-    deleteChat,
-    appendMessage,
-  } = useMessages(props.chatflowid, welcomeMessage)
+  const { messages, updateLastMessage, deleteChat, appendMessage } = useMessages(
+    props.chatflowid,
+    welcomeMessage
+  )
 
   const {
     suggestedPrompts,
@@ -355,7 +353,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
         <div class='mt-4 flex  items-center pl-5 pr-5' ref={parent} style={{ gap: '6px 24px' }}>
           <Show when={messages().length > 2}>
             <p
-              class='whitespace-nowrap border-r-2  border-gray-200 pr-8 '
+              class='whitespace-nowrap border-r-2  border-gray-200 pr-8  '
               style={{
                 // TODO: Theme it
                 color: '#231843A1',
