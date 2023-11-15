@@ -13,7 +13,7 @@ type Props = {
 
 export const TextInput = (props: Props) => {
   const [inputValue, setInputValue] = createSignal(props.defaultValue ?? '')
-  let inputRef: HTMLInputElement | HTMLTextAreaElement | undefined
+  let inputRef: HTMLTextAreaElement | undefined
 
   const { theme } = useTheme()
   const {
@@ -57,9 +57,9 @@ export const TextInput = (props: Props) => {
       }}
       onKeyDown={submitWhenEnter}
     >
-      <div class='h-full'>
+      <div class='h-full flex-1'>
         <ShortTextInput
-          ref={inputRef as HTMLInputElement}
+          ref={inputRef}
           onInput={handleInput}
           value={inputValue()}
           fontSize={props.fontSize}
