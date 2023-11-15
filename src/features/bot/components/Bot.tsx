@@ -214,7 +214,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
         <div class='flex flex-1 overflow-y-scroll'>
           <div
             ref={chatContainer}
-            class='overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth'
+            class='flex-1 overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth'
           >
             <For each={[...messages()]}>
               {(message, index) => (
@@ -269,7 +269,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
             </For>
           </div>
 
-          <Sidebar class='pt-16 pr-10'>
+          <Sidebar class='pt-16 pr-10 max-w-[275px]'>
             <NavigationPrompts
               prompts={props.initialPrompts}
               onSelect={handleSubmit}
