@@ -8,7 +8,7 @@ import { TextInput } from '@/components/inputs/textInput'
 import { BotMessageTheme, TextInputTheme, UserMessageTheme } from '@/features/bubble/types'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
-import { extractChatbotResponse, removeDuplicateURL } from '@/features/messages/utils'
+import { extractChatbotResponse } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
 
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
@@ -16,10 +16,15 @@ import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
-import { SourceBubble } from '@/components/bubbles/SourceBubble'
+import {
+  ContextualContainer,
+  ContextualElement,
+  ContextualElementType,
+  SourceDocument,
+} from '@/features/contextual'
+import { dummyContextuals } from '@/features/contextual/dummy'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { Prompt, useSuggestedPrompts } from '@/features/prompt'
-import { isValidURL } from '@/utils/isValidUrl'
 import { chatId } from '..'
 
 Amplify.configure(awsconfig)
@@ -59,6 +64,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
+  const [contextualElements, setContextualElements] =
+    createSignal<ContextualElement[]>(dummyContextuals)
+
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc, setSourcePopupSrc] = createSignal({})
 
@@ -79,12 +87,44 @@ export const Bot = (props: BotProps & { class?: string }) => {
     isFetching: isFetchingSuggestedPrompts,
   } = useSuggestedPrompts(props.chatflowid, props.apiHost, messages)
 
+  const injectSourceDocuments = (documents: SourceDocument[]) => {
+    if (documents.length === 0) return
+
+    console.log('From socket: ', documents)
+
+    // Loops through documents and injects them into the contextual elements array
+    documents.forEach((doc) => {
+      doc.metadata.facts.forEach((fact, index) => {
+        const { id, name, value } = fact
+
+        // Add elements with 0.5 second delay
+        setTimeout(() => {
+          setContextualElements((prev) => {
+            // Return if element already exists
+            if (prev.find((el) => el.id === id)) return prev
+
+            return [
+              {
+                id,
+                value,
+                type: ContextualElementType.FACT,
+                source: doc.metadata.source,
+                header: name,
+              },
+              ...prev,
+            ]
+          })
+        }, 500 * index)
+      })
+    })
+  }
+
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
     apiHost: props.apiHost,
     onStart: () => appendMessage({ message: '', type: 'apiMessage' }),
     onToken: updateLastMessage,
-    onDocuments: updateLastMessageSourceDocuments,
+    onDocuments: injectSourceDocuments,
   })
 
   const scrollToBottom = () => {
@@ -183,6 +223,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
           props.class
         }
       >
+        {/* Header  */}
         <div
           class='flex'
           style={{
@@ -214,6 +255,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </DeleteButton>
         </div>
 
+        {/* Initial prompts  */}
         <div class='flex flex-wrap pl-5 pr-5'>
           <For each={props.initialPrompts}>
             {(p) => (
@@ -229,67 +271,73 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </For>
         </div>
 
-        <div
-          ref={chatContainer}
-          class='flex-1 overflow-y-scroll pt-16 px-3 relative scrollable-container max-w-3xl scroll-smooth'
-        >
-          <For each={[...messages()]}>
-            {(message, index) => (
-              <>
-                {message.type === 'userMessage' && (
-                  <GuestBubble
-                    message={message.message}
-                    backgroundColor={props.userMessage?.backgroundColor}
-                    textColor={props.userMessage?.textColor}
-                    showAvatar={props.userMessage?.showAvatar}
-                    avatarSrc={props.userMessage?.avatarSrc}
-                  />
-                )}
+        <div class='flex flex-1 flex-row flex-nowrap overflow-hidden'>
+          {/* Chat Container */}
+          <div
+            ref={chatContainer}
+            class='flex-1 overflow-y-scroll pt-8 px-3 m-5 relative scrollable-container scroll-smooth border border-gray-300 rounded-md '
+          >
+            <For each={[...messages()]}>
+              {(message, index) => (
+                <>
+                  {message.type === 'userMessage' && (
+                    <GuestBubble
+                      message={message.message}
+                      backgroundColor={props.userMessage?.backgroundColor}
+                      textColor={props.userMessage?.textColor}
+                      showAvatar={props.userMessage?.showAvatar}
+                      avatarSrc={props.userMessage?.avatarSrc}
+                    />
+                  )}
 
-                {message.type === 'apiMessage' && (
-                  <BotBubble
-                    message={message.message}
-                    backgroundColor={props.botMessage?.backgroundColor}
-                    textColor={props.botMessage?.textColor}
-                    showAvatar={props.botMessage?.showAvatar}
-                    avatarSrc={props.botMessage?.avatarSrc}
-                  />
-                )}
+                  {message.type === 'apiMessage' && (
+                    <BotBubble
+                      message={message.message}
+                      backgroundColor={props.botMessage?.backgroundColor}
+                      textColor={props.botMessage?.textColor}
+                      showAvatar={props.botMessage?.showAvatar}
+                      avatarSrc={props.botMessage?.avatarSrc}
+                    />
+                  )}
 
-                {message.type === 'userMessage' &&
-                  loading() &&
-                  index() === messages().length - 1 && <LoadingBubble />}
+                  {message.type === 'userMessage' &&
+                    loading() &&
+                    index() === messages().length - 1 && <LoadingBubble />}
 
-                {/* Popups */}
-                {message.sourceDocuments && message.sourceDocuments.length && (
-                  <div class='flex w-full'>
-                    <For each={[...removeDuplicateURL(message)]}>
-                      {(src) => {
-                        const URL = isValidURL(src.metadata.source)
+                  {/* Popups */}
+                  {/* {message.sourceDocuments && message.sourceDocuments.length && (
+                    <div class='flex w-full'>
+                      <For each={[...removeDuplicateURL(message)]}>
+                        {(src) => {
+                          const URL = isValidURL(src.metadata.source)
 
-                        return (
-                          <SourceBubble
-                            pageContent={URL ? URL.pathname : src.pageContent}
-                            metadata={src.metadata}
-                            onSourceClick={() => {
-                              if (URL) {
-                                window.open(src.metadata.source, '_blank')
-                              } else {
-                                setSourcePopupSrc(src)
-                                setSourcePopupOpen(true)
-                              }
-                            }}
-                          />
-                        )
-                      }}
-                    </For>
-                  </div>
-                )}
-              </>
-            )}
-          </For>
+                          return (
+                            <SourceBubble
+                              pageContent={URL ? URL.pathname : src.pageContent}
+                              metadata={src.metadata}
+                              onSourceClick={() => {
+                                if (URL) {
+                                  window.open(src.metadata.source, '_blank')
+                                } else {
+                                  setSourcePopupSrc(src)
+                                  setSourcePopupOpen(true)
+                                }
+                              }}
+                            />
+                          )
+                        }}
+                      </For>
+                    </div>
+                  )} */}
+                </>
+              )}
+            </For>
+          </div>
+
+          <ContextualContainer contextualElements={contextualElements} />
         </div>
 
+        {/* Text Input Container */}
         <div class='w-full pl-5 pr-5 pb-1'>
           <TextInput
             backgroundColor={props.textInput?.backgroundColor}

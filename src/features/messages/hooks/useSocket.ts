@@ -1,3 +1,4 @@
+import { SourceDocument } from '@/features/contextual'
 import { isStreamAvailableQuery } from '@/features/messages/queries/sendMessageQuery'
 import socketIOClient from 'socket.io-client'
 import { createSignal, onCleanup, onMount } from 'solid-js'
@@ -12,7 +13,7 @@ export function useSocket({
   chatflowid: string
   apiHost: string
   onStart: () => void
-  onDocuments: (documents: any) => void
+  onDocuments: (documents: SourceDocument[]) => void
   onToken: (token: string) => void
 }) {
   const [isChatFlowAvailableToStream, setIsChatFlowAvailableToStream] = createSignal(false)
