@@ -1,5 +1,4 @@
 import { DeleteButton } from '@/components/SendButton'
-import { Avatar } from '@/components/avatars/Avatar'
 import { BotBubble } from '@/components/bubbles/BotBubble'
 import { GuestBubble } from '@/components/bubbles/GuestBubble'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
@@ -12,14 +11,18 @@ import { Popup } from '@/features/popup'
 
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
-import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
+import { For, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
-import { SourceBubble } from '@/components/bubbles/SourceBubble'
+
+import { Sidebar, chatId } from '@/features/bot'
 import { useMessages } from '@/features/messages/hooks/useMessages'
-import { Prompt, useSuggestedPrompts } from '@/features/prompt'
+import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
+import { useTheme } from '@/features/theme/hooks'
+import { SourceBubble } from '@/components/bubbles/SourceBubble'
 import { isValidURL } from '@/utils/isValidUrl'
-import { chatId } from '..'
+
+
 
 Amplify.configure(awsconfig)
 
@@ -31,10 +34,17 @@ export type MessageType = {
   sourceDocuments?: any
 }
 
+export type PromptType =
+  | string
+  | {
+      display: string
+      prompt: string
+    }
+
 export type BotProps = {
   chatflowid: string
   themeId?: string
-  initialPrompts?: string[]
+  initialPrompts?: PromptType[]
   apiHost: string
   chatflowConfig?: Record<string, unknown>
   welcomeMessage?: string
@@ -61,7 +71,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc, setSourcePopupSrc] = createSignal({})
 
+  const { theme } = useTheme()
+
   const [parent] = createAutoAnimate(/* optional config */)
+
 
   const {
     messages,
@@ -176,7 +189,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
       <div
         ref={botContainer}
         class={
-          'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container' +
+          'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container ' +
           props.class
         }
       >
@@ -189,17 +202,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
             'border-top-right-radius': props.isFullPage ? '0px' : '6px',
           }}
         >
-          <Show when={props.titleAvatarSrc}>
-            <div class='w-4' />
-            <Avatar initialAvatarSrc={props.titleAvatarSrc} />
-          </Show>
-
-          <Show when={props.title}>
-            <span class='px-3 whitespace-pre-wrap font-semibold max-w-full'>{props.title}</span>
-          </Show>
-
-          <div class='flex-1' />
-
           <DeleteButton
             sendButtonColor={props.bubbleTextColor}
             type='button'
@@ -210,87 +212,79 @@ export const Bot = (props: BotProps & { class?: string }) => {
             <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
           </DeleteButton>
         </div>
+        
+        <div class='flex flex-1 overflow-y-scroll'>
+          <div
+            ref={chatContainer}
+            class='overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth'
+          >
+            <For each={[...messages()]}>
+              {(message, index) => (
+                <>
+                  {message.type === 'userMessage' && (
+                    <GuestBubble
+                      message={message.message}
+                      backgroundColor={props.userMessage?.backgroundColor}
+                      textColor={props.userMessage?.textColor}
+                      showAvatar={props.userMessage?.showAvatar}
+                      avatarSrc={props.userMessage?.avatarSrc}
+                    />
+                  )}
+                  {message.type === 'apiMessage' && (
+                    <BotBubble
+                      message={message.message}
+                      backgroundColor={props.botMessage?.backgroundColor}
+                      textColor={props.botMessage?.textColor}
+                      showAvatar={props.botMessage?.showAvatar}
+                      avatarSrc={props.botMessage?.avatarSrc}
+                    />
+                  )}
+                  {message.type === 'userMessage' &&
+                    loading() &&
+                    index() === messages().length - 1 && <LoadingBubble />}
+                  {/* Popups */}
+                  {message.sourceDocuments && message.sourceDocuments.length && (
+                    <div class='flex w-full'>
+                      <For each={[...removeDuplicateURL(message)]}>
+                        {(src) => {
+                          const URL = isValidURL(src.metadata.source)
+                          return (
+                            <SourceBubble
+                              pageContent={URL ? URL.pathname : src.pageContent}
+                              metadata={src.metadata}
+                              onSourceClick={() => {
+                                if (URL) {
+                                  window.open(src.metadata.source, '_blank')
+                                } else {
+                                  setSourcePopupSrc(src)
+                                  setSourcePopupOpen(true)
+                                }
+                              }}
+                            />
+                          )
+                        }}
+                      </For>
+                    </div>
+                  )}
+                </>
+              )}
+            </For>
+          </div>
 
-        <div class='flex flex-wrap pl-5 pr-5'>
-          <For each={props.initialPrompts}>
-            {(p) => (
-              <Prompt
-                prompt={p}
-                onClick={handleSubmit}
-                textColor={props.textInput?.textColor}
-                // TODO: Theme it
-                surfaceColor={'#5B93FF14' || props.bubbleBackgroundColor}
-                disabled={loading()}
-              />
-            )}
-          </For>
+          <Sidebar class='pt-16 pr-10'>
+            <NavigationPrompts
+              prompts={props.initialPrompts}
+              onSelect={handleSubmit}
+              disabled={loading()}
+            />
+          </Sidebar>
         </div>
-
-        <div
-          ref={chatContainer}
-          class='flex-1 overflow-y-scroll pt-16 px-3 relative scrollable-container max-w-3xl scroll-smooth'
-        >
-          <For each={[...messages()]}>
-            {(message, index) => (
-              <>
-                {message.type === 'userMessage' && (
-                  <GuestBubble
-                    message={message.message}
-                    backgroundColor={props.userMessage?.backgroundColor}
-                    textColor={props.userMessage?.textColor}
-                    showAvatar={props.userMessage?.showAvatar}
-                    avatarSrc={props.userMessage?.avatarSrc}
-                  />
-                )}
-
-                {message.type === 'apiMessage' && (
-                  <BotBubble
-                    message={message.message}
-                    backgroundColor={props.botMessage?.backgroundColor}
-                    textColor={props.botMessage?.textColor}
-                    showAvatar={props.botMessage?.showAvatar}
-                    avatarSrc={props.botMessage?.avatarSrc}
-                  />
-                )}
-
-                {message.type === 'userMessage' &&
-                  loading() &&
-                  index() === messages().length - 1 && <LoadingBubble />}
-
-                {/* Popups */}
-                {message.sourceDocuments && message.sourceDocuments.length && (
-                  <div class='flex w-full'>
-                    <For each={[...removeDuplicateURL(message)]}>
-                      {(src) => {
-                        const URL = isValidURL(src.metadata.source)
-
-                        return (
-                          <SourceBubble
-                            pageContent={URL ? URL.pathname : src.pageContent}
-                            metadata={src.metadata}
-                            onSourceClick={() => {
-                              if (URL) {
-                                window.open(src.metadata.source, '_blank')
-                              } else {
-                                setSourcePopupSrc(src)
-                                setSourcePopupOpen(true)
-                              }
-                            }}
-                          />
-                        )
-                      }}
-                    </For>
-                  </div>
-                )}
-              </>
-            )}
-          </For>
-        </div>
-
-
-         <div class='w-full pl-10 pr-10 pb-1'>
+        
+        <div class='w-full pb-1 px-10'>
           <TextInput disabled={loading()} defaultValue={userInput()} onSubmit={handleSubmit} />
         </div>
+
+     
 
         {/* Suggested Prompt Container */}
         <div class='mt-4 flex  items-center pl-5 pr-5' ref={parent} style={{ gap: '6px 24px' }}>
@@ -314,9 +308,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
                   <Prompt
                     prompt={p}
                     onClick={handleSubmit}
-                    textColor={props.textInput?.textColor}
+                    color={props.textInput?.textColor}
                     // TODO: Theme it
-                    surfaceColor={'#5B93FF14' || props.bubbleBackgroundColor}
+                    background={'#5B93FF14' || props.bubbleBackgroundColor}
                     disabled={loading()}
                   />
                 )}
@@ -329,9 +323,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
               >
                 Fetch
               </button>
-            )}
-          </Show>
-        </div>
+   
 
         <Badge
           badgeBackgroundColor={props.badgeBackgroundColor}
