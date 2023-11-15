@@ -33,5 +33,6 @@ export enum ContextualElementType {
   FACT = 'fact',
   LINK = 'link',
   VIDEO = 'video',
+  IFRAME = 'iframe',
   PICTURE = 'picture',
 }

@@ -2,6 +2,10 @@ import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Accessor, For } from 'solid-js'
 import { ContextualElement } from '.'
 import { Fact } from './components/Fact'
+import { Iframe } from './components/Iframe'
+import { Link } from './components/Link'
+import { Picture } from './components/Picture'
+import { Video } from './components/Video'
 
 type Props = {
   contextualElements: Accessor<ContextualElement[]>
@@ -9,6 +13,8 @@ type Props = {
 
 export const ContextualContainer = ({ contextualElements }: Props) => {
   let contextContainer: HTMLDivElement | undefined
+
+  console.log('contextualElements', contextualElements())
 
   const [parent] = createAutoAnimate(/* optional config */)
 
@@ -33,6 +39,18 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
           switch (element.type) {
             case 'fact':
               return <Fact element={element} />
+
+            case 'picture':
+              return <Picture element={element} />
+
+            case 'video':
+              return <Video element={element} />
+
+            case 'iframe':
+              return <Iframe element={element} />
+
+            case 'link':
+              return <Link element={element} />
 
             default:
               return null

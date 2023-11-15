@@ -21,13 +21,23 @@ export const useContextualElements = (props: Props) => {
     }
   })
 
+  const saveHistory = () => {
+    localStorage.setItem(
+      contextStorageKey,
+      JSON.stringify({ chatId: props.chatId(), contextHistory: contextualElements() })
+    )
+  }
+
   const handleSourceDocuments = (documents: SourceDocument[]) => {
     if (!documents) return
     if (documents.length === 0) return
 
     console.log('From socket: ', documents)
+    handleFacts(documents)
+    handleLinkedResources(documents)
+  }
 
-    // Loops through documents and injects them into the contextual elements array
+  const handleFacts = (documents: SourceDocument[]) => {
     documents.forEach((doc) => {
       doc.metadata.facts.forEach((fact, index) => {
         const { id, name, value } = fact
@@ -51,10 +61,37 @@ export const useContextualElements = (props: Props) => {
             ]
           })
 
-          localStorage.setItem(
-            contextStorageKey,
-            JSON.stringify({ chatId: props.chatId(), contextHistory: contextualElements() })
-          )
+          saveHistory()
+        }, 500 * index)
+      })
+    })
+  }
+
+  const handleLinkedResources = (documents: SourceDocument[]) => {
+    documents.forEach((doc) => {
+      doc.metadata.linked_resources.forEach((resource, index) => {
+        const { link, type, description } = resource
+
+        // Add elements with 0.5 second delay
+        setTimeout(() => {
+          setContextualElements((prev) => {
+            // Return if element already exists
+            if (prev.find((el) => el.id === link && el.type === type)) return prev
+
+            return [
+              ...prev,
+
+              {
+                id: link,
+                value: link,
+                description,
+                type: type as ContextualElementType,
+                source: doc.metadata.source,
+              },
+            ]
+          })
+
+          saveHistory()
         }, 500 * index)
       })
     })
