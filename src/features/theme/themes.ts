@@ -1,4 +1,5 @@
 export type Theme = {
+  primaryColor: string
   backgroundColor: string
   borderColor: string
   textInputTextColor: string
@@ -10,6 +11,7 @@ export type Theme = {
 }
 
 export const defaultTheme: Theme = {
+  primaryColor: 'rgba(91, 147, 255, 1)',
   backgroundColor: '#F3F1F1',
   borderColor: 'rgba(147, 147, 147, 0.25)',
   textInputPlaceholder: 'Ask me anything...',
