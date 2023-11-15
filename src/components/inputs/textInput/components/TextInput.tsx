@@ -1,25 +1,27 @@
 import { SendButton } from '@/components/SendButton'
+import { useTheme } from '@/features/theme/hooks'
 import { isMobile } from '@/utils/isMobileSignal'
 import { createEffect, createSignal, onMount } from 'solid-js'
 import { ShortTextInput } from './ShortTextInput'
 
 type Props = {
-  placeholder?: string
-  backgroundColor?: string
-  textColor?: string
-  sendButtonColor?: string
   defaultValue?: string
   fontSize?: number
   disabled?: boolean
   onSubmit: (value: string) => void
 }
 
-const defaultBackgroundColor = '#ffffff'
-const defaultTextColor = '#303235'
-
 export const TextInput = (props: Props) => {
   const [inputValue, setInputValue] = createSignal(props.defaultValue ?? '')
   let inputRef: HTMLInputElement | HTMLTextAreaElement | undefined
+
+  const { theme } = useTheme()
+  const {
+    textInputTextColor,
+    textInputBackgroundColor,
+    textInputSendIconColor,
+    textInputPlaceholder,
+  } = theme()
 
   const handleInput = (inputValue: string) => setInputValue(inputValue)
 
@@ -46,26 +48,27 @@ export const TextInput = (props: Props) => {
 
   return (
     <div
-      class={'flex items-end justify-between chatbot-input'}
+      class={'flex  justify-between rounded-lg h-24'}
       data-testid='input'
       style={{
-        'border-top': '1px solid #eeeeee',
         margin: 'auto',
-        'background-color': props.backgroundColor ?? defaultBackgroundColor,
-        color: props.textColor ?? defaultTextColor,
+        'background-color': textInputBackgroundColor,
+        color: textInputTextColor,
       }}
       onKeyDown={submitWhenEnter}
     >
-      <ShortTextInput
-        ref={inputRef as HTMLInputElement}
-        onInput={handleInput}
-        value={inputValue()}
-        fontSize={props.fontSize}
-        disabled={props.disabled}
-        placeholder={props.placeholder ?? 'Type your question'}
-      />
+      <div class='h-full'>
+        <ShortTextInput
+          ref={inputRef as HTMLInputElement}
+          onInput={handleInput}
+          value={inputValue()}
+          fontSize={props.fontSize}
+          disabled={props.disabled}
+          placeholder={textInputPlaceholder}
+        />
+      </div>
       <SendButton
-        sendButtonColor={props.sendButtonColor}
+        sendButtonColor={textInputSendIconColor}
         type='button'
         isDisabled={props.disabled || inputValue() === ''}
         class='my-2 ml-2'

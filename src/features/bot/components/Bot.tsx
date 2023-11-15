@@ -1,11 +1,10 @@
-import { Badge } from '@/components/Badge'
 import { DeleteButton } from '@/components/SendButton'
 import { Avatar } from '@/components/avatars/Avatar'
 import { BotBubble } from '@/components/bubbles/BotBubble'
 import { GuestBubble } from '@/components/bubbles/GuestBubble'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
 import { TextInput } from '@/components/inputs/textInput'
-import { BotMessageTheme, TextInputTheme, UserMessageTheme } from '@/features/bubble/types'
+import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse, removeDuplicateURL } from '@/features/messages/utils'
@@ -34,20 +33,20 @@ export type MessageType = {
 
 export type BotProps = {
   chatflowid: string
+  themeId?: string
   initialPrompts?: string[]
   apiHost: string
   chatflowConfig?: Record<string, unknown>
   welcomeMessage?: string
   botMessage?: BotMessageTheme
   userMessage?: UserMessageTheme
-  textInput?: TextInputTheme
+
   poweredByTextColor?: string
   badgeBackgroundColor?: string
   bubbleBackgroundColor?: string
   bubbleTextColor?: string
   title?: string
   titleAvatarSrc?: string
-  fontSize?: number
   isFullPage?: boolean
 }
 
@@ -165,9 +164,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     if (messages() || suggestedPrompts()) scrollToBottom()
   })
 
-  createEffect(() => {
-    if (props.fontSize && botContainer) botContainer.style.fontSize = `${props.fontSize}px`
-  })
+  createEffect(() => {})
 
   onCleanup(() => {
     setUserInput('')
@@ -290,17 +287,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </For>
         </div>
 
-        <div class='w-full pl-5 pr-5 pb-1'>
-          <TextInput
-            backgroundColor={props.textInput?.backgroundColor}
-            textColor={props.textInput?.textColor}
-            placeholder={props.textInput?.placeholder}
-            sendButtonColor={props.textInput?.sendButtonColor}
-            fontSize={props.fontSize}
-            disabled={loading()}
-            defaultValue={userInput()}
-            onSubmit={handleSubmit}
-          />
+
+         <div class='w-full pl-10 pr-10 pb-1'>
+          <TextInput disabled={loading()} defaultValue={userInput()} onSubmit={handleSubmit} />
         </div>
 
         {/* Suggested Prompt Container */}
@@ -349,6 +338,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
           poweredByTextColor={props.poweredByTextColor}
           botContainer={botContainer}
         />
+
       </div>
       {sourcePopupOpen() && (
         <Popup
