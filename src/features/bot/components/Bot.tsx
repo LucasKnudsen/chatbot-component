@@ -14,16 +14,18 @@ import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
-import { ContextualElement, ContextualElementType, SourceDocument } from '@/features/contextual'
-import { dummyContextuals } from '@/features/contextual/dummy'
+import {
+  ContextualContainer,
+  ContextualElement,
+  ContextualElementType,
+  SourceDocument,
+} from '@/features/contextual'
 
 import { Badge } from '@/components/Badge'
-import { SourceBubble } from '@/components/bubbles/SourceBubble'
 import { Sidebar, chatId } from '@/features/bot'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
-import { isValidURL } from '@/utils/isValidUrl'
 
 Amplify.configure(awsconfig)
 
@@ -69,9 +71,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
-  const [contextualElements, setContextualElements] = createSignal<ContextualElement[]>(
-    dummyContextuals as any[]
-  )
+  const [contextualElements, setContextualElements] = createSignal<ContextualElement[]>([])
 
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc] = createSignal({})
@@ -93,6 +93,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   } = useSuggestedPrompts(props.chatflowid, props.apiHost, messages)
 
   const injectSourceDocuments = (documents: SourceDocument[]) => {
+    if (!documents) return
     if (documents.length === 0) return
 
     console.log('From socket: ', documents)
@@ -109,6 +110,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
             if (prev.find((el) => el.id === id)) return prev
 
             return [
+              ...prev,
+
               {
                 id,
                 value,
@@ -116,7 +119,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
                 source: doc.metadata.source,
                 header: name,
               },
-              ...prev,
             ]
           })
         }, 500 * index)
@@ -247,10 +249,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </DeleteButton>
         </div>
 
-        <div class='flex flex-1 overflow-y-scroll'>
+        <div class='flex overflow-y-scroll flex-nowrap'>
+          {/* Chat container  */}
           <div
             ref={chatContainer}
-            class='overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth'
+            class='m-5 flex-1 overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth border border-gray-300 rounded-md'
           >
             <For each={[...messages()]}>
               {(message, index) => (
@@ -277,7 +280,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                     loading() &&
                     index() === messages().length - 1 && <LoadingBubble />}
                   {/* Popups */}
-                  {message.sourceDocuments && message.sourceDocuments.length && (
+                  {/* {message.sourceDocuments && message.sourceDocuments.length && (
                     <div class='flex w-full'>
                       <For each={[...removeDuplicateURL(message)]}>
                         {(src) => {
@@ -299,12 +302,15 @@ export const Bot = (props: BotProps & { class?: string }) => {
                         }}
                       </For>
                     </div>
-                  )}
+                  )} */}
                 </>
               )}
             </For>
           </div>
 
+          <ContextualContainer contextualElements={contextualElements} />
+
+          {/* Sidebar container */}
           <Sidebar class='pt-16 pr-10'>
             <NavigationPrompts
               prompts={props.initialPrompts}
@@ -314,19 +320,19 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </Sidebar>
         </div>
 
+        {/* Input Container */}
         <div class='w-full pb-1 px-10'>
           <TextInput disabled={loading()} defaultValue={userInput()} onSubmit={handleSubmit} />
         </div>
 
         {/* Suggested Prompt Container */}
-        <div class='mt-4 flex  items-center pl-5 pr-5' ref={parent} style={{ gap: '6px 24px' }}>
+        <div class='mt-4 flex  items-center px-10' ref={parent} style={{ gap: '6px 24px' }}>
           <Show when={messages().length > 2}>
             <p
-              class='whitespace-nowrap border-r-2  border-gray-200 pr-8  '
+              class='whitespace-nowrap border-r-2  border-gray-200 pr-8 font-bold'
               style={{
                 // TODO: Theme it
                 color: '#231843A1',
-                'font-weight': 700,
               }}
             >
               SUGGESTED QUESTIONS

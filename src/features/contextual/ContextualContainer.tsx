@@ -8,7 +8,20 @@ type Props = {
 }
 
 export const ContextualContainer = ({ contextualElements }: Props) => {
+  let contextContainer: HTMLDivElement | undefined
+
   const [parent] = createAutoAnimate(/* optional config */)
+
+  // // Auto scroll chat to bottom
+  // createEffect(() => {
+  //   if (contextualElements()) scrollToBottom()
+  // })
+
+  // const scrollToBottom = () => {
+  //   setTimeout(() => {
+  //     parent()?.scrollTo(0, parent().scrollHeight)
+  //   }, 50)
+  // }
 
   return (
     <div
