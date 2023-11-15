@@ -1,4 +1,3 @@
-import { DeleteButton } from '@/components/SendButton'
 import { BotBubble } from '@/components/bubbles/BotBubble'
 import { GuestBubble } from '@/components/bubbles/GuestBubble'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
@@ -16,6 +15,7 @@ import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 import awsconfig from '@/aws-exports'
 
 import { Badge } from '@/components/Badge'
+import { Nav } from '@/components/Nav'
 import { SourceBubble } from '@/components/bubbles/SourceBubble'
 import { Sidebar, chatId } from '@/features/bot'
 import { useMessages } from '@/features/messages/hooks/useMessages'
@@ -191,25 +191,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
           props.class
         }
       >
-        <div
-          class='flex'
-          style={{
-            background: props.bubbleBackgroundColor,
-            color: props.bubbleTextColor,
-            'border-top-left-radius': props.isFullPage ? '0px' : '6px',
-            'border-top-right-radius': props.isFullPage ? '0px' : '6px',
-          }}
-        >
-          <DeleteButton
-            sendButtonColor={props.bubbleTextColor}
-            type='button'
-            isDisabled={messages().length === 1}
-            class='my-2 ml-2'
-            on:click={clear}
-          >
-            <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
-          </DeleteButton>
-        </div>
+        <Nav messages={messages()} onClear={clear} />
 
         <div class='flex flex-1 overflow-y-scroll'>
           <div

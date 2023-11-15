@@ -2,7 +2,7 @@ import type { BubbleProps } from './features/bubble'
 
 export const defaultBotProps: BubbleProps = {
   chatflowid: '',
-  apiHost: undefined,
+  apiHost: '',
   chatflowConfig: undefined,
   theme: undefined,
 }
