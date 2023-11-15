@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Styles from Flowise Embed */
+
 :host {
   --chatbot-container-bg-image: none;
   --chatbot-container-bg-color: transparent;
@@ -15,10 +17,6 @@
 
   --chatbot-guest-bubble-bg-color: #3b81f6;
   --chatbot-guest-bubble-color: #ffffff;
-
-  --chatbot-input-bg-color: #ffffff;
-  --chatbot-input-color: #303235;
-  --chatbot-input-placeholder-color: #9095a0;
 
   --chatbot-header-bg-color: #ffffff;
   --chatbot-header-color: #303235;
@@ -199,17 +197,6 @@ textarea {
   color: var(--chatbot-guest-bubble-color);
   background-color: #3b81f6;
   border-radius: 6px;
-}
-
-.chatbot-input {
-  color: #303235;
-  background-color: #ffffff;
-  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.1);
-  border-radius: var(--chatbot-border-radius);
-}
-
-.chatbot-input-error-message {
-  color: #303235;
 }
 
 .chatbot-button > .send-icon {
