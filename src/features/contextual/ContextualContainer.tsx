@@ -1,5 +1,5 @@
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { Accessor, For } from 'solid-js'
+import { Accessor, For, createEffect } from 'solid-js'
 import { ContextualElement } from '.'
 import { Fact } from './components/Fact'
 import { Iframe } from './components/Iframe'
@@ -16,23 +16,27 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
 
   console.log('contextualElements', contextualElements())
 
-  const [parent] = createAutoAnimate(/* optional config */)
+  const [parent] = createAutoAnimate({ duration: 500 })
 
   // // Auto scroll chat to bottom
-  // createEffect(() => {
-  //   if (contextualElements()) scrollToBottom()
-  // })
+  createEffect(() => {
+    if (contextualElements()) scrollToBottom()
+  })
 
-  // const scrollToBottom = () => {
-  //   setTimeout(() => {
-  //     parent()?.scrollTo(0, parent().scrollHeight)
-  //   }, 50)
-  // }
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      const contextualContainer = document.getElementById('contextual-container')
+      if (contextualContainer) {
+        contextualContainer.scrollTop = contextualContainer.scrollHeight
+      }
+    }, 50)
+  }
 
   return (
     <div
+      id='contextual-container'
       ref={parent}
-      class='flex-1 overflow-y-scroll pt-8 px-3 m-5 relative scrollable-container scroll-smooth border border-gray-300 rounded-md '
+      class='flex-1 flex-col  overflow-y-scroll pt-8 px-3 m-5 relative scrollable-container scroll-smooth border border-gray-300 rounded-md '
     >
       <For each={contextualElements()}>
         {(element) => {

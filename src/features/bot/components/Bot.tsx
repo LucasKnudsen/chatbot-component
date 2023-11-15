@@ -79,10 +79,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
     welcomeMessage
   )
 
-  const { handleSourceDocuments, contextualElements } = useContextualElements({
-    chatflowid: props.chatflowid,
-    chatId,
-  })
+  const { handleSourceDocuments, contextualElements, clearContextualElements } =
+    useContextualElements({
+      chatflowid: props.chatflowid,
+      chatId,
+    })
 
   const {
     suggestedPrompts,
@@ -107,6 +108,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const clear = () => {
     deleteChat()
+    clearContextualElements()
     clearSuggestions()
   }
 

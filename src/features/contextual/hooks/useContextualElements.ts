@@ -28,15 +28,6 @@ export const useContextualElements = (props: Props) => {
     )
   }
 
-  const handleSourceDocuments = (documents: SourceDocument[]) => {
-    if (!documents) return
-    if (documents.length === 0) return
-
-    console.log('From socket: ', documents)
-    handleFacts(documents)
-    handleLinkedResources(documents)
-  }
-
   const handleFacts = (documents: SourceDocument[]) => {
     documents.forEach((doc) => {
       doc.metadata.facts.forEach((fact, index) => {
@@ -92,10 +83,29 @@ export const useContextualElements = (props: Props) => {
           })
 
           saveHistory()
-        }, 500 * index)
+        }, 1000 * index)
       })
     })
   }
 
-  return { handleSourceDocuments, contextualElements, setContextualElements }
+  const handleSourceDocuments = (documents: SourceDocument[]) => {
+    if (!documents) return
+    if (documents.length === 0) return
+
+    console.log('From socket: ', documents)
+    handleFacts(documents)
+    handleLinkedResources(documents)
+  }
+
+  const clearContextualElements = () => {
+    localStorage.removeItem(contextStorageKey)
+    setContextualElements([])
+  }
+
+  return {
+    handleSourceDocuments,
+    contextualElements,
+    setContextualElements,
+    clearContextualElements,
+  }
 }
