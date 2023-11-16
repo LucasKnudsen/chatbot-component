@@ -200,7 +200,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
         }}
       >
         <div
-          class='absolute h-full w-full opacity-[15%]'
+          class='absolute h-full w-full opacity-[15%] pointer-events-none'
           style={{
             background: `url(${backgroundImageUrl})`,
             'background-size': 'cover',
