@@ -295,9 +295,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
         {/* Suggested Prompt Container */}
 
         <div class='flex items-center px-10 h-28' ref={parent} style={{ gap: '6px 24px' }}>
-
-        <div class='mt-4 flex  items-center px-10' ref={parent} style={{ gap: '6px 24px' }}>
-
           <Show when={messages().length > 2}>
             <p
               class='whitespace-nowrap border-r-2  border-gray-200 pr-8 font-bold'
