@@ -9,7 +9,7 @@ import { extractChatbotResponse } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
-import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
+import { For, Match, Show, Switch, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
 import { ContextualContainer, useContextualElements } from '@/features/contextual'
@@ -202,24 +202,27 @@ export const Bot = (props: BotProps & { class?: string }) => {
           props.class
         }
         style={{
-          background: backgroundColor,
+          'background-color': backgroundColor,
+          background: `url(${backgroundImageUrl})`,
         }}
       >
-        <div
-          class='absolute h-full w-full opacity-[15%] pointer-events-none'
+        {/* <div
+          class='absolute h-full w-full opacity-[100%] pointer-events-none z-1'
           style={{
             background: `url(${backgroundImageUrl})`,
             'background-size': 'cover',
           }}
-        />
+        /> */}
+
+        {/* Nav container  */}
         <Nav messages={messages()} onClear={clear} />
 
         {/* Chat container  */}
-        <div ref={chatContainer} class='flex flex-1 overflow-y-scroll flex-nowrap'>
+        <div ref={chatParent} class='flex flex-1 overflow-y-scroll flex-nowrap '>
           <Show when={messages().length > 1}>
             <div
               ref={chatContainer}
-              class='m-5 flex-1 overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth border border-gray-300 rounded-md'
+              class='m-5 flex-1 overflow-y-scroll pt-16 pl-10  scroll-smooth  rounded-md'
             >
               <For each={[...messages()]}>
                 {(message, index) => (
@@ -277,21 +280,25 @@ export const Bot = (props: BotProps & { class?: string }) => {
             <ContextualContainer contextualElements={contextualElements} />
           </Show>
 
-          <div ref={sidebarParent}>
-            <Show when={messages().length < 2}>
-              <Sidebar class='pt-16 pr-10 max-w-[275px]'>
+          <Show when={messages().length < 2}>
+            <div ref={sidebarParent} class='flex justify-between w-full items-end mx-10'>
+              <h1 class='text-5xl max-w-md h-fit mb-8 font-light'>
+                Hey there again. How can I help you today?
+              </h1>
+
+              <Sidebar class='pt-16  max-w-[275px] h-full'>
                 <NavigationPrompts
                   prompts={props.initialPrompts}
                   onSelect={handleSubmit}
                   disabled={loading()}
                 />
               </Sidebar>
-            </Show>
-          </div>
+            </div>
+          </Show>
         </div>
 
         {/* Input Container */}
-        <div class='w-full pb-1 px-10'>
+        <div class='w-full pb-1 px-10 z-1 '>
           <TextInput
             disabled={loading()}
             defaultValue={userInput()}
@@ -301,46 +308,43 @@ export const Bot = (props: BotProps & { class?: string }) => {
         </div>
 
         {/* Suggested Prompt Container */}
-
-        <div
-          class='flex items-center px-10 h-28'
-          ref={suggestedPromptsParent}
-          style={{ gap: '6px 24px' }}
-        >
+        <div ref={suggestedPromptsParent} class='mb-8'>
           <Show when={messages().length > 2}>
-            <p
-              class='whitespace-nowrap border-r-2  border-gray-200 pr-8 font-bold'
-              style={{
-                // TODO: Theme it
-                color: '#231843A1',
-              }}
+            <div
+              ref={suggestedPromptsParent}
+              class='flex items-center px-10 h-20 '
+              style={{ gap: '6px 24px' }}
             >
-              {props.suggestedPromptsTitle ?? 'SUGGESTED QUESTIONS'}
-            </p>
-
-            {isFetchingSuggestedPrompts() ? (
-              <LoadingBubble />
-            ) : suggestedPrompts().length > 0 ? (
-              <For each={suggestedPrompts()}>
-                {(p) => (
-                  <Prompt
-                    prompt={p}
-                    onClick={handleSubmit}
-                    color={promptTextColor}
-                    background={promptBackground}
-                    disabled={loading()}
-                  />
-                )}
-              </For>
-            ) : (
-              <button
-                onClick={() => {
-                  fetchSuggestedPrompts()
+              <p
+                class='whitespace-nowrap border-r-2  border-gray-200 pr-8 font-bold'
+                style={{
+                  // TODO: Theme it
+                  color: '#231843A1',
                 }}
               >
-                Fetch
-              </button>
-            )}
+                {props.suggestedPromptsTitle ?? 'FOLLOW UP QUESTIONS'}
+              </p>
+
+              <Switch fallback={<LoadingBubble />}>
+                <Match when={isFetchingSuggestedPrompts()}>
+                  <LoadingBubble />
+                </Match>
+
+                <Match when={suggestedPrompts().length > 0}>
+                  <For each={suggestedPrompts()}>
+                    {(p) => (
+                      <Prompt
+                        prompt={p}
+                        onClick={handleSubmit}
+                        color={promptTextColor}
+                        background={promptBackground}
+                        disabled={loading()}
+                      />
+                    )}
+                  </For>
+                </Match>
+              </Switch>
+            </div>
           </Show>
         </div>
 

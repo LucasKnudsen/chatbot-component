@@ -1,4 +1,4 @@
-import background from '@/assets/background-1.png'
+import background2 from '@/assets/background-2.png'
 
 export type Theme = {
   primaryColor: string
@@ -15,8 +15,8 @@ export type Theme = {
 
 export const defaultTheme: Theme = {
   primaryColor: 'rgba(91, 147, 255, 1)',
-  backgroundColor: '#E7E5F4',
-  backgroundImageUrl: background,
+  backgroundColor: 'transparent',
+  backgroundImageUrl: background2,
   borderColor: 'rgba(147, 147, 147, 0.25)',
   textInputTextColor: 'rgba(128, 114, 166, 1)',
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',

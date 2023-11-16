@@ -36,7 +36,7 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
     <div
       id='contextual-container'
       ref={parent}
-      class='flex-1 flex-col  overflow-y-scroll pt-8 px-3 m-5 relative scrollable-container scroll-smooth border border-gray-300 rounded-md '
+      class='flex-1 flex-col  overflow-y-scroll pt-8 px-3 m-5 relative  scroll-smooth rounded-md '
     >
       <For each={contextualElements()}>
         {(element) => {
