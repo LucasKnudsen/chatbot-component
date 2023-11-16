@@ -1,6 +1,9 @@
+import background from '@/assets/background-1.png'
+
 export type Theme = {
   primaryColor: string
   backgroundColor: string
+  backgroundImageUrl: string
   borderColor: string
   textInputTextColor: string
   textInputBackgroundColor: string
@@ -13,6 +16,7 @@ export type Theme = {
 export const defaultTheme: Theme = {
   primaryColor: 'rgba(91, 147, 255, 1)',
   backgroundColor: '#E7E5F4',
+  backgroundImageUrl: background,
   borderColor: 'rgba(147, 147, 147, 0.25)',
   textInputTextColor: 'rgba(128, 114, 166, 1)',
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
@@ -27,6 +31,7 @@ export const defaultTheme: Theme = {
 export const ugly: Theme = {
   primaryColor: 'red',
   backgroundColor: 'green',
+  backgroundImageUrl: 'https://picsum.photos/200/300',
   borderColor: 'blue',
   textInputTextColor: 'purple',
   textInputBackgroundColor: 'yellow',

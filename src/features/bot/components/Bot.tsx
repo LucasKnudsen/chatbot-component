@@ -7,7 +7,6 @@ import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse, removeDuplicateURL } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
-
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
@@ -72,7 +71,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupSrc, setSourcePopupSrc] = createSignal({})
 
   const { theme, setThemeFromKey } = useTheme()
-  const { backgroundColor, promptBackground, promptTextColor } = theme()
+  const { backgroundColor, backgroundImageUrl, promptBackground, promptTextColor } = theme()
 
   const [parent] = createAutoAnimate(/* optional config */)
 
@@ -200,6 +199,13 @@ export const Bot = (props: BotProps & { class?: string }) => {
           background: backgroundColor,
         }}
       >
+        <div
+          class='absolute h-full w-full opacity-[15%]'
+          style={{
+            background: `url(${backgroundImageUrl})`,
+            'background-size': 'cover',
+          }}
+        ></div>
         <Nav messages={messages()} onClear={clear} />
 
         <div class='flex flex-1 overflow-y-scroll'>
