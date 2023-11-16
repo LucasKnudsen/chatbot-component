@@ -58,6 +58,10 @@ export const Bubble = (props: BubbleProps) => {
         <Show when={isBotStarted()}>
           <Bot
             initialPrompts={props.initialPrompts}
+            themeId={props.themeId}
+            navPromptsTitle={props.navPromptsTitle}
+            promptPlaceholder={props.promptPlaceholder}
+            suggestedPromptsTitle={props.suggestedPromptsTitle}
             badgeBackgroundColor={bubbleProps.theme?.chatWindow?.backgroundColor}
             bubbleBackgroundColor={bubbleProps.theme?.button?.backgroundColor ?? defaultButtonColor}
             bubbleTextColor={bubbleProps.theme?.button?.iconColor ?? defaultIconColor}
@@ -65,10 +69,8 @@ export const Bubble = (props: BubbleProps) => {
             titleAvatarSrc={bubbleProps.theme?.chatWindow?.titleAvatarSrc}
             welcomeMessage={bubbleProps.theme?.chatWindow?.welcomeMessage}
             poweredByTextColor={bubbleProps.theme?.chatWindow?.poweredByTextColor}
-            textInput={bubbleProps.theme?.chatWindow?.textInput}
             botMessage={bubbleProps.theme?.chatWindow?.botMessage}
             userMessage={bubbleProps.theme?.chatWindow?.userMessage}
-            fontSize={bubbleProps.theme?.chatWindow?.fontSize}
             chatflowid={props.chatflowid}
             chatflowConfig={props.chatflowConfig}
             apiHost={props.apiHost}

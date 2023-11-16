@@ -4,6 +4,7 @@ import { For } from 'solid-js'
 import { NavigationPrompt } from '.'
 
 type NavigationPromptsProps = {
+  title?: string
   prompts?: PromptType[]
   onSelect: (prompt: string) => void
   disabled: boolean
@@ -11,9 +12,11 @@ type NavigationPromptsProps = {
 
 export const NavigationPrompts = (props: NavigationPromptsProps) => {
   const { theme } = useTheme()
+  const { borderColor, navPromptBackground, promptTextColor } = theme()
+
   return (
     <>
-      <div class='text-lg font-semibold'>What would you like to know?</div>
+      <div class='text-lg font-semibold'>{props.title ?? 'What would you like to know?'}</div>
 
       <ul>
         <For each={props.prompts}>
@@ -23,9 +26,9 @@ export const NavigationPrompts = (props: NavigationPromptsProps) => {
               prompt={p}
               onClick={(prompt) => props.onSelect(prompt)}
               disabled={props.disabled}
-              borderColor={theme().borderColor}
-              background={theme().promptBackground}
-              color={theme().promptTextColor}
+              borderColor={borderColor}
+              background={navPromptBackground}
+              color={promptTextColor}
             />
           )}
         </For>

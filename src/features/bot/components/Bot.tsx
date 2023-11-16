@@ -1,4 +1,3 @@
-import { DeleteButton } from '@/components/SendButton'
 import { BotBubble } from '@/components/bubbles/BotBubble'
 import { GuestBubble } from '@/components/bubbles/GuestBubble'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
@@ -8,15 +7,14 @@ import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
-
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
-import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
+import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
 import { ContextualContainer, useContextualElements } from '@/features/contextual'
 
-import { Badge } from '@/components/Badge'
+import { Nav } from '@/components/Nav'
 import { Sidebar, chatId } from '@/features/bot'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
@@ -44,11 +42,13 @@ export type BotProps = {
   themeId?: string
   initialPrompts?: PromptType[]
   apiHost: string
+  navPromptsTitle?: string
+  promptPlaceholder?: string
+  suggestedPromptsTitle?: string
   chatflowConfig?: Record<string, unknown>
   welcomeMessage?: string
   botMessage?: BotMessageTheme
   userMessage?: UserMessageTheme
-
   poweredByTextColor?: string
   badgeBackgroundColor?: string
   bubbleBackgroundColor?: string
@@ -70,7 +70,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc] = createSignal({})
 
-  const { theme } = useTheme()
+  const { theme, setThemeFromKey } = useTheme()
+  const { backgroundColor, backgroundImageUrl, promptBackground, promptTextColor } = theme()
 
   const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
   const [chatParent] = createAutoAnimate(/* optional config */)
@@ -181,6 +182,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
     if (messages() || suggestedPrompts()) scrollToBottom()
   })
 
+  onMount(() => {
+    setThemeFromKey(props.themeId)
+  })
+
   createEffect(() => {})
 
   onCleanup(() => {
@@ -196,30 +201,21 @@ export const Bot = (props: BotProps & { class?: string }) => {
           'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container ' +
           props.class
         }
+        style={{
+          background: backgroundColor,
+        }}
       >
-        {/* Header  */}
         <div
-          class='flex'
+          class='absolute h-full w-full opacity-[15%] pointer-events-none'
           style={{
-            background: props.bubbleBackgroundColor,
-            color: props.bubbleTextColor,
-            'border-top-left-radius': props.isFullPage ? '0px' : '6px',
-            'border-top-right-radius': props.isFullPage ? '0px' : '6px',
+            background: `url(${backgroundImageUrl})`,
+            'background-size': 'cover',
           }}
-        >
-          <DeleteButton
-            sendButtonColor={props.bubbleTextColor}
-            type='button'
-            isDisabled={messages().length === 1}
-            class='my-2 ml-2'
-            on:click={clear}
-          >
-            <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
-          </DeleteButton>
-        </div>
+        />
+        <Nav messages={messages()} onClear={clear} />
 
+        {/* Chat container  */}
         <div ref={chatContainer} class='flex flex-1 overflow-y-scroll flex-nowrap'>
-          {/* Chat container  */}
           <Show when={messages().length > 1}>
             <div
               ref={chatContainer}
@@ -281,10 +277,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
             <ContextualContainer contextualElements={contextualElements} />
           </Show>
 
-          {/* Sidebar container */}
           <div ref={sidebarParent}>
             <Show when={messages().length < 2}>
-              <Sidebar class='pt-16 pr-10'>
+              <Sidebar class='pt-16 pr-10 max-w-[275px]'>
                 <NavigationPrompts
                   prompts={props.initialPrompts}
                   onSelect={handleSubmit}
@@ -297,12 +292,18 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
         {/* Input Container */}
         <div class='w-full pb-1 px-10'>
-          <TextInput disabled={loading()} defaultValue={userInput()} onSubmit={handleSubmit} />
+          <TextInput
+            disabled={loading()}
+            defaultValue={userInput()}
+            onSubmit={handleSubmit}
+            placeholder={props.promptPlaceholder ?? 'Ask me anything...'}
+          />
         </div>
 
         {/* Suggested Prompt Container */}
+
         <div
-          class='mt-4 flex  items-center px-10'
+          class='flex items-center px-10 h-28'
           ref={suggestedPromptsParent}
           style={{ gap: '6px 24px' }}
         >
@@ -314,7 +315,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                 color: '#231843A1',
               }}
             >
-              SUGGESTED QUESTIONS
+              {props.suggestedPromptsTitle ?? 'SUGGESTED QUESTIONS'}
             </p>
 
             {isFetchingSuggestedPrompts() ? (
@@ -325,9 +326,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
                   <Prompt
                     prompt={p}
                     onClick={handleSubmit}
-                    color={theme().promptTextColor}
-                    // TODO: Theme it
-                    background={'#5B93FF14' || props.bubbleBackgroundColor}
+                    color={promptTextColor}
+                    background={promptBackground}
                     disabled={loading()}
                   />
                 )}
@@ -344,11 +344,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </Show>
         </div>
 
-        <Badge
+        {/* <Badge
           badgeBackgroundColor={props.badgeBackgroundColor}
           poweredByTextColor={props.poweredByTextColor}
           botContainer={botContainer}
-        />
+        /> */}
 
         {sourcePopupOpen() && (
           <Popup
