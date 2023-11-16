@@ -3,18 +3,10 @@ import { MessageType } from '@/features/bot/components/Bot'
 import { createSignal, onCleanup, onMount } from 'solid-js'
 import { v4 as uuidv4 } from 'uuid'
 
-export function useMessages(chatflowid: string, welcomeMessage: string) {
+export function useMessages(chatflowid: string) {
   const storageKey = `${chatflowid}_EXTERNAL`
 
-  const [messages, _setMessages] = createSignal<MessageType[]>(
-    [
-      {
-        message: welcomeMessage,
-        type: 'apiMessage',
-      },
-    ],
-    { equals: false }
-  )
+  const [messages, _setMessages] = createSignal<MessageType[]>([], { equals: false })
 
   const storeMessages = (allMessage: MessageType[]) => {
     localStorage.setItem(storageKey, JSON.stringify({ chatId: chatId(), chatHistory: allMessage }))
@@ -65,12 +57,7 @@ export function useMessages(chatflowid: string, welcomeMessage: string) {
       localStorage.removeItem(storageKey)
       setChatId(uuidv4())
 
-      _setMessages([
-        {
-          message: welcomeMessage,
-          type: 'apiMessage',
-        },
-      ])
+      _setMessages([])
     } catch (error: any) {
       const errorData =
         error.response.data || `${error.response.status}: ${error.response.statusText}`
@@ -105,12 +92,7 @@ export function useMessages(chatflowid: string, welcomeMessage: string) {
   })
 
   onCleanup(() => {
-    _setMessages([
-      {
-        message: welcomeMessage,
-        type: 'apiMessage',
-      },
-    ])
+    _setMessages([])
   })
 
   return {

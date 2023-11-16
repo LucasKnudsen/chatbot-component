@@ -26,9 +26,13 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
 
   const scrollToBottom = () => {
     setTimeout(() => {
-      const contextualContainer = document.getElementById('contextual-container')
+      const contextualContainer = document.getElementById('contextual-resources')
       if (contextualContainer) {
         contextualContainer.scrollTop = contextualContainer.scrollHeight
+      }
+      const contextualContainer2 = document.getElementById('contextual-facts')
+      if (contextualContainer2) {
+        contextualContainer2.scrollTop = contextualContainer2.scrollHeight
       }
     }, 50)
   }
@@ -36,9 +40,9 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
   return (
     <div class='flex flex-1 gap-12 flex-nowrap overflow-hidden'>
       <div
-        id='contextual-container'
+        id='contextual-resources'
         ref={parent}
-        class='flex-1 flex-col  overflow-y-scroll relative  scroll-smooth rounded-md '
+        class='flex-1 flex-col  overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container'
       >
         <For each={contextualElements()}>
           {(element) => (
@@ -61,9 +65,9 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
       </div>
 
       <div
-        id='contextual-container'
+        id='contextual-facts'
         ref={parent2}
-        class='flex-1 flex-col  overflow-y-scroll relative  scroll-smooth rounded-md '
+        class='flex-1 flex-col  overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container  '
       >
         <For each={contextualElements()}>
           {(element) => (
