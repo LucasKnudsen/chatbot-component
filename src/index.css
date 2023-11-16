@@ -4,6 +4,15 @@
 
 /* Custom */
 
+@font-face {
+  font-family: 'Albert Sans';
+  src: url(@/assets/AlbertSans-VariableFont_wght.ttf);
+}
+
+* {
+  font-family: 'Albert Sans', sans-serif;
+}
+
 .textarea-hide-handle {
   resize: none;
 }

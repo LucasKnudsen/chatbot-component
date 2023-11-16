@@ -7,7 +7,6 @@ import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse, removeDuplicateURL } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
-
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
@@ -44,6 +43,9 @@ export type BotProps = {
   themeId?: string
   initialPrompts?: PromptType[]
   apiHost: string
+  navPromptsTitle?: string
+  promptPlaceholder?: string
+  suggestedPromptsTitle?: string
   chatflowConfig?: Record<string, unknown>
   welcomeMessage?: string
   botMessage?: BotMessageTheme
@@ -69,7 +71,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupSrc, setSourcePopupSrc] = createSignal({})
 
   const { theme, setThemeFromKey } = useTheme()
-  const { backgroundColor, promptBackground, promptTextColor } = theme()
+  const { backgroundColor, backgroundImageUrl, promptBackground, promptTextColor } = theme()
 
   const [parent] = createAutoAnimate(/* optional config */)
 
@@ -197,6 +199,13 @@ export const Bot = (props: BotProps & { class?: string }) => {
           background: backgroundColor,
         }}
       >
+        <div
+          class='absolute h-full w-full opacity-[15%] pointer-events-none'
+          style={{
+            background: `url(${backgroundImageUrl})`,
+            'background-size': 'cover',
+          }}
+        ></div>
         <Nav messages={messages()} onClear={clear} />
 
         <div class='flex flex-1 overflow-y-scroll'>
@@ -267,7 +276,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
         </div>
 
         <div class='w-full pb-1 px-10'>
-          <TextInput disabled={loading()} defaultValue={userInput()} onSubmit={handleSubmit} />
+          <TextInput
+            disabled={loading()}
+            defaultValue={userInput()}
+            onSubmit={handleSubmit}
+            placeholder={props.promptPlaceholder ?? 'Ask me anything...'}
+          />
         </div>
 
         {/* Suggested Prompt Container */}
@@ -281,7 +295,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                 'font-weight': 700,
               }}
             >
-              SUGGESTED QUESTIONS
+              {props.suggestedPromptsTitle ?? 'SUGGESTED QUESTIONS'}
             </p>
 
             {isFetchingSuggestedPrompts() ? (
