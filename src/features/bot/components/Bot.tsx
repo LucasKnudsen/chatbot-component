@@ -1,4 +1,3 @@
-import { DeleteButton } from '@/components/SendButton'
 import { BotBubble } from '@/components/bubbles/BotBubble'
 import { GuestBubble } from '@/components/bubbles/GuestBubble'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
@@ -17,6 +16,7 @@ import awsconfig from '@/aws-exports'
 import { ContextualContainer, useContextualElements } from '@/features/contextual'
 
 import { Badge } from '@/components/Badge'
+import { Nav } from '@/components/Nav'
 import { Sidebar, chatId } from '@/features/bot'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
@@ -195,26 +195,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
           props.class
         }
       >
-        {/* Header  */}
-        <div
-          class='flex'
-          style={{
-            background: props.bubbleBackgroundColor,
-            color: props.bubbleTextColor,
-            'border-top-left-radius': props.isFullPage ? '0px' : '6px',
-            'border-top-right-radius': props.isFullPage ? '0px' : '6px',
-          }}
-        >
-          <DeleteButton
-            sendButtonColor={props.bubbleTextColor}
-            type='button'
-            isDisabled={messages().length === 1}
-            class='my-2 ml-2'
-            on:click={clear}
-          >
-            <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
-          </DeleteButton>
-        </div>
+        <Nav messages={messages()} onClear={clear} />
 
         <div class='flex flex-1 overflow-y-scroll flex-nowrap'>
           {/* Chat container  */}
@@ -277,8 +258,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
           <ContextualContainer contextualElements={contextualElements} />
 
-          {/* Sidebar container */}
-          <Sidebar class='pt-16 pr-10'>
+          <Sidebar class='pt-16 pr-10 max-w-[275px]'>
             <NavigationPrompts
               prompts={props.initialPrompts}
               onSelect={handleSubmit}
