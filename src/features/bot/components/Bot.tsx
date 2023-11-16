@@ -5,21 +5,20 @@ import { TextInput } from '@/components/inputs/textInput'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
-import { extractChatbotResponse, removeDuplicateURL } from '@/features/messages/utils'
+import { extractChatbotResponse } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
+import { ContextualContainer, useContextualElements } from '@/features/contextual'
 
 import { Nav } from '@/components/Nav'
-import { SourceBubble } from '@/components/bubbles/SourceBubble'
 import { Sidebar, chatId } from '@/features/bot'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
-import { isValidURL } from '@/utils/isValidUrl'
 
 Amplify.configure(awsconfig)
 
@@ -67,21 +66,25 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
+
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
-  const [sourcePopupSrc, setSourcePopupSrc] = createSignal({})
+  const [sourcePopupSrc] = createSignal({})
 
   const { theme, setThemeFromKey } = useTheme()
   const { backgroundColor, backgroundImageUrl, promptBackground, promptTextColor } = theme()
 
   const [parent] = createAutoAnimate(/* optional config */)
 
-  const {
-    messages,
-    updateLastMessage,
-    updateLastMessageSourceDocuments,
-    deleteChat,
-    appendMessage,
-  } = useMessages(props.chatflowid, welcomeMessage)
+  const { messages, updateLastMessage, deleteChat, appendMessage } = useMessages(
+    props.chatflowid,
+    welcomeMessage
+  )
+
+  const { handleSourceDocuments, contextualElements, clearContextualElements } =
+    useContextualElements({
+      chatflowid: props.chatflowid,
+      chatId,
+    })
 
   const {
     suggestedPrompts,
@@ -95,7 +98,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     apiHost: props.apiHost,
     onStart: () => appendMessage({ message: '', type: 'apiMessage' }),
     onToken: updateLastMessage,
-    onDocuments: updateLastMessageSourceDocuments,
+    onDocuments: handleSourceDocuments,
   })
 
   const scrollToBottom = () => {
@@ -106,6 +109,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const clear = () => {
     deleteChat()
+    clearContextualElements()
     clearSuggestions()
   }
 
@@ -208,10 +212,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
         ></div>
         <Nav messages={messages()} onClear={clear} />
 
-        <div class='flex flex-1 overflow-y-scroll'>
+        <div class='flex flex-1 overflow-y-scroll flex-nowrap'>
+          {/* Chat container  */}
           <div
             ref={chatContainer}
-            class='flex-1 overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth'
+            class='m-5 flex-1 overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth border border-gray-300 rounded-md'
           >
             <For each={[...messages()]}>
               {(message, index) => (
@@ -238,7 +243,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                     loading() &&
                     index() === messages().length - 1 && <LoadingBubble />}
                   {/* Popups */}
-                  {message.sourceDocuments && message.sourceDocuments.length && (
+                  {/* {message.sourceDocuments && message.sourceDocuments.length && (
                     <div class='flex w-full'>
                       <For each={[...removeDuplicateURL(message)]}>
                         {(src) => {
@@ -260,11 +265,13 @@ export const Bot = (props: BotProps & { class?: string }) => {
                         }}
                       </For>
                     </div>
-                  )}
+                  )} */}
                 </>
               )}
             </For>
           </div>
+
+          <ContextualContainer contextualElements={contextualElements} />
 
           <Sidebar class='pt-16 pr-10 max-w-[275px]'>
             <NavigationPrompts
@@ -275,6 +282,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </Sidebar>
         </div>
 
+        {/* Input Container */}
         <div class='w-full pb-1 px-10'>
           <TextInput
             disabled={loading()}
@@ -285,14 +293,17 @@ export const Bot = (props: BotProps & { class?: string }) => {
         </div>
 
         {/* Suggested Prompt Container */}
+
         <div class='flex items-center px-10 h-28' ref={parent} style={{ gap: '6px 24px' }}>
+
+        <div class='mt-4 flex  items-center px-10' ref={parent} style={{ gap: '6px 24px' }}>
+
           <Show when={messages().length > 2}>
             <p
-              class='whitespace-nowrap border-r-2  border-gray-200 pr-8 '
+              class='whitespace-nowrap border-r-2  border-gray-200 pr-8 font-bold'
               style={{
                 // TODO: Theme it
                 color: '#231843A1',
-                'font-weight': 700,
               }}
             >
               {props.suggestedPromptsTitle ?? 'SUGGESTED QUESTIONS'}

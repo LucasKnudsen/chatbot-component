@@ -65,9 +65,9 @@ export function useSuggestedPrompts(
   }
 
   onMount(() => {
-    if (messages().length > 1) {
-      fetchSuggestedPrompts()
-    }
+    // if (messages().length > 1) {
+    //   fetchSuggestedPrompts()
+    // }
   })
 
   return { suggestedPrompts, fetchSuggestedPrompts, clearSuggestions, isFetching }
