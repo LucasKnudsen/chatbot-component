@@ -44,6 +44,9 @@ export type BotProps = {
   themeId?: string
   initialPrompts?: PromptType[]
   apiHost: string
+  navPromptsTitle?: string
+  promptPlaceholder?: string
+  suggestedPromptsTitle?: string
   chatflowConfig?: Record<string, unknown>
   welcomeMessage?: string
   botMessage?: BotMessageTheme
@@ -267,7 +270,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
         </div>
 
         <div class='w-full pb-1 px-10'>
-          <TextInput disabled={loading()} defaultValue={userInput()} onSubmit={handleSubmit} />
+          <TextInput
+            disabled={loading()}
+            defaultValue={userInput()}
+            onSubmit={handleSubmit}
+            placeholder={props.promptPlaceholder ?? 'Ask me anything...'}
+          />
         </div>
 
         {/* Suggested Prompt Container */}
@@ -281,7 +289,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                 'font-weight': 700,
               }}
             >
-              SUGGESTED QUESTIONS
+              {props.suggestedPromptsTitle ?? 'SUGGESTED QUESTIONS'}
             </p>
 
             {isFetchingSuggestedPrompts() ? (

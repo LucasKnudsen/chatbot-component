@@ -59,6 +59,9 @@ export const Bubble = (props: BubbleProps) => {
           <Bot
             initialPrompts={props.initialPrompts}
             themeId={props.themeId}
+            navPromptsTitle={props.navPromptsTitle}
+            promptPlaceholder={props.promptPlaceholder}
+            suggestedPromptsTitle={props.suggestedPromptsTitle}
             badgeBackgroundColor={bubbleProps.theme?.chatWindow?.backgroundColor}
             bubbleBackgroundColor={bubbleProps.theme?.button?.backgroundColor ?? defaultButtonColor}
             bubbleTextColor={bubbleProps.theme?.button?.iconColor ?? defaultIconColor}

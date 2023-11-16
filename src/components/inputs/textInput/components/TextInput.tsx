@@ -5,6 +5,7 @@ import { createEffect, createSignal, onMount } from 'solid-js'
 import { ShortTextInput } from './ShortTextInput'
 
 type Props = {
+  placeholder: string
   defaultValue?: string
   fontSize?: number
   disabled?: boolean
@@ -16,12 +17,7 @@ export const TextInput = (props: Props) => {
   let inputRef: HTMLTextAreaElement | undefined
 
   const { theme } = useTheme()
-  const {
-    textInputTextColor,
-    textInputBackgroundColor,
-    textInputSendIconColor,
-    textInputPlaceholder,
-  } = theme()
+  const { textInputTextColor, textInputBackgroundColor, textInputSendIconColor } = theme()
 
   const handleInput = (inputValue: string) => setInputValue(inputValue)
 
@@ -64,7 +60,7 @@ export const TextInput = (props: Props) => {
           value={inputValue()}
           fontSize={props.fontSize}
           disabled={props.disabled}
-          placeholder={textInputPlaceholder}
+          placeholder={props.placeholder}
         />
       </div>
       <SendButton
