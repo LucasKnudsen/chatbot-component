@@ -198,7 +198,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
       <div
         ref={botContainer}
         class={
-          'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container ' +
+          'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container px-4 ' +
           props.class
         }
         style={{
@@ -218,11 +218,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
         <Nav messages={messages()} onClear={clear} />
 
         {/* Chat container  */}
-        <div ref={chatParent} class='flex flex-1 overflow-y-scroll flex-nowrap '>
+        <div ref={chatParent} class='flex flex-1 overflow-y-scroll flex-nowrap mx-10 gap-10 mb-8'>
           <Show when={messages().length > 1}>
             <div
               ref={chatContainer}
-              class='m-5 flex-1 overflow-y-scroll pt-16 pl-10  scroll-smooth  rounded-md'
+              class=' flex-1 overflow-y-scroll pt-16   scroll-smooth  rounded-md'
             >
               <For each={[...messages()]}>
                 {(message, index) => (
@@ -281,12 +281,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </Show>
 
           <Show when={messages().length < 2}>
-            <div ref={sidebarParent} class='flex justify-between w-full items-end mx-10'>
-              <h1 class='text-5xl max-w-md h-fit mb-8 font-light'>
+            <div ref={sidebarParent} class='flex justify-between w-full items-end '>
+              <h1 class='text-5xl max-w-md h-fit  font-light'>
                 Hey there again. How can I help you today?
               </h1>
 
-              <Sidebar class='pt-16  max-w-[275px] h-full'>
+              <Sidebar class='pt-16 h-full max-w-xs'>
                 <NavigationPrompts
                   prompts={props.initialPrompts}
                   onSelect={handleSubmit}
