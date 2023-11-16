@@ -1,21 +1,23 @@
 import { createSignal } from 'solid-js'
 import { Theme, defaultTheme, themes } from '..'
 
-const [theme, _setTheme] = createSignal<Theme>(defaultTheme)
+const [theme, setTheme] = createSignal<Theme>(defaultTheme)
 
 export const useTheme = () => {
-  const setTheme = (themeKey?: string) => {
-    if (!themeKey) return _setTheme(defaultTheme)
+  const setThemeFromKey = (themeKey?: string) => {
+    if (!themeKey) return setTheme(defaultTheme)
 
     const theme = themes[themeKey]
 
     if (theme) {
-      _setTheme(theme)
+      console.log(theme)
+
+      setTheme(theme)
     } else {
       console.warn(`Theme ${themeKey} not found, using default theme`)
-      _setTheme(defaultTheme)
+      setTheme(defaultTheme)
     }
   }
 
-  return { theme, setTheme }
+  return { theme, setThemeFromKey }
 }

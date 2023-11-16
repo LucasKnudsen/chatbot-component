@@ -39,7 +39,6 @@ export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
       <Show when={isBotDisplayed()}>
         <div
           style={{
-            'background-color': props.theme?.chatWindow?.backgroundColor || '#ffffff',
             height: props.theme?.chatWindow?.height
               ? `${props.theme?.chatWindow?.height.toString()}px`
               : '100vh',
@@ -51,6 +50,10 @@ export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
         >
           <Bot
             initialPrompts={props.initialPrompts}
+            navPromptsTitle={props.navPromptsTitle}
+            promptPlaceholder={props.promptPlaceholder}
+            suggestedPromptsTitle={props.suggestedPromptsTitle}
+            themeId={props.themeId}
             badgeBackgroundColor={props.theme?.chatWindow?.backgroundColor}
             bubbleBackgroundColor={props.theme?.button?.backgroundColor ?? defaultButtonColor}
             bubbleTextColor={props.theme?.button?.iconColor ?? defaultIconColor}
