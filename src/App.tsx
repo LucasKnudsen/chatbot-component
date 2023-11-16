@@ -49,12 +49,7 @@ function App() {
 
   return (
     <>
-      <Full
-        chatflowid={chatflowid}
-        apiHost={apiHost}
-        initialPrompts={initialPrompts}
-        themeId='ugly'
-      />
+      <Full chatflowid={chatflowid} apiHost={apiHost} initialPrompts={initialPrompts} />
       <Bubble chatflowid={chatflowid} apiHost={apiHost} initialPrompts={initialPrompts} />
     </>
   )
