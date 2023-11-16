@@ -10,11 +10,10 @@ import { Popup } from '@/features/popup'
 
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
-import { For, Show, createEffect, createSignal, onCleanup } from 'solid-js'
+import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 
 import awsconfig from '@/aws-exports'
 
-import { Badge } from '@/components/Badge'
 import { Nav } from '@/components/Nav'
 import { SourceBubble } from '@/components/bubbles/SourceBubble'
 import { Sidebar, chatId } from '@/features/bot'
@@ -49,7 +48,6 @@ export type BotProps = {
   welcomeMessage?: string
   botMessage?: BotMessageTheme
   userMessage?: UserMessageTheme
-
   poweredByTextColor?: string
   badgeBackgroundColor?: string
   bubbleBackgroundColor?: string
@@ -70,7 +68,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc, setSourcePopupSrc] = createSignal({})
 
-  const { theme } = useTheme()
+  const { theme, setThemeFromKey } = useTheme()
+  const { backgroundColor, promptBackground, promptTextColor } = theme()
 
   const [parent] = createAutoAnimate(/* optional config */)
 
@@ -175,6 +174,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
     if (messages() || suggestedPrompts()) scrollToBottom()
   })
 
+  onMount(() => {
+    setThemeFromKey(props.themeId)
+  })
+
   createEffect(() => {})
 
   onCleanup(() => {
@@ -190,6 +193,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
           'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container ' +
           props.class
         }
+        style={{
+          background: backgroundColor,
+        }}
       >
         <Nav messages={messages()} onClear={clear} />
 
@@ -265,7 +271,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
         </div>
 
         {/* Suggested Prompt Container */}
-        <div class='mt-4 flex  items-center pl-5 pr-5' ref={parent} style={{ gap: '6px 24px' }}>
+        <div class='flex items-center px-10 h-28' ref={parent} style={{ gap: '6px 24px' }}>
           <Show when={messages().length > 2}>
             <p
               class='whitespace-nowrap border-r-2  border-gray-200 pr-8 '
@@ -286,9 +292,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
                   <Prompt
                     prompt={p}
                     onClick={handleSubmit}
-                    color={theme().promptTextColor}
-                    // TODO: Theme it
-                    background={'#5B93FF14' || props.bubbleBackgroundColor}
+                    color={promptTextColor}
+                    background={promptBackground}
                     disabled={loading()}
                   />
                 )}
@@ -305,11 +310,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </Show>
         </div>
 
-        <Badge
+        {/* <Badge
           badgeBackgroundColor={props.badgeBackgroundColor}
           poweredByTextColor={props.poweredByTextColor}
           botContainer={botContainer}
-        />
+        /> */}
 
         {sourcePopupOpen() && (
           <Popup
