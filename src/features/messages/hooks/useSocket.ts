@@ -12,9 +12,9 @@ export function useSocket({
 }: {
   chatflowid: string
   apiHost: string
-  onStart: () => void
-  onDocuments: (documents: SourceDocument[]) => void
-  onToken: (token: string) => void
+  onStart?: () => void
+  onDocuments?: (documents: SourceDocument[]) => void
+  onToken?: (token: string) => void
 }) {
   const [isChatFlowAvailableToStream, setIsChatFlowAvailableToStream] = createSignal(false)
 
@@ -41,11 +41,11 @@ export function useSocket({
       setSocketIOClientId(socket.id)
     })
 
-    socket.on('start', () => onStart())
+    socket.on('start', () => onStart?.())
 
-    socket.on('sourceDocuments', onDocuments)
+    socket.on('sourceDocuments', (docs) => onDocuments?.(docs))
 
-    socket.on('token', onToken)
+    socket.on('token', (t) => onToken?.(t))
   })
 
   onCleanup(() => {

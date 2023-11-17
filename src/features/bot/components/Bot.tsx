@@ -1,24 +1,20 @@
-import { BotBubble } from '@/components/bubbles/BotBubble'
-import { GuestBubble } from '@/components/bubbles/GuestBubble'
+import awsconfig from '@/aws-exports'
+import { Nav } from '@/components/Nav'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
 import { TextInput } from '@/components/inputs/textInput'
+import { Sidebar, useChatId } from '@/features/bot'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
+import { ContextualContainer, useContextualElements } from '@/features/contextual'
+import { QuestionAnswer, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
+import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
+import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
-
-import awsconfig from '@/aws-exports'
-import { ContextualContainer, useContextualElements } from '@/features/contextual'
-
-import { Nav } from '@/components/Nav'
-import { Sidebar, chatId } from '@/features/bot'
-import { useMessages } from '@/features/messages/hooks/useMessages'
-import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
-import { useTheme } from '@/features/theme/hooks'
 
 Amplify.configure(awsconfig)
 
@@ -71,14 +67,29 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupSrc] = createSignal({})
 
   const { theme, setThemeFromKey } = useTheme()
-  const { backgroundColor, backgroundImageUrl, promptBackground, promptTextColor } = theme()
+  const { backgroundColor, backgroundImageUrl, promptBackground, textColor } = theme()
 
   const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
   const [suggestedPromptsParent2] = createAutoAnimate(/* optional config */)
   const [chatParent] = createAutoAnimate(/* optional config */)
   const [sidebarParent] = createAutoAnimate(/* optional config */)
 
-  const { messages, updateLastMessage, deleteChat, appendMessage } = useMessages(props.chatflowid)
+  const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
+
+  const {
+    question,
+    createQuestion,
+    updateAnswer,
+    clear: clearQuestions,
+  } = useQuestion(props.chatflowid)
+
+  // const { messages, updateLastMessage, deleteChat, appendMessage, getLastQuery } = useMessages(
+  //   props.chatflowid,
+  //   welcomeMessage
+  // )
+
+  // console.log('messages', messages())
+  // const lastQuery = getLastQuery(messages())
 
   const { handleSourceDocuments, contextualElements, clearContextualElements } =
     useContextualElements({
@@ -91,13 +102,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
     fetchSuggestedPrompts,
     clearSuggestions,
     isFetching: isFetchingSuggestedPrompts,
-  } = useSuggestedPrompts(props.chatflowid, props.apiHost, messages)
+  } = useSuggestedPrompts(props.chatflowid, props.apiHost)
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
     apiHost: props.apiHost,
-    onStart: () => appendMessage({ message: '', type: 'apiMessage' }),
-    onToken: updateLastMessage,
+    onToken: updateAnswer,
     onDocuments: handleSourceDocuments,
   })
 
@@ -108,9 +118,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
   }
 
   const clear = () => {
-    deleteChat()
+    clearQuestions()
     clearContextualElements()
     clearSuggestions()
+    clearChatId()
   }
 
   // Handle form submission
@@ -125,7 +136,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
     scrollToBottom()
     clearSuggestions()
 
-    appendMessage({ message: value, type: 'userMessage' })
+    // Remove welcome message from messages
+    createQuestion(value)
 
     const body: IncomingInput = {
       question:
@@ -136,6 +148,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
     }
 
     if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig
+
+    console.log(isChatFlowAvailableToStream())
 
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
@@ -152,7 +166,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
       if (!isChatFlowAvailableToStream()) {
         let text = extractChatbotResponse(result.data)
 
-        appendMessage({ message: text, sourceDocuments: data?.sourceDocuments, type: 'apiMessage' })
+        updateAnswer(text)
       }
 
       fetchSuggestedPrompts()
@@ -165,7 +179,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     if (result.error) {
       const message = result.error?.message ?? 'Something went wrong. Please try again later.'
 
-      appendMessage({ message, type: 'apiMessage' })
+      updateAnswer(message)
 
       setLoading(false)
       setUserInput('')
@@ -176,7 +190,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   // Auto scroll chat to bottom
   createEffect(() => {
-    if (messages()) scrollToBottom()
+    if (question()) scrollToBottom()
   })
   // createEffect(() => {
   //   if (suggestedPrompts()) scrollToBottom()
@@ -213,14 +227,14 @@ export const Bot = (props: BotProps & { class?: string }) => {
             background: `url(${backgroundImageUrl})`,
             'background-size': 'cover',
           }}
-        /> */}
 
-        {/* Nav container  */}
-        <Nav messages={messages()} onClear={clear} />
+         /> */}
 
-        <Show when={messages().length > 0}>
-          {/* Headers container  */}
-          <div class='flex mb-4 pb-1 border-b mx-12 opacity-30 border-gray-300'>
+        <Nav question={question()} onClear={clear} />
+
+        {/* Headers container  */}
+        <Show when={Boolean(question())}>
+          <div class='flex mb-4 pb-1 border-b mx-10 opacity-30 border-gray-300'>
             <div class='flex flex-1 '>
               <h1 class=' text-2xl font-light '>Chat</h1>
             </div>
@@ -232,70 +246,23 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </div>
         </Show>
 
-        {/* Chat container  */}
-        <div ref={chatParent} class='flex overflow-y-scroll flex-1 flex-nowrap mx-10 gap-2 mb-4 '>
-          <Show when={messages().length > 0}>
+        <div class='px-10 flex flex-1 overflow-y-scroll flex-nowrap'>
+          {/* Chat container  */}
+          <Show when={Boolean(question())}>
             <div
               ref={chatContainer}
-              class=' flex-1 overflow-y-scroll scroll-smooth rounded-md scrollable-container'
+              class='flex flex-1 scrollable-container scroll-smooth  flex-nowrap gap-2 mb-4 '
+              style={{
+                color: textColor,
+              }}
             >
-              <For each={[...messages()]}>
-                {(message, index) => (
-                  <>
-                    {message.type === 'userMessage' && (
-                      <GuestBubble
-                        message={message.message}
-                        backgroundColor={props.userMessage?.backgroundColor}
-                        textColor={props.userMessage?.textColor}
-                        showAvatar={props.userMessage?.showAvatar}
-                        avatarSrc={props.userMessage?.avatarSrc}
-                      />
-                    )}
-                    {message.type === 'apiMessage' && (
-                      <BotBubble
-                        message={message.message}
-                        backgroundColor={props.botMessage?.backgroundColor}
-                        textColor={props.botMessage?.textColor}
-                        showAvatar={props.botMessage?.showAvatar}
-                        avatarSrc={props.botMessage?.avatarSrc}
-                      />
-                    )}
-                    {message.type === 'userMessage' &&
-                      loading() &&
-                      index() === messages().length - 1 && <LoadingBubble />}
-                    {/* Popups */}
-                    {/* {message.sourceDocuments && message.sourceDocuments.length && (
-                    <div class='flex w-full'>
-                      <For each={[...removeDuplicateURL(message)]}>
-                        {(src) => {
-                          const URL = isValidURL(src.metadata.source)
-                          return (
-                            <SourceBubble
-                              pageContent={URL ? URL.pathname : src.pageContent}
-                              metadata={src.metadata}
-                              onSourceClick={() => {
-                                if (URL) {
-                                  window.open(src.metadata.source, '_blank')
-                                } else {
-                                  setSourcePopupSrc(src)
-                                  setSourcePopupOpen(true)
-                                }
-                              }}
-                            />
-                          )
-                        }}
-                      </For>
-                    </div>
-                  )} */}
-                  </>
-                )}
-              </For>
-            </div>
+              <QuestionAnswer question={question()!} />
 
-            <ContextualContainer contextualElements={contextualElements} />
+              <ContextualContainer contextualElements={contextualElements} />
+            </div>
           </Show>
 
-          <Show when={messages().length < 1}>
+          <Show when={!question()}>
             <div ref={sidebarParent} class='flex justify-between w-full items-end '>
               <h1 class='text-5xl max-w-md h-fit mb-4  font-light'>{welcomeMessage}</h1>
 
@@ -322,7 +289,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
         {/* Suggested Prompt Container */}
         <div class='mb-8'>
-          <Show when={messages().length > 1}>
+          <Show when={question()?.answer}>
             <div
               class='flex items-center px-10 h-20 gap-y-1 gap-x-4 '
               ref={suggestedPromptsParent2}
@@ -343,7 +310,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                     <Prompt
                       prompt={p}
                       onClick={handleSubmit}
-                      color={promptTextColor}
+                      color={textColor}
                       background={promptBackground}
                       disabled={loading()}
                     />
@@ -371,83 +338,3 @@ export const Bot = (props: BotProps & { class?: string }) => {
     </>
   )
 }
-
-// const sourceDocuments = [
-//   {
-//     pageContent:
-//       'I know some are talking about “living with COVID-19”. Tonight – I say that we will never just accept living with COVID-19. \r\n\r\nWe will continue to combat the virus as we do other diseases. And because this is a virus that mutates and spreads, we will stay on guard. \r\n\r\nHere are four common sense steps as we move forward safely.  \r\n\r\nFirst, stay protected with vaccines and treatments. We know how incredibly effective vaccines are. If you’re vaccinated and boosted you have the highest degree of protection. \r\n\r\nWe will never give up on vaccinating more Americans. Now, I know parents with kids under 5 are eager to see a vaccine authorized for their children. \r\n\r\nThe scientists are working hard to get that done and we’ll be ready with plenty of vaccines when they do. \r\n\r\nWe’re also ready with anti-viral treatments. If you get COVID-19, the Pfizer pill reduces your chances of ending up in the hospital by 90%.',
-//     metadata: {
-//       source: 'blob',
-//       blobType: '',
-//       loc: {
-//         lines: {
-//           from: 450,
-//           to: 462,
-//         },
-//       },
-//     },
-//   },
-//   {
-//     pageContent:
-//       'sistance,  and  polishing  [65].  For  instance,  AI  tools  generate\nsuggestions based on inputting keywords or topics. The tools\nanalyze  search  data,  trending  topics,  and  popular  queries  to\ncreate  fresh  content.  What’s  more,  AIGC  assists  in  writing\narticles and posting blogs on specific topics. While these tools\nmay not be able to produce high-quality content by themselves,\nthey can provide a starting point for a writer struggling with\nwriter’s block.\nH.  Cons of AIGC\nOne of the main concerns among the public is the potential\nlack  of  creativity  and  human  touch  in  AIGC.  In  addition,\nAIGC sometimes lacks a nuanced understanding of language\nand context, which may lead to inaccuracies and misinterpre-\ntations. There are also concerns about the ethics and legality\nof using AIGC, particularly when it results in issues such as\ncopyright  infringement  and  data  privacy.  In  this  section,  we\nwill discuss some of the disadvantages of AIGC (Table IV).',
-//     metadata: {
-//       source: 'blob',
-//       blobType: '',
-//       pdf: {
-//         version: '1.10.100',
-//         info: {
-//           PDFFormatVersion: '1.5',
-//           IsAcroFormPresent: false,
-//           IsXFAPresent: false,
-//           Title: '',
-//           Author: '',
-//           Subject: '',
-//           Keywords: '',
-//           Creator: 'LaTeX with hyperref',
-//           Producer: 'pdfTeX-1.40.21',
-//           CreationDate: 'D:20230414003603Z',
-//           ModDate: 'D:20230414003603Z',
-//           Trapped: {
-//             name: 'False',
-//           },
-//         },
-//         metadata: null,
-//         totalPages: 17,
-//       },
-//       loc: {
-//         pageNumber: 8,
-//         lines: {
-//           from: 301,
-//           to: 317,
-//         },
-//       },
-//     },
-//   },
-//   {
-//     pageContent: 'Main article: Views of Elon Musk',
-//     metadata: {
-//       source: 'https://en.wikipedia.org/wiki/Elon_Musk',
-//       loc: {
-//         lines: {
-//           from: 2409,
-//           to: 2409,
-//         },
-//       },
-//     },
-//   },
-//   {
-//     pageContent:
-//       'First Name: John\nLast Name: Doe\nAddress: 120 jefferson st.\nStates: Riverside\nCode: NJ\nPostal: 8075',
-//     metadata: {
-//       source: 'blob',
-//       blobType: '',
-//       line: 1,
-//       loc: {
-//         lines: {
-//           from: 1,
-//           to: 6,
-//         },
-//       },
-//     },
-//   },
-// ]

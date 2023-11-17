@@ -12,7 +12,7 @@ type NavigationPromptsProps = {
 
 export const NavigationPrompts = (props: NavigationPromptsProps) => {
   const { theme } = useTheme()
-  const { borderColor, navPromptBackground, promptTextColor } = theme()
+  const { borderColor, navPromptBackground, textColor } = theme()
 
   return (
     <>
@@ -28,7 +28,7 @@ export const NavigationPrompts = (props: NavigationPromptsProps) => {
               disabled={props.disabled}
               borderColor={borderColor}
               background={navPromptBackground}
-              color={promptTextColor}
+              color={textColor}
             />
           )}
         </For>

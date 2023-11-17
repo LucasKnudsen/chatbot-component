@@ -2,6 +2,7 @@ import background2 from '@/assets/background-2.png'
 
 export type Theme = {
   primaryColor: string
+  textColor: string
   backgroundColor: string
   backgroundImageUrl: string
   borderColor: string
@@ -10,11 +11,11 @@ export type Theme = {
   textInputSendIconColor: string
   promptBackground?: string
   navPromptBackground?: string
-  promptTextColor?: string
 }
 
 export const defaultTheme: Theme = {
   primaryColor: 'rgba(91, 147, 255, 1)',
+  textColor: 'rgba(35, 24, 67, 1)',
   backgroundColor: 'transparent',
   backgroundImageUrl: background2,
   borderColor: 'rgba(147, 147, 147, 0.25)',
@@ -25,11 +26,11 @@ export const defaultTheme: Theme = {
     'linear-gradient(90deg, rgba(91, 147, 255, 0.08) 0%, rgba(218, 145, 221, 0.08) 100%)',
   navPromptBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.25) 0%, rgba(218, 145, 221, 0.25) 100%)',
-  promptTextColor: 'rgba(35, 24, 67, 1)',
 }
 
 export const ugly: Theme = {
   primaryColor: 'red',
+  textColor: 'white',
   backgroundColor: 'green',
   backgroundImageUrl: 'https://picsum.photos/200/300',
   borderColor: 'blue',
@@ -38,7 +39,6 @@ export const ugly: Theme = {
   textInputSendIconColor: 'orange',
   navPromptBackground: 'pink',
   promptBackground: 'brown',
-  promptTextColor: 'black',
 }
 
 export const themes: Record<string, Theme> = {

@@ -24,8 +24,6 @@ export const BotBubble = (props: Props) => {
     }
   })
 
-  console.log('BotBubble', props.message)
-
   return (
     <div
       class='flex justify-start mb-2 items-start host-container'
