@@ -13,8 +13,8 @@ import awsconfig from '@/aws-exports'
 import { ContextualContainer, useContextualElements } from '@/features/contextual'
 
 import { Nav } from '@/components/Nav'
-import { Sidebar, chatId } from '@/features/bot'
-import { useMessages } from '@/features/messages/hooks/useMessages'
+import { Sidebar, useChatId } from '@/features/bot'
+import { useQuestion } from '@/features/messages'
 import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
 
@@ -69,17 +69,26 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupSrc] = createSignal({})
 
   const { theme, setThemeFromKey } = useTheme()
-  const { backgroundColor, backgroundImageUrl, promptBackground, promptTextColor } = theme()
+  const { backgroundColor, backgroundImageUrl, promptBackground, textColor } = theme()
 
   const [parent] = createAutoAnimate(/* optional config */)
 
-  const { messages, updateLastMessage, deleteChat, appendMessage, getLastQuery } = useMessages(
-    props.chatflowid,
-    welcomeMessage
-  )
+  const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
 
-  console.log('messages', messages())
-  const lastQuery = getLastQuery(messages())
+  const {
+    question,
+    createQuestion,
+    updateAnswer,
+    clear: clearQuestions,
+  } = useQuestion(props.chatflowid)
+
+  // const { messages, updateLastMessage, deleteChat, appendMessage, getLastQuery } = useMessages(
+  //   props.chatflowid,
+  //   welcomeMessage
+  // )
+
+  // console.log('messages', messages())
+  // const lastQuery = getLastQuery(messages())
 
   const { handleSourceDocuments, contextualElements, clearContextualElements } =
     useContextualElements({
@@ -92,13 +101,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
     fetchSuggestedPrompts,
     clearSuggestions,
     isFetching: isFetchingSuggestedPrompts,
-  } = useSuggestedPrompts(props.chatflowid, props.apiHost, messages)
+  } = useSuggestedPrompts(props.chatflowid, props.apiHost)
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
     apiHost: props.apiHost,
-    onStart: () => appendMessage({ message: '', type: 'apiMessage' }),
-    onToken: updateLastMessage,
+    onToken: updateAnswer,
     onDocuments: handleSourceDocuments,
   })
 
@@ -109,9 +117,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
   }
 
   const clear = () => {
-    deleteChat()
+    clearQuestions()
     clearContextualElements()
     clearSuggestions()
+    clearChatId()
   }
 
   // Handle form submission
@@ -127,9 +136,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     clearSuggestions()
 
     // Remove welcome message from messages
-    const messageList = messages().filter((msg) => msg.message !== welcomeMessage)
-
-    appendMessage({ message: value, type: 'userMessage' })
+    createQuestion(value)
 
     const body: IncomingInput = {
       question: value,
@@ -138,6 +145,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
     }
 
     if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig
+
+    console.log(isChatFlowAvailableToStream())
 
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
@@ -154,7 +163,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
       if (!isChatFlowAvailableToStream()) {
         let text = extractChatbotResponse(result.data)
 
-        appendMessage({ message: text, sourceDocuments: data?.sourceDocuments, type: 'apiMessage' })
+        updateAnswer(text)
       }
 
       fetchSuggestedPrompts()
@@ -167,7 +176,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     if (result.error) {
       const message = result.error?.message ?? 'Something went wrong. Please try again later.'
 
-      appendMessage({ message, type: 'apiMessage' })
+      updateAnswer(message)
 
       setLoading(false)
       setUserInput('')
@@ -178,7 +187,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   // Auto scroll chat to bottom
   createEffect(() => {
-    if (messages() || suggestedPrompts()) scrollToBottom()
+    if (question() || suggestedPrompts()) scrollToBottom()
   })
 
   onMount(() => {
@@ -191,8 +200,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
     setUserInput('')
     setLoading(false)
   })
-
-  console.log(lastQuery)
 
   return (
     <>
@@ -213,70 +220,25 @@ export const Bot = (props: BotProps & { class?: string }) => {
             'background-size': 'cover',
           }}
         ></div>
-        <Nav messages={messages()} onClear={clear} />
+        <Nav question={question()} onClear={clear} />
 
-        <div class='flex flex-1 overflow-y-scroll flex-nowrap'>
+        <div class='pl-10 flex flex-1 overflow-y-scroll flex-nowrap'>
           {/* Chat container  */}
           <div
             ref={chatContainer}
-            class='m-5 flex-1 overflow-y-scroll pt-8 pl-10 scrollable-container scroll-smooth border border-gray-300 rounded-md'
+            class='p-5 flex-1 overflow-y-scroll pt-8  scrollable-container scroll-smooth border rounded-md'
+            style={{
+              color: textColor,
+            }}
           >
-            <Show when={getLastQuery(messages())} fallback={<div>How can I help you?</div>}>
-              <div>{getLastQuery(messages())!.question.message}</div>
-              <div>{getLastQuery(messages())!.answer?.message}</div>
-            </Show>
+            <Show
+              when={!!question()}
+              fallback={<div class='flex items-end h-full text-4xl'>{welcomeMessage}</div>}
+            >
+              <div class='mb-4 text-xl text-gray-500'>{question()?.question}</div>
 
-            {/* <For each={[...messages()]}>
-              {(message, index) => (
-                <>
-                  {message.type === 'userMessage' && (
-                    <GuestBubble
-                      message={message.message}
-                      backgroundColor={props.userMessage?.backgroundColor}
-                      textColor={props.userMessage?.textColor}
-                      showAvatar={props.userMessage?.showAvatar}
-                      avatarSrc={props.userMessage?.avatarSrc}
-                    />
-                  )}
-                  {message.type === 'apiMessage' && (
-                    <BotBubble
-                      message={message.message}
-                      backgroundColor={props.botMessage?.backgroundColor}
-                      textColor={props.botMessage?.textColor}
-                      showAvatar={props.botMessage?.showAvatar}
-                      avatarSrc={props.botMessage?.avatarSrc}
-                    />
-                  )}
-                  {message.type === 'userMessage' &&
-                    loading() &&
-                    index() === messages().length - 1 && <LoadingBubble />}
-                </>
-              )}
-            </For> */}
-            {/* Popups */}
-            {/* {message.sourceDocuments && message.sourceDocuments.length && (
-                    <div class='flex w-full'>
-                      <For each={[...removeDuplicateURL(message)]}>
-                        {(src) => {
-                          const URL = isValidURL(src.metadata.source)
-                          return (
-                            <SourceBubble
-                              pageContent={URL ? URL.pathname : src.pageContent}
-                              metadata={src.metadata}
-                              onSourceClick={() => {
-                                if (URL) {
-                                  window.open(src.metadata.source, '_blank')
-                                } else {
-                                  setSourcePopupSrc(src)
-                                  setSourcePopupOpen(true)
-                                }
-                              }}
-                            />
-                          )
-                        }}
-                      </For>
-                    </div>
-                  )} */}
+              <div class='text-xl'>{question()?.answer}</div>
+            </Show>
           </div>
 
           <ContextualContainer contextualElements={contextualElements} />
@@ -303,7 +265,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
         {/* Suggested Prompt Container */}
 
         <div class='flex items-center px-10 h-28' ref={parent} style={{ gap: '6px 24px' }}>
-          <Show when={messages().length > 2}>
+          <Show when={!!question()?.answer}>
             <p
               class='whitespace-nowrap border-r-2  border-gray-200 pr-8 font-bold'
               style={{
@@ -322,7 +284,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                   <Prompt
                     prompt={p}
                     onClick={handleSubmit}
-                    color={promptTextColor}
+                    color={textColor}
                     background={promptBackground}
                     disabled={loading()}
                   />

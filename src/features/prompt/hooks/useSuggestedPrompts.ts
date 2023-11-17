@@ -1,7 +1,6 @@
-import { MessageType } from '@/features/bot/components/Bot'
 import { extractChatbotResponse } from '@/features/messages'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
-import { Accessor, createSignal, onMount } from 'solid-js'
+import { createSignal, onMount } from 'solid-js'
 
 // Follow-up questions related to a blockchain company
 const dummySuggestions = [
@@ -10,11 +9,7 @@ const dummySuggestions = [
   'What strategies do you use for cryptocurrency trading?',
 ]
 
-export function useSuggestedPrompts(
-  chatflowid: string,
-  apiHost: string,
-  messages: Accessor<MessageType[]>
-) {
+export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
   const [suggestedPrompts, setSuggestedPrompts] = createSignal<string[]>([])
   const [isFetching, setIsFetching] = createSignal(false)
 
@@ -24,12 +19,6 @@ export function useSuggestedPrompts(
 
   const fetchSuggestedPrompts = async () => {
     clearSuggestions()
-
-    // remove sourceDocuments key from messages
-    const history = messages().map((message) => {
-      const { sourceDocuments, ...rest } = message
-      return rest
-    })
 
     const body: IncomingInput = {
       question:

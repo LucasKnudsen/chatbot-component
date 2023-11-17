@@ -1,10 +1,10 @@
 import logo from '@/assets/logo.png'
-import { MessageType } from '@/features/bot'
+import { Question } from '@/features/messages/question'
 import { useTheme } from '@/features/theme/hooks'
 import { DeleteButton } from './SendButton'
 
 type NavProps = {
-  messages: MessageType[]
+  question: Question | null
   onClear: () => void
 }
 
@@ -20,7 +20,7 @@ export const Nav = (props: NavProps) => {
       <DeleteButton
         sendButtonColor={primaryColor}
         type='button'
-        isDisabled={props.messages.length === 1}
+        isDisabled={!props.question}
         on:click={props.onClear}
       >
         <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
