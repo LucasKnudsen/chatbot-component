@@ -23,6 +23,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
     "@types/aws-lambda": "^8.10.126",
     "@types/node": "^20.8.10",
     "@types/uuid": "^9.0.6",

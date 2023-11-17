@@ -1,4 +1,4 @@
 export type Question = {
   question: string
-  answer: string | null
+  answer: string
 }

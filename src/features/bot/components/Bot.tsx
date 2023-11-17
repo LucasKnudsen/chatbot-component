@@ -1,22 +1,20 @@
+import awsconfig from '@/aws-exports'
+import { Nav } from '@/components/Nav'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
 import { TextInput } from '@/components/inputs/textInput'
+import { Sidebar, useChatId } from '@/features/bot'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
+import { ContextualContainer, useContextualElements } from '@/features/contextual'
+import { QuestionAnswer, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
+import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
+import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
-
-import awsconfig from '@/aws-exports'
-import { ContextualContainer, useContextualElements } from '@/features/contextual'
-
-import { Nav } from '@/components/Nav'
-import { Sidebar, useChatId } from '@/features/bot'
-import { useQuestion } from '@/features/messages'
-import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
-import { useTheme } from '@/features/theme/hooks'
 
 Amplify.configure(awsconfig)
 
@@ -235,9 +233,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
               when={!!question()}
               fallback={<div class='flex items-end h-full text-4xl'>{welcomeMessage}</div>}
             >
-              <div class='mb-4 text-xl text-gray-500'>{question()?.question}</div>
-
-              <div class='text-xl'>{question()?.answer}</div>
+              <QuestionAnswer question={question()!} />
             </Show>
           </div>
 

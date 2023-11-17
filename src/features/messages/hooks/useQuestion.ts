@@ -29,7 +29,7 @@ export const useQuestion = (chatflowid: string) => {
 
     const updatedQuestion: Question = {
       question: oldQ.question,
-      answer: (oldQ.answer ?? '') + answer,
+      answer: oldQ.answer + answer,
     }
 
     setQuestion(updatedQuestion)
@@ -42,7 +42,7 @@ export const useQuestion = (chatflowid: string) => {
   const createQuestion = (question: string) => {
     const q: Question = {
       question: question,
-      answer: null,
+      answer: '',
     }
 
     setQuestion(q)
