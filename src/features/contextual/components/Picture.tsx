@@ -11,7 +11,7 @@ export const Picture = ({ element }: Props) => {
   // TODO: Add onHover to show description and link indication
   return (
     <img
-      class='rounded-lg'
+      class='rounded-lg my-2'
       src={element.value}
       alt={element.description}
       width='100%'

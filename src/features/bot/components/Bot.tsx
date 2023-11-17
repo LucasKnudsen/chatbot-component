@@ -128,7 +128,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
     appendMessage({ message: value, type: 'userMessage' })
 
     const body: IncomingInput = {
-      question: value,
+      question:
+        value +
+        '. Always return your answer in formatted markdown, structure it to use a lot of markdown and formatting, links, bold, list.',
       history: [],
       chatId: chatId(),
     }
@@ -176,9 +178,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
   createEffect(() => {
     if (messages()) scrollToBottom()
   })
-  createEffect(() => {
-    if (suggestedPrompts()) scrollToBottom()
-  })
+  // createEffect(() => {
+  //   if (suggestedPrompts()) scrollToBottom()
+  // })
 
   onMount(() => {
     setThemeFromKey(props.themeId)
@@ -216,8 +218,22 @@ export const Bot = (props: BotProps & { class?: string }) => {
         {/* Nav container  */}
         <Nav messages={messages()} onClear={clear} />
 
+        <Show when={messages().length > 0}>
+          {/* Headers container  */}
+          <div class='flex mb-4 pb-1 border-b mx-12 opacity-30 border-gray-300'>
+            <div class='flex flex-1 '>
+              <h1 class=' text-2xl font-light '>Chat</h1>
+            </div>
+
+            <div class='flex flex-1'>
+              <h1 class='flex flex-1 text-2xl font-light '>Resources</h1>
+              <h1 class='flex flex-1 ml-14 text-2xl font-light '>Facts</h1>
+            </div>
+          </div>
+        </Show>
+
         {/* Chat container  */}
-        <div ref={chatParent} class='flex overflow-y-scroll flex-1 flex-nowrap mx-10 gap-10 mb-8 '>
+        <div ref={chatParent} class='flex overflow-y-scroll flex-1 flex-nowrap mx-10 gap-2 mb-4 '>
           <Show when={messages().length > 0}>
             <div
               ref={chatContainer}
@@ -281,9 +297,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
           <Show when={messages().length < 1}>
             <div ref={sidebarParent} class='flex justify-between w-full items-end '>
-              <h1 class='text-5xl max-w-md h-fit  font-light'>{welcomeMessage}</h1>
+              <h1 class='text-5xl max-w-md h-fit mb-4  font-light'>{welcomeMessage}</h1>
 
-              <Sidebar class='pt-16 h-full max-w-xs'>
+              <Sidebar class='pt-8 h-full max-w-xs'>
                 <NavigationPrompts
                   prompts={props.initialPrompts}
                   onSelect={handleSubmit}

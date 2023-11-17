@@ -207,6 +207,11 @@ textarea {
 .chatbot-host-bubble video {
   border-radius: var(--chatbot-border-radius);
 }
+pre:has(code) {
+  background-color: #f0f0f0; /* Set the background color */
+  padding: 10px; /* Add padding for spacing */
+  border: 1px solid #ccc; /* Add a border */
+}
 
 .chatbot-guest-bubble {
   color: var(--chatbot-guest-bubble-color);
