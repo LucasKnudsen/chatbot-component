@@ -62,7 +62,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   let chatContainer: HTMLDivElement | undefined
   let botContainer: HTMLDivElement | undefined
 
-  const welcomeMessage = props.welcomeMessage ?? 'Hi there! How can I help?'
+  const welcomeMessage = props.welcomeMessage ?? 'Hey there again. How can I help you today?'
 
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
@@ -73,12 +73,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const { theme, setThemeFromKey } = useTheme()
   const { backgroundColor, backgroundImageUrl, promptBackground, promptTextColor } = theme()
 
-  const [parent] = createAutoAnimate(/* optional config */)
+  const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
+  const [suggestedPromptsParent2] = createAutoAnimate(/* optional config */)
+  const [chatParent] = createAutoAnimate(/* optional config */)
+  const [sidebarParent] = createAutoAnimate(/* optional config */)
 
-  const { messages, updateLastMessage, deleteChat, appendMessage } = useMessages(
-    props.chatflowid,
-    welcomeMessage
-  )
+  const { messages, updateLastMessage, deleteChat, appendMessage } = useMessages(props.chatflowid)
 
   const { handleSourceDocuments, contextualElements, clearContextualElements } =
     useContextualElements({
@@ -125,13 +125,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
     scrollToBottom()
     clearSuggestions()
 
-    // Remove welcome message from messages
-    const messageList = messages().filter((msg) => msg.message !== welcomeMessage)
-
     appendMessage({ message: value, type: 'userMessage' })
 
     const body: IncomingInput = {
-      question: value,
+      question:
+        value +
+        '. Always return your answer in formatted markdown, structure it to use a lot of markdown and formatting, links, bold, list.',
       history: [],
       chatId: chatId(),
     }
@@ -177,8 +176,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   // Auto scroll chat to bottom
   createEffect(() => {
-    if (messages() || suggestedPrompts()) scrollToBottom()
+    if (messages()) scrollToBottom()
   })
+  // createEffect(() => {
+  //   if (suggestedPrompts()) scrollToBottom()
+  // })
 
   onMount(() => {
     setThemeFromKey(props.themeId)
@@ -196,54 +198,73 @@ export const Bot = (props: BotProps & { class?: string }) => {
       <div
         ref={botContainer}
         class={
-          'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container ' +
+          'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container px-4 ' +
           props.class
         }
         style={{
-          background: backgroundColor,
+          'background-color': backgroundColor,
+          background: `url(${backgroundImageUrl})`,
+          'background-size': 'cover',
         }}
       >
-        <div
-          class='absolute h-full w-full opacity-[15%] pointer-events-none'
+        {/* <div
+          class='absolute h-full w-full opacity-[100%] pointer-events-none z-1'
           style={{
             background: `url(${backgroundImageUrl})`,
             'background-size': 'cover',
           }}
-        ></div>
+        /> */}
+
+        {/* Nav container  */}
         <Nav messages={messages()} onClear={clear} />
 
-        <div class='flex flex-1 overflow-y-scroll flex-nowrap'>
-          {/* Chat container  */}
-          <div
-            ref={chatContainer}
-            class='m-5 flex-1 overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth border border-gray-300 rounded-md'
-          >
-            <For each={[...messages()]}>
-              {(message, index) => (
-                <>
-                  {message.type === 'userMessage' && (
-                    <GuestBubble
-                      message={message.message}
-                      backgroundColor={props.userMessage?.backgroundColor}
-                      textColor={props.userMessage?.textColor}
-                      showAvatar={props.userMessage?.showAvatar}
-                      avatarSrc={props.userMessage?.avatarSrc}
-                    />
-                  )}
-                  {message.type === 'apiMessage' && (
-                    <BotBubble
-                      message={message.message}
-                      backgroundColor={props.botMessage?.backgroundColor}
-                      textColor={props.botMessage?.textColor}
-                      showAvatar={props.botMessage?.showAvatar}
-                      avatarSrc={props.botMessage?.avatarSrc}
-                    />
-                  )}
-                  {message.type === 'userMessage' &&
-                    loading() &&
-                    index() === messages().length - 1 && <LoadingBubble />}
-                  {/* Popups */}
-                  {/* {message.sourceDocuments && message.sourceDocuments.length && (
+        <Show when={messages().length > 0}>
+          {/* Headers container  */}
+          <div class='flex mb-4 pb-1 border-b mx-12 opacity-30 border-gray-300'>
+            <div class='flex flex-1 '>
+              <h1 class=' text-2xl font-light '>Chat</h1>
+            </div>
+
+            <div class='flex flex-1'>
+              <h1 class='flex flex-1 text-2xl font-light '>Resources</h1>
+              <h1 class='flex flex-1 ml-14 text-2xl font-light '>Facts</h1>
+            </div>
+          </div>
+        </Show>
+
+        {/* Chat container  */}
+        <div ref={chatParent} class='flex overflow-y-scroll flex-1 flex-nowrap mx-10 gap-2 mb-4 '>
+          <Show when={messages().length > 0}>
+            <div
+              ref={chatContainer}
+              class=' flex-1 overflow-y-scroll scroll-smooth rounded-md scrollable-container'
+            >
+              <For each={[...messages()]}>
+                {(message, index) => (
+                  <>
+                    {message.type === 'userMessage' && (
+                      <GuestBubble
+                        message={message.message}
+                        backgroundColor={props.userMessage?.backgroundColor}
+                        textColor={props.userMessage?.textColor}
+                        showAvatar={props.userMessage?.showAvatar}
+                        avatarSrc={props.userMessage?.avatarSrc}
+                      />
+                    )}
+                    {message.type === 'apiMessage' && (
+                      <BotBubble
+                        message={message.message}
+                        backgroundColor={props.botMessage?.backgroundColor}
+                        textColor={props.botMessage?.textColor}
+                        showAvatar={props.botMessage?.showAvatar}
+                        avatarSrc={props.botMessage?.avatarSrc}
+                      />
+                    )}
+                    {message.type === 'userMessage' &&
+                      loading() &&
+                      index() === messages().length - 1 && <LoadingBubble />}
+                    {/* Popups */}
+                    {/* {message.sourceDocuments && message.sourceDocuments.length && (
                     <div class='flex w-full'>
                       <For each={[...removeDuplicateURL(message)]}>
                         {(src) => {
@@ -266,24 +287,31 @@ export const Bot = (props: BotProps & { class?: string }) => {
                       </For>
                     </div>
                   )} */}
-                </>
-              )}
-            </For>
-          </div>
+                  </>
+                )}
+              </For>
+            </div>
 
-          <ContextualContainer contextualElements={contextualElements} />
+            <ContextualContainer contextualElements={contextualElements} />
+          </Show>
 
-          <Sidebar class='pt-16 pr-10 max-w-[275px]'>
-            <NavigationPrompts
-              prompts={props.initialPrompts}
-              onSelect={handleSubmit}
-              disabled={loading()}
-            />
-          </Sidebar>
+          <Show when={messages().length < 1}>
+            <div ref={sidebarParent} class='flex justify-between w-full items-end '>
+              <h1 class='text-5xl max-w-md h-fit mb-4  font-light'>{welcomeMessage}</h1>
+
+              <Sidebar class='pt-8 h-full max-w-xs'>
+                <NavigationPrompts
+                  prompts={props.initialPrompts}
+                  onSelect={handleSubmit}
+                  disabled={loading()}
+                />
+              </Sidebar>
+            </div>
+          </Show>
         </div>
 
         {/* Input Container */}
-        <div class='w-full pb-1 px-10'>
+        <div class='w-full pb-1 px-10 z-1 '>
           <TextInput
             disabled={loading()}
             defaultValue={userInput()}
@@ -293,42 +321,36 @@ export const Bot = (props: BotProps & { class?: string }) => {
         </div>
 
         {/* Suggested Prompt Container */}
-
-        <div class='flex items-center px-10 h-28' ref={parent} style={{ gap: '6px 24px' }}>
-          <Show when={messages().length > 2}>
-            <p
-              class='whitespace-nowrap border-r-2  border-gray-200 pr-8 font-bold'
-              style={{
-                // TODO: Theme it
-                color: '#231843A1',
-              }}
+        <div class='mb-8'>
+          <Show when={messages().length > 1}>
+            <div
+              class='flex items-center px-10 h-20 gap-y-1 gap-x-4 '
+              ref={suggestedPromptsParent2}
             >
-              {props.suggestedPromptsTitle ?? 'SUGGESTED QUESTIONS'}
-            </p>
-
-            {isFetchingSuggestedPrompts() ? (
-              <LoadingBubble />
-            ) : suggestedPrompts().length > 0 ? (
-              <For each={suggestedPrompts()}>
-                {(p) => (
-                  <Prompt
-                    prompt={p}
-                    onClick={handleSubmit}
-                    color={promptTextColor}
-                    background={promptBackground}
-                    disabled={loading()}
-                  />
-                )}
-              </For>
-            ) : (
-              <button
-                onClick={() => {
-                  fetchSuggestedPrompts()
+              <p
+                class='whitespace-nowrap border-r-2 border-gray-200 pr-8 font-bold'
+                style={{
+                  // TODO: Theme it
+                  color: '#231843A1',
                 }}
               >
-                Fetch
-              </button>
-            )}
+                {props.suggestedPromptsTitle ?? 'FOLLOW UP QUESTIONS'}
+              </p>
+
+              <Show when={suggestedPrompts().length > 0} fallback={<LoadingBubble />}>
+                <For each={suggestedPrompts()}>
+                  {(p) => (
+                    <Prompt
+                      prompt={p}
+                      onClick={handleSubmit}
+                      color={promptTextColor}
+                      background={promptBackground}
+                      disabled={loading()}
+                    />
+                  )}
+                </For>
+              </Show>
+            </div>
           </Show>
         </div>
 

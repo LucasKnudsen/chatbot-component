@@ -20,7 +20,7 @@ export const Nav = (props: NavProps) => {
       <DeleteButton
         sendButtonColor={primaryColor}
         type='button'
-        isDisabled={props.messages.length === 1}
+        isDisabled={props.messages.length === 0}
         on:click={props.onClear}
       >
         <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>

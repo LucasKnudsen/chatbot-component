@@ -1,3 +1,4 @@
+import { useTheme } from '@/features/theme/hooks'
 import { createSignal } from 'solid-js'
 
 type PromptProps = {
@@ -12,17 +13,20 @@ type PromptProps = {
 export const Prompt = (props: PromptProps) => {
   const [isHovered, setIsHovered] = createSignal(false)
 
+  const { theme } = useTheme()
+  const { primaryColor } = theme()
+
   return (
     <>
       <div
-        class='py-2 px-6 my-1 rounded-xl border border-solid transition duration-100 ease-in-out'
+        class='py-2 px-6 my-1 rounded-xl border border-solid transition duration-200 ease-in-out'
         style={{
           cursor: props.disabled ? 'not-allowed' : 'pointer',
 
           // TODO: Themme it
           background: props.background,
           color: props.color,
-          'border-color': isHovered() ? '#5B93FF' : '#93939340',
+          'border-color': isHovered() ? primaryColor : '#93939340',
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

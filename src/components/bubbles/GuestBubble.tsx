@@ -1,6 +1,6 @@
+import { Marked } from '@ts-stack/markdown'
 import { Show, onMount } from 'solid-js'
 import { Avatar } from '../avatars/Avatar'
-import { Marked } from '@ts-stack/markdown'
 
 type Props = {
   message: string
@@ -10,7 +10,7 @@ type Props = {
   textColor?: string
 }
 
-const defaultBackgroundColor = '#3B81F6'
+const defaultBackgroundColor = 'rgba(91, 147, 255, 1)'
 const defaultTextColor = '#ffffff'
 
 Marked.setOptions({ isNoP: true })
@@ -28,7 +28,7 @@ export const GuestBubble = (props: Props) => {
     <div class='flex justify-end mb-2 items-end guest-container' style={{ 'margin-left': '50px' }}>
       <span
         ref={userMessageEl}
-        class='px-4 py-2 mr-2 whitespace-pre-wrap max-w-full chatbot-guest-bubble'
+        class='px-4 py-2 mr-2 whitespace-pre-wrap max-w-full chatbot-guest-bubble text-lg font-light'
         data-testid='guest-bubble'
         style={{
           'background-color': props.backgroundColor ?? defaultBackgroundColor,

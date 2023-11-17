@@ -9,6 +9,7 @@ export const Video = ({ element }: Props) => {
 
   return (
     <video
+      class='my-2 rounded-md'
       src={element.value}
       muted
       autoplay
