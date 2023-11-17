@@ -1,5 +1,3 @@
-import { BotBubble } from '@/components/bubbles/BotBubble'
-import { GuestBubble } from '@/components/bubbles/GuestBubble'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
 import { TextInput } from '@/components/inputs/textInput'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
@@ -75,10 +73,13 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const [parent] = createAutoAnimate(/* optional config */)
 
-  const { messages, updateLastMessage, deleteChat, appendMessage } = useMessages(
+  const { messages, updateLastMessage, deleteChat, appendMessage, getLastQuery } = useMessages(
     props.chatflowid,
     welcomeMessage
   )
+
+  console.log('messages', messages())
+  const lastQuery = getLastQuery(messages())
 
   const { handleSourceDocuments, contextualElements, clearContextualElements } =
     useContextualElements({
@@ -191,6 +192,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
     setLoading(false)
   })
 
+  console.log(lastQuery)
+
   return (
     <>
       <div
@@ -216,9 +219,14 @@ export const Bot = (props: BotProps & { class?: string }) => {
           {/* Chat container  */}
           <div
             ref={chatContainer}
-            class='m-5 flex-1 overflow-y-scroll pt-16 pl-10 scrollable-container scroll-smooth border border-gray-300 rounded-md'
+            class='m-5 flex-1 overflow-y-scroll pt-8 pl-10 scrollable-container scroll-smooth border border-gray-300 rounded-md'
           >
-            <For each={[...messages()]}>
+            <Show when={getLastQuery(messages())} fallback={<div>How can I help you?</div>}>
+              <div>{getLastQuery(messages())!.question.message}</div>
+              <div>{getLastQuery(messages())!.answer?.message}</div>
+            </Show>
+
+            {/* <For each={[...messages()]}>
               {(message, index) => (
                 <>
                   {message.type === 'userMessage' && (
@@ -242,8 +250,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
                   {message.type === 'userMessage' &&
                     loading() &&
                     index() === messages().length - 1 && <LoadingBubble />}
-                  {/* Popups */}
-                  {/* {message.sourceDocuments && message.sourceDocuments.length && (
+                </>
+              )}
+            </For> */}
+            {/* Popups */}
+            {/* {message.sourceDocuments && message.sourceDocuments.length && (
                     <div class='flex w-full'>
                       <For each={[...removeDuplicateURL(message)]}>
                         {(src) => {
@@ -266,14 +277,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
                       </For>
                     </div>
                   )} */}
-                </>
-              )}
-            </For>
           </div>
 
           <ContextualContainer contextualElements={contextualElements} />
 
-          <Sidebar class='pt-16 pr-10 max-w-[275px]'>
+          <Sidebar class='pr-10 max-w-[275px]'>
             <NavigationPrompts
               prompts={props.initialPrompts}
               onSelect={handleSubmit}

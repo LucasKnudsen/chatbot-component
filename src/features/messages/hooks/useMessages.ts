@@ -3,6 +3,11 @@ import { MessageType } from '@/features/bot/components/Bot'
 import { createSignal, onCleanup, onMount } from 'solid-js'
 import { v4 as uuidv4 } from 'uuid'
 
+type Query = {
+  question: MessageType
+  answer: MessageType | null
+}
+
 export function useMessages(chatflowid: string, welcomeMessage: string) {
   const storageKey = `${chatflowid}_EXTERNAL`
 
@@ -113,11 +118,32 @@ export function useMessages(chatflowid: string, welcomeMessage: string) {
     ])
   })
 
+  const getLastQuery = (messages: MessageType[]): Query | null => {
+    const lastQueryReversedIndex = messages
+      .slice()
+      .reverse()
+      .findIndex((message) => message.type === 'userMessage')
+
+    if (lastQueryReversedIndex == -1) return null
+
+    const lastQueryIndex = messages.length - 1 - lastQueryReversedIndex
+    const lastAnswerIndex = lastQueryIndex == messages.length - 1 ? null : lastQueryIndex + 1
+
+    const lastQuestion = messages[lastQueryIndex]
+    const lastAnswer = lastAnswerIndex ? messages[lastAnswerIndex] : null
+
+    return {
+      question: lastQuestion,
+      answer: lastAnswer,
+    }
+  }
+
   return {
     messages,
     updateLastMessage,
     updateLastMessageSourceDocuments,
     deleteChat,
     appendMessage,
+    getLastQuery,
   }
 }
