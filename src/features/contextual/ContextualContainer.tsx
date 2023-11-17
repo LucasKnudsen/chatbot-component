@@ -1,5 +1,5 @@
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { Accessor, For, createEffect } from 'solid-js'
+import { Accessor, For, Match, Switch, createEffect } from 'solid-js'
 import { ContextualElement } from '.'
 import { Fact } from './components/Fact'
 import { Iframe } from './components/Iframe'
@@ -16,7 +16,8 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
 
   console.log('contextualElements', contextualElements())
 
-  const [parent] = createAutoAnimate({ duration: 500 })
+  const [parent] = createAutoAnimate()
+  const [parent2] = createAutoAnimate()
 
   // // Auto scroll chat to bottom
   createEffect(() => {
@@ -25,42 +26,59 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
 
   const scrollToBottom = () => {
     setTimeout(() => {
-      const contextualContainer = document.getElementById('contextual-container')
+      const contextualContainer = document.getElementById('contextual-resources')
       if (contextualContainer) {
         contextualContainer.scrollTop = contextualContainer.scrollHeight
+      }
+      const contextualContainer2 = document.getElementById('contextual-facts')
+      if (contextualContainer2) {
+        contextualContainer2.scrollTop = contextualContainer2.scrollHeight
       }
     }, 50)
   }
 
   return (
-    <div
-      id='contextual-container'
-      ref={parent}
-      class='flex-1 flex-col  overflow-y-scroll pt-8 px-3 m-5 relative scrollable-container scroll-smooth border border-gray-300 rounded-md '
-    >
-      <For each={contextualElements()}>
-        {(element) => {
-          switch (element.type) {
-            case 'fact':
-              return <Fact element={element} />
+    <div class='flex flex-1 gap-12 flex-nowrap overflow-hidden'>
+      <div
+        id='contextual-resources'
+        ref={parent}
+        class='flex-1 flex-col  overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container'
+      >
+        <For each={contextualElements()}>
+          {(element) => (
+            <Switch fallback={null}>
+              <Match when={element.type === 'picture'}>
+                <Picture element={element} />
+              </Match>
+              <Match when={element.type === 'video'}>
+                <Video element={element} />
+              </Match>
+              <Match when={element.type === 'iframe'}>
+                <Iframe element={element} />
+              </Match>
+              <Match when={element.type === 'link'}>
+                <Link element={element} />
+              </Match>
+            </Switch>
+          )}
+        </For>
+      </div>
 
-            case 'picture':
-              return <Picture element={element} />
-
-            case 'video':
-              return <Video element={element} />
-
-            case 'iframe':
-              return <Iframe element={element} />
-
-            case 'link':
-              return <Link element={element} />
-
-            default:
-              return null
-          }
-        }}
-      </For>
+      <div
+        id='contextual-facts'
+        ref={parent2}
+        class='flex-1 flex-col  overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container  '
+      >
+        <For each={contextualElements()}>
+          {(element) => (
+            <Switch fallback={null}>
+              <Match when={element.type === 'fact'}>
+                <Fact element={element} />
+              </Match>
+            </Switch>
+          )}
+        </For>
+      </div>
     </div>
   )
 }

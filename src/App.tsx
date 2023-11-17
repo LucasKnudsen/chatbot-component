@@ -1,6 +1,5 @@
 import { onMount } from 'solid-js'
 import './dev.css'
-import { Bubble } from './features/bubble'
 import { Full } from './features/full'
 
 import { PromptType } from './features/bot'
@@ -10,16 +9,16 @@ import { SubscriptionHelper } from './utils/subscriptionHelpers'
 
 const initialPrompts: PromptType[] = [
   {
-    display: 'Tell me about concordium',
-    prompt: 'Give me a detailed description of the services that concordium offers',
+    display: 'Tell me about Lion Brain',
+    prompt: 'Give me a detailed description of the services that Lion Brain offers',
   },
   {
     display: 'Tell me about your products',
-    prompt: 'Give me a detailed description of the products that concordium offers',
+    prompt: 'Give me a detailed description of the products that Soft Design offers',
   },
   {
     display: 'Who is your CEO',
-    prompt: 'Give me a detailed description of the CEO of concordium',
+    prompt: 'Give me a detailed description of the CEO of Lion Brain',
   },
 ]
 
@@ -50,7 +49,7 @@ function App() {
   return (
     <>
       <Full chatflowid={chatflowid} apiHost={apiHost} initialPrompts={initialPrompts} />
-      <Bubble chatflowid={chatflowid} apiHost={apiHost} initialPrompts={initialPrompts} />
+      {/* <Bubble chatflowid={chatflowid} apiHost={apiHost} initialPrompts={initialPrompts} /> */}
     </>
   )
 }

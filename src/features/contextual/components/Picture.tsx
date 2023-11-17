@@ -9,5 +9,13 @@ export const Picture = ({ element }: Props) => {
 
   // TODO: Add onClick to open link in new tab
   // TODO: Add onHover to show description and link indication
-  return <img src={element.value} alt={element.description} width='100%' height={240} />
+  return (
+    <img
+      class='rounded-lg my-2'
+      src={element.value}
+      alt={element.description}
+      width='100%'
+      height={240}
+    />
+  )
 }

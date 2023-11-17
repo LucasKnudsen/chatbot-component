@@ -58,7 +58,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   let chatContainer: HTMLDivElement | undefined
   let botContainer: HTMLDivElement | undefined
 
-  const welcomeMessage = props.welcomeMessage ?? 'Hi there! How can I help?'
+  const welcomeMessage = props.welcomeMessage ?? 'Hey there again. How can I help you today?'
 
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
@@ -69,7 +69,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const { theme, setThemeFromKey } = useTheme()
   const { backgroundColor, backgroundImageUrl, promptBackground, textColor } = theme()
 
-  const [parent] = createAutoAnimate(/* optional config */)
+  const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
+  const [suggestedPromptsParent2] = createAutoAnimate(/* optional config */)
+  const [chatParent] = createAutoAnimate(/* optional config */)
+  const [sidebarParent] = createAutoAnimate(/* optional config */)
 
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
 
@@ -137,7 +140,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
     createQuestion(value)
 
     const body: IncomingInput = {
-      question: value,
+      question:
+        value +
+        '. Always return your answer in formatted markdown, structure it to use a lot of markdown and formatting, links, bold, list.',
       history: [],
       chatId: chatId(),
     }
@@ -185,8 +190,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   // Auto scroll chat to bottom
   createEffect(() => {
-    if (question() || suggestedPrompts()) scrollToBottom()
+    if (question()) scrollToBottom()
   })
+  // createEffect(() => {
+  //   if (suggestedPrompts()) scrollToBottom()
+  // })
 
   onMount(() => {
     setThemeFromKey(props.themeId)
@@ -204,52 +212,73 @@ export const Bot = (props: BotProps & { class?: string }) => {
       <div
         ref={botContainer}
         class={
-          'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container ' +
+          'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container px-4 ' +
           props.class
         }
         style={{
-          background: backgroundColor,
+          'background-color': backgroundColor,
+          background: `url(${backgroundImageUrl})`,
+          'background-size': 'cover',
         }}
       >
-        <div
-          class='absolute h-full w-full opacity-[15%] pointer-events-none'
+        {/* <div
+          class='absolute h-full w-full opacity-[100%] pointer-events-none z-1'
           style={{
             background: `url(${backgroundImageUrl})`,
             'background-size': 'cover',
           }}
-        ></div>
+
+         /> */}
+
         <Nav question={question()} onClear={clear} />
 
-        <div class='pl-10 flex flex-1 overflow-y-scroll flex-nowrap'>
+        {/* Headers container  */}
+        <Show when={Boolean(question())}>
+          <div class='flex mb-4 pb-1 border-b mx-10 opacity-30 border-gray-300'>
+            <div class='flex flex-1 '>
+              <h1 class=' text-2xl font-light '>Chat</h1>
+            </div>
+
+            <div class='flex flex-1'>
+              <h1 class='flex flex-1 text-2xl font-light '>Resources</h1>
+              <h1 class='flex flex-1 ml-14 text-2xl font-light '>Facts</h1>
+            </div>
+          </div>
+        </Show>
+
+        <div class='px-10 flex flex-1 overflow-y-scroll flex-nowrap'>
           {/* Chat container  */}
-          <div
-            ref={chatContainer}
-            class='p-5 flex-1 overflow-y-scroll pt-8  scrollable-container scroll-smooth border rounded-md'
-            style={{
-              color: textColor,
-            }}
-          >
-            <Show
-              when={!!question()}
-              fallback={<div class='flex items-end h-full text-4xl'>{welcomeMessage}</div>}
+          <Show when={Boolean(question())}>
+            <div
+              ref={chatContainer}
+              class='flex flex-1 scrollable-container scroll-smooth  flex-nowrap gap-2 mb-4 '
+              style={{
+                color: textColor,
+              }}
             >
               <QuestionAnswer question={question()!} />
-            </Show>
-          </div>
 
-          <ContextualContainer contextualElements={contextualElements} />
+              <ContextualContainer contextualElements={contextualElements} />
+            </div>
+          </Show>
 
-          <Sidebar class='pr-10 max-w-[275px]'>
-            <NavigationPrompts
-              prompts={props.initialPrompts}
-              onSelect={handleSubmit}
-              disabled={loading()}
-            />
-          </Sidebar>
+          <Show when={!question()}>
+            <div ref={sidebarParent} class='flex justify-between w-full items-end '>
+              <h1 class='text-5xl max-w-md h-fit mb-4  font-light'>{welcomeMessage}</h1>
+
+              <Sidebar class='pt-8 h-full max-w-xs'>
+                <NavigationPrompts
+                  prompts={props.initialPrompts}
+                  onSelect={handleSubmit}
+                  disabled={loading()}
+                />
+              </Sidebar>
+            </div>
+          </Show>
         </div>
 
         {/* Input Container */}
-        <div class='w-full pb-1 px-10'>
+        <div class='w-full pb-1 px-10 z-1 '>
           <TextInput
             disabled={loading()}
             defaultValue={userInput()}
@@ -259,42 +288,36 @@ export const Bot = (props: BotProps & { class?: string }) => {
         </div>
 
         {/* Suggested Prompt Container */}
-
-        <div class='flex items-center px-10 h-28' ref={parent} style={{ gap: '6px 24px' }}>
-          <Show when={!!question()?.answer}>
-            <p
-              class='whitespace-nowrap border-r-2  border-gray-200 pr-8 font-bold'
-              style={{
-                // TODO: Theme it
-                color: '#231843A1',
-              }}
+        <div class='mb-8'>
+          <Show when={question()?.answer}>
+            <div
+              class='flex items-center px-10 h-20 gap-y-1 gap-x-4 '
+              ref={suggestedPromptsParent2}
             >
-              {props.suggestedPromptsTitle ?? 'SUGGESTED QUESTIONS'}
-            </p>
-
-            {isFetchingSuggestedPrompts() ? (
-              <LoadingBubble />
-            ) : suggestedPrompts().length > 0 ? (
-              <For each={suggestedPrompts()}>
-                {(p) => (
-                  <Prompt
-                    prompt={p}
-                    onClick={handleSubmit}
-                    color={textColor}
-                    background={promptBackground}
-                    disabled={loading()}
-                  />
-                )}
-              </For>
-            ) : (
-              <button
-                onClick={() => {
-                  fetchSuggestedPrompts()
+              <p
+                class='whitespace-nowrap border-r-2 border-gray-200 pr-8 font-bold'
+                style={{
+                  // TODO: Theme it
+                  color: '#231843A1',
                 }}
               >
-                Fetch
-              </button>
-            )}
+                {props.suggestedPromptsTitle ?? 'FOLLOW UP QUESTIONS'}
+              </p>
+
+              <Show when={suggestedPrompts().length > 0} fallback={<LoadingBubble />}>
+                <For each={suggestedPrompts()}>
+                  {(p) => (
+                    <Prompt
+                      prompt={p}
+                      onClick={handleSubmit}
+                      color={textColor}
+                      background={promptBackground}
+                      disabled={loading()}
+                    />
+                  )}
+                </For>
+              </Show>
+            </div>
           </Show>
         </div>
 
@@ -315,83 +338,3 @@ export const Bot = (props: BotProps & { class?: string }) => {
     </>
   )
 }
-
-// const sourceDocuments = [
-//   {
-//     pageContent:
-//       'I know some are talking about “living with COVID-19”. Tonight – I say that we will never just accept living with COVID-19. \r\n\r\nWe will continue to combat the virus as we do other diseases. And because this is a virus that mutates and spreads, we will stay on guard. \r\n\r\nHere are four common sense steps as we move forward safely.  \r\n\r\nFirst, stay protected with vaccines and treatments. We know how incredibly effective vaccines are. If you’re vaccinated and boosted you have the highest degree of protection. \r\n\r\nWe will never give up on vaccinating more Americans. Now, I know parents with kids under 5 are eager to see a vaccine authorized for their children. \r\n\r\nThe scientists are working hard to get that done and we’ll be ready with plenty of vaccines when they do. \r\n\r\nWe’re also ready with anti-viral treatments. If you get COVID-19, the Pfizer pill reduces your chances of ending up in the hospital by 90%.',
-//     metadata: {
-//       source: 'blob',
-//       blobType: '',
-//       loc: {
-//         lines: {
-//           from: 450,
-//           to: 462,
-//         },
-//       },
-//     },
-//   },
-//   {
-//     pageContent:
-//       'sistance,  and  polishing  [65].  For  instance,  AI  tools  generate\nsuggestions based on inputting keywords or topics. The tools\nanalyze  search  data,  trending  topics,  and  popular  queries  to\ncreate  fresh  content.  What’s  more,  AIGC  assists  in  writing\narticles and posting blogs on specific topics. While these tools\nmay not be able to produce high-quality content by themselves,\nthey can provide a starting point for a writer struggling with\nwriter’s block.\nH.  Cons of AIGC\nOne of the main concerns among the public is the potential\nlack  of  creativity  and  human  touch  in  AIGC.  In  addition,\nAIGC sometimes lacks a nuanced understanding of language\nand context, which may lead to inaccuracies and misinterpre-\ntations. There are also concerns about the ethics and legality\nof using AIGC, particularly when it results in issues such as\ncopyright  infringement  and  data  privacy.  In  this  section,  we\nwill discuss some of the disadvantages of AIGC (Table IV).',
-//     metadata: {
-//       source: 'blob',
-//       blobType: '',
-//       pdf: {
-//         version: '1.10.100',
-//         info: {
-//           PDFFormatVersion: '1.5',
-//           IsAcroFormPresent: false,
-//           IsXFAPresent: false,
-//           Title: '',
-//           Author: '',
-//           Subject: '',
-//           Keywords: '',
-//           Creator: 'LaTeX with hyperref',
-//           Producer: 'pdfTeX-1.40.21',
-//           CreationDate: 'D:20230414003603Z',
-//           ModDate: 'D:20230414003603Z',
-//           Trapped: {
-//             name: 'False',
-//           },
-//         },
-//         metadata: null,
-//         totalPages: 17,
-//       },
-//       loc: {
-//         pageNumber: 8,
-//         lines: {
-//           from: 301,
-//           to: 317,
-//         },
-//       },
-//     },
-//   },
-//   {
-//     pageContent: 'Main article: Views of Elon Musk',
-//     metadata: {
-//       source: 'https://en.wikipedia.org/wiki/Elon_Musk',
-//       loc: {
-//         lines: {
-//           from: 2409,
-//           to: 2409,
-//         },
-//       },
-//     },
-//   },
-//   {
-//     pageContent:
-//       'First Name: John\nLast Name: Doe\nAddress: 120 jefferson st.\nStates: Riverside\nCode: NJ\nPostal: 8075',
-//     metadata: {
-//       source: 'blob',
-//       blobType: '',
-//       line: 1,
-//       loc: {
-//         lines: {
-//           from: 1,
-//           to: 6,
-//         },
-//       },
-//     },
-//   },
-// ]

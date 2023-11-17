@@ -1,6 +1,6 @@
 import { extractChatbotResponse } from '@/features/messages'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
-import { createSignal, onMount } from 'solid-js'
+import { createSignal } from 'solid-js'
 
 // Follow-up questions related to a blockchain company
 const dummySuggestions = [
@@ -52,12 +52,6 @@ export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
       }
     }
   }
-
-  onMount(() => {
-    // if (messages().length > 1) {
-    //   fetchSuggestedPrompts()
-    // }
-  })
 
   return { suggestedPrompts, fetchSuggestedPrompts, clearSuggestions, isFetching }
 }

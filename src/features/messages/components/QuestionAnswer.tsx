@@ -16,10 +16,10 @@ export const QuestionAnswer = (props: QuestionAnswerProps) => {
   })
 
   return (
-    <>
+    <div class='flex flex-1 flex-col overflow-y-scroll scrollable-container'>
       <div class='mb-4 text-xl text-gray-500'>{props.question.question}</div>
 
       <div ref={botMessageEl} class='prose'></div>
-    </>
+    </div>
   )
 }
