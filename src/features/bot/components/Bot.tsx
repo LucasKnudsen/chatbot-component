@@ -1,6 +1,7 @@
 import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
+import { MessageIcon } from '@/components/icons'
 import { TextInput } from '@/components/inputs/textInput'
 import { Sidebar, useChatId } from '@/features/bot'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
@@ -14,6 +15,7 @@ import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/promp
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Amplify } from 'aws-amplify'
+
 import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 
 Amplify.configure(awsconfig)
@@ -70,8 +72,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const { backgroundColor, backgroundImageUrl, promptBackground, textColor } = theme()
 
   const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
-  const [suggestedPromptsParent2] = createAutoAnimate(/* optional config */)
-  const [chatParent] = createAutoAnimate(/* optional config */)
   const [sidebarParent] = createAutoAnimate(/* optional config */)
 
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
@@ -192,9 +192,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
   createEffect(() => {
     if (question()) scrollToBottom()
   })
-  // createEffect(() => {
-  //   if (suggestedPrompts()) scrollToBottom()
-  // })
+
+  createEffect(() => {
+    if (isFetchingSuggestedPrompts()) setTimeout(() => scrollToBottom(), 300)
+  })
 
   onMount(() => {
     setThemeFromKey(props.themeId)
@@ -234,29 +235,28 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
         {/* Headers container  */}
         <Show when={Boolean(question())}>
-          <div class='flex mb-4 pb-1 border-b mx-10 opacity-30 border-gray-300'>
-            <div class='flex flex-1 '>
-              <h1 class=' text-2xl font-light '>Chat</h1>
-            </div>
+          <div class='flex pb-1 border-b mx-10  border-gray-200'>
+            <div class=' text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start '>
+              <MessageIcon width={30} />
 
-            <div class='flex flex-1'>
-              <h1 class='flex flex-1 text-2xl font-light '>Resources</h1>
-              <h1 class='flex flex-1 ml-14 text-2xl font-light '>Facts</h1>
+              {question()?.question}
             </div>
           </div>
         </Show>
 
-        <div class='px-10 flex flex-1 overflow-y-scroll flex-nowrap'>
+        <div class='px-10 flex flex-1 overflow-y-scroll'>
           {/* Chat container  */}
           <Show when={Boolean(question())}>
-            <div
-              ref={chatContainer}
-              class='flex flex-1 scrollable-container scroll-smooth  flex-nowrap gap-2 mb-4 '
-              style={{
-                color: textColor,
-              }}
-            >
-              <QuestionAnswer question={question()!} />
+            <div class='flex flex-1 flex-nowrap gap-12 mb-4 '>
+              <div
+                ref={chatContainer}
+                class='flex flex-1 flex-col overflow-y-scroll scrollable-container scroll-smooth  pt-4'
+                style={{
+                  color: textColor,
+                }}
+              >
+                <QuestionAnswer question={question()!} />
+              </div>
 
               <ContextualContainer contextualElements={contextualElements} />
             </div>
@@ -288,12 +288,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
         </div>
 
         {/* Suggested Prompt Container */}
-        <div class='mb-8'>
-          <Show when={question()?.answer}>
-            <div
-              class='flex items-center px-10 h-20 gap-y-1 gap-x-4 '
-              ref={suggestedPromptsParent2}
-            >
+        <div class='mb-8' ref={suggestedPromptsParent}>
+          <Show when={isFetchingSuggestedPrompts() || suggestedPrompts().length > 0}>
+            <div class='flex items-center px-10 h-20 gap-y-1 gap-x-4 '>
               <p
                 class='whitespace-nowrap border-r-2 border-gray-200 pr-8 font-bold'
                 style={{
