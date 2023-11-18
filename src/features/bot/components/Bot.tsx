@@ -58,7 +58,6 @@ export type BotProps = {
 
 export const Bot = (props: BotProps & { class?: string }) => {
   let chatContainer: HTMLDivElement | undefined
-  let botContainer: HTMLDivElement | undefined
 
   const welcomeMessage = props.welcomeMessage ?? 'Hey there again. How can I help you today?'
 
@@ -71,6 +70,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const { theme, setThemeFromKey } = useTheme()
   const { backgroundColor, backgroundImageUrl, promptBackground, textColor } = theme()
 
+  const [parent] = createAutoAnimate(/* optional config */)
   const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
   const [sidebarParent] = createAutoAnimate(/* optional config */)
 
@@ -82,14 +82,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
     updateAnswer,
     clear: clearQuestions,
   } = useQuestion(props.chatflowid)
-
-  // const { messages, updateLastMessage, deleteChat, appendMessage, getLastQuery } = useMessages(
-  //   props.chatflowid,
-  //   welcomeMessage
-  // )
-
-  // console.log('messages', messages())
-  // const lastQuery = getLastQuery(messages())
 
   const { handleSourceDocuments, contextualElements, clearContextualElements } =
     useContextualElements({
@@ -211,7 +203,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   return (
     <>
       <div
-        ref={botContainer}
+        ref={parent}
         class={
           'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container px-4 ' +
           props.class
@@ -317,12 +309,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
             </div>
           </Show>
         </div>
-
-        {/* <Badge
-          badgeBackgroundColor={props.badgeBackgroundColor}
-          poweredByTextColor={props.poweredByTextColor}
-          botContainer={botContainer}
-        /> */}
 
         {sourcePopupOpen() && (
           <Popup
