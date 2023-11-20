@@ -1,5 +1,6 @@
+import { TypingBubble } from '@/components'
 import { Marked } from '@ts-stack/markdown'
-import { createEffect, on } from 'solid-js'
+import { createEffect, on, Show } from 'solid-js'
 import { Question } from '../question'
 
 type QuestionAnswerProps = {
@@ -25,12 +26,20 @@ export const QuestionAnswer = (props: QuestionAnswerProps) => {
 
   createEffect(on(() => props.question, scrollToBottom, { defer: true }))
 
+  // createEffect(() => {
+  //   if (isFetchingSuggestedPrompts()) setTimeout(() => scrollToBottom(), 300)
+  // })
+
   return (
     <div
       ref={questionAnswerContainer}
       class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth'
     >
-      <div class='mb-4 text-xl text-gray-500'>{props.question.question}</div>
+      <Show when={!props.question.answer}>
+        <div class='flex mt-4  '>
+          <TypingBubble />
+        </div>
+      </Show>
 
       <div ref={botMessageEl} class='prose' />
     </div>

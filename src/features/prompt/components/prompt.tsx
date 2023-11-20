@@ -31,7 +31,7 @@ export const Prompt = (props: PromptProps) => {
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => (props.disabled ? null : props.onClick(props.prompt))}
       >
-        <p class='text-bast whitespace-pre-line font-light'>{props.prompt}</p>
+        <p class='text-bast whitespace-pre-line font-normal '>{props.prompt}</p>
       </div>
     </>
   )

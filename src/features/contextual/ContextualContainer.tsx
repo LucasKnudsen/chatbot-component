@@ -12,10 +12,6 @@ type Props = {
 }
 
 export const ContextualContainer = ({ contextualElements }: Props) => {
-  let contextContainer: HTMLDivElement | undefined
-
-  console.log('contextualElements', contextualElements())
-
   const [parent] = createAutoAnimate()
   const [parent2] = createAutoAnimate()
 
