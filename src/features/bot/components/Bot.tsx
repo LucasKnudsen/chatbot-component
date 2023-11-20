@@ -217,49 +217,44 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
         <Nav question={question()} onClear={clear} />
 
-        {/* Headers container  */}
-        <Show when={Boolean(question())}>
-          <div class='flex pb-1 border-b mx-10 opacity-30 border-gray-300'>
-            <div class='flex flex-1 '>
-              <h1 class=' text-2xl font-light '>Chat</h1>
-            </div>
-
-            <div class='flex flex-1'>
-              <h1 class='flex flex-1 text-2xl font-light '>Resources</h1>
-              <h1 class='flex flex-1 ml-14 text-2xl font-light '>Facts</h1>
+        <div class='flex overflow-y-scroll'>
+          <div class='flex flex-col flex-1'>
+            {/* Headers container  */}
+            <Show when={Boolean(question())}>
+              <div class='flex pb-1 border-b mx-10 opacity-30 border-gray-300'>
+                <div class='flex flex-1 '>
+                  <h1 class=' text-2xl font-light '>Chat</h1>
+                </div>
+                <div class='flex flex-1'>
+                  <h1 class='flex flex-1 text-2xl font-light '>Resources</h1>
+                  <h1 class='flex flex-1 ml-14 text-2xl font-light '>Facts</h1>
+                </div>
+              </div>
+            </Show>
+            <div class='px-10 flex flex-1 overflow-y-scroll flex-nowrap'>
+              {/* Chat container  */}
+              <Show when={Boolean(question())}>
+                <div
+                  ref={chatContainer}
+                  class='flex flex-1 flex-nowrap gap-2'
+                  style={{
+                    color: textColor,
+                  }}
+                >
+                  <QuestionAnswer question={question()!} />
+                  <ContextualContainer contextualElements={contextualElements} />
+                </div>
+              </Show>
             </div>
           </div>
-        </Show>
 
-        <div class='px-10 flex flex-1 overflow-y-scroll flex-nowrap'>
-          {/* Chat container  */}
-          <Show when={Boolean(question())}>
-            <div
-              ref={chatContainer}
-              class='flex flex-1 flex-nowrap gap-2'
-              style={{
-                color: textColor,
-              }}
-            >
-              <QuestionAnswer question={question()!} />
-
-              <ContextualContainer contextualElements={contextualElements} />
-            </div>
-          </Show>
-
-          <Show when={!question()}>
-            <div ref={sidebarParent} class='flex justify-between w-full items-end '>
-              <h1 class='text-5xl max-w-md h-fit mb-4  font-light'>{welcomeMessage}</h1>
-
-              <Sidebar class='pt-8 h-full max-w-xs'>
-                <NavigationPrompts
-                  prompts={props.initialPrompts}
-                  onSelect={handleSubmit}
-                  disabled={loading()}
-                />
-              </Sidebar>
-            </div>
-          </Show>
+          <Sidebar open={!!question()}>
+            <NavigationPrompts
+              prompts={props.initialPrompts}
+              onSelect={handleSubmit}
+              disabled={loading()}
+            />
+          </Sidebar>
         </div>
 
         {/* Input Container */}
