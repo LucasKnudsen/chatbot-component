@@ -14,19 +14,18 @@ export const Prompt = (props: PromptProps) => {
   const [isHovered, setIsHovered] = createSignal(false)
 
   const { theme } = useTheme()
-  const { primaryColor } = theme()
+  const { primaryColor, borderColor } = theme()
 
   return (
     <>
       <div
-        class='py-2 px-6 my-1 rounded-xl border border-solid transition duration-200 ease-in-out'
+        class='py-2 px-5 rounded-[10px] border transition duration-200 ease-in-out'
         style={{
           cursor: props.disabled ? 'not-allowed' : 'pointer',
-
           // TODO: Themme it
           background: props.background,
           color: props.color,
-          'border-color': isHovered() ? primaryColor : '#93939340',
+          'border-color': isHovered() ? primaryColor : borderColor,
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

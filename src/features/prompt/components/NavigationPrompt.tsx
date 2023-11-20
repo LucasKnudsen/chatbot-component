@@ -13,7 +13,7 @@ type PromptProps = {
 export const NavigationPrompt = (props: PromptProps) => {
   return (
     <div
-      class={'p-5 text-white inline-block rounded-[10px] ' + props.class}
+      class={'p-5 text-white inline-block  rounded-[10px] ' + props.class}
       style={{
         cursor: props.disabled ? 'not-allowed' : 'pointer',
         background: props.background,

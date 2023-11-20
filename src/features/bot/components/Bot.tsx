@@ -103,12 +103,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
     onDocuments: handleSourceDocuments,
   })
 
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      chatContainer?.scrollTo(0, chatContainer.scrollHeight)
-    }, 50)
-  }
-
   const clear = () => {
     clearQuestions()
     clearContextualElements()
@@ -125,7 +119,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
     }
 
     setLoading(true)
-    scrollToBottom()
     clearSuggestions()
 
     // Remove welcome message from messages
@@ -165,7 +158,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
       setLoading(false)
       setUserInput('')
-      scrollToBottom()
     }
 
     if (result.error) {
@@ -175,22 +167,16 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
       setLoading(false)
       setUserInput('')
-      scrollToBottom()
       return
     }
   }
 
-  // Auto scroll chat to bottom
-  createEffect(() => {
-    if (question()) scrollToBottom()
-  })
-
-  createEffect(() => {
-    if (isFetchingSuggestedPrompts()) setTimeout(() => scrollToBottom(), 300)
-  })
-
   onMount(() => {
     setThemeFromKey(props.themeId)
+
+    if (question()) {
+      fetchSuggestedPrompts()
+    }
   })
 
   createEffect(() => {})
@@ -236,13 +222,29 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </div>
         </Show>
 
+        {/* Chat container  */}
+        {/* <div class='px-10 flex flex-1 overflow-y-scroll flex-nowrap'>
+              <Show when={Boolean(question())}>
+                <div
+                  ref={chatContainer}
+                  class='flex flex-1 flex-nowrap gap-2'
+                  style={{
+                    color: textColor,
+                  }}
+                >
+                  <QuestionAnswer question={question()!} />
+                  <ContextualContainer contextualElements={contextualElements} />
+                </div>
+              </Show>
+            </div> */}
+
         <div class='px-10 flex flex-1 overflow-y-scroll'>
           {/* Chat container  */}
           <Show when={Boolean(question())}>
             <div class='flex flex-1 flex-nowrap gap-12 mb-4 '>
               <div
                 ref={chatContainer}
-                class='flex flex-1 flex-col overflow-y-scroll scrollable-container scroll-smooth  pt-4'
+                class='flex flex-1 flex-col overflow-y-scroll scrollable-container scroll-smooth  '
                 style={{
                   color: textColor,
                 }}
@@ -257,16 +259,16 @@ export const Bot = (props: BotProps & { class?: string }) => {
           <Show when={!question()}>
             <div ref={sidebarParent} class='flex justify-between w-full items-end '>
               <h1 class='text-5xl max-w-md h-fit mb-4  font-light'>{welcomeMessage}</h1>
-
-              <Sidebar class='pt-8 h-full max-w-xs'>
-                <NavigationPrompts
-                  prompts={props.initialPrompts}
-                  onSelect={handleSubmit}
-                  disabled={loading()}
-                />
-              </Sidebar>
             </div>
           </Show>
+
+          <Sidebar open={!!question()}>
+            <NavigationPrompts
+              prompts={props.initialPrompts}
+              onSelect={handleSubmit}
+              disabled={loading()}
+            />
+          </Sidebar>
         </div>
 
         {/* Input Container */}
