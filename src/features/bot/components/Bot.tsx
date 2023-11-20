@@ -97,12 +97,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
       chatId,
     })
 
-  const {
-    suggestedPrompts,
-    fetchSuggestedPrompts,
-    clearSuggestions,
-    isFetching: isFetchingSuggestedPrompts,
-  } = useSuggestedPrompts(props.chatflowid, props.apiHost)
+  const { suggestedPrompts, fetchSuggestedPrompts, clearSuggestions } = useSuggestedPrompts(
+    props.chatflowid,
+    props.apiHost
+  )
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
@@ -181,6 +179,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   onMount(() => {
     setThemeFromKey(props.themeId)
+
+    if (question()) {
+      fetchSuggestedPrompts()
+    }
   })
 
   createEffect(() => {})
