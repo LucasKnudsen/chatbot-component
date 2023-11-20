@@ -1,1 +1,1 @@
-export * from './QuestionAnswer'
+export * from './ChatWindow'

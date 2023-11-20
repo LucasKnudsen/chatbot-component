@@ -1,12 +1,12 @@
 import { createSignal, onMount } from 'solid-js'
-import { Question } from '../question'
+import { Chat } from '../types'
 
 export const useQuestion = (chatflowid: string) => {
   const storageKey = `${chatflowid}_QUESTIONS`
 
-  const [question, setQuestion] = createSignal<Question | null>(null)
+  const [question, setQuestion] = createSignal<Chat | null>(null)
 
-  const storeQuestions = (allQuestions: Question[]) => {
+  const storeQuestions = (allQuestions: Chat[]) => {
     localStorage.setItem(storageKey, JSON.stringify(allQuestions))
   }
 
@@ -16,7 +16,7 @@ export const useQuestion = (chatflowid: string) => {
     if (data) {
       const questions = JSON.parse(data)
 
-      return questions as Question[]
+      return questions as Chat[]
     }
 
     return []
@@ -27,7 +27,7 @@ export const useQuestion = (chatflowid: string) => {
 
     if (oldQ === null) return
 
-    const updatedQuestion: Question = {
+    const updatedQuestion: Chat = {
       question: oldQ.question,
       answer: oldQ.answer + answer,
     }
@@ -40,7 +40,7 @@ export const useQuestion = (chatflowid: string) => {
   }
 
   const createQuestion = (question: string) => {
-    const q: Question = {
+    const q: Chat = {
       question: question,
       answer: '',
     }

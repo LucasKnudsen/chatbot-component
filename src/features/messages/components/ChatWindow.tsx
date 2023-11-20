@@ -1,14 +1,14 @@
 import { TypingBubble } from '@/components'
 import { Marked } from '@ts-stack/markdown'
 import { createEffect, on, Show } from 'solid-js'
-import { Question } from '../question'
+import { Chat } from '../types'
 
-type QuestionAnswerProps = {
-  question: Question
+type ChatWindowProps = {
+  question: Chat
   isFetchingSuggestedPrompts: boolean
 }
 
-export const QuestionAnswer = (props: QuestionAnswerProps) => {
+export const ChatWindow = (props: ChatWindowProps) => {
   let questionAnswerContainer: HTMLDivElement | undefined
 
   let botMessageEl: HTMLDivElement | undefined

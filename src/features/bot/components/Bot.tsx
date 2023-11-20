@@ -6,7 +6,7 @@ import { TextInput } from '@/components/inputs/textInput'
 import { Sidebar, useChatId } from '@/features/bot'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
 import { ContextualContainer, useContextualElements } from '@/features/contextual'
-import { QuestionAnswer, useQuestion } from '@/features/messages'
+import { ChatWindow, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse } from '@/features/messages/utils'
@@ -233,7 +233,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                   color: textColor,
                 }}
               >
-                <QuestionAnswer
+                <ChatWindow
                   question={question()!}
                   isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
                 />

@@ -1,10 +1,10 @@
 import logo from '@/assets/logo.png'
-import { Question } from '@/features/messages/question'
+import { Chat } from '@/features/messages/types'
 import { useTheme } from '@/features/theme/hooks'
 import { DeleteButton } from './SendButton'
 
 type NavProps = {
-  question: Question | null
+  question: Chat | null
   onClear: () => void
 }
 
