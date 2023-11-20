@@ -43,7 +43,7 @@ export const ChatWindow = (props: ChatWindowProps) => {
   return (
     <div
       ref={questionAnswerContainer}
-      class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth'
+      class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative'
     >
       <Show when={!props.question.answer}>
         <div class='flex mt-4  '>
@@ -51,7 +51,7 @@ export const ChatWindow = (props: ChatWindowProps) => {
         </div>
       </Show>
 
-      <div ref={botMessageEl} class='prose' />
+      <div ref={botMessageEl} class='prose ' />
 
       {/* Gallery  */}
       <Gallery contextualElements={props.contextualElements} />
