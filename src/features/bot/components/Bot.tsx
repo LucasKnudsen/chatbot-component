@@ -111,12 +111,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
     onDocuments: handleSourceDocuments,
   })
 
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      chatContainer?.scrollTo(0, chatContainer.scrollHeight)
-    }, 50)
-  }
-
   const clear = () => {
     clearQuestions()
     clearContextualElements()
@@ -133,7 +127,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
     }
 
     setLoading(true)
-    scrollToBottom()
     clearSuggestions()
 
     // Remove welcome message from messages
@@ -173,7 +166,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
       setLoading(false)
       setUserInput('')
-      scrollToBottom()
     }
 
     if (result.error) {
@@ -183,18 +175,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
       setLoading(false)
       setUserInput('')
-      scrollToBottom()
       return
     }
   }
-
-  // Auto scroll chat to bottom
-  createEffect(() => {
-    if (question()) scrollToBottom()
-  })
-  // createEffect(() => {
-  //   if (suggestedPrompts()) scrollToBottom()
-  // })
 
   onMount(() => {
     setThemeFromKey(props.themeId)
@@ -234,7 +217,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
         {/* Headers container  */}
         <Show when={Boolean(question())}>
-          <div class='flex mb-4 pb-1 border-b mx-10 opacity-30 border-gray-300'>
+          <div class='flex pb-1 border-b mx-10 opacity-30 border-gray-300'>
             <div class='flex flex-1 '>
               <h1 class=' text-2xl font-light '>Chat</h1>
             </div>
@@ -251,7 +234,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
           <Show when={Boolean(question())}>
             <div
               ref={chatContainer}
-              class='flex flex-1 scrollable-container scroll-smooth  flex-nowrap gap-2 mb-4 '
+              class='flex flex-1 flex-nowrap gap-2'
               style={{
                 color: textColor,
               }}

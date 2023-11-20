@@ -42,7 +42,7 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
       <div
         id='contextual-resources'
         ref={parent}
-        class='flex-1 flex-col  overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container'
+        class='flex-1 flex-col py-4  overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container'
       >
         <For each={contextualElements()}>
           {(element) => (
@@ -67,7 +67,7 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
       <div
         id='contextual-facts'
         ref={parent2}
-        class='flex-1 flex-col  overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container  '
+        class='flex-1 flex-col py-4 overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container  '
       >
         <For each={contextualElements()}>
           {(element) => (
