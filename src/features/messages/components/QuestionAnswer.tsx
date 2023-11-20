@@ -1,5 +1,6 @@
+import { TypingBubble } from '@/components'
 import { Marked } from '@ts-stack/markdown'
-import { createEffect } from 'solid-js'
+import { Show, createEffect } from 'solid-js'
 import { Question } from '../question'
 
 type QuestionAnswerProps = {
@@ -16,9 +17,12 @@ export const QuestionAnswer = (props: QuestionAnswerProps) => {
   })
 
   return (
-    <div class='flex flex-1 flex-col overflow-y-scroll scrollable-container'>
-      <div class='mb-4 text-xl text-gray-500'>{props.question.question}</div>
-
+    <div>
+      <Show when={!props.question.answer}>
+        <div class='flex mt-4  '>
+          <TypingBubble />
+        </div>
+      </Show>
       <div ref={botMessageEl} class='prose'></div>
     </div>
   )
