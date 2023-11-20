@@ -5,6 +5,7 @@ import { Question } from '../question'
 
 type QuestionAnswerProps = {
   question: Question
+  isFetchingSuggestedPrompts: boolean
 }
 
 export const QuestionAnswer = (props: QuestionAnswerProps) => {
@@ -26,9 +27,13 @@ export const QuestionAnswer = (props: QuestionAnswerProps) => {
 
   createEffect(on(() => props.question, scrollToBottom, { defer: true }))
 
-  // createEffect(() => {
-  //   if (isFetchingSuggestedPrompts()) setTimeout(() => scrollToBottom(), 300)
-  // })
+  createEffect(
+    on(
+      () => props.isFetchingSuggestedPrompts,
+      () => setTimeout(() => scrollToBottom(), 300),
+      { defer: true }
+    )
+  )
 
   return (
     <div

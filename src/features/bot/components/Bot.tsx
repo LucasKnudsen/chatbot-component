@@ -222,22 +222,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </div>
         </Show>
 
-        {/* Chat container  */}
-        {/* <div class='px-10 flex flex-1 overflow-y-scroll flex-nowrap'>
-              <Show when={Boolean(question())}>
-                <div
-                  ref={chatContainer}
-                  class='flex flex-1 flex-nowrap gap-2'
-                  style={{
-                    color: textColor,
-                  }}
-                >
-                  <QuestionAnswer question={question()!} />
-                  <ContextualContainer contextualElements={contextualElements} />
-                </div>
-              </Show>
-            </div> */}
-
         <div class='px-10 flex flex-1 overflow-y-scroll'>
           {/* Chat container  */}
           <Show when={Boolean(question())}>
@@ -249,7 +233,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
                   color: textColor,
                 }}
               >
-                <QuestionAnswer question={question()!} />
+                <QuestionAnswer
+                  question={question()!}
+                  isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
+                />
               </div>
 
               <ContextualContainer contextualElements={contextualElements} />
