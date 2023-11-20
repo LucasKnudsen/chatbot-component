@@ -14,8 +14,8 @@ import { Popup } from '@/features/popup'
 import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { Amplify } from 'aws-amplify'
 
+import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 
 Amplify.configure(awsconfig)
@@ -119,6 +119,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     }
 
     setLoading(true)
+
     clearSuggestions()
 
     // Remove welcome message from messages
@@ -235,6 +236,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
               >
                 <ChatWindow
                   question={question()!}
+                  contextualElements={contextualElements}
                   isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
                 />
               </div>

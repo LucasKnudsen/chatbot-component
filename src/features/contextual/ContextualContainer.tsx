@@ -4,8 +4,6 @@ import { ContextualElement } from '.'
 import { Fact } from './components/Fact'
 import { Iframe } from './components/Iframe'
 import { Link } from './components/Link'
-import { Picture } from './components/Picture'
-import { Video } from './components/Video'
 
 type Props = {
   contextualElements: Accessor<ContextualElement[]>
@@ -43,12 +41,6 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
         <For each={contextualElements()}>
           {(element) => (
             <Switch fallback={null}>
-              <Match when={element.type === 'picture'}>
-                <Picture element={element} />
-              </Match>
-              <Match when={element.type === 'video'}>
-                <Video element={element} />
-              </Match>
               <Match when={element.type === 'iframe'}>
                 <Iframe element={element} />
               </Match>
