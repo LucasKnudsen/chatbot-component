@@ -15,7 +15,7 @@ export const Sidebar = (props: SidebarProps) => {
 
   return (
     <div
-      class={'h-full w-10 hover:w-80 transition-all overflow-hidden' + props.class}
+      class={'h-full w-10 hover:w-80 transition-all overflow-hidden ' + props.class}
       style={{
         width: open() ? openWidth : closedWidth,
       }}
@@ -32,7 +32,7 @@ export const Sidebar = (props: SidebarProps) => {
       </div>
 
       <div
-        class='opacity-0 hover:opacity-100 transition-opacity'
+        class='opacity-0 hover:opacity-100 transition-opacity pr-5'
         style={{ width: openWidth, opacity: open() ? '1' : '0' }}
       >
         {props.children}

@@ -11,7 +11,6 @@ type Props = {
 
 export const ContextualContainer = (props: Props) => {
   const [parent] = createAutoAnimate()
-  const [parent2] = createAutoAnimate()
 
   // // Auto scroll chat to bottom
   createEffect(() => {
@@ -32,24 +31,16 @@ export const ContextualContainer = (props: Props) => {
   }
 
   return (
-    <div class='flex flex-1 gap-12 flex-nowrap overflow-hidden'>
-      <div
-        id='contextual-resources'
-        ref={parent}
-        class='flex-1 flex-col py-4  overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container'
-      >
-        <For each={props.resources.link}>{(element) => <Link element={element} />}</For>
+    <div
+      id='contextual-resources'
+      ref={parent}
+      class='flex-col overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container w-64'
+    >
+      <For each={props.resources.link}>{(element) => <Link element={element} />}</For>
 
-        <For each={props.resources.iframe}>{(element) => <Iframe element={element} />}</For>
-      </div>
+      <For each={props.resources.iframe}>{(element) => <Iframe element={element} />}</For>
 
-      <div
-        id='contextual-facts'
-        ref={parent2}
-        class='flex-1 flex-col py-4 overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container  '
-      >
-        <For each={props.resources.fact}>{(element) => <Fact element={element} />}</For>
-      </div>
+      <For each={props.resources.fact}>{(element) => <Fact element={element} />}</For>
     </div>
   )
 }
