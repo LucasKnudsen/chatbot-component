@@ -1,21 +1,23 @@
+export type SourceFact = {
+  id: string
+  name: string
+  value: string | string[]
+}
+export type SourceResource = {
+  link: string
+  type: string
+  description: string
+}
 export type SourceDocument = {
   id: string
   metadata: {
     tags: {
       namespace: string
     }
-    facts: {
-      id: string
-      name: string
-      value: string | string[]
-    }[]
+    facts: SourceFact[]
     source: string
     source_document: string
-    linked_resources: {
-      link: string
-      type: string
-      description: string
-    }[]
+    linked_resources: SourceResource[]
   }
 }
 
@@ -35,4 +37,12 @@ export enum ContextualElementType {
   VIDEO = 'video',
   IFRAME = 'iframe',
   PICTURE = 'picture',
+}
+
+export type Resources = {
+  fact: ContextualElement[]
+  link: ContextualElement[]
+  video: ContextualElement[]
+  iframe: ContextualElement[]
+  picture: ContextualElement[]
 }
