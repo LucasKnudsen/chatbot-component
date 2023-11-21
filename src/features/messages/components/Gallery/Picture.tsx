@@ -49,7 +49,7 @@ const Picture = ({ element }: Props) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <img
-        class={`rounded-lg  h-48 object-cover `}
+        class={`rounded-lg  h-80 object-cover `}
         src={element.value as string}
         alt={element.description}
         loading='lazy'

@@ -1,8 +1,9 @@
 import { TypingBubble } from '@/components'
 import { Marked } from '@ts-stack/markdown'
 import { createEffect, on, Show } from 'solid-js'
+import { scrollChatWindowToBottom } from '..'
 import { Chat } from '../types'
-import Gallery from './Gallery'
+import Gallery from './Gallery/Gallery'
 
 type ChatWindowProps = {
   question: Chat
@@ -10,8 +11,6 @@ type ChatWindowProps = {
 }
 
 export const ChatWindow = (props: ChatWindowProps) => {
-  let questionAnswerContainer: HTMLDivElement | undefined
-
   let botMessageEl: HTMLDivElement | undefined
 
   createEffect(() => {
@@ -20,25 +19,19 @@ export const ChatWindow = (props: ChatWindowProps) => {
     }
   })
 
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      questionAnswerContainer?.scrollTo(0, questionAnswerContainer.scrollHeight)
-    }, 50)
-  }
-
-  createEffect(on(() => props.question, scrollToBottom, { defer: true }))
+  createEffect(on(() => props.question, scrollChatWindowToBottom, { defer: true }))
 
   createEffect(
     on(
       () => props.isFetchingSuggestedPrompts,
-      () => setTimeout(() => scrollToBottom(), 300),
+      () => setTimeout(() => scrollChatWindowToBottom(), 200),
       { defer: true }
     )
   )
 
   return (
     <div
-      ref={questionAnswerContainer}
+      id='chat-window'
       class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative'
     >
       <Show when={!props.question.answer}>
