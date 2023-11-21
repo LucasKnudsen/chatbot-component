@@ -7,25 +7,16 @@ import {
   SourceResource,
 } from '@/features/contextual'
 import uniqBy from 'lodash/uniqBy'
-import { createSignal, onMount } from 'solid-js'
+import { createEffect, createSignal, onMount } from 'solid-js'
 import { Chat } from '../types'
 
 export const useQuestion = (chatflowid: string) => {
   const storageKey = `${chatflowid}_QUESTIONS`
 
   const [question, setQuestion] = createSignal<Chat | null>(null)
+  const [history, setHistory] = createSignal<Chat[]>(getStoredHistory())
 
-  const storeQuestions = (allQuestions: Chat[]) => {
-    localStorage.setItem(storageKey, JSON.stringify(allQuestions))
-  }
-
-  const updateLastHistory = (question: Chat) => {
-    const history = getHistory()
-    history.pop()
-    storeQuestions([...history, question])
-  }
-
-  const getHistory = () => {
+  function getStoredHistory() {
     const data = localStorage.getItem(storageKey)
 
     if (data) {
@@ -36,6 +27,21 @@ export const useQuestion = (chatflowid: string) => {
 
     return []
   }
+
+  const addHistory = (question: Chat) => {
+    setHistory((prev) => [...prev, question])
+  }
+
+  const updateHistory = (question: Chat) => {
+    setHistory((prev) => {
+      prev.pop()
+      return [...prev, question]
+    })
+  }
+
+  createEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(history()))
+  })
 
   const updateAnswer = (answer: string) => {
     const oldQ = question()
@@ -50,7 +56,7 @@ export const useQuestion = (chatflowid: string) => {
 
     setQuestion(updatedQuestion)
 
-    updateLastHistory(updatedQuestion)
+    updateHistory(updatedQuestion)
   }
 
   const createQuestion = (question: string) => {
@@ -68,11 +74,12 @@ export const useQuestion = (chatflowid: string) => {
 
     setQuestion(q)
 
-    storeQuestions([...getHistory(), q])
+    addHistory(q)
   }
 
   const clear = () => {
     setQuestion(null)
+    setHistory([])
     localStorage.removeItem(storageKey)
   }
 
@@ -103,7 +110,7 @@ export const useQuestion = (chatflowid: string) => {
 
     setQuestion(updatedQ)
 
-    updateLastHistory(updatedQ)
+    updateHistory(updatedQ)
   }
 
   const handleLinkedResources = (source: string, linkedResources: SourceResource[]) => {
@@ -139,7 +146,7 @@ export const useQuestion = (chatflowid: string) => {
 
     setQuestion(updatedQ)
 
-    updateLastHistory(updatedQ)
+    updateHistory(updatedQ)
   }
 
   const handleSourceDocuments = (documents: SourceDocument[]) => {
@@ -155,16 +162,18 @@ export const useQuestion = (chatflowid: string) => {
   }
 
   onMount(() => {
-    const history = getHistory()
+    const historyData = history()
 
-    if (history.length > 0) {
-      setQuestion(history[history.length - 1])
+    if (historyData.length > 0) {
+      setQuestion(historyData[historyData.length - 1])
     }
   })
 
   return {
     question,
+    history,
     updateAnswer,
+    setQuestion,
     createQuestion,
     handleSourceDocuments,
     clear,
