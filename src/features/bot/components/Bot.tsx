@@ -80,6 +80,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
     updateAnswer,
     clear: clearQuestions,
     handleSourceDocuments,
+    history,
+    setQuestion,
   } = useQuestion(props.chatflowid)
 
   const {
@@ -269,6 +271,18 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
         {/* Sidebar */}
         <Sidebar open={!!question()}>
+          <div class='text-lg'>History</div>
+
+          <ul>
+            <For each={history()}>
+              {(q) => (
+                <li class='mb-2' onClick={() => setQuestion(q)}>
+                  {q.question}
+                </li>
+              )}
+            </For>
+          </ul>
+
           <NavigationPrompts
             prompts={props.initialPrompts}
             onSelect={handleSubmit}
