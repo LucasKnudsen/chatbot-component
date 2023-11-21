@@ -29,8 +29,6 @@ export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
     setIsFetching(false)
 
     if (response.data) {
-      console.log(response.data)
-
       const text = extractChatbotResponse(response.data)
       let questionsArray: string[] = []
 

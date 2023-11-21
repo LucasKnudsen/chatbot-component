@@ -1,20 +1,20 @@
-import { ContextualElement } from '@/features/contextual'
+import { Resources } from '@/features/contextual'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { Accessor, For, Match, Switch } from 'solid-js'
+import { For, Match, Switch, createMemo } from 'solid-js'
 import Picture from './Gallery/Picture'
 
 type Props = {
-  contextualElements: Accessor<ContextualElement[]>
+  resources: Resources
 }
 
 const Gallery = (props: Props) => {
   const [parent] = createAutoAnimate()
 
-  console.log('Gallery', props.contextualElements())
+  const imagesAndVideos = createMemo(() => [...props.resources.picture, ...props.resources.video])
 
   return (
     <div ref={parent} class='grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3  gap-4 py-4 '>
-      <For each={props.contextualElements()}>
+      <For each={imagesAndVideos()}>
         {(element) => (
           <Switch fallback={null}>
             <Match when={element.type === 'picture'}>

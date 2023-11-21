@@ -5,7 +5,7 @@ import { MessageIcon } from '@/components/icons'
 import { TextInput } from '@/components/inputs/textInput'
 import { Sidebar, useChatId } from '@/features/bot'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
-import { ContextualContainer, useContextualElements } from '@/features/contextual'
+import { ContextualContainer } from '@/features/contextual'
 import { ChatWindow, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
@@ -79,13 +79,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
     createQuestion,
     updateAnswer,
     clear: clearQuestions,
+    handleSourceDocuments,
   } = useQuestion(props.chatflowid)
-
-  const { handleSourceDocuments, contextualElements, clearContextualElements } =
-    useContextualElements({
-      chatflowid: props.chatflowid,
-      chatId,
-    })
 
   const {
     suggestedPrompts,
@@ -103,7 +98,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const clear = () => {
     clearQuestions()
-    clearContextualElements()
+    // clearContextualElements()
     clearSuggestions()
     clearChatId()
   }
@@ -133,8 +128,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
     if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig
 
-    console.log(isChatFlowAvailableToStream())
-
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
     const result = await sendMessageQuery({
@@ -144,9 +137,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
     })
 
     if (result.data) {
-      const data = result.data
-
-      console.log('data', data)
       if (!isChatFlowAvailableToStream()) {
         let text = extractChatbotResponse(result.data)
 
@@ -230,11 +220,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
               <ChatWindow
                 question={question()!}
-                contextualElements={contextualElements}
                 isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
               />
 
-              <ContextualContainer contextualElements={contextualElements} />
+              <ContextualContainer resources={question()!.resources} />
             </div>
           </Show>
 

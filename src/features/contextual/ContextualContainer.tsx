@@ -1,21 +1,21 @@
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { Accessor, For, Match, Switch, createEffect } from 'solid-js'
-import { ContextualElement } from '.'
+import { For, createEffect } from 'solid-js'
+import { Resources } from '.'
 import { Fact } from './components/Fact'
 import { Iframe } from './components/Iframe'
 import { Link } from './components/Link'
 
 type Props = {
-  contextualElements: Accessor<ContextualElement[]>
+  resources: Resources
 }
 
-export const ContextualContainer = ({ contextualElements }: Props) => {
+export const ContextualContainer = (props: Props) => {
   const [parent] = createAutoAnimate()
   const [parent2] = createAutoAnimate()
 
   // // Auto scroll chat to bottom
   createEffect(() => {
-    if (contextualElements()) scrollToBottom()
+    if (props.resources) scrollToBottom()
   })
 
   const scrollToBottom = () => {
@@ -38,18 +38,9 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
         ref={parent}
         class='flex-1 flex-col py-4  overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container'
       >
-        <For each={contextualElements()}>
-          {(element) => (
-            <Switch fallback={null}>
-              <Match when={element.type === 'iframe'}>
-                <Iframe element={element} />
-              </Match>
-              <Match when={element.type === 'link'}>
-                <Link element={element} />
-              </Match>
-            </Switch>
-          )}
-        </For>
+        <For each={props.resources.link}>{(element) => <Link element={element} />}</For>
+
+        <For each={props.resources.iframe}>{(element) => <Iframe element={element} />}</For>
       </div>
 
       <div
@@ -57,15 +48,7 @@ export const ContextualContainer = ({ contextualElements }: Props) => {
         ref={parent2}
         class='flex-1 flex-col py-4 overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container  '
       >
-        <For each={contextualElements()}>
-          {(element) => (
-            <Switch fallback={null}>
-              <Match when={element.type === 'fact'}>
-                <Fact element={element} />
-              </Match>
-            </Switch>
-          )}
-        </For>
+        <For each={props.resources.fact}>{(element) => <Fact element={element} />}</For>
       </div>
     </div>
   )
