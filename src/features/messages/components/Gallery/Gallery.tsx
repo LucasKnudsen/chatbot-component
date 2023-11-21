@@ -30,7 +30,7 @@ const Gallery = (props: Props) => {
                   <Match when={element.type === 'video'}>
                     <div class='p-2 rounded-lg h-48 border'>
                       <video
-                        class='rounded-lg hover:shadow-lg transition-all duration-300 ease-in-out   object-cover '
+                        class='rounded-lg hover:shadow-lg transition-all duration-300 ease-in-out h-full  object-cover '
                         src={element.value as string}
                         muted
                         autoplay

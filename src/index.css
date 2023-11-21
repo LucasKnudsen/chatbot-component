@@ -102,7 +102,6 @@ pre {
 .bubble1,
 .bubble2,
 .bubble3 {
-  background-color: var(--chatbot-host-bubble-color);
   opacity: 0.5;
 }
 

@@ -1,7 +1,6 @@
 import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
-import { MessageIcon } from '@/components/icons'
 import { TextInput } from '@/components/inputs/textInput'
 import { Sidebar, useChatId } from '@/features/bot'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
@@ -68,9 +67,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const { theme, setThemeFromKey } = useTheme()
   const { backgroundColor, backgroundImageUrl, promptBackground, textColor } = theme()
 
-  const [parent] = createAutoAnimate(/* optional config */)
+  const [chatWindowParent] = createAutoAnimate(/* optional config */)
   const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
-  const [sidebarParent] = createAutoAnimate(/* optional config */)
 
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
 
@@ -179,7 +177,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   return (
     <div
-      ref={parent}
       class={
         'relative flex flex-col h-full w-full bg-cover bg-center chatbot-container overflow-hidden ' +
         props.class
@@ -194,36 +191,24 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
       <div class='relative flex flex-1 px-10 gap-10 overflow-hidden'>
         {/* Main Container */}
-        <div class='flex flex-col flex-1 text-base overflow-hidden'>
-          {/* Headers container  */}
-          <Show when={Boolean(question())}>
-            <div class='flex pb-1 border-b border-gray-200'>
-              <div class=' text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start '>
-                <MessageIcon width={30} />
-                {question()?.question}
+        <div class='flex flex-col flex-1 text-base overflow-hidden' ref={chatWindowParent}>
+          <Show
+            when={Boolean(question())}
+            fallback={
+              // Welcome message
+              <div class='flex flex-1 items-end '>
+                <h1 class='text-5xl max-w-md h-fit mb-6 font-light '>{welcomeMessage}</h1>
               </div>
-            </div>
+            }
+          >
+            <ChatWindow
+              question={question()!}
+              isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
+            />
           </Show>
 
-          <div class='flex flex-1 overflow-y-scroll'>
-            {/* Chat container  */}
-            <Show
-              when={Boolean(question())}
-              fallback={
-                <div ref={sidebarParent} class='flex flex-1 items-end '>
-                  <h1 class='text-5xl max-w-md h-fit mb-4  font-light'>{welcomeMessage}</h1>
-                </div>
-              }
-            >
-              <ChatWindow
-                question={question()!}
-                isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
-              />
-            </Show>
-          </div>
-
           {/* Input Container */}
-          <div class='w-full pb-1 z-1 '>
+          <div class='w-full pb-1 z-1 border-t pt-6 '>
             <TextInput
               disabled={loading()}
               defaultValue={userInput()}
@@ -231,6 +216,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
               placeholder={props.promptPlaceholder ?? 'Ask me anything...'}
             />
           </div>
+
           {/* Suggested Prompt Container */}
           <div class='mb-8' ref={suggestedPromptsParent}>
             <Show when={isFetchingSuggestedPrompts() || suggestedPrompts().length > 0}>
