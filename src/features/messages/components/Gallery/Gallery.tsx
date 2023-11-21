@@ -20,7 +20,7 @@ const Gallery = (props: Props) => {
       {/* TODO: Configureable header */}
       <Show when={imagesAndVideos().length > 0}>
         <Expandable header='Media' onOpen={scrollChatWindowToBottom}>
-          <div class='grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3  gap-4 px-6 pb-6 '>
+          <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 px-6 pb-6'>
             <For each={imagesAndVideos()}>
               {(element) => (
                 <Switch fallback={null}>
@@ -28,16 +28,18 @@ const Gallery = (props: Props) => {
                     <Picture element={element} />
                   </Match>
                   <Match when={element.type === 'video'}>
-                    <video
-                      class='rounded-md hover:shadow-lg transition-all duration-300 ease-in-out h-80 object-cover'
-                      src={element.value as string}
-                      muted
-                      autoplay
-                      controls
-                      width='100%'
-                      aria-label={element.description}
-                      onError={(e) => (e.currentTarget.style.display = 'none')}
-                    />
+                    <div class='p-2 rounded-lg h-48 border'>
+                      <video
+                        class='rounded-lg hover:shadow-lg transition-all duration-300 ease-in-out   object-cover '
+                        src={element.value as string}
+                        muted
+                        autoplay
+                        controls
+                        width='100%'
+                        aria-label={element.description}
+                        onError={(e) => (e.currentTarget.style.display = 'none')}
+                      />
+                    </div>
                   </Match>
                 </Switch>
               )}

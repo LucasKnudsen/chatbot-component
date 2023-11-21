@@ -32,7 +32,7 @@ export const ChatWindow = (props: ChatWindowProps) => {
   return (
     <div
       id='chat-window'
-      class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative'
+      class='flex flex-1 py-4 mb-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative'
     >
       <Show when={!props.question.answer}>
         <div class='flex mt-4  '>
