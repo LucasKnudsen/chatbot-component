@@ -29,7 +29,7 @@ export const Sidebar = (props: SidebarProps) => {
     >
       <div
         class='absolute'
-        style={{ width: openWidth, left: '-20px', opacity: open() ? '0' : '1' }}
+        style={{ left: '-20px', opacity: open() ? '0' : '1' }}
         onClick={() => setIsOpen(!open())}
       >
         <img class='transition-all inline-block' src={sidebarTabIcon} width={20} />
@@ -37,7 +37,7 @@ export const Sidebar = (props: SidebarProps) => {
 
       <div
         class='absolute'
-        style={{ width: openWidth, left: '-10px', opacity: open() ? '1' : '0' }}
+        style={{ left: '-10px', opacity: open() ? '1' : '0' }}
         onClick={() => setIsOpen(!open())}
       >
         <img class='transition-all inline-block' src={circleCloseIcon} width={20} />
