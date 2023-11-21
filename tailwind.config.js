@@ -46,6 +46,13 @@ export default {
       animation: {
         'fade-in': 'fade-in 0.3s ease-out',
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: '100%', // add required value here
+          },
+        },
+      },
     },
   },
   plugins: [require('@tailwindcss/typography')],

@@ -176,121 +176,114 @@ export const Bot = (props: BotProps & { class?: string }) => {
   })
 
   return (
-    <>
-      <div
-        ref={parent}
-        class={
-          'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col chatbot-container px-4 ' +
-          props.class
-        }
-        style={{
-          'background-color': backgroundColor,
-          background: `url(${backgroundImageUrl})`,
-          'background-size': 'cover',
-        }}
-      >
-        {/* <div
-          class='absolute h-full w-full opacity-[100%] pointer-events-none z-1'
-          style={{
-            background: `url(${backgroundImageUrl})`,
-            'background-size': 'cover',
-          }}
+    <div
+      ref={parent}
+      class={
+        'relative flex flex-col h-full w-full bg-cover bg-center chatbot-container overflow-hidden ' +
+        props.class
+      }
+      style={{
+        'background-color': backgroundColor,
+        background: `url(${backgroundImageUrl})`,
+        'background-size': 'cover',
+      }}
+    >
+      <Nav question={question()} onClear={clear} />
 
-         /> */}
-
-        <Nav question={question()} onClear={clear} />
-
-        {/* Headers container  */}
-        <Show when={Boolean(question())}>
-          <div class='flex pb-1 border-b mx-10  border-gray-200'>
-            <div class=' text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start '>
-              <MessageIcon width={30} />
-
-              {question()?.question}
-            </div>
-          </div>
-        </Show>
-
-        <div class='px-10 flex flex-1 overflow-y-scroll '>
-          {/* Chat container  */}
+      <div class='relative flex flex-1 px-10 gap-10 overflow-hidden'>
+        {/* Main Container */}
+        <div class='flex flex-col flex-1 text-base overflow-hidden'>
+          {/* Headers container  */}
           <Show when={Boolean(question())}>
-            <div class='flex flex-1 flex-nowrap gap-12 mb-4 relative  '>
-              {/* <div class='h-16 absolute top-0 left-0 right-0 bg-gradient-to-t from-transparent to-white z-10'></div>
-              <div class='h-16 absolute bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-white z-10'></div> */}
+            <div class='flex pb-1 border-b border-gray-200'>
+              <div class=' text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start '>
+                <MessageIcon width={30} />
+                {question()?.question}
+              </div>
+            </div>
+          </Show>
 
+          <div class='flex flex-1 overflow-y-scroll'>
+            {/* Chat container  */}
+            <Show
+              when={Boolean(question())}
+              fallback={
+                <div ref={sidebarParent} class='flex flex-1 items-end '>
+                  <h1 class='text-5xl max-w-md h-fit mb-4  font-light'>{welcomeMessage}</h1>
+                </div>
+              }
+            >
               <ChatWindow
                 question={question()!}
                 isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
               />
+            </Show>
+          </div>
 
-              <ContextualContainer resources={question()!.resources} />
-            </div>
-          </Show>
-
-          <Show when={!question()}>
-            <div ref={sidebarParent} class='flex justify-between w-full items-end '>
-              <h1 class='text-5xl max-w-md h-fit mb-4  font-light'>{welcomeMessage}</h1>
-            </div>
-          </Show>
-
-          <Sidebar open={!!question()}>
-            <NavigationPrompts
-              prompts={props.initialPrompts}
-              onSelect={handleSubmit}
+          {/* Input Container */}
+          <div class='w-full pb-1 z-1 '>
+            <TextInput
               disabled={loading()}
+              defaultValue={userInput()}
+              onSubmit={handleSubmit}
+              placeholder={props.promptPlaceholder ?? 'Ask me anything...'}
             />
-          </Sidebar>
+          </div>
+          {/* Suggested Prompt Container */}
+          <div class='mb-8' ref={suggestedPromptsParent}>
+            <Show when={isFetchingSuggestedPrompts() || suggestedPrompts().length > 0}>
+              <div class='flex items-center h-20 gap-y-1 gap-x-4 '>
+                <p
+                  class='whitespace-nowrap border-r-2 border-gray-200 pr-8 font-bold'
+                  style={{
+                    // TODO: Theme it
+                    color: '#231843A1',
+                  }}
+                >
+                  {props.suggestedPromptsTitle ?? 'FOLLOW UP QUESTIONS'}
+                </p>
+                <Show when={suggestedPrompts().length > 0} fallback={<LoadingBubble />}>
+                  <For each={suggestedPrompts()}>
+                    {(p) => (
+                      <Prompt
+                        prompt={p}
+                        onClick={handleSubmit}
+                        color={textColor}
+                        background={promptBackground}
+                        disabled={loading()}
+                      />
+                    )}
+                  </For>
+                </Show>
+              </div>
+            </Show>
+          </div>
         </div>
 
-        {/* Input Container */}
-        <div class='w-full pb-1 px-10 z-1 '>
-          <TextInput
+        {/* Resources Container */}
+        <Show when={question()}>
+          <div class='border-l'></div>
+
+          <ContextualContainer resources={question()!.resources} />
+        </Show>
+
+        {/* Sidebar */}
+        <Sidebar open={!!question()}>
+          <NavigationPrompts
+            prompts={props.initialPrompts}
+            onSelect={handleSubmit}
             disabled={loading()}
-            defaultValue={userInput()}
-            onSubmit={handleSubmit}
-            placeholder={props.promptPlaceholder ?? 'Ask me anything...'}
           />
-        </div>
-
-        {/* Suggested Prompt Container */}
-        <div class='mb-8' ref={suggestedPromptsParent}>
-          <Show when={isFetchingSuggestedPrompts() || suggestedPrompts().length > 0}>
-            <div class='flex items-center px-10 h-20 gap-y-1 gap-x-4 '>
-              <p
-                class='whitespace-nowrap border-r-2 border-gray-200 pr-8 font-bold'
-                style={{
-                  // TODO: Theme it
-                  color: '#231843A1',
-                }}
-              >
-                {props.suggestedPromptsTitle ?? 'FOLLOW UP QUESTIONS'}
-              </p>
-
-              <Show when={suggestedPrompts().length > 0} fallback={<LoadingBubble />}>
-                <For each={suggestedPrompts()}>
-                  {(p) => (
-                    <Prompt
-                      prompt={p}
-                      onClick={handleSubmit}
-                      color={textColor}
-                      background={promptBackground}
-                      disabled={loading()}
-                    />
-                  )}
-                </For>
-              </Show>
-            </div>
-          </Show>
-        </div>
-
-        {sourcePopupOpen() && (
-          <Popup
-            isOpen={sourcePopupOpen()}
-            value={sourcePopupSrc()}
-            onClose={() => setSourcePopupOpen(false)}
-          />
-        )}
+        </Sidebar>
       </div>
-    </>
+
+      {sourcePopupOpen() && (
+        <Popup
+          isOpen={sourcePopupOpen()}
+          value={sourcePopupSrc()}
+          onClose={() => setSourcePopupOpen(false)}
+        />
+      )}
+    </div>
   )
 }
