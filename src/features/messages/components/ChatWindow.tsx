@@ -1,10 +1,13 @@
 import { TypingBubble } from '@/components'
+import { ContextualElement } from '@/features/contextual'
 import { Marked } from '@ts-stack/markdown'
-import { createEffect, on, Show } from 'solid-js'
+import { Accessor, createEffect, on, Show } from 'solid-js'
 import { Chat } from '../types'
+import Gallery from './Gallery'
 
 type ChatWindowProps = {
   question: Chat
+  contextualElements: Accessor<ContextualElement[]>
   isFetchingSuggestedPrompts: boolean
 }
 
@@ -25,7 +28,9 @@ export const ChatWindow = (props: ChatWindowProps) => {
     }, 50)
   }
 
-  createEffect(on(() => props.question, scrollToBottom, { defer: true }))
+  createEffect(
+    on(() => [props.question, props.contextualElements()], scrollToBottom, { defer: true })
+  )
 
   createEffect(
     on(
@@ -38,7 +43,7 @@ export const ChatWindow = (props: ChatWindowProps) => {
   return (
     <div
       ref={questionAnswerContainer}
-      class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth'
+      class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative'
     >
       <Show when={!props.question.answer}>
         <div class='flex mt-4  '>
@@ -46,7 +51,10 @@ export const ChatWindow = (props: ChatWindowProps) => {
         </div>
       </Show>
 
-      <div ref={botMessageEl} class='prose' />
+      <div ref={botMessageEl} class='prose ' />
+
+      {/* Gallery  */}
+      <Gallery contextualElements={props.contextualElements} />
     </div>
   )
 }

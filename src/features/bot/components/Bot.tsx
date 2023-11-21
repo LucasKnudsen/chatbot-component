@@ -14,8 +14,8 @@ import { Popup } from '@/features/popup'
 import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { Amplify } from 'aws-amplify'
 
+import { Amplify } from 'aws-amplify'
 import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 
 Amplify.configure(awsconfig)
@@ -57,8 +57,6 @@ export type BotProps = {
 }
 
 export const Bot = (props: BotProps & { class?: string }) => {
-  let chatContainer: HTMLDivElement | undefined
-
   const welcomeMessage = props.welcomeMessage ?? 'Hey there again. How can I help you today?'
 
   const [userInput, setUserInput] = createSignal('')
@@ -119,6 +117,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     }
 
     setLoading(true)
+
     clearSuggestions()
 
     // Remove welcome message from messages
@@ -222,22 +221,18 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </div>
         </Show>
 
-        <div class='px-10 flex flex-1 overflow-y-scroll'>
+        <div class='px-10 flex flex-1 overflow-y-scroll '>
           {/* Chat container  */}
           <Show when={Boolean(question())}>
-            <div class='flex flex-1 flex-nowrap gap-12 mb-4 '>
-              <div
-                ref={chatContainer}
-                class='flex flex-1 flex-col overflow-y-scroll scrollable-container scroll-smooth  '
-                style={{
-                  color: textColor,
-                }}
-              >
-                <ChatWindow
-                  question={question()!}
-                  isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
-                />
-              </div>
+            <div class='flex flex-1 flex-nowrap gap-12 mb-4 relative  '>
+              {/* <div class='h-16 absolute top-0 left-0 right-0 bg-gradient-to-t from-transparent to-white z-10'></div>
+              <div class='h-16 absolute bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-white z-10'></div> */}
+
+              <ChatWindow
+                question={question()!}
+                contextualElements={contextualElements}
+                isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
+              />
 
               <ContextualContainer contextualElements={contextualElements} />
             </div>
