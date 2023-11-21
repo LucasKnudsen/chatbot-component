@@ -34,7 +34,7 @@ export const ContextualContainer = (props: Props) => {
     <div
       id='contextual-resources'
       ref={parent}
-      class='flex-col overflow-y-scroll relative  scroll-smooth rounded-md scrollable-container w-64'
+      class='flex-col overflow-y-scroll relative scroll-smooth rounded-md scrollable-container w-64'
     >
       <For each={props.resources.link}>{(element) => <Link element={element} />}</For>
 

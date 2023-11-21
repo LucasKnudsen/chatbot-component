@@ -1,4 +1,6 @@
-import sidebarIcon from '@/assets/sidebar-icon.svg'
+import circleCloseIcon from '@/assets/circle-close-icon.png'
+import sidebarTabIcon from '@/assets/sidebar-tab-icon.svg'
+
 import { JSX, createSignal } from 'solid-js'
 
 type SidebarProps = {
@@ -7,33 +9,48 @@ type SidebarProps = {
   class?: string
 }
 
-const openWidth = '320px'
-const closedWidth = '20px'
+const padding = 40
+const innerWidthNum = 256
+const innerWidth = innerWidthNum + 'px'
+const openWidth = innerWidthNum + padding * 2 + 'px'
+const closedWidth = '0px'
 
 export const Sidebar = (props: SidebarProps) => {
-  const [open, setIsOpen] = createSignal(props.open)
+  const [open, setIsOpen] = createSignal(true)
 
   return (
     <div
-      class={'h-full w-10 hover:w-80 transition-all overflow-hidden ' + props.class}
+      class={
+        'absolute h-full top-0 right-0 transition-all backdrop-blur bg-white/75 ' + props.class
+      }
       style={{
         width: open() ? openWidth : closedWidth,
       }}
     >
-      <div class='mb-2' style={{ width: openWidth }} onClick={() => setIsOpen(!open())}>
-        <img
-          class='transition-all rotate-180'
-          src={sidebarIcon}
-          width={20}
-          style={{
-            '--tw-rotate': open() ? '0deg' : '180deg',
-          }}
-        />
+      <div
+        class='absolute'
+        style={{ width: openWidth, left: '-20px', opacity: open() ? '0' : '1' }}
+        onClick={() => setIsOpen(!open())}
+      >
+        <img class='transition-all inline-block' src={sidebarTabIcon} width={20} />
       </div>
 
       <div
-        class='opacity-0 hover:opacity-100 transition-opacity pr-5'
-        style={{ width: openWidth, opacity: open() ? '1' : '0' }}
+        class='absolute'
+        style={{ width: openWidth, left: '-10px', opacity: open() ? '1' : '0' }}
+        onClick={() => setIsOpen(!open())}
+      >
+        <img class='transition-all inline-block' src={circleCloseIcon} width={20} />
+      </div>
+
+      <div
+        class='opacity-0 hover:opacity-100 transition-opacity py-6'
+        style={{
+          width: innerWidth,
+          opacity: open() ? '1' : '0',
+          'margin-left': padding + 'px',
+          'margin-right': padding + 'px',
+        }}
       >
         {props.children}
       </div>

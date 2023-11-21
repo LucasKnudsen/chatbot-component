@@ -3,7 +3,7 @@ import { Nav } from '@/components/Nav'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
 import { MessageIcon } from '@/components/icons'
 import { TextInput } from '@/components/inputs/textInput'
-import { useChatId } from '@/features/bot'
+import { Sidebar, useChatId } from '@/features/bot'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
 import { ContextualContainer } from '@/features/contextual'
 import { ChatWindow, useQuestion } from '@/features/messages'
@@ -11,7 +11,7 @@ import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
-import { Prompt, useSuggestedPrompts } from '@/features/prompt'
+import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
@@ -190,7 +190,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     >
       <Nav question={question()} onClear={clear} />
 
-      <div class='flex flex-1 px-10 gap-10 overflow-hidden'>
+      <div class='relative flex flex-1 px-10 gap-10 overflow-hidden'>
         {/* Main Container */}
         <div class='flex flex-col flex-1 text-base overflow-hidden'>
           {/* Headers container  */}
@@ -258,20 +258,23 @@ export const Bot = (props: BotProps & { class?: string }) => {
               </div>
             </Show>
           </div>
-          {/* <Sidebar open={!!question()}>
-              <NavigationPrompts
-                prompts={props.initialPrompts}
-                onSelect={handleSubmit}
-                disabled={loading()}
-              />
-            </Sidebar> */}
         </div>
 
+        {/* Resources Container */}
         <Show when={question()}>
           <div class='border-l'></div>
 
           <ContextualContainer resources={question()!.resources} />
         </Show>
+
+        {/* Sidebar */}
+        <Sidebar open={!!question()}>
+          <NavigationPrompts
+            prompts={props.initialPrompts}
+            onSelect={handleSubmit}
+            disabled={loading()}
+          />
+        </Sidebar>
       </div>
 
       {sourcePopupOpen() && (
