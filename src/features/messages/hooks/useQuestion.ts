@@ -79,6 +79,7 @@ export const useQuestion = (chatflowid: string) => {
 
   const clear = () => {
     setQuestion(null)
+    setHistory([])
     localStorage.removeItem(storageKey)
   }
 
