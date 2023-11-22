@@ -36,9 +36,8 @@
       "hosting": {
         "amplifyhosting": {
           "appId": "d1i4jp82axmvxl",
-          "type": "manual"
-        },
-        "S3AndCloudFront": {}
+          "type": "cicd"
+        }
       }
     }
   }
