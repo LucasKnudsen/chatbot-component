@@ -16,6 +16,19 @@ export const Nav = (props: NavProps) => {
     <div class='flex flex-wrap items-center px-5 py-5'>
       <img src={logo} class='h-8' />
 
+      {/* TODO: Make configurable  */}
+      <h1 class='text-4xl ml-3' style={{ 'letter-spacing': '0.2rem' }}>
+        FR
+        <span
+          style={{
+            color: primaryColor,
+          }}
+        >
+          AI
+        </span>
+        A
+      </h1>
+
       <div class='flex-1' />
       <DeleteButton
         sendButtonColor={primaryColor}
