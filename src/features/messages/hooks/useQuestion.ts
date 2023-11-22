@@ -49,9 +49,8 @@ export const useQuestion = (chatflowid: string) => {
     if (oldQ === null) return
 
     const updatedQuestion: Chat = {
-      question: oldQ.question,
+      ...oldQ,
       answer: oldQ.answer + answer,
-      resources: oldQ.resources,
     }
 
     setQuestion(updatedQuestion)
@@ -61,6 +60,7 @@ export const useQuestion = (chatflowid: string) => {
 
   const createQuestion = (question: string) => {
     const q: Chat = {
+      createdAt: new Date().toISOString(),
       question: question,
       answer: '',
       resources: {
