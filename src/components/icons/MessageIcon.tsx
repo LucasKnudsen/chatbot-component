@@ -11,7 +11,6 @@ export const MessageIcon = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
     fill='none'
     stroke-linecap='round'
     stroke-linejoin='round'
-    width='19px'
     style={{ stroke: props.color ?? defaultButtonColor }}
     {...props}
   >

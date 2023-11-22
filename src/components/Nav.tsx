@@ -14,7 +14,7 @@ export const Nav = (props: NavProps) => {
 
   return (
     <div
-      class='flex flex-wrap items-center mx-5 rounded-full px-6 py-2 mt-5 mb-8'
+      class='flex flex-wrap items-center mx-5 rounded-full px-6 py-2 mt-5 mb-6'
       style={{
         background: promptBackground,
       }}
@@ -22,7 +22,7 @@ export const Nav = (props: NavProps) => {
       <img src={logo} class='h-8' />
 
       {/* TODO: Make configurable  */}
-      <h1 class='text-3xl ml-3 tracking-widest'>
+      <h1 class='text-2xl ml-3 tracking-widest'>
         FR
         <span
           style={{

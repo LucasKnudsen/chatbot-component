@@ -19,7 +19,7 @@ const Gallery = (props: Props) => {
     <div ref={parent} class='mt-8'>
       {/* TODO: Configureable header */}
       <Show when={imagesAndVideos().length > 0}>
-        <Expandable header='Media' onOpen={scrollChatWindowToBottom}>
+        <Expandable header='Media' defaultOpen onOpen={scrollChatWindowToBottom}>
           <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 px-6 pb-6'>
             <For each={imagesAndVideos()}>
               {(element) => (
