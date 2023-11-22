@@ -1,5 +1,6 @@
 import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
+import { TabView } from '@/components/TabView'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
 import { TextInput } from '@/components/inputs/textInput'
 import { Sidebar, useChatId } from '@/features/bot'
@@ -257,12 +258,25 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
         {/* Sidebar */}
         <Sidebar open={!!question()}>
-          <History history={history()} onSelect={setQuestion} disabled={loading()} />
-
-          <NavigationPrompts
-            prompts={props.initialPrompts}
-            onSelect={handleSubmit}
-            disabled={loading()}
+          <TabView
+            tabs={[
+              {
+                title: 'History',
+                content: (
+                  <History history={history()} onSelect={setQuestion} disabled={loading()} />
+                ),
+              },
+              {
+                title: 'Navigation',
+                content: (
+                  <NavigationPrompts
+                    prompts={props.initialPrompts}
+                    onSelect={handleSubmit}
+                    disabled={loading()}
+                  />
+                ),
+              },
+            ]}
           />
         </Sidebar>
       </div>
