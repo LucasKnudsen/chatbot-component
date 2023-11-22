@@ -19,23 +19,22 @@ const Gallery = (props: Props) => {
     <div ref={parent} class='mt-8'>
       {/* TODO: Configureable header */}
       <Show when={imagesAndVideos().length > 0}>
-        <Expandable header='Media' defaultOpen onOpen={scrollChatWindowToBottom}>
-          <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 px-6 pb-6'>
-            <For each={imagesAndVideos()}>
+        <Expandable header='View media' defaultOpen onOpen={scrollChatWindowToBottom}>
+          <div class='flex gap-4 px-6 pb-6 custom-scrollbar overflow-x-auto whitespace-nowrap'>
+            <For each={[...imagesAndVideos(), ...imagesAndVideos(), ...imagesAndVideos()]}>
               {(element) => (
                 <Switch fallback={null}>
                   <Match when={element.type === 'picture'}>
                     <Picture element={element} />
                   </Match>
                   <Match when={element.type === 'video'}>
-                    <div class='p-2 rounded-lg h-48 border'>
+                    <div class='p-2 rounded-lg h-48  border min-w-[298px] '>
                       <video
-                        class='rounded-lg hover:shadow-lg transition-all duration-300 ease-in-out h-full  object-cover '
+                        class='rounded-lg hover:shadow-lg transition-all duration-300 ease-in-out h-full w-full  object-cover '
                         src={element.value as string}
                         muted
                         autoplay
                         controls
-                        width='100%'
                         aria-label={element.description}
                         onError={(e) => (e.currentTarget.style.display = 'none')}
                       />
