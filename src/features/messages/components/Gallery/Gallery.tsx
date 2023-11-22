@@ -21,7 +21,7 @@ const Gallery = (props: Props) => {
       <Show when={imagesAndVideos().length > 0}>
         <Expandable header='View media' defaultOpen onOpen={scrollChatWindowToBottom}>
           <div class='flex gap-4 px-6 pb-6 custom-scrollbar overflow-x-auto whitespace-nowrap'>
-            <For each={[...imagesAndVideos(), ...imagesAndVideos(), ...imagesAndVideos()]}>
+            <For each={imagesAndVideos()}>
               {(element) => (
                 <Switch fallback={null}>
                   <Match when={element.type === 'picture'}>
