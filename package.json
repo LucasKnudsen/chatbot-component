@@ -9,8 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.ts*\"",
     "lint-fix": "eslint --fix \"src/**/*.ts*\"",
-    "amplify:flowiseMiddleware": "cd amplify/backend/function/flowiseMiddleware && tsc -p ./tsconfig.json && cd -",
-    "amplify:flowiseBroadcast": "cd amplify/backend/function/flowiseBroadcast && tsc -p ./tsconfig.json && cd -"
+    "amplify:flowiseMiddleware": "cd amplify/backend/function/flowiseMiddleware && npx tsc -p ./tsconfig.json && cd -",
+    "amplify:flowiseBroadcast": "cd amplify/backend/function/flowiseBroadcast && npx tsc -p ./tsconfig.json && cd -"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
