@@ -44,16 +44,15 @@ const Picture = ({ element }: Props) => {
 
   return (
     <div
-      class='relative'
+      class='relative h-48 p-2 rounded-lg border '
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <img
-        class={`rounded-lg  h-48 object-cover `}
+        class={`rounded-lg object-cover h-full w-full`}
         src={element.value as string}
         alt={element.description}
         loading='lazy'
-        width='100%'
         onError={(e) => (e.currentTarget.style.display = 'none')}
         onClick={handleImageClick}
       />
@@ -61,7 +60,7 @@ const Picture = ({ element }: Props) => {
       <div
         class={`absolute inset-0 flex items-center justify-center cursor-pointer rounded-lg
           transition-all duration-300 ease-in-out ${isHovered() ? 'opacity-100' : 'opacity-0'}`}
-        style='background-color: rgba(0, 0, 0, 0.5);'
+        style='background-color: rgba(0, 0, 0, 0.3);'
         onClick={handleImageClick}
       >
         <span class='text-white text-3xl'>🔍</span>
