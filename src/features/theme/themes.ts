@@ -9,6 +9,7 @@ export type Theme = {
   textInputTextColor: string
   textInputBackgroundColor: string
   textInputSendIconColor: string
+  frostTitleColor: string
   promptBackground?: string
   navPromptBackground?: string
 }
@@ -22,6 +23,7 @@ export const defaultTheme: Theme = {
   textInputTextColor: 'rgba(128, 114, 166, 1)',
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
   textInputSendIconColor: 'rgba(147, 147, 147, 1)',
+  frostTitleColor: 'rgba(147, 147, 147, 1)',
   promptBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.08) 0%, rgba(218, 145, 221, 0.08) 100%)',
   navPromptBackground:
@@ -37,6 +39,7 @@ export const ugly: Theme = {
   textInputTextColor: 'purple',
   textInputBackgroundColor: 'yellow',
   textInputSendIconColor: 'orange',
+  frostTitleColor: 'black',
   navPromptBackground: 'pink',
   promptBackground: 'brown',
 }

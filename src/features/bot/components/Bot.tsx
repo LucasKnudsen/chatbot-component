@@ -5,7 +5,7 @@ import { TextInput } from '@/components/inputs/textInput'
 import { Sidebar, useChatId } from '@/features/bot'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
 import { ContextualContainer } from '@/features/contextual'
-import { ChatWindow, useQuestion } from '@/features/messages'
+import { ChatWindow, History, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse } from '@/features/messages/utils'
@@ -257,17 +257,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
         {/* Sidebar */}
         <Sidebar open={!!question()}>
-          <div class='text-lg'>History</div>
-
-          <ul>
-            <For each={history()}>
-              {(q) => (
-                <li class='mb-2' onClick={() => setQuestion(q)}>
-                  {q.question}
-                </li>
-              )}
-            </For>
-          </ul>
+          <History history={history()} onSelect={setQuestion} disabled={loading()} />
 
           <NavigationPrompts
             prompts={props.initialPrompts}
