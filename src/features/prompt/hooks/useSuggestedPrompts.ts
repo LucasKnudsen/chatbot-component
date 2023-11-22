@@ -1,6 +1,6 @@
-import { extractChatbotResponse } from '@/features/messages'
+import { extractChatbotResponse, scrollChatWindowToBottom } from '@/features/messages'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
-import { createSignal } from 'solid-js'
+import { createEffect, createSignal, on } from 'solid-js'
 
 export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
   const [suggestedPrompts, setSuggestedPrompts] = createSignal<string[]>([])
@@ -14,8 +14,9 @@ export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
     clearSuggestions()
 
     const body: IncomingInput = {
-      question:
-        'Based on our history so far, give me 2 short concise follow up prompts that would encourage me to proceed with the conversation. The questions need to be non-repetitive. Please provide the questions in a JSON array format like ["Question 1?", "Question 2?", "Question 3?"]. Do not say anything else, just send me back an array.',
+      question: `Based on our history so far, give me 2 short concise follow up prompts that would encourage me to proceed with the conversation. The questions need to be non-repetitive. 
+      Please provide the questions in a JSON array format like ["Question 1?", "Question 2?", "Question 3?"]. Do not say anything else, just send me back an array.
+      `,
       history: [],
       // chatId: '123',
     }
@@ -43,6 +44,17 @@ export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
       }
     }
   }
+
+  createEffect(
+    on(
+      () => isFetching(),
+      () =>
+        setTimeout(() => {
+          suggestedPrompts().length === 0 && scrollChatWindowToBottom()
+        }, 200),
+      { defer: true }
+    )
+  )
 
   return { suggestedPrompts, fetchSuggestedPrompts, clearSuggestions, isFetching }
 }

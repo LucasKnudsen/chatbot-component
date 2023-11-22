@@ -10,14 +10,19 @@ type NavProps = {
 
 export const Nav = (props: NavProps) => {
   const { theme } = useTheme()
-  const { primaryColor } = theme()
+  const { primaryColor, promptBackground } = theme()
 
   return (
-    <div class='flex flex-wrap items-center px-5 py-5'>
+    <div
+      class='flex flex-wrap items-center mx-5 rounded-full px-6 py-2 mt-5 mb-8'
+      style={{
+        background: promptBackground,
+      }}
+    >
       <img src={logo} class='h-8' />
 
       {/* TODO: Make configurable  */}
-      <h1 class='text-4xl ml-3' style={{ 'letter-spacing': '0.2rem' }}>
+      <h1 class='text-3xl ml-3 tracking-widest'>
         FR
         <span
           style={{
