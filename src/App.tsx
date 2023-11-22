@@ -1,9 +1,9 @@
 import { onMount } from 'solid-js'
 import './dev.css'
-import { Full } from './features/full'
 
 import { chatflows } from './constants'
 import { PromptType } from './features/bot'
+import { Full } from './features/full'
 import { subscribe2channel } from './graphql/subscriptions'
 import './index.css'
 import { SubscriptionHelper } from './utils/subscriptionHelpers'
