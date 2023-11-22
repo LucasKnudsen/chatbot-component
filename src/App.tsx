@@ -2,6 +2,7 @@ import { onMount } from 'solid-js'
 import './dev.css'
 import { Full } from './features/full'
 
+import { chatflows } from './constants'
 import { PromptType } from './features/bot'
 import { subscribe2channel } from './graphql/subscriptions'
 import './index.css'
@@ -21,12 +22,6 @@ const initialPrompts: PromptType[] = [
     prompt: 'Give me a detailed description of the CEO of Lion Brain',
   },
 ]
-
-const apiHost = 'https://lionbrain.softdesign.dk'
-const chatflowid = 'ac2aa23a-5c82-4f50-8b7a-76f87887fc38'
-
-// const chatflowid = 'ca719387-f573-4989-aea0-21dc07d5ca73'
-// const apiHost = 'https://flowise.testnet.concordium.com'
 
 function App() {
   // Subscription example
@@ -48,8 +43,8 @@ function App() {
 
   return (
     <>
-      <Full chatflowid={chatflowid} apiHost={apiHost} initialPrompts={initialPrompts} />
-      {/* <Bubble chatflowid={chatflowid} apiHost={apiHost} initialPrompts={initialPrompts} /> */}
+      <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} />
+      {/* <Bubble {...chatflows.fraia_test} initialPrompts={initialPrompts} /> */}
     </>
   )
 }
