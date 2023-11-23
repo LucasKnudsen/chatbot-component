@@ -44,7 +44,7 @@ export const TextInput = (props: Props) => {
 
   return (
     <div
-      class={'flex  justify-between rounded-lg h-24'}
+      class={'flex  justify-between rounded-lg h-20'}
       data-testid='input'
       style={{
         margin: 'auto',

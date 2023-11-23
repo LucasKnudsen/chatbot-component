@@ -1,5 +1,6 @@
 import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
+
 import { TabView } from '@/components/TabView'
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
 import { TextInput } from '@/components/inputs/textInput'
@@ -11,7 +12,7 @@ import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
-import { NavigationPrompts, Prompt, useSuggestedPrompts } from '@/features/prompt'
+import { NavigationPrompts, SuggestedPrompts, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
@@ -66,10 +67,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupSrc] = createSignal({})
 
   const { theme, setThemeFromKey } = useTheme()
-  const { backgroundColor, backgroundImageUrl, promptBackground, textColor } = theme()
+  const { backgroundColor, backgroundImageUrl } = theme()
 
   const [chatWindowParent] = createAutoAnimate(/* optional config */)
-  const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
 
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
 
@@ -99,7 +99,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const clear = () => {
     clearQuestions()
-    // clearContextualElements()
     clearSuggestions()
     clearChatId()
   }
@@ -198,14 +197,13 @@ export const Bot = (props: BotProps & { class?: string }) => {
             fallback={
               // Welcome message
               <div class='flex flex-1 items-end '>
-                <h1 class='text-5xl max-w-md h-fit mb-6 font-light '>{welcomeMessage}</h1>
+                <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
+                  {welcomeMessage}
+                </h1>
               </div>
             }
           >
-            <ChatWindow
-              question={question()!}
-              isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
-            />
+            <ChatWindow question={question()!} />
           </Show>
 
           {/* Input Container */}
@@ -219,34 +217,13 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </div>
 
           {/* Suggested Prompt Container */}
-          <div class='mb-8' ref={suggestedPromptsParent}>
-            <Show when={isFetchingSuggestedPrompts() || suggestedPrompts().length > 0}>
-              <div class='flex items-center h-20 gap-y-1 gap-x-4 '>
-                <p
-                  class='whitespace-nowrap border-r-2 border-gray-200 pr-8 font-bold'
-                  style={{
-                    // TODO: Theme it
-                    color: '#231843A1',
-                  }}
-                >
-                  {props.suggestedPromptsTitle ?? 'FOLLOW UP QUESTIONS'}
-                </p>
-                <Show when={suggestedPrompts().length > 0} fallback={<LoadingBubble />}>
-                  <For each={suggestedPrompts()}>
-                    {(p) => (
-                      <Prompt
-                        prompt={p}
-                        onClick={handleSubmit}
-                        color={textColor}
-                        background={promptBackground}
-                        disabled={loading()}
-                      />
-                    )}
-                  </For>
-                </Show>
-              </div>
-            </Show>
-          </div>
+          <SuggestedPrompts
+            handleSubmit={handleSubmit}
+            suggestedPrompts={suggestedPrompts}
+            isFetching={isFetchingSuggestedPrompts}
+            suggestedPromptsTitle={props.suggestedPromptsTitle}
+            loading={loading()}
+          />
         </div>
 
         {/* Resources Container */}

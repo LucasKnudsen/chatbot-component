@@ -12,7 +12,7 @@ export default defineConfig({
   },
   define: {
     // // Fixes the Amplify global issue
-    // global: {},
+    global: {},
     // // Fixes Amplify build issue 🤔 https://stackoverflow.com/questions/75925195/how-to-fix-vite-build-syntax-error-unexpected-token-in-third-party-dependenc
     // _global: {},
 

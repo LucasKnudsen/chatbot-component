@@ -8,7 +8,6 @@ import Gallery from './Gallery/Gallery'
 
 type ChatWindowProps = {
   question: Chat
-  isFetchingSuggestedPrompts: boolean
 }
 
 export const ChatWindow = (props: ChatWindowProps) => {
@@ -22,20 +21,14 @@ export const ChatWindow = (props: ChatWindowProps) => {
 
   createEffect(on(() => props.question, scrollChatWindowToBottom, { defer: true }))
 
-  createEffect(
-    on(
-      () => props.isFetchingSuggestedPrompts,
-      () => setTimeout(() => scrollChatWindowToBottom(), 200),
-      { defer: true }
-    )
-  )
-
   return (
     <>
       {/* Question */}
-      <div class='flex pb-1 border-b border-gray-200'>
+      <div class='flex pb-3 border-b border-gray-200'>
         <div class=' text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start '>
-          <MessageIcon width={30} />
+          <div>
+            <MessageIcon width={30} />
+          </div>
           {props.question?.question}
         </div>
       </div>
