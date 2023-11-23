@@ -1,7 +1,7 @@
-import { TypingBubble } from '@/components'
+import { Settings, TypingBubble } from '@/components'
 import { MessageIcon } from '@/components/icons'
 import { Marked } from '@ts-stack/markdown'
-import { createEffect, on, Show } from 'solid-js'
+import { Show, createEffect, on } from 'solid-js'
 import { scrollChatWindowToBottom } from '..'
 import { Chat } from '../types'
 import Gallery from './Gallery/Gallery'
@@ -24,13 +24,24 @@ export const ChatWindow = (props: ChatWindowProps) => {
   return (
     <>
       {/* Question */}
-      <div class='flex pb-3 border-b border-gray-200'>
+      <div class='flex pb-3 border-b border-gray-200 justify-between'>
         <div class=' text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start '>
           <div>
             <MessageIcon width={30} />
           </div>
           {props.question?.question}
         </div>
+
+        <Settings
+          menuItems={[
+            {
+              label: 'Copy text',
+              onClick: () => {
+                navigator.clipboard.writeText(props.question?.answer!)
+              },
+            },
+          ]}
+        />
       </div>
 
       {/* Answer */}

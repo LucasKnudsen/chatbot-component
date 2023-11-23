@@ -1,8 +1,13 @@
+import { Theme } from './features/theme'
+
 /* eslint-disable solid/reactivity */
 type BotProps = {
   chatflowid: string
   apiHost?: string
-  chatflowConfig?: Record<string, unknown>
+  themeId: string
+  theme?: Theme
+  text?: Record<string, string>
+  defaultLang: string
 }
 
 export const initFull = (props: BotProps & { id?: string }) => {
