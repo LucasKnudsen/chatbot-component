@@ -61,6 +61,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
+  const [sidebarOpen, setSidebarOpen] = createSignal(false)
 
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc] = createSignal({})
@@ -243,12 +244,23 @@ export const Bot = (props: BotProps & { class?: string }) => {
           <ContextualContainer class='pt-6' resources={question()!.resources} />
 
           {/* Sidebar */}
-          <Sidebar>
+          <Sidebar
+            open={sidebarOpen()}
+            onToggle={() => {
+              setSidebarOpen(!sidebarOpen())
+            }}
+          >
             <SidebarTabView
               initialPrompts={props.initialPrompts}
               history={history()}
-              setQuestion={setQuestion}
-              handleSubmit={handleSubmit}
+              setQuestion={(chat) => {
+                setQuestion(chat)
+                setSidebarOpen(false)
+              }}
+              handleSubmit={(question) => {
+                handleSubmit(question)
+                setSidebarOpen(false)
+              }}
               disabled={loading()}
             />
           </Sidebar>

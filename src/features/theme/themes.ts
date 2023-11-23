@@ -2,6 +2,7 @@ import background2 from '@/assets/background-2.png'
 
 export type Theme = {
   primaryColor: string
+  primaryColorHovered?: string
   textColor: string
   backgroundColor: string
   backgroundImageUrl: string
@@ -16,6 +17,7 @@ export type Theme = {
 
 export const defaultTheme: Theme = {
   primaryColor: 'rgba(91, 147, 255, 1)',
+  primaryColorHovered: 'rgba(91, 147, 255, 0.2)',
   textColor: 'rgba(35, 24, 67, 1)',
   backgroundColor: 'transparent',
   backgroundImageUrl: background2,

@@ -12,32 +12,41 @@ type HistoryListSectionProps = {
 
 export const HistoryListSection = (props: HistoryListSectionProps) => {
   const { theme } = useTheme()
-  const { frostTitleColor, textColor } = theme()
+  const { frostTitleColor, textColor, primaryColorHovered } = theme()
 
   return (
-    <Show when={props.history.length > 0}>
-      <div class='font-bold' style={{ color: frostTitleColor }}>
-        {props.title}
-      </div>
+    <>
+      <style>
+        {`
+        .history-list-section-item:hover {
+          background: ${primaryColorHovered};
+        }
+      `}
+      </style>
+      <Show when={props.history.length > 0}>
+        <div class='font-bold' style={{ color: frostTitleColor }}>
+          {props.title}
+        </div>
 
-      <Divider />
+        <Divider />
 
-      <ul class='mt-6 mb-10'>
-        <For each={props.history.reverse()}>
-          {(h) => (
-            <li
-              class='my-4 cursor-pointer font-light'
-              style={{
-                color: textColor,
-                cursor: props.disabled ? 'not-allowed' : 'pointer',
-              }}
-              onClick={() => (props.disabled ? null : props.onSelect(h))}
-            >
-              {h.question}
-            </li>
-          )}
-        </For>
-      </ul>
-    </Show>
+        <ul class='mt-6 mb-10'>
+          <For each={props.history.reverse()}>
+            {(h) => (
+              <li
+                class='history-list-section-item my-2 cursor-pointer font-light rounded-[10px] p-2 '
+                style={{
+                  color: textColor,
+                  cursor: props.disabled ? 'not-allowed' : 'pointer',
+                }}
+                onClick={() => (props.disabled ? null : props.onSelect(h))}
+              >
+                {h.question}
+              </li>
+            )}
+          </For>
+        </ul>
+      </Show>
+    </>
   )
 }
