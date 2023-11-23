@@ -22,7 +22,7 @@ export const HistoryListSection = (props: HistoryListSectionProps) => {
 
       <Divider />
 
-      <ul class='mb-6'>
+      <ul class='mt-6 mb-10'>
         <For each={props.history.reverse()}>
           {(h) => (
             <li

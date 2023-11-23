@@ -42,7 +42,7 @@ export const TabView: (props: TabViewProps) => JSXElement = (props) => {
           )}
         </For>
       </ul>
-      <div class='py-4'>{props.tabs[selectedTab()].content}</div>
+      <div class='my-10'>{props.tabs[selectedTab()].content}</div>
     </div>
   )
 }

@@ -1,23 +1,22 @@
 import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 
-import { TabView } from '@/components/TabView'
-import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
 import { TextInput } from '@/components/inputs/textInput'
 import { Sidebar, useChatId } from '@/features/bot'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
 import { ContextualContainer } from '@/features/contextual'
-import { ChatWindow, History, useQuestion } from '@/features/messages'
+import { ChatWindow, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse } from '@/features/messages/utils'
 import { Popup } from '@/features/popup'
-import { NavigationPrompts, SuggestedPrompts, useSuggestedPrompts } from '@/features/prompt'
+import { SuggestedPrompts, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
 import { Amplify } from 'aws-amplify'
-import { For, Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
+import { Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
+import { SidebarTabView } from './SidebarTabView'
 
 Amplify.configure(awsconfig)
 
@@ -191,15 +190,26 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
       <div class='relative flex flex-1 px-10 gap-10 overflow-hidden'>
         {/* Main Container */}
-        <div class='flex flex-col flex-1 text-base overflow-hidden' ref={chatWindowParent}>
+        <div class='flex flex-col flex-1 text-base overflow-hidden pt-6' ref={chatWindowParent}>
           <Show
             when={Boolean(question())}
             fallback={
               // Welcome message
-              <div class='flex flex-1 items-end '>
-                <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
-                  {welcomeMessage}
-                </h1>
+              <div class='flex flex-1'>
+                <div class='flex flex-1 items-end '>
+                  <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
+                    {welcomeMessage}
+                  </h1>
+                </div>
+
+                <SidebarTabView
+                  initialPrompts={props.initialPrompts}
+                  history={history()}
+                  setQuestion={setQuestion}
+                  handleSubmit={handleSubmit}
+                  disabled={loading()}
+                  navDefault={true}
+                />
               </div>
             }
           >
@@ -230,32 +240,19 @@ export const Bot = (props: BotProps & { class?: string }) => {
         <Show when={question()}>
           <div class='border-l'></div>
 
-          <ContextualContainer resources={question()!.resources} />
-        </Show>
+          <ContextualContainer class='pt-6' resources={question()!.resources} />
 
-        {/* Sidebar */}
-        <Sidebar open={!!question()}>
-          <TabView
-            tabs={[
-              {
-                title: 'History',
-                content: (
-                  <History history={history()} onSelect={setQuestion} disabled={loading()} />
-                ),
-              },
-              {
-                title: 'Navigation',
-                content: (
-                  <NavigationPrompts
-                    prompts={props.initialPrompts}
-                    onSelect={handleSubmit}
-                    disabled={loading()}
-                  />
-                ),
-              },
-            ]}
-          />
-        </Sidebar>
+          {/* Sidebar */}
+          <Sidebar>
+            <SidebarTabView
+              initialPrompts={props.initialPrompts}
+              history={history()}
+              setQuestion={setQuestion}
+              handleSubmit={handleSubmit}
+              disabled={loading()}
+            />
+          </Sidebar>
+        </Show>
       </div>
 
       {sourcePopupOpen() && (

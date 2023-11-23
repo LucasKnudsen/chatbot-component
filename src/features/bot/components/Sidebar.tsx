@@ -2,17 +2,15 @@ import circleCloseIcon from '@/assets/circle-close-icon.png'
 import sidebarTabIcon from '@/assets/sidebar-tab-icon.svg'
 
 import { JSX, createSignal } from 'solid-js'
+import { sidebarInnerWidthNum, sidebarPaddingNum } from '../constants'
 
 type SidebarProps = {
   children: JSX.Element
-  open: boolean
   class?: string
 }
 
-const padding = 40
-const innerWidthNum = 256
-const innerWidth = innerWidthNum + 'px'
-const openWidth = innerWidthNum + padding * 2 + 'px'
+const innerWidth = sidebarInnerWidthNum + 'px'
+const openWidth = sidebarInnerWidthNum + sidebarPaddingNum * 2 + 'px'
 const closedWidth = '0px'
 
 export const Sidebar = (props: SidebarProps) => {
@@ -21,7 +19,7 @@ export const Sidebar = (props: SidebarProps) => {
   return (
     <div
       class={
-        'absolute h-full top-0 right-0 transition-all backdrop-blur bg-white/75 ' + props.class
+        'absolute h-full top-0 right-0 transition-all backdrop-blur-md bg-white/75 ' + props.class
       }
       style={{
         width: open() ? openWidth : closedWidth,
@@ -48,8 +46,8 @@ export const Sidebar = (props: SidebarProps) => {
         style={{
           width: innerWidth,
           opacity: open() ? '1' : '0',
-          'margin-left': padding + 'px',
-          'margin-right': padding + 'px',
+          'margin-left': sidebarPaddingNum + 'px',
+          'margin-right': sidebarPaddingNum + 'px',
         }}
       >
         {props.children}
