@@ -7,7 +7,7 @@ import {
   SourceResource,
 } from '@/features/contextual'
 import uniqBy from 'lodash/uniqBy'
-import { createEffect, createSignal, onMount } from 'solid-js'
+import { createEffect, createMemo, createSignal, onMount } from 'solid-js'
 import { Chat } from '../types'
 
 export const useQuestion = (chatflowid: string) => {
@@ -76,6 +76,17 @@ export const useQuestion = (chatflowid: string) => {
 
     addHistory(q)
   }
+
+  const hasResources = createMemo(() => {
+    const q = question()
+    if (!q) return false
+
+    const anyResourceExists = Object.keys(q.resources).some(
+      (key) => q.resources[key as ContextualElementType].length > 0
+    )
+
+    return anyResourceExists
+  })
 
   const clear = () => {
     setQuestion(null)
@@ -177,5 +188,6 @@ export const useQuestion = (chatflowid: string) => {
     createQuestion,
     handleSourceDocuments,
     clear,
+    hasResources,
   }
 }

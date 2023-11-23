@@ -1,10 +1,10 @@
+import circleCloseRightIcon from '@/assets/circle-close-right-icon.svg'
 import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 
 import { TextInput } from '@/components/inputs/textInput'
 import { Sidebar, useChatId } from '@/features/bot'
 import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
-import { ContextualContainer } from '@/features/contextual'
 import { ChatWindow, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
@@ -14,8 +14,10 @@ import { SuggestedPrompts, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
+import { Divider } from '@/components/Divider'
+import { ContextualContainer } from '@/features/contextual'
 import { Amplify } from 'aws-amplify'
-import { Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
+import { Show, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
 import { sidebarPaddingNum } from '../constants'
 import { SidebarTabView } from './SidebarTabView'
 
@@ -63,6 +65,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
   const [sidebarOpen, setSidebarOpen] = createSignal(false)
+  const [resourcesToggled, setResourcesToggled] = createSignal(true)
 
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc] = createSignal({})
@@ -71,6 +74,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const { backgroundColor, backgroundImageUrl } = theme()
 
   const [chatWindowParent] = createAutoAnimate(/* optional config */)
+  const [contextualContainerParent] = createAutoAnimate(/* optional config */)
 
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
 
@@ -82,7 +86,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
     handleSourceDocuments,
     history,
     setQuestion,
+    hasResources,
   } = useQuestion(props.chatflowid)
+
+  const resourcesOpen = createMemo(() => hasResources() && resourcesToggled())
 
   const {
     suggestedPrompts,
@@ -196,7 +203,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
           class='flex flex-col flex-1 text-base overflow-hidden pt-6'
           ref={chatWindowParent}
           style={{
-            'padding-right': question() ? sidebarPaddingNum + 'px' : '0',
+            'padding-right': resourcesOpen() ? sidebarPaddingNum + 'px' : '0',
           }}
         >
           <Show
@@ -244,17 +251,30 @@ export const Bot = (props: BotProps & { class?: string }) => {
           />
         </div>
 
-        {/* Resources Container */}
+        <div class='flex relative' ref={contextualContainerParent}>
+          <Show when={resourcesOpen()}>
+            <Divider vertical margin={0} />
+
+            <ContextualContainer class='py-6' resources={question()!.resources} />
+
+            <div
+              class='absolute cursor-pointer'
+              style={{ left: '-10px', opacity: resourcesOpen() ? '1' : '0' }}
+              onClick={() => setResourcesToggled(!resourcesToggled())}
+            >
+              <img class='transition-all inline-block' src={circleCloseRightIcon} width={20} />
+            </div>
+          </Show>
+        </div>
+
         <Show when={question()}>
-          <div class='border-l'></div>
-
-          <ContextualContainer class='py-6' resources={question()!.resources} />
-
           {/* Sidebar */}
           <Sidebar
             open={sidebarOpen()}
             onToggle={() => {
               setSidebarOpen(!sidebarOpen())
+
+              setResourcesToggled(true)
             }}
           >
             <SidebarTabView
