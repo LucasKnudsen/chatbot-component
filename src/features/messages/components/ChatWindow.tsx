@@ -1,4 +1,5 @@
 import { Settings, TypingBubble } from '@/components'
+import { Divider } from '@/components/Divider'
 import { MessageIcon } from '@/components/icons'
 import { Marked } from '@ts-stack/markdown'
 import { Show, createEffect, on } from 'solid-js'
@@ -24,7 +25,7 @@ export const ChatWindow = (props: ChatWindowProps) => {
   return (
     <>
       {/* Question */}
-      <div class='flex pb-3 border-b border-gray-200 justify-between'>
+      <div class='flex  justify-between'>
         <div class=' text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start '>
           <div>
             <MessageIcon width={30} />
@@ -43,6 +44,8 @@ export const ChatWindow = (props: ChatWindowProps) => {
           ]}
         />
       </div>
+
+      <Divider />
 
       {/* Answer */}
       <div

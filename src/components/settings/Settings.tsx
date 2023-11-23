@@ -1,6 +1,6 @@
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { For, JSX, Show, createSignal } from 'solid-js'
+import { For, JSX, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 import { Divider } from '../Divider'
 import { SettingsButton } from '../icons'
 
@@ -16,6 +16,7 @@ type Props = {
 }
 
 export const Settings = (props: Props) => {
+  let menuRef: HTMLDivElement | undefined = undefined
   const [isOpen, setIsOpen] = createSignal(false)
 
   const [animate] = createAutoAnimate({ duration: 100 })
@@ -37,6 +38,27 @@ export const Settings = (props: Props) => {
     e.preventDefault()
   }
 
+  // Function to handle document click
+  const handleDocumentClick = (e: MouseEvent) => {
+    if (menuRef && !menuRef.contains(e.target as Node)) {
+      closeMenu()
+    }
+  }
+
+  // Add event listener when the menu is opened and remove it when closed
+  createEffect(() => {
+    if (isOpen()) {
+      document.addEventListener('click', handleDocumentClick)
+    } else {
+      document.removeEventListener('click', handleDocumentClick)
+    }
+  })
+
+  // Cleanup the event listener when the component is unmounted
+  onCleanup(() => {
+    document.removeEventListener('click', handleDocumentClick)
+  })
+
   return (
     <>
       <style>
@@ -47,7 +69,7 @@ export const Settings = (props: Props) => {
       `}
       </style>
 
-      <div ref={animate} class='relative inline-block text-left'>
+      <div ref={menuRef} class='relative inline-block text-left'>
         <div>
           <button type='button' class='flex items-center  px-2' onClick={toggleMenu}>
             <SettingsButton />
