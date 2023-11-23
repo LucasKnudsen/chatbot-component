@@ -4,4 +4,5 @@ export type Chat = {
   question: string
   answer: string
   resources: Resources
+  createdAt: string
 }
