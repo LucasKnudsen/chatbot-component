@@ -14,9 +14,8 @@ import { Request, default as fetch } from 'node-fetch'
 import { publish2channel } from './mutation'
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  console.log(`EVENT: ${JSON.stringify(event)}`)
-
   const { sessionId, data } = JSON.parse(event.body)
+  console.log(`EVENT: ${JSON.stringify(event)}`)
 
   const variables = {
     sessionId,

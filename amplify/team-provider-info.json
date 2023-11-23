@@ -19,7 +19,7 @@
         },
         "flowiseBroadcast": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/flowiseBroadcast-334a37307a6343777435-build.zip"
+          "s3Key": "amplify-builds/flowiseBroadcast-77396a2b6e3679433556-build.zip"
         },
         "broadcastResolver": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
@@ -36,9 +36,8 @@
       "hosting": {
         "amplifyhosting": {
           "appId": "d1i4jp82axmvxl",
-          "type": "manual"
-        },
-        "S3AndCloudFront": {}
+          "type": "cicd"
+        }
       }
     }
   }

@@ -11,10 +11,13 @@ export default defineConfig({
     },
   },
   define: {
-    // Fixes the Amplify global issue
-    global: {},
-    // Fixes Amplify build issue 🤔 https://stackoverflow.com/questions/75925195/how-to-fix-vite-build-syntax-error-unexpected-token-in-third-party-dependenc
-    _global: {},
+    // // Fixes the Amplify global issue
+    // global: {},
+    // // Fixes Amplify build issue 🤔 https://stackoverflow.com/questions/75925195/how-to-fix-vite-build-syntax-error-unexpected-token-in-third-party-dependenc
+    // _global: {},
+
+    // Fixes a script runtime error that "process is not defined"
+    'process.env.NODE_ENV': JSON.stringify('production'),
   },
   resolve: {
     alias: {
