@@ -2,6 +2,7 @@ import background2 from '@/assets/background-2.png'
 
 export type Theme = {
   primaryColor: string
+  primaryColorHovered?: string
   textColor: string
   backgroundColor: string
   backgroundImageUrl: string
@@ -11,11 +12,12 @@ export type Theme = {
   textInputSendIconColor: string
   frostTitleColor: string
   promptBackground?: string
-  navPromptBackground?: string
+  promptBackgroundHovered?: string
 }
 
 export const defaultTheme: Theme = {
   primaryColor: 'rgba(91, 147, 255, 1)',
+  primaryColorHovered: 'rgba(91, 147, 255, 0.2)',
   textColor: 'rgba(35, 24, 67, 1)',
   backgroundColor: 'transparent',
   backgroundImageUrl: background2,
@@ -26,7 +28,7 @@ export const defaultTheme: Theme = {
   frostTitleColor: 'rgba(147, 147, 147, 1)',
   promptBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.08) 0%, rgba(218, 145, 221, 0.08) 100%)',
-  navPromptBackground:
+  promptBackgroundHovered:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.25) 0%, rgba(218, 145, 221, 0.25) 100%)',
 }
 
@@ -40,7 +42,7 @@ export const ugly: Theme = {
   textInputBackgroundColor: 'yellow',
   textInputSendIconColor: 'orange',
   frostTitleColor: 'black',
-  navPromptBackground: 'pink',
+  promptBackgroundHovered: 'pink',
   promptBackground: 'brown',
 }
 

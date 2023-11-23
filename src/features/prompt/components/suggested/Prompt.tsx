@@ -14,16 +14,28 @@ export const Prompt = (props: PromptProps) => {
   const [firstPart, secondPart] = splitTextAtNearestWhitespace(props.prompt)
 
   const { theme } = useTheme()
-  const { primaryColor, borderColor, promptBackground, textColor } = theme()
+  const { primaryColor, borderColor, promptBackground, promptBackgroundHovered, textColor } =
+    theme()
 
   return (
     <>
+      <style>
+        {`
+        .prompt:hover {
+          background: ${promptBackgroundHovered};
+        }
+        .prompt {
+          background: ${promptBackground};
+        }
+      `}
+      </style>
+
       <div
-        class='py-2 px-5 rounded-xl border transition duration-200 ease-in-out  w-fit '
+        class='prompt py-2 px-5 rounded-xl border transition duration-200 ease-in-out  w-fit '
         style={{
           cursor: props.disabled ? 'not-allowed' : 'pointer',
           // TODO: Themme it
-          background: promptBackground,
+
           color: textColor,
           'border-color': isHovered() ? primaryColor : borderColor,
         }}

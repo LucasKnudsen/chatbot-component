@@ -14,7 +14,7 @@ export const Nav = (props: NavProps) => {
 
   return (
     <div
-      class='flex flex-wrap items-center mx-5 rounded-full px-6 py-2 mt-5 mb-6'
+      class='flex flex-wrap items-center mx-5 rounded-full px-6 py-2 mt-5'
       style={{
         background: promptBackground,
       }}

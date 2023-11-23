@@ -1,12 +1,14 @@
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { For, createEffect } from 'solid-js'
 import { Resources } from '.'
+import { sidebarInnerWidthNum } from '../bot/constants'
 import { Fact } from './components/Fact'
 import { Iframe } from './components/Iframe'
 import { Link } from './components/Link'
 
 type Props = {
   resources: Resources
+  class?: string
 }
 
 export const ContextualContainer = (props: Props) => {
@@ -34,7 +36,11 @@ export const ContextualContainer = (props: Props) => {
     <div
       id='contextual-resources'
       ref={parent}
-      class='flex-col overflow-y-scroll relative scroll-smooth rounded-md scrollable-container w-64'
+      class={
+        'flex-col overflow-y-scroll relative scroll-smooth rounded-md scrollable-container ' +
+        props.class
+      }
+      style={{ width: sidebarInnerWidthNum + 'px' }}
     >
       <For each={props.resources.link}>{(element) => <Link element={element} />}</For>
 
