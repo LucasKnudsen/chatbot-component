@@ -16,6 +16,7 @@ import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
 import { Amplify } from 'aws-amplify'
 import { Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
+import { sidebarPaddingNum } from '../constants'
 import { SidebarTabView } from './SidebarTabView'
 
 Amplify.configure(awsconfig)
@@ -189,9 +190,15 @@ export const Bot = (props: BotProps & { class?: string }) => {
     >
       <Nav question={question()} onClear={clear} />
 
-      <div class='relative flex flex-1 px-10 gap-10 overflow-hidden'>
+      <div class='relative flex flex-1 px-10 overflow-hidden'>
         {/* Main Container */}
-        <div class='flex flex-col flex-1 text-base overflow-hidden pt-6' ref={chatWindowParent}>
+        <div
+          class='flex flex-col flex-1 text-base overflow-hidden pt-6'
+          ref={chatWindowParent}
+          style={{
+            'padding-right': question() ? sidebarPaddingNum + 'px' : '0',
+          }}
+        >
           <Show
             when={Boolean(question())}
             fallback={
@@ -241,7 +248,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
         <Show when={question()}>
           <div class='border-l'></div>
 
-          <ContextualContainer class='pt-6' resources={question()!.resources} />
+          <ContextualContainer class='py-6' resources={question()!.resources} />
 
           {/* Sidebar */}
           <Sidebar

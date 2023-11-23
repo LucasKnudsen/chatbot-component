@@ -1,7 +1,7 @@
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { For, createEffect } from 'solid-js'
+import { For } from 'solid-js'
 import { Resources } from '.'
-import { sidebarInnerWidthNum } from '../bot/constants'
+import { sidebarInnerWidthNum, sidebarPaddingNum } from '../bot/constants'
 import { Fact } from './components/Fact'
 import { Iframe } from './components/Iframe'
 import { Link } from './components/Link'
@@ -15,22 +15,22 @@ export const ContextualContainer = (props: Props) => {
   const [parent] = createAutoAnimate()
 
   // // Auto scroll chat to bottom
-  createEffect(() => {
-    if (props.resources) scrollToBottom()
-  })
+  // createEffect(() => {
+  //   if (props.resources) scrollToBottom()
+  // })
 
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      const contextualContainer = document.getElementById('contextual-resources')
-      if (contextualContainer) {
-        contextualContainer.scrollTop = contextualContainer.scrollHeight
-      }
-      const contextualContainer2 = document.getElementById('contextual-facts')
-      if (contextualContainer2) {
-        contextualContainer2.scrollTop = contextualContainer2.scrollHeight
-      }
-    }, 50)
-  }
+  // const scrollToBottom = () => {
+  //   setTimeout(() => {
+  //     const contextualContainer = document.getElementById('contextual-resources')
+  //     if (contextualContainer) {
+  //       contextualContainer.scrollTop = contextualContainer.scrollHeight
+  //     }
+  //     const contextualContainer2 = document.getElementById('contextual-facts')
+  //     if (contextualContainer2) {
+  //       contextualContainer2.scrollTop = contextualContainer2.scrollHeight
+  //     }
+  //   }, 50)
+  // }
 
   return (
     <div
@@ -40,7 +40,10 @@ export const ContextualContainer = (props: Props) => {
         'flex-col overflow-y-scroll relative scroll-smooth rounded-md scrollable-container ' +
         props.class
       }
-      style={{ width: sidebarInnerWidthNum + 'px' }}
+      style={{
+        width: sidebarInnerWidthNum + sidebarPaddingNum + 'px',
+        'padding-left': sidebarPaddingNum + 'px',
+      }}
     >
       <For each={props.resources.link}>{(element) => <Link element={element} />}</For>
 
