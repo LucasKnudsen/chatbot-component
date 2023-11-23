@@ -1,21 +1,45 @@
+import linkIcon from '@/assets/link-icon.svg'
+import { Divider } from '@/components/Divider'
+import { useTheme } from '@/features/theme/hooks'
 import { ContextualElement } from '..'
 
 type Props = {
-  element: ContextualElement
+  link: ContextualElement
 }
 
-export const Link = ({ element }: Props) => {
-  if (Array.isArray(element.value)) return null
+export const Link = (props: Props) => {
+  if (Array.isArray(props.link.value)) return null
+
+  const { theme } = useTheme()
+  const { textColor } = theme()
 
   // TODO: Add onClick to open link in new tab
   // TODO: Add onHover to show description and link indication
 
   return (
-    <div class='flex flex-col justify-between py-2 border border-gray-200 mb-2 p-2 rounded-lg '>
-      <p class='pr-8 text-sm line-clamp-4'>{element.description}</p>
-      <p class='pr-8 text-sm font-medium text-gray-500 mt-2 '>Read more:</p>
-      <a class='text-sm break-words ' href={element.value} target='_blank'>
-        {element.value}
+    <div class='flex flex-col justify-between border border-gray-200 mb-2 rounded-xl '>
+      <a
+        class='hover:no-underline'
+        href={props.link.value}
+        target='_blank'
+        rel='noreferrer'
+        style={{
+          color: textColor,
+        }}
+      >
+        <div class='p-2'>
+          <div class='relative rounded-md overflow-hidden mb-2'>
+            <img class='absolute top-2 right-2' src={linkIcon} />
+
+            <img src='https://picsum.photos/290/100' />
+          </div>
+          <p class='break-words line-clamp-2 font-light'>{props.link.description}</p>
+        </div>
+
+        <Divider margin={0} />
+        <div class='p-2'>
+          <p class='break-words line-clamp-1 font-light'>{props.link.value}</p>
+        </div>
       </a>
     </div>
   )

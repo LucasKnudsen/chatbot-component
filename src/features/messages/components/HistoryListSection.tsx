@@ -12,7 +12,7 @@ type HistoryListSectionProps = {
 
 export const HistoryListSection = (props: HistoryListSectionProps) => {
   const { theme } = useTheme()
-  const { frostTitleColor, textColor, primaryColorHovered } = theme()
+  const { textSecondary, textColor, primaryColorHovered } = theme()
 
   return (
     <>
@@ -24,7 +24,7 @@ export const HistoryListSection = (props: HistoryListSectionProps) => {
       `}
       </style>
       <Show when={props.history.length > 0}>
-        <div class='font-bold' style={{ color: frostTitleColor }}>
+        <div class='font-bold' style={{ color: textSecondary }}>
           {props.title}
         </div>
 
