@@ -37,7 +37,7 @@ export const ContextualContainer = (props: Props) => {
       id='contextual-resources'
       ref={parent}
       class={
-        'flex-col overflow-y-scroll relative scroll-smooth rounded-md scrollable-container ' +
+        'flex flex-col gap-2 h-full relative scroll-smooth rounded-md scrollable-container ' +
         props.class
       }
       style={{
@@ -45,11 +45,14 @@ export const ContextualContainer = (props: Props) => {
         'padding-left': sidebarPaddingNum + 'px',
       }}
     >
-      <For each={props.resources.link}>{(element) => <Link element={element} />}</For>
+      <div class='flex-1 overflow-y-scroll'>
+        <For each={props.resources.fact}>{(element) => <Fact fact={element} />}</For>
+      </div>
 
-      <For each={props.resources.iframe}>{(element) => <Iframe element={element} />}</For>
-
-      <For each={props.resources.fact}>{(element) => <Fact element={element} />}</For>
+      <div class='flex-1 overflow-y-scroll'>
+        <For each={props.resources.link}>{(element) => <Link element={element} />}</For>
+        <For each={props.resources.iframe}>{(element) => <Iframe element={element} />}</For>
+      </div>
     </div>
   )
 }
