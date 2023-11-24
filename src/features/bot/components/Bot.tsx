@@ -2,7 +2,13 @@ import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 
 import { TextInput } from '@/components/inputs/textInput'
-import { SYSTEM_DEFAULT_LANGUAGE, Sidebar, useChatId, useLanguage } from '@/features/bot'
+import {
+  SYSTEM_DEFAULT_LANGUAGE,
+  Sidebar,
+  currentLanguage,
+  useChatId,
+  useLanguage,
+} from '@/features/bot'
 import { ChatWindow, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
@@ -69,10 +75,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [chatWindowParent] = createAutoAnimate(/* optional config */)
 
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
-  const { currentLanguage, clear: clearDefaultLanguage } = useLanguage(
-    props.chatflowid,
-    props.language
-  )
+  const { clear: clearDefaultLanguage } = useLanguage(props.chatflowid, props.language)
 
   const {
     question,
@@ -221,32 +224,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                       {text().welcomeMessage}
                     </h1>
 
-                    {/* Testing translations  */}
-                    <button
-                      class='p-10 bg-black text-cyan-200'
-                      onClick={async () => {
-                        console.time('translation')
-
-                        try {
-                          const translation = await Predictions.convert({
-                            translateText: {
-                              source: {
-                                text: 'Hello world',
-                                language: props.language || SYSTEM_DEFAULT_LANGUAGE, // either client override or default
-                              },
-                              targetLanguage: currentLanguage(),
-                            },
-                          })
-
-                          console.log(translation)
-                        } catch (error) {
-                          console.log(error)
-                        }
-                        console.timeEnd('translation')
-                      }}
-                    >
-                      Test
-                    </button>
+                    <TestButton language={props.language} />
                   </div>
 
                   <SidebarTabView
@@ -326,5 +304,35 @@ export const Bot = (props: BotProps & { class?: string }) => {
         )}
       </div>
     </>
+  )
+}
+
+const TestButton = (props: { language?: string }) => {
+  const onTest = async () => {
+    console.time('translation')
+    // TODO: Make a
+
+    try {
+      const translation = await Predictions.convert({
+        translateText: {
+          source: {
+            text: 'Hello world',
+            language: props.language || SYSTEM_DEFAULT_LANGUAGE, // either client override or default
+          },
+          targetLanguage: currentLanguage(),
+        },
+      })
+
+      console.log(translation)
+    } catch (error) {
+      console.log(error)
+    }
+    console.timeEnd('translation')
+  }
+
+  return (
+    <button class='p-10 bg-blue-400 text-black rounded-md' onClick={onTest}>
+      Test
+    </button>
   )
 }
