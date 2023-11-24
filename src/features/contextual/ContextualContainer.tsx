@@ -21,7 +21,6 @@ export const ContextualContainer = (props: Props) => {
   const [parent] = createAutoAnimate()
 
   const { theme } = useTheme()
-  const { textSecondary } = theme()
 
   // // Auto scroll chat to bottom
   // createEffect(() => {
@@ -62,7 +61,7 @@ export const ContextualContainer = (props: Props) => {
         <div
           class='font-bold'
           style={{
-            color: textSecondary,
+            color: theme().textSecondary,
           }}
         >
           <img class='inline-block mr-2' src={linkIcon1} />

@@ -7,7 +7,6 @@ type DividerProps = {
 
 export const Divider = (props: DividerProps) => {
   const { theme } = useTheme()
-  const { borderColor } = theme()
 
   const margin = props.margin ?? 8
 
@@ -17,7 +16,7 @@ export const Divider = (props: DividerProps) => {
         width: props.vertical ? '1px' : '100%',
         height: props.vertical ? '100%' : '1px',
         margin: props.vertical ? `0 ${margin}px` : `${margin}px 0`,
-        background: borderColor,
+        background: theme().borderColor,
       }}
     />
   )

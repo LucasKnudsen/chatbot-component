@@ -3,7 +3,6 @@ import { Nav } from '@/components/Nav'
 
 import { TextInput } from '@/components/inputs/textInput'
 import { Sidebar, useChatId } from '@/features/bot'
-import { BotMessageTheme, UserMessageTheme } from '@/features/bubble/types'
 import { ChatWindow, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
@@ -14,6 +13,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
 import { ContextualContainer } from '@/features/contextual'
+import { Theme } from '@/features/theme'
 import { Amplify } from 'aws-amplify'
 import { Show, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
 import { sidebarPaddingNum } from '../constants'
@@ -42,20 +42,12 @@ export type BotProps = {
   themeId?: string
   initialPrompts?: PromptType[]
   apiHost: string
+  welcomeMessage?: string
   navPromptsTitle?: string
   promptPlaceholder?: string
   suggestedPromptsTitle?: string
   chatflowConfig?: Record<string, unknown>
-  welcomeMessage?: string
-  botMessage?: BotMessageTheme
-  userMessage?: UserMessageTheme
-  poweredByTextColor?: string
-  badgeBackgroundColor?: string
-  bubbleBackgroundColor?: string
-  bubbleTextColor?: string
-  title?: string
-  titleAvatarSrc?: string
-  isFullPage?: boolean
+  theme?: Partial<Theme>
 }
 
 export const Bot = (props: BotProps & { class?: string }) => {
@@ -69,11 +61,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc] = createSignal({})
 
-  const { theme, setThemeFromKey } = useTheme()
-  const { backgroundColor, backgroundImageUrl, textColor } = theme()
+  const { theme, initTheme } = useTheme()
 
   const [chatWindowParent] = createAutoAnimate(/* optional config */)
-  const [contextualContainerParent] = createAutoAnimate(/* optional config */)
 
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
 
@@ -168,7 +158,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   }
 
   onMount(() => {
-    setThemeFromKey(props.themeId)
+    initTheme(props.themeId, props.theme)
 
     if (question()) {
       fetchSuggestedPrompts()
@@ -189,9 +179,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
         props.class
       }
       style={{
-        color: textColor,
-        'background-color': backgroundColor,
-        background: `url(${backgroundImageUrl})`,
+        color: theme().textColor,
+        'background-color': theme().backgroundColor,
+        background: `url(${theme().backgroundImageUrl})`,
         'background-size': 'cover',
       }}
     >

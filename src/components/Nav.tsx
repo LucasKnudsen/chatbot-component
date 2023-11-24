@@ -10,13 +10,12 @@ type NavProps = {
 
 export const Nav = (props: NavProps) => {
   const { theme } = useTheme()
-  const { primaryColor, promptBackground } = theme()
 
   return (
     <div
       class='flex flex-wrap items-center mx-5 rounded-full px-6 py-2 mt-5'
       style={{
-        background: promptBackground,
+        background: theme().promptBackground,
       }}
     >
       <img src={logo} class='h-8' />
@@ -26,7 +25,7 @@ export const Nav = (props: NavProps) => {
         FR
         <span
           style={{
-            color: primaryColor,
+            color: theme().primaryColor,
           }}
         >
           AI
@@ -36,7 +35,7 @@ export const Nav = (props: NavProps) => {
 
       <div class='flex-1' />
       <DeleteButton
-        sendButtonColor={primaryColor}
+        sendButtonColor={theme().primaryColor}
         type='button'
         isDisabled={!props.question}
         on:click={props.onClear}

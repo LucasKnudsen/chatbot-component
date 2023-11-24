@@ -10,9 +10,7 @@ export type Theme = {
   borderColor: string
   textInputTextColor: string
   textInputBackgroundColor: string
-
   surfaceColor?: string
-
   promptBackground?: string
   promptBackgroundHovered?: string
 }
@@ -27,10 +25,8 @@ export const defaultTheme: Theme = {
   borderColor: 'rgba(147, 147, 147, 0.25)',
   textInputTextColor: 'rgba(128, 114, 166, 1)',
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
-
   surfaceColor:
     'linear-gradient(0deg, #C2C2C2, #C2C2C2), linear-gradient(0deg, rgba(215, 214, 227, 0.5), rgba(215, 214, 227, 0.5));',
-
   promptBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.08) 0%, rgba(218, 145, 221, 0.08) 100%)',
   promptBackgroundHovered:

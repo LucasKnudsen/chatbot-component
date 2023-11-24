@@ -2,7 +2,7 @@ import { useTheme } from '@/features/theme/hooks'
 
 export const TypingBubble = () => {
   const { theme } = useTheme()
-  const { primaryColor } = theme()
+  const primaryColor = theme().primaryColor
 
   return (
     <div class='flex items-center'>

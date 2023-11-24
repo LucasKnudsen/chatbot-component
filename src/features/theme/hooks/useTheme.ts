@@ -4,20 +4,19 @@ import { Theme, defaultTheme, themes } from '..'
 const [theme, setTheme] = createSignal<Theme>(defaultTheme)
 
 export const useTheme = () => {
-  const setThemeFromKey = (themeKey?: string) => {
+  const initTheme = (themeKey?: string, themeOverrides: Partial<Theme> = {}) => {
     if (!themeKey) return setTheme(defaultTheme)
 
-    const theme = themes[themeKey]
+    let theme = themes[themeKey] || defaultTheme
 
-    if (theme) {
-      console.log(theme)
+    console.log(themeOverrides)
 
-      setTheme(theme)
-    } else {
-      console.warn(`Theme ${themeKey} not found, using default theme`)
-      setTheme(defaultTheme)
-    }
+    theme = { ...theme, ...themeOverrides }
+
+    console.log(theme)
+
+    setTheme(theme)
   }
 
-  return { theme, setThemeFromKey }
+  return { theme, initTheme }
 }

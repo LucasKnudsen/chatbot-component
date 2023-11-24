@@ -15,7 +15,6 @@ export const Expandable = (props: Props) => {
   const [parent] = createAutoAnimate()
 
   const { theme } = useTheme()
-  const { primaryColor, promptBackground } = theme()
 
   const toggle = () => {
     setOpen((prev) => {
@@ -30,18 +29,18 @@ export const Expandable = (props: Props) => {
       ref={parent}
       class={`border rounded-lg `}
       style={{
-        background: promptBackground,
+        background: theme().promptBackground,
       }}
     >
       <div class='flex p-6 cursor-pointer gap-x-6 items-center' onClick={toggle}>
-        <p class='font-medium text-sm underline' style={{ color: primaryColor }}>
+        <p class='font-medium text-sm underline' style={{ color: theme().primaryColor }}>
           {props.header}
         </p>
 
         <div
           class='flex rounded-full h-4 w-4 align-center justify-center'
           style={{
-            background: primaryColor,
+            background: theme().primaryColor,
           }}
         >
           <ChevronIcon

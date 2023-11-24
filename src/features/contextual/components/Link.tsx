@@ -11,7 +11,6 @@ export const Link = (props: Props) => {
   if (Array.isArray(props.link.value)) return null
 
   const { theme } = useTheme()
-  const { textColor } = theme()
 
   // TODO: Add onClick to open link in new tab
   // TODO: Add onHover to show description and link indication
@@ -24,7 +23,7 @@ export const Link = (props: Props) => {
         target='_blank'
         rel='noreferrer'
         style={{
-          color: textColor,
+          color: theme().textColor,
         }}
       >
         <div class='p-2'>

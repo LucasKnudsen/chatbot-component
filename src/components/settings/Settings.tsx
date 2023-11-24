@@ -21,7 +21,7 @@ export const Settings = (props: Props) => {
 
   const [animate] = createAutoAnimate({ duration: 100 })
   const { theme } = useTheme()
-  const { borderColor, primaryColorHovered } = theme()
+  const primaryColorHovered = theme().primaryColorHovered
 
   const toggleMenu = () => {
     setIsOpen(!isOpen())
@@ -80,7 +80,7 @@ export const Settings = (props: Props) => {
           <div
             class='absolute right-0 mt-2 w-fit border rounded-lg shadow-lg z-10 backdrop-blur-md bg-white/75'
             style={{
-              'border-color': borderColor,
+              'border-color': theme().borderColor,
               'min-width': props.minWidth || '200px',
             }}
           >

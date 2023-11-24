@@ -12,7 +12,7 @@ type HistoryListSectionProps = {
 
 export const HistoryListSection = (props: HistoryListSectionProps) => {
   const { theme } = useTheme()
-  const { textSecondary, textColor, primaryColorHovered } = theme()
+  const primaryColorHovered = theme().primaryColorHovered
 
   return (
     <>
@@ -24,7 +24,7 @@ export const HistoryListSection = (props: HistoryListSectionProps) => {
       `}
       </style>
       <Show when={props.history.length > 0}>
-        <div class='font-bold' style={{ color: textSecondary }}>
+        <div class='font-bold' style={{ color: theme().textSecondary }}>
           {props.title}
         </div>
 
@@ -36,7 +36,7 @@ export const HistoryListSection = (props: HistoryListSectionProps) => {
               <li
                 class='history-list-section-item my-2 cursor-pointer font-light rounded-[10px] p-2 '
                 style={{
-                  color: textColor,
+                  color: theme().textColor,
                   cursor: props.disabled ? 'not-allowed' : 'pointer',
                 }}
                 onClick={() => (props.disabled ? null : props.onSelect(h))}

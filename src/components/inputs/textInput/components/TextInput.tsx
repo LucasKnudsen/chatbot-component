@@ -17,7 +17,6 @@ export const TextInput = (props: Props) => {
   let inputRef: HTMLTextAreaElement | undefined
 
   const { theme } = useTheme()
-  const { textInputTextColor, textInputBackgroundColor, textSecondary } = theme()
 
   const handleInput = (inputValue: string) => setInputValue(inputValue)
 
@@ -48,8 +47,8 @@ export const TextInput = (props: Props) => {
       data-testid='input'
       style={{
         margin: 'auto',
-        'background-color': textInputBackgroundColor,
-        color: textInputTextColor,
+        'background-color': theme().textInputBackgroundColor,
+        color: theme().textInputTextColor,
       }}
       onKeyDown={submitWhenEnter}
     >
@@ -64,7 +63,7 @@ export const TextInput = (props: Props) => {
         />
       </div>
       <SendButton
-        sendButtonColor={textSecondary}
+        sendButtonColor={theme().textSecondary}
         type='button'
         isDisabled={props.disabled || inputValue() === ''}
         class='my-2 ml-2'
