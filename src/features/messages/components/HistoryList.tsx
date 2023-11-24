@@ -1,3 +1,4 @@
+import { useText } from '@/features/text'
 import { createMemo } from 'solid-js'
 import { HistoryListSection } from '.'
 import { Chat } from '../types'
@@ -9,6 +10,8 @@ type HistoryProps = {
 }
 
 export const History = (props: HistoryProps) => {
+  const { text } = useText()
+
   const todayStartOfDay = createMemo(() => {
     const date = new Date()
 
@@ -44,19 +47,19 @@ export const History = (props: HistoryProps) => {
   return (
     <>
       <HistoryListSection
-        title='TODAY'
+        title={text().today}
         history={todayChats()}
         onSelect={props.onSelect}
         disabled={!!props.disabled}
       />
       <HistoryListSection
-        title='YESTERDAY'
+        title={text().yesterday}
         history={yesterdayChats()}
         onSelect={props.onSelect}
         disabled={!!props.disabled}
       />
       <HistoryListSection
-        title='PREVIOUS'
+        title={text().previous}
         history={remainingChats()}
         onSelect={props.onSelect}
         disabled={!!props.disabled}

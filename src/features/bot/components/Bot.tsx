@@ -13,6 +13,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
 import { ContextualContainer } from '@/features/contextual'
+import { TextTemplate, useText } from '@/features/text'
 import { Theme } from '@/features/theme'
 import StyleSheet from '@/styles'
 import { Amplify } from 'aws-amplify'
@@ -38,25 +39,19 @@ export type PromptType =
       prompt: string
     }
 
-export type BotText = {
-  welcomeMessage?: string
-  promptPlaceholder?: string
-  suggestedPromptsTitle?: string
-}
-
 export type BotProps = {
   chatflowid: string
+  apiHost: string
+  defaultLanguage?: string
   themeId?: string
   initialPrompts?: PromptType[]
-  apiHost: string
-  text?: BotText
+  text?: Partial<TextTemplate>
   chatflowConfig?: Record<string, unknown>
   theme?: Partial<Theme>
 }
 
 export const Bot = (props: BotProps & { class?: string }) => {
-  const welcomeMessage = props.text?.welcomeMessage ?? 'Hey there again. How can I help you today?'
-
+  console.log(props.defaultLanguage)
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
   const [sidebarOpen, setSidebarOpen] = createSignal(false)
@@ -66,6 +61,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupSrc] = createSignal({})
 
   const { theme, initTheme } = useTheme()
+  const { text, initText } = useText()
 
   const [chatWindowParent] = createAutoAnimate(/* optional config */)
 
@@ -163,6 +159,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   onMount(() => {
     initTheme(props.themeId, props.theme)
+    initText(props.defaultLanguage, props.text)
 
     if (question()) {
       fetchSuggestedPrompts()
@@ -210,7 +207,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                 <div class='flex flex-1'>
                   <div class='flex flex-1 items-end '>
                     <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
-                      {welcomeMessage}
+                      {text().welcomeMessage}
                     </h1>
                   </div>
 
@@ -234,7 +231,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
                 disabled={loading()}
                 defaultValue={userInput()}
                 onSubmit={handleSubmit}
-                placeholder={props.text?.promptPlaceholder ?? 'Ask me anything...'}
+                placeholder={text().inputPlaceholder}
               />
             </div>
 

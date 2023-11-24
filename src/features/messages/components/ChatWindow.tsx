@@ -1,6 +1,7 @@
 import { Settings, TypingBubble } from '@/components'
 import { Divider } from '@/components/Divider'
 import { MessageIcon } from '@/components/icons'
+import { useText } from '@/features/text'
 import { Marked } from '@ts-stack/markdown'
 import { Show, createEffect, on } from 'solid-js'
 import { scrollChatWindowToBottom } from '..'
@@ -13,6 +14,8 @@ type ChatWindowProps = {
 
 export const ChatWindow = (props: ChatWindowProps) => {
   let botMessageEl: HTMLDivElement | undefined
+
+  const { text } = useText()
 
   createEffect(() => {
     if (botMessageEl) {
@@ -47,13 +50,13 @@ export const ChatWindow = (props: ChatWindowProps) => {
         <Settings
           menuItems={[
             {
-              label: 'Copy text',
+              label: text().copyText,
               onClick: onCopy,
             },
             ...(Boolean(navigator.share) // Check if share is supported
               ? [
                   {
-                    label: 'Share',
+                    label: text().share,
                     onClick: onShare,
                   },
                 ]
