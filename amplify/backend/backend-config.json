@@ -35,6 +35,14 @@
           ],
           "category": "function",
           "resourceName": "flowiseBroadcast"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "detectLanguage"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -69,6 +77,11 @@
   },
   "function": {
     "broadcastResolver": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "detectLanguage": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -115,6 +128,22 @@
         {
           "category": "function",
           "resourceName": "broadcastResolver"
+        }
+      ]
+    },
+    "AMPLIFY_function_detectLanguage_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "detectLanguage"
+        }
+      ]
+    },
+    "AMPLIFY_function_detectLanguage_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "detectLanguage"
         }
       ]
     },

@@ -24,6 +24,10 @@
         "broadcastResolver": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
           "s3Key": "amplify-builds/broadcastResolver-58707663655a3952564b-build.zip"
+        },
+        "detectLanguage": {
+          "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
+          "s3Key": "amplify-builds/detectLanguage-5378504b544c367a4170-build.zip"
         }
       },
       "api": {

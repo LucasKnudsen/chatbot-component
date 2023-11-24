@@ -2,13 +2,7 @@ import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 
 import { TextInput } from '@/components/inputs/textInput'
-import {
-  SYSTEM_DEFAULT_LANGUAGE,
-  Sidebar,
-  currentLanguage,
-  useChatId,
-  useLanguage,
-} from '@/features/bot'
+import { SYSTEM_DEFAULT_LANGUAGE, Sidebar, useChatId, useLanguage } from '@/features/bot'
 import { ChatWindow, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
@@ -23,7 +17,7 @@ import { Language, TextTemplate, useText } from '@/features/text'
 import { Theme } from '@/features/theme'
 import StyleSheet from '@/styles'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
-import { Amplify } from 'aws-amplify'
+import { API, Amplify } from 'aws-amplify'
 import { Show, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
 import { sidebarPaddingNum } from '../constants'
 import { ResourcesSidebar } from './ResourcesSidebar'
@@ -310,20 +304,26 @@ export const Bot = (props: BotProps & { class?: string }) => {
 const TestButton = (props: { language?: string }) => {
   const onTest = async () => {
     console.time('translation')
-    // TODO: Make a
 
     try {
+      // TODO: Make a
+      const answer = (await API.post('digitaltwinRest', '/detect-language', {
+        body: 'Previous question asked is here..',
+      })) as { LanguageCode: string; Score: number }
+
+      console.log('Answer detection: ', answer)
+
       const translation = await Predictions.convert({
         translateText: {
           source: {
-            text: 'Hello world',
+            text: 'Lokationer. Kontorer i Danmark, Sydafrika, Indien, Italien og Thailand | E-mailadresse. kontakt@lionbrain.ai',
             language: props.language || SYSTEM_DEFAULT_LANGUAGE, // either client override or default
           },
-          targetLanguage: currentLanguage(),
+          targetLanguage: answer.LanguageCode,
         },
       })
 
-      console.log(translation)
+      console.log('Translation: ', translation)
     } catch (error) {
       console.log(error)
     }
