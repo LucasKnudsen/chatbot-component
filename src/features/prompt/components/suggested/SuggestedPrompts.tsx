@@ -1,5 +1,4 @@
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
-import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Accessor, For, Show } from 'solid-js'
 import { Prompt } from './Prompt'
@@ -13,25 +12,10 @@ type Props = {
 }
 
 export const SuggestedPrompts = (props: Props) => {
-  const { theme } = useTheme()
-  const { primaryColor } = theme()
   const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
 
   return (
     <>
-      <style>
-        {`
-            .custom-scrollbar::-webkit-scrollbar {
-                width: 2px;
-                height: 2px;
-            }
-            .custom-scrollbar::-webkit-scrollbar-thumb {
-                background-color: ${primaryColor};
-                border-radius: 20px;
-            }
-        `}
-      </style>
-
       <div class='pb-8' ref={suggestedPromptsParent}>
         <Show when={props.isFetching?.() || props.suggestedPrompts().length > 0}>
           <div class='flex items-center  gap-y-1 gap-x-4 '>
