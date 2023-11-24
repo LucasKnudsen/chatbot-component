@@ -63,10 +63,7 @@ export const Bubble = (props: BubbleProps) => {
           <Bot
             initialPrompts={props.initialPrompts}
             themeId={props.themeId}
-            navPromptsTitle={props.navPromptsTitle}
-            promptPlaceholder={props.promptPlaceholder}
-            suggestedPromptsTitle={props.suggestedPromptsTitle}
-            welcomeMessage={props.welcomeMessage}
+            text={props.text}
             chatflowid={props.chatflowid}
             chatflowConfig={props.chatflowConfig}
             apiHost={props.apiHost}
