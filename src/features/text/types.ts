@@ -1,3 +1,3 @@
-import { en } from './templates'
+import { defaultText } from './templates'
 
-export type TextTemplate = typeof en
+export type TextTemplate = typeof defaultText

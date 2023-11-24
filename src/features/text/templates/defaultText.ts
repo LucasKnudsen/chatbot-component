@@ -1,4 +1,4 @@
-export const en = {
+export const defaultText = {
   welcomeMessage: 'Introducing a new website experience',
   inputPlaceholder: 'Ask me anything...',
   suggestedPromptsTitle: 'SUGGESTIONS',

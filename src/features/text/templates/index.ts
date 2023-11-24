@@ -1,2 +1,2 @@
-export * from './da'
-export * from './en'
+export * from './defaultText'
+export * from './locales/da'
