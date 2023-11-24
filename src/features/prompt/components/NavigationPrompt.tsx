@@ -10,17 +10,18 @@ type PromptProps = {
 
 export const NavigationPrompt = (props: PromptProps) => {
   const { theme } = useTheme()
-  const { borderColor, promptBackground, promptBackgroundHovered, textColor } = theme()
+  const surfaceHoveredBackground = theme().surfaceHoveredBackground
+  const surfaceBackground = theme().surfaceBackground
 
   return (
     <>
       <style>
         {`
         .navigation-prompt:hover {
-          background: ${promptBackgroundHovered};
+          background: ${surfaceHoveredBackground};
         }
         .navigation-prompt {
-          background: ${promptBackground};
+          background: ${surfaceBackground};
         }
       `}
       </style>
@@ -29,8 +30,8 @@ export const NavigationPrompt = (props: PromptProps) => {
         style={{
           cursor: props.disabled ? 'not-allowed' : 'pointer',
 
-          border: `1px solid ${borderColor}`,
-          color: textColor,
+          border: `1px solid ${theme().borderColor}`,
+          color: theme().textColor,
         }}
         onClick={() =>
           props.disabled

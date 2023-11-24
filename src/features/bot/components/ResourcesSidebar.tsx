@@ -15,7 +15,7 @@ export const ResourcesSidebar = (props: ResourcesSidebarProps) => {
     <div
       class='flex relative transition-all'
       style={{
-        width: props.open ? sidebarInnerWidthNum + sidebarPaddingNum + 'px' : '0',
+        width: props.open ? sidebarInnerWidthNum + sidebarPaddingNum + 1 + 'px' : '0',
       }}
     >
       <Divider vertical margin={0} />

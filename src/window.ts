@@ -1,14 +1,6 @@
-import { Theme } from './features/theme'
+import { BotProps } from '.'
 
 /* eslint-disable solid/reactivity */
-type BotProps = {
-  chatflowid: string
-  apiHost?: string
-  themeId: string
-  theme?: Theme
-  text?: Record<string, string>
-  defaultLang: string
-}
 
 export const initFull = (props: BotProps & { id?: string }) => {
   const fullElement = props.id

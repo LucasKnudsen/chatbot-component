@@ -20,8 +20,7 @@ export const Sidebar = (props: SidebarProps) => {
   return (
     <div
       class={
-        'absolute h-full top-0 right-0 transition-all backdrop-blur-md bg-white/75 border-l ' +
-        props.class
+        'absolute h-full top-0 right-0 transition-all backdrop-blur-md bg-white/75 ' + props.class
       }
       style={{
         width: props.open ? openWidth : closedWidth,

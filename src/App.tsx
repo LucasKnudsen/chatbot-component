@@ -43,7 +43,13 @@ function App() {
 
   return (
     <>
-      <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} />
+      <Full
+        {...chatflows.fraia_test}
+        initialPrompts={initialPrompts}
+        theme={{
+          surfaceBackground: 'green',
+        }}
+      />
       {/* <Bubble {...chatflows.fraia_test} initialPrompts={initialPrompts} /> */}
     </>
   )

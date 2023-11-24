@@ -1,13 +1,13 @@
 import { createSignal, Show, splitProps } from 'solid-js'
 import styles from '../../../index.css?inline'
 import { Bot, BotProps } from '../../bot/components/Bot'
-import { BubbleParams } from '../types'
+
 import { BubbleButton } from './BubbleButton'
 
 const defaultButtonColor = '#3B81F6'
 const defaultIconColor = 'white'
 
-export type BubbleProps = BotProps & BubbleParams
+export type BubbleProps = BotProps
 
 export const Bubble = (props: BubbleProps) => {
   const [bubbleProps] = splitProps(props, ['theme'])
@@ -32,7 +32,7 @@ export const Bubble = (props: BubbleProps) => {
     <>
       <style>{styles}</style>
       <BubbleButton
-        {...bubbleProps.theme?.button}
+        // {...bubbleProps.theme?.button}
         toggleBot={toggleBot}
         isBotOpened={isBotOpened()}
       />
@@ -66,18 +66,11 @@ export const Bubble = (props: BubbleProps) => {
             navPromptsTitle={props.navPromptsTitle}
             promptPlaceholder={props.promptPlaceholder}
             suggestedPromptsTitle={props.suggestedPromptsTitle}
-            badgeBackgroundColor={bubbleProps.theme?.chatWindow?.backgroundColor}
-            bubbleBackgroundColor={bubbleProps.theme?.button?.backgroundColor ?? defaultButtonColor}
-            bubbleTextColor={bubbleProps.theme?.button?.iconColor ?? defaultIconColor}
-            title={bubbleProps.theme?.chatWindow?.title}
-            titleAvatarSrc={bubbleProps.theme?.chatWindow?.titleAvatarSrc}
-            welcomeMessage={bubbleProps.theme?.chatWindow?.welcomeMessage}
-            poweredByTextColor={bubbleProps.theme?.chatWindow?.poweredByTextColor}
-            botMessage={bubbleProps.theme?.chatWindow?.botMessage}
-            userMessage={bubbleProps.theme?.chatWindow?.userMessage}
+            welcomeMessage={props.welcomeMessage}
             chatflowid={props.chatflowid}
             chatflowConfig={props.chatflowConfig}
             apiHost={props.apiHost}
+            theme={props.theme}
           />
         </Show>
       </div>

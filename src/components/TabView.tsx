@@ -13,7 +13,6 @@ type TabViewProps = {
 export const TabView: (props: TabViewProps) => JSXElement = (props) => {
   const [selectedTab, setSelectedTab] = createSignal(0)
   const { theme } = useTheme()
-  const { primaryColor, textSecondary, borderColor, textColor } = theme()
 
   return (
     <div>
@@ -25,8 +24,9 @@ export const TabView: (props: TabViewProps) => JSXElement = (props) => {
               style={{
                 'padding-bottom': selectedTab() === index() ? '0px' : '1px',
                 'border-bottom-width': selectedTab() === index() ? '2px' : '1px',
-                'border-color': selectedTab() === index() ? primaryColor : borderColor,
-                color: selectedTab() === index() ? textColor : textSecondary,
+                'border-color':
+                  selectedTab() === index() ? theme().primaryColor : theme().borderColor,
+                color: selectedTab() === index() ? theme().textColor : theme().textSecondary,
               }}
             >
               <button

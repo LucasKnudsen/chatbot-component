@@ -2,7 +2,7 @@ import background2 from '@/assets/background-2.png'
 
 export type Theme = {
   primaryColor: string
-  primaryColorHovered?: string
+  primaryAccent: string
   textColor: string
   textSecondary: string
   backgroundColor: string
@@ -10,16 +10,13 @@ export type Theme = {
   borderColor: string
   textInputTextColor: string
   textInputBackgroundColor: string
-
-  surfaceColor?: string
-
-  promptBackground?: string
-  promptBackgroundHovered?: string
+  surfaceBackground: string
+  surfaceHoveredBackground: string
 }
 
 export const defaultTheme: Theme = {
   primaryColor: 'rgba(91, 147, 255, 1)',
-  primaryColorHovered: 'rgba(91, 147, 255, 0.2)',
+  primaryAccent: 'rgba(91, 147, 255, 0.2)',
   textColor: 'rgba(35, 24, 67, 1)',
   textSecondary: 'rgba(147, 147, 147, 1)',
   backgroundColor: 'transparent',
@@ -27,18 +24,15 @@ export const defaultTheme: Theme = {
   borderColor: 'rgba(147, 147, 147, 0.25)',
   textInputTextColor: 'rgba(128, 114, 166, 1)',
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
-
-  surfaceColor:
-    'linear-gradient(0deg, #C2C2C2, #C2C2C2), linear-gradient(0deg, rgba(215, 214, 227, 0.5), rgba(215, 214, 227, 0.5));',
-
-  promptBackground:
+  surfaceBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.08) 0%, rgba(218, 145, 221, 0.08) 100%)',
-  promptBackgroundHovered:
+  surfaceHoveredBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.25) 0%, rgba(218, 145, 221, 0.25) 100%)',
 }
 
-export const ugly: Theme = {
+const ugly: Theme = {
   primaryColor: 'red',
+  primaryAccent: 'orange',
   textColor: 'white',
   textSecondary: 'black',
   backgroundColor: 'green',
@@ -46,8 +40,8 @@ export const ugly: Theme = {
   borderColor: 'blue',
   textInputTextColor: 'purple',
   textInputBackgroundColor: 'yellow',
-  promptBackgroundHovered: 'pink',
-  promptBackground: 'brown',
+  surfaceHoveredBackground: 'pink',
+  surfaceBackground: 'brown',
 }
 
 export const themes: Record<string, Theme> = {
