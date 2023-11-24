@@ -5,15 +5,13 @@ const [theme, setTheme] = createSignal<Theme>(defaultTheme)
 
 export const useTheme = () => {
   const initTheme = (themeKey?: string, themeOverrides: Partial<Theme> = {}) => {
-    if (!themeKey) return setTheme(defaultTheme)
+    let theme = defaultTheme
 
-    let theme = themes[themeKey] || defaultTheme
-
-    console.log(themeOverrides)
+    if (themeKey) {
+      theme = themes[themeKey] || defaultTheme
+    }
 
     theme = { ...theme, ...themeOverrides }
-
-    console.log(theme)
 
     setTheme(theme)
   }

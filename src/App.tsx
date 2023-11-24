@@ -46,7 +46,6 @@ function App() {
       <Full
         {...chatflows.fraia_test}
         initialPrompts={initialPrompts}
-        themeId='ugly'
         theme={{
           surfaceBackground: 'green',
         }}

@@ -30,7 +30,7 @@ export const defaultTheme: Theme = {
     'linear-gradient(90deg, rgba(91, 147, 255, 0.25) 0%, rgba(218, 145, 221, 0.25) 100%)',
 }
 
-export const ugly: Theme = {
+const ugly: Theme = {
   primaryColor: 'red',
   primaryAccent: 'orange',
   textColor: 'white',
