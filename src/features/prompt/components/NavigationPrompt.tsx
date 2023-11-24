@@ -10,18 +10,18 @@ type PromptProps = {
 
 export const NavigationPrompt = (props: PromptProps) => {
   const { theme } = useTheme()
-  const promptBackgroundHovered = theme().promptBackgroundHovered
-  const promptBackground = theme().promptBackground
+  const surfaceHoveredBackground = theme().surfaceHoveredBackground
+  const surfaceBackground = theme().surfaceBackground
 
   return (
     <>
       <style>
         {`
         .navigation-prompt:hover {
-          background: ${promptBackgroundHovered};
+          background: ${surfaceHoveredBackground};
         }
         .navigation-prompt {
-          background: ${promptBackground};
+          background: ${surfaceBackground};
         }
       `}
       </style>

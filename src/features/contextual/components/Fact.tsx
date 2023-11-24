@@ -12,7 +12,7 @@ export const Fact = (props: Props) => {
     <div
       class='p-2 mb-2 text-sm'
       style={{
-        background: theme().primaryColorHovered,
+        background: theme().primaryAccent,
         'border-left': `3px solid ${theme().primaryColor}`,
         color: theme().textColor,
       }}

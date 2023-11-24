@@ -12,14 +12,14 @@ type HistoryListSectionProps = {
 
 export const HistoryListSection = (props: HistoryListSectionProps) => {
   const { theme } = useTheme()
-  const primaryColorHovered = theme().primaryColorHovered
+  const primaryAccent = theme().primaryAccent
 
   return (
     <>
       <style>
         {`
         .history-list-section-item:hover {
-          background: ${primaryColorHovered};
+          background: ${primaryAccent};
         }
       `}
       </style>

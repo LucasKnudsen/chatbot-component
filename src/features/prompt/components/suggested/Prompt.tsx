@@ -14,7 +14,7 @@ export const Prompt = (props: PromptProps) => {
   const [firstPart, secondPart] = splitTextAtNearestWhitespace(props.prompt)
 
   const { theme } = useTheme()
-  const { primaryColor, borderColor, promptBackground, promptBackgroundHovered, textColor } =
+  const { primaryColor, borderColor, surfaceBackground, surfaceHoveredBackground, textColor } =
     theme()
 
   return (
@@ -22,10 +22,10 @@ export const Prompt = (props: PromptProps) => {
       <style>
         {`
         .prompt:hover {
-          background: ${promptBackgroundHovered};
+          background: ${surfaceHoveredBackground};
         }
         .prompt {
-          background: ${promptBackground};
+          background: ${surfaceBackground};
         }
       `}
       </style>

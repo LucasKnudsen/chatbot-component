@@ -29,7 +29,7 @@ export const Expandable = (props: Props) => {
       ref={parent}
       class={`border rounded-lg `}
       style={{
-        background: theme().promptBackground,
+        background: theme().surfaceBackground,
       }}
     >
       <div class='flex p-6 cursor-pointer gap-x-6 items-center' onClick={toggle}>

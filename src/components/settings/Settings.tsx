@@ -21,7 +21,7 @@ export const Settings = (props: Props) => {
 
   const [animate] = createAutoAnimate({ duration: 100 })
   const { theme } = useTheme()
-  const primaryColorHovered = theme().primaryColorHovered
+  const primaryAccent = theme().primaryAccent
 
   const toggleMenu = () => {
     setIsOpen(!isOpen())
@@ -64,7 +64,7 @@ export const Settings = (props: Props) => {
       <style>
         {`
         .settings-menu-item:hover {
-          background: ${primaryColorHovered};
+          background: ${primaryAccent};
         }
       `}
       </style>

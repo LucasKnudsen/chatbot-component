@@ -48,7 +48,7 @@ function App() {
         initialPrompts={initialPrompts}
         themeId='ugly'
         theme={{
-          promptBackground: 'green',
+          surfaceBackground: 'green',
         }}
       />
       {/* <Bubble {...chatflows.fraia_test} initialPrompts={initialPrompts} /> */}
