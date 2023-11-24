@@ -15,6 +15,7 @@ export const useQuestion = (chatflowid: string) => {
 
   const [question, setQuestion] = createSignal<Chat | null>(null)
   const [history, setHistory] = createSignal<Chat[]>(getStoredHistory())
+  const [questionLanguage, setQuestionLanguage] = createSignal<string | null>(null)
 
   function getStoredHistory() {
     const data = localStorage.getItem(storageKey)

@@ -2,7 +2,13 @@ import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 
 import { TextInput } from '@/components/inputs/textInput'
-import { SYSTEM_DEFAULT_LANGUAGE, Sidebar, useChatId, useLanguage } from '@/features/bot'
+import {
+  SYSTEM_DEFAULT_LANGUAGE,
+  Sidebar,
+  currentLanguage,
+  useChatId,
+  useLanguage,
+} from '@/features/bot'
 import { ChatWindow, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
@@ -13,7 +19,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
 import { ContextualContainer } from '@/features/contextual'
-import { Language, TextTemplate, useText } from '@/features/text'
+import { Language, TextTemplate, detectLanguage, useText } from '@/features/text'
 import { Theme } from '@/features/theme'
 import StyleSheet from '@/styles'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
@@ -132,15 +138,18 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
-    const result = await sendMessageQuery({
-      chatflowid: props.chatflowid,
-      apiHost: props.apiHost,
-      body,
-    })
+    const [messageResult, detectLanguageResult] = await Promise.all([
+      sendMessageQuery({
+        chatflowid: props.chatflowid,
+        apiHost: props.apiHost,
+        body,
+      }),
+      detectLanguage(value, true),
+    ])
 
-    if (result.data) {
+    if (messageResult.data) {
       if (!isChatFlowAvailableToStream()) {
-        let text = extractChatbotResponse(result.data)
+        let text = extractChatbotResponse(messageResult.data)
 
         updateAnswer(text)
       }
@@ -151,8 +160,9 @@ export const Bot = (props: BotProps & { class?: string }) => {
       setUserInput('')
     }
 
-    if (result.error) {
-      const message = result.error?.message ?? 'Something went wrong. Please try again later.'
+    if (messageResult.error) {
+      const message =
+        messageResult.error?.message ?? 'Something went wrong. Please try again later.'
 
       updateAnswer(message)
 
@@ -306,12 +316,14 @@ const TestButton = (props: { language?: string }) => {
     console.time('translation')
 
     try {
-      // TODO: Make a
       const answer = (await API.post('digitaltwinRest', '/detect-language', {
         body: 'Previous question asked is here..',
       })) as { LanguageCode: string; Score: number }
 
       console.log('Answer detection: ', answer)
+
+      // If LanguageCode is not currentLanguage, translate!
+      if (answer.LanguageCode.toLowerCase() === currentLanguage().toLowerCase()) return
 
       const translation = await Predictions.convert({
         translateText: {

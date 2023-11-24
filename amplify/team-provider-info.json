@@ -27,7 +27,7 @@
         },
         "detectLanguage": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/detectLanguage-5378504b544c367a4170-build.zip"
+          "s3Key": "amplify-builds/detectLanguage-49714e39537263527875-build.zip"
         }
       },
       "api": {

@@ -28,7 +28,10 @@ export async function handler(
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify(bestLanguage),
+      body: JSON.stringify({
+        languageCode: bestLanguage.LanguageCode,
+        score: bestLanguage.Score,
+      }),
     }
   } catch (error) {
     console.log(error)
