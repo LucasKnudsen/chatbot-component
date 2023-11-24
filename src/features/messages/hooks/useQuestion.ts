@@ -6,16 +6,18 @@ import {
   SourceFact,
   SourceResource,
 } from '@/features/contextual'
-import uniqBy from 'lodash/uniqBy'
+import { translate } from '@/features/text'
 import { createEffect, createMemo, createSignal, onMount } from 'solid-js'
 import { Chat } from '../types'
 
-export const useQuestion = (chatflowid: string) => {
+type ExtendedSourceFact = SourceFact & { source: string }
+type ExtendedSourceResource = SourceResource & { source: string }
+
+export const useQuestion = (chatflowid: string, clientLanguage?: string) => {
   const storageKey = `${chatflowid}_QUESTIONS`
 
   const [question, setQuestion] = createSignal<Chat | null>(null)
   const [history, setHistory] = createSignal<Chat[]>(getStoredHistory())
-  const [questionLanguage, setQuestionLanguage] = createSignal<string | null>(null)
 
   function getStoredHistory() {
     const data = localStorage.getItem(storageKey)
@@ -95,37 +97,47 @@ export const useQuestion = (chatflowid: string) => {
     localStorage.removeItem(storageKey)
   }
 
-  const handleFacts = (source: string, facts: SourceFact[]) => {
+  const handleFacts = async (facts: ExtendedSourceFact[]) => {
     const oldQ = question()
 
     if (oldQ === null) return
 
-    const factElements: ContextualElement[] = facts.map((f) => ({
+    let factElements: ContextualElement[] = facts.map((f) => ({
       id: f.id,
-      source,
+      source: f.source,
       type: ContextualElementType.FACT,
       value: f.value,
       header: f.name,
     }))
 
-    const allFacts = [...oldQ.resources.fact, ...factElements]
+    factElements = await Promise.all(
+      factElements.map(async (f) => {
+        const encodedText = `${f.header} | ${f.value}`
+        const translatedText = await translate(encodedText, clientLanguage)
 
-    const uniqFactElements = uniqBy(allFacts, 'id')
+        const [header, value] = translatedText.split('|')
+
+        return {
+          ...f,
+          value,
+          header,
+        }
+      })
+    )
 
     const updatedQ: Chat = {
       ...oldQ,
       resources: {
         ...oldQ.resources,
-        fact: uniqFactElements,
+        fact: factElements,
       },
     }
 
     setQuestion(updatedQ)
-
     updateHistory(updatedQ)
   }
 
-  const handleLinkedResources = (source: string, linkedResources: SourceResource[]) => {
+  const handleLinkedResources = async (linkedResources: ExtendedSourceResource[]) => {
     const oldQ = question()
 
     if (oldQ === null) return
@@ -142,7 +154,7 @@ export const useQuestion = (chatflowid: string) => {
         value: link,
         description,
         type: type as ContextualElementType,
-        source,
+        source: resource.source,
       })
 
       return {
@@ -161,16 +173,35 @@ export const useQuestion = (chatflowid: string) => {
     updateHistory(updatedQ)
   }
 
-  const handleSourceDocuments = (documents: SourceDocument[]) => {
+  const handleSourceDocuments = async (documents: SourceDocument[]) => {
     if (!documents) return
     if (documents.length === 0) return
 
-    documents.forEach((doc) => {
-      const { facts, linked_resources } = doc.metadata
+    const uniqueFacts: ExtendedSourceFact[] = []
+    const uniqueResources: ExtendedSourceResource[] = []
 
-      handleFacts(doc.metadata.source, facts)
-      handleLinkedResources(doc.metadata.source, linked_resources)
+    documents.forEach((doc) => {
+      const { facts, linked_resources, source } = doc.metadata
+
+      facts.forEach((fact) => {
+        const existingFact = uniqueFacts.find((f) => f.id === fact.id)
+        if (!existingFact) {
+          uniqueFacts.push({ ...fact, source })
+        }
+      })
+
+      linked_resources.forEach((resource) => {
+        const existingResource = uniqueResources.find(
+          (r) => r.link === resource.link && r.type === resource.type
+        )
+        if (!existingResource) {
+          uniqueResources.push({ ...resource, source })
+        }
+      })
     })
+
+    handleLinkedResources(uniqueResources)
+    handleFacts(uniqueFacts)
   }
 
   onMount(() => {

@@ -40,6 +40,8 @@ export const ContextualContainer = (props: Props) => {
   //   }, 50)
   // }
 
+  console.log(links(), props.resources?.link)
+
   return (
     <div
       id='contextual-resources'

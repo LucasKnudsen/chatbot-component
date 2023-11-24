@@ -1,3 +1,4 @@
+import { currentLanguage } from '@/features/bot'
 import { extractChatbotResponse, scrollChatWindowToBottom } from '@/features/messages'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { createEffect, createSignal, on } from 'solid-js'
@@ -15,7 +16,7 @@ export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
 
     const body: IncomingInput = {
       question: `Based on our history so far, give me 2 short concise follow up prompts that would encourage me to proceed with the conversation. The questions need to be non-repetitive. 
-      Please provide the questions in a JSON array format like ["Question 1?", "Question 2?", "Question 3?"]. Do not say anything else, just send me back an array.
+      Please provide the questions in a JSON array format like ["Question 1?", "Question 2?", "Question 3?"]. You MUST understand and use the following language code as the language for the questions: "${currentLanguage()}". Do not say anything else, just send me back an array.
       `,
       history: [],
       // chatId: '123',
