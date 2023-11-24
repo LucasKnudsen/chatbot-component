@@ -1,7 +1,7 @@
 import linkIcon1 from '@/assets/link-icon-1.svg'
 import { Divider } from '@/components/Divider'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { For } from 'solid-js'
+import { For, createMemo } from 'solid-js'
 import { Resources } from '.'
 import { sidebarInnerWidthNum, sidebarPaddingNum } from '../bot/constants'
 import { useTheme } from '../theme/hooks'
@@ -10,11 +10,14 @@ import { Iframe } from './components/Iframe'
 import { Link } from './components/Link'
 
 type Props = {
-  resources: Resources
+  resources?: Resources
   class?: string
 }
 
 export const ContextualContainer = (props: Props) => {
+  const facts = createMemo(() => props.resources?.fact ?? [])
+  const links = createMemo(() => props.resources?.link ?? [])
+  const iframes = createMemo(() => props.resources?.iframe ?? [])
   const [parent] = createAutoAnimate()
 
   const { theme } = useTheme()
@@ -52,7 +55,7 @@ export const ContextualContainer = (props: Props) => {
       }}
     >
       <div class='flex-1 overflow-y-scroll'>
-        <For each={props.resources.fact}>{(element) => <Fact fact={element} />}</For>
+        <For each={facts()}>{(element) => <Fact fact={element} />}</For>
       </div>
 
       <div class='flex-1 overflow-hidden'>
@@ -69,8 +72,8 @@ export const ContextualContainer = (props: Props) => {
         <Divider margin={12} />
 
         <div class='flex flex-col h-full gap-4 flex-1 overflow-y-scroll'>
-          <For each={props.resources.link}>{(element) => <Link link={element} />}</For>
-          <For each={props.resources.iframe}>{(element) => <Iframe element={element} />}</For>
+          <For each={links()}>{(element) => <Link link={element} />}</For>
+          <For each={iframes()}>{(element) => <Iframe element={element} />}</For>
         </div>
       </div>
     </div>

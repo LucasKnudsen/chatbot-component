@@ -1,4 +1,3 @@
-import circleCloseRightIcon from '@/assets/circle-close-right-icon.svg'
 import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 
@@ -14,11 +13,11 @@ import { SuggestedPrompts, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
-import { Divider } from '@/components/Divider'
 import { ContextualContainer } from '@/features/contextual'
 import { Amplify } from 'aws-amplify'
 import { Show, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
 import { sidebarPaddingNum } from '../constants'
+import { ResourcesSidebar } from './ResourcesSidebar'
 import { SidebarTabView } from './SidebarTabView'
 
 Amplify.configure(awsconfig)
@@ -198,7 +197,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     >
       <Nav question={question()} onClear={clear} />
 
-      <div class='relative flex flex-1 px-10 overflow-hidden'>
+      <div class='relative flex flex-1 px-16 overflow-hidden'>
         {/* Main Container */}
         <div
           class='flex flex-col flex-1 text-base overflow-hidden pt-6'
@@ -252,21 +251,12 @@ export const Bot = (props: BotProps & { class?: string }) => {
           />
         </div>
 
-        <div class='flex relative' ref={contextualContainerParent}>
-          <Show when={resourcesOpen()}>
-            <Divider vertical margin={0} />
-
-            <ContextualContainer class='py-6' resources={question()!.resources} />
-
-            <div
-              class='absolute cursor-pointer'
-              style={{ left: '-10px', opacity: resourcesOpen() ? '1' : '0' }}
-              onClick={() => setResourcesToggled(!resourcesToggled())}
-            >
-              <img class='transition-all inline-block' src={circleCloseRightIcon} width={20} />
-            </div>
-          </Show>
-        </div>
+        <ResourcesSidebar
+          open={resourcesOpen()}
+          toggle={() => setResourcesToggled(!resourcesToggled())}
+        >
+          <ContextualContainer class='py-6' resources={question()?.resources} />
+        </ResourcesSidebar>
 
         <Show when={question()}>
           {/* Sidebar */}
