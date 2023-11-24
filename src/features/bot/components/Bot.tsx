@@ -37,21 +37,24 @@ export type PromptType =
       prompt: string
     }
 
+export type BotText = {
+  welcomeMessage?: string
+  promptPlaceholder?: string
+  suggestedPromptsTitle?: string
+}
+
 export type BotProps = {
   chatflowid: string
   themeId?: string
   initialPrompts?: PromptType[]
   apiHost: string
-  welcomeMessage?: string
-  navPromptsTitle?: string
-  promptPlaceholder?: string
-  suggestedPromptsTitle?: string
+  text?: BotText
   chatflowConfig?: Record<string, unknown>
   theme?: Partial<Theme>
 }
 
 export const Bot = (props: BotProps & { class?: string }) => {
-  const welcomeMessage = props.welcomeMessage ?? 'Hey there again. How can I help you today?'
+  const welcomeMessage = props.text?.welcomeMessage ?? 'Hey there again. How can I help you today?'
 
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
@@ -227,7 +230,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
               disabled={loading()}
               defaultValue={userInput()}
               onSubmit={handleSubmit}
-              placeholder={props.promptPlaceholder ?? 'Ask me anything...'}
+              placeholder={props.text?.promptPlaceholder ?? 'Ask me anything...'}
             />
           </div>
 
@@ -236,7 +239,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
             handleSubmit={handleSubmit}
             suggestedPrompts={suggestedPrompts}
             isFetching={isFetchingSuggestedPrompts}
-            suggestedPromptsTitle={props.suggestedPromptsTitle}
+            suggestedPromptsTitle={props.text?.suggestedPromptsTitle}
             loading={loading()}
           />
         </div>

@@ -3,9 +3,6 @@ import { Bot, BotProps } from '@/features/bot/components/Bot'
 import { Show, createSignal, onCleanup, onMount } from 'solid-js'
 import styles from '../../../index.css?inline'
 
-const defaultButtonColor = '#3B81F6'
-const defaultIconColor = 'white'
-
 export type FullProps = BotProps
 
 export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
@@ -40,11 +37,8 @@ export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
         <div class='h-screen w-full'>
           <Bot
             initialPrompts={props.initialPrompts}
-            navPromptsTitle={props.navPromptsTitle}
-            promptPlaceholder={props.promptPlaceholder}
-            suggestedPromptsTitle={props.suggestedPromptsTitle}
             themeId={props.themeId}
-            welcomeMessage={props.welcomeMessage}
+            text={props.text}
             chatflowid={props.chatflowid}
             chatflowConfig={props.chatflowConfig}
             apiHost={props.apiHost}
