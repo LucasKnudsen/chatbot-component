@@ -1,4 +1,4 @@
-import circleCloseIcon from '@/assets/circle-close-icon.png'
+import circleCloseIcon from '@/assets/circle-close-icon.svg'
 import sidebarTabIcon from '@/assets/sidebar-tab-icon.svg'
 
 import { JSX } from 'solid-js'
@@ -11,8 +11,9 @@ type SidebarProps = {
   class?: string
 }
 
+const botPaddingNum = 64
 const innerWidth = sidebarInnerWidthNum + 'px'
-const openWidth = sidebarInnerWidthNum + sidebarPaddingNum * 2 + 'px'
+const openWidth = sidebarInnerWidthNum + botPaddingNum + sidebarPaddingNum + 'px'
 const closedWidth = '0px'
 
 export const Sidebar = (props: SidebarProps) => {
@@ -27,7 +28,7 @@ export const Sidebar = (props: SidebarProps) => {
     >
       <div
         class='absolute cursor-pointer'
-        style={{ left: '-20px', opacity: props.open ? '0' : '1' }}
+        style={{ top: '20px', left: '-20px', opacity: props.open ? '0' : '1' }}
         onClick={props.onToggle}
       >
         <img class='transition-all inline-block' src={sidebarTabIcon} width={20} />
@@ -35,7 +36,7 @@ export const Sidebar = (props: SidebarProps) => {
 
       <div
         class='absolute cursor-pointer'
-        style={{ left: '-10px', opacity: props.open ? '1' : '0' }}
+        style={{ top: '20px', left: '-10px', opacity: props.open ? '1' : '0' }}
         onClick={props.onToggle}
       >
         <img class='transition-all inline-block' src={circleCloseIcon} width={20} />
@@ -47,7 +48,7 @@ export const Sidebar = (props: SidebarProps) => {
           width: innerWidth,
           opacity: props.open ? '1' : '0',
           'margin-left': sidebarPaddingNum + 'px',
-          'margin-right': sidebarPaddingNum + 'px',
+          'margin-right': botPaddingNum + 'px',
         }}
       >
         {props.children}
