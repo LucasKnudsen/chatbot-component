@@ -1,2 +1,2 @@
 export * from './chatId'
-export * from './defaultLanguage'
+export * from './language'

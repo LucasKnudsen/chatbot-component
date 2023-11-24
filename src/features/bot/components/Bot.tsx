@@ -2,7 +2,7 @@ import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 
 import { TextInput } from '@/components/inputs/textInput'
-import { Sidebar, useChatId, useDefaultLanguage } from '@/features/bot'
+import { SYSTEM_DEFAULT_LANGUAGE, Sidebar, useChatId, useLanguage } from '@/features/bot'
 import { ChatWindow, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
@@ -24,7 +24,9 @@ import { ResourcesSidebar } from './ResourcesSidebar'
 import { SidebarTabView } from './SidebarTabView'
 
 Amplify.configure(awsconfig)
-Predictions.addPluggable(new AmazonAIConvertPredictionsProvider())
+try {
+  Predictions.addPluggable(new AmazonAIConvertPredictionsProvider())
+} catch (error) {}
 
 type messageType = 'apiMessage' | 'userMessage' | 'usermessagewaiting'
 
@@ -44,7 +46,7 @@ export type PromptType =
 export type BotProps = {
   chatflowid: string
   apiHost: string
-  defaultLanguage?: keyof typeof Language
+  language?: keyof typeof Language
   themeId?: string
   initialPrompts?: PromptType[]
   text?: Partial<TextTemplate>
@@ -67,7 +69,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [chatWindowParent] = createAutoAnimate(/* optional config */)
 
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
-  const { clear: clearDefaultLanguage } = useDefaultLanguage(props.chatflowid)
+  const { currentLanguage, clear: clearDefaultLanguage } = useLanguage(
+    props.chatflowid,
+    props.language
+  )
 
   const {
     question,
@@ -221,14 +226,15 @@ export const Bot = (props: BotProps & { class?: string }) => {
                       class='p-10 bg-black text-cyan-200'
                       onClick={async () => {
                         console.time('translation')
+
                         try {
                           const translation = await Predictions.convert({
                             translateText: {
                               source: {
                                 text: 'Hello world',
-                                language: 'en',
+                                language: props.language || SYSTEM_DEFAULT_LANGUAGE, // either client override or default
                               },
-                              targetLanguage: 'fr',
+                              targetLanguage: currentLanguage(),
                             },
                           })
 
