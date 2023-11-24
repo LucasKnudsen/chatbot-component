@@ -2,7 +2,7 @@ import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 
 import { TextInput } from '@/components/inputs/textInput'
-import { Sidebar, useChatId } from '@/features/bot'
+import { Sidebar, useChatId, useDefaultLanguage } from '@/features/bot'
 import { ChatWindow, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
@@ -13,9 +13,10 @@ import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
 import { ContextualContainer } from '@/features/contextual'
-import { TextTemplate, useText } from '@/features/text'
+import { Language, TextTemplate, useText } from '@/features/text'
 import { Theme } from '@/features/theme'
 import StyleSheet from '@/styles'
+import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Amplify } from 'aws-amplify'
 import { Show, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
 import { sidebarPaddingNum } from '../constants'
@@ -23,6 +24,7 @@ import { ResourcesSidebar } from './ResourcesSidebar'
 import { SidebarTabView } from './SidebarTabView'
 
 Amplify.configure(awsconfig)
+Predictions.addPluggable(new AmazonAIConvertPredictionsProvider())
 
 type messageType = 'apiMessage' | 'userMessage' | 'usermessagewaiting'
 
@@ -42,7 +44,7 @@ export type PromptType =
 export type BotProps = {
   chatflowid: string
   apiHost: string
-  defaultLanguage?: string
+  defaultLanguage?: keyof typeof Language
   themeId?: string
   initialPrompts?: PromptType[]
   text?: Partial<TextTemplate>
@@ -51,7 +53,6 @@ export type BotProps = {
 }
 
 export const Bot = (props: BotProps & { class?: string }) => {
-  console.log(props.defaultLanguage)
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
   const [sidebarOpen, setSidebarOpen] = createSignal(false)
@@ -66,6 +67,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [chatWindowParent] = createAutoAnimate(/* optional config */)
 
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
+  const { clear: clearDefaultLanguage } = useDefaultLanguage(props.chatflowid)
 
   const {
     question,
@@ -98,6 +100,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     clearQuestions()
     clearSuggestions()
     clearChatId()
+    clearDefaultLanguage()
   }
 
   // Handle form submission
@@ -159,7 +162,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
   onMount(() => {
     initTheme(props.themeId, props.theme)
-    initText(props.defaultLanguage, props.text)
+    initText(
+      props.text
+      // defaultLanguage(),
+    )
 
     if (question()) {
       fetchSuggestedPrompts()
@@ -209,6 +215,32 @@ export const Bot = (props: BotProps & { class?: string }) => {
                     <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
                       {text().welcomeMessage}
                     </h1>
+
+                    {/* Testing translations  */}
+                    <button
+                      class='p-10 bg-black text-cyan-200'
+                      onClick={async () => {
+                        console.time('translation')
+                        try {
+                          const translation = await Predictions.convert({
+                            translateText: {
+                              source: {
+                                text: 'Hello world',
+                                language: 'en',
+                              },
+                              targetLanguage: 'fr',
+                            },
+                          })
+
+                          console.log(translation)
+                        } catch (error) {
+                          console.log(error)
+                        }
+                        console.timeEnd('translation')
+                      }}
+                    >
+                      Test
+                    </button>
                   </div>
 
                   <SidebarTabView

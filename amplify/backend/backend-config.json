@@ -166,5 +166,12 @@
         }
       ]
     }
+  },
+  "predictions": {
+    "dynamicTranslator": {
+      "convertType": "translateText",
+      "providerPlugin": "awscloudformation",
+      "service": "Translate"
+    }
   }
 }

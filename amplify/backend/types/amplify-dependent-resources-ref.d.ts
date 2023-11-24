@@ -44,5 +44,12 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     }
+  },
+  "predictions": {
+    "dynamicTranslator": {
+      "region": "string",
+      "sourceLang": "string",
+      "targetLang": "string"
+    }
   }
 }

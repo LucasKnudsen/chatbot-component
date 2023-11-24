@@ -1,17 +1,12 @@
-import { createSignal, Show, splitProps } from 'solid-js'
+import { createSignal, Show } from 'solid-js'
 import styles from '../../../index.css?inline'
 import { Bot, BotProps } from '../../bot/components/Bot'
 
 import { BubbleButton } from './BubbleButton'
 
-const defaultButtonColor = '#3B81F6'
-const defaultIconColor = 'white'
-
 export type BubbleProps = BotProps
 
 export const Bubble = (props: BubbleProps) => {
-  const [bubbleProps] = splitProps(props, ['theme'])
-
   const [isBotOpened, setIsBotOpened] = createSignal(false)
   const [isBotStarted, setIsBotStarted] = createSignal(false)
 
@@ -60,15 +55,7 @@ export const Bubble = (props: BubbleProps) => {
         // }}
       >
         <Show when={isBotStarted()}>
-          <Bot
-            initialPrompts={props.initialPrompts}
-            themeId={props.themeId}
-            text={props.text}
-            chatflowid={props.chatflowid}
-            chatflowConfig={props.chatflowConfig}
-            apiHost={props.apiHost}
-            theme={props.theme}
-          />
+          <Bot {...props} />
         </Show>
       </div>
     </>
