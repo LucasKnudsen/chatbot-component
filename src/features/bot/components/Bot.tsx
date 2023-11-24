@@ -71,7 +71,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
   const [sourcePopupSrc] = createSignal({})
 
   const { theme, setThemeFromKey } = useTheme()
-  const { backgroundColor, backgroundImageUrl } = theme()
+  const { backgroundColor, backgroundImageUrl, textColor } = theme()
 
   const [chatWindowParent] = createAutoAnimate(/* optional config */)
   const [contextualContainerParent] = createAutoAnimate(/* optional config */)
@@ -190,6 +190,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
         props.class
       }
       style={{
+        color: textColor,
         'background-color': backgroundColor,
         background: `url(${backgroundImageUrl})`,
         'background-size': 'cover',

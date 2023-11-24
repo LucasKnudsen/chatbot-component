@@ -37,21 +37,16 @@ export const Bubble = (props: BubbleProps) => {
         isBotOpened={isBotOpened()}
       />
       <div
+        class={`fixed top-0 left-0 w-screen h-screen m-0 ${
+          isBotOpened() ? 'opacity-1' : 'opacity-0 pointer-events-none'
+        }`}
         style={{
-          height: props.theme?.chatWindow?.height
-            ? `${props.theme?.chatWindow?.height.toString()}px`
-            : '100vh',
-          width: props.theme?.chatWindow?.width
-            ? `${props.theme?.chatWindow?.width.toString()}px`
-            : '100%',
-          margin: '0px',
           transition: 'transform 250ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
           'transform-origin': 'bottom right',
           transform: isBotOpened() ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
           'z-index': 42424242,
         }}
-        class={isBotOpened() ? ' opacity-1' : ' opacity-0 pointer-events-none'}
-        // part='bot'
+        part='bot'
         // style={{
         //   height: bubbleProps.theme?.chatWindow?.height
         //     ? `${bubbleProps.theme?.chatWindow?.height.toString()}px`
