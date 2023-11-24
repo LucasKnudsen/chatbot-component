@@ -1,27 +1,19 @@
 import { useTheme } from '@/features/theme/hooks'
-import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { For, JSX, Show, createEffect, createSignal, onCleanup } from 'solid-js'
 import { Divider } from '../Divider'
 import { SettingsButton } from '../icons'
 
-type MenuItem = {
-  label: string
-  onClick: () => void | Promise<void>
-  icon?: JSX.Element
-}
-
 type Props = {
-  menuItems: MenuItem[]
+  menuItems: MenuItemProps[]
   minWidth?: string
+  transformOrigin?: string
 }
 
 export const Settings = (props: Props) => {
   let menuRef: HTMLDivElement | undefined = undefined
   const [isOpen, setIsOpen] = createSignal(false)
 
-  const [animate] = createAutoAnimate({ duration: 100 })
   const { theme } = useTheme()
-  const primaryAccent = theme().primaryAccent
 
   const toggleMenu = () => {
     setIsOpen(!isOpen())
@@ -61,14 +53,6 @@ export const Settings = (props: Props) => {
 
   return (
     <>
-      <style>
-        {`
-        .settings-menu-item:hover {
-          background: ${primaryAccent};
-        }
-      `}
-      </style>
-
       <div ref={menuRef} class='relative inline-block text-left'>
         <div>
           <button type='button' class='flex items-center  px-2' onClick={toggleMenu}>
@@ -76,43 +60,77 @@ export const Settings = (props: Props) => {
           </button>
         </div>
 
-        <Show when={isOpen()}>
+        {/* <Show when={isOpen()}> */}
+        <div
+          class='absolute right-0 mt-2 w-fit border rounded-lg shadow-lg z-10 backdrop-blur-md bg-white/75'
+          style={{
+            'border-color': theme().borderColor,
+            'min-width': props.minWidth || '200px',
+            transition: 'transform 250ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
+            'transform-origin': props.transformOrigin || 'top right',
+            transform: isOpen() ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
+          }}
+        >
           <div
-            class='absolute right-0 mt-2 w-fit border rounded-lg shadow-lg z-10 backdrop-blur-md bg-white/75'
-            style={{
-              'border-color': theme().borderColor,
-              'min-width': props.minWidth || '200px',
-            }}
+            class='p-2'
+            onClick={handleMenuClick} // Prevent closing when clicking inside the menu
           >
-            <div
-              class='p-2'
-              onClick={handleMenuClick} // Prevent closing when clicking inside the menu
-            >
-              <For each={props.menuItems}>
-                {(item, index) => (
-                  <>
-                    <button
-                      type='button'
-                      class='flex text-sm w-full p-3 rounded-lg items-center hover:font-medium settings-menu-item '
-                      onClick={async () => {
-                        await item.onClick()
-                        closeMenu()
-                      }}
-                    >
-                      {item.icon}
-                      <span class='ml-3 whitespace-nowrap'>{item.label}</span>
-                    </button>
+            <For each={props.menuItems}>
+              {(item, index) => (
+                <>
+                  <MenuItem
+                    {...item}
+                    onClick={async () => {
+                      await item.onClick()
+                      closeMenu()
+                    }}
+                  />
 
-                    <Show when={index() !== props.menuItems.length - 1}>
-                      <Divider />
-                    </Show>
-                  </>
-                )}
-              </For>
-            </div>
+                  <Show when={index() !== props.menuItems.length - 1}>
+                    <Divider />
+                  </Show>
+                </>
+              )}
+            </For>
           </div>
-        </Show>
+        </div>
+        {/* </Show> */}
       </div>
+    </>
+  )
+}
+
+type MenuItemProps = {
+  label: string
+  onClick: () => void | Promise<void>
+  icon?: JSX.Element
+}
+
+const MenuItem = (props: MenuItemProps) => {
+  const { theme } = useTheme()
+
+  const primaryAccent = theme().primaryAccent
+  const primaryColor = theme().primaryColor
+
+  return (
+    <>
+      <style>
+        {`
+        .settings-menu-item:hover {
+          background: ${primaryAccent};
+          color: ${primaryColor};
+        }
+      `}
+      </style>
+
+      <button
+        type='button'
+        class='flex text-sm w-full p-3 rounded-lg items-center font-medium settings-menu-item '
+        onClick={props.onClick}
+      >
+        {props.icon}
+        <span class='ml-3 whitespace-nowrap'>{props.label}</span>
+      </button>
     </>
   )
 }
