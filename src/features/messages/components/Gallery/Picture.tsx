@@ -1,5 +1,4 @@
 import { ContextualElement } from '@/features/contextual'
-import { useTheme } from '@/features/theme/hooks'
 import { createSignal, onCleanup } from 'solid-js'
 
 type Props = {
@@ -9,8 +8,6 @@ type Props = {
 const Picture = ({ element }: Props) => {
   const [isZoomed, setIsZoomed] = createSignal(false)
   const [isHovered, setIsHovered] = createSignal(false)
-
-  const { theme } = useTheme()
 
   const handleImageClick = (event: MouseEvent) => {
     event.stopPropagation()
