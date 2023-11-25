@@ -200,8 +200,8 @@ export const useQuestion = (chatflowid: string, clientLanguage?: string) => {
       })
     })
 
-    handleLinkedResources(uniqueResources)
-    handleFacts(uniqueFacts)
+    await handleLinkedResources(uniqueResources)
+    await handleFacts(uniqueFacts)
   }
 
   onMount(() => {

@@ -151,9 +151,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
       }
 
       fetchSuggestedPrompts()
-
-      setLoading(false)
-      setUserInput('')
     }
 
     if (messageResult.error) {
@@ -162,10 +159,11 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
       updateAnswer(message)
 
-      setLoading(false)
-      setUserInput('')
       return
     }
+
+    setLoading(false)
+    setUserInput('')
   }
 
   onMount(() => {
