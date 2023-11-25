@@ -19,6 +19,8 @@ const Gallery = (props: Props) => {
 
   const imagesAndVideos = createMemo(() => [...props.resources.picture, ...props.resources.video])
 
+  console.log(props.resources)
+
   return (
     <div ref={parent} class='mt-8'>
       {/* TODO: Configureable header */}
@@ -37,7 +39,7 @@ const Gallery = (props: Props) => {
             <For each={imagesAndVideos()}>
               {(element) => (
                 <div
-                  class='p-2 rounded-lg h-48 border w-[298px] '
+                  class='p-2 rounded-lg h-48 border min-w-[298px] w-[298px] '
                   style={{ 'border-color': theme().borderColor }}
                 >
                   <Switch fallback={null}>

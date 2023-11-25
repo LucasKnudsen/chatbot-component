@@ -143,18 +143,19 @@ export const useQuestion = (chatflowid: string, clientLanguage?: string) => {
     if (oldQ === null) return
 
     const resources = linkedResources.reduce<Resources>((acc, resource) => {
-      const { link, description, type } = resource
+      const { link, description, type, id, thumbnail } = resource
 
       const resourcesOfType = acc[type as keyof Resources]
 
       if (resourcesOfType.find((el) => el.id === link)) return acc
 
       resourcesOfType.push({
-        id: link,
+        id,
         value: link,
         description,
         type: type as ContextualElementType,
         source: resource.source,
+        thumbnail,
       })
 
       return {
@@ -191,9 +192,7 @@ export const useQuestion = (chatflowid: string, clientLanguage?: string) => {
       })
 
       linked_resources.forEach((resource) => {
-        const existingResource = uniqueResources.find(
-          (r) => r.link === resource.link && r.type === resource.type
-        )
+        const existingResource = uniqueResources.find((r) => r.id === resource.id)
         if (!existingResource) {
           uniqueResources.push({ ...resource, source })
         }

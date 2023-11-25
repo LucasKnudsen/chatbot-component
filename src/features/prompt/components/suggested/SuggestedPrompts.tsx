@@ -18,7 +18,7 @@ export const SuggestedPrompts = (props: Props) => {
   const { text } = useText()
   return (
     <>
-      <div class='pb-8' ref={suggestedPromptsParent}>
+      <div ref={suggestedPromptsParent}>
         <Show when={props.isFetching?.() || props.suggestedPrompts().length > 0}>
           <div class='flex items-center  gap-y-1 gap-x-4 '>
             <p
@@ -31,7 +31,7 @@ export const SuggestedPrompts = (props: Props) => {
               {text().suggestedPromptsTitle}
             </p>
 
-            <div class='flex overflow-x-auto  whitespace-nowrap py-4 gap-x-4 custom-scrollbar'>
+            <div class='flex overflow-x-auto  whitespace-nowrap pb-2 pt-4 gap-x-4 custom-scrollbar'>
               <Show when={props.suggestedPrompts().length > 0} fallback={<LoadingBubble />}>
                 <For each={props.suggestedPrompts()}>
                   {(p) => (

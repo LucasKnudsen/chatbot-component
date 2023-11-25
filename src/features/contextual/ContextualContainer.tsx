@@ -16,8 +16,8 @@ type Props = {
 
 export const ContextualContainer = (props: Props) => {
   const facts = createMemo(() => props.resources?.fact ?? [])
-  const links = createMemo(() => props.resources?.link ?? [])
-  const iframes = createMemo(() => props.resources?.iframe ?? [])
+  // const links = createMemo(() => props.resources?.link ?? [])
+  // const iframes = createMemo(() => props.resources?.iframe ?? [])
   const [parent] = createAutoAnimate()
 
   const { theme } = useTheme()
@@ -55,11 +55,11 @@ export const ContextualContainer = (props: Props) => {
         'padding-left': sidebarPaddingNum + 'px',
       }}
     >
-      <div class='flex-1 overflow-y-scroll'>
+      <div class='flex-1 flex flex-col gap-2 overflow-y-scroll custom-scrollbar '>
         <For each={facts()}>{(element) => <Fact fact={element} />}</For>
       </div>
 
-      <div class='flex-1 overflow-hidden'>
+      <div class='flex-1 flex-grow-[2] overflow-hidden'>
         <div
           class='font-bold'
           style={{
@@ -72,7 +72,7 @@ export const ContextualContainer = (props: Props) => {
 
         <Divider margin={12} />
 
-        <div class='flex flex-col h-full gap-4 flex-1 overflow-y-scroll'>
+        <div class='flex flex-col h-full gap-4 flex-1 overflow-y-scroll custom-scrollbar pr-0.5'>
           <For each={props.resources?.link ?? []}>{(element) => <Link link={element} />}</For>
           <For each={props.resources?.iframe ?? []}>
             {(element) => <Iframe element={element} />}

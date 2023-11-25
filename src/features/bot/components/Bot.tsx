@@ -12,6 +12,7 @@ import { SuggestedPrompts, useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
+import { Divider } from '@/components/Divider'
 import { ContextualContainer } from '@/features/contextual'
 import { TextTemplate, detectLanguage, useText } from '@/features/text'
 import { Theme } from '@/features/theme'
@@ -203,10 +204,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
       >
         <Nav question={question()} onClear={clear} />
 
-        <div class='relative flex flex-1 px-16 overflow-hidden'>
+        <div class='relative flex flex-1 px-10 overflow-hidden'>
           {/* Main Container */}
           <div
-            class='flex flex-col flex-1 text-base overflow-hidden pt-6'
+            class='flex flex-col flex-1 text-base overflow-hidden py-6'
             ref={chatWindowParent}
             style={{
               'padding-right': resourcesOpen() ? sidebarPaddingNum + 'px' : '0',
@@ -237,8 +238,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
               <ChatWindow question={question()!} />
             </Show>
 
+            <Divider margin={0} />
+
             {/* Input Container */}
-            <div class='w-full pb-1 z-1 border-t pt-6 '>
+            <div class='w-full pb-1 z-1 mt-5 '>
               <TextInput
                 disabled={loading()}
                 defaultValue={userInput()}
@@ -257,6 +260,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
             />
           </div>
 
+          {/* Resources Sidebar */}
           <ResourcesSidebar
             open={resourcesOpen()}
             toggle={() => setResourcesToggled(!resourcesToggled())}
@@ -264,8 +268,8 @@ export const Bot = (props: BotProps & { class?: string }) => {
             <ContextualContainer class='py-6' resources={question()?.resources} />
           </ResourcesSidebar>
 
+          {/* Sidebar */}
           <Show when={question()}>
-            {/* Sidebar */}
             <Sidebar
               open={sidebarOpen()}
               onToggle={() => {

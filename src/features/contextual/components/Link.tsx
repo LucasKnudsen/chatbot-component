@@ -16,7 +16,12 @@ export const Link = (props: Props) => {
   // TODO: Add onHover to show description and link indication
 
   return (
-    <div class='flex flex-col justify-between border border-gray-200 mb-2 rounded-xl '>
+    <div
+      class='flex flex-col justify-between border mb-2 rounded-xl '
+      style={{
+        'border-color': theme().borderColor,
+      }}
+    >
       <a
         class='hover:no-underline'
         href={props.link.value}
@@ -30,14 +35,17 @@ export const Link = (props: Props) => {
           <div class='relative rounded-md overflow-hidden mb-2'>
             <img class='absolute top-2 right-2' src={linkIcon} />
 
-            <img src='https://picsum.photos/290/100' />
+            <img
+              src={props.link.thumbnail || 'https://picsum.photos/290/140'}
+              class='max-h-[124px] w-full object-cover'
+            />
           </div>
           <p class='break-words line-clamp-2 font-light'>{props.link.description}</p>
         </div>
 
         <Divider margin={0} />
         <div class='p-2'>
-          <p class='break-words line-clamp-1 font-light'>{props.link.value}</p>
+          <p class='break-words line-clamp-1 font-medium text-xs'>{props.link.value}</p>
         </div>
       </a>
     </div>
