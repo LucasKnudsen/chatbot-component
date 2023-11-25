@@ -2,9 +2,11 @@ import { Resources } from '@/features/contextual'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
 import { Expandable } from '@/components'
+import { useTheme } from '@/features/theme/hooks'
 import { For, Match, Show, Switch, createMemo } from 'solid-js'
 import { scrollChatWindowToBottom } from '../..'
 import Picture from './Picture'
+import Video from './Video'
 
 type Props = {
   resources: Resources
@@ -13,34 +15,40 @@ type Props = {
 const Gallery = (props: Props) => {
   const [parent] = createAutoAnimate()
 
+  const { theme } = useTheme()
+
   const imagesAndVideos = createMemo(() => [...props.resources.picture, ...props.resources.video])
 
   return (
     <div ref={parent} class='mt-8'>
       {/* TODO: Configureable header */}
       <Show when={imagesAndVideos().length > 0}>
-        <Expandable header='View media' defaultOpen onOpen={scrollChatWindowToBottom}>
+        <Expandable
+          header='View media'
+          defaultOpen
+          onOpen={() => {
+            setTimeout(() => {
+              scrollChatWindowToBottom()
+            }, 100)
+          }}
+          height='280px'
+        >
           <div class='flex gap-4 px-6 pb-6 custom-scrollbar overflow-x-auto whitespace-nowrap'>
             <For each={imagesAndVideos()}>
               {(element) => (
-                <Switch fallback={null}>
-                  <Match when={element.type === 'picture'}>
-                    <Picture element={element} />
-                  </Match>
-                  <Match when={element.type === 'video'}>
-                    <div class='p-2 rounded-lg h-48  border min-w-[298px] '>
-                      <video
-                        class='rounded-lg hover:shadow-lg transition-all duration-300 ease-in-out h-full w-full  object-cover '
-                        src={element.value as string}
-                        muted
-                        autoplay
-                        controls
-                        aria-label={element.description}
-                        onError={(e) => (e.currentTarget.style.display = 'none')}
-                      />
-                    </div>
-                  </Match>
-                </Switch>
+                <div
+                  class='p-2 rounded-lg h-48 border w-[298px] '
+                  style={{ 'border-color': theme().borderColor }}
+                >
+                  <Switch fallback={null}>
+                    <Match when={element.type === 'picture'}>
+                      <Picture element={element} />
+                    </Match>
+                    <Match when={element.type === 'video'}>
+                      <Video element={element} />
+                    </Match>
+                  </Switch>
+                </div>
               )}
             </For>
           </div>
