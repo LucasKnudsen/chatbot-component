@@ -22,6 +22,17 @@ export const ChatWindow = (props: ChatWindowProps) => {
 
   createEffect(on(() => props.question, scrollChatWindowToBottom, { defer: true }))
 
+  const onCopy = () => {
+    navigator.clipboard.writeText(props.question?.answer!)
+  }
+
+  const onShare = () => {
+    navigator.share?.({
+      title: props.question?.question!,
+      text: props.question?.answer!,
+    })
+  }
+
   return (
     <>
       {/* Question */}
@@ -37,10 +48,16 @@ export const ChatWindow = (props: ChatWindowProps) => {
           menuItems={[
             {
               label: 'Copy text',
-              onClick: () => {
-                navigator.clipboard.writeText(props.question?.answer!)
-              },
+              onClick: onCopy,
             },
+            ...(Boolean(navigator.share) // Check if share is supported
+              ? [
+                  {
+                    label: 'Share',
+                    onClick: onShare,
+                  },
+                ]
+              : []),
           ]}
         />
       </div>
