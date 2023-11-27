@@ -20,7 +20,7 @@ export const TabView: (props: TabViewProps) => JSXElement = (props) => {
         <For each={props.tabs}>
           {(tab, index) => (
             <li
-              class={`flex flex-1 inline-block text-left  `}
+              class={`flex flex-1 text-left  `}
               style={{
                 'padding-bottom': selectedTab() === index() ? '0px' : '1px',
                 'border-bottom-width': selectedTab() === index() ? '2px' : '1px',

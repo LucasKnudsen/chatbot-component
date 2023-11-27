@@ -1,8 +1,8 @@
-import { Show } from 'solid-js'
 import { isNotDefined } from '@/utils/index'
-import { ButtonTheme } from '../types'
+import { Show } from 'solid-js'
 
-type Props = ButtonTheme & {
+type Props = any & {
+  // temp build fix
   isBotOpened: boolean
   toggleBot: () => void
 }

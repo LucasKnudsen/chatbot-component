@@ -38,6 +38,9 @@
           "appId": "d1i4jp82axmvxl",
           "type": "cicd"
         }
+      },
+      "predictions": {
+        "dynamicTranslator": {}
       }
     }
   }
