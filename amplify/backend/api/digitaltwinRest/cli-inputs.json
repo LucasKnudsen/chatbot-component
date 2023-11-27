@@ -14,6 +14,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/detect-language": {
+      "name": "/detect-language",
+      "lambdaFunction": "detectLanguage",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }

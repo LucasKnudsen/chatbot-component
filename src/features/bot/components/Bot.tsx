@@ -2,13 +2,7 @@ import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 
 import { TextInput } from '@/components/inputs/textInput'
-import {
-  SYSTEM_DEFAULT_LANGUAGE,
-  Sidebar,
-  currentLanguage,
-  useChatId,
-  useLanguage,
-} from '@/features/bot'
+import { Sidebar, useChatId, useLanguage } from '@/features/bot'
 import { ChatWindow, useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
@@ -19,7 +13,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
 import { ContextualContainer } from '@/features/contextual'
-import { Language, TextTemplate, useText } from '@/features/text'
+import { TextTemplate, detectLanguage, useText } from '@/features/text'
 import { Theme } from '@/features/theme'
 import StyleSheet from '@/styles'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
@@ -52,7 +46,7 @@ export type PromptType =
 export type BotProps = {
   chatflowid: string
   apiHost: string
-  language?: keyof typeof Language
+  language?: string
   themeId?: string
   initialPrompts?: PromptType[]
   text?: Partial<TextTemplate>
@@ -86,7 +80,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
     history,
     setQuestion,
     hasResources,
-  } = useQuestion(props.chatflowid)
+  } = useQuestion(props.chatflowid, props.language)
 
   const resourcesOpen = createMemo(() => hasResources() && resourcesToggled())
 
@@ -101,7 +95,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
     chatflowid: props.chatflowid,
     apiHost: props.apiHost,
     onToken: updateAnswer,
-    onDocuments: handleSourceDocuments,
   })
 
   const clear = () => {
@@ -138,34 +131,39 @@ export const Bot = (props: BotProps & { class?: string }) => {
 
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
-    const result = await sendMessageQuery({
-      chatflowid: props.chatflowid,
-      apiHost: props.apiHost,
-      body,
-    })
+    const [messageResult] = await Promise.all([
+      sendMessageQuery({
+        chatflowid: props.chatflowid,
+        apiHost: props.apiHost,
+        body,
+      }),
+      detectLanguage(value, true),
+    ])
 
-    if (result.data) {
+    if (messageResult.data) {
+      // Uses the source documents from the end result rather than sockets (they are the same, and doesnt stream in anyway)
+      await handleSourceDocuments(messageResult.data.sourceDocuments)
+
       if (!isChatFlowAvailableToStream()) {
-        let text = extractChatbotResponse(result.data)
+        let text = extractChatbotResponse(messageResult.data)
 
         updateAnswer(text)
       }
 
       fetchSuggestedPrompts()
-
-      setLoading(false)
-      setUserInput('')
     }
 
-    if (result.error) {
-      const message = result.error?.message ?? 'Something went wrong. Please try again later.'
+    if (messageResult.error) {
+      const message =
+        messageResult.error?.message ?? 'Something went wrong. Please try again later.'
 
       updateAnswer(message)
 
-      setLoading(false)
-      setUserInput('')
       return
     }
+
+    setLoading(false)
+    setUserInput('')
   }
 
   onMount(() => {
@@ -223,8 +221,6 @@ export const Bot = (props: BotProps & { class?: string }) => {
                     <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
                       {text().welcomeMessage}
                     </h1>
-
-                    <TestButton language={props.language} />
                   </div>
 
                   <SidebarTabView
@@ -304,35 +300,5 @@ export const Bot = (props: BotProps & { class?: string }) => {
         )}
       </div>
     </>
-  )
-}
-
-const TestButton = (props: { language?: string }) => {
-  const onTest = async () => {
-    console.time('translation')
-    // TODO: Make a
-
-    try {
-      const translation = await Predictions.convert({
-        translateText: {
-          source: {
-            text: 'Hello world',
-            language: props.language || SYSTEM_DEFAULT_LANGUAGE, // either client override or default
-          },
-          targetLanguage: currentLanguage(),
-        },
-      })
-
-      console.log(translation)
-    } catch (error) {
-      console.log(error)
-    }
-    console.timeEnd('translation')
-  }
-
-  return (
-    <button class='p-10 bg-blue-400 text-black rounded-md' onClick={onTest}>
-      Test
-    </button>
   )
 }

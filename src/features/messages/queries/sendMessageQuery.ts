@@ -17,12 +17,6 @@ export type MessageRequest = {
 }
 
 export async function sendMessageQuery({ body, chatflowid, apiHost }: MessageRequest) {
-  // return await sendRequest<any>({
-  //   method: 'POST',
-  //   url: `${apiHost}/api/v1/prediction/${chatflowid}`,
-  //   body,
-  // })
-
   try {
     // TODO: Test timeout of the REST API. (There's a 30 second timeout on AppSync)
     const answer = await API.post('digitaltwinRest', '/flowise/middleware', {

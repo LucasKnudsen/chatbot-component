@@ -40,6 +40,8 @@ export const ContextualContainer = (props: Props) => {
   //   }, 50)
   // }
 
+  //
+
   return (
     <div
       id='contextual-resources'
@@ -71,8 +73,10 @@ export const ContextualContainer = (props: Props) => {
         <Divider margin={12} />
 
         <div class='flex flex-col h-full gap-4 flex-1 overflow-y-scroll'>
-          <For each={links()}>{(element) => <Link link={element} />}</For>
-          <For each={iframes()}>{(element) => <Iframe element={element} />}</For>
+          <For each={props.resources?.link ?? []}>{(element) => <Link link={element} />}</For>
+          <For each={props.resources?.iframe ?? []}>
+            {(element) => <Iframe element={element} />}
+          </For>
         </div>
       </div>
     </div>
