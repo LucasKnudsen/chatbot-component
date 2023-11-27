@@ -24,11 +24,7 @@ export const Bubble = (props: BotProps) => {
   return (
     <>
       <style>{styles}</style>
-      <BubbleButton
-        // {...bubbleProps.theme?.button}
-        toggleBot={toggleBot}
-        isBotOpened={isBotOpened()}
-      />
+      <BubbleButton toggleBot={toggleBot} isBotOpened={isBotOpened()} />
 
       <div
         class={`fixed top-0 left-0 w-screen h-screen m-0 ${
