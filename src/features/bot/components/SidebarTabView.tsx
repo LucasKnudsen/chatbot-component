@@ -2,6 +2,7 @@ import { TabView } from '@/components/TabView'
 import { History } from '@/features/messages'
 import { Chat } from '@/features/messages/types'
 import { NavigationPromptsList } from '@/features/prompt'
+import { useText } from '@/features/text'
 import { createMemo } from 'solid-js'
 import { PromptType } from '.'
 import { sidebarInnerWidthNum } from '../constants'
@@ -16,16 +17,18 @@ type SidebarTabViewProps = {
 }
 
 export const SidebarTabView = (props: SidebarTabViewProps) => {
+  const { text } = useText()
+
   const tabs = createMemo(() => {
     const historyTab = {
-      title: 'History',
+      title: text().historyTabTitle,
       content: (
         <History history={props.history} onSelect={props.setQuestion} disabled={props.disabled} />
       ),
     }
 
     const navTab = {
-      title: 'Navigation',
+      title: text().navigationTabTitle,
       content: (
         <NavigationPromptsList
           prompts={props.initialPrompts}

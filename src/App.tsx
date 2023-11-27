@@ -43,7 +43,7 @@ function App() {
 
   return (
     <>
-      <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} />
+      <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} defaultLanguage='da' />
       {/* <Bubble {...chatflows.fraia_test} initialPrompts={initialPrompts} /> */}
     </>
   )

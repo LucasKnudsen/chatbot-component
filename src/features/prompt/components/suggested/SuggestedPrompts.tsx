@@ -1,4 +1,5 @@
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
+import { useText } from '@/features/text'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Accessor, For, Show } from 'solid-js'
 import { Prompt } from './Prompt'
@@ -14,6 +15,7 @@ type Props = {
 export const SuggestedPrompts = (props: Props) => {
   const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
 
+  const { text } = useText()
   return (
     <>
       <div class='pb-8' ref={suggestedPromptsParent}>
@@ -26,7 +28,7 @@ export const SuggestedPrompts = (props: Props) => {
                 color: '#231843A1',
               }}
             >
-              {props.suggestedPromptsTitle ?? 'SUGGESTIONS'}
+              {text().suggestedPromptsTitle}
             </p>
 
             <div class='flex overflow-x-auto  whitespace-nowrap py-4 gap-x-4 custom-scrollbar'>

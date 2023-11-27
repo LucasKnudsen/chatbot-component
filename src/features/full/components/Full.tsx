@@ -35,15 +35,7 @@ export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
       {isWebComponent && <style>{styles}</style>}
       <Show when={isBotDisplayed()}>
         <div class='h-screen w-full'>
-          <Bot
-            initialPrompts={props.initialPrompts}
-            themeId={props.themeId}
-            text={props.text}
-            chatflowid={props.chatflowid}
-            chatflowConfig={props.chatflowConfig}
-            apiHost={props.apiHost}
-            theme={props.theme}
-          />
+          <Bot {...props} />
         </div>
       </Show>
     </>
