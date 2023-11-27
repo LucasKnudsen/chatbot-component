@@ -16,4 +16,6 @@ export const da: TextTemplate = {
   today: 'I dag',
   yesterday: 'I går',
   previous: 'Forrige',
+  // github copilot recommended this
+  noHistory: 'Stil et spørgsmål for at komme i gang',
 }

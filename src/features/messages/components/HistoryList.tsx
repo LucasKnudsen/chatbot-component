@@ -1,4 +1,5 @@
 import { useText } from '@/features/text'
+import { useTheme } from '@/features/theme/hooks'
 import { createMemo } from 'solid-js'
 import { HistoryListSection } from '.'
 import { Chat } from '../types'
@@ -11,6 +12,15 @@ type HistoryProps = {
 
 export const History = (props: HistoryProps) => {
   const { text } = useText()
+  const { theme } = useTheme()
+
+  if (!props.history.length) {
+    return (
+      <div class='text-center' style={{ color: theme().textSecondary }}>
+        {text().noHistory}
+      </div>
+    )
+  }
 
   const todayStartOfDay = createMemo(() => {
     const date = new Date()
