@@ -43,7 +43,7 @@ export const Bubble = (props: BotProps) => {
         part='bot'
       >
         <Show when={isBotStarted()}>
-          <Bot {...props} />
+          <Bot {...props} toggleBot={toggleBot} />
         </Show>
       </div>
     </>

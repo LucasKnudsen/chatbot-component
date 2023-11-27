@@ -55,7 +55,7 @@ export type BotProps = {
   theme?: Partial<Theme>
 }
 
-export const Bot = (props: BotProps & { class?: string }) => {
+export const Bot = (props: BotProps & { class?: string; toggleBot: () => void }) => {
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
   const [sidebarOpen, setSidebarOpen] = createSignal(false)
@@ -202,7 +202,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
           'background-size': 'cover',
         }}
       >
-        <Nav question={question()} onClear={clear} />
+        <Nav question={question()} onClear={clear} toggleBot={props.toggleBot} />
 
         <div class='relative flex flex-1 px-10 overflow-hidden'>
           {/* Main Container */}
