@@ -17,4 +17,5 @@ export const defaultText = {
   today: 'Today',
   yesterday: 'Yesterday',
   previous: 'Previous',
+  noHistory: 'Ask a Question to Get Started',
 }

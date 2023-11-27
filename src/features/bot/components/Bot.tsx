@@ -1,28 +1,21 @@
 import awsconfig from '@/aws-exports'
-import { Nav } from '@/components/Nav'
 
-import { TextInput } from '@/components/inputs/textInput'
-import { Sidebar, useChatId, useLanguage } from '@/features/bot'
-import { ChatWindow, useQuestion } from '@/features/messages'
+import { useChatId, useLanguage } from '@/features/bot'
+import { useQuestion } from '@/features/messages'
 import { useSocket } from '@/features/messages/hooks/useSocket'
 import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
 import { extractChatbotResponse } from '@/features/messages/utils'
-import { Popup } from '@/features/popup'
-import { SuggestedPrompts, useSuggestedPrompts } from '@/features/prompt'
+import { useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
-import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
-import { Divider } from '@/components/Divider'
-import { ContextualContainer } from '@/features/contextual'
+import { Popup } from '@/features/popup'
 import { TextTemplate, detectLanguage, useText } from '@/features/text'
 import { Theme } from '@/features/theme'
 import StyleSheet from '@/styles'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Amplify } from 'aws-amplify'
-import { Show, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
-import { sidebarPaddingNum } from '../constants'
-import { ResourcesSidebar } from './ResourcesSidebar'
-import { SidebarTabView } from './SidebarTabView'
+import { createEffect, createSignal, onCleanup, onMount } from 'solid-js'
+import { BotDesktopLayout } from './BotDesktopLayout'
 
 Amplify.configure(awsconfig)
 try {
@@ -60,16 +53,12 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
 
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
-  const [sidebarOpen, setSidebarOpen] = createSignal(false)
-  const [resourcesToggled, setResourcesToggled] = createSignal(true)
 
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc] = createSignal({})
 
-  const { theme, initTheme } = useTheme()
-  const { text, initText } = useText()
-
-  const [chatWindowParent] = createAutoAnimate(/* optional config */)
+  const { initTheme } = useTheme()
+  const { initText } = useText()
 
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
   const { clear: clearDefaultLanguage } = useLanguage(props.chatflowid, props.language)
@@ -84,8 +73,6 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
     setQuestion,
     hasResources,
   } = useQuestion(props.chatflowid, props.language)
-
-  const resourcesOpen = createMemo(() => hasResources() && resourcesToggled())
 
   const {
     suggestedPrompts,
@@ -192,119 +179,29 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
     <>
       <StyleSheet />
 
-      <div
-        class={
-          'relative flex flex-col h-full w-full bg-cover bg-center chatbot-container overflow-hidden ' +
-          props.class
-        }
-        style={{
-          color: theme().textColor,
-          'background-color': theme().backgroundColor,
-          background: `url(${theme().backgroundImageUrl})`,
-          'background-size': 'cover',
-        }}
-      >
-        <Nav question={question()} onClear={clear} toggleBot={props.toggleBot} />
+      <BotDesktopLayout
+        chat={question()}
+        userInput={userInput()}
+        history={history()}
+        hasResources={hasResources()}
+        loading={loading()}
+        isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
+        suggestedPrompts={suggestedPrompts()}
+        initialPrompts={props.initialPrompts}
+        onSetQuestion={setQuestion}
+        onSubmit={handleSubmit}
+        onClear={clear}
+        toggleBot={props.toggleBot}
+        class={props.class}
+      />
 
-        <div class='relative flex flex-1 px-10 overflow-hidden'>
-          {/* Main Container */}
-          <div
-            class='flex flex-col flex-1 text-base overflow-hidden py-6'
-            ref={chatWindowParent}
-            style={{
-              'padding-right': resourcesOpen() ? sidebarPaddingNum + 'px' : '0',
-            }}
-          >
-            <Show
-              when={Boolean(question())}
-              fallback={
-                // Welcome message
-                <div class='flex flex-1'>
-                  <div class='flex flex-1 items-end '>
-                    <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
-                      {text().welcomeMessage}
-                    </h1>
-                  </div>
-
-                  <SidebarTabView
-                    initialPrompts={props.initialPrompts}
-                    history={history()}
-                    setQuestion={setQuestion}
-                    handleSubmit={handleSubmit}
-                    disabled={loading()}
-                    navDefault={true}
-                  />
-                </div>
-              }
-            >
-              <ChatWindow question={question()!} />
-            </Show>
-
-            <Divider margin={0} />
-
-            {/* Input Container */}
-            <div class='w-full pb-1 z-1 mt-5 '>
-              <TextInput
-                disabled={loading()}
-                defaultValue={userInput()}
-                onSubmit={handleSubmit}
-                placeholder={text().inputPlaceholder}
-              />
-            </div>
-
-            {/* Suggested Prompt Container */}
-            <SuggestedPrompts
-              handleSubmit={handleSubmit}
-              suggestedPrompts={suggestedPrompts}
-              isFetching={isFetchingSuggestedPrompts}
-              suggestedPromptsTitle={props.text?.suggestedPromptsTitle}
-              loading={loading()}
-            />
-          </div>
-
-          {/* Resources Sidebar */}
-          <ResourcesSidebar
-            open={resourcesOpen()}
-            toggle={() => setResourcesToggled(!resourcesToggled())}
-          >
-            <ContextualContainer class='py-6' resources={question()?.resources} />
-          </ResourcesSidebar>
-
-          {/* Sidebar */}
-          <Show when={question()}>
-            <Sidebar
-              open={sidebarOpen()}
-              onToggle={() => {
-                setSidebarOpen(!sidebarOpen())
-
-                setResourcesToggled(true)
-              }}
-            >
-              <SidebarTabView
-                initialPrompts={props.initialPrompts}
-                history={history()}
-                setQuestion={(chat) => {
-                  setQuestion(chat)
-                  setSidebarOpen(false)
-                }}
-                handleSubmit={(question) => {
-                  handleSubmit(question)
-                  setSidebarOpen(false)
-                }}
-                disabled={loading()}
-              />
-            </Sidebar>
-          </Show>
-        </div>
-
-        {sourcePopupOpen() && (
-          <Popup
-            isOpen={sourcePopupOpen()}
-            value={sourcePopupSrc()}
-            onClose={() => setSourcePopupOpen(false)}
-          />
-        )}
-      </div>
+      {sourcePopupOpen() && (
+        <Popup
+          isOpen={sourcePopupOpen()}
+          value={sourcePopupSrc()}
+          onClose={() => setSourcePopupOpen(false)}
+        />
+      )}
     </>
   )
 }

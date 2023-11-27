@@ -32,7 +32,7 @@ export const Bubble = (props: BotProps) => {
           isBotOpened() ? 'opacity-1' : 'opacity-0 pointer-events-none'
         }`}
         style={{
-          transition: 'transform 250ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
+          transition: 'transform 350ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
           'transform-origin': 'bottom right',
           transform: isBotOpened() ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
           'z-index': 42424242,
