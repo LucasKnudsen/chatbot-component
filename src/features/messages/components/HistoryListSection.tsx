@@ -36,7 +36,6 @@ export const HistoryListSection = (props: HistoryListSectionProps) => {
               <li
                 class='history-list-section-item my-2 cursor-pointer font-light rounded-[10px] p-2 '
                 style={{
-                  color: theme().textColor,
                   cursor: props.disabled ? 'not-allowed' : 'pointer',
                 }}
                 onClick={() => (props.disabled ? null : props.onSelect(h))}

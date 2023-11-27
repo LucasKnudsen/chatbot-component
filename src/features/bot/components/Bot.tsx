@@ -14,6 +14,7 @@ import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
 import { ContextualContainer } from '@/features/contextual'
 import { Theme } from '@/features/theme'
+import StyleSheet from '@/styles'
 import { Amplify } from 'aws-amplify'
 import { Show, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
 import { sidebarPaddingNum } from '../constants'
@@ -176,115 +177,119 @@ export const Bot = (props: BotProps & { class?: string }) => {
   })
 
   return (
-    <div
-      class={
-        'relative flex flex-col h-full w-full bg-cover bg-center chatbot-container overflow-hidden ' +
-        props.class
-      }
-      style={{
-        color: theme().textColor,
-        'background-color': theme().backgroundColor,
-        background: `url(${theme().backgroundImageUrl})`,
-        'background-size': 'cover',
-      }}
-    >
-      <Nav question={question()} onClear={clear} />
+    <>
+      <StyleSheet />
 
-      <div class='relative flex flex-1 px-16 overflow-hidden'>
-        {/* Main Container */}
-        <div
-          class='flex flex-col flex-1 text-base overflow-hidden pt-6'
-          ref={chatWindowParent}
-          style={{
-            'padding-right': resourcesOpen() ? sidebarPaddingNum + 'px' : '0',
-          }}
-        >
-          <Show
-            when={Boolean(question())}
-            fallback={
-              // Welcome message
-              <div class='flex flex-1'>
-                <div class='flex flex-1 items-end '>
-                  <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
-                    {welcomeMessage}
-                  </h1>
-                </div>
+      <div
+        class={
+          'relative flex flex-col h-full w-full bg-cover bg-center chatbot-container overflow-hidden ' +
+          props.class
+        }
+        style={{
+          color: theme().textColor,
+          'background-color': theme().backgroundColor,
+          background: `url(${theme().backgroundImageUrl})`,
+          'background-size': 'cover',
+        }}
+      >
+        <Nav question={question()} onClear={clear} />
 
-                <SidebarTabView
-                  initialPrompts={props.initialPrompts}
-                  history={history()}
-                  setQuestion={setQuestion}
-                  handleSubmit={handleSubmit}
-                  disabled={loading()}
-                  navDefault={true}
-                />
-              </div>
-            }
+        <div class='relative flex flex-1 px-16 overflow-hidden'>
+          {/* Main Container */}
+          <div
+            class='flex flex-col flex-1 text-base overflow-hidden pt-6'
+            ref={chatWindowParent}
+            style={{
+              'padding-right': resourcesOpen() ? sidebarPaddingNum + 'px' : '0',
+            }}
           >
-            <ChatWindow question={question()!} />
-          </Show>
+            <Show
+              when={Boolean(question())}
+              fallback={
+                // Welcome message
+                <div class='flex flex-1'>
+                  <div class='flex flex-1 items-end '>
+                    <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
+                      {welcomeMessage}
+                    </h1>
+                  </div>
 
-          {/* Input Container */}
-          <div class='w-full pb-1 z-1 border-t pt-6 '>
-            <TextInput
-              disabled={loading()}
-              defaultValue={userInput()}
-              onSubmit={handleSubmit}
-              placeholder={props.text?.promptPlaceholder ?? 'Ask me anything...'}
+                  <SidebarTabView
+                    initialPrompts={props.initialPrompts}
+                    history={history()}
+                    setQuestion={setQuestion}
+                    handleSubmit={handleSubmit}
+                    disabled={loading()}
+                    navDefault={true}
+                  />
+                </div>
+              }
+            >
+              <ChatWindow question={question()!} />
+            </Show>
+
+            {/* Input Container */}
+            <div class='w-full pb-1 z-1 border-t pt-6 '>
+              <TextInput
+                disabled={loading()}
+                defaultValue={userInput()}
+                onSubmit={handleSubmit}
+                placeholder={props.text?.promptPlaceholder ?? 'Ask me anything...'}
+              />
+            </div>
+
+            {/* Suggested Prompt Container */}
+            <SuggestedPrompts
+              handleSubmit={handleSubmit}
+              suggestedPrompts={suggestedPrompts}
+              isFetching={isFetchingSuggestedPrompts}
+              suggestedPromptsTitle={props.text?.suggestedPromptsTitle}
+              loading={loading()}
             />
           </div>
 
-          {/* Suggested Prompt Container */}
-          <SuggestedPrompts
-            handleSubmit={handleSubmit}
-            suggestedPrompts={suggestedPrompts}
-            isFetching={isFetchingSuggestedPrompts}
-            suggestedPromptsTitle={props.text?.suggestedPromptsTitle}
-            loading={loading()}
-          />
+          <ResourcesSidebar
+            open={resourcesOpen()}
+            toggle={() => setResourcesToggled(!resourcesToggled())}
+          >
+            <ContextualContainer class='py-6' resources={question()?.resources} />
+          </ResourcesSidebar>
+
+          <Show when={question()}>
+            {/* Sidebar */}
+            <Sidebar
+              open={sidebarOpen()}
+              onToggle={() => {
+                setSidebarOpen(!sidebarOpen())
+
+                setResourcesToggled(true)
+              }}
+            >
+              <SidebarTabView
+                initialPrompts={props.initialPrompts}
+                history={history()}
+                setQuestion={(chat) => {
+                  setQuestion(chat)
+                  setSidebarOpen(false)
+                }}
+                handleSubmit={(question) => {
+                  handleSubmit(question)
+                  setSidebarOpen(false)
+                }}
+                disabled={loading()}
+              />
+            </Sidebar>
+          </Show>
         </div>
 
-        <ResourcesSidebar
-          open={resourcesOpen()}
-          toggle={() => setResourcesToggled(!resourcesToggled())}
-        >
-          <ContextualContainer class='py-6' resources={question()?.resources} />
-        </ResourcesSidebar>
-
-        <Show when={question()}>
-          {/* Sidebar */}
-          <Sidebar
-            open={sidebarOpen()}
-            onToggle={() => {
-              setSidebarOpen(!sidebarOpen())
-
-              setResourcesToggled(true)
-            }}
-          >
-            <SidebarTabView
-              initialPrompts={props.initialPrompts}
-              history={history()}
-              setQuestion={(chat) => {
-                setQuestion(chat)
-                setSidebarOpen(false)
-              }}
-              handleSubmit={(question) => {
-                handleSubmit(question)
-                setSidebarOpen(false)
-              }}
-              disabled={loading()}
-            />
-          </Sidebar>
-        </Show>
+        {sourcePopupOpen() && (
+          <Popup
+            isOpen={sourcePopupOpen()}
+            value={sourcePopupSrc()}
+            onClose={() => setSourcePopupOpen(false)}
+          />
+        )}
       </div>
-
-      {sourcePopupOpen() && (
-        <Popup
-          isOpen={sourcePopupOpen()}
-          value={sourcePopupSrc()}
-          onClose={() => setSourcePopupOpen(false)}
-        />
-      )}
-    </div>
+    </>
   )
 }
