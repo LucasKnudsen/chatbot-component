@@ -42,7 +42,7 @@ function App() {
   }
 
   return (
-    <div class='w-screen h-screen flex justify-center items-center'>
+    <div class='w-screen h-screen flex justify-center items-center bg-slate-100'>
       <h1 class='text-6xl'>
         FR
         <span

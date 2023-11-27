@@ -3,6 +3,7 @@ import { useTheme } from '@/features/theme/hooks'
 type Props = {
   onClick?: () => void | Promise<void>
   children: string
+  class?: string
 }
 
 export const Button = (props: Props) => {
@@ -10,7 +11,10 @@ export const Button = (props: Props) => {
 
   return (
     <button
-      class='rounded-full px-4 py-2 ml-4  font-medium tracking-widest text-sm active:scale-95 transition-transform duration-100'
+      class={
+        'rounded-full px-3 py-1 ml-4  font-medium tracking-widest text-xs active:scale-95 transition-transform duration-100' +
+        props.class
+      }
       style={{
         background: theme().primaryColor,
         color: theme().textAccent,

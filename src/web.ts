@@ -1,5 +1,5 @@
 import { registerWebComponents } from './register'
-import { parseChatbot, injectChatbotInWindow } from './window'
+import { injectChatbotInWindow, parseChatbot } from './window'
 
 registerWebComponents()
 

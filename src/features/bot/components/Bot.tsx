@@ -56,6 +56,8 @@ export type BotProps = {
 }
 
 export const Bot = (props: BotProps & { class?: string; toggleBot: () => void }) => {
+  console.log('Bot props', props)
+
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
   const [sidebarOpen, setSidebarOpen] = createSignal(false)

@@ -5,8 +5,9 @@ import { Bot, BotProps } from '../../bot/components/Bot'
 import { BubbleButton } from './BubbleButton'
 
 export const Bubble = (props: BotProps) => {
-  const [isBotOpened, setIsBotOpened] = createSignal(false)
+  console.log('Bubble props', props)
   const [isBotStarted, setIsBotStarted] = createSignal(false)
+  const [isBotOpened, setIsBotOpened] = createSignal(false)
 
   const openBot = () => {
     if (!isBotStarted()) setIsBotStarted(true)
