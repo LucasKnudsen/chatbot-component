@@ -15,13 +15,13 @@ export const Nav = (props: NavProps) => {
     <div
       class='flex flex-wrap items-center mx-5 rounded-full px-6 py-2 mt-5'
       style={{
-        background: theme().primaryAccent,
+        background: theme().surfaceBackground,
       }}
     >
-      <img src={logo} class='h-8' />
+      <img src={logo} class='h-6' />
 
       {/* TODO: Make configurable  */}
-      <h1 class='text-2xl ml-3 tracking-widest'>
+      <h1 class='text-xl ml-3 tracking-widest'>
         FR
         <span
           style={{

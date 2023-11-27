@@ -59,7 +59,6 @@ export async function translate(
       },
     })
 
-    console.log('Translation: ', translation)
     return translation.text
   } catch (error) {
     console.log(error)

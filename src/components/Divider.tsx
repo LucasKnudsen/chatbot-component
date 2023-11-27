@@ -1,6 +1,7 @@
 import { useTheme } from '@/features/theme/hooks'
 
 type DividerProps = {
+  class?: string
   margin?: number
   vertical?: boolean
 }
@@ -12,6 +13,7 @@ export const Divider = (props: DividerProps) => {
 
   return (
     <div
+      class={props.class}
       style={{
         width: props.vertical ? '1px' : '100%',
         height: props.vertical ? '100%' : '1px',

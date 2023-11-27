@@ -44,7 +44,7 @@ const Picture = ({ element }: Props) => {
 
   return (
     <div
-      class='relative h-48 min-w-[298px] p-2 rounded-lg border '
+      class='relative h-full w-full'
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

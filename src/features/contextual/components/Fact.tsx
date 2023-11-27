@@ -10,14 +10,14 @@ export const Fact = (props: Props) => {
 
   return (
     <div
-      class='p-2 mb-2 text-sm'
+      class='p-2 text-sm'
       style={{
-        background: theme().primaryAccent,
+        background: theme().surfaceBackground2,
         'border-left': `3px solid ${theme().primaryColor}`,
         color: theme().textColor,
       }}
     >
-      <div class='font-bold'>{props.fact.header}</div>
+      <div class='font-semibold'>{props.fact.header}</div>
       <div class='font-light'>
         {Array.isArray(props.fact.value) ? props.fact.value.join(', ') : props.fact.value}
       </div>

@@ -1,6 +1,6 @@
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { JSX, Show, createSignal } from 'solid-js'
+import { JSX, createSignal } from 'solid-js'
 import { ChevronIcon } from '../icons'
 
 type Props = {
@@ -8,6 +8,7 @@ type Props = {
   header: string
   onOpen?: () => void
   defaultOpen?: boolean
+  height?: string
 }
 
 export const Expandable = (props: Props) => {
@@ -27,9 +28,11 @@ export const Expandable = (props: Props) => {
   return (
     <div
       ref={parent}
-      class={`border rounded-lg `}
+      class={`border rounded-lg transition-all overflow-hidden `}
       style={{
-        background: theme().primaryAccent,
+        background: theme().surfaceBackground,
+        'border-color': theme().borderColor,
+        height: open() ? props.height ?? 'auto' : '70px',
       }}
     >
       <div class='flex p-6 cursor-pointer gap-x-6 items-center' onClick={toggle}>
@@ -53,7 +56,7 @@ export const Expandable = (props: Props) => {
         </div>
       </div>
 
-      <Show when={open()}>{props.children}</Show>
+      {props.children}
     </div>
   )
 }

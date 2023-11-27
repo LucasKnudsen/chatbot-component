@@ -4,9 +4,11 @@ export type SourceFact = {
   value: string | string[]
 }
 export type SourceResource = {
+  id: string
   link: string
   type: string
   description: string
+  thumbnail?: string
 }
 export type SourceDocument = {
   id: string
@@ -29,6 +31,7 @@ export type ContextualElement = {
 
   header?: string
   description?: string
+  thumbnail?: string
 }
 
 export enum ContextualElementType {
