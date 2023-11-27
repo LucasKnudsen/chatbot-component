@@ -261,12 +261,14 @@ export const Bot = (props: BotProps & { class?: string }) => {
           </div>
 
           {/* Resources Sidebar */}
-          <ResourcesSidebar
-            open={resourcesOpen()}
-            toggle={() => setResourcesToggled(!resourcesToggled())}
-          >
-            <ContextualContainer class='py-6' resources={question()?.resources} />
-          </ResourcesSidebar>
+          <Show when={!!question()}>
+            <ResourcesSidebar
+              open={resourcesOpen()}
+              toggle={() => setResourcesToggled(!resourcesToggled())}
+            >
+              <ContextualContainer class='py-6' resources={question()?.resources} />
+            </ResourcesSidebar>
+          </Show>
 
           {/* Sidebar */}
           <Show when={question()}>
