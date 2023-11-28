@@ -21,6 +21,7 @@ type BotDesktopProps = {
   isFetchingSuggestedPrompts: boolean
   onSubmit: (question: string) => void
   onClear: () => void
+  toggleBot: () => void
   class?: string
 }
 
@@ -48,7 +49,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
         'background-size': 'cover',
       }}
     >
-      <Nav question={botStore.chat} onClear={props.onClear} />
+      <Nav question={botStore.chat} onClear={props.onClear} toggleBot={props.toggleBot} />
 
       <div class='relative flex flex-1 px-10 overflow-hidden'>
         {/* Main Container */}

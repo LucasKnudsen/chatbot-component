@@ -3,6 +3,9 @@ export const defaultText = {
   inputPlaceholder: 'Ask me anything...',
   suggestedPromptsTitle: 'SUGGESTIONS',
 
+  // Nav bar
+  close: 'Close',
+
   // Settings dropdown
   copyText: 'Copy text',
   copyTextSuccess: 'Text copied to clipboard',
@@ -14,4 +17,5 @@ export const defaultText = {
   today: 'Today',
   yesterday: 'Yesterday',
   previous: 'Previous',
+  noHistory: 'Ask a Question to Get Started',
 }

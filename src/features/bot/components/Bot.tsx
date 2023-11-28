@@ -45,7 +45,9 @@ export type BotProps = {
   theme?: Partial<Theme>
 }
 
-export const Bot = (props: BotProps & { class?: string }) => {
+export const Bot = (props: BotProps & { class?: string; toggleBot: () => void }) => {
+  console.log('Bot props', props)
+
   const [userInput, setUserInput] = createSignal('')
 
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
@@ -164,6 +166,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
         initialPrompts={props.initialPrompts}
         onSubmit={handleSubmit}
         onClear={clear}
+        toggleBot={props.toggleBot}
         class={props.class}
       />
 
