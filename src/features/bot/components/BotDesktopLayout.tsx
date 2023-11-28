@@ -3,28 +3,23 @@ import { Nav } from '@/components/Nav'
 import { TextInput } from '@/components/inputs/textInput'
 import { ContextualContainer } from '@/features/contextual'
 import { ChatWindow } from '@/features/messages'
-import { Chat } from '@/features/messages/types'
 import { SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Show, createMemo, createSignal } from 'solid-js'
 import { PromptType, Sidebar } from '.'
+import { botStore, botStoreMutations } from '..'
 import { sidebarPaddingNum } from '../constants'
 import { ResourcesSidebar } from './ResourcesSidebar'
 import { SidebarTabView } from './SidebarTabView'
 
 type BotDesktopProps = {
-  chat: Chat | null
-  history: Chat[]
-  hasResources: boolean
-  loading: boolean
   userInput: string
   suggestedPrompts: string[]
   initialPrompts?: PromptType[]
   isFetchingSuggestedPrompts: boolean
   onSubmit: (question: string) => void
-  onSetQuestion: (question: Chat) => void
   onClear: () => void
   class?: string
 }
@@ -38,7 +33,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
   const [sidebarOpen, setSidebarOpen] = createSignal(false)
   const [resourcesToggled, setResourcesToggled] = createSignal(true)
 
-  const resourcesOpen = createMemo(() => props.hasResources && resourcesToggled())
+  const resourcesOpen = createMemo(() => botStore.hasResources && resourcesToggled())
 
   return (
     <div
@@ -53,7 +48,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
         'background-size': 'cover',
       }}
     >
-      <Nav question={props.chat} onClear={props.onClear} />
+      <Nav question={botStore.chat} onClear={props.onClear} />
 
       <div class='relative flex flex-1 px-10 overflow-hidden'>
         {/* Main Container */}
@@ -65,7 +60,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
           }}
         >
           <Show
-            when={props.chat}
+            when={botStore.chat}
             fallback={
               // Welcome message
               <div class='flex flex-1'>
@@ -77,22 +72,22 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
 
                 <SidebarTabView
                   initialPrompts={props.initialPrompts}
-                  history={props.history}
-                  navDefault={!props.chat}
+                  history={botStore.history}
+                  navDefault={!botStore.chat}
                   setQuestion={(chat) => {
-                    props.onSetQuestion(chat)
+                    botStoreMutations.setChat(chat)
                     setSidebarOpen(false)
                   }}
                   handleSubmit={(question) => {
                     props.onSubmit(question)
                     setSidebarOpen(false)
                   }}
-                  disabled={props.loading}
+                  disabled={botStore.loading}
                 />
               </div>
             }
           >
-            <ChatWindow question={props.chat!} />
+            <ChatWindow question={botStore.chat!} />
           </Show>
 
           <Divider margin={0} />
@@ -100,7 +95,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
           {/* Input Container */}
           <div class='w-full pb-1 z-1 mt-5 '>
             <TextInput
-              disabled={props.loading}
+              disabled={botStore.loading}
               defaultValue={props.userInput}
               onSubmit={props.onSubmit}
               placeholder={text().inputPlaceholder}
@@ -112,22 +107,22 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
             handleSubmit={props.onSubmit}
             suggestedPrompts={props.suggestedPrompts}
             isFetching={props.isFetchingSuggestedPrompts}
-            loading={props.loading}
+            loading={botStore.loading}
           />
         </div>
 
         {/* Resources Sidebar */}
-        <Show when={props.chat}>
+        <Show when={botStore.chat}>
           <ResourcesSidebar
             open={resourcesOpen()}
             toggle={() => setResourcesToggled(!resourcesToggled())}
           >
-            <ContextualContainer class='py-6' resources={props.chat?.resources} />
+            <ContextualContainer class='py-6' resources={botStore.chat?.resources} />
           </ResourcesSidebar>
         </Show>
 
         {/* Sidebar */}
-        <Show when={props.chat}>
+        <Show when={botStore.chat}>
           <Sidebar
             open={sidebarOpen()}
             onToggle={() => {
@@ -138,17 +133,17 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
           >
             <SidebarTabView
               initialPrompts={props.initialPrompts}
-              history={props.history}
-              navDefault={!props.chat}
+              history={botStore.history}
+              navDefault={!botStore.chat}
               setQuestion={(chat) => {
-                props.onSetQuestion(chat)
+                botStoreMutations.setChat(chat)
                 setSidebarOpen(false)
               }}
               handleSubmit={(question) => {
                 props.onSubmit(question)
                 setSidebarOpen(false)
               }}
-              disabled={props.loading}
+              disabled={botStore.loading}
             />
           </Sidebar>
         </Show>
