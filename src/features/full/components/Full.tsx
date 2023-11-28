@@ -35,7 +35,7 @@ export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
       {isWebComponent && <style>{styles}</style>}
       <Show when={isBotDisplayed()}>
         <div class='h-screen w-full'>
-          <Bot {...props} />
+          <Bot {...props} toggleBot={() => {}} />
         </div>
       </Show>
     </>
