@@ -44,7 +44,7 @@ export const Sidebar = (props: SidebarProps) => {
       </div>
 
       <div
-        class='opacity-0 hover:opacity-100 transition-opacity py-6'
+        class='opacity-0 hover:opacity-100 transition-opacity py-6 '
         style={{
           width: innerWidth,
           opacity: props.open ? '1' : '0',

@@ -1,4 +1,4 @@
-import { currentLanguage } from '@/features/bot'
+import { botStore, currentLanguage } from '@/features/bot'
 import {
   IncomingInput,
   PromptCode,
@@ -6,14 +6,9 @@ import {
   scrollChatWindowToBottom,
   sendMessageQuery,
 } from '@/features/messages'
-import { Chat } from '@/features/messages/types'
-import { Accessor, createEffect, createSignal, on } from 'solid-js'
+import { createEffect, createSignal, on } from 'solid-js'
 
-export function useSuggestedPrompts(
-  chatflowid: string,
-  apiHost: string,
-  history: Accessor<Chat[]>
-) {
+export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
   const [suggestedPrompts, setSuggestedPrompts] = createSignal<string[]>([])
   const [isFetching, setIsFetching] = createSignal(false)
 
@@ -25,12 +20,14 @@ export function useSuggestedPrompts(
     clearSuggestions()
 
     // Take only the questions from today. We don't want to suggest questions from previous days. Take latest 5.
-    const previousQuestions = history()
+    const previousQuestions = botStore.history
       .filter(
         (question) => new Date(question.createdAt).toDateString() === new Date().toDateString()
       )
       .map((question) => question.question)
       .slice(-5)
+
+    console.log('previousQuestions', previousQuestions)
 
     const body: IncomingInput = {
       question: '',

@@ -1,24 +1,21 @@
 import awsconfig from '@/aws-exports'
-
-import { useChatId, useLanguage } from '@/features/bot'
+import { botStore, botStoreMutations, useChatId, useLanguage } from '@/features/bot'
 import {
   IncomingInput,
   PromptCode,
   extractChatbotResponse,
   sendMessageQuery,
-  useQuestion,
   useSocket,
 } from '@/features/messages'
-import { useSuggestedPrompts } from '@/features/prompt'
-import { useTheme } from '@/features/theme/hooks'
-
 import { Popup } from '@/features/popup'
+import { useSuggestedPrompts } from '@/features/prompt'
 import { TextTemplate, detectLanguage, useText } from '@/features/text'
 import { Theme } from '@/features/theme'
+import { useTheme } from '@/features/theme/hooks'
 import StyleSheet from '@/styles'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Amplify } from 'aws-amplify'
-import { createEffect, createSignal, onCleanup, onMount } from 'solid-js'
+import { createSignal, onMount } from 'solid-js'
 import { BotDesktopLayout } from './BotDesktopLayout'
 
 Amplify.configure(awsconfig)
@@ -54,7 +51,6 @@ export type BotProps = {
 
 export const Bot = (props: BotProps & { class?: string; toggleBot: () => void }) => {
   const [userInput, setUserInput] = createSignal('')
-  const [loading, setLoading] = createSignal(false)
 
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
   const [sourcePopupSrc] = createSignal({})
@@ -66,31 +62,20 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
   const { clear: clearDefaultLanguage } = useLanguage(props.chatflowid, props.language)
 
   const {
-    question,
-    createQuestion,
-    updateAnswer,
-    clear: clearQuestions,
-    handleSourceDocuments,
-    history,
-    setQuestion,
-    hasResources,
-  } = useQuestion(props.chatflowid, props.language)
-
-  const {
     suggestedPrompts,
     fetchSuggestedPrompts,
     clearSuggestions,
     isFetching: isFetchingSuggestedPrompts,
-  } = useSuggestedPrompts(props.chatflowid, props.apiHost, history)
+  } = useSuggestedPrompts(props.chatflowid, props.apiHost)
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
     apiHost: props.apiHost,
-    onToken: updateAnswer,
+    onToken: botStoreMutations.updateAnswer,
   })
 
   const clear = () => {
-    clearQuestions()
+    botStoreMutations.clear()
     clearSuggestions()
     clearChatId()
     clearDefaultLanguage()
@@ -104,12 +89,12 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
       return
     }
 
-    setLoading(true)
+    botStoreMutations.setLoading(true)
 
     clearSuggestions()
 
     // Remove welcome message from messages
-    createQuestion(value)
+    botStoreMutations.createQuestion(value)
 
     // const prompt = `. Always return your answer in formatted markdown, structure it with bold, list, images, etc.`
 
@@ -135,12 +120,12 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
 
     if (messageResult.data) {
       // Uses the source documents from the end result rather than sockets (they are the same, and doesnt stream in anyway)
-      handleSourceDocuments(messageResult.data.sourceDocuments)
+      botStoreMutations.handleSourceDocuments(messageResult.data.sourceDocuments)
 
       if (!isChatFlowAvailableToStream()) {
         let text = extractChatbotResponse(messageResult.data)
 
-        updateAnswer(text)
+        botStoreMutations.updateAnswer(text)
       }
 
       fetchSuggestedPrompts(detectLanguageResult?.languageCode)
@@ -150,30 +135,25 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
       const message =
         messageResult.error?.message ?? 'Something went wrong. Please try again later.'
 
-      updateAnswer(message)
+      botStoreMutations.updateAnswer(message)
     }
 
-    setLoading(false)
+    botStoreMutations.setLoading(false)
     setUserInput('')
   }
 
   onMount(() => {
+    botStoreMutations.initBotStore(props.chatflowid, props.apiHost)
     initTheme(props.themeId, props.theme)
+
     initText(
       props.text
       // defaultLanguage(),
     )
 
-    if (question() && import.meta.env.PROD) {
+    if (botStore.chat && import.meta.env.PROD) {
       fetchSuggestedPrompts()
     }
-  })
-
-  createEffect(() => {})
-
-  onCleanup(() => {
-    setUserInput('')
-    setLoading(false)
   })
 
   return (
@@ -181,15 +161,10 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
       <StyleSheet />
 
       <BotDesktopLayout
-        chat={question()}
         userInput={userInput()}
-        history={history()}
-        hasResources={hasResources()}
-        loading={loading()}
         isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
         suggestedPrompts={suggestedPrompts()}
         initialPrompts={props.initialPrompts}
-        onSetQuestion={setQuestion}
         onSubmit={handleSubmit}
         onClear={clear}
         toggleBot={props.toggleBot}
