@@ -81,7 +81,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
     fetchSuggestedPrompts,
     clearSuggestions,
     isFetching: isFetchingSuggestedPrompts,
-  } = useSuggestedPrompts(props.chatflowid, props.apiHost)
+  } = useSuggestedPrompts(props.chatflowid, props.apiHost, history)
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
@@ -111,10 +111,10 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
     // Remove welcome message from messages
     createQuestion(value)
 
-    const prompt = `. Always return your answer in formatted markdown, structure it with bold, list, images, etc.`
+    // const prompt = `. Always return your answer in formatted markdown, structure it with bold, list, images, etc.`
 
     const body: IncomingInput = {
-      question: value + prompt,
+      question: value,
       history: [],
       chatId: chatId(),
       promptCode: PromptCode.QUESTION,
@@ -151,8 +151,6 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
         messageResult.error?.message ?? 'Something went wrong. Please try again later.'
 
       updateAnswer(message)
-
-      return
     }
 
     setLoading(false)

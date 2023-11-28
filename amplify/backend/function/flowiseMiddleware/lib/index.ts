@@ -1,9 +1,12 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import axios from 'axios'
 
-// const chatflowid = 'ca719387-f573-4989-aea0-21dc07d5ca73'
-// const apiHost = 'https://flowise.testnet.concordium.com'
 const TEST_API_KEY = 'Bearer Z6tQxMs34lQs1kcpOO7bB8bbMrUY9cDo52kjopo/MjM='
+
+const headers = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': '*',
+}
 
 type ParsedEventBody = {
   chatflowid: string
@@ -22,7 +25,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
     const body = JSON.parse(event.body) as ParsedEventBody
 
-    const { chatflowid, apiHost } = body
+    const { chatflowid, apiHost, chatId, socketIOClientId } = body
 
     // TODO: Fetch config based on ID instead
 
@@ -31,8 +34,10 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     let engineeredQuestion = getEngineeredQuestion(body)
 
     const data = {
-      engineeredQuestion,
-      ...body,
+      question: engineeredQuestion,
+      chatId,
+      socketIOClientId,
+      history: [],
     }
 
     const result = await axios.post(endpoint, data, {
@@ -43,14 +48,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
     const answer = result.data
 
-    console.log(`ANSWER: `, answer)
+    console.log(`ANSWER: `, answer.text)
 
     return {
       statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-      },
+      headers,
       body: JSON.stringify(answer),
     }
   } catch (error) {
@@ -58,23 +60,34 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
     return {
       statusCode: error.response?.status || 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-      },
+      headers,
       body: JSON.stringify(error),
     }
   }
 }
 
 const getEngineeredQuestion = (body: ParsedEventBody) => {
-  const { question, previousQuestions } = body
+  let { question, previousQuestions, language } = body
+
+  // TODO: Add Client overrides/additions to the prompts
+  previousQuestions = [
+    'What is your chatbot about?',
+    'How to buy the chatbot?',
+    'What benefits can Soft Designs chatbot provide for my business?',
+  ]
 
   switch (body.promptCode) {
     case 'question':
-      return `Please answer the following question: ${question}. Always return your answer in formatted markdown, structure it with bold, list, images, etc.`
+      return `Please answer the following question: ${question}. Always return your answer in formatted markdown, structure it with bold, list, images, etc, making it interesting and informative.`
     case 'suggestedPrompts':
-      return previousQuestions.join(' ')
+      return `Help me with 2 short concise follow up prompts that would encourage me the user to proceed with this conversation. 
+       
+      Please provide the questions in a JSON array format like ["Question 1?", "Question 2?", "Question 3?"]. You MUST understand and use the following language code as the language for the questions: "${language}". Do not say anything else, just send me back an array.
+
+      Here are the questions that the user has asked so far in chronological order: ${previousQuestions.join(
+        ', '
+      )}.
+      `
     default:
       return question
   }
