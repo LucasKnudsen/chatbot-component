@@ -5,6 +5,7 @@ export type Theme = {
   primaryAccent: string
   textColor: string
   textSecondary: string
+  textAccent: string
   backgroundColor: string
   backgroundImageUrl: string
   borderColor: string
@@ -20,6 +21,7 @@ export const defaultTheme: Theme = {
   primaryAccent: 'rgba(91, 147, 255, 0.2)',
   textColor: 'rgba(35, 24, 67, 1)',
   textSecondary: 'rgba(147, 147, 147, 1)',
+  textAccent: 'rgba(255, 255, 255, 1)',
   backgroundColor: 'transparent',
   backgroundImageUrl: background2,
   borderColor: 'rgba(147, 147, 147, 0.25)',
@@ -39,6 +41,7 @@ const ugly: Theme = {
   primaryAccent: 'orange',
   textColor: 'white',
   textSecondary: 'black',
+  textAccent: 'purple',
   backgroundColor: 'green',
   backgroundImageUrl: 'https://picsum.photos/200/300',
   borderColor: 'blue',

@@ -1,10 +1,16 @@
-import type { BubbleProps } from './features/bubble'
+import { BotProps } from '.'
 
-export const defaultBotProps: BubbleProps = {
+// The props needs to be instantiated with the default values, otherwise it won't be filled from the Object.assign
+export const defaultBotProps: BotProps = {
   chatflowid: '',
   apiHost: '',
-  chatflowConfig: undefined,
+
+  language: undefined,
+  themeId: undefined,
   theme: undefined,
+  text: undefined,
+
+  initialPrompts: undefined,
 }
 
 export const chatflows = {

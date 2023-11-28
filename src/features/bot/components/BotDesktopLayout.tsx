@@ -26,6 +26,7 @@ type BotDesktopProps = {
   onSubmit: (question: string) => void
   onSetQuestion: (question: Chat) => void
   onClear: () => void
+  toggleBot: () => void
   class?: string
 }
 
@@ -53,7 +54,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
         'background-size': 'cover',
       }}
     >
-      <Nav question={props.chat} onClear={props.onClear} />
+      <Nav question={props.chat} onClear={props.onClear} toggleBot={props.toggleBot} />
 
       <div class='relative flex flex-1 px-10 overflow-hidden'>
         {/* Main Container */}

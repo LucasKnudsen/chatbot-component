@@ -1,4 +1,5 @@
 export * from './SendButton'
 export * from './TypingBubble'
+export * from './button/Button'
 export * from './expandable/Expandable'
 export * from './settings/Settings'

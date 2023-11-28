@@ -4,11 +4,10 @@ import { Bot, BotProps } from '../../bot/components/Bot'
 
 import { BubbleButton } from './BubbleButton'
 
-export type BubbleProps = BotProps
-
-export const Bubble = (props: BubbleProps) => {
-  const [isBotOpened, setIsBotOpened] = createSignal(false)
+export const Bubble = (props: BotProps) => {
+  console.log('Bubble props', props)
   const [isBotStarted, setIsBotStarted] = createSignal(false)
+  const [isBotOpened, setIsBotOpened] = createSignal(false)
 
   const openBot = () => {
     if (!isBotStarted()) setIsBotStarted(true)
@@ -26,36 +25,22 @@ export const Bubble = (props: BubbleProps) => {
   return (
     <>
       <style>{styles}</style>
-      <BubbleButton
-        // {...bubbleProps.theme?.button}
-        toggleBot={toggleBot}
-        isBotOpened={isBotOpened()}
-      />
+      <BubbleButton toggleBot={toggleBot} isBotOpened={isBotOpened()} />
+
       <div
         class={`fixed top-0 left-0 w-screen h-screen m-0 ${
           isBotOpened() ? 'opacity-1' : 'opacity-0 pointer-events-none'
         }`}
         style={{
-          transition: 'transform 250ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
+          transition: 'transform 350ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
           'transform-origin': 'bottom right',
           transform: isBotOpened() ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
           'z-index': 42424242,
         }}
         part='bot'
-        // style={{
-        //   height: bubbleProps.theme?.chatWindow?.height
-        //     ? `${bubbleProps.theme?.chatWindow?.height.toString()}px`
-        //     : 'calc(100% - 100px)',
-        //   transition: 'transform 200ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
-        //   'transform-origin': 'bottom right',
-        //   transform: isBotOpened() ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
-        //   'box-shadow': 'rgb(0 0 0 / 16%) 0px 5px 40px',
-        //   'background-color': bubbleProps.theme?.chatWindow?.backgroundColor || '#ffffff',
-        //   'z-index': 42424242,
-        // }}
       >
         <Show when={isBotStarted()}>
-          <Bot {...props} />
+          <Bot {...props} toggleBot={toggleBot} />
         </Show>
       </div>
     </>

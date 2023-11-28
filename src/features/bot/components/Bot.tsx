@@ -48,7 +48,9 @@ export type BotProps = {
   theme?: Partial<Theme>
 }
 
-export const Bot = (props: BotProps & { class?: string }) => {
+export const Bot = (props: BotProps & { class?: string; toggleBot: () => void }) => {
+  console.log('Bot props', props)
+
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
 
@@ -189,6 +191,7 @@ export const Bot = (props: BotProps & { class?: string }) => {
         onSetQuestion={setQuestion}
         onSubmit={handleSubmit}
         onClear={clear}
+        toggleBot={props.toggleBot}
         class={props.class}
       />
 

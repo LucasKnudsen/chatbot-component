@@ -5,6 +5,9 @@ export const da: TextTemplate = {
   inputPlaceholder: 'Spørg mig om noget...',
   suggestedPromptsTitle: 'Forslag',
 
+  // Nav bar
+  close: 'Luk',
+
   // Indstillinger dropdown
   copyText: 'Kopier tekst',
   copyTextSuccess: 'Tekst kopieret til udklipsholderen',

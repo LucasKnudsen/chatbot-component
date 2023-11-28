@@ -1,11 +1,13 @@
 import logo from '@/assets/logo.png'
 import { Chat } from '@/features/messages/types'
 import { useTheme } from '@/features/theme/hooks'
+import { Button } from '.'
 import { DeleteButton } from './SendButton'
 
 type NavProps = {
   question: Chat | null
   onClear: () => void
+  toggleBot: () => void
 }
 
 export const Nav = (props: NavProps) => {
@@ -42,6 +44,8 @@ export const Nav = (props: NavProps) => {
       >
         <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
       </DeleteButton>
+
+      <Button onClick={props.toggleBot}>Close</Button>
     </div>
   )
 }
