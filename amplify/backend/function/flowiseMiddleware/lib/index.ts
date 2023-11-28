@@ -70,17 +70,17 @@ const getEngineeredQuestion = (body: ParsedEventBody) => {
   let { question, previousQuestions, language } = body
 
   // TODO: Add Client overrides/additions to the prompts
-  previousQuestions = [
-    'What is your chatbot about?',
-    'How to buy the chatbot?',
-    'What benefits can Soft Designs chatbot provide for my business?',
-  ]
+  // previousQuestions = [
+  //   'What is your chatbot about?',
+  //   'How to buy the chatbot?',
+  //   'What benefits can Soft Designs chatbot provide for my business?',
+  // ]
 
   switch (body.promptCode) {
     case 'question':
-      return `Please answer the following question: ${question}. Always return your answer in formatted markdown, structure it with bold, list, images, etc, making it interesting and informative.`
+      return `Please answer the following question: ${question}. Always return your answer in formatted markdown, structure it with bold, lists, etc, making it interesting and informative, but still concise.`
     case 'suggestedPrompts':
-      return `Help me with 2 short concise follow up prompts that would encourage me the user to proceed with this conversation. 
+      return `Help me with 2 short concise suggestive follow up prompts that would encourage the user to proceed with this conversation. 
        
       Please provide the questions in a JSON array format like ["Question 1?", "Question 2?", "Question 3?"]. You MUST understand and use the following language code as the language for the questions: "${language}". Do not say anything else, just send me back an array.
 
