@@ -124,7 +124,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
 
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
-    const [messageResult] = await Promise.all([
+    const [messageResult, detectLanguageResult] = await Promise.all([
       sendMessageQuery({
         chatflowid: props.chatflowid,
         apiHost: props.apiHost,
@@ -143,7 +143,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
         updateAnswer(text)
       }
 
-      fetchSuggestedPrompts()
+      fetchSuggestedPrompts(detectLanguageResult?.languageCode)
     }
 
     if (messageResult.error) {

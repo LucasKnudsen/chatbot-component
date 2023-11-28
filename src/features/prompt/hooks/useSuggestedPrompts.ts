@@ -21,7 +21,7 @@ export function useSuggestedPrompts(
     setSuggestedPrompts([])
   }
 
-  const fetchSuggestedPrompts = async () => {
+  const fetchSuggestedPrompts = async (language?: string) => {
     clearSuggestions()
 
     // Take only the questions from today. We don't want to suggest questions from previous days. Take latest 5.
@@ -36,7 +36,7 @@ export function useSuggestedPrompts(
       question: '',
       previousQuestions,
       promptCode: PromptCode.SUGGESTED_PROMPTS,
-      language: currentLanguage(),
+      language: language || currentLanguage(),
       history: [],
       // chatId: '123',
     }
