@@ -1,10 +1,14 @@
 import awsconfig from '@/aws-exports'
 
 import { useChatId, useLanguage } from '@/features/bot'
-import { useQuestion } from '@/features/messages'
-import { useSocket } from '@/features/messages/hooks/useSocket'
-import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
-import { extractChatbotResponse } from '@/features/messages/utils'
+import {
+  IncomingInput,
+  PromptCode,
+  extractChatbotResponse,
+  sendMessageQuery,
+  useQuestion,
+  useSocket,
+} from '@/features/messages'
 import { useSuggestedPrompts } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
 
@@ -49,8 +53,6 @@ export type BotProps = {
 }
 
 export const Bot = (props: BotProps & { class?: string; toggleBot: () => void }) => {
-  console.log('Bot props', props)
-
   const [userInput, setUserInput] = createSignal('')
   const [loading, setLoading] = createSignal(false)
 
@@ -109,12 +111,13 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
     // Remove welcome message from messages
     createQuestion(value)
 
+    const prompt = `. Always return your answer in formatted markdown, structure it with bold, list, images, etc.`
+
     const body: IncomingInput = {
-      question:
-        value +
-        '. Always return your answer in formatted markdown, structure it to use a lot of markdown and formatting, links, bold, list.',
+      question: value + prompt,
       history: [],
       chatId: chatId(),
+      promptCode: PromptCode.QUESTION,
     }
 
     if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig
@@ -163,7 +166,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
       // defaultLanguage(),
     )
 
-    if (question()) {
+    if (question() && import.meta.env.PROD) {
       fetchSuggestedPrompts()
     }
   })

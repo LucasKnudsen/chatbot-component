@@ -112,6 +112,8 @@ export const useQuestion = (chatflowid: string, clientLanguage?: string) => {
 
     factElements = await Promise.all(
       factElements.map(async (f) => {
+        if (import.meta.env.DEV) return f
+
         const encodedText = `${f.header} | ${f.value}`
         const translatedText = await translate(encodedText, clientLanguage)
 

@@ -56,7 +56,7 @@ function App() {
       </h1>
 
       {/* <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} /> */}
-      <Bubble {...chatflows.fraia_test} initialPrompts={initialPrompts} language='da' />
+      <Bubble {...chatflows.fraia_test2} initialPrompts={initialPrompts} language='da' />
     </div>
   )
 }
