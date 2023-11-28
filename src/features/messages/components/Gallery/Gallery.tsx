@@ -21,8 +21,6 @@ const Gallery = (props: Props) => {
 
   const imagesAndVideos = createMemo(() => [...props.resources.picture, ...props.resources.video])
 
-  console.log(props.resources)
-
   return (
     <div ref={parent} class='mt-8'>
       {/* TODO: Configureable header */}
