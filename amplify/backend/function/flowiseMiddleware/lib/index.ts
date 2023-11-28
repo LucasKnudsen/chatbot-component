@@ -1,5 +1,11 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import axios from 'axios'
+// @ts-ignore
+const { SSMClient, GetParameterCommand } = require('@aws-sdk/client-ssm')
+// @ts-ignore
+import OpenAI from 'openai'
+
+const ssmClient = new SSMClient({ region: process.env.REGION })
 
 const TEST_API_KEY = 'Bearer Z6tQxMs34lQs1kcpOO7bB8bbMrUY9cDo52kjopo/MjM='
 
@@ -19,34 +25,32 @@ type ParsedEventBody = {
   socketIOClientId?: string
 }
 
-export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler = async (
+  event: APIGatewayProxyEvent & { isMock?: boolean }
+): Promise<APIGatewayProxyResult> => {
   try {
     console.log(`EVENT: ${JSON.stringify(event)}`)
 
     const body = JSON.parse(event.body) as ParsedEventBody
 
-    const { chatflowid, apiHost, chatId, socketIOClientId } = body
-
     // TODO: Fetch config based on ID instead
 
-    const endpoint = `${apiHost}/api/v1/prediction/${chatflowid}`
+    let answer = { text: '' }
 
-    let engineeredQuestion = getEngineeredQuestion(body)
+    switch (body.promptCode) {
+      case 'question':
+        answer = await handleFlowiseRequest(body)
+        break
 
-    const data = {
-      question: engineeredQuestion,
-      chatId,
-      socketIOClientId,
-      history: [],
+      case 'suggestedPrompts':
+        answer = await handleOpenAIRequest(body, event.isMock)
+        break
+
+      default:
+        answer = await handleFlowiseRequest(body)
+
+        break
     }
-
-    const result = await axios.post(endpoint, data, {
-      headers: {
-        Authorization: TEST_API_KEY,
-      },
-    })
-
-    const answer = result.data
 
     console.log(`ANSWER: `, answer.text)
 
@@ -56,7 +60,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       body: JSON.stringify(answer),
     }
   } catch (error) {
-    console.log(`ERROR: `, JSON.stringify(error))
+    console.log(error)
 
     return {
       statusCode: error.response?.status || 500,
@@ -66,29 +70,63 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   }
 }
 
-const getEngineeredQuestion = (body: ParsedEventBody) => {
-  let { question, previousQuestions, language } = body
+const handleFlowiseRequest = async (body: ParsedEventBody) => {
+  const { chatflowid, apiHost, chatId, socketIOClientId, question } = body
 
-  // TODO: Add Client overrides/additions to the prompts
-  // previousQuestions = [
-  //   'What is your chatbot about?',
-  //   'How to buy the chatbot?',
-  //   'What benefits can Soft Designs chatbot provide for my business?',
-  // ]
+  const endpoint = `${apiHost}/api/v1/prediction/${chatflowid}`
+  const data = {
+    question: `Please answer the following question: ${question}. Always return your answer in formatted markdown, structure it with bold, lists, etc, making it interesting and informative, but still concise.`,
+    chatId,
+    socketIOClientId,
+  }
 
-  switch (body.promptCode) {
-    case 'question':
-      return `Please answer the following question: ${question}. Always return your answer in formatted markdown, structure it with bold, lists, etc, making it interesting and informative, but still concise.`
-    case 'suggestedPrompts':
-      return `Help me with 2 short concise suggestive follow up prompts that would encourage the user to proceed with this conversation. 
-       
-      Please provide the questions in a JSON array format like ["Question 1?", "Question 2?", "Question 3?"]. You MUST understand and use the following language code as the language for the questions: "${language}". Do not say anything else, just send me back an array.
+  const result = await axios.post(endpoint, data, {
+    headers: {
+      Authorization: TEST_API_KEY,
+    },
+  })
 
-      Here are the questions that the user has asked so far in chronological order: ${previousQuestions.join(
-        ', '
-      )}.
+  return result.data
+}
+
+const handleOpenAIRequest = async (body: ParsedEventBody, isMock?: boolean) => {
+  const command = new GetParameterCommand({ Name: process.env.openai_key, WithDecryption: true })
+  const { Parameter } = await ssmClient.send(command)
+
+  const openai = new OpenAI({
+    organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
+    apiKey: Parameter.Value,
+  })
+
+  let { previousQuestions, language } = body
+
+  language = language || 'en'
+
+  previousQuestions = isMock
+    ? [
+        'Question 1: What is your chatbot about?',
+        'Question 2: How to buy the chatbot?',
+        'Question 3: What benefits can Soft Designs chatbot provide for my business?',
+      ]
+    : previousQuestions
+
+  // Validate that the previous questions are in the correct format
+  if (!Array.isArray(previousQuestions)) {
+    return { text: '' }
+  }
+
+  const prompt = `Help me formulate two short concise follow up questions that would encourage the user to proceed with this conversation. They should be non-repetitive and based on the questions asked so far: "${previousQuestions.join(
+    ', '
+  )}".    
+      Give me the list of questions in a JSON list. You MUST understand and use the following language code as the language for the questions: "${language}". Do not say anything else, ONLY send me back a JSON list. Response example: ["What is...", "Tell me more about ..."]. 
       `
-    default:
-      return question
+
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [{ role: 'user', content: prompt }],
+    model: 'gpt-3.5-turbo',
+  })
+
+  return {
+    text: chatCompletion.choices[0].message.content,
   }
 }

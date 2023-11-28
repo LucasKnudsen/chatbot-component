@@ -15,7 +15,8 @@
       "function": {
         "flowiseMiddleware": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/flowiseMiddleware-674357596f7a33357947-build.zip"
+          "s3Key": "amplify-builds/flowiseMiddleware-5345435844416d38562b-build.zip",
+          "secretsPathAmplifyAppId": "d1i4jp82axmvxl"
         },
         "flowiseBroadcast": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",

@@ -18,7 +18,7 @@ const initialPrompts: PromptType[] = [
     prompt: 'Give me a detailed description of the products that Soft Design offers',
   },
   {
-    display: 'Who is your CEO',
+    display: 'Who is your CEO?',
     prompt: 'Give me a detailed description of the CEO of Lion Brain',
   },
 ]
@@ -56,7 +56,7 @@ function App() {
       </h1>
 
       {/* <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} /> */}
-      <Bubble {...chatflows.fraia_test} initialPrompts={initialPrompts} language='da' />
+      <Bubble {...chatflows.fraia_test2} initialPrompts={initialPrompts} language='da' />
     </div>
   )
 }

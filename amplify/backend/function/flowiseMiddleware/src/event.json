@@ -1,4 +1,5 @@
 {
+  "isMock": true,
   "resource": "/flowise/middleware",
   "path": "/flowise/middleware",
   "httpMethod": "POST",
@@ -96,6 +97,6 @@
     "domainName": "zg7aws7xvd.execute-api.ap-southeast-1.amazonaws.com",
     "apiId": "zg7aws7xvd"
   },
-  "body": "{\"chatflowid\":\"ac2aa23a-5c82-4f50-8b7a-76f87887fc38\",\"apiHost\":\"https://lionbrain.softdesign.dk\",\"question\":\"Give me a detailed description of the services that Lion Brain offers\",\"history\":[],\"chatId\":\"54a4226e-6450-42d6-885d-41da761a58f5\",\"promptCode\":\"suggestedPrompts\"}",
+  "body": "{\"chatflowid\":\"141aca34-5624-4441-87c8-62524f40ecd1\",\"apiHost\":\"https://lionbrain.softdesign.dk\",\"question\":\"Give me a detailed description of the products that Soft Design offers\",\"history\":[],\"chatId\":\"aa97e019-2a47-460d-b4d4-4ca2c70cda8f\",\"promptCode\":\"suggestedPrompts\"}",
   "isBase64Encoded": false
 }
