@@ -67,8 +67,8 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
           <Show
             when={props.chat}
             fallback={
-              // Welcome message
               <div class='flex flex-1'>
+                {/* Welcome message */}
                 <div class='flex flex-1 items-end '>
                   <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
                     {text().welcomeMessage}
