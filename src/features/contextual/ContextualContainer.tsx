@@ -18,7 +18,8 @@ export const ContextualContainer = (props: Props) => {
   const facts = createMemo(() => props.resources?.fact ?? [])
   // const links = createMemo(() => props.resources?.link ?? [])
   // const iframes = createMemo(() => props.resources?.iframe ?? [])
-  const [parent] = createAutoAnimate()
+  const [animateFacts] = createAutoAnimate()
+  const [animateLinks] = createAutoAnimate()
 
   const { theme } = useTheme()
 
@@ -45,7 +46,6 @@ export const ContextualContainer = (props: Props) => {
   return (
     <div
       id='contextual-resources'
-      ref={parent}
       class={
         'flex flex-col gap-5 h-full relative scroll-smooth rounded-md scrollable-container text-sm ' +
         props.class
@@ -55,7 +55,10 @@ export const ContextualContainer = (props: Props) => {
         'padding-left': sidebarPaddingNum + 'px',
       }}
     >
-      <div class='flex-1 flex flex-col gap-2 overflow-y-scroll custom-scrollbar '>
+      <div
+        ref={animateFacts}
+        class='flex-1 flex flex-col gap-2 overflow-y-scroll custom-scrollbar '
+      >
         <For each={facts()}>{(element) => <Fact fact={element} />}</For>
       </div>
 
@@ -72,7 +75,10 @@ export const ContextualContainer = (props: Props) => {
 
         <Divider margin={12} />
 
-        <div class='flex flex-col h-full gap-4 flex-1 overflow-y-scroll custom-scrollbar pr-0.5'>
+        <div
+          ref={animateLinks}
+          class='flex flex-col h-full gap-4 flex-1 overflow-y-scroll custom-scrollbar pr-0.5'
+        >
           <For each={props.resources?.link ?? []}>{(element) => <Link link={element} />}</For>
           <For each={props.resources?.iframe ?? []}>
             {(element) => <Iframe element={element} />}
