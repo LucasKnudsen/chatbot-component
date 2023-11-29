@@ -2,13 +2,15 @@ import { SendButton } from '@/components/SendButton'
 import { useTheme } from '@/features/theme/hooks'
 import { isMobile } from '@/utils/isMobileSignal'
 import { createEffect, createSignal, onMount } from 'solid-js'
-import { ShortTextInput } from './ShortTextInput'
+import { Textarea } from './ShortTextInput'
 
 type Props = {
   placeholder: string
+  rows?: number
   defaultValue?: string
   fontSize?: number
   disabled?: boolean
+  class?: string
   onSubmit: (value: string) => void
 }
 
@@ -43,30 +45,30 @@ export const TextInput = (props: Props) => {
 
   return (
     <div
-      class={'flex  justify-between rounded-lg h-20'}
+      class={'flex justify-between rounded-lg ' + props.class}
       data-testid='input'
       style={{
-        margin: 'auto',
         'background-color': theme().textInputBackgroundColor,
         color: theme().textInputTextColor,
       }}
       onKeyDown={submitWhenEnter}
     >
-      <div class='h-full flex-1'>
-        <ShortTextInput
-          ref={inputRef}
-          onInput={handleInput}
-          value={inputValue()}
-          fontSize={props.fontSize}
-          disabled={props.disabled}
-          placeholder={props.placeholder}
-        />
-      </div>
+      <Textarea
+        ref={inputRef}
+        onInput={handleInput}
+        value={inputValue()}
+        fontSize={props.fontSize}
+        disabled={props.disabled}
+        placeholder={props.placeholder}
+        rows={props.rows}
+        class='p-2 md:p-4'
+      />
+
       <SendButton
         sendButtonColor={theme().textSecondary}
         type='button'
         isDisabled={props.disabled || inputValue() === ''}
-        class='my-2 ml-2'
+        class='ml-2'
         on:click={submit}
       >
         <span style={{ 'font-family': 'Poppins, sans-serif' }}>Send</span>

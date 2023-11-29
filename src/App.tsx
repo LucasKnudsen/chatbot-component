@@ -1,12 +1,9 @@
-import { onMount } from 'solid-js'
 import './dev.css'
 
 import { chatflows } from './constants'
 import { PromptType } from './features/bot'
 import { Bubble } from './features/bubble'
-import { subscribe2channel } from './graphql/subscriptions'
 import './index.css'
-import { SubscriptionHelper } from './utils/subscriptionHelpers'
 
 const initialPrompts: PromptType[] = [
   {
@@ -29,24 +26,9 @@ const initialPrompts: PromptType[] = [
 ]
 
 function App() {
-  // Subscription example
-  onMount(() => {
-    subscribe()
-  })
-
-  const subscribe = async () => {
-    await SubscriptionHelper({
-      query: subscribe2channel,
-      variables: {
-        sessionId: '1234',
-      },
-      onNext(data) {
-        console.log(data)
-      },
-    })
-  }
-
   return (
+    // <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} />
+
     <div class='w-screen h-screen flex justify-center items-center bg-slate-100'>
       <h1 class='text-6xl'>
         FR
@@ -59,8 +41,6 @@ function App() {
         </span>
         A
       </h1>
-
-      {/* <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} /> */}
       <Bubble {...chatflows.fraia_test2} initialPrompts={initialPrompts} />
     </div>
   )

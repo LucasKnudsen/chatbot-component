@@ -3,6 +3,7 @@ import { ContextualElement } from '..'
 
 type Props = {
   fact: ContextualElement
+  class?: string
 }
 
 export const Fact = (props: Props) => {
@@ -10,7 +11,7 @@ export const Fact = (props: Props) => {
 
   return (
     <div
-      class='p-2 text-sm'
+      class={'p-2 text-sm ' + props.class}
       style={{
         background: theme().surfaceBackground2,
         'border-left': `3px solid ${theme().primaryColor}`,
