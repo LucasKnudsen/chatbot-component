@@ -1,5 +1,5 @@
 export const defaultText = {
-  welcomeMessage: 'Introducing a new website experience',
+  welcomeMessage: 'Welcome to a new, immersive chatbot experience',
   inputPlaceholder: 'Ask me anything...',
   suggestedPromptsTitle: 'SUGGESTIONS',
   viewMedia: 'View media',

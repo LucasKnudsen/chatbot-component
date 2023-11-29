@@ -144,11 +144,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
   onMount(() => {
     botStoreMutations.initBotStore(props.chatflowid, props.apiHost)
     initTheme(props.themeId, props.theme)
-
-    initText(
-      props.text
-      // defaultLanguage(),
-    )
+    initText(props.text, props.language)
 
     if (botStore.chat) {
       fetchSuggestedPrompts()
