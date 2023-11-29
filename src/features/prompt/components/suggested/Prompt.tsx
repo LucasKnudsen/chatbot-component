@@ -28,11 +28,9 @@ export const Prompt = (props: PromptProps) => {
       </style>
 
       <div
-        class='prompt py-2 px-5 rounded-xl border transition duration-200 ease-in-out w-fit '
+        class='prompt text-xs md:text-sm py-1 md:py-2 px-3 md:px-5 rounded-lg md:rounded-xl border transition duration-200 ease-in-out w-fit '
         style={{
           cursor: props.disabled ? 'not-allowed' : 'pointer',
-          // TODO: Themme it
-
           color: textColor,
         }}
         onClick={() => (props.disabled ? null : props.onClick(props.prompt))}

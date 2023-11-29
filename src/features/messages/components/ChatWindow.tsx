@@ -2,9 +2,12 @@ import { Settings, TypingBubble } from '@/components'
 import { Divider } from '@/components/Divider'
 import { MessageIcon } from '@/components/icons'
 import { botStore } from '@/features/bot'
+import { Fact } from '@/features/contextual/components/Fact'
+import { LinkInline } from '@/features/contextual/components/LinkInline'
 import { useText } from '@/features/text'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Marked } from '@ts-stack/markdown'
-import { Show, createEffect, on } from 'solid-js'
+import { For, Show, createEffect, on } from 'solid-js'
 import { scrollChatWindowToBottom } from '..'
 import Gallery from './Gallery/Gallery'
 
@@ -12,6 +15,7 @@ export const ChatWindow = () => {
   let botMessageEl: HTMLDivElement | undefined
 
   const { text } = useText()
+  const device = useMediaQuery()
 
   createEffect(() => {
     if (botMessageEl) {
@@ -35,8 +39,8 @@ export const ChatWindow = () => {
   return (
     <>
       {/* Question */}
-      <div class='flex  justify-between'>
-        <div class=' text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start '>
+      <div class='flex justify-between'>
+        <div class='mb-1 text-xl md:text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start '>
           <div>
             <MessageIcon width={30} />
           </div>
@@ -61,12 +65,12 @@ export const ChatWindow = () => {
         />
       </div>
 
-      <Divider />
+      <Divider margin={0} />
 
       {/* Answer */}
       <div
         id='chat-window'
-        class='flex flex-1 py-4 mb-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative'
+        class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative'
       >
         {/* Loading  */}
         <Show when={!botStore.chat?.answer}>
@@ -80,6 +84,22 @@ export const ChatWindow = () => {
 
         {/* Gallery  */}
         <Gallery resources={botStore.chat?.resources!} />
+
+        <Show when={device() == 'mobile'}>
+          <div>
+            <div class='flex overflow-x-scroll whitespace-nowrap gap-x-4 custom-scrollbar mt-2'>
+              <For each={botStore.chat?.resources?.fact ?? []}>
+                {(element) => <Fact fact={element} />}
+              </For>
+            </div>
+
+            <div class='flex overflow-x-scroll whitespace-nowrap gap-x-4 custom-scrollbar mt-2'>
+              <For each={botStore.chat?.resources?.link ?? []}>
+                {(element) => <LinkInline link={element} />}
+              </For>
+            </div>
+          </div>
+        </Show>
       </div>
     </>
   )
