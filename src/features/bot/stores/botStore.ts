@@ -142,6 +142,8 @@ const handleFacts = async (facts: ExtendedSourceFact[]) => {
 
   factElements = await Promise.all(
     factElements.map(async (f) => {
+      if (import.meta.env.DEV) return f
+
       const encodedText = `${f.header} | ${f.value}`
       const translatedText = await translate(encodedText, botStore.clientLanguage)
 

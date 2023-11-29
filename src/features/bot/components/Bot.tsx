@@ -1,8 +1,12 @@
 import awsconfig from '@/aws-exports'
 import { botStore, botStoreMutations, useChatId, useLanguage } from '@/features/bot'
-import { useSocket } from '@/features/messages/hooks/useSocket'
-import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
-import { extractChatbotResponse } from '@/features/messages/utils'
+import {
+  IncomingInput,
+  PromptCode,
+  extractChatbotResponse,
+  sendMessageQuery,
+  useSocket,
+} from '@/features/messages'
 import { Popup } from '@/features/popup'
 import { useSuggestedPrompts } from '@/features/prompt'
 import { TextTemplate, detectLanguage, useText } from '@/features/text'
@@ -46,8 +50,6 @@ export type BotProps = {
 }
 
 export const Bot = (props: BotProps & { class?: string; toggleBot: () => void }) => {
-  console.log('Bot props', props)
-
   const [userInput, setUserInput] = createSignal('')
 
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
@@ -94,19 +96,20 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
     // Remove welcome message from messages
     botStoreMutations.createQuestion(value)
 
+    // const prompt = `. Always return your answer in formatted markdown, structure it with bold, list, images, etc.`
+
     const body: IncomingInput = {
-      question:
-        value +
-        '. Always return your answer in formatted markdown, structure it to use a lot of markdown and formatting, links, bold, list.',
+      question: value,
       history: [],
       chatId: chatId(),
+      promptCode: PromptCode.QUESTION,
     }
 
     if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig
 
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
-    const [messageResult] = await Promise.all([
+    const [messageResult, detectLanguageResult] = await Promise.all([
       sendMessageQuery({
         chatflowid: props.chatflowid,
         apiHost: props.apiHost,
@@ -125,7 +128,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
         botStoreMutations.updateAnswer(text)
       }
 
-      fetchSuggestedPrompts()
+      fetchSuggestedPrompts(detectLanguageResult?.languageCode)
     }
 
     if (messageResult.error) {
@@ -133,8 +136,6 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
         messageResult.error?.message ?? 'Something went wrong. Please try again later.'
 
       botStoreMutations.updateAnswer(message)
-
-      return
     }
 
     botStoreMutations.setLoading(false)
@@ -146,7 +147,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
     initTheme(props.themeId, props.theme)
     initText(props.text, props.language)
 
-    if (botStore.chat) {
+    if (botStore.chat && import.meta.env.PROD) {
       fetchSuggestedPrompts()
     }
   })

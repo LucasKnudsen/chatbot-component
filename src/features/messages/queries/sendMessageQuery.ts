@@ -2,9 +2,18 @@ import { MessageType } from '@/features/bot/components/Bot'
 import { sendRequest } from '@/utils/index'
 import { API } from 'aws-amplify'
 
+export enum PromptCode {
+  QUESTION = 'question',
+  SUGGESTED_PROMPTS = 'suggestedPrompts',
+}
+
 export type IncomingInput = {
+  promptCode: PromptCode
   question: string
-  history: MessageType[]
+  language?: string
+
+  previousQuestions?: string[]
+  history?: MessageType[]
   overrideConfig?: Record<string, unknown>
   socketIOClientId?: string
   chatId?: string

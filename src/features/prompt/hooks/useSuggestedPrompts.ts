@@ -1,6 +1,11 @@
-import { currentLanguage } from '@/features/bot'
-import { extractChatbotResponse, scrollChatWindowToBottom } from '@/features/messages'
-import { IncomingInput, sendMessageQuery } from '@/features/messages/queries/sendMessageQuery'
+import { botStore, currentLanguage } from '@/features/bot'
+import {
+  IncomingInput,
+  PromptCode,
+  extractChatbotResponse,
+  scrollChatWindowToBottom,
+  sendMessageQuery,
+} from '@/features/messages'
 import { createEffect, createSignal, on } from 'solid-js'
 
 export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
@@ -11,13 +16,24 @@ export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
     setSuggestedPrompts([])
   }
 
-  const fetchSuggestedPrompts = async () => {
+  const fetchSuggestedPrompts = async (language?: string) => {
     clearSuggestions()
 
+    // Take only the questions from today. We don't want to suggest questions from previous days. Take latest 5.
+    const previousQuestions = botStore.history
+      .filter(
+        (question) => new Date(question.createdAt).toDateString() === new Date().toDateString()
+      )
+      .map((question) => question.question)
+      .slice(-5)
+
+    console.log('previousQuestions', previousQuestions)
+
     const body: IncomingInput = {
-      question: `Based on our history so far, give me 2 short concise follow up prompts that would encourage me to proceed with the conversation. The questions need to be non-repetitive. 
-      Please provide the questions in a JSON array format like ["Question 1?", "Question 2?", "Question 3?"]. You MUST understand and use the following language code as the language for the questions: "${currentLanguage()}". Do not say anything else, just send me back an array.
-      `,
+      question: '',
+      previousQuestions,
+      promptCode: PromptCode.SUGGESTED_PROMPTS,
+      language: language || currentLanguage(),
       history: [],
       // chatId: '123',
     }

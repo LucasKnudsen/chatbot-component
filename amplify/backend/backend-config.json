@@ -179,6 +179,14 @@
         }
       ]
     },
+    "AMPLIFY_function_flowiseMiddleware_secretsPathAmplifyAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "flowiseMiddleware"
+        }
+      ]
+    },
     "AMPLIFY_hosting_amplifyhosting_appId": {
       "usedBy": [
         {
