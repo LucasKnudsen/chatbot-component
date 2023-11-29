@@ -1,7 +1,8 @@
-import { createSignal, Show } from 'solid-js'
+import { createSignal, onMount, Show } from 'solid-js'
 import styles from '../../../index.css?inline'
 import { Bot, BotProps } from '../../bot/components/Bot'
 
+import StyleSheet from '@/styles'
 import { BubbleButton } from './BubbleButton'
 
 export const Bubble = (props: BotProps) => {
@@ -21,9 +22,17 @@ export const Bubble = (props: BotProps) => {
     isBotOpened() ? closeBot() : openBot()
   }
 
+  onMount(() => {
+    if (import.meta.env.DEV) {
+      openBot()
+    }
+  })
+
   return (
     <>
       <style>{styles}</style>
+      <StyleSheet />
+
       <BubbleButton toggleBot={toggleBot} isBotOpened={isBotOpened()} />
 
       <div

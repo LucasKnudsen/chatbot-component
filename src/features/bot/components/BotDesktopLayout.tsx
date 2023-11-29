@@ -51,7 +51,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
     >
       <Nav onClear={props.onClear} toggleBot={props.toggleBot} />
 
-      <div class='relative flex flex-1 px-10 overflow-hidden'>
+      <div class='relative flex flex-1 px-16 overflow-hidden'>
         {/* Main Container */}
         <div
           class='flex flex-col flex-1 text-base overflow-hidden py-6'

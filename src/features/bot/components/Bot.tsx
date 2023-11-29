@@ -12,7 +12,6 @@ import { useSuggestedPrompts } from '@/features/prompt'
 import { TextTemplate, detectLanguage, useText } from '@/features/text'
 import { Theme } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
-import StyleSheet from '@/styles'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Amplify } from 'aws-amplify'
 import { createSignal, onMount } from 'solid-js'
@@ -153,8 +152,6 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
 
   return (
     <>
-      <StyleSheet />
-
       <BotDesktopLayout
         userInput={userInput()}
         isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
