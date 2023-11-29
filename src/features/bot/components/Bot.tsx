@@ -1,5 +1,5 @@
 import awsconfig from '@/aws-exports'
-import { botStore, botStoreMutations, useChatId, useLanguage } from '@/features/bot'
+import { botStore, botStoreActions, useChatId, useLanguage } from '@/features/bot'
 import {
   IncomingInput,
   PromptCode,
@@ -71,11 +71,11 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowid: props.chatflowid,
     apiHost: props.apiHost,
-    onToken: botStoreMutations.updateAnswer,
+    onToken: botStoreActions.updateAnswer,
   })
 
   const clear = () => {
-    botStoreMutations.clear()
+    botStoreActions.clear()
     clearSuggestions()
     clearChatId()
     clearDefaultLanguage()
@@ -89,14 +89,12 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
       return
     }
 
-    botStoreMutations.setLoading(true)
+    botStoreActions.setLoading(true)
 
     clearSuggestions()
 
     // Remove welcome message from messages
-    botStoreMutations.createQuestion(value)
-
-    // const prompt = `. Always return your answer in formatted markdown, structure it with bold, list, images, etc.`
+    botStoreActions.createQuestion(value)
 
     const body: IncomingInput = {
       question: value,
@@ -120,12 +118,12 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
 
     if (messageResult.data) {
       // Uses the source documents from the end result rather than sockets (they are the same, and doesnt stream in anyway)
-      botStoreMutations.handleSourceDocuments(messageResult.data.sourceDocuments)
+      botStoreActions.handleSourceDocuments(messageResult.data.sourceDocuments)
 
       if (!isChatFlowAvailableToStream()) {
         let text = extractChatbotResponse(messageResult.data)
 
-        botStoreMutations.updateAnswer(text)
+        botStoreActions.updateAnswer(text)
       }
 
       fetchSuggestedPrompts(detectLanguageResult?.languageCode)
@@ -135,15 +133,16 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
       const message =
         messageResult.error?.message ?? 'Something went wrong. Please try again later.'
 
-      botStoreMutations.updateAnswer(message)
+      botStoreActions.updateAnswer(message)
     }
 
-    botStoreMutations.setLoading(false)
+    botStoreActions.setLoading(false)
     setUserInput('')
   }
 
   onMount(() => {
-    botStoreMutations.initBotStore(props.chatflowid, props.apiHost)
+    botStoreActions.initBotStore(props.chatflowid, props.apiHost)
+
     initTheme(props.themeId, props.theme)
     initText(props.text, props.language)
 

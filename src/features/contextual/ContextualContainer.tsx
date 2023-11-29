@@ -2,7 +2,7 @@ import linkIcon1 from '@/assets/link-icon-1.svg'
 import { Divider } from '@/components/Divider'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { For, createMemo } from 'solid-js'
-import { Resources } from '.'
+import { botStore } from '../bot'
 import { sidebarInnerWidthNum, sidebarPaddingNum } from '../bot/constants'
 import { useTheme } from '../theme/hooks'
 import { Fact } from './components/Fact'
@@ -10,38 +10,16 @@ import { Iframe } from './components/Iframe'
 import { Link } from './components/Link'
 
 type Props = {
-  resources?: Resources
   class?: string
 }
 
 export const ContextualContainer = (props: Props) => {
-  const facts = createMemo(() => props.resources?.fact ?? [])
-  // const links = createMemo(() => props.resources?.link ?? [])
-  // const iframes = createMemo(() => props.resources?.iframe ?? [])
+  const facts = createMemo(() => botStore.chat?.resources?.fact ?? [])
+
   const [animateFacts] = createAutoAnimate()
   const [animateLinks] = createAutoAnimate()
 
   const { theme } = useTheme()
-
-  // // Auto scroll chat to bottom
-  // createEffect(() => {
-  //   if (props.resources) scrollToBottom()
-  // })
-
-  // const scrollToBottom = () => {
-  //   setTimeout(() => {
-  //     const contextualContainer = document.getElementById('contextual-resources')
-  //     if (contextualContainer) {
-  //       contextualContainer.scrollTop = contextualContainer.scrollHeight
-  //     }
-  //     const contextualContainer2 = document.getElementById('contextual-facts')
-  //     if (contextualContainer2) {
-  //       contextualContainer2.scrollTop = contextualContainer2.scrollHeight
-  //     }
-  //   }, 50)
-  // }
-
-  //
 
   return (
     <div
@@ -79,8 +57,10 @@ export const ContextualContainer = (props: Props) => {
           ref={animateLinks}
           class='flex flex-col h-full gap-4 flex-1 overflow-y-scroll custom-scrollbar pr-0.5'
         >
-          <For each={props.resources?.link ?? []}>{(element) => <Link link={element} />}</For>
-          <For each={props.resources?.iframe ?? []}>
+          <For each={botStore.chat?.resources?.link ?? []}>
+            {(element) => <Link link={element} />}
+          </For>
+          <For each={botStore.chat?.resources?.iframe ?? []}>
             {(element) => <Iframe element={element} />}
           </For>
         </div>

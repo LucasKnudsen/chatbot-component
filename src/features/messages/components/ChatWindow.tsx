@@ -1,38 +1,34 @@
 import { Settings, TypingBubble } from '@/components'
 import { Divider } from '@/components/Divider'
 import { MessageIcon } from '@/components/icons'
+import { botStore } from '@/features/bot'
 import { useText } from '@/features/text'
 import { Marked } from '@ts-stack/markdown'
 import { Show, createEffect, on } from 'solid-js'
 import { scrollChatWindowToBottom } from '..'
-import { Chat } from '../types'
 import Gallery from './Gallery/Gallery'
 
-type ChatWindowProps = {
-  question: Chat
-}
-
-export const ChatWindow = (props: ChatWindowProps) => {
+export const ChatWindow = () => {
   let botMessageEl: HTMLDivElement | undefined
 
   const { text } = useText()
 
   createEffect(() => {
     if (botMessageEl) {
-      botMessageEl.innerHTML = Marked.parse(props?.question?.answer || '')
+      botMessageEl.innerHTML = Marked.parse(botStore.chat?.answer || '')
     }
   })
 
-  createEffect(on(() => props.question, scrollChatWindowToBottom, { defer: true }))
+  createEffect(on(() => botStore.chat, scrollChatWindowToBottom, { defer: true }))
 
   const onCopy = () => {
-    navigator.clipboard.writeText(props.question?.answer!)
+    navigator.clipboard.writeText(botStore.chat?.answer!)
   }
 
   const onShare = () => {
     navigator.share?.({
-      title: props.question?.question!,
-      text: props.question?.answer!,
+      title: botStore.chat?.question!,
+      text: botStore.chat?.answer!,
     })
   }
 
@@ -44,7 +40,7 @@ export const ChatWindow = (props: ChatWindowProps) => {
           <div>
             <MessageIcon width={30} />
           </div>
-          {props.question?.question}
+          {botStore.chat?.question}
         </div>
 
         <Settings
@@ -73,7 +69,7 @@ export const ChatWindow = (props: ChatWindowProps) => {
         class='flex flex-1 py-4 mb-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative'
       >
         {/* Loading  */}
-        <Show when={!props.question?.answer}>
+        <Show when={!botStore.chat?.answer}>
           <div class='flex mt-4  '>
             <TypingBubble />
           </div>
@@ -83,7 +79,7 @@ export const ChatWindow = (props: ChatWindowProps) => {
         <div ref={botMessageEl} class='prose ' />
 
         {/* Gallery  */}
-        <Gallery resources={props.question?.resources!} />
+        <Gallery resources={botStore.chat?.resources!} />
       </div>
     </>
   )
