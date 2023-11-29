@@ -1,6 +1,13 @@
 import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
-import { Sidebar, botStore, botStoreActions, useChatId, useLanguage } from '@/features/bot'
+import {
+  Sidebar,
+  botStore,
+  botStoreActions,
+  chatHistory,
+  useChatId,
+  useLanguage,
+} from '@/features/bot'
 import {
   IncomingInput,
   PromptCode,
@@ -16,7 +23,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Amplify } from 'aws-amplify'
-import { Match, Show, Switch, createSignal, onMount } from 'solid-js'
+import { Match, Show, Switch, createEffect, createSignal, onMount } from 'solid-js'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
 import { SidebarTabView } from './SidebarTabView'
@@ -66,6 +73,10 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
   const { clear: clearDefaultLanguage } = useLanguage(props.chatflowid, props.language)
 
+  createEffect(() => {
+    console.log(chatHistory())
+  })
+
   const {
     suggestedPrompts,
     fetchSuggestedPrompts,
@@ -98,7 +109,6 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
 
     clearSuggestions()
 
-    // Remove welcome message from messages
     botStoreActions.createQuestion(value)
 
     const body: IncomingInput = {
@@ -124,12 +134,8 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
     if (messageResult.data) {
       // Uses the source documents from the end result rather than sockets (they are the same, and doesnt stream in anyway)
       botStoreActions.handleSourceDocuments(messageResult.data.sourceDocuments)
-
-      if (!isChatFlowAvailableToStream()) {
-        let text = extractChatbotResponse(messageResult.data)
-
-        botStoreActions.updateAnswer(text)
-      }
+      // Saves end answer in history rather than at every stream update
+      botStoreActions.updateAnswer(extractChatbotResponse(messageResult.data), true)
 
       fetchSuggestedPrompts(detectLanguageResult?.languageCode)
     }
@@ -172,7 +178,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
       >
         <Nav onClear={clear} toggleBot={props.toggleBot} />
 
-        <div class='relative md:flex md:px-10 flex-1 overflow-hidden'>
+        <div class='relative md:flex md:px-16 flex-1 overflow-hidden'>
           <Switch>
             <Match when={['desktop', 'tablet'].includes(device())}>
               <BotDesktopLayout
