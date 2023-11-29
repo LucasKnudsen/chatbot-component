@@ -14,6 +14,8 @@ export const History = (props: HistoryProps) => {
   const { text } = useText()
   const { theme } = useTheme()
 
+  const primaryAccent = theme().primaryAccent
+
   if (!props.history.length) {
     return (
       <div class='text-center' style={{ color: theme().textSecondary }}>
@@ -56,24 +58,39 @@ export const History = (props: HistoryProps) => {
 
   return (
     <>
-      <HistoryListSection
-        title={text().today}
-        history={todayChats()}
-        onSelect={props.onSelect}
-        disabled={!!props.disabled}
-      />
-      <HistoryListSection
-        title={text().yesterday}
-        history={yesterdayChats()}
-        onSelect={props.onSelect}
-        disabled={!!props.disabled}
-      />
-      <HistoryListSection
-        title={text().previous}
-        history={remainingChats()}
-        onSelect={props.onSelect}
-        disabled={!!props.disabled}
-      />
+      <style>
+        {`
+        .history-list-section-item:hover {
+          background: ${primaryAccent};
+        }
+      `}
+      </style>
+
+      <div
+        class='overflow-y-auto custom-scrollbar pr-1 '
+        style={{
+          'max-height': 'calc(100vh - 180px)',
+        }}
+      >
+        <HistoryListSection
+          title={text().today}
+          history={todayChats()}
+          onSelect={props.onSelect}
+          disabled={!!props.disabled}
+        />
+        <HistoryListSection
+          title={text().yesterday}
+          history={yesterdayChats()}
+          onSelect={props.onSelect}
+          disabled={!!props.disabled}
+        />
+        <HistoryListSection
+          title={text().previous}
+          history={remainingChats()}
+          onSelect={props.onSelect}
+          disabled={!!props.disabled}
+        />
+      </div>
     </>
   )
 }

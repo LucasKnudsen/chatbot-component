@@ -2,6 +2,7 @@ export const defaultText = {
   welcomeMessage: 'Introducing a new website experience',
   inputPlaceholder: 'Ask me anything...',
   suggestedPromptsTitle: 'SUGGESTIONS',
+  viewMedia: 'View media',
 
   // Nav bar
   close: 'Close',

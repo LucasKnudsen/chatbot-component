@@ -12,19 +12,14 @@ type HistoryListSectionProps = {
 
 export const HistoryListSection = (props: HistoryListSectionProps) => {
   const { theme } = useTheme()
-  const primaryAccent = theme().primaryAccent
 
   return (
     <>
-      <style>
-        {`
-        .history-list-section-item:hover {
-          background: ${primaryAccent};
-        }
-      `}
-      </style>
       <Show when={props.history.length > 0}>
-        <div class='font-bold' style={{ color: theme().textSecondary }}>
+        <div
+          class='font-semibold uppercase tracking-wider'
+          style={{ color: theme().textSecondary }}
+        >
           {props.title}
         </div>
 
