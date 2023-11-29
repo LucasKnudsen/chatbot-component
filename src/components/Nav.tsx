@@ -21,19 +21,6 @@ export const Nav = (props: NavProps) => {
     >
       <img src={logo} class='h-6' />
 
-      {/* TODO: Make configurable  */}
-      <h1 class='text-xl ml-3 tracking-widest'>
-        FR
-        <span
-          style={{
-            color: theme().primaryColor,
-          }}
-        >
-          AI
-        </span>
-        A
-      </h1>
-
       <div class='flex-1' />
       <DeleteButton
         sendButtonColor={theme().primaryColor}

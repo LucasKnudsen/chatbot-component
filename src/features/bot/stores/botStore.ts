@@ -144,7 +144,9 @@ const handleFacts = async (facts: ExtendedSourceFact[]) => {
     factElements.map(async (f) => {
       if (import.meta.env.DEV) return f
 
-      const encodedText = `${f.header} | ${f.value}`
+      const parsedValue = Array.isArray(f.value) ? f.value.join(', ') : f.value
+
+      const encodedText = `${f.header} | ${parsedValue}`
       const translatedText = await translate(encodedText, botStore.clientLanguage)
 
       const [header, value] = translatedText.split('|')

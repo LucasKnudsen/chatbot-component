@@ -13,7 +13,6 @@ import { useSuggestedPrompts } from '@/features/prompt'
 import { TextTemplate, detectLanguage, useText } from '@/features/text'
 import { Theme } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
-import StyleSheet from '@/styles'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Amplify } from 'aws-amplify'
@@ -147,7 +146,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
   }
 
   onMount(() => {
-    botStoreActions.initBotStore(props.chatflowid, props.apiHost)
+    botStoreActions.initBotStore(props.chatflowid, props.language)
 
     initTheme(props.themeId, props.theme)
     initText(props.text, props.language)
@@ -159,8 +158,6 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
 
   return (
     <>
-      <StyleSheet />
-
       <div
         class={
           'relative flex flex-col h-full w-full bg-cover bg-center chatbot-container overflow-hidden ' +

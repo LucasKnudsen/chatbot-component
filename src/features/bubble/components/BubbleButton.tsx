@@ -13,7 +13,7 @@ export const BubbleButton = (props: Props) => {
     <button
       part='button'
       onClick={() => props.toggleBot()}
-      class={`fixed right-5 bottom-5  shadow-lg rounded-full hover:scale-110 active:scale-95 transition-transform duration-200 flex justify-center items-center animate-fade-in w-16 h-16`}
+      class={`fixed right-5 bottom-5  shadow-lg rounded-full hover:scale-110 active:scale-95 transition-transform duration-200 flex justify-center items-center animate-fade-in w-14 h-14`}
       style={{
         background: theme().primaryColor,
         'z-index': 42424242,
@@ -22,7 +22,7 @@ export const BubbleButton = (props: Props) => {
       {/* <Show when={isNotDefined(props.customIconSrc)} keyed> */}
       <img
         class={
-          `stroke-2  absolute duration-200 transition w-9 ` +
+          `stroke-2  absolute duration-200 transition w-7 ` +
           (props.isBotOpened ? 'scale-0 opacity-0' : 'scale-100 opacity-100')
         }
         src={logo}
@@ -46,7 +46,7 @@ export const BubbleButton = (props: Props) => {
         viewBox='0 0 24 24'
         style={{ fill: theme().textAccent }}
         class={
-          `absolute duration-200 transition  w-9` +
+          `absolute duration-200 transition  w-5` +
           (props.isBotOpened ? 'scale-100 rotate-0 opacity-100' : 'scale-0 -rotate-180 opacity-0')
         }
       >

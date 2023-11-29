@@ -31,7 +31,7 @@ export const ResourcesSidebar = (props: ResourcesSidebarProps) => {
         class='absolute cursor-pointer z-10'
         style={{
           top: '20px',
-          left: '-2px',
+          left: '10px',
           width: '20px',
           opacity: props.open ? '0' : '1',
         }}
