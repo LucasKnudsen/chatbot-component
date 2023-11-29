@@ -1,4 +1,8 @@
 export function splitTextAtNearestWhitespace(text: string) {
+  if (text.length < 50) {
+    return [text, '']
+  }
+
   const splitIndexApprox = Math.floor(text.length * (0.5 + Math.random() * 0.1)) // Between 50-60% of the length
   let splitIndex = splitIndexApprox
 

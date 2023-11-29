@@ -30,7 +30,7 @@ export const SuggestedPrompts = (props: Props) => {
               {text().suggestedPromptsTitle}
             </p>
 
-            <div class='flex overflow-x-auto  whitespace-nowrap pb-2 pt-4 gap-x-4 custom-scrollbar'>
+            <div class='flex overflow-x-auto  whitespace-nowrap pb-2 pt-2 gap-x-4 custom-scrollbar'>
               <Show when={props.suggestedPrompts.length > 0} fallback={<LoadingBubble />}>
                 <For each={props.suggestedPrompts}>
                   {(p) => (

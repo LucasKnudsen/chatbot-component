@@ -1,4 +1,6 @@
 import font from '@/assets/AlbertSans-VariableFont_wght.ttf'
+import styles from './index.css?inline'
+
 import { useTheme } from './features/theme/hooks'
 
 const StyleSheet = () => {
@@ -23,6 +25,8 @@ const StyleSheet = () => {
             border-radius: 20px;
         } 
         `}
+
+      {styles}
     </style>
   )
 }

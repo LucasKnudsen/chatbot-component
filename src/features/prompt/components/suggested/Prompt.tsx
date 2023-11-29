@@ -4,7 +4,6 @@ import { splitTextAtNearestWhitespace } from '../../utils'
 type PromptProps = {
   prompt: string
   onClick: (prompt: string) => void
-
   disabled?: boolean
 }
 
@@ -28,11 +27,9 @@ export const Prompt = (props: PromptProps) => {
       </style>
 
       <div
-        class='prompt py-2 px-5 rounded-xl border transition duration-200 ease-in-out w-fit '
+        class='flex flex-col justify-center prompt py-2 px-5 rounded-xl border transition duration-200 ease-in-out w-fit '
         style={{
           cursor: props.disabled ? 'not-allowed' : 'pointer',
-          // TODO: Themme it
-
           color: textColor,
         }}
         onClick={() => (props.disabled ? null : props.onClick(props.prompt))}
