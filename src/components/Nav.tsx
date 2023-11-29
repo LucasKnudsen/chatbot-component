@@ -1,11 +1,10 @@
 import logo from '@/assets/logo.png'
-import { Chat } from '@/features/messages/types'
+import { botStore } from '@/features/bot'
 import { useTheme } from '@/features/theme/hooks'
 import { Button } from '.'
 import { DeleteButton } from './SendButton'
 
 type NavProps = {
-  question: Chat | null
   onClear: () => void
   toggleBot: () => void
 }
@@ -39,7 +38,7 @@ export const Nav = (props: NavProps) => {
       <DeleteButton
         sendButtonColor={theme().primaryColor}
         type='button'
-        isDisabled={!props.question}
+        isDisabled={!botStore.chat}
         on:click={props.onClear}
       >
         <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>

@@ -239,7 +239,7 @@ const clear = () => {
   localStorage.removeItem(botStore.storageKey)
 }
 
-const botStoreMutations = {
+const botStoreActions = {
   initBotStore,
   updateAnswer,
   createQuestion,
@@ -249,4 +249,4 @@ const botStoreMutations = {
   clear,
 }
 
-export { botStore, botStoreMutations }
+export { botStore, botStoreActions }

@@ -9,7 +9,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Show, createMemo, createSignal } from 'solid-js'
 import { PromptType, Sidebar } from '.'
-import { botStore, botStoreMutations } from '..'
+import { botStore, botStoreActions } from '..'
 import { sidebarPaddingNum } from '../constants'
 import { ResourcesSidebar } from './ResourcesSidebar'
 import { SidebarTabView } from './SidebarTabView'
@@ -49,7 +49,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
         'background-size': 'cover',
       }}
     >
-      <Nav question={botStore.chat} onClear={props.onClear} toggleBot={props.toggleBot} />
+      <Nav onClear={props.onClear} toggleBot={props.toggleBot} />
 
       <div class='relative flex flex-1 px-10 overflow-hidden'>
         {/* Main Container */}
@@ -73,22 +73,19 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
 
                 <SidebarTabView
                   initialPrompts={props.initialPrompts}
-                  history={botStore.history}
-                  navDefault={!botStore.chat}
                   setQuestion={(chat) => {
-                    botStoreMutations.setChat(chat)
+                    botStoreActions.setChat(chat)
                     setSidebarOpen(false)
                   }}
                   handleSubmit={(question) => {
                     props.onSubmit(question)
                     setSidebarOpen(false)
                   }}
-                  disabled={botStore.loading}
                 />
               </div>
             }
           >
-            <ChatWindow question={botStore.chat!} />
+            <ChatWindow />
           </Show>
 
           <Divider margin={0} />
@@ -118,7 +115,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
             open={resourcesOpen()}
             toggle={() => setResourcesToggled(!resourcesToggled())}
           >
-            <ContextualContainer class='py-6' resources={botStore.chat?.resources} />
+            <ContextualContainer class='py-6' />
           </ResourcesSidebar>
         </Show>
 
@@ -134,17 +131,14 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
           >
             <SidebarTabView
               initialPrompts={props.initialPrompts}
-              history={botStore.history}
-              navDefault={!botStore.chat}
               setQuestion={(chat) => {
-                botStoreMutations.setChat(chat)
+                botStoreActions.setChat(chat)
                 setSidebarOpen(false)
               }}
               handleSubmit={(question) => {
                 props.onSubmit(question)
                 setSidebarOpen(false)
               }}
-              disabled={botStore.loading}
             />
           </Sidebar>
         </Show>
