@@ -1,5 +1,6 @@
 import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
 import { useText } from '@/features/text'
+import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { For, Show } from 'solid-js'
 import { Prompt } from './Prompt'
@@ -13,24 +14,24 @@ type Props = {
 
 export const SuggestedPrompts = (props: Props) => {
   const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
+  const { theme } = useTheme()
 
   const { text } = useText()
   return (
     <>
       <div ref={suggestedPromptsParent}>
         <Show when={props.isFetching || props.suggestedPrompts.length > 0}>
-          <div class='flex items-center  gap-y-1 gap-x-4 '>
+          <div class='flex flex-col md:flex-row gap-y-2'>
             <p
-              class='whitespace-nowrap border-r-2 border-gray-200 pr-8 font-bold'
               style={{
-                // TODO: Theme it
-                color: '#231843A1',
+                color: theme().textSecondary,
               }}
+              class='whitespace-nowrap md:border-r-2 border-gray-200 pr-8 font-bold'
             >
               {text().suggestedPromptsTitle}
             </p>
 
-            <div class='flex overflow-x-auto  whitespace-nowrap pb-2 pt-4 gap-x-4 custom-scrollbar'>
+            <div class='flex overflow-x-auto whitespace-nowrap gap-x-4 custom-scrollbar'>
               <Show when={props.suggestedPrompts.length > 0} fallback={<LoadingBubble />}>
                 <For each={props.suggestedPrompts}>
                   {(p) => (

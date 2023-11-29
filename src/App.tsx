@@ -3,7 +3,7 @@ import './dev.css'
 
 import { chatflows } from './constants'
 import { PromptType } from './features/bot'
-import { Bubble } from './features/bubble'
+import { Full } from './features/full'
 import { subscribe2channel } from './graphql/subscriptions'
 import './index.css'
 import { SubscriptionHelper } from './utils/subscriptionHelpers'
@@ -42,22 +42,23 @@ function App() {
   }
 
   return (
-    <div class='w-screen h-screen flex justify-center items-center bg-slate-100'>
-      <h1 class='text-6xl'>
-        FR
-        <span
-          style={{
-            color: '#3B81F6',
-          }}
-        >
-          AI
-        </span>
-        A
-      </h1>
+    <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} />
 
-      {/* <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} /> */}
-      <Bubble {...chatflows.fraia_test2} initialPrompts={initialPrompts} language='da' />
-    </div>
+    // <div class='w-screen h-screen flex justify-center items-center bg-slate-100'>
+    //   <h1 class='text-6xl'>
+    //     FR
+    //     <span
+    //       style={{
+    //         color: '#3B81F6',
+    //       }}
+    //     >
+    //       AI
+    //     </span>
+    //     A
+    //   </h1>
+
+    //   <Bubble {...chatflows.fraia_test2} initialPrompts={initialPrompts} language='da' />
+    // </div>
   )
 }
 
