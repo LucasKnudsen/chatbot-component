@@ -140,7 +140,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
   }
 
   onMount(() => {
-    botStoreActions.initBotStore(props.chatflowid, props.apiHost)
+    botStoreActions.initBotStore(props.chatflowid, props.language)
 
     initTheme(props.themeId, props.theme)
     initText(props.text, props.language)
