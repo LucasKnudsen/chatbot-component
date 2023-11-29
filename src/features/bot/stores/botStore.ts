@@ -10,7 +10,6 @@ import { Chat } from '@/features/messages/types'
 import { translate } from '@/features/text'
 import { parseProxy, randomUUID } from '@/utils'
 import { uniqBy } from 'lodash'
-import { createSignal } from 'solid-js'
 import { createStore } from 'solid-js/store'
 
 type ExtendedSourceFact = SourceFact & { source: string }
@@ -25,8 +24,6 @@ type BotStore = {
   readonly storageKey: string
   readonly hasResources: boolean
 }
-
-export const [chatHistory, setChatHistory] = createSignal<Chat[]>([])
 
 const [botStore, setBotStore] = createStore<BotStore>({
   chatflowId: '',

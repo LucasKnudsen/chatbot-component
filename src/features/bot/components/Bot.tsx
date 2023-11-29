@@ -1,13 +1,6 @@
 import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
-import {
-  Sidebar,
-  botStore,
-  botStoreActions,
-  chatHistory,
-  useChatId,
-  useLanguage,
-} from '@/features/bot'
+import { Sidebar, botStore, botStoreActions, useChatId, useLanguage } from '@/features/bot'
 import {
   IncomingInput,
   PromptCode,
@@ -23,7 +16,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Amplify } from 'aws-amplify'
-import { Match, Show, Switch, createEffect, createSignal, onMount } from 'solid-js'
+import { Match, Show, Switch, createSignal, onMount } from 'solid-js'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
 import { SidebarTabView } from './SidebarTabView'
@@ -72,10 +65,6 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
 
   const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
   const { clear: clearDefaultLanguage } = useLanguage(props.chatflowid, props.language)
-
-  createEffect(() => {
-    console.log(chatHistory())
-  })
 
   const {
     suggestedPrompts,
