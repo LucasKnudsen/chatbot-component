@@ -11,15 +11,20 @@ import { SubscriptionHelper } from './utils/subscriptionHelpers'
 const initialPrompts: PromptType[] = [
   {
     display: 'Tell me about Lion Brain',
-    prompt: 'Give me a detailed description of the services that Lion Brain offers',
+    prompt: 'Give me a detailed description of Lion Brain',
   },
   {
-    display: 'Tell me about your products',
-    prompt: 'Give me a detailed description of the products that Soft Design offers',
+    display: 'What is the collaboration between Soft Design and Lion Brain?',
+    prompt:
+      'Give me a detailed description of the collaboration between Soft Design and Lion Brain',
   },
   {
-    display: 'Who is your CEO?',
-    prompt: 'Give me a detailed description of the CEO of Lion Brain',
+    display: 'Who is the CEO of Soft Design?',
+    prompt: 'Who is the CEO of Soft Design',
+  },
+  {
+    display: 'Who is the CEO of Lion Brain?',
+    prompt: 'Who is the CEO of Lion Brain',
   },
 ]
 
@@ -56,7 +61,7 @@ function App() {
       </h1>
 
       {/* <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} /> */}
-      <Bubble {...chatflows.fraia_test2} initialPrompts={initialPrompts} language='da' />
+      <Bubble {...chatflows.fraia_test2} initialPrompts={initialPrompts} />
     </div>
   )
 }
