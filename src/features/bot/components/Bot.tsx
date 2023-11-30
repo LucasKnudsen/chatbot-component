@@ -41,6 +41,10 @@ export type PromptType =
       prompt: string
     }
 
+export type BotSettings = {
+  autoOpen: boolean
+}
+
 export type BotProps = {
   chatflowid: string
   apiHost: string
@@ -50,6 +54,7 @@ export type BotProps = {
   text?: Partial<TextTemplate>
   chatflowConfig?: Record<string, unknown>
   theme?: Partial<Theme>
+  settings?: BotSettings
 }
 
 export const Bot = (props: BotProps & { class?: string; toggleBot: () => void }) => {
