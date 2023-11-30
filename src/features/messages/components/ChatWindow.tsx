@@ -1,3 +1,4 @@
+import linkIcon1 from '@/assets/link-icon-1.svg'
 import { Settings, TypingBubble } from '@/components'
 import { Divider } from '@/components/Divider'
 import { MessageIcon } from '@/components/icons'
@@ -5,6 +6,7 @@ import { botStore } from '@/features/bot'
 import { Fact } from '@/features/contextual/components/Fact'
 import { LinkInline } from '@/features/contextual/components/LinkInline'
 import { useText } from '@/features/text'
+import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Marked } from '@ts-stack/markdown'
 import { For, Show, createEffect, on } from 'solid-js'
@@ -15,6 +17,7 @@ export const ChatWindow = () => {
   let botMessageEl: HTMLDivElement | undefined
 
   const { text } = useText()
+  const { theme } = useTheme()
   const device = useMediaQuery()
 
   createEffect(() => {
@@ -70,7 +73,7 @@ export const ChatWindow = () => {
       {/* Answer */}
       <div
         id='chat-window'
-        class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative'
+        class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative gap-y-8'
       >
         {/* Loading  */}
         <Show when={!botStore.chat?.answer}>
@@ -80,20 +83,32 @@ export const ChatWindow = () => {
         </Show>
 
         {/* Chatbot answer  */}
-        <div ref={botMessageEl} class='prose ' />
+        <div ref={botMessageEl} class='prose' />
 
         {/* Gallery  */}
         <Gallery resources={botStore.chat?.resources!} />
 
         <Show when={device() == 'mobile'}>
-          <div>
+          <div class='flex flex-col'>
             <div class='flex overflow-x-scroll whitespace-nowrap gap-x-4 custom-scrollbar mt-2'>
               <For each={botStore.chat?.resources?.fact ?? []}>
                 {(element) => <Fact fact={element} />}
               </For>
             </div>
 
-            <div class='flex overflow-x-scroll whitespace-nowrap gap-x-4 custom-scrollbar mt-2'>
+            <div
+              class='font-bold text-xs mt-8'
+              style={{
+                color: theme().textSecondary,
+              }}
+            >
+              <img class='inline-block mr-2' src={linkIcon1} />
+              Links
+            </div>
+
+            <Divider margin={8} />
+
+            <div class='flex overflow-x-scroll gap-x-4 custom-scrollbar mt-2'>
               <For each={botStore.chat?.resources?.link ?? []}>
                 {(element) => <LinkInline link={element} />}
               </For>
