@@ -29,7 +29,8 @@
         "detectLanguage": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
           "s3Key": "amplify-builds/detectLanguage-49714e39537263527875-build.zip"
-        }
+        },
+        "digitaltwin": {}
       },
       "api": {
         "digitaltwin": {},
@@ -43,6 +44,58 @@
           "appId": "d1i4jp82axmvxl",
           "type": "cicd"
         }
+      },
+      "predictions": {
+        "dynamicTranslator": {}
+      }
+    }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-digitaltwin-dev-91806-authRole",
+      "UnauthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-dev-91806-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-dev-91806-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+      "UnauthRoleName": "amplify-digitaltwin-dev-91806-unauthRole",
+      "StackName": "amplify-digitaltwin-dev-91806",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:047845575339:stack/amplify-digitaltwin-dev-91806/fff563b0-8f58-11ee-b66b-0a14b2b25086",
+      "AmplifyAppId": "d1i4jp82axmvxl",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-digitaltwin-dev-91806-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "digitaltwinauth": {}
+      },
+      "function": {
+        "broadcastResolver": {
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/broadcastResolver-58707663655a3952564b-build.zip"
+        },
+        "detectLanguage": {
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/detectLanguage-623941554366646f647a-build.zip"
+        },
+        "flowiseBroadcast": {
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/flowiseBroadcast-77396a2b6e3679433556-build.zip"
+        },
+        "flowiseMiddleware": {
+          "secretsPathAmplifyAppId": "d1i4jp82axmvxl",
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/flowiseMiddleware-67346758414c41394f62-build.zip"
+        },
+        "digitaltwin": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1i4jp82axmvxl",
+          "type": "cicd"
+        }
+      },
+      "api": {
+        "digitaltwin": {},
+        "digitaltwinRest": {}
       },
       "predictions": {
         "dynamicTranslator": {}

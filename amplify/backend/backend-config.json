@@ -26,14 +26,6 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "flowiseMiddleware"
-        },
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
           "resourceName": "flowiseBroadcast"
         },
         {
@@ -43,6 +35,14 @@
           ],
           "category": "function",
           "resourceName": "detectLanguage"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "flowiseMiddleware"
         }
       ],
       "providerPlugin": "awscloudformation",
