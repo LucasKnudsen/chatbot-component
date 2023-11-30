@@ -12,6 +12,7 @@ type Props = {
   disabled?: boolean
   class?: string
   onSubmit: (value: string) => void
+  onFocusChange?: (value: boolean) => void
 }
 
 export const TextInput = (props: Props) => {
@@ -61,6 +62,7 @@ export const TextInput = (props: Props) => {
         disabled={props.disabled}
         placeholder={props.placeholder}
         rows={props.rows}
+        onFocusChange={props.onFocusChange}
         class='p-2 md:p-4'
       />
 
