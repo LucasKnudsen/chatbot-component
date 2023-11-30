@@ -1,6 +1,6 @@
-import font from '@/assets/AlbertSans-VariableFont_wght.ttf'
 import styles from './index.css?inline'
 
+import { onMount } from 'solid-js'
 import { useTheme } from './features/theme/hooks'
 
 const StyleSheet = () => {
@@ -8,14 +8,17 @@ const StyleSheet = () => {
 
   const primaryColor = theme().primaryColor
 
+  onMount(() => {
+    // Apparently the only thing that worked for me..
+    const font = document.createElement('link')
+    font.href = 'https://fonts.googleapis.com/css2?family=Albert+Sans:wght@200..900&display=swap'
+    font.rel = 'stylesheet'
+    document.head.appendChild(font)
+  })
+
   return (
     <style>
       {`
-        @font-face {
-          font-family: 'Albert Sans';
-          src: url(${font});
-        }
-
         .custom-scrollbar::-webkit-scrollbar {
             width: 2px;
             height: 2px;
