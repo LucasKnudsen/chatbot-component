@@ -16,7 +16,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Amplify } from 'aws-amplify'
-import { Match, Switch, createSignal, onMount } from 'solid-js'
+import { Match, Show, Switch, createSignal, onMount } from 'solid-js'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
 import { SidebarTabView } from './SidebarTabView'
@@ -205,27 +205,28 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
           </Switch>
 
           {/* Sidebar */}
+          <Show when={device() == 'mobile' || botStore.chat}>
+            <Sidebar
+              open={sidebarOpen()}
+              onToggle={() => {
+                setSidebarOpen(!sidebarOpen())
 
-          <Sidebar
-            open={sidebarOpen()}
-            onToggle={() => {
-              setSidebarOpen(!sidebarOpen())
-
-              // setResourcesToggled(true)
-            }}
-          >
-            <SidebarTabView
-              initialPrompts={props.initialPrompts}
-              setQuestion={(chat) => {
-                botStoreActions.setChat(chat)
-                setSidebarOpen(false)
+                // setResourcesToggled(true)
               }}
-              handleSubmit={(question) => {
-                handleSubmit(question)
-                setSidebarOpen(false)
-              }}
-            />
-          </Sidebar>
+            >
+              <SidebarTabView
+                initialPrompts={props.initialPrompts}
+                setQuestion={(chat) => {
+                  botStoreActions.setChat(chat)
+                  setSidebarOpen(false)
+                }}
+                handleSubmit={(question) => {
+                  handleSubmit(question)
+                  setSidebarOpen(false)
+                }}
+              />
+            </Sidebar>
+          </Show>
         </div>
       </div>
 
