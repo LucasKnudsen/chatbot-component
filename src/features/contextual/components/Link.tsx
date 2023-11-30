@@ -32,7 +32,7 @@ export const Link = (props: Props) => {
 
           <img
             src={props.link.thumbnail || 'https://picsum.photos/290/140'}
-            class='max-h-[124px] w-full object-cover'
+            class='max-h-[100px] w-full object-cover'
           />
         </div>
         <p class='break-words line-clamp-2 font-light'>{props.link.description}</p>

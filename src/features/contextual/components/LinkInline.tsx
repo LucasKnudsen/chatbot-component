@@ -23,19 +23,19 @@ export const LinkInline = (props: Props) => {
       }}
     >
       <div class='p-2 w-[50%] '>
-        <div class='relative rounded-md overflow-hidden h-16'>
+        <div class='relative rounded-md overflow-hidden h-12'>
           <img class='absolute top-2 right-2' src={linkIcon} />
           <img
             src={props.link.thumbnail || 'https://picsum.photos/290/140'}
-            class='w-full object-cover'
+            class='w-full h-full object-cover'
           />
         </div>
       </div>
 
       <div class='p-2 w-[50%] justify-between'>
-        <div class='flex flex-col justify-between h-16'>
-          <div class='font-light text-sm line-clamp-2'>{props.link.description}</div>
-          <div class='text-xs line-clamp-1 text-ellipsis'>{props.link.value}</div>
+        <div class='flex flex-col justify-between h-12'>
+          <div class='font-light text-xs line-clamp-2 break-words'>{props.link.description}</div>
+          <div class='text-xs line-clamp-1 break-words'>{props.link.value}</div>
         </div>
       </div>
     </a>

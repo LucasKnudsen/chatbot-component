@@ -22,7 +22,7 @@ const Gallery = (props: Props) => {
   const imagesAndVideos = createMemo(() => [...props.resources.picture, ...props.resources.video])
 
   return (
-    <div ref={parent} class='mt-8'>
+    <div ref={parent}>
       {/* TODO: Configureable header */}
       <Show when={imagesAndVideos().length > 0}>
         <Expandable
