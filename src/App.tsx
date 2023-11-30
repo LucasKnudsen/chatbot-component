@@ -23,6 +23,19 @@ const initialPrompts: PromptType[] = [
     display: 'Who is the CEO of Lion Brain?',
     prompt: 'Who is the CEO of Lion Brain',
   },
+  {
+    display: 'What is the collaboration between Soft Design and Lion Brain?',
+    prompt:
+      'Give me a detailed description of the collaboration between Soft Design and Lion Brain',
+  },
+  {
+    display: 'Who is the CEO of Soft Design?',
+    prompt: 'Who is the CEO of Soft Design',
+  },
+  {
+    display: 'Who is the CEO of Lion Brain?',
+    prompt: 'Who is the CEO of Lion Brain',
+  },
 ]
 
 function App() {

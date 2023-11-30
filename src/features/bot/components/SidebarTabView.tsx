@@ -44,7 +44,7 @@ export const SidebarTabView = (props: SidebarTabViewProps) => {
   })
 
   return (
-    <div style={{ width: sidebarInnerWidthNum + 'px' }}>
+    <div class='h-full' style={{ width: sidebarInnerWidthNum + 'px' }}>
       <TabView tabs={tabs()} />
     </div>
   )
