@@ -28,7 +28,7 @@ export const Sidebar = (props: SidebarProps) => {
       }}
     >
       <div
-        class='absolute cursor-pointer transition-all'
+        class='hidden md:block absolute cursor-pointer transition-all'
         style={{ top: '20px', left: '-20px', opacity: props.open ? '0' : '1' }}
         onClick={props.onToggle}
       >
