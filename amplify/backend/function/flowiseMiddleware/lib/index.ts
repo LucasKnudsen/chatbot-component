@@ -72,14 +72,13 @@ export const handler = async (
 
 const handleFlowiseRequest = async (body: ParsedEventBody) => {
   const { chatflowid, apiHost, chatId, socketIOClientId, question } = body
-
+  // `Please answer the following question: ${question}. Always return your answer in formatted markdown, structure it with bold, lists, etc, making it interesting and informative, but still concise.`
   const endpoint = `${apiHost}/api/v1/prediction/${chatflowid}`
   const data = {
-    question: `Please answer the following question: ${question}. Always return your answer in formatted markdown, structure it with bold, lists, etc, making it interesting and informative, but still concise.`,
+    question,
     chatId,
     socketIOClientId,
   }
-
   const result = await axios.post(endpoint, data, {
     headers: {
       Authorization: TEST_API_KEY,

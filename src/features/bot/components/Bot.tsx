@@ -98,7 +98,6 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
 
     clearSuggestions()
 
-    // Remove welcome message from messages
     botStoreActions.createQuestion(value)
 
     const body: IncomingInput = {
@@ -124,12 +123,8 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
     if (messageResult.data) {
       // Uses the source documents from the end result rather than sockets (they are the same, and doesnt stream in anyway)
       botStoreActions.handleSourceDocuments(messageResult.data.sourceDocuments)
-
-      if (!isChatFlowAvailableToStream()) {
-        let text = extractChatbotResponse(messageResult.data)
-
-        botStoreActions.updateAnswer(text)
-      }
+      // Saves end answer in history rather than at every stream update
+      botStoreActions.updateAnswer(extractChatbotResponse(messageResult.data), true)
 
       fetchSuggestedPrompts(detectLanguageResult?.languageCode)
     }
@@ -172,7 +167,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
       >
         <Nav onClear={clear} toggleBot={props.toggleBot} />
 
-        <div class='relative md:flex md:px-10 flex-1 overflow-hidden'>
+        <div class='relative md:flex md:px-16 flex-1 overflow-hidden'>
           <Switch>
             <Match when={['desktop', 'tablet'].includes(device())}>
               <BotDesktopLayout

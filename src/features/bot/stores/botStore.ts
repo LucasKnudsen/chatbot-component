@@ -8,6 +8,7 @@ import {
 } from '@/features/contextual'
 import { Chat } from '@/features/messages/types'
 import { translate } from '@/features/text'
+import { parseProxy, randomUUID } from '@/utils'
 import { uniqBy } from 'lodash'
 import { createStore } from 'solid-js/store'
 
@@ -80,36 +81,46 @@ const storeHistory = (history: Chat[]) => {
   localStorage.setItem(botStore.storageKey, JSON.stringify(history))
 }
 
-const addHistory = (question: Chat) => {
-  setBotStore('history', (prev) => [...prev, question])
-  storeHistory(botStore.history)
+const addHistory = (newQuestion: Chat) => {
+  setBotStore('history', (prev) => {
+    const newHistory = [...prev, newQuestion]
+    storeHistory(newHistory)
+    return newHistory
+  })
 }
 
 const updateHistory = (question: Chat) => {
   setBotStore('history', (prev) => {
     prev.pop()
-    return [...prev, question]
+
+    const newHistory = [...prev, question]
+
+    storeHistory(newHistory)
+    return newHistory
   })
-  storeHistory(botStore.history)
 }
 
-const updateAnswer = (answer: string) => {
+const buildUpdatedAnswer = (oldQ: Chat, answer: string) => {
+  return {
+    ...oldQ,
+    answer: oldQ.answer + answer,
+  }
+}
+
+const updateAnswer = (answer: string, shouldUpdateHistory: boolean = false) => {
   const oldQ = botStore.chat
 
   if (oldQ === null) return
 
-  const updatedQuestion: Chat = {
-    ...oldQ,
-    answer: oldQ.answer + answer,
-  }
+  setChat(buildUpdatedAnswer(oldQ, answer))
 
-  setBotStore('chat', updatedQuestion)
-
-  updateHistory(updatedQuestion)
+  // To not update history on every stream update
+  shouldUpdateHistory && updateHistory(buildUpdatedAnswer(parseProxy(oldQ), answer))
 }
 
-const createQuestion = (question: string) => {
+const buildQuestion = (question: string, id: string) => {
   const q: Chat = {
+    id,
     createdAt: new Date().toISOString(),
     question: question,
     answer: '',
@@ -122,9 +133,14 @@ const createQuestion = (question: string) => {
     },
   }
 
-  setBotStore('chat', q)
+  return q
+}
 
-  addHistory(q)
+const createQuestion = (question: string) => {
+  const uuid = randomUUID()
+
+  setChat(buildQuestion(question, uuid))
+  addHistory(buildQuestion(question, uuid))
 }
 
 const handleFacts = async (facts: ExtendedSourceFact[]) => {
@@ -161,7 +177,7 @@ const handleFacts = async (facts: ExtendedSourceFact[]) => {
 
   setBotStore('chat', 'resources', 'fact', (prev) => [...prev, ...factElements])
 
-  updateHistory(botStore.chat!)
+  updateHistory(parseProxy(botStore.chat!))
 }
 
 const handleLinkedResources = async (linkedResources: ExtendedSourceResource[]) => {
@@ -195,7 +211,7 @@ const handleLinkedResources = async (linkedResources: ExtendedSourceResource[]) 
 
   setBotStore('chat', 'resources', (prev) => ({ ...prev, ...resources }))
 
-  updateHistory(botStore.chat!)
+  updateHistory(parseProxy(botStore.chat!))
 }
 
 const handleSourceDocuments = async (documents: SourceDocument[]) => {

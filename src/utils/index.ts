@@ -10,6 +10,16 @@ export const isEmpty = (value: string | undefined | null): value is undefined =>
 export const isNotEmpty = (value: string | undefined | null): value is string =>
   value !== undefined && value !== null && value !== ''
 
+export const randomUUID = (): string => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0
+    const v = c === 'x' ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
+export const parseProxy = <T>(proxy: T): T => JSON.parse(JSON.stringify(proxy))
+
 export const sendRequest = async <ResponseData>(
   params:
     | {
@@ -17,7 +27,7 @@ export const sendRequest = async <ResponseData>(
         method: string
         body?: Record<string, unknown> | FormData
       }
-    | string,
+    | string
 ): Promise<{ data?: ResponseData; error?: Error }> => {
   try {
     const url = typeof params === 'string' ? params : params.url

@@ -21,17 +21,17 @@ export const SuggestedPrompts = (props: Props) => {
     <>
       <div ref={suggestedPromptsParent}>
         <Show when={props.isFetching || props.suggestedPrompts.length > 0}>
-          <div class='flex flex-col md:flex-row gap-y-2'>
+          <div class='flex flex-col md:flex-row md:items-center gap-y-2 md:mt-4'>
             <p
               style={{
                 color: theme().textSecondary,
               }}
-              class='whitespace-nowrap md:border-r-2 border-gray-200 pr-8 font-bold'
+              class='whitespace-nowrap md:border-r-2 border-gray-200 pr-4 max-sm:text-sm font-semibold'
             >
               {text().suggestedPromptsTitle}
             </p>
 
-            <div class='flex overflow-x-auto whitespace-nowrap gap-x-4 custom-scrollbar'>
+            <div class='flex overflow-x-auto whitespace-nowrap gap-x-4 custom-scrollbar md:ml-4'>
               <Show when={props.suggestedPrompts.length > 0} fallback={<LoadingBubble />}>
                 <For each={props.suggestedPrompts}>
                   {(p) => (

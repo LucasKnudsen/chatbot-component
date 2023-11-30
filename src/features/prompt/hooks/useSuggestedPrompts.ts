@@ -27,8 +27,6 @@ export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
       .map((question) => question.question)
       .slice(-5)
 
-    console.log('previousQuestions', previousQuestions)
-
     const body: IncomingInput = {
       question: '',
       previousQuestions,

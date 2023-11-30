@@ -1,6 +1,7 @@
+import { botStore } from '@/features/bot'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
-import { createMemo } from 'solid-js'
+import { Show, createMemo } from 'solid-js'
 import { HistoryListSection } from '.'
 import { Chat } from '../types'
 
@@ -15,14 +16,6 @@ export const History = (props: HistoryProps) => {
   const { theme } = useTheme()
 
   const primaryAccent = theme().primaryAccent
-
-  if (!props.history.length) {
-    return (
-      <div class='text-center' style={{ color: theme().textSecondary }}>
-        {text().noHistory}
-      </div>
-    )
-  }
 
   const todayStartOfDay = createMemo(() => {
     const date = new Date()
@@ -42,18 +35,18 @@ export const History = (props: HistoryProps) => {
   })
 
   const todayChats = createMemo(() =>
-    props.history.filter((h) => new Date(h.createdAt) >= todayStartOfDay())
+    botStore.history.filter((h) => new Date(h.createdAt) >= todayStartOfDay())
   )
 
   const yesterdayChats = createMemo(() => {
-    return props.history.filter(
+    return botStore.history.filter(
       (h) =>
         new Date(h.createdAt) >= yesterdayStartOfDay() && new Date(h.createdAt) < todayStartOfDay()
     )
   })
 
   const remainingChats = createMemo(() => {
-    return props.history.filter((h) => new Date(h.createdAt) < yesterdayStartOfDay())
+    return botStore.history.filter((h) => new Date(h.createdAt) < yesterdayStartOfDay())
   })
 
   return (
@@ -66,31 +59,40 @@ export const History = (props: HistoryProps) => {
       `}
       </style>
 
-      <div
-        class='overflow-y-auto custom-scrollbar pr-1 '
-        style={{
-          'max-height': 'calc(100vh - 180px)',
-        }}
+      <Show
+        when={botStore.history.length}
+        fallback={
+          <div class='text-center' style={{ color: theme().textSecondary }}>
+            {text().noHistory}
+          </div>
+        }
       >
-        <HistoryListSection
-          title={text().today}
-          history={todayChats()}
-          onSelect={props.onSelect}
-          disabled={!!props.disabled}
-        />
-        <HistoryListSection
-          title={text().yesterday}
-          history={yesterdayChats()}
-          onSelect={props.onSelect}
-          disabled={!!props.disabled}
-        />
-        <HistoryListSection
-          title={text().previous}
-          history={remainingChats()}
-          onSelect={props.onSelect}
-          disabled={!!props.disabled}
-        />
-      </div>
+        <div
+          class='overflow-y-auto custom-scrollbar pr-1 '
+          style={{
+            'max-height': 'calc(100vh - 180px)',
+          }}
+        >
+          <HistoryListSection
+            title={text().today}
+            history={todayChats()}
+            onSelect={props.onSelect}
+            disabled={!!props.disabled}
+          />
+          <HistoryListSection
+            title={text().yesterday}
+            history={yesterdayChats()}
+            onSelect={props.onSelect}
+            disabled={!!props.disabled}
+          />
+          <HistoryListSection
+            title={text().previous}
+            history={remainingChats()}
+            onSelect={props.onSelect}
+            disabled={!!props.disabled}
+          />
+        </div>
+      </Show>
     </>
   )
 }
