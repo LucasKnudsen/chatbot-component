@@ -41,7 +41,7 @@ function App() {
         </span>
         A
       </h1>
-      <Bubble {...chatflows.fraia_test2} initialPrompts={initialPrompts} />
+      <Bubble {...chatflows.fraia_dev} initialPrompts={initialPrompts} />
     </div>
   )
 }

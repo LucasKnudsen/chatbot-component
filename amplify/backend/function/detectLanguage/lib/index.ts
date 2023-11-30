@@ -13,7 +13,7 @@ export async function handler(
   context: Context
 ): Promise<APIGatewayProxyResult> {
   try {
-    // Your code logic here
+    console.log('Event: ', event)
 
     const command = new DetectDominantLanguageCommand({
       Text: event.body,

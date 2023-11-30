@@ -1,13 +1,6 @@
 {
   "version": 1,
   "paths": {
-    "/flowise/middleware": {
-      "name": "/flowise/middleware",
-      "lambdaFunction": "flowiseMiddleware",
-      "permissions": {
-        "setting": "open"
-      }
-    },
     "/broadcast": {
       "name": "/broadcast",
       "lambdaFunction": "flowiseBroadcast",
@@ -19,7 +12,34 @@
       "name": "/detect-language",
       "lambdaFunction": "detectLanguage",
       "permissions": {
-        "setting": "open"
+        "setting": "protected",
+        "auth": [
+          "create",
+          "read",
+          "update"
+        ],
+        "guest": [
+          "create",
+          "read",
+          "update"
+        ]
+      }
+    },
+    "/flowise/middleware": {
+      "name": "/flowise/middleware",
+      "lambdaFunction": "flowiseMiddleware",
+      "permissions": {
+        "setting": "protected",
+        "auth": [
+          "create",
+          "read",
+          "update"
+        ],
+        "guest": [
+          "create",
+          "read",
+          "update"
+        ]
       }
     }
   }

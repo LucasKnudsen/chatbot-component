@@ -22,8 +22,12 @@ export const chatflows = {
     chatflowid: 'ac2aa23a-5c82-4f50-8b7a-76f87887fc38',
     apiHost: 'https://lionbrain.softdesign.dk',
   },
-  fraia_test2: {
+  fraia_prod: {
     chatflowid: '141aca34-5624-4441-87c8-62524f40ecd1',
+    apiHost: 'https://lionbrain.softdesign.dk',
+  },
+  fraia_dev: {
+    chatflowid: '88ad3bb5-046f-4c5e-9115-39b4d10125b9',
     apiHost: 'https://lionbrain.softdesign.dk',
   },
 }
