@@ -159,15 +159,12 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
   return (
     <>
       <div
-        class={
-          'relative flex flex-col h-full w-full bg-cover bg-center chatbot-container overflow-hidden ' +
-          props.class
-        }
+        class={'relative flex flex-col h-full w-full  overflow-hidden ' + props.class}
         style={{
           color: theme().textColor,
-          'background-color': theme().backgroundColor,
-          background: `url(${theme().backgroundImageUrl})`,
-          'background-size': 'cover',
+          background: `${theme().backgroundColor} url(${
+            theme().backgroundImageUrl
+          }) no-repeat center / cover`,
         }}
       >
         <Nav
