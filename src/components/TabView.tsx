@@ -15,7 +15,7 @@ export const TabView: (props: TabViewProps) => JSXElement = (props) => {
   const { theme } = useTheme()
 
   return (
-    <div>
+    <div class='h-full flex flex-col'>
       <ul class='flex'>
         <For each={props.tabs}>
           {(tab, index) => (
@@ -43,7 +43,7 @@ export const TabView: (props: TabViewProps) => JSXElement = (props) => {
         </For>
       </ul>
 
-      <div class='my-10'>{props.tabs[selectedTab()].content}</div>
+      <div class='flex-1 overflow-y-scroll pt-6'>{props.tabs[selectedTab()].content}</div>
     </div>
   )
 }
