@@ -16,7 +16,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Amplify } from 'aws-amplify'
-import { Match, Show, Switch, createSignal, onMount } from 'solid-js'
+import { Match, Switch, createSignal, onMount } from 'solid-js'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
 import { SidebarTabView } from './SidebarTabView'
@@ -165,7 +165,11 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
           'background-size': 'cover',
         }}
       >
-        <Nav onClear={clear} toggleBot={props.toggleBot} />
+        <Nav
+          onClear={clear}
+          toggleBot={props.toggleBot}
+          toggleSidebar={() => setSidebarOpen(!sidebarOpen())}
+        />
 
         <div class='relative md:flex md:px-16 flex-1 overflow-hidden'>
           <Switch>
@@ -196,28 +200,27 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
           </Switch>
 
           {/* Sidebar */}
-          <Show when={botStore.chat}>
-            <Sidebar
-              open={sidebarOpen()}
-              onToggle={() => {
-                setSidebarOpen(!sidebarOpen())
 
-                // setResourcesToggled(true)
+          <Sidebar
+            open={sidebarOpen()}
+            onToggle={() => {
+              setSidebarOpen(!sidebarOpen())
+
+              // setResourcesToggled(true)
+            }}
+          >
+            <SidebarTabView
+              initialPrompts={props.initialPrompts}
+              setQuestion={(chat) => {
+                botStoreActions.setChat(chat)
+                setSidebarOpen(false)
               }}
-            >
-              <SidebarTabView
-                initialPrompts={props.initialPrompts}
-                setQuestion={(chat) => {
-                  botStoreActions.setChat(chat)
-                  setSidebarOpen(false)
-                }}
-                handleSubmit={(question) => {
-                  handleSubmit(question)
-                  setSidebarOpen(false)
-                }}
-              />
-            </Sidebar>
-          </Show>
+              handleSubmit={(question) => {
+                handleSubmit(question)
+                setSidebarOpen(false)
+              }}
+            />
+          </Sidebar>
         </div>
       </div>
 
