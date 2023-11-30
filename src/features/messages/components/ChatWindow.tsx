@@ -90,29 +90,31 @@ export const ChatWindow = () => {
 
         <Show when={device() == 'mobile'}>
           <div class='flex flex-col'>
-            <div class='flex overflow-x-scroll whitespace-nowrap gap-x-4 custom-scrollbar mt-2'>
-              <For each={botStore.chat?.resources?.fact ?? []}>
-                {(element) => <Fact fact={element} />}
-              </For>
-            </div>
+            <Show when={botStore.chat?.resources.fact.length}>
+              <div class='flex overflow-x-scroll whitespace-nowrap gap-x-4 custom-scrollbar mt-2'>
+                <For each={botStore.chat?.resources?.fact ?? []}>
+                  {(element) => <Fact fact={element} />}
+                </For>
+              </div>
+            </Show>
 
-            <div
-              class='font-bold text-xs mt-8'
-              style={{
-                color: theme().textSecondary,
-              }}
-            >
-              <img class='inline-block mr-2' src={linkIcon1} />
-              Links
-            </div>
-
-            <Divider margin={8} />
-
-            <div class='flex overflow-x-scroll gap-x-4 custom-scrollbar mt-2'>
-              <For each={botStore.chat?.resources?.link ?? []}>
-                {(element) => <LinkInline link={element} />}
-              </For>
-            </div>
+            <Show when={botStore.chat?.resources.link.length}>
+              <div
+                class='font-bold text-xs mt-8'
+                style={{
+                  color: theme().textSecondary,
+                }}
+              >
+                <img class='inline-block mr-2' src={linkIcon1} />
+                Links
+              </div>
+              <Divider margin={8} />
+              <div class='flex overflow-x-scroll gap-x-4 custom-scrollbar mt-2'>
+                <For each={botStore.chat?.resources?.link ?? []}>
+                  {(element) => <LinkInline link={element} />}
+                </For>
+              </div>
+            </Show>
           </div>
         </Show>
       </div>

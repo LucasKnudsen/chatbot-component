@@ -1,8 +1,9 @@
+import { Collapsible } from '@/components/Collapsible'
 import { TextInput } from '@/components/inputs/textInput'
 import { ChatWindow } from '@/features/messages'
 import { SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
-import { Show } from 'solid-js'
+import { Show, createSignal } from 'solid-js'
 import { PromptType } from '.'
 import { botStore } from '..'
 
@@ -18,6 +19,7 @@ type BotMobileProps = {
 }
 
 export const BotMobileLayout = (props: BotMobileProps) => {
+  const [isFocused, setIsFocused] = createSignal(false)
   const { text } = useText()
 
   return (
@@ -44,14 +46,17 @@ export const BotMobileLayout = (props: BotMobileProps) => {
           defaultValue={props.userInput}
           onSubmit={props.onSubmit}
           placeholder={text().inputPlaceholder}
+          onFocusChange={setIsFocused}
         />
-        {/* Suggested Prompt Container */}
-        <SuggestedPrompts
-          handleSubmit={props.onSubmit}
-          suggestedPrompts={props.suggestedPrompts}
-          isFetching={props.isFetchingSuggestedPrompts}
-          loading={botStore.loading}
-        />
+
+        <Collapsible open={isFocused()}>
+          <SuggestedPrompts
+            handleSubmit={props.onSubmit}
+            suggestedPrompts={props.suggestedPrompts}
+            isFetching={props.isFetchingSuggestedPrompts}
+            loading={botStore.loading}
+          />
+        </Collapsible>
       </div>
     </div>
   )
