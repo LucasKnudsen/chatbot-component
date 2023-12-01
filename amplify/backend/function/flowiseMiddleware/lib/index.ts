@@ -43,7 +43,7 @@ export const handler = async (
         break
 
       case 'suggestedPrompts':
-        answer = await handleOpenAIRequest(body, event.isMock)
+        answer = await handleSuggestedPrompts(body, event.isMock)
         break
 
       default:
@@ -88,14 +88,18 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
   return result.data
 }
 
-const handleOpenAIRequest = async (body: ParsedEventBody, isMock?: boolean) => {
+const initiateOpenAI = async () => {
   const command = new GetParameterCommand({ Name: process.env.openai_key, WithDecryption: true })
   const { Parameter } = await ssmClient.send(command)
 
-  const openai = new OpenAI({
+  return new OpenAI({
     organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
     apiKey: Parameter.Value,
   })
+}
+
+const handleSuggestedPrompts = async (body: ParsedEventBody, isMock?: boolean) => {
+  const openai = await initiateOpenAI()
 
   let { previousQuestions, language } = body
 
@@ -117,7 +121,7 @@ const handleOpenAIRequest = async (body: ParsedEventBody, isMock?: boolean) => {
   const prompt = `Help me formulate two short concise follow up questions that would encourage the user to proceed with this conversation. They should be non-repetitive and based on the questions asked so far: "${previousQuestions.join(
     ', '
   )}".    
-      Give me the list of questions in a JSON list. You MUST understand and use the following language code as the language for the questions: "${language}". Do not say anything else, ONLY send me back a JSON list. Response example: ["What is...", "Tell me more about ..."]. 
+      Give me the list of questions in a JSON list. You MUST understand and use the following language code as the language for the questions: "${language}". Do not say anything else, ONLY send me back a JSON list. Response example: { "questions": ["What is...", "Tell me more about ..."] }. 
       `
 
   const chatCompletion = await openai.chat.completions.create({
@@ -125,7 +129,13 @@ const handleOpenAIRequest = async (body: ParsedEventBody, isMock?: boolean) => {
     model: 'gpt-3.5-turbo',
   })
 
-  return {
-    text: chatCompletion.choices[0].message.content,
+  const textObj = chatCompletion.choices[0].message.content
+
+  try {
+    const text = JSON.parse(textObj).questions
+
+    return { text }
+  } catch (error) {
+    return { text: '' }
   }
 }

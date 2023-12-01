@@ -17,8 +17,6 @@ export async function detectLanguage(text: string, shouldSetLanguage: boolean = 
       body: text,
     })) as { languageCode: string; score: number }
 
-    console.log('Answer detection: ', answer)
-
     const isEqualToCurrentLanguage =
       answer.languageCode.toLowerCase() === currentLanguageCache.toLowerCase()
 

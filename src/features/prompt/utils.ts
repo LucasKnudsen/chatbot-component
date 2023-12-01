@@ -21,3 +21,23 @@ export function splitTextAtNearestWhitespace(text: string) {
 
   return [firstPart, secondPart]
 }
+
+export function extractSuggestedPrompts(text: string | string[]) {
+  let questionsArray: string[] = []
+
+  if (!text) return []
+
+  if (Array.isArray(text)) {
+    return text
+  }
+
+  try {
+    // In case the response is a stringified JSON array
+    questionsArray = JSON.parse(text)
+  } catch (error) {
+    // In case the response is a string with newlines
+    questionsArray = text.split('\n').map((question) => question.replace(/^\d+\.\s/, ''))
+  }
+
+  return questionsArray
+}
