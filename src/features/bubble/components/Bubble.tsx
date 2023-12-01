@@ -22,7 +22,7 @@ export const Bubble = (props: BotProps) => {
   }
 
   onMount(() => {
-    if (import.meta.env.DEV) {
+    if (props.settings?.autoOpen) {
       openBot()
     }
   })

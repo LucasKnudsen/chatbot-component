@@ -11,6 +11,7 @@ export const defaultBotProps: BotProps = {
   text: undefined,
 
   initialPrompts: undefined,
+  settings: undefined,
 }
 
 export const chatflows = {

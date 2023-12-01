@@ -16,7 +16,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Amplify } from 'aws-amplify'
-import { Match, Switch, createSignal, onMount } from 'solid-js'
+import { Match, Show, Switch, createSignal, onMount } from 'solid-js'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
 import { SidebarTabView } from './SidebarTabView'
@@ -41,6 +41,10 @@ export type PromptType =
       prompt: string
     }
 
+export type BotSettings = {
+  autoOpen: boolean
+}
+
 export type BotProps = {
   chatflowid: string
   apiHost: string
@@ -50,6 +54,7 @@ export type BotProps = {
   text?: Partial<TextTemplate>
   chatflowConfig?: Record<string, unknown>
   theme?: Partial<Theme>
+  settings?: BotSettings
 }
 
 export const Bot = (props: BotProps & { class?: string; toggleBot: () => void }) => {
@@ -154,15 +159,12 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
   return (
     <>
       <div
-        class={
-          'relative flex flex-col h-full w-full bg-cover bg-center chatbot-container overflow-hidden ' +
-          props.class
-        }
+        class={'relative flex flex-col h-full w-full  overflow-hidden ' + props.class}
         style={{
           color: theme().textColor,
-          'background-color': theme().backgroundColor,
-          background: `url(${theme().backgroundImageUrl})`,
-          'background-size': 'cover',
+          background: `${theme().backgroundColor} url(${
+            theme().backgroundImageUrl
+          }) no-repeat center / cover`,
         }}
       >
         <Nav
@@ -200,27 +202,28 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
           </Switch>
 
           {/* Sidebar */}
+          <Show when={device() == 'mobile' || botStore.chat}>
+            <Sidebar
+              open={sidebarOpen()}
+              onToggle={() => {
+                setSidebarOpen(!sidebarOpen())
 
-          <Sidebar
-            open={sidebarOpen()}
-            onToggle={() => {
-              setSidebarOpen(!sidebarOpen())
-
-              // setResourcesToggled(true)
-            }}
-          >
-            <SidebarTabView
-              initialPrompts={props.initialPrompts}
-              setQuestion={(chat) => {
-                botStoreActions.setChat(chat)
-                setSidebarOpen(false)
+                // setResourcesToggled(true)
               }}
-              handleSubmit={(question) => {
-                handleSubmit(question)
-                setSidebarOpen(false)
-              }}
-            />
-          </Sidebar>
+            >
+              <SidebarTabView
+                initialPrompts={props.initialPrompts}
+                setQuestion={(chat) => {
+                  botStoreActions.setChat(chat)
+                  setSidebarOpen(false)
+                }}
+                handleSubmit={(question) => {
+                  handleSubmit(question)
+                  setSidebarOpen(false)
+                }}
+              />
+            </Sidebar>
+          </Show>
         </div>
       </div>
 

@@ -22,7 +22,7 @@ export const defaultTheme: Theme = {
   textColor: 'rgba(35, 24, 67, 1)',
   textSecondary: 'rgba(147, 147, 147, 1)',
   textAccent: 'rgba(255, 255, 255, 1)',
-  backgroundColor: 'transparent',
+  backgroundColor: 'rgba(255, 255, 255, 1)',
   backgroundImageUrl: background2,
   borderColor: 'rgba(147, 147, 147, 0.25)',
   textInputTextColor: 'rgba(128, 114, 166, 1)',
