@@ -1,11 +1,9 @@
 import circleCloseIcon from '@/assets/circle-close-icon.svg'
 import logo from '@/assets/logo.png'
 import menuIcon from '@/assets/menu-icon.svg'
-import { botStore } from '@/features/bot'
 import { useTheme } from '@/features/theme/hooks'
 import { Show } from 'solid-js'
 import { Button } from '.'
-import { DeleteButton } from './SendButton'
 
 type NavProps = {
   sidebarOpen: boolean
@@ -28,16 +26,6 @@ export const Nav = (props: NavProps) => {
 
       <div class='md:flex-1' />
 
-      <DeleteButton
-        sendButtonColor={theme().primaryColor}
-        type='button'
-        isDisabled={!botStore.chat}
-        on:click={props.onClear}
-        class='ml-4'
-      >
-        <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
-      </DeleteButton>
-
       <Button onClick={props.onToggleBot} class='hidden md:block ml-4'>
         Close
       </Button>
@@ -48,7 +36,7 @@ export const Nav = (props: NavProps) => {
         when={props.sidebarOpen}
         fallback={<img class='md:hidden py-2' onClick={props.onToggleSidebar} src={menuIcon} />}
       >
-        <img class='md:hidden' width={28} onClick={props.onToggleSidebar} src={circleCloseIcon} />
+        <img class='md:hidden' width={24} onClick={props.onToggleSidebar} src={circleCloseIcon} />
       </Show>
     </div>
   )
