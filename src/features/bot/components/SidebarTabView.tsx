@@ -12,6 +12,7 @@ type SidebarTabViewProps = {
   setQuestion: (question: Chat) => void
   handleSubmit: (question: string) => void
   initialPrompts?: PromptType[]
+  class?: string
 }
 
 export const SidebarTabView = (props: SidebarTabViewProps) => {
@@ -44,7 +45,7 @@ export const SidebarTabView = (props: SidebarTabViewProps) => {
   })
 
   return (
-    <div class='h-full' style={{ width: sidebarInnerWidthNum + 'px' }}>
+    <div class={props.class} style={{ width: sidebarInnerWidthNum + 'px' }}>
       <TabView tabs={tabs()} />
     </div>
   )

@@ -1,5 +1,9 @@
+import powerIcon from '@/assets/power-icon.svg'
 import awsconfig from '@/aws-exports'
+import { Button } from '@/components'
+import { Divider } from '@/components/Divider'
 import { Nav } from '@/components/Nav'
+import { DeleteIcon } from '@/components/icons/DeleteIcon'
 import { Sidebar, botStore, botStoreActions, useChatId, useLanguage } from '@/features/bot'
 import {
   IncomingInput,
@@ -168,9 +172,10 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
         }}
       >
         <Nav
+          sidebarOpen={sidebarOpen()}
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen())}
           onClear={clear}
-          toggleBot={props.toggleBot}
-          toggleSidebar={() => setSidebarOpen(!sidebarOpen())}
+          onToggleBot={props.toggleBot}
         />
 
         <div class='relative md:flex md:px-16 flex-1 overflow-hidden'>
@@ -207,21 +212,49 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
               open={sidebarOpen()}
               onToggle={() => {
                 setSidebarOpen(!sidebarOpen())
-
-                // setResourcesToggled(true)
               }}
             >
-              <SidebarTabView
-                initialPrompts={props.initialPrompts}
-                setQuestion={(chat) => {
-                  botStoreActions.setChat(chat)
-                  setSidebarOpen(false)
-                }}
-                handleSubmit={(question) => {
-                  handleSubmit(question)
-                  setSidebarOpen(false)
-                }}
-              />
+              <div class='h-full flex flex-col'>
+                <div class='flex-1 overflow-hidden'>
+                  <SidebarTabView
+                    class='h-full'
+                    initialPrompts={props.initialPrompts}
+                    setQuestion={(chat) => {
+                      botStoreActions.setChat(chat)
+                      setSidebarOpen(false)
+                    }}
+                    handleSubmit={(question) => {
+                      handleSubmit(question)
+                      setSidebarOpen(false)
+                    }}
+                  />
+                </div>
+
+                <Divider margin={24} />
+
+                <ul>
+                  <li>
+                    <button
+                      class='flex text-xs items-center'
+                      onClick={() => {
+                        clear()
+                        setSidebarOpen(false)
+                      }}
+                    >
+                      <div class='mr-5 '>
+                        <DeleteIcon width={15} />
+                      </div>{' '}
+                      Clear History
+                    </button>
+                  </li>
+                </ul>
+
+                <Divider margin={24} />
+
+                <Button onClick={props.toggleBot} padding='8px'>
+                  <img class='m-auto' src={powerIcon} />
+                </Button>
+              </div>
             </Sidebar>
           </Show>
         </div>

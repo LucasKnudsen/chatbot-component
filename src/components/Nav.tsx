@@ -1,15 +1,17 @@
+import circleCloseIcon from '@/assets/circle-close-icon.svg'
 import logo from '@/assets/logo.png'
 import menuIcon from '@/assets/menu-icon.svg'
-
 import { botStore } from '@/features/bot'
 import { useTheme } from '@/features/theme/hooks'
+import { Show } from 'solid-js'
 import { Button } from '.'
 import { DeleteButton } from './SendButton'
 
 type NavProps = {
+  sidebarOpen: boolean
   onClear: () => void
-  toggleBot: () => void
-  toggleSidebar?: () => void
+  onToggleBot: () => void
+  onToggleSidebar: () => void
 }
 
 export const Nav = (props: NavProps) => {
@@ -36,11 +38,18 @@ export const Nav = (props: NavProps) => {
         <span style={{ 'font-family': 'Poppins, sans-serif' }}>Clear</span>
       </DeleteButton>
 
-      <Button onClick={props.toggleBot}>Close</Button>
+      <Button onClick={props.onToggleBot} class='hidden md:block ml-4'>
+        Close
+      </Button>
 
       <div class='flex-1 md:hidden' />
 
-      <img class='md:hidden py-2' onClick={props.toggleSidebar} src={menuIcon} />
+      <Show
+        when={props.sidebarOpen}
+        fallback={<img class='md:hidden py-2' onClick={props.onToggleSidebar} src={menuIcon} />}
+      >
+        <img class='md:hidden' width={28} onClick={props.onToggleSidebar} src={circleCloseIcon} />
+      </Show>
     </div>
   )
 }
