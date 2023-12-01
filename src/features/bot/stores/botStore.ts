@@ -169,7 +169,7 @@ const handleFacts = async (facts: ExtendedSourceFact[]) => {
 
   factElements = await Promise.all(
     factElements.map(async (f) => {
-      if (import.meta.env.DEV) return f
+      // if (import.meta.env.DEV) return f
 
       const parsedValue = Array.isArray(f.value) ? f.value.join(', ') : f.value
 
