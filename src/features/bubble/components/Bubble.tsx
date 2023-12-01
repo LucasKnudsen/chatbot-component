@@ -34,14 +34,13 @@ export const Bubble = (props: BotProps) => {
       <BubbleButton toggleBot={toggleBot} isBotOpened={isBotOpened()} />
 
       <div
-        class={`fixed top-0 left-0 w-screen h-screen m-0 ${
+        class={`fixed top-0 left-0 w-screen m-0 min-h-[-webkit-fill-available] h-full ${
           isBotOpened() ? 'opacity-1' : 'opacity-0 pointer-events-none'
         }`}
         style={{
           transition: 'transform 350ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
           'transform-origin': 'bottom right',
           transform: isBotOpened() ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
-          'z-index': 42424242,
         }}
         part='bot'
       >

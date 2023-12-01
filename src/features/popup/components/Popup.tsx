@@ -84,7 +84,6 @@ export const Popup = (props: PopupProps) => {
         aria-labelledby='modal-title'
         role='dialog'
         aria-modal='true'
-        style={{ 'z-index': 1100 }}
         on:click={closeBot}
       >
         <style>{styles}</style>

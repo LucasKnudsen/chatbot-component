@@ -14,13 +14,14 @@ type SidebarProps = {
 const botPaddingNum = 64
 const innerWidth = sidebarInnerWidthNum + 'px'
 const openWidth = sidebarInnerWidthNum + botPaddingNum + sidebarPaddingNum + 'px'
-const closedWidth = '0px'
+// 1px instead of 0px stops weird safari z-index issue
+const closedWidth = '1px'
 
 export const Sidebar = (props: SidebarProps) => {
   return (
     <div
       class={
-        'absolute h-full top-0 right-0 transition-all backdrop-blur-md bg-white/75 z-20 shadow-md ' +
+        'absolute z-10 h-full top-0 right-0 transition-all backdrop-blur-md   shadow-md ' +
         props.class
       }
       style={{
