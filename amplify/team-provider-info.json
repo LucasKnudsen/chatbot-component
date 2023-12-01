@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-digitaltwin-prod-121451-unauthRole",
       "StackName": "amplify-digitaltwin-prod-121451",
       "StackId": "arn:aws:cloudformation:ap-southeast-1:047845575339:stack/amplify-digitaltwin-prod-121451/0bced500-7e28-11ee-9459-02fc87cf7948",
-      "AmplifyAppId": "d1i4jp82axmvxl"
+      "AmplifyAppId": "d1i4jp82axmvxl",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-digitaltwin-prod-121451-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "function": {
@@ -28,7 +29,7 @@
         },
         "detectLanguage": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/detectLanguage-49714e39537263527875-build.zip"
+          "s3Key": "amplify-builds/detectLanguage-623941554366646f647a-build.zip"
         },
         "digitaltwin": {}
       },
