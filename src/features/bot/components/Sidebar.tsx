@@ -21,7 +21,7 @@ export const Sidebar = (props: SidebarProps) => {
   return (
     <div
       class={
-        'absolute z-10 h-full top-0 right-0 transition-all backdrop-blur-md   shadow-md ' +
+        'absolute z-10 bg-white/75 h-full top-0 right-0 transition-all backdrop-blur-md   shadow-md ' +
         props.class
       }
       style={{
