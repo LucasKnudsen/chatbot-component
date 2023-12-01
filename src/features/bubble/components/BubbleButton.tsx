@@ -16,7 +16,6 @@ export const BubbleButton = (props: Props) => {
       class={`fixed right-5 bottom-5  shadow-lg rounded-full hover:scale-110 active:scale-95 transition-transform duration-200 flex justify-center items-center animate-fade-in w-14 h-14`}
       style={{
         background: theme().primaryColor,
-        'z-index': 42424242,
       }}
     >
       {/* <Show when={isNotDefined(props.customIconSrc)} keyed> */}
