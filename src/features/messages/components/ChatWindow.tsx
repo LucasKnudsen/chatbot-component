@@ -83,7 +83,7 @@ export const ChatWindow = () => {
         </Show>
 
         {/* Chatbot answer  */}
-        <div ref={botMessageEl} class='prose' />
+        <div data-testid='chatbot-answer' ref={botMessageEl} class='prose' />
 
         {/* Gallery  */}
         <Gallery resources={botStore.chat?.resources!} />
