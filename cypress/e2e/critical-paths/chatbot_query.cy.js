@@ -22,6 +22,9 @@ describe('Chatbot Test', () => {
     })
 
     // Verify the visual response
-    cy.get('[data-testid="chatbot-answer"]').children().should('include', expectedResponseInclude)
+    cy.get('[data-testid="chatbot-answer"]')
+      .children()
+      .first()
+      .should('contain', expectedResponseInclude)
   })
 })
