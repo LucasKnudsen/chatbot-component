@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.ts*\"",
     "lint-fix": "eslint --fix \"src/**/*.ts*\"",
+    "test": "cypress open",
     "amplify:flowiseMiddleware": "cd amplify/backend/function/flowiseMiddleware && npx tsc -p ./tsconfig.json && cd -",
     "amplify:flowiseBroadcast": "cd amplify/backend/function/flowiseBroadcast && npx tsc -p ./tsconfig.json && cd -",
     "amplify:detectLanguage": "cd amplify/backend/function/detectLanguage && npx tsc -p ./tsconfig.json && cd -"
@@ -32,6 +33,7 @@
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
     "autoprefixer": "^10.4.16",
+    "cypress": "^13.6.0",
     "eslint": "^8.24.0",
     "eslint-config-next": "13.2.4",
     "eslint-config-prettier": "^8.3.0",
