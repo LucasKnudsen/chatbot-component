@@ -7,6 +7,7 @@ import {
   sendMessageQuery,
 } from '@/features/messages'
 import { createEffect, createSignal, on } from 'solid-js'
+import { extractSuggestedPrompts } from '../utils'
 
 export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
   const [suggestedPrompts, setSuggestedPrompts] = createSignal<string[]>([])
@@ -46,17 +47,9 @@ export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
 
     if (response.data) {
       const text = extractChatbotResponse(response.data)
-      let questionsArray: string[] = []
+      const newPrompts = extractSuggestedPrompts(text)
 
-      try {
-        // In case the response is a stringified JSON array
-        questionsArray = JSON.parse(text)
-      } catch (error) {
-        // In case the response is a string with newlines
-        questionsArray = text.split('\n').map((question) => question.replace(/^\d+\.\s/, ''))
-      } finally {
-        setSuggestedPrompts(questionsArray)
-      }
+      setSuggestedPrompts(newPrompts)
     }
   }
 
