@@ -30,6 +30,7 @@ export const Bubble = (props: BotProps) => {
   return (
     <>
       <StyleSheet />
+      <style>{isBotOpened() ? 'body { overflow: hidden; }' : ''}</style>
 
       <BubbleButton toggleBot={toggleBot} isBotOpened={isBotOpened()} />
 

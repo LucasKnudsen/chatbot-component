@@ -155,7 +155,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
     initTheme(props.themeId, props.theme)
     initText(props.text, props.language)
 
-    if (botStore.chat && import.meta.env.PROD) {
+    if (botStore.chat) {
       fetchSuggestedPrompts()
     }
   })

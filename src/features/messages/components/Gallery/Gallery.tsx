@@ -11,6 +11,7 @@ import Video from './Video'
 
 type Props = {
   resources: Resources
+  class?: string
 }
 
 const Gallery = (props: Props) => {
@@ -22,7 +23,7 @@ const Gallery = (props: Props) => {
   const imagesAndVideos = createMemo(() => [...props.resources.picture, ...props.resources.video])
 
   return (
-    <div ref={parent}>
+    <div ref={parent} class={props.class}>
       {/* TODO: Configureable header */}
       <Show when={imagesAndVideos().length > 0}>
         <Expandable

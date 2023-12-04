@@ -24,7 +24,7 @@ export const BotMobileLayout = (props: BotMobileProps) => {
 
   return (
     <div class='flex flex-col flex-1 h-full overflow-hidden'>
-      <div class='flex flex-col flex-1 overflow-hidden text-base px-6 pt-6'>
+      <div class='flex flex-col flex-1 overflow-hidden text-base pt-6'>
         <Show
           when={botStore.chat}
           fallback={
@@ -38,16 +38,18 @@ export const BotMobileLayout = (props: BotMobileProps) => {
           <ChatWindow />
         </Show>
       </div>
-      <div class='w-full px-6 py-4 bg-white border-t'>
-        <TextInput
-          class='mb-2'
-          rows={1}
-          disabled={botStore.loading}
-          defaultValue={props.userInput}
-          onSubmit={props.onSubmit}
-          placeholder={text().inputPlaceholder}
-          onFocusChange={setIsFocused}
-        />
+      <div class='w-full py-4 bg-white border-t'>
+        <div class='px-6'>
+          <TextInput
+            class='mb-2'
+            rows={1}
+            disabled={botStore.loading}
+            defaultValue={props.userInput}
+            onSubmit={props.onSubmit}
+            placeholder={text().inputPlaceholder}
+            onFocusChange={setIsFocused}
+          />
+        </div>
 
         <Collapsible open={isFocused()}>
           <SuggestedPrompts
