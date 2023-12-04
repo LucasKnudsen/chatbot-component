@@ -3,10 +3,9 @@ import {
   IncomingInput,
   PromptCode,
   extractChatbotResponse,
-  scrollChatWindowToBottom,
   sendMessageQuery,
 } from '@/features/messages'
-import { createEffect, createSignal, on } from 'solid-js'
+import { createSignal } from 'solid-js'
 import { extractSuggestedPrompts } from '../utils'
 
 export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
@@ -52,17 +51,6 @@ export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
       setSuggestedPrompts(newPrompts)
     }
   }
-
-  createEffect(
-    on(
-      () => isFetching(),
-      () =>
-        setTimeout(() => {
-          suggestedPrompts().length === 0 && scrollChatWindowToBottom()
-        }, 200),
-      { defer: true }
-    )
-  )
 
   return { suggestedPrompts, fetchSuggestedPrompts, clearSuggestions, isFetching }
 }
