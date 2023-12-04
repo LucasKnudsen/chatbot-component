@@ -1,0 +1,9 @@
+customHeaders:
+  - pattern: '*.js'
+    headers:
+      - key: 'Access-Control-Allow-Origin'
+        value: '*'
+  - pattern: '*.cjs'
+    headers:
+      - key: 'Access-Control-Allow-Origin'
+        value: '*'
