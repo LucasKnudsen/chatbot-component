@@ -29,7 +29,15 @@ export const ChatWindow = () => {
   const scrollChatWindowToBottom = (offset?: number) => {
     const chatWindow = document.getElementById('chat-window')
 
-    if (chatWindow) setTimeout(() => chatWindow.scrollTo(0, chatWindow.scrollHeight), 50)
+    if (chatWindow)
+      setTimeout(
+        () =>
+          chatWindow.scrollTo(
+            0,
+            offset ? chatWindow.scrollHeight + offset : chatWindow.scrollHeight
+          ),
+        50
+      )
   }
 
   createEffect(
@@ -112,7 +120,7 @@ export const ChatWindow = () => {
         <Show when={device() == 'mobile'}>
           <div class='flex flex-col'>
             <Show when={botStore.chat?.resources.fact.length}>
-              <div class='flex overflow-x-scroll whitespace-nowrap gap-x-4 px-6 md:px-0 custom-scrollbar mt-2'>
+              <div class='flex overflow-x-scroll whitespace-nowrap gap-x-4 px-6 md:px-0 no-scrollbar mt-2'>
                 <For each={botStore.chat?.resources?.fact ?? []}>
                   {(element) => <Fact fact={element} />}
                 </For>
@@ -132,7 +140,7 @@ export const ChatWindow = () => {
                 </div>
                 <Divider margin={8} />
               </div>
-              <div class='flex overflow-x-scroll gap-x-4 px-6 custom-scrollbar mt-2'>
+              <div class='flex overflow-x-scroll gap-x-4 px-6 no-scrollbar mt-2'>
                 <For each={botStore.chat?.resources?.link ?? []}>
                   {(element) => <LinkInline link={element} />}
                 </For>
