@@ -1,11 +1,10 @@
 import { Resources } from '@/features/contextual'
-import { createAutoAnimate } from '@formkit/auto-animate/solid'
 
 import { Expandable } from '@/components'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { For, Match, Show, Switch, createMemo } from 'solid-js'
-import { scrollChatWindowToBottom } from '../..'
+
 import Picture from './Picture'
 import Video from './Video'
 
@@ -15,15 +14,21 @@ type Props = {
 }
 
 const Gallery = (props: Props) => {
-  const [parent] = createAutoAnimate()
+  // const [parent] = createAutoAnimate()
 
   const { theme } = useTheme()
   const { text } = useText()
 
   const imagesAndVideos = createMemo(() => [...props.resources.picture, ...props.resources.video])
 
+  const scrollIntoView = () => {
+    const galleryContainer = document.getElementById('gallery-container')
+
+    if (galleryContainer) setTimeout(() => galleryContainer.scrollIntoView())
+  }
+
   return (
-    <div ref={parent} class={props.class}>
+    <div id='gallery-container' class={props.class}>
       {/* TODO: Configureable header */}
       <Show when={imagesAndVideos().length > 0}>
         <Expandable
@@ -31,7 +36,7 @@ const Gallery = (props: Props) => {
           defaultOpen
           onOpen={() => {
             setTimeout(() => {
-              scrollChatWindowToBottom()
+              scrollIntoView()
             }, 100)
           }}
           height='280px'

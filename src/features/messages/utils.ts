@@ -25,8 +25,3 @@ export const extractChatbotResponse = (response: any) => {
 
   return text
 }
-
-export const scrollChatWindowToBottom = () => {
-  const chatWindow = document.getElementById('chat-window')
-  if (chatWindow) setTimeout(() => chatWindow.scrollTo(0, chatWindow.scrollHeight), 50)
-}

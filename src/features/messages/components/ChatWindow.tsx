@@ -10,7 +10,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Marked } from '@ts-stack/markdown'
 import { For, Show, createEffect, on } from 'solid-js'
-import { scrollChatWindowToBottom } from '..'
+
 import Gallery from './Gallery/Gallery'
 
 export const ChatWindow = () => {
@@ -26,7 +26,28 @@ export const ChatWindow = () => {
     }
   })
 
-  createEffect(on(() => botStore.chat?.answer, scrollChatWindowToBottom, { defer: true }))
+  const scrollChatWindowToBottom = (offset?: number) => {
+    const chatWindow = document.getElementById('chat-window')
+
+    if (chatWindow) setTimeout(() => chatWindow.scrollTo(0, chatWindow.scrollHeight), 50)
+  }
+
+  createEffect(
+    on(
+      () => botStore.chat?.answer,
+      () => scrollChatWindowToBottom(),
+      { defer: true }
+    )
+  )
+
+  // shows a bit of the resources when they are loaded
+  createEffect(
+    on(
+      () => botStore.chat?.resources,
+      () => scrollChatWindowToBottom(-100),
+      { defer: true }
+    )
+  )
 
   const onCopy = () => {
     navigator.clipboard.writeText(botStore.chat?.answer!)

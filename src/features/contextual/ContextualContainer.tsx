@@ -55,7 +55,7 @@ export const ContextualContainer = (props: Props) => {
 
         <div
           ref={animateLinks}
-          class='flex-1 flex flex-col gap-4 flex-1 overflow-y-scroll custom-scrollbar pr-0.5'
+          class='flex-1 flex flex-col gap-4 overflow-y-scroll custom-scrollbar pr-0.5'
         >
           <For each={botStore.chat?.resources?.link ?? []}>
             {(element) => <Link link={element} />}
