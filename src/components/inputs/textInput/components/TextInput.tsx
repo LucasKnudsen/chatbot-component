@@ -67,6 +67,7 @@ export const TextInput = (props: Props) => {
       />
 
       <SendButton
+        data-testid='submit-question'
         sendButtonColor={theme().textSecondary}
         type='button'
         isDisabled={props.disabled || inputValue() === ''}

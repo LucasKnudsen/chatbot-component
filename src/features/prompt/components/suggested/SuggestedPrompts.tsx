@@ -14,11 +14,24 @@ type Props = {
 
 export const SuggestedPrompts = (props: Props) => {
   const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
+
   const { theme } = useTheme()
+  const { surfaceBackground, surfaceBackground2 } = theme()
 
   const { text } = useText()
   return (
     <>
+      <style>
+        {`
+        .prompt:hover {
+          background: ${surfaceBackground2};
+        }
+        .prompt {
+          background: ${surfaceBackground};
+        }
+      `}
+      </style>
+
       <div ref={suggestedPromptsParent}>
         <Show when={props.isFetching || props.suggestedPrompts.length > 0}>
           <div class='flex flex-col md:flex-row md:items-center gap-y-2 md:mt-4'>

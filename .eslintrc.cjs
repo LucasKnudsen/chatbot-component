@@ -5,8 +5,9 @@ export default {
     'plugin:@typescript-eslint/recommended',
     'prettier',
     'plugin:solid/typescript',
+    'plugin:cypress/recommended',
   ],
-  plugins: ['@typescript-eslint', 'solid'],
+  plugins: ['@typescript-eslint', 'solid', 'cypress'],
   parser: '@typescript-eslint/parser',
   ignorePatterns: ['**/*.md'],
   rules: {
