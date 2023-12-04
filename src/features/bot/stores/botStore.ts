@@ -156,9 +156,20 @@ const handleFacts = async (facts: ExtendedSourceFact[]) => {
     header: f.name,
   }))
 
+  setBotStore(
+    'chat',
+    'resources',
+    'fact',
+    factElements.map((f) => ({
+      ...f,
+      value: '',
+      header: '',
+    }))
+  )
+
   factElements = await Promise.all(
     factElements.map(async (f) => {
-      if (import.meta.env.DEV) return f
+      // if (import.meta.env.DEV) return f
 
       const parsedValue = Array.isArray(f.value) ? f.value.join(', ') : f.value
 
@@ -175,7 +186,7 @@ const handleFacts = async (facts: ExtendedSourceFact[]) => {
     })
   )
 
-  setBotStore('chat', 'resources', 'fact', (prev) => [...prev, ...factElements])
+  setBotStore('chat', 'resources', 'fact', factElements)
 
   updateHistory(parseProxy(botStore.chat!))
 }
