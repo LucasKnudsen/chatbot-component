@@ -39,12 +39,12 @@ export const SuggestedPrompts = (props: Props) => {
               style={{
                 color: theme().textSecondary,
               }}
-              class='whitespace-nowrap md:border-r-2 border-gray-200 pr-4 max-sm:text-sm font-semibold'
+              class='whitespace-nowrap md:border-r-2 border-gray-200 px-6 md:px-0 max-sm:text-sm font-semibold'
             >
               {text().suggestedPromptsTitle}
             </p>
 
-            <div class='flex overflow-x-auto whitespace-nowrap gap-x-4 custom-scrollbar md:ml-4'>
+            <div class='flex overflow-x-scroll px-6 md:px-0 whitespace-nowrap gap-x-4 no-scrollbar md:ml-4'>
               <Show when={props.suggestedPrompts.length > 0} fallback={<LoadingBubble />}>
                 <For each={props.suggestedPrompts}>
                   {(p) => (
