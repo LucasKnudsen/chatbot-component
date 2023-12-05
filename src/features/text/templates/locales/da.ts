@@ -11,7 +11,7 @@ export const da: TextTemplate = {
   close: 'Luk',
 
   // Indstillinger dropdown
-  copyText: 'Kopier tekst',
+  copyText: 'Kopier svaret',
   copyTextSuccess: 'Tekst kopieret til udklipsholderen',
   share: 'Del',
 

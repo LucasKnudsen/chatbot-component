@@ -8,6 +8,7 @@ import { Show, createMemo, createSignal } from 'solid-js'
 import { PromptType } from '.'
 import { botStore, botStoreActions } from '..'
 import { sidebarPaddingNum } from '../constants'
+import { MenuSettings } from './MenuSettings'
 import { ResourcesSidebar } from './ResourcesSidebar'
 import { SidebarTabView } from './SidebarTabView'
 
@@ -41,23 +42,30 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
         <Show
           when={botStore.chat}
           fallback={
-            <div class='flex flex-1 h-full overflow-hidden'>
+            <div class='flex flex-1 overflow-hidden  mb-6 '>
               {/* Welcome message */}
               <div class='flex flex-1 items-end '>
-                <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
+                <h1 class='text-5xl max-w-md h-fitfont-light tracking-wide '>
                   {botStore.history.length ? text().returnWelcomeMessage : text().welcomeMessage}
                 </h1>
               </div>
 
-              <SidebarTabView
-                initialPrompts={props.initialPrompts}
-                setQuestion={(chat) => {
-                  botStoreActions.setChat(chat)
-                }}
-                handleSubmit={(question) => {
-                  props.onSubmit(question)
-                }}
-              />
+              <div>
+                <div class='flex flex-col flex-1  h-full'>
+                  <SidebarTabView
+                    class='h-full'
+                    initialPrompts={props.initialPrompts}
+                    setQuestion={(chat) => {
+                      botStoreActions.setChat(chat)
+                    }}
+                    handleSubmit={(question) => {
+                      props.onSubmit(question)
+                    }}
+                  />
+
+                  <MenuSettings toggleBot={props.toggleBot} clear={props.onClear} />
+                </div>
+              </div>
             </div>
           }
         >

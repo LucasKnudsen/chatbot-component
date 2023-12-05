@@ -1,6 +1,7 @@
 import circleCloseIcon from '@/assets/circle-close-icon.svg'
 import logo from '@/assets/logo.png'
 import menuIcon from '@/assets/menu-icon.svg'
+import { botStoreActions } from '@/features/bot'
 import { useTheme } from '@/features/theme/hooks'
 import { Show } from 'solid-js'
 import { Button } from '.'
@@ -15,6 +16,11 @@ type NavProps = {
 export const Nav = (props: NavProps) => {
   const { theme } = useTheme()
 
+  const resetChat = () => {
+    botStoreActions.setChat(null)
+    props.onClear()
+  }
+
   return (
     <div
       class='flex flex-wrap items-center mx-5 rounded-full pl-6 pr-3 py-2 mt-5'
@@ -22,7 +28,7 @@ export const Nav = (props: NavProps) => {
         background: theme().surfaceBackground,
       }}
     >
-      <img src={logo} class='h-6' />
+      <img src={logo} class='h-6 cursor-pointer' onClick={resetChat} />
 
       <div class='md:flex-1' />
 

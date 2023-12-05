@@ -9,7 +9,7 @@ export const defaultText = {
   close: 'Close',
 
   // Settings dropdown
-  copyText: 'Copy text',
+  copyText: 'Copy answer',
   copyTextSuccess: 'Text copied to clipboard',
   share: 'Share',
 

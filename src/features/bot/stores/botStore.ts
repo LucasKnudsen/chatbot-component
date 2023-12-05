@@ -262,7 +262,7 @@ const handleSourceDocuments = async (documents: SourceDocument[]) => {
   await handleFacts(uniqueFacts)
 }
 
-const setChat = (chat: Chat) => {
+const setChat = (chat: Chat | null) => {
   setBotStore('chat', chat)
 }
 

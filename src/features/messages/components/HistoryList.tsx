@@ -67,12 +67,7 @@ export const History = (props: HistoryProps) => {
           </div>
         }
       >
-        <div
-          class='overflow-y-auto custom-scrollbar pr-1 '
-          style={{
-            'max-height': 'calc(100vh - 180px)',
-          }}
-        >
+        <div>
           <HistoryListSection
             title={text().today}
             history={todayChats()}
