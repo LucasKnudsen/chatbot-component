@@ -86,11 +86,11 @@ const addHistory = (newQuestion: Chat) => {
   })
 }
 
-const updateHistory = (question: Chat) => {
+const updateHistory = (chat: Chat) => {
   setBotStore('history', (prev) => {
     prev.pop()
 
-    const newHistory = [...prev, question]
+    const newHistory = [...prev, chat]
 
     storeHistory(newHistory)
     return newHistory
@@ -104,15 +104,20 @@ const buildUpdatedAnswer = (oldQ: Chat, answer: string) => {
   }
 }
 
-const updateAnswer = (answer: string, shouldUpdateHistory: boolean = false) => {
+const updateHistoryAnswer = (answer: string) => {
+  const oldQ = botStore.chat
+
+  if (oldQ === null) return
+
+  updateHistory(buildUpdatedAnswer(parseProxy(oldQ), answer))
+}
+
+const updateAnswer = (answer: string) => {
   const oldQ = botStore.chat
 
   if (oldQ === null) return
 
   setChat(buildUpdatedAnswer(oldQ, answer))
-
-  // To not update history on every stream update
-  shouldUpdateHistory && updateHistory(buildUpdatedAnswer(parseProxy(oldQ), answer))
 }
 
 const buildQuestion = (question: string, id: string) => {
@@ -268,6 +273,7 @@ const clear = () => {
 const botStoreActions = {
   initBotStore,
   updateAnswer,
+  updateHistoryAnswer,
   createQuestion,
   setChat,
   handleSourceDocuments,

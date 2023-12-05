@@ -13,9 +13,8 @@ import {
 } from '@/features/messages'
 import { Popup } from '@/features/popup'
 import { useSuggestedPrompts } from '@/features/prompt'
-import { TextTemplate, detectLanguage, useText } from '@/features/text'
+import { TextTemplate, detectLanguage } from '@/features/text'
 import { Theme } from '@/features/theme'
-import { useTheme } from '@/features/theme/hooks'
 import { queries } from '@/graphql'
 import { Channel, GetChannelQuery } from '@/graphql/types'
 import { useMediaQuery } from '@/utils/useMediaQuery'
@@ -115,8 +114,6 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
   const [sourcePopupSrc] = createSignal({})
   const [sidebarOpen, setSidebarOpen] = createSignal(false)
 
-  const { initTheme, theme } = useTheme()
-  const { initText } = useText()
   const device = useMediaQuery()
 
   const { chatId, clear: clearChatId } = useChatId(props.channel.chatflowId!)
@@ -178,8 +175,16 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
     if (messageResult.data) {
       // Uses the source documents from the end result rather than sockets (they are the same, and doesnt stream in anyway)
       botStoreActions.handleSourceDocuments(messageResult.data.sourceDocuments)
+
+      const answer = extractChatbotResponse(messageResult.data)
+
       // Saves end answer in history rather than at every stream update
-      botStoreActions.updateAnswer(extractChatbotResponse(messageResult.data), true)
+      botStoreActions.updateHistoryAnswer(answer)
+
+      // If the chatflow is not available to stream, we update the answer here
+      if (!isChatFlowAvailableToStream()) {
+        botStoreActions.updateAnswer(answer)
+      }
 
       fetchSuggestedPrompts(detectLanguageResult?.languageCode)
     }
@@ -198,9 +203,6 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
   onMount(() => {
     botStoreActions.initBotStore(props.channel.chatflowId!, props.language)
 
-    initTheme(props.themeId, props.theme)
-    initText(props.text, props.language)
-
     if (botStore.chat) {
       fetchSuggestedPrompts()
     }
@@ -209,13 +211,9 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
   return (
     <>
       <div
-        class={'relative flex flex-col h-full w-full  overflow-hidden ' + props.class}
-        style={{
-          color: theme().textColor,
-          background: `${theme().backgroundColor} url(${
-            theme().backgroundImageUrl
-          }) no-repeat center / cover`,
-        }}
+        class={
+          'relative flex flex-col h-full w-full  overflow-hidden animate-fade-in ' + props.class
+        }
       >
         <Nav
           sidebarOpen={sidebarOpen()}
