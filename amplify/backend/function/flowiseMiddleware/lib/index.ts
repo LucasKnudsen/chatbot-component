@@ -15,8 +15,6 @@ const ssmClient = new SSMClient({ region: process.env.REGION })
 const ddbService = new DynamoDBClient({ region: process.env.REGION })
 const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
 
-const TEST_API_KEY = 'Bearer Z6tQxMs34lQs1kcpOO7bB8bbMrUY9cDo52kjopo/MjM='
-
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': '*',
@@ -90,6 +88,13 @@ const getChannel = async (channelId: string) => {
   return result.Item
 }
 
+const getSecret = async (secretName: string) => {
+  const command = new GetParameterCommand({ Name: secretName, WithDecryption: true })
+  const { Parameter } = await ssmClient.send(command)
+
+  return Parameter.Value
+}
+
 const handleFlowiseRequest = async (body: ParsedEventBody) => {
   const { channelId, chatId, socketIOClientId, question } = body
 
@@ -99,6 +104,8 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
 
   const endpoint = `${channel.apiHost}/api/v1/prediction/${channel.chatflowId}`
 
+  const apiKey = await getSecret(`flowiseKey_${channelId}`)
+
   const data = {
     question,
     chatId,
@@ -106,7 +113,7 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
   }
   const result = await axios.post(endpoint, data, {
     headers: {
-      Authorization: TEST_API_KEY,
+      Authorization: apiKey,
     },
   })
 
@@ -114,12 +121,11 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
 }
 
 const initiateOpenAI = async () => {
-  const command = new GetParameterCommand({ Name: process.env.openai_key, WithDecryption: true })
-  const { Parameter } = await ssmClient.send(command)
+  const apiKey = await getSecret(process.env.openai_key)
 
   return new OpenAI({
     organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
-    apiKey: Parameter.Value,
+    apiKey,
   })
 }
 
