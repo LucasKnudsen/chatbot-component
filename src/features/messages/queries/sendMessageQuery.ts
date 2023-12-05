@@ -20,18 +20,16 @@ export type IncomingInput = {
 }
 
 export type MessageRequest = {
-  chatflowid: string
-  apiHost?: string
+  channelId: string
   body?: IncomingInput
 }
 
-export async function sendMessageQuery({ body, chatflowid, apiHost }: MessageRequest) {
+export async function sendMessageQuery({ channelId, body }: MessageRequest) {
   try {
     // TODO: Test timeout of the REST API. (There's a 30 second timeout on AppSync)
     const answer = await API.post('digitaltwinRest', '/flowise/middleware', {
       body: {
-        chatflowid,
-        apiHost,
+        channelId,
         ...body,
       },
     })
@@ -45,10 +43,13 @@ export async function sendMessageQuery({ body, chatflowid, apiHost }: MessageReq
 }
 
 export const isStreamAvailableQuery = ({
-  chatflowid,
+  chatflowId,
   apiHost = 'http://localhost:3000',
-}: MessageRequest) =>
+}: {
+  chatflowId: string
+  apiHost?: string
+}) =>
   sendRequest<any>({
     method: 'GET',
-    url: `${apiHost}/api/v1/chatflows-streaming/${chatflowid}`,
+    url: `${apiHost}/api/v1/chatflows-streaming/${chatflowId}`,
   })

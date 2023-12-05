@@ -27,6 +27,11 @@ export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
       .map((question) => question.question)
       .slice(-5)
 
+    // Don't send if there are no relevant previous questions
+    if (previousQuestions.length === 0) {
+      return
+    }
+
     const body: IncomingInput = {
       question: '',
       previousQuestions,

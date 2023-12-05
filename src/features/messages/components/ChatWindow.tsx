@@ -105,7 +105,7 @@ export const ChatWindow = () => {
         class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative gap-y-8'
       >
         {/* Loading  */}
-        <Show when={!botStore.chat?.answer}>
+        <Show when={botStore.loading && !botStore.chat?.answer}>
           <div class='flex mt-4 px-6 md:px-0'>
             <TypingBubble />
           </div>

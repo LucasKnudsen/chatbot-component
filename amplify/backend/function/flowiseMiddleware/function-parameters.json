@@ -2,5 +2,12 @@
   "lambdaLayers": [],
   "secretNames": [
     "openai_key"
-  ]
+  ],
+  "permissions": {
+    "storage": {
+      "Channel:@model(appsync)": [
+        "read"
+      ]
+    }
+  }
 }

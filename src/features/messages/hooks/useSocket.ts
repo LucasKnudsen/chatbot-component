@@ -4,12 +4,12 @@ import socketIOClient from 'socket.io-client'
 import { createSignal, onCleanup, onMount } from 'solid-js'
 
 export function useSocket({
-  chatflowid,
+  chatflowId,
   apiHost,
   onStart,
   onToken,
 }: {
-  chatflowid: string
+  chatflowId: string
   apiHost: string
   onStart?: () => void
   onDocuments?: (documents: SourceDocument[]) => void
@@ -23,20 +23,18 @@ export function useSocket({
 
   onMount(async () => {
     const { data } = await isStreamAvailableQuery({
-      chatflowid: chatflowid,
-      apiHost: apiHost,
+      chatflowId,
+      apiHost,
     })
 
-    // if (data) {
-    //   setIsChatFlowAvailableToStream(data?.isStreaming ?? false)
-    // }
+    if (data) {
+      socket.id && setSocketIOClientId(socket.id)
+      setIsChatFlowAvailableToStream(data?.isStreaming ?? false)
+    }
 
     socket.on('connect', () => {
-      console.log('In connect', socket.id, data)
+      console.log('In connect', socket.id)
 
-      if (data) {
-        setIsChatFlowAvailableToStream(data?.isStreaming ?? false)
-      }
       setSocketIOClientId(socket.id)
     })
 

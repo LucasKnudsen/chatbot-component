@@ -1,13 +1,19 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import axios from 'axios'
+
 // @ts-ignore
-const { SSMClient, GetParameterCommand } = require('@aws-sdk/client-ssm')
+import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm'
 // @ts-ignore
 import OpenAI from 'openai'
+// @ts-ignore
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+// @ts-ignore
+import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb'
 
 const ssmClient = new SSMClient({ region: process.env.REGION })
 
-const TEST_API_KEY = 'Bearer Z6tQxMs34lQs1kcpOO7bB8bbMrUY9cDo52kjopo/MjM='
+const ddbService = new DynamoDBClient({ region: process.env.REGION })
+const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -15,13 +21,12 @@ const headers = {
 }
 
 type ParsedEventBody = {
-  chatflowid: string
-  apiHost: string
   promptCode: string
-  language: string
-  question: string
-  previousQuestions: string[]
-  chatId: string
+  channelId?: string
+  language?: string
+  question?: string
+  previousQuestions?: string[]
+  chatId?: string
   socketIOClientId?: string
 }
 
@@ -29,11 +34,9 @@ export const handler = async (
   event: APIGatewayProxyEvent & { isMock?: boolean }
 ): Promise<APIGatewayProxyResult> => {
   try {
-    console.log(`EVENT: ${JSON.stringify(event)}`)
+    !event.isMock && console.log(`EVENT: ${JSON.stringify(event)}`)
 
     const body = JSON.parse(event.body) as ParsedEventBody
-
-    // TODO: Fetch config based on ID instead
 
     let answer = { text: '' }
 
@@ -70,10 +73,39 @@ export const handler = async (
   }
 }
 
+const getChannel = async (channelId: string) => {
+  if (!channelId) throw new Error('Channel ID is required')
+
+  const command = new GetCommand({
+    TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
+    Key: {
+      id: channelId,
+    },
+  })
+
+  const result = await ddbDocClient.send(command)
+
+  return result.Item
+}
+
+const getSecret = async (secretName: string) => {
+  const command = new GetParameterCommand({ Name: secretName, WithDecryption: true })
+  const { Parameter } = await ssmClient.send(command)
+
+  return Parameter.Value
+}
+
 const handleFlowiseRequest = async (body: ParsedEventBody) => {
-  const { chatflowid, apiHost, chatId, socketIOClientId, question } = body
-  // `Please answer the following question: ${question}. Always return your answer in formatted markdown, structure it with bold, lists, etc, making it interesting and informative, but still concise.`
-  const endpoint = `${apiHost}/api/v1/prediction/${chatflowid}`
+  const { channelId, chatId, socketIOClientId, question } = body
+
+  const channel = await getChannel(channelId)
+
+  if (!channel) throw new Error('Channel not found')
+
+  const endpoint = `${channel.apiHost}/api/v1/prediction/${channel.chatflowId}`
+
+  const apiKey = await getSecret(`flowiseKey_${channelId}`)
+
   const data = {
     question,
     chatId,
@@ -81,7 +113,7 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
   }
   const result = await axios.post(endpoint, data, {
     headers: {
-      Authorization: TEST_API_KEY,
+      Authorization: apiKey,
     },
   })
 
@@ -89,12 +121,11 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
 }
 
 const initiateOpenAI = async () => {
-  const command = new GetParameterCommand({ Name: process.env.openai_key, WithDecryption: true })
-  const { Parameter } = await ssmClient.send(command)
+  const apiKey = await getSecret(process.env.openai_key)
 
   return new OpenAI({
     organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
-    apiKey: Parameter.Value,
+    apiKey,
   })
 }
 

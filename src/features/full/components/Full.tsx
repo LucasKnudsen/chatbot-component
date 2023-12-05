@@ -1,9 +1,9 @@
-import { Bot, BotProps } from '@/features/bot/components/Bot'
+import { BotConfig, BotManager } from '@/features/bot/components/Bot'
 
 import { Show, createSignal, onCleanup, onMount } from 'solid-js'
 import styles from '../../../index.css?inline'
 
-export type FullProps = BotProps
+export type FullProps = BotConfig
 
 export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
   const isWebComponent = !!options
@@ -35,7 +35,7 @@ export const Full = (props: FullProps, options?: { element: HTMLElement }) => {
       {isWebComponent && <style>{styles}</style>}
       <Show when={isBotDisplayed()}>
         <div class='h-screen w-full'>
-          <Bot {...props} toggleBot={() => {}} />
+          <BotManager {...props} toggleBot={() => {}} />
         </div>
       </Show>
     </>

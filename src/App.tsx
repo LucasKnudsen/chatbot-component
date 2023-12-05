@@ -54,11 +54,7 @@ function App() {
         </span>
         A
       </h1>
-      <Bubble
-        {...chatflows.fraia_dev}
-        initialPrompts={initialPrompts}
-        settings={{ autoOpen: true }}
-      />
+      <Bubble {...chatflows.fraia_dev} initialPrompts={initialPrompts} />
     </div>
   )
 }

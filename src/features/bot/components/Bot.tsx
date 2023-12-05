@@ -4,7 +4,6 @@ import { Button } from '@/components'
 import { Divider } from '@/components/Divider'
 import { Nav } from '@/components/Nav'
 import { DeleteIcon } from '@/components/icons/DeleteIcon'
-import { Sidebar, botStore, botStoreActions, useChatId, useLanguage } from '@/features/bot'
 import {
   IncomingInput,
   PromptCode,
@@ -17,12 +16,18 @@ import { useSuggestedPrompts } from '@/features/prompt'
 import { TextTemplate, detectLanguage, useText } from '@/features/text'
 import { Theme } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
+import { queries } from '@/graphql'
+import { Channel, GetChannelQuery } from '@/graphql/types'
 import { useMediaQuery } from '@/utils/useMediaQuery'
+import { GraphQLQuery } from '@aws-amplify/api'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
-import { Amplify } from 'aws-amplify'
-import { Match, Show, Switch, createSignal, onMount } from 'solid-js'
+import { API, Amplify } from 'aws-amplify'
+import { Match, Show, Switch, createResource, createSignal, onMount } from 'solid-js'
+import { Sidebar } from '.'
+import { botStore, botStoreActions, useChatId, useLanguage } from '..'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
+import { FraiaLoading } from './FraiaLoading'
 import { SidebarTabView } from './SidebarTabView'
 
 Amplify.configure(awsconfig)
@@ -49,9 +54,8 @@ export type BotSettings = {
   autoOpen: boolean
 }
 
-export type BotProps = {
-  chatflowid: string
-  apiHost: string
+export type BotConfig = {
+  channelId: string
   language?: string
   themeId?: string
   initialPrompts?: PromptType[]
@@ -61,7 +65,50 @@ export type BotProps = {
   settings?: BotSettings
 }
 
-export const Bot = (props: BotProps & { class?: string; toggleBot: () => void }) => {
+type BotProps = BotConfig & {
+  class?: string
+  toggleBot: () => void
+}
+
+export const BotManager = (props: BotProps) => {
+  const storageKey = 'fraiaChannel'
+  const [channel] = createResource(async () => {
+    try {
+      const localChannel = localStorage.getItem(storageKey)
+
+      if (localChannel) return JSON.parse(localChannel) as Channel
+
+      const result = await API.graphql<GraphQLQuery<GetChannelQuery>>({
+        query: queries.getChannel,
+        variables: {
+          id: props.channelId,
+        },
+        authMode: 'AWS_IAM',
+      })
+
+      const channel = result.data!.getChannel!
+
+      localStorage.setItem(storageKey, JSON.stringify(channel))
+
+      return channel
+    } catch (error) {
+      console.error(error)
+    }
+  })
+
+  return (
+    <Show when={channel()} fallback={<FraiaLoading />}>
+      <Bot
+        channel={channel()!}
+        {...props}
+        toggleBot={props.toggleBot}
+        class='fixed top-0 left-0 w-full h-full z-50'
+      />
+    </Show>
+  )
+}
+
+export const Bot = (props: BotProps & { channel: Channel }) => {
   const [userInput, setUserInput] = createSignal('')
 
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
@@ -72,19 +119,19 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
   const { initText } = useText()
   const device = useMediaQuery()
 
-  const { chatId, clear: clearChatId } = useChatId(props.chatflowid)
-  const { clear: clearDefaultLanguage } = useLanguage(props.chatflowid, props.language)
+  const { chatId, clear: clearChatId } = useChatId(props.channel.chatflowId!)
+  const { clear: clearDefaultLanguage } = useLanguage(props.channel.chatflowId!, props.language)
 
   const {
     suggestedPrompts,
     fetchSuggestedPrompts,
     clearSuggestions,
     isFetching: isFetchingSuggestedPrompts,
-  } = useSuggestedPrompts(props.chatflowid, props.apiHost)
+  } = useSuggestedPrompts(props.channel.chatflowId!, props.channel.apiHost!)
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
-    chatflowid: props.chatflowid,
-    apiHost: props.apiHost,
+    chatflowId: props.channel.chatflowId!,
+    apiHost: props.channel.apiHost!,
     onToken: botStoreActions.updateAnswer,
   })
 
@@ -122,8 +169,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
 
     const [messageResult, detectLanguageResult] = await Promise.all([
       sendMessageQuery({
-        chatflowid: props.chatflowid,
-        apiHost: props.apiHost,
+        channelId: props.channel.id,
         body,
       }),
       detectLanguage(value, true),
@@ -150,7 +196,7 @@ export const Bot = (props: BotProps & { class?: string; toggleBot: () => void })
   }
 
   onMount(() => {
-    botStoreActions.initBotStore(props.chatflowid, props.language)
+    botStoreActions.initBotStore(props.channel.chatflowId!, props.language)
 
     initTheme(props.themeId, props.theme)
     initText(props.text, props.language)
