@@ -10,6 +10,7 @@ export enum PromptCode {
 export type IncomingInput = {
   promptCode: PromptCode
   question: string
+  channelId?: string
   language?: string
 
   previousQuestions?: string[]
@@ -19,19 +20,11 @@ export type IncomingInput = {
   chatId?: string
 }
 
-export type MessageRequest = {
-  channelId: string
-  body?: IncomingInput
-}
-
-export async function sendMessageQuery({ channelId, body }: MessageRequest) {
+export async function sendMessageQuery(body: IncomingInput) {
   try {
     // TODO: Test timeout of the REST API. (There's a 30 second timeout on AppSync)
     const answer = await API.post('digitaltwinRest', '/flowise/middleware', {
-      body: {
-        channelId,
-        ...body,
-      },
+      body,
     })
 
     return {

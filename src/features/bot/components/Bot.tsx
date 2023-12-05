@@ -124,7 +124,7 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
     fetchSuggestedPrompts,
     clearSuggestions,
     isFetching: isFetchingSuggestedPrompts,
-  } = useSuggestedPrompts(props.channel.chatflowId!, props.channel.apiHost!)
+  } = useSuggestedPrompts()
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     chatflowId: props.channel.chatflowId!,
@@ -155,6 +155,7 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
 
     const body: IncomingInput = {
       question: value,
+      channelId: props.channel.id,
       history: [],
       chatId: chatId(),
       promptCode: PromptCode.QUESTION,
@@ -165,10 +166,7 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
     const [messageResult, detectLanguageResult] = await Promise.all([
-      sendMessageQuery({
-        channelId: props.channel.id,
-        body,
-      }),
+      sendMessageQuery(body),
       detectLanguage(value, true),
     ])
 
