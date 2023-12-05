@@ -97,27 +97,33 @@ const updateHistory = (chat: Chat) => {
   })
 }
 
-const buildUpdatedAnswer = (oldQ: Chat, answer: string) => {
-  return {
-    ...oldQ,
-    answer: oldQ.answer + answer,
-  }
-}
-
 const updateHistoryAnswer = (answer: string) => {
   const oldQ = botStore.chat
 
   if (oldQ === null) return
 
-  updateHistory(buildUpdatedAnswer(parseProxy(oldQ), answer))
+  const updatedQ = {
+    ...oldQ,
+    answer: oldQ.answer + answer,
+  }
+
+  updateHistory(parseProxy(updatedQ))
 }
 
-const updateAnswer = (answer: string) => {
+const updateAnswer = (answer: string, shouldOverwrite: boolean = false) => {
   const oldQ = botStore.chat
 
   if (oldQ === null) return
 
-  setChat(buildUpdatedAnswer(oldQ, answer))
+  if (shouldOverwrite) {
+    setChat({
+      ...oldQ,
+      answer,
+    })
+    return
+  }
+
+  setChat({ ...oldQ, answer: oldQ.answer + answer })
 }
 
 const buildQuestion = (question: string, id: string) => {

@@ -171,18 +171,18 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
     ])
 
     if (messageResult.data) {
-      // Uses the source documents from the end result rather than sockets (they are the same, and doesnt stream in anyway)
-      botStoreActions.handleSourceDocuments(messageResult.data.sourceDocuments)
-
       const answer = extractChatbotResponse(messageResult.data)
-
-      // Saves end answer in history rather than at every stream update
-      botStoreActions.updateHistoryAnswer(answer)
 
       // If the chatflow is not available to stream, we update the answer here
       if (!isChatFlowAvailableToStream()) {
         botStoreActions.updateAnswer(answer)
       }
+
+      // Uses the source documents from the end result rather than sockets (they are the same, and doesnt stream in anyway)
+      botStoreActions.handleSourceDocuments(messageResult.data.sourceDocuments)
+
+      // Saves end answer in history rather than at every stream update
+      botStoreActions.updateHistoryAnswer(answer)
 
       fetchSuggestedPrompts(detectLanguageResult?.languageCode)
     }
