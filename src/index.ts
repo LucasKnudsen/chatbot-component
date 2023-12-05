@@ -1,1 +1,1 @@
-export type { BotProps } from './features/bot/components/Bot'
+export type { BotConfig as BotProps } from './features/bot/components/Bot'

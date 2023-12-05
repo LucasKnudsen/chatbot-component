@@ -1,10 +1,10 @@
 import { createSignal, onMount, Show } from 'solid-js'
-import { Bot, BotProps } from '../../bot/components/Bot'
+import { BotConfig, BotManager } from '../../bot/components/Bot'
 
 import StyleSheet from '@/styles'
 import { BubbleButton } from './BubbleButton'
 
-export const Bubble = (props: BotProps) => {
+export const Bubble = (props: BotConfig) => {
   const [isBotStarted, setIsBotStarted] = createSignal(false)
   const [isBotOpened, setIsBotOpened] = createSignal(false)
 
@@ -46,7 +46,7 @@ export const Bubble = (props: BotProps) => {
         part='bot'
       >
         <Show when={isBotStarted()}>
-          <Bot {...props} toggleBot={toggleBot} />
+          <BotManager {...props} toggleBot={toggleBot} />
         </Show>
       </div>
     </>
