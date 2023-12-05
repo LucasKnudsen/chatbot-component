@@ -27,16 +27,14 @@ export function useSocket({
       apiHost: apiHost,
     })
 
-    // if (data) {
-    //   setIsChatFlowAvailableToStream(data?.isStreaming ?? false)
-    // }
+    if (data) {
+      socket.id && setSocketIOClientId(socket.id)
+      setIsChatFlowAvailableToStream(data?.isStreaming ?? false)
+    }
 
     socket.on('connect', () => {
-      console.log('In connect', socket.id, data)
+      console.log('In connect', socket.id)
 
-      if (data) {
-        setIsChatFlowAvailableToStream(data?.isStreaming ?? false)
-      }
       setSocketIOClientId(socket.id)
     })
 
