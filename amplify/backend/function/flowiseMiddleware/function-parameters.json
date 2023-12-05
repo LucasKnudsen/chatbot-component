@@ -6,7 +6,7 @@
   "permissions": {
     "storage": {
       "Channel:@model(appsync)": [
-        "create"
+        "read"
       ]
     }
   }

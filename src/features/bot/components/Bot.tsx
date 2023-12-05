@@ -130,7 +130,7 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
   } = useSuggestedPrompts(props.channel.chatflowId!, props.channel.apiHost!)
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
-    chatflowid: props.channel.chatflowId!,
+    chatflowId: props.channel.chatflowId!,
     apiHost: props.channel.apiHost!,
     onToken: botStoreActions.updateAnswer,
   })
@@ -169,8 +169,7 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
 
     const [messageResult, detectLanguageResult] = await Promise.all([
       sendMessageQuery({
-        chatflowid: props.channel.chatflowId!,
-        apiHost: props.channel.apiHost!,
+        channelId: props.channel.id,
         body,
       }),
       detectLanguage(value, true),
