@@ -1,9 +1,9 @@
-type Channel {
+type SubscriptionEvent {
   sessionId: String!
   data: AWSJSON!
 }
 
 type Mutation {
-  publish2channel(sessionId: String!, data: AWSJSON!): Channel
+  publish2channel(sessionId: String!, data: AWSJSON!): SubscriptionEvent
     @function(name: "broadcastResolver-${env}")
 }

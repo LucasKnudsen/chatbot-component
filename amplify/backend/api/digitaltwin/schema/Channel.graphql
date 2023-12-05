@@ -1,0 +1,7 @@
+type Channel @model @auth(rules: [{ allow: public, provider: iam, operations: [get] }]) {
+  id: ID!
+  tenantId: String! @index(name: "tenantId", queryField: "channelsByTenantId")
+  apiHost: String
+  chatflowId: String
+  name: String!
+}

@@ -130,3 +130,51 @@ export const onDeleteLanguageItem = /* GraphQL */ `subscription OnDeleteLanguage
   APITypes.OnDeleteLanguageItemSubscriptionVariables,
   APITypes.OnDeleteLanguageItemSubscription
 >;
+export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel($filter: ModelSubscriptionChannelFilterInput) {
+  onCreateChannel(filter: $filter) {
+    id
+    tenantId
+    apiHost
+    chatflowId
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateChannelSubscriptionVariables,
+  APITypes.OnCreateChannelSubscription
+>;
+export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel($filter: ModelSubscriptionChannelFilterInput) {
+  onUpdateChannel(filter: $filter) {
+    id
+    tenantId
+    apiHost
+    chatflowId
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateChannelSubscriptionVariables,
+  APITypes.OnUpdateChannelSubscription
+>;
+export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel($filter: ModelSubscriptionChannelFilterInput) {
+  onDeleteChannel(filter: $filter) {
+    id
+    tenantId
+    apiHost
+    chatflowId
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteChannelSubscriptionVariables,
+  APITypes.OnDeleteChannelSubscription
+>;

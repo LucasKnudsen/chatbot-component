@@ -2,8 +2,8 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type Channel = {
-  __typename: "Channel",
+export type SubscriptionEvent = {
+  __typename: "SubscriptionEvent",
   sessionId: string,
   data: string,
 };
@@ -149,6 +149,47 @@ export type DeleteLanguageItemInput = {
   itemCode: string,
 };
 
+export type CreateChannelInput = {
+  id?: string | null,
+  tenantId: string,
+  apiHost?: string | null,
+  chatflowId?: string | null,
+  name: string,
+};
+
+export type ModelChannelConditionInput = {
+  tenantId?: ModelStringInput | null,
+  apiHost?: ModelStringInput | null,
+  chatflowId?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  and?: Array< ModelChannelConditionInput | null > | null,
+  or?: Array< ModelChannelConditionInput | null > | null,
+  not?: ModelChannelConditionInput | null,
+};
+
+export type Channel = {
+  __typename: "Channel",
+  id: string,
+  tenantId: string,
+  apiHost?: string | null,
+  chatflowId?: string | null,
+  name: string,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateChannelInput = {
+  id: string,
+  tenantId?: string | null,
+  apiHost?: string | null,
+  chatflowId?: string | null,
+  name?: string | null,
+};
+
+export type DeleteChannelInput = {
+  id: string,
+};
+
 export type ModelCodeItemPrimaryCompositeKeyConditionInput = {
   eq?: ModelCodeItemPrimaryCompositeKeyInput | null,
   le?: ModelCodeItemPrimaryCompositeKeyInput | null,
@@ -222,6 +263,39 @@ export type ModelLanguageItemConnection = {
   nextToken?: string | null,
 };
 
+export type ModelChannelFilterInput = {
+  id?: ModelIDInput | null,
+  tenantId?: ModelStringInput | null,
+  apiHost?: ModelStringInput | null,
+  chatflowId?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  and?: Array< ModelChannelFilterInput | null > | null,
+  or?: Array< ModelChannelFilterInput | null > | null,
+  not?: ModelChannelFilterInput | null,
+};
+
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
+export type ModelChannelConnection = {
+  __typename: "ModelChannelConnection",
+  items:  Array<Channel | null >,
+  nextToken?: string | null,
+};
+
 export type ModelSubscriptionCodeItemFilterInput = {
   tenantCode?: ModelSubscriptionStringInput | null,
   tableCode?: ModelSubscriptionStringInput | null,
@@ -265,6 +339,31 @@ export type ModelSubscriptionLanguageItemFilterInput = {
   or?: Array< ModelSubscriptionLanguageItemFilterInput | null > | null,
 };
 
+export type ModelSubscriptionChannelFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  tenantId?: ModelSubscriptionStringInput | null,
+  apiHost?: ModelSubscriptionStringInput | null,
+  chatflowId?: ModelSubscriptionStringInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionChannelFilterInput | null > | null,
+  or?: Array< ModelSubscriptionChannelFilterInput | null > | null,
+};
+
+export type ModelSubscriptionIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  in?: Array< string | null > | null,
+  notIn?: Array< string | null > | null,
+};
+
 export type Publish2channelMutationVariables = {
   sessionId: string,
   data: string,
@@ -272,7 +371,7 @@ export type Publish2channelMutationVariables = {
 
 export type Publish2channelMutation = {
   publish2channel?:  {
-    __typename: "Channel",
+    __typename: "SubscriptionEvent",
     sessionId: string,
     data: string,
   } | null,
@@ -395,6 +494,60 @@ export type DeleteLanguageItemMutation = {
   } | null,
 };
 
+export type CreateChannelMutationVariables = {
+  input: CreateChannelInput,
+  condition?: ModelChannelConditionInput | null,
+};
+
+export type CreateChannelMutation = {
+  createChannel?:  {
+    __typename: "Channel",
+    id: string,
+    tenantId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateChannelMutationVariables = {
+  input: UpdateChannelInput,
+  condition?: ModelChannelConditionInput | null,
+};
+
+export type UpdateChannelMutation = {
+  updateChannel?:  {
+    __typename: "Channel",
+    id: string,
+    tenantId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteChannelMutationVariables = {
+  input: DeleteChannelInput,
+  condition?: ModelChannelConditionInput | null,
+};
+
+export type DeleteChannelMutation = {
+  deleteChannel?:  {
+    __typename: "Channel",
+    id: string,
+    tenantId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type GetCodeItemQueryVariables = {
   tenantCode: string,
   tableCode: string,
@@ -491,13 +644,78 @@ export type ListLanguageItemsQuery = {
   } | null,
 };
 
+export type GetChannelQueryVariables = {
+  id: string,
+};
+
+export type GetChannelQuery = {
+  getChannel?:  {
+    __typename: "Channel",
+    id: string,
+    tenantId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListChannelsQueryVariables = {
+  filter?: ModelChannelFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListChannelsQuery = {
+  listChannels?:  {
+    __typename: "ModelChannelConnection",
+    items:  Array< {
+      __typename: "Channel",
+      id: string,
+      tenantId: string,
+      apiHost?: string | null,
+      chatflowId?: string | null,
+      name: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ChannelsByTenantIdQueryVariables = {
+  tenantId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelChannelFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ChannelsByTenantIdQuery = {
+  channelsByTenantId?:  {
+    __typename: "ModelChannelConnection",
+    items:  Array< {
+      __typename: "Channel",
+      id: string,
+      tenantId: string,
+      apiHost?: string | null,
+      chatflowId?: string | null,
+      name: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type Subscribe2channelSubscriptionVariables = {
   sessionId: string,
 };
 
 export type Subscribe2channelSubscription = {
   subscribe2channel?:  {
-    __typename: "Channel",
+    __typename: "SubscriptionEvent",
     sessionId: string,
     data: string,
   } | null,
@@ -609,6 +827,57 @@ export type OnDeleteLanguageItemSubscription = {
     tableCode: string,
     itemCode: string,
     text: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateChannelSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelFilterInput | null,
+};
+
+export type OnCreateChannelSubscription = {
+  onCreateChannel?:  {
+    __typename: "Channel",
+    id: string,
+    tenantId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateChannelSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelFilterInput | null,
+};
+
+export type OnUpdateChannelSubscription = {
+  onUpdateChannel?:  {
+    __typename: "Channel",
+    id: string,
+    tenantId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteChannelSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelFilterInput | null,
+};
+
+export type OnDeleteChannelSubscription = {
+  onDeleteChannel?:  {
+    __typename: "Channel",
+    id: string,
+    tenantId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
     createdAt: string,
     updatedAt: string,
   } | null,

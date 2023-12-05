@@ -142,3 +142,60 @@ export const deleteLanguageItem = /* GraphQL */ `mutation DeleteLanguageItem(
   APITypes.DeleteLanguageItemMutationVariables,
   APITypes.DeleteLanguageItemMutation
 >;
+export const createChannel = /* GraphQL */ `mutation CreateChannel(
+  $input: CreateChannelInput!
+  $condition: ModelChannelConditionInput
+) {
+  createChannel(input: $input, condition: $condition) {
+    id
+    tenantId
+    apiHost
+    chatflowId
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChannelMutationVariables,
+  APITypes.CreateChannelMutation
+>;
+export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
+  $input: UpdateChannelInput!
+  $condition: ModelChannelConditionInput
+) {
+  updateChannel(input: $input, condition: $condition) {
+    id
+    tenantId
+    apiHost
+    chatflowId
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChannelMutationVariables,
+  APITypes.UpdateChannelMutation
+>;
+export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
+  $input: DeleteChannelInput!
+  $condition: ModelChannelConditionInput
+) {
+  deleteChannel(input: $input, condition: $condition) {
+    id
+    tenantId
+    apiHost
+    chatflowId
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChannelMutationVariables,
+  APITypes.DeleteChannelMutation
+>;
