@@ -27,6 +27,7 @@ import { Sidebar } from '.'
 import { botStore, botStoreActions, useChatId, useLanguage } from '..'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
+import { FraiaLoading } from './FraiaLoading'
 import { SidebarTabView } from './SidebarTabView'
 
 Amplify.configure(awsconfig)
@@ -70,8 +71,13 @@ type BotProps = BotConfig & {
 }
 
 export const BotManager = (props: BotProps) => {
+  const storageKey = 'fraiaChannel'
   const [channel] = createResource(async () => {
     try {
+      const localChannel = localStorage.getItem(storageKey)
+
+      if (localChannel) return JSON.parse(localChannel) as Channel
+
       const result = await API.graphql<GraphQLQuery<GetChannelQuery>>({
         query: queries.getChannel,
         variables: {
@@ -80,14 +86,18 @@ export const BotManager = (props: BotProps) => {
         authMode: 'AWS_IAM',
       })
 
-      return result.data!.getChannel!
+      const channel = result.data!.getChannel!
+
+      localStorage.setItem(storageKey, JSON.stringify(channel))
+
+      return channel
     } catch (error) {
       console.error(error)
     }
   })
 
   return (
-    <Show when={channel()} fallback={<>Loading....</>}>
+    <Show when={channel()} fallback={<FraiaLoading />}>
       <Bot
         channel={channel()!}
         {...props}
