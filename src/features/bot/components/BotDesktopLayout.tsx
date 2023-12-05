@@ -45,7 +45,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
               {/* Welcome message */}
               <div class='flex flex-1 items-end '>
                 <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
-                  {text().welcomeMessage}
+                  {botStore.history.length ? text().returnWelcomeMessage : text().welcomeMessage}
                 </h1>
               </div>
 

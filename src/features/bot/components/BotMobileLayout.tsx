@@ -30,7 +30,7 @@ export const BotMobileLayout = (props: BotMobileProps) => {
           fallback={
             <div class='flex flex-1 items-end '>
               <h1 class='text-4xl md:text-5xl max-w-md h-fit mb-6 font-extralight tracking-wide '>
-                {text().welcomeMessage}
+                {botStore.history.length ? text().returnWelcomeMessage : text().welcomeMessage}
               </h1>
             </div>
           }
