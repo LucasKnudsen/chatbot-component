@@ -108,6 +108,15 @@
     },
     "flowiseMiddleware": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
