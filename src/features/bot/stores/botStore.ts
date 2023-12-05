@@ -55,10 +55,7 @@ const initBotStore = (chatflowId: string, clientLanguage?: string) => {
 
   const history = getStoredHistory()
 
-  const chat = history.length > 0 ? history[history.length - 1] : null
-
   setBotStore({
-    chat,
     history,
     chatflowId,
     clientLanguage,
