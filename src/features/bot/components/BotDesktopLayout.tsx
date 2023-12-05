@@ -8,7 +8,6 @@ import { Show, createMemo, createSignal } from 'solid-js'
 import { PromptType } from '.'
 import { botStore, botStoreActions } from '..'
 import { sidebarPaddingNum } from '../constants'
-import { MenuSettings } from './MenuSettings'
 import { ResourcesSidebar } from './ResourcesSidebar'
 import { SidebarTabView } from './SidebarTabView'
 
@@ -50,22 +49,15 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
                 </h1>
               </div>
 
-              <div>
-                <div class='flex flex-col flex-1  h-full'>
-                  <SidebarTabView
-                    class='h-full'
-                    initialPrompts={props.initialPrompts}
-                    setQuestion={(chat) => {
-                      botStoreActions.setChat(chat)
-                    }}
-                    handleSubmit={(question) => {
-                      props.onSubmit(question)
-                    }}
-                  />
-
-                  <MenuSettings toggleBot={props.toggleBot} clear={props.onClear} />
-                </div>
-              </div>
+              <SidebarTabView
+                initialPrompts={props.initialPrompts}
+                setQuestion={(chat) => {
+                  botStoreActions.setChat(chat)
+                }}
+                handleSubmit={(question) => {
+                  props.onSubmit(question)
+                }}
+              />
             </div>
           }
         >
