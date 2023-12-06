@@ -15,7 +15,7 @@ export const Button = (props: Props) => {
   return (
     <button
       class={
-        'rounded-full font-medium tracking-widest text-xs active:scale-95 transition-transform duration-100 ' +
+        'rounded-full font-medium tracking-widest text-xs active:scale-95 transition hover:brightness-110 ' +
         props.class
       }
       style={{

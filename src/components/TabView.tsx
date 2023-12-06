@@ -43,7 +43,9 @@ export const TabView: (props: TabViewProps) => JSXElement = (props) => {
         </For>
       </ul>
 
-      <div class='flex-1 overflow-y-scroll pt-6'>{props.tabs[selectedTab()].content}</div>
+      <div class='flex-1 overflow-y-scroll pt-6 custom-scrollbar'>
+        {props.tabs[selectedTab()].content}
+      </div>
     </div>
   )
 }

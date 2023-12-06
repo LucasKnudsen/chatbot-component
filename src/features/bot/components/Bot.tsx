@@ -1,9 +1,5 @@
-import powerIcon from '@/assets/power-icon.svg'
 import awsconfig from '@/aws-exports'
-import { Button } from '@/components'
-import { Divider } from '@/components/Divider'
 import { Nav } from '@/components/Nav'
-import { DeleteIcon } from '@/components/icons/DeleteIcon'
 import {
   IncomingInput,
   PromptCode,
@@ -27,6 +23,7 @@ import { botStore, botStoreActions, useChatId, useLanguage } from '..'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
 import { FraiaLoading } from './FraiaLoading'
+import { MenuSettings } from './MenuSettings'
 import { SidebarTabView } from './SidebarTabView'
 
 Amplify.configure(awsconfig)
@@ -216,7 +213,7 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
         <Nav
           sidebarOpen={sidebarOpen()}
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen())}
-          onClear={clear}
+          onClear={clearSuggestions}
           onToggleBot={props.toggleBot}
         />
 
@@ -248,7 +245,7 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
             </Match>
           </Switch>
 
-          {/* Sidebar */}
+          {/* Sidebar drawer */}
           <Show when={device() == 'mobile' || botStore.chat}>
             <Sidebar
               open={sidebarOpen()}
@@ -272,30 +269,11 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
                   />
                 </div>
 
-                <Divider margin={24} />
-
-                <ul>
-                  <li>
-                    <button
-                      class='flex text-xs items-center'
-                      onClick={() => {
-                        clear()
-                        setSidebarOpen(false)
-                      }}
-                    >
-                      <div class='mr-5 '>
-                        <DeleteIcon width={15} />
-                      </div>{' '}
-                      Clear History
-                    </button>
-                  </li>
-                </ul>
-
-                <Divider margin={24} />
-
-                <Button onClick={props.toggleBot} padding='8px'>
-                  <img class='m-auto' src={powerIcon} />
-                </Button>
+                <MenuSettings
+                  toggleBot={props.toggleBot}
+                  setSidebarOpen={setSidebarOpen}
+                  clear={clear}
+                />
               </div>
             </Sidebar>
           </Show>

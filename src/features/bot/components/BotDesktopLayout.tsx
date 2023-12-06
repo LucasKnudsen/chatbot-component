@@ -41,10 +41,10 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
         <Show
           when={botStore.chat}
           fallback={
-            <div class='flex flex-1 h-full overflow-hidden'>
+            <div class='flex flex-1 overflow-hidden  mb-6 '>
               {/* Welcome message */}
               <div class='flex flex-1 items-end '>
-                <h1 class='text-5xl max-w-md h-fit mb-6 font-light tracking-wide '>
+                <h1 class='text-5xl max-w-md h-fit font-light tracking-wide '>
                   {botStore.history.length ? text().returnWelcomeMessage : text().welcomeMessage}
                 </h1>
               </div>

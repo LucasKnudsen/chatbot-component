@@ -11,19 +11,17 @@ type NavigationPromptsProps = {
 
 export const NavigationPromptsList = (props: NavigationPromptsProps) => {
   return (
-    <>
-      <ul>
-        <For each={props.prompts}>
-          {(p) => (
-            <NavigationPrompt
-              class='w-full mb-6'
-              prompt={p}
-              onClick={(prompt) => props.onSelect(prompt)}
-              disabled={props.disabled}
-            />
-          )}
-        </For>
-      </ul>
-    </>
+    <ul>
+      <For each={props.prompts}>
+        {(p) => (
+          <NavigationPrompt
+            class='w-full mb-4'
+            prompt={p}
+            onClick={(prompt) => props.onSelect(prompt)}
+            disabled={props.disabled}
+          />
+        )}
+      </For>
+    </ul>
   )
 }
