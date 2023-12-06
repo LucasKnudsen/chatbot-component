@@ -1,7 +1,9 @@
+import { useMediaQuery } from '@/utils/useMediaQuery'
 import { createSignal, onCleanup, onMount } from 'solid-js'
 
 export function useScrollOnResize() {
   const [height, setHeight] = createSignal(window.visualViewport!.height)
+  const device = useMediaQuery()
 
   const handleResize = () => {
     setTimeout(() => {
@@ -21,10 +23,12 @@ export function useScrollOnResize() {
   }
 
   onMount(() => {
+    if (device() === 'desktop') return
     window.visualViewport?.addEventListener('resize', handleResize)
   })
 
   onCleanup(() => {
+    if (device() === 'desktop') return
     window.visualViewport?.removeEventListener('resize', handleResize)
   })
 
