@@ -1,30 +1,90 @@
-- Revise prompt engineering
-  - Lang control
-  - Move to middleware
-- Finish hosting
+# Fraia Embed
 
-  - Revise Bubble component
-  - Quickly brush up Playground
-  - Document embeddable scripts
+Javascript script for implementing a Fraia chatbot on your website
 
-- New features
+## Usage
 
-  - CTA integration / form
-  - https://www.tidio.com/blog/chatbot-ideas/#retail-bots
+In `<head>`
 
-- Mobile look
+```
+<script type="module">
+  import Chatbot from 'https://xxx.yyy';
 
-- White label it
+  Chatbot.init({
+    channelId: '<channelId>',
+  });
+</script>
+```
 
-  - Organization / Client DB Table
-  - Fraia Config DB Table
-    - apiHost, chatflowId, flowKey, language, prompts overrides / additions
-  - Ultra quick form interface
-  - Update props to use an overall UUID instead of apiHost and chatflowId,
-  - Update Flowise Middleware to be dynamic
+## Config
 
-- Add some surprise
-  - Translate hardcoded text dynamically
-  - AI generated welcome messages
-  - Background animations
-  - Entity animation
+Almost everything you see in fraia is customizable to fit your brand
+
+```
+language?: string // two letter language code e.g. 'en' 'dk'
+initialPrompts?: Prompt[]
+text?: Partial<TextConfig>
+theme?: Partial<ThemeConfig>
+```
+
+See below for expanded types
+
+### Prompt
+
+The initial prompt suggestions shown in the sidebar
+
+```
+type Prompt = string | {
+      display: string
+      prompt: string
+    }
+```
+
+### TextConfig
+
+```
+type TextConfig = {
+  welcomeMessage: string
+  returnWelcomeMessage: string
+  inputPlaceholder: string
+  suggestedPromptsTitle: string
+  viewMedia: string
+
+  // Nav
+  close: string
+
+  // Settings Dropdown
+  copyText: string
+  copyTextSuccess: string
+  share: string
+
+  // Sidebar
+  historyTabTitle: string
+  navigationTabTitle: string
+  today: string
+  yesterday: string
+  previous: string
+  noHistory: string
+}
+```
+
+### Theme
+
+```
+type Theme = {
+  primaryColor: string
+  primaryAccent: string
+  textColor: string
+  textSecondary: string
+  textAccent: string
+  backgroundColor: string
+  backgroundImageUrl: string
+  borderColor: string
+  textInputTextColor: string
+  textInputBackgroundColor: string
+  surfaceBackground: string
+  surfaceBackground2: string
+  surfaceHoveredBackground: string
+}
+
+```
