@@ -1,7 +1,8 @@
 import { SendButton } from '@/components/SendButton'
 import { useTheme } from '@/features/theme/hooks'
-import { isMobile } from '@/utils/isMobileSignal'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 import { createEffect, createSignal, onMount } from 'solid-js'
+import { useScrollOnResize } from '../hooks/useScrollOnResize'
 import { Textarea } from './ShortTextInput'
 
 type Props = {
@@ -20,6 +21,8 @@ export const TextInput = (props: Props) => {
   let inputRef: HTMLTextAreaElement | undefined
 
   const { theme } = useTheme()
+  const device = useMediaQuery()
+  useScrollOnResize()
 
   const handleInput = (inputValue: string) => setInputValue(inputValue)
 
@@ -33,16 +36,37 @@ export const TextInput = (props: Props) => {
   const submitWhenEnter = (e: KeyboardEvent) => {
     // Check if IME composition is in progress
     const isIMEComposition = e.isComposing || e.keyCode === 229
-    if (e.key === 'Enter' && !isIMEComposition) submit()
+    if (e.key === 'Enter' && !isIMEComposition) {
+      submit()
+      inputRef?.blur()
+    }
   }
 
   createEffect(() => {
-    if (!props.disabled && !isMobile() && inputRef) inputRef.focus()
+    if (!props.disabled && device() == 'desktop' && inputRef) inputRef.focus()
   })
 
   onMount(() => {
-    if (!isMobile() && inputRef) inputRef.focus()
+    if (device() == 'desktop' && inputRef) inputRef.focus()
   })
+
+  // const onFocus = () => {
+  //   setTimeout(() => {
+  //     if (window.scrollY > 150) return
+  //     botStoreActions.updateAnswer('', true)
+
+  //     // window.scrollTo({
+  //     //   top: document.body.scrollHeight,
+  //     //   behavior: 'smooth',
+  //     // })
+  //   }, 100)
+  // }
+
+  // const onBlur = () => {
+  //   setTimeout(() => {
+  //     botStoreActions.updateAnswer('', true)
+  //   }, 100)
+  // }
 
   return (
     <div

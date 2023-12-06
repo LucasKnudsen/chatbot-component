@@ -15,6 +15,7 @@ import Gallery from './Gallery/Gallery'
 
 export const ChatWindow = () => {
   let botMessageEl: HTMLDivElement | undefined
+  let chatWindowEl: HTMLDivElement | undefined
 
   const { text } = useText()
   const { theme } = useTheme()
@@ -26,18 +27,19 @@ export const ChatWindow = () => {
     }
   })
 
-  const scrollChatWindowToBottom = (offset?: number) => {
-    const chatWindow = document.getElementById('chat-window')
-
-    if (chatWindow)
+  const scrollChatWindowToBottom = (by: number = 0) => {
+    if (chatWindowEl !== undefined) {
       setTimeout(
         () =>
-          chatWindow.scrollTo(
-            0,
-            offset ? chatWindow.scrollHeight + offset : chatWindow.scrollHeight
-          ),
+          by
+            ? chatWindowEl!.scrollBy({
+                top: by,
+                behavior: 'smooth',
+              })
+            : chatWindowEl!.scrollTo(0, chatWindowEl!.scrollHeight),
         50
       )
+    }
   }
 
   createEffect(
@@ -51,8 +53,8 @@ export const ChatWindow = () => {
   // shows a bit of the resources when they are loaded
   createEffect(
     on(
-      () => botStore.chat?.resources,
-      () => scrollChatWindowToBottom(-100),
+      () => botStore.loading,
+      () => scrollChatWindowToBottom(150),
       { defer: true }
     )
   )
@@ -101,6 +103,7 @@ export const ChatWindow = () => {
 
       {/* Answer */}
       <div
+        ref={chatWindowEl}
         id='chat-window'
         class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative gap-y-8'
       >
@@ -115,12 +118,13 @@ export const ChatWindow = () => {
         <div data-testid='chatbot-answer' ref={botMessageEl} class='prose px-6 md:px-0' />
 
         {/* Gallery  */}
-        <Gallery resources={botStore.chat?.resources!} class='px-6 md:px-0' />
+        <Gallery resources={botStore.chat?.resources!} class='px-6 md:px-0 animate-fade-in' />
 
+        {/* Mobile resources  */}
         <Show when={device() == 'mobile'}>
           <div class='flex flex-col'>
             <Show when={botStore.chat?.resources.fact.length}>
-              <div class='flex overflow-x-scroll whitespace-nowrap gap-x-4 px-6 md:px-0 no-scrollbar mt-2'>
+              <div class='flex overflow-x-scroll whitespace-nowrap gap-x-4 px-6 md:px-0 no-scrollbar mt-2 '>
                 <For each={botStore.chat?.resources?.fact ?? []}>
                   {(element) => <Fact fact={element} />}
                 </For>
@@ -128,7 +132,7 @@ export const ChatWindow = () => {
             </Show>
 
             <Show when={botStore.chat?.resources.link.length}>
-              <div class='px-6 md:px-0'>
+              <div class='px-6 md:px-0 animate-fade-in'>
                 <div
                   class='font-bold text-xs mt-8'
                   style={{
@@ -140,7 +144,7 @@ export const ChatWindow = () => {
                 </div>
                 <Divider margin={8} />
               </div>
-              <div class='flex overflow-x-scroll gap-x-4 px-6 no-scrollbar mt-2'>
+              <div class='flex overflow-x-scroll gap-x-4 px-6 no-scrollbar mt-2 '>
                 <For each={botStore.chat?.resources?.link ?? []}>
                   {(element) => <LinkInline link={element} />}
                 </For>

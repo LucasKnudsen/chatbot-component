@@ -4,22 +4,33 @@ import { BotConfig, BotManager } from '../../bot/components/Bot'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import StyleSheet from '@/styles'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 import { BubbleButton } from './BubbleButton'
 
 export const Bubble = (props: BotConfig) => {
+  let botContainerEl: HTMLDivElement | undefined
   const [isBotStarted, setIsBotStarted] = createSignal(false)
   const [isBotOpened, setIsBotOpened] = createSignal(false)
 
   const { initTheme, theme } = useTheme()
   const { initText } = useText()
+  const device = useMediaQuery()
 
   const openBot = () => {
     if (!isBotStarted()) setIsBotStarted(true)
     setIsBotOpened(true)
+
+    if (device() !== 'desktop') {
+      document.body.style.overflow = 'hidden'
+    }
   }
 
   const closeBot = () => {
     setIsBotOpened(false)
+
+    if (device() !== 'desktop') {
+      document.body.style.overflow = 'auto'
+    }
   }
 
   const toggleBot = () => {
@@ -38,11 +49,11 @@ export const Bubble = (props: BotConfig) => {
   return (
     <>
       <StyleSheet />
-      <style>{isBotOpened() ? 'body { overflow: hidden; }' : ''}</style>
 
       <BubbleButton toggleBot={toggleBot} isBotOpened={isBotOpened()} />
 
       <div
+        ref={botContainerEl}
         class={`fixed top-0 left-0 w-screen m-0 min-h-[-webkit-fill-available] h-full ${
           isBotOpened() ? 'opacity-1' : 'opacity-0 pointer-events-none'
         }`}
