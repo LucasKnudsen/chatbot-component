@@ -16,7 +16,7 @@
       "function": {
         "flowiseMiddleware": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/flowiseMiddleware-67346758414c41394f62-build.zip",
+          "s3Key": "amplify-builds/flowiseMiddleware-6f512b62426371516469-build.zip",
           "secretsPathAmplifyAppId": "d1i4jp82axmvxl"
         },
         "flowiseBroadcast": {
@@ -25,7 +25,7 @@
         },
         "broadcastResolver": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/broadcastResolver-33446f705969355a6559-build.zip"
+          "s3Key": "amplify-builds/broadcastResolver-58707663655a3952564b-build.zip"
         },
         "detectLanguage": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
