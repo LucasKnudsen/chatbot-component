@@ -8,7 +8,6 @@ import { useMediaQuery } from '@/utils/useMediaQuery'
 import { BubbleButton } from './BubbleButton'
 
 export const Bubble = (props: BotConfig) => {
-  let botContainerEl: HTMLDivElement | undefined
   const [isBotStarted, setIsBotStarted] = createSignal(false)
   const [isBotOpened, setIsBotOpened] = createSignal(false)
 
@@ -53,7 +52,6 @@ export const Bubble = (props: BotConfig) => {
       <BubbleButton toggleBot={toggleBot} isBotOpened={isBotOpened()} />
 
       <div
-        ref={botContainerEl}
         class={`fixed top-0 left-0 w-screen m-0 min-h-[-webkit-fill-available] h-full ${
           isBotOpened() ? 'opacity-1' : 'opacity-0 pointer-events-none'
         }`}
