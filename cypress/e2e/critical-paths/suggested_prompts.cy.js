@@ -1,12 +1,15 @@
 describe('Suggested Prompts', () => {
   it('should send a query to the middleware and verify the API and visual response', () => {
-    const question = 'How can I buy this chatbot?'
+    const chatbotQuestion = 'How can I buy this chatbot?'
 
     // Visit the page
     cy.visit('/')
 
+    // Click the chatbot button
+    cy.get('[data-testid="bubble-button"]').click()
+
     // Type the question in the input field
-    cy.get('[data-testid="question-input"]').type(question)
+    cy.get('[data-testid="question-input"]').type(chatbotQuestion)
 
     // Click the submit button
     cy.get('[data-testid="submit-question"]').click()
@@ -31,9 +34,10 @@ describe('Suggested Prompts', () => {
     cy.intercept('POST', '**/flowise/middleware').as('suggestionsRequest')
 
     cy.wait('@suggestionsRequest').should(({ request, response }) => {
-      expect(request.body.previousQuestions).to.include(question)
+      expect(request.body.previousQuestions).to.include(chatbotQuestion)
+      expect(request.body.promptCode).to.include('suggestedPrompts')
 
-      expect(response.body.text).to.include('chatbot')
+      expect(response.body.text).to.be.an('array').with.lengthOf(2)
     })
 
     // Verify that the suggested prompts are rendered

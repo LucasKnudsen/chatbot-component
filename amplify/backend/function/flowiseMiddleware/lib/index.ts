@@ -34,7 +34,7 @@ export const handler = async (
   event: APIGatewayProxyEvent & { isMock?: boolean }
 ): Promise<APIGatewayProxyResult> => {
   try {
-    !event.isMock && console.log(`EVENT: ${JSON.stringify(event)}`)
+    !event.isMock && console.log(`EVENT: ${event.body}`)
 
     const body = JSON.parse(event.body) as ParsedEventBody
 
@@ -98,13 +98,15 @@ const getSecret = async (secretName: string) => {
 const handleFlowiseRequest = async (body: ParsedEventBody) => {
   const { channelId, chatId, socketIOClientId, question } = body
 
-  const channel = await getChannel(channelId)
+  const [channel, apiKey] = await Promise.all([
+    getChannel(channelId),
+    getSecret(`flowiseKey_${channelId}`),
+  ])
 
   if (!channel) throw new Error('Channel not found')
+  if (!apiKey) throw new Error('API key not found')
 
   const endpoint = `${channel.apiHost}/api/v1/prediction/${channel.chatflowId}`
-
-  const apiKey = await getSecret(`flowiseKey_${channelId}`)
 
   const data = {
     question,
@@ -155,6 +157,7 @@ const handleSuggestedPrompts = async (body: ParsedEventBody, isMock?: boolean) =
       Give me the list of questions in a JSON list. You MUST understand and use the following language code as the language for the questions: "${language}". Do not say anything else, ONLY send me back a JSON list. Response example: { "questions": ["What is...", "Tell me more about ..."] }. 
       `
 
+  console.log('prompt', prompt)
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: 'user', content: prompt }],
     model: 'gpt-3.5-turbo',
