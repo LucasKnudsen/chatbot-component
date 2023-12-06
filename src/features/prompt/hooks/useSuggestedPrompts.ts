@@ -8,7 +8,7 @@ import {
 import { createSignal } from 'solid-js'
 import { extractSuggestedPrompts } from '../utils'
 
-export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
+export function useSuggestedPrompts() {
   const [suggestedPrompts, setSuggestedPrompts] = createSignal<string[]>([])
   const [isFetching, setIsFetching] = createSignal(false)
 
@@ -42,11 +42,7 @@ export function useSuggestedPrompts(chatflowid: string, apiHost: string) {
     }
 
     setIsFetching(true)
-    const response = await sendMessageQuery({
-      chatflowid,
-      apiHost,
-      body,
-    })
+    const response = await sendMessageQuery(body)
     setIsFetching(false)
 
     if (response.data) {

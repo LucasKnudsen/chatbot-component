@@ -44,7 +44,7 @@ function App() {
 
     <div class='w-screen h-screen flex justify-center items-center bg-slate-100'>
       <h1 class='text-6xl'>
-        FR
+        PL
         <span
           style={{
             color: '#3B81F6',
@@ -52,7 +52,7 @@ function App() {
         >
           AI
         </span>
-        A
+        GROUND
       </h1>
       <Bubble {...chatflows.fraia_dev} initialPrompts={initialPrompts} />
     </div>

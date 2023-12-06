@@ -72,7 +72,7 @@ export const ChatWindow = () => {
     <>
       {/* Question */}
       <div class='flex justify-between px-6 md:px-0'>
-        <div class='mb-1  text-lg md:text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start '>
+        <div class='mb-1  text-lg md:text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start animate-fade-in '>
           <div>
             <MessageIcon width={30} />
           </div>

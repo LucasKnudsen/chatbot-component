@@ -2,6 +2,7 @@ import { TextTemplate } from '../../types'
 
 export const da: TextTemplate = {
   welcomeMessage: 'Velkommen til en ny, fordybende chatbot-oplevelse',
+  returnWelcomeMessage: 'Velkommen tilbage! Hvad kan jeg hjælpe med?',
   inputPlaceholder: 'Spørg mig om noget...',
   suggestedPromptsTitle: 'Forslag',
   viewMedia: 'Vis medier',
