@@ -110,7 +110,9 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
 
   const data = {
     question,
-    chatId,
+    overrideConfig: {
+      chatId,
+    },
     socketIOClientId,
   }
   const result = await axios.post(endpoint, data, {
