@@ -50,24 +50,6 @@ export const TextInput = (props: Props) => {
     if (device() == 'desktop' && inputRef) inputRef.focus()
   })
 
-  // const onFocus = () => {
-  //   setTimeout(() => {
-  //     if (window.scrollY > 150) return
-  //     botStoreActions.updateAnswer('', true)
-
-  //     // window.scrollTo({
-  //     //   top: document.body.scrollHeight,
-  //     //   behavior: 'smooth',
-  //     // })
-  //   }, 100)
-  // }
-
-  // const onBlur = () => {
-  //   setTimeout(() => {
-  //     botStoreActions.updateAnswer('', true)
-  //   }, 100)
-  // }
-
   return (
     <div
       class={'flex justify-between rounded-lg ' + props.class}
