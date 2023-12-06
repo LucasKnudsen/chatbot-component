@@ -21,10 +21,9 @@ export const chatflows: Record<string, BotProps> = {
   //   chatflowid: 'ac2aa23a-5c82-4f50-8b7a-76f87887fc38',
   //   apiHost: 'https://lionbrain.softdesign.dk',
   // },
-  // fraia_prod: {
-  //   chatflowid: '141aca34-5624-4441-87c8-62524f40ecd1',
-  //   apiHost: 'https://lionbrain.softdesign.dk',
-  // },
+  fraia_prod: {
+    channelId: '141aca34-5624-4441-87c8-62524f40ecd1',
+  },
   fraia_dev: {
     channelId: 'c03c3bbc-935a-11ee-b9d1-0242ac120002',
   },
