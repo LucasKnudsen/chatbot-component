@@ -11,6 +11,7 @@ export const BubbleButton = (props: Props) => {
 
   return (
     <button
+      data-testid='bubble-button'
       part='button'
       onClick={() => props.toggleBot()}
       class={`fixed right-5 bottom-5  shadow-lg rounded-full hover:scale-110 active:scale-95 transition-transform duration-200 flex justify-center items-center animate-fade-in w-14 h-14`}
