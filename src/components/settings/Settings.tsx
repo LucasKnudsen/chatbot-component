@@ -62,9 +62,10 @@ export const Settings = (props: Props) => {
 
         {/* <Show when={isOpen()}> */}
         <div
-          class='absolute right-0 mt-2 w-fit border rounded-lg shadow-lg z-10 backdrop-blur-md bg-white/75'
+          class='absolute right-0 mt-2 w-fit border rounded-lg shadow-lg z-10 backdrop-blur-md '
           style={{
             'border-color': theme().borderColor,
+            background: theme().drawerBackground,
             'min-width': props.minWidth || '200px',
             transition: 'transform 250ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
             'transform-origin': props.transformOrigin || 'top right',
@@ -110,7 +111,6 @@ const MenuItem = (props: MenuItemProps) => {
   const { theme } = useTheme()
 
   const primaryAccent = theme().primaryAccent
-  const primaryColor = theme().primaryColor
 
   return (
     <>
@@ -118,7 +118,6 @@ const MenuItem = (props: MenuItemProps) => {
         {`
         .settings-menu-item:hover {
           background: ${primaryAccent};
-          color: ${primaryColor};
         }
       `}
       </style>

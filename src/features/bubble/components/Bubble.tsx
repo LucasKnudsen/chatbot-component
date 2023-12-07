@@ -4,7 +4,6 @@ import { BotConfig, BotManager } from '../../bot/components/Bot'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import StyleSheet from '@/styles'
-import { useMediaQuery } from '@/utils/useMediaQuery'
 import { BubbleButton } from './BubbleButton'
 
 export const Bubble = (props: BotConfig) => {
@@ -13,23 +12,18 @@ export const Bubble = (props: BotConfig) => {
 
   const { initTheme, theme } = useTheme()
   const { initText } = useText()
-  const device = useMediaQuery()
 
   const openBot = () => {
     if (!isBotStarted()) setIsBotStarted(true)
     setIsBotOpened(true)
 
-    if (device() !== 'desktop') {
-      document.body.style.overflow = 'hidden'
-    }
+    document.body.style.overflow = 'hidden'
   }
 
   const closeBot = () => {
     setIsBotOpened(false)
 
-    if (device() !== 'desktop') {
-      document.body.style.overflow = 'auto'
-    }
+    document.body.style.overflow = 'auto'
   }
 
   const toggleBot = () => {
