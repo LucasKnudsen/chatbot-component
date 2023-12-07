@@ -9,6 +9,7 @@ export const Iframe = ({ element }: Props) => {
 
   return (
     <iframe
+      data-testid='iframe-resource'
       class='rounded-xl h-72 w-full'
       src={element.value}
       aria-label={element.description}

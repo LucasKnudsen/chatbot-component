@@ -17,6 +17,7 @@ export const Link = (props: Props) => {
 
   return (
     <a
+      data-testid='link-resource'
       class='hover:no-underline border rounded-xl '
       href={props.link.value}
       target='_blank'
