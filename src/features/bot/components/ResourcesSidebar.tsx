@@ -1,6 +1,7 @@
-import circleCloseRightIcon from '@/assets/circle-close-right-icon.svg'
-import circleLinkIcon from '@/assets/circle-link-icon.svg'
 import { Divider } from '@/components/Divider'
+import { CircleCloseRightIcon } from '@/components/icons/CircleCloseRightIcon'
+import { CircleLinkIcon } from '@/components/icons/CircleLinkIcon'
+import { useTheme } from '@/features/theme/hooks'
 import { JSX } from 'solid-js'
 import { sidebarInnerWidthNum, sidebarPaddingNum } from '../constants'
 
@@ -11,6 +12,8 @@ type ResourcesSidebarProps = {
 }
 
 export const ResourcesSidebar = (props: ResourcesSidebarProps) => {
+  const { theme } = useTheme()
+
   return (
     <div
       class='flex relative transition-all'
@@ -37,7 +40,7 @@ export const ResourcesSidebar = (props: ResourcesSidebarProps) => {
         }}
         onClick={props.toggle}
       >
-        <img class='transition-all inline-block' src={circleLinkIcon} width={20} />
+        <CircleLinkIcon width={20} color={theme().primaryColor} />
       </div>
 
       <div
@@ -50,7 +53,7 @@ export const ResourcesSidebar = (props: ResourcesSidebarProps) => {
         }}
         onClick={props.toggle}
       >
-        <img class='transition-all inline-block' src={circleCloseRightIcon} width={20} />
+        <CircleCloseRightIcon width={20} color={theme().primaryColor} />
       </div>
     </div>
   )

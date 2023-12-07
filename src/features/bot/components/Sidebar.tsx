@@ -1,6 +1,6 @@
-import circleCloseIcon from '@/assets/circle-close-icon.svg'
-import sidebarTabIcon from '@/assets/sidebar-tab-icon.svg'
-
+import { CircleCloseIcon } from '@/components/icons'
+import { SidebarTabIcon } from '@/components/icons/SidebarTabIcon'
+import { useTheme } from '@/features/theme/hooks'
 import { JSX } from 'solid-js'
 import { sidebarInnerWidthNum, sidebarPaddingNum } from '../constants'
 
@@ -18,6 +18,7 @@ const openWidth = sidebarInnerWidthNum + botPaddingNum + sidebarPaddingNum + 'px
 const closedWidth = '1px'
 
 export const Sidebar = (props: SidebarProps) => {
+  const { theme } = useTheme()
   return (
     <div
       class={
@@ -26,6 +27,7 @@ export const Sidebar = (props: SidebarProps) => {
       }
       style={{
         width: props.open ? openWidth : closedWidth,
+        background: theme().drawerBackground,
       }}
     >
       {/* Sidebar drawer button  */}
@@ -35,7 +37,7 @@ export const Sidebar = (props: SidebarProps) => {
         style={{ top: '20px', left: '-20px', opacity: props.open ? '0' : '1' }}
         onClick={props.onToggle}
       >
-        <img class='transition-all inline-block' src={sidebarTabIcon} width={20} />
+        <SidebarTabIcon width={20} color={theme().primaryColor} />
       </div>
 
       {/* Sidebar close button  */}
@@ -44,7 +46,7 @@ export const Sidebar = (props: SidebarProps) => {
         style={{ top: '20px', left: '-10px', opacity: props.open ? '1' : '0' }}
         onClick={props.onToggle}
       >
-        <img class='transition-all inline-block' src={circleCloseIcon} width={20} />
+        <CircleCloseIcon width={20} color={theme().primaryColor} />
       </div>
 
       {/* Sidebar container  */}

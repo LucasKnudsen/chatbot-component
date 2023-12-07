@@ -1,4 +1,4 @@
-import linkIcon from '@/assets/link-icon.svg'
+import { CircleDocumentIcon } from '@/components/icons/CircleDocumentIcon'
 import { useTheme } from '@/features/theme/hooks'
 import { ContextualElement } from '..'
 
@@ -25,7 +25,7 @@ export const LinkInline = (props: Props) => {
     >
       <div class='p-2 w-[50%] '>
         <div class='relative rounded-md overflow-hidden h-12'>
-          <img class='absolute top-2 right-2' src={linkIcon} />
+          <CircleDocumentIcon class='absolute top-2 right-2' color={theme().primaryColor} />
           <img
             src={props.link.thumbnail || 'https://picsum.photos/290/140'}
             class='w-full h-full object-cover'

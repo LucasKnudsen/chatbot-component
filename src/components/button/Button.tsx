@@ -20,7 +20,7 @@ export const Button = (props: Props) => {
       }
       style={{
         background: theme().primaryColor,
-        color: theme().textAccent,
+        color: theme().onPrimary,
         padding,
       }}
       onClick={props.onClick}
