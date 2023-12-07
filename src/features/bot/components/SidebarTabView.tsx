@@ -41,12 +41,12 @@ export const SidebarTabView = (props: SidebarTabViewProps) => {
       ),
     }
 
-    return botStore.chat ? [historyTab, navTab] : [navTab, historyTab]
+    return [navTab, historyTab]
   })
 
   return (
     <div class={props.class} style={{ width: sidebarInnerWidthNum + 'px' }}>
-      <TabView tabs={tabs()} />
+      <TabView initialIndex={botStore.chat ? 1 : 0} tabs={tabs()} />
     </div>
   )
 }

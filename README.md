@@ -83,7 +83,6 @@ type Theme = {
   textInputTextColor: string
   textInputBackgroundColor: string
   surfaceBackground: string
-  surfaceBackground2: string
   surfaceHoveredBackground: string
 }
 

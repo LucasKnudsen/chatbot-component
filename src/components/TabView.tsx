@@ -8,10 +8,11 @@ type Tab = {
 
 type TabViewProps = {
   tabs: Tab[]
+  initialIndex?: number
 }
 
 export const TabView: (props: TabViewProps) => JSXElement = (props) => {
-  const [selectedTab, setSelectedTab] = createSignal(0)
+  const [selectedTab, setSelectedTab] = createSignal(props.initialIndex ?? 0)
   const { theme } = useTheme()
 
   return (

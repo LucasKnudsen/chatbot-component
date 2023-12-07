@@ -9,7 +9,7 @@ export const Iframe = ({ element }: Props) => {
 
   return (
     <iframe
-      class='my-2 rounded-xl h-72 w-full'
+      class='rounded-xl h-72 w-full'
       src={element.value}
       aria-label={element.description}
       allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'

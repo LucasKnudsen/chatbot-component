@@ -92,7 +92,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
           open={resourcesOpen()}
           toggle={() => setResourcesToggled(!resourcesToggled())}
         >
-          <ContextualContainer class='py-6' />
+          <ContextualContainer class='pt-6' />
         </ResourcesSidebar>
       </Show>
     </>
