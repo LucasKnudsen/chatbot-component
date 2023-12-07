@@ -73,8 +73,13 @@ export const ChatWindow = () => {
   return (
     <>
       {/* Question */}
-      <div class='flex justify-between px-6 md:px-0'>
-        <div class='mb-1  text-lg md:text-2xl text-gray-500 font-light flex flex-row gap-x-4 items-start animate-fade-in '>
+      <div class='flex justify-between px-6 md:px-0 shadow'>
+        <div
+          class='mb-1 text-lg md:text-2xl font-light flex flex-row gap-x-4 items-start animate-fade-in '
+          style={{
+            color: theme().textSecondary,
+          }}
+        >
           <div>
             <MessageIcon width={30} />
           </div>
@@ -115,7 +120,7 @@ export const ChatWindow = () => {
         </Show>
 
         {/* Chatbot answer  */}
-        <div data-testid='chatbot-answer' ref={botMessageEl} class='prose px-6 md:px-0' />
+        <div data-testid='chatbot-answer' ref={botMessageEl} class='px-6 md:px-0' />
 
         {/* Gallery  */}
         <Gallery resources={botStore.chat?.resources!} class='px-6 md:px-0 animate-fade-in' />

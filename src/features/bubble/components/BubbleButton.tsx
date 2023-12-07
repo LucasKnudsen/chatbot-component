@@ -44,7 +44,7 @@ export const BubbleButton = (props: Props) => {
 
       <svg
         viewBox='0 0 24 24'
-        style={{ fill: theme().textAccent }}
+        style={{ fill: theme().onPrimary }}
         class={
           `absolute duration-200 transition  w-5` +
           (props.isBotOpened ? 'scale-100 rotate-0 opacity-100' : 'scale-0 -rotate-180 opacity-0')

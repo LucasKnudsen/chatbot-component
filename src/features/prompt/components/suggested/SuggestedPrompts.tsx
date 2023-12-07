@@ -38,8 +38,9 @@ export const SuggestedPrompts = (props: Props) => {
             <p
               style={{
                 color: theme().textSecondary,
+                'border-color': theme().borderColor,
               }}
-              class='whitespace-nowrap md:border-r-2 border-gray-200 max-md:pl-6 md:pr-6 max-sm:text-sm font-semibold'
+              class='whitespace-nowrap md:border-r-2 max-md:pl-6 md:pr-6 max-sm:text-sm font-semibold'
             >
               {text().suggestedPromptsTitle}
             </p>

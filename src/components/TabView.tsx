@@ -32,9 +32,6 @@ export const TabView: (props: TabViewProps) => JSXElement = (props) => {
             >
               <button
                 class='flex-1 py-2 text-left font-semibold'
-                style={{
-                  'font-weight': selectedTab() === index() ? '700' : '500',
-                }}
                 onClick={() => setSelectedTab(index())}
               >
                 {tab.title}

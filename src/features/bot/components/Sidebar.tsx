@@ -1,6 +1,7 @@
 import circleCloseIcon from '@/assets/circle-close-icon.svg'
 import sidebarTabIcon from '@/assets/sidebar-tab-icon.svg'
 
+import { useTheme } from '@/features/theme/hooks'
 import { JSX } from 'solid-js'
 import { sidebarInnerWidthNum, sidebarPaddingNum } from '../constants'
 
@@ -18,6 +19,7 @@ const openWidth = sidebarInnerWidthNum + botPaddingNum + sidebarPaddingNum + 'px
 const closedWidth = '1px'
 
 export const Sidebar = (props: SidebarProps) => {
+  const { theme } = useTheme()
   return (
     <div
       class={
@@ -26,6 +28,7 @@ export const Sidebar = (props: SidebarProps) => {
       }
       style={{
         width: props.open ? openWidth : closedWidth,
+        background: theme().drawerBackground,
       }}
     >
       <div
