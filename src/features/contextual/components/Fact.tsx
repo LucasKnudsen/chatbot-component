@@ -14,7 +14,7 @@ export const Fact = (props: Props) => {
     <div
       class={'p-2 text-sm ' + props.class + ' ' + (!props.fact.header ? 'animate-pulse' : '')}
       style={{
-        background: theme().surfaceBackground2,
+        background: theme().surfaceBackground,
         'border-left': `3px solid ${theme().primaryColor}`,
         color: theme().textColor,
       }}

@@ -17,7 +17,7 @@ export const Link = (props: Props) => {
 
   return (
     <a
-      class='hover:no-underline border mb-2  rounded-xl '
+      class='hover:no-underline border rounded-xl '
       href={props.link.value}
       target='_blank'
       rel='noreferrer'

@@ -40,9 +40,9 @@ export const ContextualContainer = (props: Props) => {
         <For each={facts()}>{(element) => <Fact fact={element} />}</For>
       </div>
 
-      <div class='flex flex-col flex-1 flex-grow-[2] overflow-hidden'>
+      <div class='flex flex-col flex-1 flex-grow-[2] overflow-hidden '>
         <div
-          class='font-bold'
+          class='font-bold mb-3'
           style={{
             color: theme().textSecondary,
           }}
@@ -51,11 +51,11 @@ export const ContextualContainer = (props: Props) => {
           Links
         </div>
 
-        <Divider margin={12} />
+        <Divider margin={0} />
 
         <div
           ref={animateLinks}
-          class='flex-1 flex flex-col gap-4 overflow-y-scroll custom-scrollbar pr-0.5'
+          class='flex-1 flex flex-col py-4 gap-4 overflow-y-scroll custom-scrollbar pr-0.5'
         >
           <For each={botStore.chat?.resources?.link ?? []}>
             {(element) => <Link link={element} />}

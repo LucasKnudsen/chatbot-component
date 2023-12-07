@@ -16,7 +16,7 @@ export const SuggestedPrompts = (props: Props) => {
   const [suggestedPromptsParent] = createAutoAnimate(/* optional config */)
 
   const { theme } = useTheme()
-  const { surfaceBackground, surfaceBackground2 } = theme()
+  const { surfaceBackground, surfaceHoveredBackground } = theme()
 
   const { text } = useText()
   return (
@@ -24,7 +24,7 @@ export const SuggestedPrompts = (props: Props) => {
       <style>
         {`
         .prompt:hover {
-          background: ${surfaceBackground2};
+          background: ${surfaceHoveredBackground};
         }
         .prompt {
           background: ${surfaceBackground};

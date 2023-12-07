@@ -12,7 +12,7 @@ export type Theme = {
   textInputTextColor: string
   textInputBackgroundColor: string
   surfaceBackground: string
-  surfaceBackground2: string
+
   surfaceHoveredBackground: string
 }
 
@@ -29,8 +29,6 @@ export const defaultTheme: Theme = {
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
   surfaceBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.08) 0%, rgba(218, 145, 221, 0.08) 100%)',
-  surfaceBackground2:
-    'linear-gradient(90deg, rgba(91, 147, 255, 0.15) 0%, rgba(218, 145, 221, 0.15) 100%)',
 
   surfaceHoveredBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.25) 0%, rgba(218, 145, 221, 0.25) 100%)',
@@ -49,7 +47,6 @@ const ugly: Theme = {
   textInputBackgroundColor: 'yellow',
   surfaceHoveredBackground: 'pink',
   surfaceBackground: 'brown',
-  surfaceBackground2: 'teal',
 }
 
 export const themes: Record<string, Theme> = {
