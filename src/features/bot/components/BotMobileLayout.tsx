@@ -31,7 +31,7 @@ export const BotMobileLayout = (props: BotMobileProps) => {
           when={botStore.chat}
           fallback={
             <div class='flex flex-1 items-end px-6 '>
-              <h1 class='text-4xl md:text-5xl max-w-md h-fit mb-6 font-extralight tracking-wide '>
+              <h1 class='text-4xl md:text-5xl max-w-md h-fit mb-6 font-extralight tracking-wide leading-tight'>
                 {botStore.history.length ? text().returnWelcomeMessage : text().welcomeMessage}
               </h1>
             </div>
