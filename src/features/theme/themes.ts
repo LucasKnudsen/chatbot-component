@@ -23,7 +23,7 @@ export const defaultTheme: Theme = {
   customIconSrc: logo,
   primaryColor: 'rgba(91, 147, 255, 1)',
   primaryAccent: 'rgba(91, 147, 255, 0.2)',
-  textColor: 'rgba(35, 24, 67, 1)',
+  textColor: 'rgba(31, 8, 8, 1)',
   textSecondary: 'rgba(147, 147, 147, 1)',
   onPrimary: 'rgba(255, 255, 255, 1)',
   backgroundColor: 'rgba(255, 255, 255, 1)',

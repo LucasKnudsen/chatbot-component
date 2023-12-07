@@ -26,7 +26,9 @@ export const NavigationPrompt = (props: PromptProps) => {
       `}
       </style>
       <div
-        class={'navigation-prompt p-4  text-white inline-block rounded-[10px]  ' + props.class}
+        class={
+          'navigation-prompt p-3 text-white inline-block rounded-[10px] font-light ' + props.class
+        }
         style={{
           cursor: props.disabled ? 'not-allowed' : 'pointer',
 

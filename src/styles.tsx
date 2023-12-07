@@ -19,15 +19,29 @@ const StyleSheet = () => {
   return (
     <style>
       {`
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 2px;
-            height: 2px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: ${primaryColor};
-            border-radius: 20px;
-        } 
-        `}
+      .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(147, 147, 147, 0.25);
+      }
+
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(147, 147, 147, 0.25);
+          width: 10px; 
+          height: 10px; 
+        border-radius: 10px;
+
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+      `}
 
       {styles}
     </style>

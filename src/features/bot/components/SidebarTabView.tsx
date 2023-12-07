@@ -34,7 +34,10 @@ export const SidebarTabView = (props: SidebarTabViewProps) => {
       title: text().navigationTabTitle,
       content: (
         <NavigationPromptsList
-          prompts={props.initialPrompts}
+          prompts={
+            props.initialPrompts
+            // botStore.chat?.question ? props.initialPrompts : props.initialPrompts?.slice(0, 3)
+          }
           onSelect={props.handleSubmit}
           disabled={botStore.loading}
         />
