@@ -63,7 +63,7 @@ const Picture = ({ element }: Props) => {
         style='background-color: rgba(0, 0, 0, 0.3);'
         onClick={handleImageClick}
       >
-        <span class='text-white text-3xl'>🔍</span>
+        <span class='text-white px-6 line-clamp-4 '>{element.description}</span>
       </div>
 
       {isZoomed() && (
