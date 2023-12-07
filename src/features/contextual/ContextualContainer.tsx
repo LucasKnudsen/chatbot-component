@@ -1,5 +1,5 @@
-import linkIcon1 from '@/assets/link-icon-1.svg'
 import { Divider } from '@/components/Divider'
+import { LinkIcon } from '@/components/icons/LinkIcon'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { For, createMemo } from 'solid-js'
 import { botStore } from '../bot'
@@ -47,7 +47,7 @@ export const ContextualContainer = (props: Props) => {
             color: theme().textSecondary,
           }}
         >
-          <img class='inline-block mr-2' src={linkIcon1} />
+          <LinkIcon class='inline-block mr-2' color={theme().primaryColor} />
           Links
         </div>
 

@@ -1,4 +1,3 @@
-import linkIcon1 from '@/assets/link-icon-1.svg'
 import { Settings, TypingBubble } from '@/components'
 import { Divider } from '@/components/Divider'
 import { MessageIcon } from '@/components/icons'
@@ -11,6 +10,7 @@ import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Marked } from '@ts-stack/markdown'
 import { For, Show, createEffect, on } from 'solid-js'
 
+import { LinkIcon } from '@/components/icons/LinkIcon'
 import Gallery from './Gallery/Gallery'
 
 export const ChatWindow = () => {
@@ -144,7 +144,7 @@ export const ChatWindow = () => {
                     color: theme().textSecondary,
                   }}
                 >
-                  <img class='inline-block mr-2' src={linkIcon1} />
+                  <LinkIcon width={14} class='inline-block mr-2' color={theme().primaryColor} />
                   Links
                 </div>
                 <Divider margin={8} />
