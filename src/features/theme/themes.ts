@@ -1,6 +1,8 @@
 import background2 from '@/assets/background-2.png'
+import logo from '@/assets/logo.png'
 
 export type Theme = {
+  customIconSrc: string
   primaryColor: string
   primaryAccent: string
   textColor: string
@@ -18,6 +20,7 @@ export type Theme = {
 }
 
 export const defaultTheme: Theme = {
+  customIconSrc: logo,
   primaryColor: 'rgba(91, 147, 255, 1)',
   primaryAccent: 'rgba(91, 147, 255, 0.2)',
   textColor: 'rgba(35, 24, 67, 1)',
@@ -37,6 +40,7 @@ export const defaultTheme: Theme = {
 }
 
 const midnight: Theme = {
+  customIconSrc: logo,
   primaryColor: '#204ef7',
   primaryAccent: '#152e8a',
   textColor: '#FAF9F6',
@@ -53,6 +57,7 @@ const midnight: Theme = {
 }
 
 const ugly: Theme = {
+  customIconSrc: logo,
   primaryColor: 'red',
   primaryAccent: 'orange',
   textColor: 'white',

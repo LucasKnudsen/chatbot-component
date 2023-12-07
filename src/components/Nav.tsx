@@ -1,5 +1,3 @@
-import logo from '@/assets/logo.png'
-
 import { botStoreActions } from '@/features/bot'
 import { useTheme } from '@/features/theme/hooks'
 import { Show } from 'solid-js'
@@ -29,7 +27,7 @@ export const Nav = (props: NavProps) => {
         background: theme().surfaceBackground,
       }}
     >
-      <img src={logo} class='h-6 cursor-pointer' onClick={resetChat} />
+      <img src={theme().customIconSrc} class='h-6 cursor-pointer' onClick={resetChat} />
 
       <div class='md:flex-1' />
 
