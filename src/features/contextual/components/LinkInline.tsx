@@ -13,6 +13,7 @@ export const LinkInline = (props: Props) => {
 
   return (
     <a
+      data-testid='link-resource'
       class='flex hover:no-underline border rounded-xl max-w-[80%]'
       href={props.link.value}
       target='_blank'

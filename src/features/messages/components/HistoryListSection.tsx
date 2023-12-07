@@ -29,6 +29,7 @@ export const HistoryListSection = (props: HistoryListSectionProps) => {
           <For each={props.history.reverse()}>
             {(h) => (
               <li
+                data-testid='history-list-item'
                 class='history-list-section-item my-2 cursor-pointer font-light rounded-[10px] p-2 transition-all '
                 style={{
                   cursor: props.disabled ? 'not-allowed' : 'pointer',
