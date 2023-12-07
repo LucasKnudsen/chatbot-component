@@ -24,6 +24,7 @@ Almost everything you see in fraia is customizable to fit your brand
 language?: string // two letter language code e.g. 'en' 'dk'
 initialPrompts?: Prompt[]
 text?: Partial<TextConfig>
+themeId?: 'bubbles' | 'midnight' // sets the base theme, which can be overrided using theme below
 theme?: Partial<ThemeConfig>
 ```
 
@@ -71,14 +72,16 @@ type TextConfig = {
 ### Theme
 
 ```
-type Theme = {
+export type Theme = {
   primaryColor: string
   primaryAccent: string
   textColor: string
   textSecondary: string
-  textAccent: string
+  onPrimary: string
   backgroundColor: string
-  backgroundImageUrl: string
+  backgroundAccent: string
+  backgroundImageUrl?: string
+  drawerBackground: string
   borderColor: string
   textInputTextColor: string
   textInputBackgroundColor: string

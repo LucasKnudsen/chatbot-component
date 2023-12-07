@@ -42,7 +42,7 @@ function App() {
   return (
     // <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} />
 
-    <div class='w-screen h-screen flex justify-center items-center bg-slate-100'>
+    <div class='w-screen h-[150vh] flex justify-center items-center bg-slate-100'>
       <h1 class='text-6xl'>
         PL
         <span
@@ -54,7 +54,7 @@ function App() {
         </span>
         GROUND
       </h1>
-      <Bubble {...chatflows.fraia_dev} initialPrompts={initialPrompts} />
+      <Bubble {...chatflows.fraia_dev} initialPrompts={initialPrompts} themeId='midnight' />
     </div>
   )
 }

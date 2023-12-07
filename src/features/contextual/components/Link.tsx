@@ -1,5 +1,5 @@
-import linkIcon from '@/assets/link-icon.svg'
 import { Divider } from '@/components/Divider'
+import { CircleDocumentIcon } from '@/components/icons/CircleDocumentIcon'
 import { useTheme } from '@/features/theme/hooks'
 import { ContextualElement } from '..'
 
@@ -28,7 +28,7 @@ export const Link = (props: Props) => {
     >
       <div class='p-2'>
         <div class='relative rounded-md overflow-hidden mb-2'>
-          <img class='absolute top-2 right-2' src={linkIcon} />
+          <CircleDocumentIcon class='absolute top-2 right-2' color={theme().primaryColor} />
 
           <img
             src={props.link.thumbnail || 'https://picsum.photos/290/140'}

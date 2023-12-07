@@ -1,4 +1,3 @@
-import logo from '@/assets/logo.png'
 import { useTheme } from '@/features/theme/hooks'
 
 type Props = {
@@ -19,32 +18,18 @@ export const BubbleButton = (props: Props) => {
         background: theme().primaryColor,
       }}
     >
-      {/* <Show when={isNotDefined(props.customIconSrc)} keyed> */}
       <img
         class={
           `stroke-2  absolute duration-200 transition w-7 ` +
           (props.isBotOpened ? 'scale-0 opacity-0' : 'scale-100 opacity-100')
         }
-        src={logo}
+        src={theme().customIconSrc}
         style={{ filter: 'brightness(0) invert(1)' }}
       />
-      {/* </Show> */}
-
-      {/* <Show when={props.customIconSrc}>
-        <img
-          src={props.customIconSrc}
-          class={
-            'rounded-full object-cover' +
-            (props.isBotOpened ? 'scale-0 opacity-0' : 'scale-100 opacity-100') +
-            (props.size === 'large' ? ' w-9 h-9' : ' w-7 h-7')
-          }
-          alt='Bubble button icon'
-        />
-      </Show> */}
 
       <svg
         viewBox='0 0 24 24'
-        style={{ fill: theme().textAccent }}
+        style={{ fill: theme().onPrimary }}
         class={
           `absolute duration-200 transition  w-5` +
           (props.isBotOpened ? 'scale-100 rotate-0 opacity-100' : 'scale-0 -rotate-180 opacity-0')

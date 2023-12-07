@@ -3,6 +3,7 @@ import { TextInput } from '@/components/inputs/textInput'
 import { ChatWindow } from '@/features/messages'
 import { SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
+import { useTheme } from '@/features/theme/hooks'
 import { Show, createSignal } from 'solid-js'
 import { PromptType } from '.'
 import { botStore } from '..'
@@ -20,6 +21,7 @@ type BotMobileProps = {
 
 export const BotMobileLayout = (props: BotMobileProps) => {
   const [isFocused, setIsFocused] = createSignal(false)
+  const { theme } = useTheme()
   const { text } = useText()
 
   return (
@@ -38,7 +40,13 @@ export const BotMobileLayout = (props: BotMobileProps) => {
           <ChatWindow />
         </Show>
       </div>
-      <div class='w-full py-4 bg-white border-t'>
+      <div
+        class='w-full py-4'
+        style={{
+          background: theme().backgroundAccent,
+          'border-top': `1px solid ${theme().borderColor}`,
+        }}
+      >
         <div class='px-6'>
           <TextInput
             class='mb-2'

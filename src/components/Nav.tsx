@@ -1,10 +1,9 @@
-import circleCloseIcon from '@/assets/circle-close-icon.svg'
-import logo from '@/assets/logo.png'
-import menuIcon from '@/assets/menu-icon.svg'
 import { botStoreActions } from '@/features/bot'
 import { useTheme } from '@/features/theme/hooks'
 import { Show } from 'solid-js'
 import { Button } from '.'
+import { CircleCloseIcon } from './icons/CircleCloseIcon'
+import { MenuIcon } from './icons/MenuIcon'
 
 type NavProps = {
   sidebarOpen: boolean
@@ -28,7 +27,7 @@ export const Nav = (props: NavProps) => {
         background: theme().surfaceBackground,
       }}
     >
-      <img src={logo} class='h-6 cursor-pointer' onClick={resetChat} />
+      <img src={theme().customIconSrc} class='h-6 cursor-pointer' onClick={resetChat} />
 
       <div class='md:flex-1' />
 
@@ -40,9 +39,18 @@ export const Nav = (props: NavProps) => {
 
       <Show
         when={props.sidebarOpen}
-        fallback={<img class='md:hidden py-2' onClick={props.onToggleSidebar} src={menuIcon} />}
+        fallback={
+          <div onClick={props.onToggleSidebar}>
+            <MenuIcon class='md:hidden' color={theme().primaryColor} />
+          </div>
+        }
       >
-        <img class='md:hidden' width={24} onClick={props.onToggleSidebar} src={circleCloseIcon} />
+        <CircleCloseIcon
+          class='md:hidden'
+          height={24}
+          color={theme().primaryColor}
+          onClick={props.onToggleSidebar}
+        />
       </Show>
     </div>
   )
