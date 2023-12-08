@@ -7,7 +7,6 @@ import {
   sendMessageQuery,
   useSocket,
 } from '@/features/messages'
-import { Popup } from '@/features/popup'
 import { useSuggestedPrompts } from '@/features/prompt'
 import { TextConfig, detectLanguage } from '@/features/text'
 import { Theme } from '@/features/theme'
@@ -101,8 +100,6 @@ export const BotManager = (props: BotProps) => {
 export const Bot = (props: BotProps & { channel: Channel }) => {
   const [userInput, setUserInput] = createSignal('')
 
-  const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false)
-  const [sourcePopupSrc] = createSignal({})
   const [sidebarOpen, setSidebarOpen] = createSignal(false)
 
   const device = useMediaQuery()
@@ -273,14 +270,6 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
           </Show>
         </div>
       </div>
-
-      {sourcePopupOpen() && (
-        <Popup
-          isOpen={sourcePopupOpen()}
-          value={sourcePopupSrc()}
-          onClose={() => setSourcePopupOpen(false)}
-        />
-      )}
     </>
   )
 }
