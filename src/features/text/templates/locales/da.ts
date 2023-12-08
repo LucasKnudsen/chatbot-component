@@ -1,6 +1,6 @@
-import { TextTemplate } from '../../types'
+import { TextConfig } from '../..'
 
-export const da: TextTemplate = {
+export const da: TextConfig = {
   welcomeMessage: 'Velkommen til en ny, fordybende chatbot-oplevelse',
   returnWelcomeMessage: 'Velkommen tilbage! Hvad kan jeg hjælpe med?',
   inputPlaceholder: 'Spørg mig om noget...',

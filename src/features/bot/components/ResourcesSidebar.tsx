@@ -33,27 +33,27 @@ export const ResourcesSidebar = (props: ResourcesSidebarProps) => {
       <div
         class='absolute cursor-pointer z-10'
         style={{
-          top: '20px',
+          top: '25px',
           left: '10px',
           width: '20px',
           opacity: props.open ? '0' : '1',
         }}
         onClick={props.toggle}
       >
-        <CircleLinkIcon width={20} color={theme().primaryColor} />
+        <CircleLinkIcon width={25} color={theme().primaryColor} />
       </div>
 
       <div
         class='absolute cursor-pointer'
         style={{
-          top: '20px',
-          left: '-10px',
+          top: '25px',
+          left: '-9px',
           opacity: props.open ? '1' : '0',
           'pointer-events': props.open ? 'auto' : 'none',
         }}
         onClick={props.toggle}
       >
-        <CircleCloseRightIcon width={20} color={theme().primaryColor} />
+        <CircleCloseRightIcon width={25} color={theme().primaryColor} />
       </div>
     </div>
   )

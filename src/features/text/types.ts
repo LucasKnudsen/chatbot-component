@@ -1,3 +1,23 @@
-import { defaultText } from './templates'
+export type TextConfig = {
+  welcomeMessage: string
+  returnWelcomeMessage: string
+  inputPlaceholder: string
+  suggestedPromptsTitle: string
+  viewMedia: string
 
-export type TextTemplate = typeof defaultText
+  // Nav bar
+  close: string
+
+  // Settings dropdown
+  copyText: string
+  copyTextSuccess: string
+  share: string
+
+  // Sidebar
+  historyTabTitle: string
+  navigationTabTitle: string
+  today: string
+  yesterday: string
+  previous: string
+  noHistory: string
+}

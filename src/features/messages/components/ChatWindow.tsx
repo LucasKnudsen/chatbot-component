@@ -87,7 +87,7 @@ export const ChatWindow = () => {
         </div>
 
         <Settings
-          class='pt-1 pl-4'
+          class='pt-1'
           menuItems={[
             {
               label: text().copyText,
@@ -121,7 +121,11 @@ export const ChatWindow = () => {
         </Show>
 
         {/* Chatbot answer  */}
-        <div data-testid='chatbot-answer' ref={botMessageEl} class='px-6 md:px-0 prose  ' />
+        <div
+          data-testid='chatbot-answer'
+          ref={botMessageEl}
+          class={'px-6 md:px-0 prose prose-sm ' + (theme().isDark && 'prose-invert')}
+        />
 
         {/* Gallery  */}
         <Gallery resources={botStore.chat?.resources!} class='px-6 md:px-0 animate-fade-in' />

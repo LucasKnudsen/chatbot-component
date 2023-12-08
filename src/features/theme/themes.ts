@@ -2,6 +2,7 @@ import background2 from '@/assets/background-2.png'
 import logo from '@/assets/logo.png'
 
 export type Theme = {
+  isDark: boolean
   customIconSrc: string
   primaryColor: string
   primaryAccent: string
@@ -20,6 +21,7 @@ export type Theme = {
 }
 
 export const defaultTheme: Theme = {
+  isDark: false,
   customIconSrc: logo,
   primaryColor: 'rgba(91, 147, 255, 1)',
   primaryAccent: 'rgba(91, 147, 255, 0.2)',
@@ -40,6 +42,7 @@ export const defaultTheme: Theme = {
 }
 
 const midnight: Theme = {
+  isDark: true,
   customIconSrc: logo,
   primaryColor: '#204ef7',
   primaryAccent: '#152e8a',
@@ -57,6 +60,7 @@ const midnight: Theme = {
 }
 
 const ugly: Theme = {
+  isDark: false,
   customIconSrc: logo,
   primaryColor: 'red',
   primaryAccent: 'orange',
@@ -74,7 +78,7 @@ const ugly: Theme = {
   surfaceBackground: 'brown',
 }
 
-export const themes: Record<string, Theme> = {
+export const themes = {
   bubbles: defaultTheme,
   ugly,
   midnight,

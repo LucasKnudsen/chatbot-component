@@ -21,6 +21,7 @@ In `<head>`
 Almost everything you see in fraia is customizable to fit your brand
 
 ```
+channelId: string
 language?: string // two letter language code e.g. 'en' 'dk'
 initialPrompts?: Prompt[]
 text?: Partial<TextConfig>
@@ -44,17 +45,17 @@ type Prompt = string | {
 ### TextConfig
 
 ```
-type TextConfig = {
+export type TextConfig = {
   welcomeMessage: string
   returnWelcomeMessage: string
   inputPlaceholder: string
   suggestedPromptsTitle: string
   viewMedia: string
 
-  // Nav
+  // Nav bar
   close: string
 
-  // Settings Dropdown
+  // Settings dropdown
   copyText: string
   copyTextSuccess: string
   share: string
@@ -73,6 +74,8 @@ type TextConfig = {
 
 ```
 export type Theme = {
+  isDark: boolean
+  customIconSrc: string
   primaryColor: string
   primaryAccent: string
   textColor: string
@@ -88,5 +91,4 @@ export type Theme = {
   surfaceBackground: string
   surfaceHoveredBackground: string
 }
-
 ```

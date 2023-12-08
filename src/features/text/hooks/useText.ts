@@ -1,11 +1,11 @@
 import { createSignal } from 'solid-js'
-import { Language, TextTemplate } from '..'
+import { Language, TextConfig } from '..'
 import { defaultText } from '../templates'
 
-const [text, setText] = createSignal<TextTemplate>(defaultText)
+const [text, setText] = createSignal<TextConfig>(defaultText)
 
 export const useText = () => {
-  const initText = (textOverrides: Partial<TextTemplate> = {}, defaultLanguage?: string) => {
+  const initText = (textOverrides: Partial<TextConfig> = {}, defaultLanguage?: string) => {
     let text = defaultText // system default to english
 
     if (defaultLanguage) {
