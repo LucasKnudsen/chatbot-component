@@ -34,19 +34,19 @@ export const Sidebar = (props: SidebarProps) => {
       <div
         data-testid='drawer-button'
         class='hidden md:block absolute cursor-pointer transition-all'
-        style={{ top: '20px', left: '-20px', opacity: props.open ? '0' : '1' }}
+        style={{ top: '25px', left: '-25px', opacity: props.open ? '0' : '1' }}
         onClick={props.onToggle}
       >
-        <SidebarTabIcon width={20} color={theme().primaryColor} />
+        <SidebarTabIcon width={25} color={theme().primaryColor} />
       </div>
 
       {/* Sidebar close button  */}
       <div
         class='hidden md:block absolute cursor-pointer transition-all'
-        style={{ top: '20px', left: '-10px', opacity: props.open ? '1' : '0' }}
+        style={{ top: '25px', left: '-10px', opacity: props.open ? '1' : '0' }}
         onClick={props.onToggle}
       >
-        <CircleCloseIcon width={20} color={theme().primaryColor} />
+        <CircleCloseIcon width={25} color={theme().primaryColor} />
       </div>
 
       {/* Sidebar container  */}

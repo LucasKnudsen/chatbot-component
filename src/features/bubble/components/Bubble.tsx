@@ -6,7 +6,11 @@ import { useTheme } from '@/features/theme/hooks'
 import StyleSheet from '@/styles'
 import { BubbleButton } from './BubbleButton'
 
-export const Bubble = (props: BotConfig) => {
+type BubbleConfig = BotConfig & {
+  autoOpen: boolean
+}
+
+export const Bubble = (props: BubbleConfig) => {
   const [isBotStarted, setIsBotStarted] = createSignal(false)
   const [isBotOpened, setIsBotOpened] = createSignal(false)
 
@@ -34,7 +38,7 @@ export const Bubble = (props: BotConfig) => {
     initTheme(props.themeId, props.theme)
     initText(props.text, props.language)
 
-    if (props.settings?.autoOpen) {
+    if (props?.autoOpen) {
       openBot()
     }
   })
