@@ -42,7 +42,7 @@ function App() {
   return (
     // <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} />
 
-    <div class='w-screen h-screen flex justify-center items-center bg-slate-100'>
+    <div class='w-screen h-screen flex flex-col justify-center items-center bg-slate-100'>
       <h1 class='text-6xl tracking-widest'>
         PL
         <span
@@ -54,6 +54,19 @@ function App() {
         </span>
         GROUND
       </h1>
+
+      <h2 class='text-lg italic tracking-widest'>
+        Powered by
+        <span
+          style={{
+            color: '#3B81F6',
+          }}
+        >
+          {' '}
+          Fraia
+        </span>
+      </h2>
+
       <Bubble {...chatflows.fraia_dev} initialPrompts={initialPrompts} themeId='bubbles' />
     </div>
   )
