@@ -1,13 +1,8 @@
 import styles from './index.css?inline'
 
 import { onMount } from 'solid-js'
-import { useTheme } from './features/theme/hooks'
 
 const StyleSheet = () => {
-  const { theme } = useTheme()
-
-  const primaryColor = theme().primaryColor
-
   onMount(() => {
     // Apparently the only thing that worked for me..
     const font = document.createElement('link')
