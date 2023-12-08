@@ -61,6 +61,7 @@ export const Bubble = (props: BubbleConfig) => {
           background: `${theme().backgroundColor} url(${
             theme().backgroundImageUrl
           }) no-repeat center / cover`,
+          'z-index': 69420,
         }}
         part='bot'
       >
