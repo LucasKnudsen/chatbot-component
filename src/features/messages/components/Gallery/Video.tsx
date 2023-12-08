@@ -7,6 +7,7 @@ type Props = {
 const Video = (props: Props) => {
   return (
     <video
+      data-testid='video-resource'
       class='rounded-lg hover:shadow-lg transition-all duration-300 ease-in-out h-full w-full  object-cover '
       src={props.element.value as string}
       muted

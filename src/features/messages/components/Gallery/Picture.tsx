@@ -44,6 +44,7 @@ const Picture = ({ element }: Props) => {
 
   return (
     <div
+      data-testid='picture-resource'
       class='relative h-full w-full'
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

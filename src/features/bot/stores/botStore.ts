@@ -241,14 +241,14 @@ const handleSourceDocuments = async (documents: SourceDocument[]) => {
   documents.forEach((doc) => {
     const { facts, linked_resources, source } = doc.metadata
 
-    facts.forEach((fact) => {
+    facts?.forEach((fact) => {
       const existingFact = uniqueFacts.find((f) => f.id === fact.id)
       if (!existingFact) {
         uniqueFacts.push({ ...fact, source })
       }
     })
 
-    linked_resources.forEach((resource) => {
+    linked_resources?.forEach((resource) => {
       const existingResource = uniqueResources.find((r) => r.id === resource.id)
       if (!existingResource) {
         uniqueResources.push({ ...resource, source })

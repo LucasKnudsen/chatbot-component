@@ -1,0 +1,31 @@
+{
+  "text": "Just a test response",
+  "sourceDocuments": [
+    {
+      "id": "1",
+      "metadata": {
+        "facts": [
+          {
+            "id": "c75a0632-7ca1-4fb6-9deb-5b9efe1fff9d",
+            "name": "Locations",
+            "value": "Offices in Denmark, South Africa, India, Italy and Thailand"
+          },
+          {
+            "id": "0b7bcb82-ee31-4f82-98fc-04d387a524aa",
+            "name": "Partnerships",
+            "value": "Chulalongkorn University, Concordium"
+          },
+
+          {
+            "id": "77ae6e6f-d431-4896-b5c7-ab880b5661ad",
+            "name": "E-mail",
+            "value": "kontakt@lionbrain.dk"
+          },
+
+          { "id": "a2fc8b13-b888-439b-ac6f-139edc2d0bba", "name": "CEO", "value": "Anders Hasle" }
+        ],
+        "source": "https://lionbrain.dk/ai-kurser/"
+      }
+    }
+  ]
+}

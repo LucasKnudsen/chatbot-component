@@ -30,7 +30,9 @@ export const Sidebar = (props: SidebarProps) => {
         background: theme().drawerBackground,
       }}
     >
+      {/* Sidebar drawer button  */}
       <div
+        data-testid='drawer-button'
         class='hidden md:block absolute cursor-pointer transition-all'
         style={{ top: '20px', left: '-20px', opacity: props.open ? '0' : '1' }}
         onClick={props.onToggle}
@@ -38,6 +40,7 @@ export const Sidebar = (props: SidebarProps) => {
         <SidebarTabIcon width={20} color={theme().primaryColor} />
       </div>
 
+      {/* Sidebar close button  */}
       <div
         class='hidden md:block absolute cursor-pointer transition-all'
         style={{ top: '20px', left: '-10px', opacity: props.open ? '1' : '0' }}
@@ -46,6 +49,7 @@ export const Sidebar = (props: SidebarProps) => {
         <CircleCloseIcon width={20} color={theme().primaryColor} />
       </div>
 
+      {/* Sidebar container  */}
       <div
         class='opacity-0 hover:opacity-100 transition-opacity py-6 h-full '
         style={{
