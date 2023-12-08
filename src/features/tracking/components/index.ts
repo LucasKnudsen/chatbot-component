@@ -1,1 +1,1 @@
-export * from './ClarityComponent'
+export * from './TrackingProvider'

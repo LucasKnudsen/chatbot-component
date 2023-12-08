@@ -3,7 +3,7 @@ import { BotConfig, BotManager } from '../../bot/components/Bot'
 
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
-import { ClarityComponent } from '@/features/tracking'
+import { TrackingProvider } from '@/features/tracking'
 import StyleSheet from '@/styles'
 import { BubbleButton } from './BubbleButton'
 
@@ -48,12 +48,12 @@ export const Bubble = (props: BubbleConfig) => {
     <>
       <StyleSheet />
 
-      <ClarityComponent />
+      <TrackingProvider />
 
       <BubbleButton toggleBot={toggleBot} isBotOpened={isBotOpened()} />
 
       <div
-        class={`fixed top-0 left-0 w-screen m-0 min-h-[-webkit-fill-available] h-full ${
+        class={`fixed top-0 left-0 w-screen m-0 min-h-[-webkit-fill-available] z-50 h-full ${
           isBotOpened() ? 'opacity-1' : 'opacity-0 pointer-events-none'
         }`}
         style={{
