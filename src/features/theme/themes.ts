@@ -78,7 +78,7 @@ const ugly: Theme = {
   surfaceBackground: 'brown',
 }
 
-export const themes = {
+export const themes: Record<string, Theme> = {
   bubbles: defaultTheme,
   ugly,
   midnight,

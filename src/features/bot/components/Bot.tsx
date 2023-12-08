@@ -10,7 +10,7 @@ import {
 import { Popup } from '@/features/popup'
 import { useSuggestedPrompts } from '@/features/prompt'
 import { TextConfig, detectLanguage } from '@/features/text'
-import { Theme, themes } from '@/features/theme'
+import { Theme } from '@/features/theme'
 import { queries } from '@/graphql'
 import { Channel, GetChannelQuery } from '@/graphql/types'
 import { useMediaQuery } from '@/utils/useMediaQuery'
@@ -49,7 +49,7 @@ export type PromptType =
 export type BotConfig = {
   channelId: string
   language?: string
-  themeId?: keyof typeof themes
+  themeId?: string
   initialPrompts?: PromptType[]
   text?: Partial<TextConfig>
   theme?: Partial<Theme>

@@ -9,7 +9,6 @@ export const defaultBotProps: BotProps = {
   text: undefined,
 
   initialPrompts: undefined,
-  settings: undefined,
 }
 
 export const chatflows: Record<string, BotProps> = {
@@ -26,8 +25,5 @@ export const chatflows: Record<string, BotProps> = {
   },
   fraia_dev: {
     channelId: 'c03c3bbc-935a-11ee-b9d1-0242ac120002',
-    settings: {
-      autoOpen: true,
-    },
   },
 }
