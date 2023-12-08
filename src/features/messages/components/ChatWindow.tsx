@@ -124,7 +124,7 @@ export const ChatWindow = () => {
         <div
           data-testid='chatbot-answer'
           ref={botMessageEl}
-          class={'px-6 md:px-0 prose prose-sm ' + (theme().isDark && 'prose-invert')}
+          class={'px-6 md:px-0 prose ' + (theme().isDark && 'prose-invert')}
         />
 
         {/* Gallery  */}

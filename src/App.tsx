@@ -43,7 +43,7 @@ function App() {
     // <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} />
 
     <div class='w-screen h-screen flex justify-center items-center bg-slate-100'>
-      <h1 class='text-6xl'>
+      <h1 class='text-6xl tracking-widest'>
         PL
         <span
           style={{
