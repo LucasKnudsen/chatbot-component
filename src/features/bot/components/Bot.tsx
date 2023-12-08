@@ -9,8 +9,8 @@ import {
 } from '@/features/messages'
 import { Popup } from '@/features/popup'
 import { useSuggestedPrompts } from '@/features/prompt'
-import { TextTemplate, detectLanguage } from '@/features/text'
-import { Theme } from '@/features/theme'
+import { TextConfig, detectLanguage } from '@/features/text'
+import { Theme, themes } from '@/features/theme'
 import { queries } from '@/graphql'
 import { Channel, GetChannelQuery } from '@/graphql/types'
 import { useMediaQuery } from '@/utils/useMediaQuery'
@@ -46,19 +46,13 @@ export type PromptType =
       prompt: string
     }
 
-export type BotSettings = {
-  autoOpen: boolean
-}
-
 export type BotConfig = {
   channelId: string
   language?: string
-  themeId?: string
+  themeId?: keyof typeof themes
   initialPrompts?: PromptType[]
-  text?: Partial<TextTemplate>
-  chatflowConfig?: Record<string, unknown>
+  text?: Partial<TextConfig>
   theme?: Partial<Theme>
-  settings?: BotSettings
 }
 
 type BotProps = BotConfig & {
@@ -158,7 +152,7 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
       promptCode: PromptCode.QUESTION,
     }
 
-    if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig
+    // if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig
 
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
