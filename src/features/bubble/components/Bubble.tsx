@@ -3,6 +3,7 @@ import { BotConfig, BotManager } from '../../bot/components/Bot'
 
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
+import { ClarityComponent } from '@/features/tracking'
 import StyleSheet from '@/styles'
 import { BubbleButton } from './BubbleButton'
 
@@ -46,6 +47,8 @@ export const Bubble = (props: BubbleConfig) => {
   return (
     <>
       <StyleSheet />
+
+      <ClarityComponent />
 
       <BubbleButton toggleBot={toggleBot} isBotOpened={isBotOpened()} />
 
