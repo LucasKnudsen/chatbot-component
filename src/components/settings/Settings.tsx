@@ -7,6 +7,7 @@ type Props = {
   menuItems: MenuItemProps[]
   minWidth?: string
   transformOrigin?: string
+  class?: string
 }
 
 export const Settings = (props: Props) => {
@@ -53,9 +54,9 @@ export const Settings = (props: Props) => {
 
   return (
     <>
-      <div ref={menuRef} class='relative inline-block text-left'>
-        <div>
-          <button type='button' class='flex items-center  px-2' onClick={toggleMenu}>
+      <div ref={menuRef} class={'relative inline-block text-left'}>
+        <div class={props.class}>
+          <button type='button' class='flex items-center' onClick={toggleMenu}>
             <SettingsButton />
           </button>
         </div>

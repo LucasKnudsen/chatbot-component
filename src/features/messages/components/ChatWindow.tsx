@@ -73,7 +73,7 @@ export const ChatWindow = () => {
   return (
     <>
       {/* Question */}
-      <div class='flex justify-between px-6 md:px-0 shadow'>
+      <div class='flex justify-between px-6 md:px-0 pb-4'>
         <div
           class='mb-1 text-lg md:text-2xl font-light flex flex-row gap-x-4 items-start animate-fade-in '
           style={{
@@ -87,6 +87,7 @@ export const ChatWindow = () => {
         </div>
 
         <Settings
+          class='pt-1 pl-4'
           menuItems={[
             {
               label: text().copyText,
@@ -120,7 +121,7 @@ export const ChatWindow = () => {
         </Show>
 
         {/* Chatbot answer  */}
-        <div data-testid='chatbot-answer' ref={botMessageEl} class='px-6 md:px-0' />
+        <div data-testid='chatbot-answer' ref={botMessageEl} class='px-6 md:px-0 prose  ' />
 
         {/* Gallery  */}
         <Gallery resources={botStore.chat?.resources!} class='px-6 md:px-0 animate-fade-in' />

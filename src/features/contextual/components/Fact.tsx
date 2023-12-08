@@ -13,7 +13,12 @@ export const Fact = (props: Props) => {
   return (
     <div
       data-testid='fact-resource'
-      class={'p-2 text-sm ' + props.class + ' ' + (!props.fact.header ? 'animate-pulse' : '')}
+      class={
+        'p-2 text-sm rounded-r-lg ' +
+        props.class +
+        ' ' +
+        (!props.fact.header ? 'animate-pulse' : '')
+      }
       style={{
         background: theme().surfaceBackground,
         'border-left': `3px solid ${theme().primaryColor}`,

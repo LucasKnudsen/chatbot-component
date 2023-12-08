@@ -17,7 +17,7 @@ export const Prompt = (props: PromptProps) => {
     <>
       <div
         data-testid='suggested-prompt'
-        class='flex flex-col justify-center prompt text-xs md:text-sm py-1 md:py-2 px-3 md:px-5 rounded-lg md:rounded-xl transition duration-200 ease-in-out w-fit '
+        class='flex flex-col justify-center prompt text-xs md:text-sm py-1 md:py-2 px-3 md:px-5 rounded-lg transition duration-200 ease-in-out w-fit '
         style={{
           cursor: props.disabled ? 'not-allowed' : 'pointer',
           color: textColor,
