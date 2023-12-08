@@ -7,7 +7,7 @@ import StyleSheet from '@/styles'
 import { BubbleButton } from './BubbleButton'
 
 type BubbleConfig = BotConfig & {
-  autoOpen: boolean
+  autoOpen?: boolean
 }
 
 export const Bubble = (props: BubbleConfig) => {
