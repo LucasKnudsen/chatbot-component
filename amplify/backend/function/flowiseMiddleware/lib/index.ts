@@ -112,7 +112,7 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
     question,
     overrideConfig: {
       sessionId: {
-        RedisBackedChatMemory_0: chatId,
+        RedisBackedChatMemory_1: chatId,
       },
     },
     socketIOClientId,
