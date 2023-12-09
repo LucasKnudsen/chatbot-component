@@ -10,6 +10,7 @@
     "openai": "^4.20.1",
     "@aws-sdk/client-ssm": "latest",
     "@aws-sdk/lib-dynamodb": "latest",
+    "@aws-sdk/client-lambda": "latest",
     "@aws-sdk/client-dynamodb": "latest"
   }
 }

@@ -10,13 +10,14 @@ import {
 import { useSuggestedPrompts } from '@/features/prompt'
 import { TextConfig, detectLanguage } from '@/features/text'
 import { Theme } from '@/features/theme'
-import { queries } from '@/graphql'
+import { queries, subscriptions } from '@/graphql'
 import { Channel, GetChannelQuery } from '@/graphql/types'
+import { SubscriptionHelper } from '@/utils/subscriptionHelpers'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { API, Amplify } from 'aws-amplify'
-import { Match, Show, Switch, createResource, createSignal, onMount } from 'solid-js'
+import { Match, Show, Switch, createEffect, createResource, createSignal, onMount } from 'solid-js'
 import { Sidebar } from '.'
 import { botStore, botStoreActions, useChatId, useLanguage } from '..'
 import { BotDesktopLayout } from './BotDesktopLayout'
@@ -45,6 +46,10 @@ export type PromptType =
       prompt: string
     }
 
+export type BotSettings = {
+  autoOpen?: boolean
+}
+
 export type BotConfig = {
   channelId: string
   language?: string
@@ -52,6 +57,7 @@ export type BotConfig = {
   initialPrompts?: PromptType[]
   text?: Partial<TextConfig>
   theme?: Partial<Theme>
+  settings?: BotSettings
 }
 
 type BotProps = BotConfig & {
@@ -127,6 +133,24 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
     clearDefaultLanguage()
   }
 
+  createEffect(async () => {
+    if (chatId()) {
+      try {
+        const sub = await SubscriptionHelper({
+          query: subscriptions.subscribe2channel,
+          variables: { sessionId: chatId() },
+          onNext: (data) => {
+            console.log(data)
+          },
+        })
+
+        console.log(chatId())
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  })
+
   // Handle form submission
   const handleSubmit = async (value: string) => {
     setUserInput(value)
@@ -148,8 +172,6 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
       chatId: chatId(),
       promptCode: PromptCode.QUESTION,
     }
-
-    // if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig
 
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 

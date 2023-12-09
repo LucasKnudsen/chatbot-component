@@ -1,17 +1,20 @@
 import { API } from 'aws-amplify'
-import { Observable } from 'zen-observable-ts'
+import { createSignal } from 'solid-js'
+import { Observable, ZenObservable } from 'zen-observable-ts'
 import { SubscriptionInput } from './types'
+
+export const [subscriptionsCache, setSubscriptionsCache] = createSignal<
+  Record<string, ZenObservable.Subscription>
+>({})
 
 export const SubscriptionHelper = async <DataType>({
   query,
   variables,
   authMode,
   authToken = '',
-  //   cacheKey,
+  cacheKey,
   onNext,
 }: SubscriptionInput<DataType>) => {
-  //   clearOldSubscriptions(cacheKey)
-
   const subscription = (
     (await API.graphql({
       query,
@@ -25,15 +28,26 @@ export const SubscriptionHelper = async <DataType>({
     },
   })
 
-  //   subscriptionsCache.merge({
-  //     [cacheKey]: subscription,
-  //   })
+  if (cacheKey) {
+    setSubscriptionsCache((prev) => ({
+      ...prev,
+      [cacheKey]: subscription,
+    }))
+  }
 
   return subscription
 }
 
-// export const clearOldSubscriptions = (subKey: string) => {
-//   if (subscriptionsCache.get()[subKey]) {
-//     subscriptionsCache.get()[subKey].unsubscribe()
-//   }
-// }
+export const clearSubscription = (subKey: string) => {
+  if (subscriptionsCache()[subKey]) {
+    subscriptionsCache()[subKey].unsubscribe()
+  }
+}
+
+export const clearAllSubscriptions = (cacheKey: string) => {
+  Object.keys(subscriptionsCache()).forEach((subKey) => {
+    if (subKey.includes(cacheKey)) {
+      clearSubscription(subKey)
+    }
+  })
+}
