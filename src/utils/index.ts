@@ -20,6 +20,12 @@ export const randomUUID = (): string => {
   })
 }
 
+export const logDev = (...args: any[]): void => {
+  if (import.meta.env.DEV) {
+    console.log(...args)
+  }
+}
+
 export const parseProxy = <T>(proxy: T): T => JSON.parse(JSON.stringify(proxy))
 
 export const sendRequest = async <ResponseData>(

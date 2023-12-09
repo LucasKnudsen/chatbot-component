@@ -2,6 +2,7 @@ import { subscriptions } from '@/graphql'
 import { API } from 'aws-amplify'
 import { createSignal } from 'solid-js'
 import { Observable } from 'zen-observable-ts'
+import { logDev } from '..'
 import { SubscriptionCache, SubscriptionInput } from './types'
 
 export const [subscriptionsCache, setSubscriptionsCache] = createSignal<SubscriptionCache>({})
@@ -57,6 +58,7 @@ export const clearSubscription = (key: string, type: string) => {
 }
 
 export const clearAllSubscriptions = () => {
+  logDev('clearAllSubscriptions')
   Object.keys(subscriptionsCache()).forEach((key) => {
     let k = key as keyof typeof subscriptionsCache
     if (!subscriptionsCache()[k]) return

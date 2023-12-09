@@ -3,8 +3,8 @@ import { Nav } from '@/components/Nav'
 import {
   IncomingInput,
   PromptCode,
-  extractChatbotResponse,
   sendMessageQuery,
+  useChatConnection,
   useSocket,
 } from '@/features/messages'
 import { useSuggestedPrompts } from '@/features/prompt'
@@ -12,22 +12,11 @@ import { TextConfig, detectLanguage } from '@/features/text'
 import { Theme } from '@/features/theme'
 import { queries } from '@/graphql'
 import { Channel, GetChannelQuery } from '@/graphql/types'
-import { SubscriptionEvent } from '@/models'
-import { SubscriptionHelper, clearAllSubscriptions } from '@/utils/subscriptionHelpers'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { API, Amplify } from 'aws-amplify'
-import {
-  Match,
-  Show,
-  Switch,
-  createEffect,
-  createResource,
-  createSignal,
-  onCleanup,
-  onMount,
-} from 'solid-js'
+import { Match, Show, Switch, createResource, createSignal, onMount } from 'solid-js'
 import { Sidebar } from '.'
 import { botStore, botStoreActions, useChatId, useLanguage } from '..'
 import { BotDesktopLayout } from './BotDesktopLayout'
@@ -136,6 +125,12 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
     onToken: botStoreActions.updateAnswer,
   })
 
+  useChatConnection({
+    chatId,
+    isChatFlowAvailableToStream,
+    fetchSuggestedPrompts,
+  })
+
   const clear = () => {
     botStoreActions.clear()
     clearSuggestions()
@@ -148,32 +143,6 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
 
     if (botStore.chat) {
       fetchSuggestedPrompts()
-    }
-  })
-
-  onCleanup(() => {
-    clearAllSubscriptions()
-  })
-
-  createEffect(async () => {
-    console.log('Initiated subscription', chatId())
-
-    if (chatId()) {
-      try {
-        await SubscriptionHelper<SubscriptionEvent>({
-          query: 'subscribe2channel',
-          variables: { sessionId: chatId() },
-          onNext: (data) => {
-            console.log(data.sessionId, JSON.parse(data.data))
-          },
-          // cache: {
-          //   key: chatId(),
-          //   type: 'chat',
-          // },
-        })
-      } catch (error) {
-        console.log(error)
-      }
     }
   })
 
@@ -201,36 +170,9 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
 
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
-    const [messageResult, detectLanguageResult] = await Promise.all([
-      sendMessageQuery(body),
-      detectLanguage(value, true),
-    ])
+    sendMessageQuery(body)
+    await detectLanguage(value, true)
 
-    if (messageResult.data) {
-      const answer = extractChatbotResponse(messageResult.data)
-
-      // If the chatflow is not available to stream, we update the answer here
-      if (!isChatFlowAvailableToStream()) {
-        botStoreActions.updateAnswer(answer)
-      }
-
-      // Uses the source documents from the end result rather than sockets (they are the same, and doesnt stream in anyway)
-      botStoreActions.handleSourceDocuments(messageResult.data.sourceDocuments)
-
-      // Saves end answer in history rather than at every stream update
-      botStoreActions.updateHistoryAnswer(answer)
-
-      fetchSuggestedPrompts(detectLanguageResult?.languageCode)
-    }
-
-    if (messageResult.error) {
-      const message =
-        messageResult.error?.message ?? 'Something went wrong. Please try again later.'
-
-      botStoreActions.updateAnswer(message)
-    }
-
-    botStoreActions.setLoading(false)
     setUserInput('')
   }
 
