@@ -6,7 +6,7 @@ import { Full } from './features/full'
 export const registerWebComponents = () => {
   if (typeof window === 'undefined') return
   // @ts-expect-error element incorect type
-  customElement('flowise-fullchatbot', defaultBotProps, Full)
+  customElement('fraia-fullchatbot', defaultBotProps, Full)
 
-  customElement('flowise-chatbot', defaultBotProps, Bubble)
+  customElement('fraia-chatbot', defaultBotProps, Bubble)
 }

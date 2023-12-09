@@ -23,7 +23,7 @@ export type IncomingInput = {
 export async function sendMessageQuery(body: IncomingInput) {
   try {
     // TODO: Test timeout of the REST API. (There's a 30 second timeout on AppSync)
-    const answer = await API.post('digitaltwinRest', '/flowise/middleware', {
+    const answer = await API.post('digitaltwinRest', '/fraia/middleware', {
       body,
     })
 

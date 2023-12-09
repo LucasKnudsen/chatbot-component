@@ -1,5 +1,4 @@
 export const initiateClarity = () => {
-  return
   if (import.meta.env.DEV) return
 
   const script = document.createElement('script')
@@ -16,7 +15,6 @@ export const initiateClarity = () => {
 }
 
 export const initiateAppAnalyzz = () => {
-  return
   const script = document.createElement('script')
   script.defer = true
   script.src = 'https://app.analyzz.com/pixel/RlSB3QnjnNjv82vd'
