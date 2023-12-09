@@ -97,6 +97,6 @@
     "domainName": "zg7aws7xvd.execute-api.ap-southeast-1.amazonaws.com",
     "apiId": "zg7aws7xvd"
   },
-  "body": "{\"channelId\":\"c03c3bbc-935a-11ee-b9d1-0242ac120002\",\"question\":\"Send me a PING\",\"history\":[],\"chatId\":\"0f5b2099-f133-4fdf-a83b-0aad0b30dfe5\",\"previousQuestions\":[\"Give me a detailed description of Lion Brain\",\"Hvor er i fra\",\"Hvad med Soft Design\"],\"promptCode\":\"question\",\"language\":\"da\"}",
+  "body": "{\"channelId\":\"c03c3bbc-935a-11ee-b9d1-0242ac120002\",\"question\":\"Send me a PING\",\"history\":[],\"chatId\":\"1f5b2099-f133-4fdf-a83b-0aad0b30dfe5\",\"previousQuestions\":[\"Give me a detailed description of Lion Brain\",\"Hvor er i fra\",\"Hvad med Soft Design\"],\"promptCode\":\"question\",\"language\":\"da\"}",
   "isBase64Encoded": false
 }

@@ -128,11 +128,11 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
 
   const data = {
     question,
-    // overrideConfig: {
-    //   sessionId: {
-    //     RedisBackedChatMemory_0: chatId,
-    //   },
-    // },
+    overrideConfig: {
+      sessionId: {
+        RedisBackedChatMemory_1: chatId,
+      },
+    },
     socketIOClientId,
   }
   const result = await axios.post(endpoint, data, {
