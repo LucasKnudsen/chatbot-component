@@ -10,14 +10,24 @@ import {
 import { useSuggestedPrompts } from '@/features/prompt'
 import { TextConfig, detectLanguage } from '@/features/text'
 import { Theme } from '@/features/theme'
-import { queries, subscriptions } from '@/graphql'
+import { queries } from '@/graphql'
 import { Channel, GetChannelQuery } from '@/graphql/types'
-import { SubscriptionHelper } from '@/utils/subscriptionHelpers'
+import { SubscriptionEvent } from '@/models'
+import { SubscriptionHelper, clearAllSubscriptions } from '@/utils/subscriptionHelpers'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { API, Amplify } from 'aws-amplify'
-import { Match, Show, Switch, createEffect, createResource, createSignal, onMount } from 'solid-js'
+import {
+  Match,
+  Show,
+  Switch,
+  createEffect,
+  createResource,
+  createSignal,
+  onCleanup,
+  onMount,
+} from 'solid-js'
 import { Sidebar } from '.'
 import { botStore, botStoreActions, useChatId, useLanguage } from '..'
 import { BotDesktopLayout } from './BotDesktopLayout'
@@ -133,18 +143,34 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
     clearDefaultLanguage()
   }
 
+  onMount(() => {
+    botStoreActions.initBotStore(props.channel.chatflowId!, props.language)
+
+    if (botStore.chat) {
+      fetchSuggestedPrompts()
+    }
+  })
+
+  onCleanup(() => {
+    clearAllSubscriptions()
+  })
+
   createEffect(async () => {
+    console.log('Initiated subscription', chatId())
+
     if (chatId()) {
       try {
-        const sub = await SubscriptionHelper({
-          query: subscriptions.subscribe2channel,
+        await SubscriptionHelper<SubscriptionEvent>({
+          query: 'subscribe2channel',
           variables: { sessionId: chatId() },
           onNext: (data) => {
-            console.log(data)
+            console.log(data.sessionId, JSON.parse(data.data))
           },
+          // cache: {
+          //   key: chatId(),
+          //   type: 'chat',
+          // },
         })
-
-        console.log(chatId())
       } catch (error) {
         console.log(error)
       }
@@ -207,14 +233,6 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
     botStoreActions.setLoading(false)
     setUserInput('')
   }
-
-  onMount(() => {
-    botStoreActions.initBotStore(props.channel.chatflowId!, props.language)
-
-    if (botStore.chat) {
-      fetchSuggestedPrompts()
-    }
-  })
 
   return (
     <>
