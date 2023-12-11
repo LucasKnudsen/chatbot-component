@@ -75,6 +75,7 @@ export const ChatWindow = () => {
       {/* Question */}
       <div class='flex justify-between px-6 md:px-0 pb-4'>
         <div
+          data-testid='chatbot-question'
           class='mb-1 text-lg md:text-2xl font-light flex flex-row gap-x-4 items-start animate-fade-in '
           style={{
             color: theme().textSecondary,

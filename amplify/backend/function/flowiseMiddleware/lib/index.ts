@@ -9,8 +9,11 @@ import OpenAI from 'openai'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 // @ts-ignore
 import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb'
+// @ts-ignore
+import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda'
 
 const ssmClient = new SSMClient({ region: process.env.REGION })
+const client = new LambdaClient({ region: process.env.REGION })
 
 const ddbService = new DynamoDBClient({ region: process.env.REGION })
 const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
@@ -43,6 +46,21 @@ export const handler = async (
     switch (body.promptCode) {
       case 'question':
         answer = await handleFlowiseRequest(body)
+
+        const params = {
+          body: {
+            sessionId: body.chatId,
+            data: answer,
+          },
+        }
+        // Query broadcast lambda with answer
+        const command = new InvokeCommand({
+          FunctionName: process.env.FUNCTION_FLOWISEBROADCAST_NAME,
+          Payload: JSON.stringify(params),
+        })
+
+        await client.send(command)
+
         break
 
       case 'suggestedPrompts':
@@ -112,7 +130,7 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
     question,
     overrideConfig: {
       sessionId: {
-        RedisBackedChatMemory_0: chatId,
+        RedisBackedChatMemory_1: chatId,
       },
     },
     socketIOClientId,

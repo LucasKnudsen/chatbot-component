@@ -3,8 +3,8 @@ import { Nav } from '@/components/Nav'
 import {
   IncomingInput,
   PromptCode,
-  extractChatbotResponse,
   sendMessageQuery,
+  useChatConnection,
   useSocket,
 } from '@/features/messages'
 import { useSuggestedPrompts } from '@/features/prompt'
@@ -45,6 +45,10 @@ export type PromptType =
       prompt: string
     }
 
+export type BotSettings = {
+  autoOpen?: boolean
+}
+
 export type BotConfig = {
   channelId: string
   language?: string
@@ -52,6 +56,7 @@ export type BotConfig = {
   initialPrompts?: PromptType[]
   text?: Partial<TextConfig>
   theme?: Partial<Theme>
+  settings?: BotSettings
 }
 
 type BotProps = BotConfig & {
@@ -120,12 +125,26 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
     onToken: botStoreActions.updateAnswer,
   })
 
+  useChatConnection({
+    chatId,
+    isChatFlowAvailableToStream,
+    fetchSuggestedPrompts,
+  })
+
   const clear = () => {
     botStoreActions.clear()
     clearSuggestions()
     clearChatId()
     clearDefaultLanguage()
   }
+
+  onMount(() => {
+    botStoreActions.initBotStore(props.channel.chatflowId!, props.language)
+
+    if (botStore.chat) {
+      fetchSuggestedPrompts()
+    }
+  })
 
   // Handle form submission
   const handleSubmit = async (value: string) => {
@@ -149,50 +168,14 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
       promptCode: PromptCode.QUESTION,
     }
 
-    // if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig
-
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
-    const [messageResult, detectLanguageResult] = await Promise.all([
-      sendMessageQuery(body),
-      detectLanguage(value, true),
-    ])
+    // Fires without waiting for response, as the response is handled by a socket
+    sendMessageQuery(body)
+    await detectLanguage(value, true)
 
-    if (messageResult.data) {
-      const answer = extractChatbotResponse(messageResult.data)
-
-      // If the chatflow is not available to stream, we update the answer here
-      if (!isChatFlowAvailableToStream()) {
-        botStoreActions.updateAnswer(answer)
-      }
-
-      // Uses the source documents from the end result rather than sockets (they are the same, and doesnt stream in anyway)
-      botStoreActions.handleSourceDocuments(messageResult.data.sourceDocuments)
-
-      // Saves end answer in history rather than at every stream update
-      botStoreActions.updateHistoryAnswer(answer)
-
-      fetchSuggestedPrompts(detectLanguageResult?.languageCode)
-    }
-
-    if (messageResult.error) {
-      const message =
-        messageResult.error?.message ?? 'Something went wrong. Please try again later.'
-
-      botStoreActions.updateAnswer(message)
-    }
-
-    botStoreActions.setLoading(false)
     setUserInput('')
   }
-
-  onMount(() => {
-    botStoreActions.initBotStore(props.channel.chatflowId!, props.language)
-
-    if (botStore.chat) {
-      fetchSuggestedPrompts()
-    }
-  })
 
   return (
     <>
