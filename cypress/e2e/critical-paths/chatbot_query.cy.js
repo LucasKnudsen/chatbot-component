@@ -1,7 +1,15 @@
+let storageCache
+
 describe('Chatbot Test', () => {
   beforeEach(() => {
     // Visit the page
-    cy.visit('/')
+    cy.visit('/', {
+      onBeforeLoad(win) {
+        Object.entries(storageCache).forEach(([k, v]) => {
+          win.localStorage.setItem(k, v)
+        })
+      },
+    })
 
     cy.wait(3000)
   })
