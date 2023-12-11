@@ -7,9 +7,7 @@ import { TrackingProvider } from '@/features/tracking'
 import StyleSheet from '@/styles'
 import { BubbleButton } from './BubbleButton'
 
-type BubbleConfig = BotConfig & {
-  autoOpen?: boolean
-}
+type BubbleConfig = BotConfig
 
 export const Bubble = (props: BubbleConfig) => {
   const [isBotStarted, setIsBotStarted] = createSignal(false)
@@ -39,7 +37,7 @@ export const Bubble = (props: BubbleConfig) => {
     initTheme(props.themeId, props.theme)
     initText(props.text, props.language)
 
-    if (props?.autoOpen) {
+    if (props.settings?.autoOpen) {
       openBot()
     }
   })

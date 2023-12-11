@@ -4,6 +4,11 @@
     "openai_key"
   ],
   "permissions": {
+    "function": {
+      "flowiseBroadcast": [
+        "read"
+      ]
+    },
     "storage": {
       "Channel:@model(appsync)": [
         "read"
