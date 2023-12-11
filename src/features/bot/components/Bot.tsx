@@ -170,6 +170,7 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
 
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
+    // Fires without waiting for response, as the response is handled by a socket
     sendMessageQuery(body)
     await detectLanguage(value, true)
 
