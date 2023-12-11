@@ -1,3 +1,8 @@
 {
-  "body": "{\"sessionId\":\"1234\",\"data\":{\"name\":\"John Doe\"}}"
+  "body": {
+    "sessionId": "e40ae40d-5592-46ef-b8af-d0cf237b11e6",
+    "data": {
+      "name": "John Doe"
+    }
+  }
 }

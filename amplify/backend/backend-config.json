@@ -111,6 +111,13 @@
       "dependsOn": [
         {
           "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "flowiseBroadcast"
+        },
+        {
+          "attributes": [
             "GraphQLAPIIdOutput"
           ],
           "category": "api",

@@ -1,12 +1,11 @@
 describe('Suggested Prompts', () => {
   it('should send a query to the middleware and verify the API and visual response', () => {
-    const chatbotQuestion = 'How can I buy this chatbot?'
+    const chatbotQuestion = 'In only 10 words, tell me about Anders'
+
+    cy.intercept({ method: 'POST', url: '**/flowise/middleware' }).as('middlewareRequest')
 
     // Visit the page
     cy.visit('/')
-
-    // Click the chatbot button
-    cy.get('[data-testid="bubble-button"]').click()
 
     // Type the question in the input field
     cy.get('[data-testid="question-input"]').type(chatbotQuestion)
@@ -14,26 +13,11 @@ describe('Suggested Prompts', () => {
     // Click the submit button
     cy.get('[data-testid="submit-question"]').click()
 
-    // Stubs and awaits the first flowise/middleware request
-    cy.intercept(
-      {
-        method: 'POST',
-        url: '**/flowise/middleware',
-        times: 1,
-      },
-      {
-        body: {
-          text: 'Just a test response',
-        },
-      }
-    ).as('questionRequest')
+    // Await the first request
+    cy.wait('@middlewareRequest')
 
-    cy.wait('@questionRequest')
-
-    // Spies on the second flowise/middleware request
-    cy.intercept('POST', '**/flowise/middleware').as('suggestionsRequest')
-
-    cy.wait('@suggestionsRequest').should(({ request, response }) => {
+    // Await the second request and verify the prompt suggestions
+    cy.wait('@middlewareRequest').should(({ request, response }) => {
       expect(request.body.previousQuestions).to.include(chatbotQuestion)
       expect(request.body.promptCode).to.include('suggestedPrompts')
 

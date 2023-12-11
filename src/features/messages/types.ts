@@ -1,4 +1,4 @@
-import { Resources } from '../contextual'
+import { Resources, SourceDocument } from '../contextual'
 
 export type Chat = {
   id: string
@@ -6,4 +6,9 @@ export type Chat = {
   answer: string
   resources: Resources
   createdAt: string
+}
+
+export type ChatResponse = {
+  text: string
+  sourceDocuments: SourceDocument[]
 }

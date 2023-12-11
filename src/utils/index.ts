@@ -1,3 +1,5 @@
+export * from './subscriptionHelpers'
+
 export const isNotDefined = <T>(value: T | undefined | null): value is undefined | null =>
   value === undefined || value === null
 
@@ -16,6 +18,12 @@ export const randomUUID = (): string => {
     const v = c === 'x' ? r : (r & 0x3) | 0x8
     return v.toString(16)
   })
+}
+
+export const logDev = (...args: any[]): void => {
+  if (import.meta.env.DEV) {
+    console.log(...args)
+  }
 }
 
 export const parseProxy = <T>(proxy: T): T => JSON.parse(JSON.stringify(proxy))
