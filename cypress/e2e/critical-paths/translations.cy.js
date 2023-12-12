@@ -1,15 +1,7 @@
-let storageCache
-
 describe('Translation', () => {
   beforeEach(() => {
     // Visit the page
-    cy.visit('/', {
-      onBeforeLoad(win) {
-        Object.entries(storageCache).forEach(([k, v]) => {
-          win.localStorage.setItem(k, v)
-        })
-      },
-    })
+    cy.visit('/')
 
     cy.wait(3000)
 

@@ -57,24 +57,16 @@ var headers = {
     'Access-Control-Allow-Headers': '*',
 };
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var body, answer, _a, params, command, error_1;
-    var _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var body, answer, _a, params, command, _b, error_1;
+    var _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
-                _c.trys.push([0, 9, , 10]);
-                !event.isMock && console.log("EVENT: ".concat(event.body));
-                body = JSON.parse(event.body);
-                answer = { text: '' };
-                _a = body.promptCode;
-                switch (_a) {
-                    case 'question': return [3 /*break*/, 1];
-                    case 'suggestedPrompts': return [3 /*break*/, 4];
-                }
-                return [3 /*break*/, 6];
+                _d.trys.push([0, 9, , 10]);
+                throw new TypeError('Channel ID is required');
             case 1: return [4 /*yield*/, handleFlowiseRequest(body)];
             case 2:
-                answer = _c.sent();
+                answer = _d.sent();
                 params = {
                     body: {
                         sessionId: body.chatId,
@@ -87,30 +79,40 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 });
                 return [4 /*yield*/, client.send(command)];
             case 3:
-                _c.sent();
+                _d.sent();
                 return [3 /*break*/, 8];
-            case 4: return [4 /*yield*/, handleSuggestedPrompts(body, event.isMock)];
+            case 4:
+                _b = answer;
+                return [4 /*yield*/, handleSuggestedPrompts(body, event.isMock)];
             case 5:
-                answer = _c.sent();
+                _b.text = _d.sent();
                 return [3 /*break*/, 8];
             case 6: return [4 /*yield*/, handleFlowiseRequest(body)];
             case 7:
-                answer = _c.sent();
+                answer = _d.sent();
                 return [3 /*break*/, 8];
             case 8:
-                console.log("ANSWER: ", answer.text);
+                console.log("ANSWER:", {
+                    text: answer.text,
+                    amountOfSourceDocuments: answer.sourceDocuments.length,
+                });
                 return [2 /*return*/, {
                         statusCode: 200,
                         headers: headers,
                         body: JSON.stringify(answer),
                     }];
             case 9:
-                error_1 = _c.sent();
-                console.log(error_1);
+                error_1 = _d.sent();
+                console.error('DEFAULT ERROR', error_1);
                 return [2 /*return*/, {
-                        statusCode: ((_b = error_1.response) === null || _b === void 0 ? void 0 : _b.status) || 500,
+                        statusCode: ((_c = error_1.response) === null || _c === void 0 ? void 0 : _c.status) || 500,
                         headers: headers,
-                        body: JSON.stringify(error_1),
+                        body: JSON.stringify({
+                            message: error_1 === null || error_1 === void 0 ? void 0 : error_1.message,
+                            type: error_1 === null || error_1 === void 0 ? void 0 : error_1.type,
+                            stack: error_1 === null || error_1 === void 0 ? void 0 : error_1.stack,
+                            error: error_1,
+                        }),
                     }];
             case 10: return [2 /*return*/];
         }
@@ -123,7 +125,7 @@ var getChannel = function (channelId) { return __awaiter(void 0, void 0, void 0,
         switch (_a.label) {
             case 0:
                 if (!channelId)
-                    throw new Error('Channel ID is required');
+                    throw new TypeError('Channel ID is required');
                 command = new lib_dynamodb_1.GetCommand({
                     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
                     Key: {
@@ -232,10 +234,10 @@ var handleSuggestedPrompts = function (body, isMock) { return __awaiter(void 0, 
                 textObj = chatCompletion.choices[0].message.content;
                 try {
                     text = JSON.parse(textObj).questions;
-                    return [2 /*return*/, { text: text }];
+                    return [2 /*return*/, text];
                 }
                 catch (error) {
-                    return [2 /*return*/, { text: '' }];
+                    return [2 /*return*/, ''];
                 }
                 return [2 /*return*/];
         }

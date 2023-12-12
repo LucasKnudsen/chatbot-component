@@ -37,11 +37,11 @@ export const handler = async (
   event: APIGatewayProxyEvent & { isMock?: boolean }
 ): Promise<APIGatewayProxyResult> => {
   try {
-    !event.isMock && console.log(`EVENT: ${event.body}`)
+    !event.isMock && console.log(`EVENT BODY: ${event.body}`)
 
     const body = JSON.parse(event.body) as ParsedEventBody
 
-    let answer = { text: '' }
+    let answer = { text: '', sourceDocuments: [] }
 
     switch (body.promptCode) {
       case 'question':
@@ -53,6 +53,7 @@ export const handler = async (
             data: answer,
           },
         }
+
         // Query broadcast lambda with answer
         const command = new InvokeCommand({
           FunctionName: process.env.FUNCTION_FLOWISEBROADCAST_NAME,
@@ -64,16 +65,18 @@ export const handler = async (
         break
 
       case 'suggestedPrompts':
-        answer = await handleSuggestedPrompts(body, event.isMock)
+        answer.text = await handleSuggestedPrompts(body, event.isMock)
         break
 
       default:
         answer = await handleFlowiseRequest(body)
-
         break
     }
 
-    console.log(`ANSWER: `, answer.text)
+    console.log(`ANSWER:`, {
+      text: answer.text,
+      amountOfSourceDocuments: answer.sourceDocuments.length,
+    })
 
     return {
       statusCode: 200,
@@ -81,18 +84,22 @@ export const handler = async (
       body: JSON.stringify(answer),
     }
   } catch (error) {
-    console.log(error)
+    console.error('DEFAULT ERROR', error)
 
     return {
       statusCode: error.response?.status || 500,
       headers,
-      body: JSON.stringify(error),
+      body: JSON.stringify({
+        message: error?.message,
+        type: error?.type,
+        error,
+      }),
     }
   }
 }
 
 const getChannel = async (channelId: string) => {
-  if (!channelId) throw new Error('Channel ID is required')
+  if (!channelId) throw new TypeError('MISSING_CHANNEL_ID')
 
   const command = new GetCommand({
     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
@@ -121,8 +128,8 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
     getSecret(`flowiseKey_${channelId}`),
   ])
 
-  if (!channel) throw new Error('Channel not found')
-  if (!apiKey) throw new Error('API key not found')
+  if (!channel) throw new TypeError('CHANNEL_NOT_FOUND')
+  if (!apiKey) throw new TypeError('FLOWISE_API_KEY_NOT_FOUND')
 
   const endpoint = `${channel.apiHost}/api/v1/prediction/${channel.chatflowId}`
 
@@ -147,6 +154,8 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
 const initiateOpenAI = async () => {
   const apiKey = await getSecret(process.env.openai_key)
 
+  if (!apiKey) throw new TypeError('OPENAI_API_KEY_NOT_FOUND')
+
   return new OpenAI({
     organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
     apiKey,
@@ -170,6 +179,8 @@ const handleSuggestedPrompts = async (body: ParsedEventBody, isMock?: boolean) =
 
   // Validate that the previous questions are in the correct format
   if (!Array.isArray(previousQuestions)) {
+    console.error('PROMPTS ERROR', 'TypeError: PREVIOUS_QUESTIONS_NOT_ARRAY')
+
     return { text: '' }
   }
 
@@ -179,7 +190,6 @@ const handleSuggestedPrompts = async (body: ParsedEventBody, isMock?: boolean) =
       Give me the list of questions in a JSON list. You MUST understand and use the following language code as the language for the questions: "${language}". Do not say anything else, ONLY send me back a JSON list. Response example: { "questions": ["What is...", "Tell me more about ..."] }. 
       `
 
-  console.log('prompt', prompt)
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: 'user', content: prompt }],
     model: 'gpt-3.5-turbo',
@@ -190,8 +200,9 @@ const handleSuggestedPrompts = async (body: ParsedEventBody, isMock?: boolean) =
   try {
     const text = JSON.parse(textObj).questions
 
-    return { text }
+    return text
   } catch (error) {
-    return { text: '' }
+    console.error('ERROR PARSING OPENAI RESPONSE: ', error)
+    return ''
   }
 }
