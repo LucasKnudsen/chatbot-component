@@ -52,29 +52,29 @@ var ssmClient = new client_ssm_1.SSMClient({ region: process.env.REGION });
 var client = new client_lambda_1.LambdaClient({ region: process.env.REGION });
 var ddbService = new client_dynamodb_1.DynamoDBClient({ region: process.env.REGION });
 var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
-var headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': '*',
-};
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var body, answer, _a, params, command, error_1;
-    var _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var responseStatus, responseBody, body, answer, _a, params, command, _b, error_1;
+    var _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
-                _c.trys.push([0, 9, , 10]);
-                !event.isMock && console.log("EVENT: ".concat(event.body));
+                console.time('HANDLER');
+                responseStatus = 200;
+                _d.label = 1;
+            case 1:
+                _d.trys.push([1, 10, 11, 12]);
+                !event.isMock && console.log("EVENT BODY: ".concat(event.body));
                 body = JSON.parse(event.body);
-                answer = { text: '' };
+                answer = { text: '', sourceDocuments: [] };
                 _a = body.promptCode;
                 switch (_a) {
-                    case 'question': return [3 /*break*/, 1];
-                    case 'suggestedPrompts': return [3 /*break*/, 4];
+                    case 'question': return [3 /*break*/, 2];
+                    case 'suggestedPrompts': return [3 /*break*/, 5];
                 }
-                return [3 /*break*/, 6];
-            case 1: return [4 /*yield*/, handleFlowiseRequest(body)];
-            case 2:
-                answer = _c.sent();
+                return [3 /*break*/, 7];
+            case 2: return [4 /*yield*/, handleFlowiseRequest(body)];
+            case 3:
+                answer = _d.sent();
                 params = {
                     body: {
                         sessionId: body.chatId,
@@ -86,33 +86,48 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     Payload: JSON.stringify(params),
                 });
                 return [4 /*yield*/, client.send(command)];
-            case 3:
-                _c.sent();
-                return [3 /*break*/, 8];
-            case 4: return [4 /*yield*/, handleSuggestedPrompts(body, event.isMock)];
+            case 4:
+                _d.sent();
+                return [3 /*break*/, 9];
             case 5:
-                answer = _c.sent();
-                return [3 /*break*/, 8];
-            case 6: return [4 /*yield*/, handleFlowiseRequest(body)];
-            case 7:
-                answer = _c.sent();
-                return [3 /*break*/, 8];
+                _b = answer;
+                return [4 /*yield*/, handleSuggestedPrompts(body, event.isMock)];
+            case 6:
+                _b.text = _d.sent();
+                return [3 /*break*/, 9];
+            case 7: return [4 /*yield*/, handleFlowiseRequest(body)];
             case 8:
-                console.log("ANSWER: ", answer.text);
-                return [2 /*return*/, {
-                        statusCode: 200,
-                        headers: headers,
-                        body: JSON.stringify(answer),
-                    }];
+                answer = _d.sent();
+                return [3 /*break*/, 9];
             case 9:
-                error_1 = _c.sent();
-                console.log(error_1);
-                return [2 /*return*/, {
-                        statusCode: ((_b = error_1.response) === null || _b === void 0 ? void 0 : _b.status) || 500,
-                        headers: headers,
-                        body: JSON.stringify(error_1),
-                    }];
-            case 10: return [2 /*return*/];
+                console.log("ANSWER:", {
+                    text: answer.text,
+                    amountOfSourceDocuments: answer.sourceDocuments.length,
+                });
+                console.timeEnd('HANDLER');
+                responseBody = answer;
+                return [3 /*break*/, 12];
+            case 10:
+                error_1 = _d.sent();
+                console.error('DEFAULT ERROR', error_1);
+                console.timeEnd('HANDLER');
+                responseStatus = ((_c = error_1.response) === null || _c === void 0 ? void 0 : _c.status) || 500;
+                responseBody = {
+                    message: error_1.message,
+                    status: responseStatus,
+                    type: error_1.type,
+                    stack: error_1.stack,
+                };
+                return [3 /*break*/, 12];
+            case 11: return [2 /*return*/, {
+                    statusCode: responseStatus,
+                    body: JSON.stringify(responseBody),
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Headers': '*',
+                    },
+                }];
+            case 12: return [2 /*return*/];
         }
     });
 }); };
@@ -123,7 +138,7 @@ var getChannel = function (channelId) { return __awaiter(void 0, void 0, void 0,
         switch (_a.label) {
             case 0:
                 if (!channelId)
-                    throw new Error('Channel ID is required');
+                    throw new TypeError('MISSING_CHANNEL_ID');
                 command = new lib_dynamodb_1.GetCommand({
                     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
                     Key: {
@@ -155,6 +170,7 @@ var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, vo
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
+                console.time('GET_CONFIG');
                 channelId = body.channelId, chatId = body.chatId, socketIOClientId = body.socketIOClientId, question = body.question;
                 return [4 /*yield*/, Promise.all([
                         getChannel(channelId),
@@ -163,9 +179,9 @@ var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, vo
             case 1:
                 _a = _b.sent(), channel = _a[0], apiKey = _a[1];
                 if (!channel)
-                    throw new Error('Channel not found');
+                    throw new TypeError('CHANNEL_NOT_FOUND');
                 if (!apiKey)
-                    throw new Error('API key not found');
+                    throw new TypeError('FLOWISE_API_KEY_NOT_FOUND');
                 endpoint = "".concat(channel.apiHost, "/api/v1/prediction/").concat(channel.chatflowId);
                 data = {
                     question: question,
@@ -176,6 +192,7 @@ var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, vo
                     },
                     socketIOClientId: socketIOClientId,
                 };
+                console.timeEnd('GET_CONFIG');
                 return [4 /*yield*/, axios_1.default.post(endpoint, data, {
                         headers: {
                             Authorization: apiKey,
@@ -194,6 +211,8 @@ var initiateOpenAI = function () { return __awaiter(void 0, void 0, void 0, func
             case 0: return [4 /*yield*/, getSecret(process.env.openai_key)];
             case 1:
                 apiKey = _a.sent();
+                if (!apiKey)
+                    throw new TypeError('OPENAI_API_KEY_NOT_FOUND');
                 return [2 /*return*/, new openai_1.default({
                         organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
                         apiKey: apiKey,
@@ -219,10 +238,10 @@ var handleSuggestedPrompts = function (body, isMock) { return __awaiter(void 0, 
                     : previousQuestions;
                 // Validate that the previous questions are in the correct format
                 if (!Array.isArray(previousQuestions)) {
+                    console.error('PROMPTS ERROR', 'TypeError: PREVIOUS_QUESTIONS_NOT_ARRAY');
                     return [2 /*return*/, { text: '' }];
                 }
                 prompt = "Help me formulate two short concise follow up questions that would encourage the user to proceed with this conversation. They should be non-repetitive and based on the questions asked so far: \"".concat(previousQuestions.join(', '), "\".    \n      Give me the list of questions in a JSON list. You MUST understand and use the following language code as the language for the questions: \"").concat(language, "\". Do not say anything else, ONLY send me back a JSON list. Response example: { \"questions\": [\"What is...\", \"Tell me more about ...\"] }. \n      ");
-                console.log('prompt', prompt);
                 return [4 /*yield*/, openai.chat.completions.create({
                         messages: [{ role: 'user', content: prompt }],
                         model: 'gpt-3.5-turbo',
@@ -232,10 +251,11 @@ var handleSuggestedPrompts = function (body, isMock) { return __awaiter(void 0, 
                 textObj = chatCompletion.choices[0].message.content;
                 try {
                     text = JSON.parse(textObj).questions;
-                    return [2 /*return*/, { text: text }];
+                    return [2 /*return*/, text];
                 }
                 catch (error) {
-                    return [2 /*return*/, { text: '' }];
+                    console.error('ERROR PARSING OPENAI RESPONSE: ', error);
+                    return [2 /*return*/, ''];
                 }
                 return [2 /*return*/];
         }

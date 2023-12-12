@@ -1,19 +1,10 @@
-let storageCache
-
 describe('Suggested Prompts', () => {
   it('should send a query to the middleware and verify the API and visual response', () => {
     const chatbotQuestion = 'In only 10 words, tell me about Anders'
 
     cy.intercept({ method: 'POST', url: '**/flowise/middleware' }).as('middlewareRequest')
 
-    // Visit the page
-    cy.visit('/', {
-      onBeforeLoad(win) {
-        Object.entries(storageCache).forEach(([k, v]) => {
-          win.localStorage.setItem(k, v)
-        })
-      },
-    })
+    cy.visit('/')
 
     // Type the question in the input field
     cy.get('[data-testid="question-input"]').type(chatbotQuestion)

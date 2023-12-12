@@ -49,15 +49,15 @@ var GRAPHQL_API_KEY = process.env.API_DIGITALTWIN_GRAPHQLAPIKEYOUTPUT;
 var node_fetch_1 = require("node-fetch");
 var mutation_1 = require("./mutation");
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var statusCode, body, response, _a, sessionId, data, variables, options, request, error_1;
+    var responseStatus, responseBody, response, _a, sessionId, data, variables, options, request, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                console.log('EVENT: ', event);
-                statusCode = 200;
+                console.log('EVENT BODY: ', event.body);
+                responseStatus = 200;
                 _b.label = 1;
             case 1:
-                _b.trys.push([1, 4, , 5]);
+                _b.trys.push([1, 4, 5, 6]);
                 _a = event.body, sessionId = _a.sessionId, data = _a.data;
                 variables = {
                     sessionId: sessionId,
@@ -77,32 +77,30 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 response = _b.sent();
                 return [4 /*yield*/, response.json()];
             case 3:
-                body = _b.sent();
-                if (body.errors)
-                    statusCode = 400;
-                return [3 /*break*/, 5];
+                responseBody = _b.sent();
+                if (responseBody.errors)
+                    responseStatus = 400;
+                return [3 /*break*/, 6];
             case 4:
                 error_1 = _b.sent();
-                console.log('ERROR', error_1);
-                statusCode = 400;
-                body = {
-                    errors: [
-                        {
-                            status: response === null || response === void 0 ? void 0 : response.status,
-                            message: error_1.message,
-                            stack: error_1.stack,
-                        },
-                    ],
+                console.error('DETFAULT ERROR', error_1);
+                responseStatus = 400;
+                responseBody = {
+                    message: error_1.message,
+                    status: responseStatus,
+                    type: error_1.type,
+                    stack: error_1.stack,
                 };
-                return [3 /*break*/, 5];
+                return [3 /*break*/, 6];
             case 5: return [2 /*return*/, {
-                    statusCode: statusCode,
-                    body: JSON.stringify(body),
+                    statusCode: responseStatus,
+                    body: JSON.stringify(responseBody),
                     headers: {
                         'Access-Control-Allow-Origin': '*',
                         'Access-Control-Allow-Headers': '*',
                     },
                 }];
+            case 6: return [2 /*return*/];
         }
     });
 }); };

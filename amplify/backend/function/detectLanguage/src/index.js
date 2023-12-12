@@ -39,46 +39,53 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.handler = void 0;
 var client_comprehend_1 = require("@aws-sdk/client-comprehend"); // ES Modules import
 var client = new client_comprehend_1.ComprehendClient({ region: process.env.REGION });
-var headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': '*',
-};
-function handler(event, context) {
+function handler(event) {
     return __awaiter(this, void 0, void 0, function () {
-        var command, response, bestLanguage, error_1;
+        var responseStatus, responseBody, command, response, bestLanguage, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    console.log('Event: ', event);
+                    console.log('EVENT BODY: ', event.body);
+                    responseStatus = 200;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, 4, 5]);
                     command = new client_comprehend_1.DetectDominantLanguageCommand({
                         Text: event.body,
                     });
                     return [4 /*yield*/, client.send(command)
                         // Find the object with the highest score
                     ];
-                case 1:
+                case 2:
                     response = _a.sent();
                     bestLanguage = response.Languages.reduce(function (prev, curr) {
                         return curr.Score > prev.Score ? curr : prev;
                     });
-                    return [2 /*return*/, {
-                            statusCode: 200,
-                            headers: headers,
-                            body: JSON.stringify({
-                                languageCode: bestLanguage.LanguageCode,
-                                score: bestLanguage.Score,
-                            }),
-                        }];
-                case 2:
+                    responseBody = {
+                        languageCode: bestLanguage.LanguageCode,
+                        score: bestLanguage.Score,
+                    };
+                    return [3 /*break*/, 5];
+                case 3:
                     error_1 = _a.sent();
-                    console.log(error_1);
-                    return [2 /*return*/, {
-                            statusCode: 500,
-                            headers: headers,
-                            body: JSON.stringify(error_1),
-                        }];
-                case 3: return [2 /*return*/];
+                    console.error('DETFAULT ERROR', error_1);
+                    responseStatus = 500;
+                    responseBody = {
+                        message: error_1.message,
+                        status: responseStatus,
+                        type: error_1.type,
+                        stack: error_1.stack,
+                    };
+                    return [3 /*break*/, 5];
+                case 4: return [2 /*return*/, {
+                        statusCode: responseStatus,
+                        body: JSON.stringify(responseBody),
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Headers': '*',
+                        },
+                    }];
+                case 5: return [2 /*return*/];
             }
         });
     });

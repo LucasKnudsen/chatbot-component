@@ -1,20 +1,15 @@
 import { ComprehendClient, DetectDominantLanguageCommand } from '@aws-sdk/client-comprehend' // ES Modules import
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
 const client = new ComprehendClient({ region: process.env.REGION })
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': '*',
-}
+export async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+  console.log('EVENT BODY: ', event.body)
 
-export async function handler(
-  event: APIGatewayProxyEvent,
-  context: Context
-): Promise<APIGatewayProxyResult> {
+  let responseStatus = 200
+  let responseBody
+
   try {
-    console.log('Event: ', event)
-
     const command = new DetectDominantLanguageCommand({
       Text: event.body,
     })
@@ -25,20 +20,28 @@ export async function handler(
       return curr.Score > prev.Score ? curr : prev
     })
 
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({
-        languageCode: bestLanguage.LanguageCode,
-        score: bestLanguage.Score,
-      }),
+    responseBody = {
+      languageCode: bestLanguage.LanguageCode,
+      score: bestLanguage.Score,
     }
   } catch (error) {
-    console.log(error)
+    console.error('DETFAULT ERROR', error)
+
+    responseStatus = 500
+    responseBody = {
+      message: error.message,
+      status: responseStatus,
+      type: error.type,
+      stack: error.stack,
+    }
+  } finally {
     return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify(error),
+      statusCode: responseStatus,
+      body: JSON.stringify(responseBody),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+      },
     }
   }
 }
