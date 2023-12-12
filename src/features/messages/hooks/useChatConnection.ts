@@ -23,6 +23,7 @@ export function useChatConnection({
       logDev('Initiated subscription', chatId)
 
       const onNext = (data: SubscriptionEvent) => {
+        logDev('Subscription event', data)
         const response = JSON.parse(data.data) as ChatResponse
         // If the chatflow is not available to stream, we update the answer here
         if (!isChatFlowAvailableToStream()) {
