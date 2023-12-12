@@ -14,10 +14,10 @@ import { Request, default as fetch } from 'node-fetch'
 import { publish2channel } from './mutation'
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  console.log('EVENT: ', event)
+  console.log('EVENT BODY: ', event.body)
 
-  let statusCode = 200
-  let body
+  let responseStatus = 200
+  let responseBody
   let response
 
   try {
@@ -40,29 +40,27 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     const request = new Request(GRAPHQL_ENDPOINT, options)
 
     response = await fetch(request)
-    body = await response.json()
+    responseBody = await response.json()
 
-    if (body.errors) statusCode = 400
+    if (responseBody.errors) responseStatus = 400
   } catch (error) {
-    console.log('ERROR', error)
-    statusCode = 400
-    body = {
-      errors: [
-        {
-          status: response?.status,
-          message: error.message,
-          stack: error.stack,
-        },
-      ],
-    }
-  }
+    console.error('DETFAULT ERROR', error)
 
-  return {
-    statusCode,
-    body: JSON.stringify(body),
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': '*',
-    },
+    responseStatus = 400
+    responseBody = {
+      message: error.message,
+      status: responseStatus,
+      type: error.type,
+      stack: error.stack,
+    }
+  } finally {
+    return {
+      statusCode: responseStatus,
+      body: JSON.stringify(responseBody),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+      },
+    }
   }
 }

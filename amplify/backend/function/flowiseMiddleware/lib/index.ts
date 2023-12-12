@@ -18,11 +18,6 @@ const client = new LambdaClient({ region: process.env.REGION })
 const ddbService = new DynamoDBClient({ region: process.env.REGION })
 const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': '*',
-}
-
 type ParsedEventBody = {
   promptCode: string
   channelId?: string
@@ -36,6 +31,11 @@ type ParsedEventBody = {
 export const handler = async (
   event: APIGatewayProxyEvent & { isMock?: boolean }
 ): Promise<APIGatewayProxyResult> => {
+  console.time('HANDLER')
+
+  let responseStatus = 200
+  let responseBody
+
   try {
     !event.isMock && console.log(`EVENT BODY: ${event.body}`)
 
@@ -78,22 +78,28 @@ export const handler = async (
       amountOfSourceDocuments: answer.sourceDocuments.length,
     })
 
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify(answer),
-    }
+    console.timeEnd('HANDLER')
+
+    responseBody = answer
   } catch (error) {
     console.error('DEFAULT ERROR', error)
+    console.timeEnd('HANDLER')
 
+    responseStatus = error.response?.status || 500
+    responseBody = {
+      message: error.message,
+      status: responseStatus,
+      type: error.type,
+      stack: error.stack,
+    }
+  } finally {
     return {
-      statusCode: error.response?.status || 500,
-      headers,
-      body: JSON.stringify({
-        message: error?.message,
-        type: error?.type,
-        error,
-      }),
+      statusCode: responseStatus,
+      body: JSON.stringify(responseBody),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+      },
     }
   }
 }
@@ -121,6 +127,7 @@ const getSecret = async (secretName: string) => {
 }
 
 const handleFlowiseRequest = async (body: ParsedEventBody) => {
+  console.time('GET_CONFIG')
   const { channelId, chatId, socketIOClientId, question } = body
 
   const [channel, apiKey] = await Promise.all([
@@ -142,6 +149,8 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
     },
     socketIOClientId,
   }
+
+  console.timeEnd('GET_CONFIG')
   const result = await axios.post(endpoint, data, {
     headers: {
       Authorization: apiKey,
