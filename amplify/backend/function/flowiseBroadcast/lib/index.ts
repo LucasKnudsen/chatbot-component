@@ -14,7 +14,7 @@ import { Request, default as fetch } from 'node-fetch'
 import { publish2channel } from './mutation'
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  console.log(`EVENT: ${event}`)
+  console.log('EVENT: ', event)
 
   let statusCode = 200
   let body
@@ -44,7 +44,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
     if (body.errors) statusCode = 400
   } catch (error) {
-    console.log(error)
+    console.log('ERROR', error)
     statusCode = 400
     body = {
       errors: [
