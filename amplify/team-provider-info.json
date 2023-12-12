@@ -75,16 +75,16 @@
         },
         "detectLanguage": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/detectLanguage-623941554366646f647a-build.zip"
+          "s3Key": "amplify-builds/detectLanguage-474b555457597661574b-build.zip"
         },
         "flowiseBroadcast": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/flowiseBroadcast-6c694471777657324b58-build.zip"
+          "s3Key": "amplify-builds/flowiseBroadcast-453656304b4369504a6a-build.zip"
         },
         "flowiseMiddleware": {
           "secretsPathAmplifyAppId": "d1i4jp82axmvxl",
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/flowiseMiddleware-494d6a59575435766d49-build.zip"
+          "s3Key": "amplify-builds/flowiseMiddleware-645657796e6134352f4d-build.zip"
         },
         "digitaltwin": {}
       },

@@ -113,9 +113,10 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 console.timeEnd('HANDLER');
                 responseStatus = ((_c = error_1.response) === null || _c === void 0 ? void 0 : _c.status) || 500;
                 responseBody = {
-                    message: error_1 === null || error_1 === void 0 ? void 0 : error_1.message,
-                    type: error_1 === null || error_1 === void 0 ? void 0 : error_1.type,
-                    error: error_1,
+                    message: error_1.message,
+                    status: responseStatus,
+                    type: error_1.type,
+                    stack: error_1.stack,
                 };
                 return [3 /*break*/, 12];
             case 11: return [2 /*return*/, {
