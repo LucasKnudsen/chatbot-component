@@ -46,6 +46,7 @@ export type PromptType =
     }
 
 export type BotSettings = {
+  brandName?: string
   autoOpen?: boolean
 }
 
@@ -66,6 +67,8 @@ type BotProps = BotConfig & {
 
 export const BotManager = (props: BotProps) => {
   const storageKey = 'fraiaChannel'
+  const [channelError, setChannelError] = createSignal('')
+
   const [channel] = createResource(async () => {
     try {
       const localChannel = localStorage.getItem(storageKey)
@@ -82,16 +85,33 @@ export const BotManager = (props: BotProps) => {
 
       const channel = result.data!.getChannel!
 
+      if (!channel) {
+        setChannelError('Channel not found')
+        return
+      }
+
       localStorage.setItem(storageKey, JSON.stringify(channel))
+
+      setChannelError('')
 
       return channel
     } catch (error) {
       console.error(error)
+      setChannelError('Something went wrong')
     }
   })
 
   return (
-    <Show when={channel()} fallback={<FraiaLoading />}>
+    <Show
+      when={channel() && !channelError()}
+      fallback={
+        <FraiaLoading
+          brandName={props.settings?.brandName}
+          channelError={channelError}
+          toggleBot={props.toggleBot}
+        />
+      }
+    >
       <Bot
         channel={channel()!}
         {...props}

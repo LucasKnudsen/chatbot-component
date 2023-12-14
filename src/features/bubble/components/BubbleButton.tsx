@@ -15,7 +15,7 @@ export const BubbleButton = (props: Props) => {
       onClick={() => props.toggleBot()}
       class='fixed right-5 bottom-5  shadow-lg rounded-full hover:scale-110 active:scale-95 transition-transform duration-200 flex justify-center items-center animate-fade-in w-14 h-14'
       style={{
-        background: theme().primaryColor,
+        background: theme().bubbleButtonColor,
         'z-index': 69419,
       }}
     >
@@ -25,7 +25,6 @@ export const BubbleButton = (props: Props) => {
           (props.isBotOpened ? 'scale-0 opacity-0' : 'scale-100 opacity-100')
         }
         src={theme().customIconSrc}
-        style={{ filter: 'brightness(0) invert(1)' }}
       />
 
       <svg

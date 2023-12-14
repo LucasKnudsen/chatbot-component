@@ -73,9 +73,10 @@ export const handler = async (
         break
     }
 
+    // TODO: Check if sourceDocuments
     console.log(`ANSWER:`, {
       text: answer.text,
-      amountOfSourceDocuments: answer.sourceDocuments.length,
+      amountOfSourceDocuments: answer.sourceDocuments?.length,
     })
 
     console.timeEnd('HANDLER')
@@ -202,6 +203,7 @@ const handleSuggestedPrompts = async (body: ParsedEventBody, isMock?: boolean) =
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: 'user', content: prompt }],
     model: 'gpt-3.5-turbo',
+    response_format: { type: 'json_object' },
   })
 
   const textObj = chatCompletion.choices[0].message.content

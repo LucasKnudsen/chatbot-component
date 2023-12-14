@@ -1,4 +1,5 @@
 import { botStoreActions } from '@/features/bot'
+import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { Show } from 'solid-js'
 import { Button } from '.'
@@ -14,6 +15,7 @@ type NavProps = {
 
 export const Nav = (props: NavProps) => {
   const { theme } = useTheme()
+  const { text } = useText()
 
   const resetChat = () => {
     botStoreActions.setChat(null)
@@ -32,7 +34,7 @@ export const Nav = (props: NavProps) => {
       <div class='md:flex-1' />
 
       <Button onClick={props.onToggleBot} class='hidden md:block ml-4'>
-        Close
+        {text().close}
       </Button>
 
       <div class='flex-1 md:hidden' />
