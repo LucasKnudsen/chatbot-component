@@ -1,5 +1,4 @@
 import { JSX } from 'solid-js/jsx-runtime'
-const defaultButtonColor = '#3B81F6'
 
 export const MessageIcon = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
   <svg
@@ -11,7 +10,7 @@ export const MessageIcon = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
     fill='none'
     stroke-linecap='round'
     stroke-linejoin='round'
-    style={{ stroke: props.color ?? defaultButtonColor }}
+    style={{ stroke: props.color }}
     {...props}
   >
     <path stroke='none' d='M0 0h24v24H0z' fill='none' />

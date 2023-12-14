@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash'
 import { createSignal } from 'solid-js'
 import { Theme, defaultTheme, themes } from '..'
 
@@ -11,7 +12,17 @@ export const useTheme = () => {
       theme = themes[themeKey] || defaultTheme
     }
 
-    theme = { ...theme, ...themeOverrides }
+    const nonEmptyThemeOverrides = Object.entries<any>(themeOverrides).reduce(
+      (acc, [key, value]) => {
+        if (!isEmpty(value)) {
+          acc[key as keyof Theme] = value
+        }
+        return acc
+      },
+      {} as Partial<Theme>
+    )
+
+    theme = { ...theme, ...nonEmptyThemeOverrides }
 
     setTheme(theme)
   }

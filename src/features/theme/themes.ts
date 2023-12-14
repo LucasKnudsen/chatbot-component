@@ -12,6 +12,7 @@ export type Theme = {
   backgroundColor: string
   backgroundAccent: string
   backgroundImageUrl?: string
+  bubbleButtonColor: string
   drawerBackground: string
   borderColor: string
   textInputTextColor: string
@@ -31,6 +32,7 @@ export const defaultTheme: Theme = {
   backgroundColor: 'rgba(255, 255, 255, 1)',
   backgroundAccent: 'white',
   backgroundImageUrl: background2,
+  bubbleButtonColor: 'rgba(91, 147, 255, 0.2)',
   drawerBackground: 'rgba(255, 255, 255, 0.75)',
   borderColor: 'rgba(147, 147, 147, 0.25)',
   textInputTextColor: 'rgba(128, 114, 166, 1)',
@@ -51,6 +53,7 @@ const midnight: Theme = {
   onPrimary: '#bdcbff',
   backgroundColor: '#0c1121',
   backgroundAccent: 'black',
+  bubbleButtonColor: '#152e8a',
   drawerBackground: 'rgba(39, 69, 125, 0.3)',
   borderColor: '#354685',
   textInputTextColor: '#bac6f5',
@@ -70,6 +73,7 @@ const ugly: Theme = {
   backgroundColor: 'green',
   backgroundAccent: 'teal',
   backgroundImageUrl: 'https://picsum.photos/200/300',
+  bubbleButtonColor: 'yellow',
   drawerBackground: 'red',
   borderColor: 'blue',
   textInputTextColor: 'purple',

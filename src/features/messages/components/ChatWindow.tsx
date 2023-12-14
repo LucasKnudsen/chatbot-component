@@ -82,7 +82,7 @@ export const ChatWindow = () => {
           }}
         >
           <div>
-            <MessageIcon width={30} />
+            <MessageIcon width={30} color={theme().primaryColor} />
           </div>
           {botStore.chat?.question}
         </div>
