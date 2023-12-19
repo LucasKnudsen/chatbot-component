@@ -16,12 +16,12 @@
       "function": {
         "flowiseMiddleware": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/flowiseMiddleware-494d6a59575435766d49-build.zip",
+          "s3Key": "amplify-builds/flowiseMiddleware-4b6c6d416f5477435373-build.zip",
           "secretsPathAmplifyAppId": "d1i4jp82axmvxl"
         },
         "flowiseBroadcast": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/flowiseBroadcast-6c694471777657324b58-build.zip"
+          "s3Key": "amplify-builds/flowiseBroadcast-6c445345457938754e71-build.zip"
         },
         "broadcastResolver": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
@@ -29,7 +29,7 @@
         },
         "detectLanguage": {
           "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/detectLanguage-623941554366646f647a-build.zip"
+          "s3Key": "amplify-builds/detectLanguage-6365337473786d414b75-build.zip"
         },
         "digitaltwin": {}
       },
@@ -38,7 +38,8 @@
         "digitaltwinRest": {}
       },
       "auth": {
-        "digitaltwinauth": {}
+        "digitaltwinauth": {},
+        "userPoolGroups": {}
       },
       "hosting": {
         "amplifyhosting": {

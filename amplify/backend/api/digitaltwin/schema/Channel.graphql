@@ -1,4 +1,11 @@
-type Channel @model @auth(rules: [{ allow: public, provider: iam, operations: [get] }]) {
+type Channel
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["SuperAdmin"] }
+      { allow: public, provider: iam, operations: [get] }
+    ]
+  ) {
   id: ID!
   tenantId: String! @index(name: "tenantId", queryField: "channelsByTenantId")
   apiHost: String

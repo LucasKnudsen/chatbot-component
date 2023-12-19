@@ -54,17 +54,17 @@ var ddbService = new client_dynamodb_1.DynamoDBClient({ region: process.env.REGI
 var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
     var responseStatus, responseBody, body, answer, _a, params, command, _b, error_1;
-    var _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var _c, _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0:
                 console.time('HANDLER');
                 responseStatus = 200;
-                _d.label = 1;
+                _e.label = 1;
             case 1:
-                _d.trys.push([1, 10, 11, 12]);
+                _e.trys.push([1, 10, 11, 12]);
                 !event.isMock && console.log("EVENT BODY: ".concat(event.body));
-                body = JSON.parse(event.body);
+                body = JSON.parse(event.body || '');
                 answer = { text: '', sourceDocuments: [] };
                 _a = body.promptCode;
                 switch (_a) {
@@ -74,7 +74,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 return [3 /*break*/, 7];
             case 2: return [4 /*yield*/, handleFlowiseRequest(body)];
             case 3:
-                answer = _d.sent();
+                answer = _e.sent();
                 params = {
                     body: {
                         sessionId: body.chatId,
@@ -87,31 +87,32 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 });
                 return [4 /*yield*/, client.send(command)];
             case 4:
-                _d.sent();
+                _e.sent();
                 return [3 /*break*/, 9];
             case 5:
                 _b = answer;
                 return [4 /*yield*/, handleSuggestedPrompts(body, event.isMock)];
             case 6:
-                _b.text = _d.sent();
+                _b.text = _e.sent();
                 return [3 /*break*/, 9];
             case 7: return [4 /*yield*/, handleFlowiseRequest(body)];
             case 8:
-                answer = _d.sent();
+                answer = _e.sent();
                 return [3 /*break*/, 9];
             case 9:
+                // TODO: Check if sourceDocuments
                 console.log("ANSWER:", {
                     text: answer.text,
-                    amountOfSourceDocuments: answer.sourceDocuments.length,
+                    amountOfSourceDocuments: (_c = answer.sourceDocuments) === null || _c === void 0 ? void 0 : _c.length,
                 });
                 console.timeEnd('HANDLER');
                 responseBody = answer;
                 return [3 /*break*/, 12];
             case 10:
-                error_1 = _d.sent();
+                error_1 = _e.sent();
                 console.error('DEFAULT ERROR', error_1);
                 console.timeEnd('HANDLER');
-                responseStatus = ((_c = error_1.response) === null || _c === void 0 ? void 0 : _c.status) || 500;
+                responseStatus = ((_d = error_1.response) === null || _d === void 0 ? void 0 : _d.status) || 500;
                 responseBody = {
                     message: error_1.message,
                     status: responseStatus,
@@ -137,8 +138,6 @@ var getChannel = function (channelId) { return __awaiter(void 0, void 0, void 0,
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!channelId)
-                    throw new TypeError('MISSING_CHANNEL_ID');
                 command = new lib_dynamodb_1.GetCommand({
                     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
                     Key: {
@@ -172,6 +171,8 @@ var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, vo
             case 0:
                 console.time('GET_CONFIG');
                 channelId = body.channelId, chatId = body.chatId, socketIOClientId = body.socketIOClientId, question = body.question;
+                if (!channelId)
+                    throw new TypeError('MISSING_CHANNEL_ID');
                 return [4 /*yield*/, Promise.all([
                         getChannel(channelId),
                         getSecret("flowiseKey_".concat(channelId)),
@@ -205,10 +206,14 @@ var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, vo
     });
 }); };
 var initiateOpenAI = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var apiKey;
+    var secretName, apiKey;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, getSecret(process.env.openai_key)];
+            case 0:
+                secretName = process.env.openai_key;
+                if (!secretName)
+                    throw new TypeError('OPENAI_API_SECRET_NAME_NOT_FOUND');
+                return [4 /*yield*/, getSecret(secretName)];
             case 1:
                 apiKey = _a.sent();
                 if (!apiKey)

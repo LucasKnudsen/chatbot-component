@@ -46,6 +46,15 @@ function handler(event) {
             switch (_a.label) {
                 case 0:
                     console.log('EVENT BODY: ', event.body);
+                    if (!event.body) {
+                        return [2 /*return*/, {
+                                statusCode: 400,
+                                body: JSON.stringify({
+                                    message: 'Missing body',
+                                    type: 'INVALID_BODY',
+                                }),
+                            }];
+                    }
                     responseStatus = 200;
                     _a.label = 1;
                 case 1:

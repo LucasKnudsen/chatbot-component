@@ -16,6 +16,16 @@ import { publish2channel } from './mutation'
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   console.log('EVENT BODY: ', event.body)
 
+  if (!GRAPHQL_API_KEY || !GRAPHQL_ENDPOINT) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: 'Missing GraphQL API Key or Endpoint',
+        type: 'INVALID_GRAPHQL_API_KEY_OR_ENDPOINT',
+      }),
+    }
+  }
+
   let responseStatus = 200
   let responseBody
   let response
@@ -43,7 +53,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     responseBody = await response.json()
 
     if (responseBody.errors) responseStatus = 400
-  } catch (error) {
+  } catch (error: any) {
     console.error('DETFAULT ERROR', error)
 
     responseStatus = 400

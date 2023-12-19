@@ -6,6 +6,16 @@ const client = new ComprehendClient({ region: process.env.REGION })
 export async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   console.log('EVENT BODY: ', event.body)
 
+  if (!event.body) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: 'Missing body',
+        type: 'INVALID_BODY',
+      }),
+    }
+  }
+
   let responseStatus = 200
   let responseBody
 
@@ -16,15 +26,15 @@ export async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayPr
     const response = await client.send(command)
 
     // Find the object with the highest score
-    const bestLanguage = response.Languages.reduce((prev, curr) => {
-      return curr.Score > prev.Score ? curr : prev
+    const bestLanguage = response.Languages!.reduce((prev, curr) => {
+      return curr.Score! > prev.Score! ? curr : prev
     })
 
     responseBody = {
       languageCode: bestLanguage.LanguageCode,
       score: bestLanguage.Score,
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('DETFAULT ERROR', error)
 
     responseStatus = 500

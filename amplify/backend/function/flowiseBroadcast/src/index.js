@@ -54,6 +54,15 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
         switch (_b.label) {
             case 0:
                 console.log('EVENT BODY: ', event.body);
+                if (!GRAPHQL_API_KEY || !GRAPHQL_ENDPOINT) {
+                    return [2 /*return*/, {
+                            statusCode: 500,
+                            body: JSON.stringify({
+                                message: 'Missing GraphQL API Key or Endpoint',
+                                type: 'INVALID_GRAPHQL_API_KEY_OR_ENDPOINT',
+                            }),
+                        }];
+                }
                 responseStatus = 200;
                 _b.label = 1;
             case 1:

@@ -39,7 +39,7 @@ export const handler = async (
   try {
     !event.isMock && console.log(`EVENT BODY: ${event.body}`)
 
-    const body = JSON.parse(event.body) as ParsedEventBody
+    const body = JSON.parse(event.body || '') as ParsedEventBody
 
     let answer = { text: '', sourceDocuments: [] }
 
@@ -82,7 +82,7 @@ export const handler = async (
     console.timeEnd('HANDLER')
 
     responseBody = answer
-  } catch (error) {
+  } catch (error: any) {
     console.error('DEFAULT ERROR', error)
     console.timeEnd('HANDLER')
 
@@ -106,8 +106,6 @@ export const handler = async (
 }
 
 const getChannel = async (channelId: string) => {
-  if (!channelId) throw new TypeError('MISSING_CHANNEL_ID')
-
   const command = new GetCommand({
     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
     Key: {
@@ -130,6 +128,8 @@ const getSecret = async (secretName: string) => {
 const handleFlowiseRequest = async (body: ParsedEventBody) => {
   console.time('GET_CONFIG')
   const { channelId, chatId, socketIOClientId, question } = body
+
+  if (!channelId) throw new TypeError('MISSING_CHANNEL_ID')
 
   const [channel, apiKey] = await Promise.all([
     getChannel(channelId),
@@ -162,7 +162,11 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
 }
 
 const initiateOpenAI = async () => {
-  const apiKey = await getSecret(process.env.openai_key)
+  const secretName = process.env.openai_key
+
+  if (!secretName) throw new TypeError('OPENAI_API_SECRET_NAME_NOT_FOUND')
+
+  const apiKey = await getSecret(secretName)
 
   if (!apiKey) throw new TypeError('OPENAI_API_KEY_NOT_FOUND')
 
@@ -203,7 +207,6 @@ const handleSuggestedPrompts = async (body: ParsedEventBody, isMock?: boolean) =
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: 'user', content: prompt }],
     model: 'gpt-3.5-turbo',
-    response_format: { type: 'json_object' },
   })
 
   const textObj = chatCompletion.choices[0].message.content
