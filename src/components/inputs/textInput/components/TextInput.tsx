@@ -105,18 +105,20 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
     setIsLoading(true)
     console.time('UPLOADING')
 
-    const key = 'test.webm'
+    const type = blob.type
+    const key = `test.${type.split('/')[1]}`
 
     try {
-      const result = await Storage.put(key, blob, {
+      await Storage.put(key, blob, {
         contentType: 'audio/webm',
       })
 
-      logDev('Uploaded file: ', result)
+      logDev('Uploaded file: ', blob)
 
       const transcription = await API.post('digitaltwinRest', '/transcribe', {
         body: {
           s3Key: `public/${key}`,
+          type,
         },
       })
 
@@ -138,17 +140,19 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
       .then((stream) => {
         const recorder = new MediaRecorder(stream)
         const audioChunks: Blob[] = [] // Store audio chunks
+        let type = 'audio/webm'
 
         recorder.ondataavailable = (event) => {
           logDev('File data', event)
           if (event.data.size > 0) {
             audioChunks.push(event.data)
+            type = event.data.type.split(';')[0]
           }
         }
 
         recorder.onstop = async () => {
           // Handle the recording stopped event
-          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' })
+          const audioBlob = new Blob(audioChunks, { type })
 
           handleUpload(audioBlob)
         }

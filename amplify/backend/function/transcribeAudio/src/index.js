@@ -51,57 +51,64 @@ var client_ssm_1 = require("@aws-sdk/client-ssm");
 var ssmClient = new client_ssm_1.SSMClient({ region: process.env.REGION });
 var s3Client = new client_s3_1.S3Client({ region: process.env.REGION });
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var responseStatus, responseBody, body, secretName, apiKey, openai, s3Key, input, Body, transcription, _a, _b, _c, _d, _e, error_1;
-    var _f;
-    return __generator(this, function (_g) {
-        switch (_g.label) {
+    var responseStatus, responseBody, _a, s3Key, type, secretName, apiKey, openai, input, Body, transcription, _b, _c, _d, _e, _f, error_1;
+    var _g;
+    var _h;
+    return __generator(this, function (_j) {
+        switch (_j.label) {
             case 0:
                 console.time('HANDLER');
                 responseStatus = 200;
-                _g.label = 1;
+                _j.label = 1;
             case 1:
-                _g.trys.push([1, 7, 8, 9]);
+                _j.trys.push([1, 7, 8, 9]);
                 !event.isMock && console.log("EVENT BODY: ".concat(event.body));
-                body = JSON.parse(event.body || '');
+                _a = JSON.parse(event.body || ''), s3Key = _a.s3Key, type = _a.type;
                 secretName = process.env.openai_key;
                 if (!secretName)
                     throw new TypeError('OPENAI_API_SECRET_NAME_NOT_FOUND');
                 return [4 /*yield*/, getSecret(secretName)];
             case 2:
-                apiKey = _g.sent();
-                console.log('API KEY', apiKey);
+                apiKey = _j.sent();
+                console.log('API KEY');
                 openai = new openai_1.default({
                     organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
                     apiKey: apiKey,
                 });
-                s3Key = body.s3Key;
                 input = {
                     Bucket: process.env.STORAGE_FRAIASTORAGE_BUCKETNAME,
                     Key: s3Key,
                 };
                 return [4 /*yield*/, s3Client.send(new client_s3_1.GetObjectCommand(input))];
             case 3:
-                Body = (_g.sent()).Body;
+                Body = (_j.sent()).Body;
                 console.log('S3');
-                _b = (_a = openai.audio.transcriptions).create;
-                _f = {};
-                _c = openai_1.toFile;
-                _e = (_d = Buffer).from;
+                _c = (_b = openai.audio.transcriptions).create;
+                _g = {};
+                _d = openai_1.toFile;
+                _f = (_e = Buffer).from;
                 return [4 /*yield*/, Body.transformToString('base64')];
-            case 4: return [4 /*yield*/, _c.apply(void 0, [_e.apply(_d, [_g.sent(), 'base64']), s3Key, {
-                        type: 'audio/webm',
+            case 4: return [4 /*yield*/, _d.apply(void 0, [_f.apply(_e, [_j.sent(), 'base64']), s3Key, {
+                        type: type,
                     }])];
-            case 5: return [4 /*yield*/, _b.apply(_a, [(_f.file = _g.sent(),
-                        _f.model = 'whisper-1',
-                        _f)])];
+            case 5: return [4 /*yield*/, _c.apply(_b, [(_g.file = _j.sent(),
+                        _g.model = 'whisper-1',
+                        _g)])];
             case 6:
-                transcription = _g.sent();
+                transcription = _j.sent();
                 console.log(transcription);
                 responseBody = transcription.text;
                 return [3 /*break*/, 9];
             case 7:
-                error_1 = _g.sent();
+                error_1 = _j.sent();
                 console.error('DEFAULT ERROR', error_1);
+                responseStatus = ((_h = error_1.response) === null || _h === void 0 ? void 0 : _h.status) || 500;
+                responseBody = {
+                    message: error_1.message || error_1,
+                    status: responseStatus,
+                    type: error_1.type,
+                    stack: error_1.stack,
+                };
                 return [3 /*break*/, 9];
             case 8:
                 console.timeEnd('HANDLER');

@@ -17,6 +17,7 @@ const s3Client = new S3Client({ region: process.env.REGION })
 
 type ParsedEventBody = {
   s3Key: string
+  type: string
 }
 
 export const handler = async (
@@ -30,7 +31,7 @@ export const handler = async (
   try {
     !event.isMock && console.log(`EVENT BODY: ${event.body}`)
 
-    const body = JSON.parse(event.body || '') as ParsedEventBody
+    const { s3Key, type } = JSON.parse(event.body || '') as ParsedEventBody
 
     const secretName = process.env.openai_key
 
@@ -38,14 +39,12 @@ export const handler = async (
 
     const apiKey = await getSecret(secretName)
 
-    console.log('API KEY', apiKey)
+    console.log('API KEY')
 
     const openai = new OpenAI({
       organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
       apiKey,
     })
-
-    const s3Key = body.s3Key
 
     const input = {
       Bucket: process.env.STORAGE_FRAIASTORAGE_BUCKETNAME,
@@ -58,7 +57,7 @@ export const handler = async (
 
     const transcription = await openai.audio.transcriptions.create({
       file: await toFile(Buffer.from(await Body.transformToString('base64'), 'base64'), s3Key, {
-        type: 'audio/webm',
+        type: type,
       }),
       model: 'whisper-1',
     })
@@ -71,7 +70,7 @@ export const handler = async (
 
     responseStatus = error.response?.status || 500
     responseBody = {
-      message: error.message,
+      message: error.message || error,
       status: responseStatus,
       type: error.type,
       stack: error.stack,
