@@ -61,6 +61,14 @@
           ],
           "category": "function",
           "resourceName": "flowiseMiddleware"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "transcribeAudio"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -156,6 +164,20 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "transcribeAudio": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "fraiastorage"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "hosting": {
@@ -234,6 +256,30 @@
         {
           "category": "function",
           "resourceName": "flowiseMiddleware"
+        }
+      ]
+    },
+    "AMPLIFY_function_transcribeAudio_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "transcribeAudio"
+        }
+      ]
+    },
+    "AMPLIFY_function_transcribeAudio_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "transcribeAudio"
+        }
+      ]
+    },
+    "AMPLIFY_function_transcribeAudio_secretsPathAmplifyAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "transcribeAudio"
         }
       ]
     },

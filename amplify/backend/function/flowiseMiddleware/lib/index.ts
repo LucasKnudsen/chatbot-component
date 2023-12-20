@@ -79,12 +79,9 @@ export const handler = async (
       amountOfSourceDocuments: answer.sourceDocuments?.length,
     })
 
-    console.timeEnd('HANDLER')
-
     responseBody = answer
   } catch (error: any) {
     console.error('DEFAULT ERROR', error)
-    console.timeEnd('HANDLER')
 
     responseStatus = error.response?.status || 500
     responseBody = {
@@ -94,6 +91,8 @@ export const handler = async (
       stack: error.stack,
     }
   } finally {
+    console.timeEnd('HANDLER')
+
     return {
       statusCode: responseStatus,
       body: JSON.stringify(responseBody),

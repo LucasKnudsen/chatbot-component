@@ -13,7 +13,8 @@
     "test:run": "cypress run",
     "amplify:flowiseMiddleware": "cd amplify/backend/function/flowiseMiddleware && npx tsc -p ./tsconfig.json && cd -",
     "amplify:flowiseBroadcast": "cd amplify/backend/function/flowiseBroadcast && npx tsc -p ./tsconfig.json && cd -",
-    "amplify:detectLanguage": "cd amplify/backend/function/detectLanguage && npx tsc -p ./tsconfig.json && cd -"
+    "amplify:detectLanguage": "cd amplify/backend/function/detectLanguage && npx tsc -p ./tsconfig.json && cd -",
+    "amplify:transcribeAudio": "cd amplify/backend/function/transcribeAudio && npx tsc -p ./tsconfig.json && cd -"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",

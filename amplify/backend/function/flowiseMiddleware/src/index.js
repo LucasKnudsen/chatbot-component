@@ -105,13 +105,11 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     text: answer.text,
                     amountOfSourceDocuments: (_c = answer.sourceDocuments) === null || _c === void 0 ? void 0 : _c.length,
                 });
-                console.timeEnd('HANDLER');
                 responseBody = answer;
                 return [3 /*break*/, 12];
             case 10:
                 error_1 = _e.sent();
                 console.error('DEFAULT ERROR', error_1);
-                console.timeEnd('HANDLER');
                 responseStatus = ((_d = error_1.response) === null || _d === void 0 ? void 0 : _d.status) || 500;
                 responseBody = {
                     message: error_1.message,
@@ -120,14 +118,16 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     stack: error_1.stack,
                 };
                 return [3 /*break*/, 12];
-            case 11: return [2 /*return*/, {
-                    statusCode: responseStatus,
-                    body: JSON.stringify(responseBody),
-                    headers: {
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Headers': '*',
-                    },
-                }];
+            case 11:
+                console.timeEnd('HANDLER');
+                return [2 /*return*/, {
+                        statusCode: responseStatus,
+                        body: JSON.stringify(responseBody),
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Headers': '*',
+                        },
+                    }];
             case 12: return [2 /*return*/];
         }
     });

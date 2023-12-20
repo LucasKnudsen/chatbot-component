@@ -40,10 +40,8 @@ const initialPrompts: PromptType[] = [
 
 function App() {
   return (
-    // <Full {...chatflows.fraia_test} initialPrompts={initialPrompts} />
-
-    <div class='w-screen h-screen flex flex-col justify-center items-center bg-slate-100'>
-      <h1 class='text-6xl tracking-widest'>
+    <div class='w-full h-screen flex flex-col justify-center items-center bg-slate-100'>
+      <h1 class='text-3xl md:text-6xl tracking-widest'>
         PL
         <span
           style={{

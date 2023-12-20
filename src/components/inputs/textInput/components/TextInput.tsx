@@ -1,7 +1,8 @@
 import { Divider, IconButton, MicrophoneIcon, SendButton } from '@/components'
 import { useTheme } from '@/features/theme/hooks'
+import { logDev } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
-import { Storage } from 'aws-amplify'
+import { API, Storage } from 'aws-amplify'
 import { createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 import { useScrollOnResize } from '../hooks/useScrollOnResize'
 import { Textarea } from './ShortTextInput'
@@ -62,7 +63,7 @@ export const TextInput = (props: Props) => {
       onKeyDown={submitWhenEnter}
     >
       <div class='flex py-2 pl-2 md:pl-4 items-center gap-1 md:gap-2 md:h-12 md:pt-4 '>
-        <AudioInput />
+        <AudioInput onSubmit={props.onSubmit} />
 
         <Divider vertical />
       </div>
@@ -94,7 +95,7 @@ export const TextInput = (props: Props) => {
     </div>
   )
 }
-const AudioInput = () => {
+const AudioInput = (props: { onSubmit: (value: string) => void }) => {
   const [mediaStream, setMediaStream] = createSignal<MediaStream | null>(null)
   const [mediaRecorder, setMediaRecorder] = createSignal<MediaRecorder | null>(null)
   const [isRecording, setIsRecording] = createSignal<boolean>(false)
@@ -102,22 +103,42 @@ const AudioInput = () => {
 
   // Function to start recording
   const startRecording = () => {
+    alert('start recording')
+
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        console.log('Started recording.')
+        alert('Started recording.')
 
         const recorder = new MediaRecorder(stream)
 
         recorder.ondataavailable = async (event) => {
           console.log('File data', event)
           setIsLoading(true)
+          console.time('UPLOADING')
 
-          const result = await Storage.put('test.webm', event.data, {
-            contentType: 'audio/webm',
-          })
+          const key = 'test.webm'
 
-          console.log('Uploaded file: ', result)
+          try {
+            const result = await Storage.put(key, event.data, {
+              contentType: 'audio/webm',
+            })
+
+            console.log('Uploaded file: ', result)
+
+            const transcription = await API.post('digitaltwinRest', '/transcribe', {
+              body: {
+                s3Key: `public/${key}`,
+              },
+            })
+
+            console.log(transcription)
+            props.onSubmit(transcription)
+          } catch (error) {
+            logDev('Uploading transcription error', error)
+          }
+
+          console.timeEnd('UPLOADING')
 
           setIsLoading(false)
         }
@@ -133,6 +154,7 @@ const AudioInput = () => {
       })
       .catch((error) => {
         console.error('Error accessing microphone:', error)
+        alert('fack')
       })
   }
 
@@ -160,7 +182,7 @@ const AudioInput = () => {
         <div class='animate-ping m-1 h-3 w-3 bg-gray-700' />
       ) : isRecording() ? (
         <IconButton onClick={stopRecording}>
-          <div class='m-1 h-3 w-3  ani  bg-gray-700 opacity-75'></div>
+          <div class=' animate-pulse m-1 h-3 w-3  ani  bg-gray-700 opacity-75'></div>
         </IconButton>
       ) : (
         <IconButton onClick={startRecording}>
