@@ -1,5 +1,6 @@
 export * from './ChevronIcon'
 export * from './CircleCloseIcon'
 export * from './MessageIcon'
+export * from './MicrophoneIcon'
 export * from './SendIcon'
 export * from './SettingsButton'

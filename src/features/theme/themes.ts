@@ -1,5 +1,6 @@
 import background2 from '@/assets/background-2.png'
 import logo from '@/assets/logo.png'
+import newLogo from '@/assets/logo2.svg'
 
 export type Theme = {
   isDark: boolean
@@ -23,7 +24,7 @@ export type Theme = {
 
 export const defaultTheme: Theme = {
   isDark: false,
-  customIconSrc: logo,
+  customIconSrc: newLogo,
   primaryColor: 'rgba(91, 147, 255, 1)',
   primaryAccent: 'rgba(91, 147, 255, 0.2)',
   textColor: 'rgba(31, 8, 8, 1)',
@@ -41,6 +42,25 @@ export const defaultTheme: Theme = {
     'linear-gradient(90deg, rgba(91, 147, 255, 0.08) 0%, rgba(218, 145, 221, 0.08) 100%)',
   surfaceHoveredBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.25) 0%, rgba(218, 145, 221, 0.25) 100%)',
+}
+
+const fraia: Theme = {
+  isDark: false,
+  customIconSrc: newLogo,
+  primaryColor: '#1f1f1f',
+  primaryAccent: '#1f1f1f',
+  textColor: '#1f1f1f',
+  textSecondary: '#1f1f1f',
+  onPrimary: '#1f1f1f',
+  backgroundColor: '#ffffff',
+  backgroundAccent: '#ffffff',
+  bubbleButtonColor: '#1f1f1f',
+  drawerBackground: '#ffffff',
+  borderColor: '#1f1f1f',
+  textInputTextColor: '#1f1f1f',
+  textInputBackgroundColor: '#1f1f1f',
+  surfaceHoveredBackground: '#1f1f1f',
+  surfaceBackground: '#1f1f1f',
 }
 
 const midnight: Theme = {
@@ -86,4 +106,5 @@ export const themes: Record<string, Theme> = {
   bubbles: defaultTheme,
   ugly,
   midnight,
+  fraia,
 }

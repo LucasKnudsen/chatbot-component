@@ -1,7 +1,7 @@
-import { SendButton } from '@/components/SendButton'
+import { Divider, IconButton, MicrophoneIcon, SendButton } from '@/components'
 import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
-import { createEffect, createSignal, onMount } from 'solid-js'
+import { createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 import { useScrollOnResize } from '../hooks/useScrollOnResize'
 import { Textarea } from './ShortTextInput'
 
@@ -60,6 +60,12 @@ export const TextInput = (props: Props) => {
       }}
       onKeyDown={submitWhenEnter}
     >
+      <div class='flex py-2 pl-2 md:pl-4 items-center gap-1 md:gap-2 md:h-12 md:pt-4 '>
+        <AudioInput />
+
+        <Divider vertical />
+      </div>
+
       <Textarea
         ref={inputRef}
         onInput={handleInput}
@@ -84,6 +90,77 @@ export const TextInput = (props: Props) => {
       >
         <span style={{ 'font-family': 'Poppins, sans-serif' }}>Send</span>
       </SendButton>
+    </div>
+  )
+}
+const AudioInput = () => {
+  const [mediaStream, setMediaStream] = createSignal<MediaStream | null>(null)
+  const [mediaRecorder, setMediaRecorder] = createSignal<MediaRecorder | null>(null)
+  const [isRecording, setIsRecording] = createSignal<boolean>(false)
+  const [isLoading, setIsLoading] = createSignal<boolean>(false)
+
+  // Function to start recording
+  const startRecording = () => {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        console.log('Started recording.')
+
+        const recorder = new MediaRecorder(stream)
+
+        recorder.ondataavailable = (event) => {
+          console.log('File data', event)
+          setIsLoading(true)
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 2000)
+        }
+
+        recorder.onstop = () => {
+          // Handle the recording stopped event
+        }
+
+        setMediaStream(stream)
+        setMediaRecorder(recorder)
+        recorder.start()
+        setIsRecording(true)
+      })
+      .catch((error) => {
+        console.error('Error accessing microphone:', error)
+      })
+  }
+
+  // Function to stop recording
+  const stopRecording = () => {
+    if (mediaRecorder()) {
+      mediaRecorder()?.stop()
+      console.log('Stopped recording.')
+      mediaStream()
+        ?.getTracks()
+        .forEach((track) => track.stop())
+      setMediaRecorder(null)
+      setMediaStream(null)
+      setIsRecording(false)
+    }
+  }
+
+  onCleanup(() => {
+    stopRecording() // Stop recording when the component unmounts
+  })
+
+  return (
+    <div>
+      {isLoading() ? (
+        <div class='animate-ping m-1 h-3 w-3 bg-gray-700' />
+      ) : isRecording() ? (
+        <IconButton onClick={stopRecording}>
+          <div class='m-1 h-3 w-3  ani  bg-gray-700 opacity-75'></div>
+        </IconButton>
+      ) : (
+        <IconButton onClick={startRecording}>
+          <MicrophoneIcon height={20} width={20} />
+        </IconButton>
+      )}
     </div>
   )
 }
