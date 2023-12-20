@@ -1,0 +1,20 @@
+{
+  "resourceName": "fraiastorage",
+  "policyUUID": "4b76db8e",
+  "bucketName": "fraiastorage",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {
+    "SuperAdmin": [
+      "CREATE_AND_UPDATE",
+      "READ",
+      "DELETE"
+    ]
+  }
+}

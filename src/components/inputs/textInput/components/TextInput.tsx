@@ -1,6 +1,7 @@
 import { Divider, IconButton, MicrophoneIcon, SendButton } from '@/components'
 import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
+import { Storage } from 'aws-amplify'
 import { createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 import { useScrollOnResize } from '../hooks/useScrollOnResize'
 import { Textarea } from './ShortTextInput'
@@ -108,12 +109,17 @@ const AudioInput = () => {
 
         const recorder = new MediaRecorder(stream)
 
-        recorder.ondataavailable = (event) => {
+        recorder.ondataavailable = async (event) => {
           console.log('File data', event)
           setIsLoading(true)
-          setTimeout(() => {
-            setIsLoading(false)
-          }, 2000)
+
+          const result = await Storage.put('test.webm', event.data, {
+            contentType: 'audio/webm',
+          })
+
+          console.log('Uploaded file: ', result)
+
+          setIsLoading(false)
         }
 
         recorder.onstop = () => {

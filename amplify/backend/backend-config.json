@@ -260,5 +260,27 @@
       "providerPlugin": "awscloudformation",
       "service": "Translate"
     }
+  },
+  "storage": {
+    "fraiastorage": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "digitaltwinauth"
+        },
+        {
+          "attributes": [
+            "SuperAdminGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
   }
 }

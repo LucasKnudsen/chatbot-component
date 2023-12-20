@@ -61,5 +61,11 @@ export type AmplifyDependentResourcesAttributes = {
       "sourceLang": "string",
       "targetLang": "string"
     }
+  },
+  "storage": {
+    "fraiastorage": {
+      "BucketName": "string",
+      "Region": "string"
+    }
   }
 }
