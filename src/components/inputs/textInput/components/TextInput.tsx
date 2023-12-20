@@ -101,50 +101,56 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
   const [isRecording, setIsRecording] = createSignal<boolean>(false)
   const [isLoading, setIsLoading] = createSignal<boolean>(false)
 
+  const handleUpload = async (blob: Blob) => {
+    setIsLoading(true)
+    console.time('UPLOADING')
+
+    const key = 'test.webm'
+
+    try {
+      const result = await Storage.put(key, blob, {
+        contentType: 'audio/webm',
+      })
+
+      logDev('Uploaded file: ', result)
+
+      const transcription = await API.post('digitaltwinRest', '/transcribe', {
+        body: {
+          s3Key: `public/${key}`,
+        },
+      })
+
+      logDev(transcription)
+      props.onSubmit(transcription)
+    } catch (error) {
+      logDev('Uploading transcription error', error)
+    }
+
+    console.timeEnd('UPLOADING')
+
+    setIsLoading(false)
+  }
+
   // Function to start recording
   const startRecording = () => {
-    alert('start recording')
-
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        alert('Started recording.')
-
         const recorder = new MediaRecorder(stream)
+        const audioChunks: Blob[] = [] // Store audio chunks
 
-        recorder.ondataavailable = async (event) => {
-          console.log('File data', event)
-          setIsLoading(true)
-          console.time('UPLOADING')
-
-          const key = 'test.webm'
-
-          try {
-            const result = await Storage.put(key, event.data, {
-              contentType: 'audio/webm',
-            })
-
-            console.log('Uploaded file: ', result)
-
-            const transcription = await API.post('digitaltwinRest', '/transcribe', {
-              body: {
-                s3Key: `public/${key}`,
-              },
-            })
-
-            console.log(transcription)
-            props.onSubmit(transcription)
-          } catch (error) {
-            logDev('Uploading transcription error', error)
+        recorder.ondataavailable = (event) => {
+          logDev('File data', event)
+          if (event.data.size > 0) {
+            audioChunks.push(event.data)
           }
-
-          console.timeEnd('UPLOADING')
-
-          setIsLoading(false)
         }
 
-        recorder.onstop = () => {
+        recorder.onstop = async () => {
           // Handle the recording stopped event
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' })
+
+          handleUpload(audioBlob)
         }
 
         setMediaStream(stream)
@@ -154,7 +160,7 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
       })
       .catch((error) => {
         console.error('Error accessing microphone:', error)
-        alert('fack')
+        alert('Error accessing microphone')
       })
   }
 
