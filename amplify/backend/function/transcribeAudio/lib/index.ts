@@ -18,6 +18,7 @@ const s3Client = new S3Client({ region: process.env.REGION })
 type ParsedEventBody = {
   s3Key: string
   type: string
+  base64?: string
 }
 
 export const handler = async (
@@ -55,12 +56,22 @@ export const handler = async (
 
     console.log('S3')
 
-    const transcription = await openai.audio.transcriptions.create({
-      file: await toFile(Buffer.from(await Body.transformToString('base64'), 'base64'), s3Key, {
+    console.time('TRANSCRIPTION')
+
+    const file = await toFile(
+      Buffer.from(await Body.transformToString('base64'), 'base64'),
+      s3Key,
+      {
         type: type,
-      }),
+      }
+    )
+
+    const transcription = await openai.audio.transcriptions.create({
+      file,
       model: 'whisper-1',
     })
+
+    console.timeEnd('TRANSCRIPTION')
 
     console.log(transcription)
 

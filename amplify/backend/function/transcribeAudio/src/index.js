@@ -51,17 +51,16 @@ var client_ssm_1 = require("@aws-sdk/client-ssm");
 var ssmClient = new client_ssm_1.SSMClient({ region: process.env.REGION });
 var s3Client = new client_s3_1.S3Client({ region: process.env.REGION });
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var responseStatus, responseBody, _a, s3Key, type, secretName, apiKey, openai, input, Body, transcription, _b, _c, _d, _e, _f, error_1;
-    var _g;
-    var _h;
-    return __generator(this, function (_j) {
-        switch (_j.label) {
+    var responseStatus, responseBody, _a, s3Key, type, secretName, apiKey, openai, input, Body, file, _b, _c, _d, transcription, error_1;
+    var _e;
+    return __generator(this, function (_f) {
+        switch (_f.label) {
             case 0:
                 console.time('HANDLER');
                 responseStatus = 200;
-                _j.label = 1;
+                _f.label = 1;
             case 1:
-                _j.trys.push([1, 7, 8, 9]);
+                _f.trys.push([1, 7, 8, 9]);
                 !event.isMock && console.log("EVENT BODY: ".concat(event.body));
                 _a = JSON.parse(event.body || ''), s3Key = _a.s3Key, type = _a.type;
                 secretName = process.env.openai_key;
@@ -69,7 +68,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     throw new TypeError('OPENAI_API_SECRET_NAME_NOT_FOUND');
                 return [4 /*yield*/, getSecret(secretName)];
             case 2:
-                apiKey = _j.sent();
+                apiKey = _f.sent();
                 console.log('API KEY');
                 openai = new openai_1.default({
                     organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
@@ -81,28 +80,33 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 };
                 return [4 /*yield*/, s3Client.send(new client_s3_1.GetObjectCommand(input))];
             case 3:
-                Body = (_j.sent()).Body;
+                Body = (_f.sent()).Body;
                 console.log('S3');
-                _c = (_b = openai.audio.transcriptions).create;
-                _g = {};
-                _d = openai_1.toFile;
-                _f = (_e = Buffer).from;
+                console.time('TRANSCRIPTION');
+                _b = openai_1.toFile;
+                _d = (_c = Buffer).from;
                 return [4 /*yield*/, Body.transformToString('base64')];
-            case 4: return [4 /*yield*/, _d.apply(void 0, [_f.apply(_e, [_j.sent(), 'base64']), s3Key, {
+            case 4: return [4 /*yield*/, _b.apply(void 0, [_d.apply(_c, [_f.sent(), 'base64']),
+                    s3Key,
+                    {
                         type: type,
                     }])];
-            case 5: return [4 /*yield*/, _c.apply(_b, [(_g.file = _j.sent(),
-                        _g.model = 'whisper-1',
-                        _g)])];
+            case 5:
+                file = _f.sent();
+                return [4 /*yield*/, openai.audio.transcriptions.create({
+                        file: file,
+                        model: 'whisper-1',
+                    })];
             case 6:
-                transcription = _j.sent();
+                transcription = _f.sent();
+                console.timeEnd('TRANSCRIPTION');
                 console.log(transcription);
                 responseBody = transcription.text;
                 return [3 /*break*/, 9];
             case 7:
-                error_1 = _j.sent();
+                error_1 = _f.sent();
                 console.error('DEFAULT ERROR', error_1);
-                responseStatus = ((_h = error_1.response) === null || _h === void 0 ? void 0 : _h.status) || 500;
+                responseStatus = ((_e = error_1.response) === null || _e === void 0 ? void 0 : _e.status) || 500;
                 responseBody = {
                     message: error_1.message || error_1,
                     status: responseStatus,

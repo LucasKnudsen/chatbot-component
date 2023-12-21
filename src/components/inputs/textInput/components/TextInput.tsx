@@ -1,6 +1,5 @@
 import { Divider, IconButton, MicrophoneIcon, SendButton } from '@/components'
 import { useTheme } from '@/features/theme/hooks'
-import { logDev } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { API, Storage } from 'aws-amplify'
 import { createEffect, createSignal, onCleanup, onMount } from 'solid-js'
@@ -62,11 +61,14 @@ export const TextInput = (props: Props) => {
       }}
       onKeyDown={submitWhenEnter}
     >
-      <div class='flex py-2 pl-2 md:pl-4 items-center gap-1 md:gap-2 md:h-12 md:pt-4 '>
-        <AudioInput onSubmit={props.onSubmit} />
+      {/* Additional inputs  */}
+      {device() == 'desktop' && (
+        <div class='flex py-2 pl-2 md:pl-4 items-center gap-1 md:gap-2 md:h-12 md:pt-4 '>
+          <AudioInput onSubmit={props.onSubmit} />
 
-        <Divider vertical />
-      </div>
+          <Divider vertical />
+        </div>
+      )}
 
       <Textarea
         ref={inputRef}
@@ -102,18 +104,16 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
   const [isLoading, setIsLoading] = createSignal<boolean>(false)
 
   const handleUpload = async (blob: Blob) => {
-    setIsLoading(true)
-    console.time('UPLOADING')
-
     const type = blob.type
     const key = `test.${type.split('/')[1]}`
 
     try {
+      setIsLoading(true)
+      console.time('FULL')
+
       await Storage.put(key, blob, {
         contentType: 'audio/webm',
       })
-
-      logDev('Uploaded file: ', blob)
 
       const transcription = await API.post('digitaltwinRest', '/transcribe', {
         body: {
@@ -122,13 +122,12 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
         },
       })
 
-      logDev(transcription)
       props.onSubmit(transcription)
     } catch (error) {
-      logDev('Uploading transcription error', error)
+      console.error('Uploading transcription error', error)
     }
 
-    console.timeEnd('UPLOADING')
+    console.timeEnd('FULL')
 
     setIsLoading(false)
   }
@@ -143,7 +142,6 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
         let type = 'audio/webm'
 
         recorder.ondataavailable = (event) => {
-          logDev('File data', event)
           if (event.data.size > 0) {
             audioChunks.push(event.data)
             type = event.data.type.split(';')[0]
@@ -189,7 +187,7 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
   return (
     <div>
       {isLoading() ? (
-        <div class='animate-ping m-1 h-3 w-3 bg-gray-700' />
+        <div class='animate-ping rounded-full m-1 h-3 w-3 bg-gray-700' />
       ) : isRecording() ? (
         <IconButton onClick={stopRecording}>
           <div class=' animate-pulse m-1 h-3 w-3  ani  bg-gray-700 opacity-75'></div>
