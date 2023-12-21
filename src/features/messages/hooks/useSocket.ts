@@ -1,5 +1,6 @@
 import { SourceDocument } from '@/features/contextual'
 import { isStreamAvailableQuery } from '@/features/messages/queries/sendMessageQuery'
+import { logDev } from '@/utils'
 import socketIOClient from 'socket.io-client'
 import { createSignal, onCleanup, onMount } from 'solid-js'
 
@@ -33,7 +34,7 @@ export function useSocket({
     }
 
     socket.on('connect', () => {
-      console.log('In connect', socket.id)
+      logDev('In connect', socket.id)
 
       setSocketIOClientId(socket.id)
     })
