@@ -1,4 +1,6 @@
+import powerIcon from '@/assets/power-icon.svg'
 import { botStoreActions } from '@/features/bot'
+
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { Show } from 'solid-js'
@@ -29,7 +31,15 @@ export const Nav = (props: NavProps) => {
         background: theme().surfaceBackground,
       }}
     >
-      <img src={theme().customIconSrc} class='h-6 cursor-pointer' onClick={resetChat} />
+      <div class='flex items-center gap-6'>
+        <img src={theme().customIconSrc} class='h-6 cursor-pointer' onClick={resetChat} />
+
+        <Show when={!props.sidebarOpen}>
+          <Button onClick={props.onToggleBot} padding='7px' class='animate-fade-in md:hidden'>
+            <img class='m-auto h-3' src={powerIcon} />
+          </Button>
+        </Show>
+      </div>
 
       <div class='md:flex-1' />
 
@@ -42,7 +52,7 @@ export const Nav = (props: NavProps) => {
       <Show
         when={props.sidebarOpen}
         fallback={
-          <div onClick={props.onToggleSidebar}>
+          <div class='h-6 flex items-center' onClick={props.onToggleSidebar}>
             <MenuIcon class='md:hidden' color={theme().primaryColor} />
           </div>
         }
