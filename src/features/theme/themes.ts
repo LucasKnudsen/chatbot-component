@@ -1,6 +1,7 @@
 import background2 from '@/assets/background-2.png'
-import logo from '@/assets/logo.png'
+import background3 from '@/assets/background-3.png'
 import newLogo from '@/assets/logo2.svg'
+import logo from '@/assets/logo_final.png'
 
 export type Theme = {
   isDark: boolean
@@ -46,26 +47,28 @@ export const defaultTheme: Theme = {
 
 const fraia: Theme = {
   isDark: false,
-  customIconSrc: newLogo,
-  primaryColor: '#1f1f1f',
-  primaryAccent: '#1f1f1f',
-  textColor: '#1f1f1f',
-  textSecondary: '#1f1f1f',
-  onPrimary: '#1f1f1f',
+  customIconSrc: logo,
+  primaryColor: 'rgba(255,118,118,255)',
+  primaryAccent: 'rgba(255,118,118,0.2)',
+  textColor: 'rgba(31, 8, 8, 1)',
+  textSecondary: 'rgba(147, 147, 147, 1)',
+  onPrimary: 'rgba(255, 255, 255, 1)',
   backgroundColor: '#ffffff',
   backgroundAccent: '#ffffff',
   bubbleButtonColor: '#1f1f1f',
-  drawerBackground: '#ffffff',
-  borderColor: '#1f1f1f',
-  textInputTextColor: '#1f1f1f',
-  textInputBackgroundColor: '#1f1f1f',
-  surfaceHoveredBackground: '#1f1f1f',
-  surfaceBackground: '#1f1f1f',
+  backgroundImageUrl: background3,
+
+  drawerBackground: 'rgba(255, 255, 255, 0.75)',
+  borderColor: 'rgba(147, 147, 147, 0.25)',
+  textInputTextColor: 'rgba(128, 114, 166, 1)',
+  textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
+  surfaceHoveredBackground: 'rgba(255,118,118,0.08)',
+  surfaceBackground: 'rgba(63, 56, 99, 0.07)',
 }
 
 const midnight: Theme = {
   isDark: true,
-  customIconSrc: logo,
+  customIconSrc: newLogo,
   primaryColor: '#204ef7',
   primaryAccent: '#152e8a',
   textColor: '#FAF9F6',

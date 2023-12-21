@@ -48,7 +48,7 @@ function App() {
         </span>
       </h2>
 
-      <Bubble {...chatflows.fraia_prod} initialPrompts={initialPrompts} />
+      <Bubble {...chatflows.fraia_prod} initialPrompts={initialPrompts} themeId='fraia' />
     </div>
   )
 }
