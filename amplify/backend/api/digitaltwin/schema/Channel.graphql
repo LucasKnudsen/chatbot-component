@@ -3,6 +3,7 @@ type Channel
   @auth(
     rules: [
       { allow: groups, groups: ["SuperAdmin"] }
+      { allow: private, operations: [get] }
       { allow: public, provider: iam, operations: [get] }
     ]
   ) {

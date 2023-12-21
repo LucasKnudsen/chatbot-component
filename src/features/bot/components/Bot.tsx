@@ -15,7 +15,7 @@ import { Channel, GetChannelQuery } from '@/graphql/types'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
-import { API, Amplify } from 'aws-amplify'
+import { API, Amplify, Auth } from 'aws-amplify'
 import { Match, Show, Switch, createResource, createSignal, onMount } from 'solid-js'
 import { Sidebar } from '.'
 import { botStore, botStoreActions, useChatId, useLanguage } from '..'
@@ -70,6 +70,13 @@ export const BotManager = (props: BotProps) => {
   const [channelError, setChannelError] = createSignal('')
 
   const [channel] = createResource(async () => {
+    let isUser = false
+    try {
+      isUser = Boolean(await Auth.currentAuthenticatedUser())
+    } catch (error) {}
+
+    console.log(isUser)
+
     try {
       const localChannel = localStorage.getItem(storageKey)
 
@@ -80,7 +87,7 @@ export const BotManager = (props: BotProps) => {
         variables: {
           id: props.channelId,
         },
-        authMode: 'AWS_IAM',
+        authMode: isUser ? 'AMAZON_COGNITO_USER_POOLS' : 'AWS_IAM',
       })
 
       const channel = result.data!.getChannel!

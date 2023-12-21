@@ -76,7 +76,7 @@ export const handler = async (
     console.log(transcription)
 
     responseBody = transcription.text
-  } catch (error) {
+  } catch (error: any) {
     console.error('DEFAULT ERROR', error)
 
     responseStatus = error.response?.status || 500
