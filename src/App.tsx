@@ -3,6 +3,7 @@ import './dev.css'
 import { chatflows } from './constants'
 import { PromptType } from './features/bot'
 import { Bubble } from './features/bubble'
+import { useTheme } from './features/theme'
 import './index.css'
 
 const initialPrompts: PromptType[] = [
@@ -22,13 +23,15 @@ const initialPrompts: PromptType[] = [
 ]
 
 function App() {
+  const { theme } = useTheme()
+
   return (
     <div class='w-full h-screen flex flex-col justify-center items-center bg-slate-100'>
       <h1 class='text-3xl md:text-6xl tracking-widest'>
         PL
         <span
           style={{
-            color: '#3B81F6',
+            color: theme().primaryColor,
           }}
         >
           AI
@@ -40,7 +43,7 @@ function App() {
         Powered by
         <span
           style={{
-            color: '#3B81F6',
+            color: theme().primaryColor,
           }}
         >
           {' '}

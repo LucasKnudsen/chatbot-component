@@ -46,7 +46,7 @@
 //   size?: 'medium' | 'large'
 //   backgroundColor?: string
 //   iconColor?: string
-//   customIconSrc?: string
+//   navbarLogoUrl?: string
 //   bottom?: number
 //   right?: number
 // }

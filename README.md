@@ -75,7 +75,7 @@ export type TextConfig = {
 ```
 export type Theme = {
   isDark: boolean
-  customIconSrc: string
+  navbarLogoUrl: string
   primaryColor: string
   primaryAccent: string
   textColor: string
@@ -84,6 +84,8 @@ export type Theme = {
   backgroundColor: string
   backgroundAccent: string
   backgroundImageUrl?: string
+  bubbleButtonColor: string
+  bubbleButtonLogoUrl?: string
   drawerBackground: string
   borderColor: string
   textInputTextColor: string

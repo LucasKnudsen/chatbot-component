@@ -1,11 +1,12 @@
 import background2 from '@/assets/background-2.png'
 import background3 from '@/assets/background-3.png'
-import newLogo from '@/assets/logo2.svg'
+import newLogo from '@/assets/logo.svg'
+import newLogo2 from '@/assets/logo2.svg'
 import logo from '@/assets/logo_final.png'
 
 export type Theme = {
   isDark: boolean
-  customIconSrc: string
+  navbarLogoUrl: string
   primaryColor: string
   primaryAccent: string
   textColor: string
@@ -15,6 +16,7 @@ export type Theme = {
   backgroundAccent: string
   backgroundImageUrl?: string
   bubbleButtonColor: string
+  bubbleButtonLogoUrl?: string
   drawerBackground: string
   borderColor: string
   textInputTextColor: string
@@ -25,7 +27,7 @@ export type Theme = {
 
 export const defaultTheme: Theme = {
   isDark: false,
-  customIconSrc: newLogo,
+  navbarLogoUrl: newLogo2,
   primaryColor: 'rgba(91, 147, 255, 1)',
   primaryAccent: 'rgba(91, 147, 255, 0.2)',
   textColor: 'rgba(31, 8, 8, 1)',
@@ -47,7 +49,7 @@ export const defaultTheme: Theme = {
 
 const fraia: Theme = {
   isDark: false,
-  customIconSrc: logo,
+  navbarLogoUrl: logo,
   primaryColor: 'rgba(255,118,118,255)',
   primaryAccent: 'rgba(255,118,118,0.2)',
   textColor: 'rgba(31, 8, 8, 1)',
@@ -55,7 +57,8 @@ const fraia: Theme = {
   onPrimary: 'rgba(255, 255, 255, 1)',
   backgroundColor: '#ffffff',
   backgroundAccent: '#ffffff',
-  bubbleButtonColor: '#1f1f1f',
+  bubbleButtonColor: 'rgba(236, 236, 236, 1)',
+  bubbleButtonLogoUrl: newLogo,
   backgroundImageUrl: background3,
 
   drawerBackground: 'rgba(255, 255, 255, 0.75)',
@@ -68,7 +71,7 @@ const fraia: Theme = {
 
 const midnight: Theme = {
   isDark: true,
-  customIconSrc: newLogo,
+  navbarLogoUrl: newLogo,
   primaryColor: '#204ef7',
   primaryAccent: '#152e8a',
   textColor: '#FAF9F6',
@@ -87,7 +90,7 @@ const midnight: Theme = {
 
 const ugly: Theme = {
   isDark: false,
-  customIconSrc: logo,
+  navbarLogoUrl: logo,
   primaryColor: 'red',
   primaryAccent: 'orange',
   textColor: 'white',

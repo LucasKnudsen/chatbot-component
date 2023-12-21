@@ -32,7 +32,7 @@ export const Nav = (props: NavProps) => {
       }}
     >
       <div class='flex items-center gap-6'>
-        <img src={theme().customIconSrc} class='h-6 cursor-pointer' onClick={resetChat} />
+        <img src={theme().navbarLogoUrl} class='h-6 cursor-pointer' onClick={resetChat} />
 
         <Show when={!props.sidebarOpen}>
           <Button onClick={props.onToggleBot} padding='7px' class='animate-fade-in md:hidden'>

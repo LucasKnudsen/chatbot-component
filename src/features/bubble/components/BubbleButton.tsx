@@ -24,7 +24,7 @@ export const BubbleButton = (props: Props) => {
           `stroke-2  absolute duration-200 transition w-7 ` +
           (props.isBotOpened ? 'scale-0 opacity-0' : 'scale-100 opacity-100')
         }
-        src={theme().customIconSrc}
+        src={theme().bubbleButtonLogoUrl || theme().navbarLogoUrl}
       />
 
       <svg
