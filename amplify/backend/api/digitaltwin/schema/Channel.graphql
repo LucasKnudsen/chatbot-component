@@ -1,15 +1,59 @@
+# type Channel
+#   @model
+#   @auth(
+#     rules: [
+#       { allow: groups, groups: ["SuperAdmin"] }
+#       { allow: private, operations: [get] }
+#       { allow: public, provider: iam, operations: [get] }
+#     ]
+#   ) {
+#   chatSpaceId: ID! @primaryKey(sortKeyFields: ["id"])
+#   id: ID!
+#   apiHost: String
+#   chatflowId: String
+#   name: String!
+# }
+
 type Channel
   @model
   @auth(
     rules: [
       { allow: groups, groups: ["SuperAdmin"] }
-      { allow: private, operations: [get] }
-      { allow: public, provider: iam, operations: [get] }
+      { allow: groups, groupsField: "admin" }
+      { allow: groups, groupsField: "members", operations: [read] }
+      { allow: private, operations: [get] } ## TODO: remove this after custom lambda is implemented
+      { allow: public, provider: iam, operations: [get] } ## TODO: remove this after custom lambda is implemented
     ]
   ) {
+  chatSpaceId: ID! @primaryKey(sortKeyFields: ["id"])
   id: ID!
-  tenantId: String! @index(name: "tenantId", queryField: "channelsByTenantId")
   apiHost: String
   chatflowId: String
   name: String!
+
+  admin: String!
+  members: [String!]
+}
+
+type ChannelDocument
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["SuperAdmin"] }
+      { allow: groups, groupsField: "admin" }
+      { allow: groups, groupsField: "members", operations: [read] }
+      { allow: private, operations: [get] } ## TODO: remove this after custom lambda is implemented
+      { allow: public, provider: iam, operations: [get] } ## TODO: remove this after custom lambda is implemented
+    ]
+  ) {
+  channelId: ID! @primaryKey(sortKeyFields: ["id"])
+  id: ID!
+
+  s3Key: String
+  fileType: String
+  fileName: String
+  fileSize: Int
+
+  admin: String!
+  members: [String!]
 }

@@ -3,27 +3,13 @@ import background3 from '@/assets/background-3.png'
 import newLogo from '@/assets/logo.svg'
 import newLogo2 from '@/assets/logo2.svg'
 import logo from '@/assets/logo_final.png'
+import { ChatSpaceTheme } from '@/graphql/types'
 
-export type Theme = {
-  isDark: boolean
-  navbarLogoUrl: string
-  primaryColor: string
-  primaryAccent: string
-  textColor: string
-  textSecondary: string
-  onPrimary: string
-  backgroundColor: string
-  backgroundAccent: string
-  backgroundImageUrl?: string
-  bubbleButtonColor: string
-  bubbleButtonLogoUrl?: string
-  drawerBackground: string
-  borderColor: string
-  textInputTextColor: string
-  textInputBackgroundColor: string
-  surfaceBackground: string
-  surfaceHoveredBackground: string
+type NonNullProperties<T> = {
+  [P in keyof T]: Exclude<T[P], null>
 }
+
+export type Theme = NonNullProperties<Omit<ChatSpaceTheme, '__typename'>>
 
 export const defaultTheme: Theme = {
   isDark: false,
@@ -50,6 +36,7 @@ export const defaultTheme: Theme = {
 const fraia: Theme = {
   isDark: false,
   navbarLogoUrl: logo,
+
   primaryColor: 'rgba(255,118,118,255)',
   primaryAccent: 'rgba(255,118,118,0.2)',
   textColor: 'rgba(31, 8, 8, 1)',

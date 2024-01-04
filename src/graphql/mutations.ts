@@ -147,11 +147,13 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
   $condition: ModelChannelConditionInput
 ) {
   createChannel(input: $input, condition: $condition) {
+    chatSpaceId
     id
-    tenantId
     apiHost
     chatflowId
     name
+    admin
+    members
     createdAt
     updatedAt
     __typename
@@ -166,11 +168,13 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
   $condition: ModelChannelConditionInput
 ) {
   updateChannel(input: $input, condition: $condition) {
+    chatSpaceId
     id
-    tenantId
     apiHost
     chatflowId
     name
+    admin
+    members
     createdAt
     updatedAt
     __typename
@@ -185,11 +189,13 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
   $condition: ModelChannelConditionInput
 ) {
   deleteChannel(input: $input, condition: $condition) {
+    chatSpaceId
     id
-    tenantId
     apiHost
     chatflowId
     name
+    admin
+    members
     createdAt
     updatedAt
     __typename
@@ -198,4 +204,340 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
 ` as GeneratedMutation<
   APITypes.DeleteChannelMutationVariables,
   APITypes.DeleteChannelMutation
+>;
+export const createChannelDocument = /* GraphQL */ `mutation CreateChannelDocument(
+  $input: CreateChannelDocumentInput!
+  $condition: ModelChannelDocumentConditionInput
+) {
+  createChannelDocument(input: $input, condition: $condition) {
+    channelId
+    id
+    s3Key
+    fileType
+    fileName
+    fileSize
+    admin
+    members
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChannelDocumentMutationVariables,
+  APITypes.CreateChannelDocumentMutation
+>;
+export const updateChannelDocument = /* GraphQL */ `mutation UpdateChannelDocument(
+  $input: UpdateChannelDocumentInput!
+  $condition: ModelChannelDocumentConditionInput
+) {
+  updateChannelDocument(input: $input, condition: $condition) {
+    channelId
+    id
+    s3Key
+    fileType
+    fileName
+    fileSize
+    admin
+    members
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChannelDocumentMutationVariables,
+  APITypes.UpdateChannelDocumentMutation
+>;
+export const deleteChannelDocument = /* GraphQL */ `mutation DeleteChannelDocument(
+  $input: DeleteChannelDocumentInput!
+  $condition: ModelChannelDocumentConditionInput
+) {
+  deleteChannelDocument(input: $input, condition: $condition) {
+    channelId
+    id
+    s3Key
+    fileType
+    fileName
+    fileSize
+    admin
+    members
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChannelDocumentMutationVariables,
+  APITypes.DeleteChannelDocumentMutation
+>;
+export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
+  $input: CreateChatSpaceInput!
+  $condition: ModelChatSpaceConditionInput
+) {
+  createChatSpace(input: $input, condition: $condition) {
+    ownerId
+    id
+    name
+    isPublic
+    isMultiChannel
+    themeId
+    language
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    settings {
+      autoOpen
+      __typename
+    }
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChatSpaceMutationVariables,
+  APITypes.CreateChatSpaceMutation
+>;
+export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
+  $input: UpdateChatSpaceInput!
+  $condition: ModelChatSpaceConditionInput
+) {
+  updateChatSpace(input: $input, condition: $condition) {
+    ownerId
+    id
+    name
+    isPublic
+    isMultiChannel
+    themeId
+    language
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    settings {
+      autoOpen
+      __typename
+    }
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChatSpaceMutationVariables,
+  APITypes.UpdateChatSpaceMutation
+>;
+export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
+  $input: DeleteChatSpaceInput!
+  $condition: ModelChatSpaceConditionInput
+) {
+  deleteChatSpace(input: $input, condition: $condition) {
+    ownerId
+    id
+    name
+    isPublic
+    isMultiChannel
+    themeId
+    language
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    settings {
+      autoOpen
+      __typename
+    }
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChatSpaceMutationVariables,
+  APITypes.DeleteChatSpaceMutation
+>;
+export const createOrganization = /* GraphQL */ `mutation CreateOrganization(
+  $input: CreateOrganizationInput!
+  $condition: ModelOrganizationConditionInput
+) {
+  createOrganization(input: $input, condition: $condition) {
+    id
+    name
+    logo
+    admin
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateOrganizationMutationVariables,
+  APITypes.CreateOrganizationMutation
+>;
+export const updateOrganization = /* GraphQL */ `mutation UpdateOrganization(
+  $input: UpdateOrganizationInput!
+  $condition: ModelOrganizationConditionInput
+) {
+  updateOrganization(input: $input, condition: $condition) {
+    id
+    name
+    logo
+    admin
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateOrganizationMutationVariables,
+  APITypes.UpdateOrganizationMutation
+>;
+export const deleteOrganization = /* GraphQL */ `mutation DeleteOrganization(
+  $input: DeleteOrganizationInput!
+  $condition: ModelOrganizationConditionInput
+) {
+  deleteOrganization(input: $input, condition: $condition) {
+    id
+    name
+    logo
+    admin
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteOrganizationMutationVariables,
+  APITypes.DeleteOrganizationMutation
+>;
+export const createUser = /* GraphQL */ `mutation CreateUser(
+  $input: CreateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  createUser(input: $input, condition: $condition) {
+    id
+    email
+    cognitoId
+    organizationId
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateUserMutationVariables,
+  APITypes.CreateUserMutation
+>;
+export const updateUser = /* GraphQL */ `mutation UpdateUser(
+  $input: UpdateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  updateUser(input: $input, condition: $condition) {
+    id
+    email
+    cognitoId
+    organizationId
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateUserMutationVariables,
+  APITypes.UpdateUserMutation
+>;
+export const deleteUser = /* GraphQL */ `mutation DeleteUser(
+  $input: DeleteUserInput!
+  $condition: ModelUserConditionInput
+) {
+  deleteUser(input: $input, condition: $condition) {
+    id
+    email
+    cognitoId
+    organizationId
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteUserMutationVariables,
+  APITypes.DeleteUserMutation
 >;

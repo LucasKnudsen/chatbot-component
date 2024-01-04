@@ -2,6 +2,9 @@ import { BotProps } from '.'
 
 // The props needs to be instantiated with the default values, otherwise it won't be filled from the Object.assign
 export const defaultBotProps: BotProps = {
+  hostId: '',
+  spaceId: '',
+
   channelId: '',
   language: undefined,
   themeId: undefined,
@@ -22,15 +25,16 @@ export const chatflows: Record<string, BotProps> = {
   //   apiHost: 'https://lionbrain.softdesign.dk',
   // },
   fraia_prod: {
+    hostId: 'f86f6a13-a58c-44d8-87cd-077f559fc0fc',
+    spaceId: 'f86f6a13-a58c-44d8-87cd-077f559fc0fc',
     channelId: '141aca34-5624-4441-87c8-62524f40ecd1',
     settings: {
       autoOpen: true,
     },
   },
   fraia_dev: {
+    hostId: 'f86f6a13-a58c-44d8-87cd-077f559fc0fc',
+    spaceId: 'f86f6a13-a58c-44d8-87cd-077f559fc0fc',
     channelId: 'c03c3bbc-935a-11ee-b9d1-0242ac120002',
-    settings: {
-      autoOpen: true,
-    },
   },
 }

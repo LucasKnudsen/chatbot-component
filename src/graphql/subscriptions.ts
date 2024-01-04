@@ -132,11 +132,13 @@ export const onDeleteLanguageItem = /* GraphQL */ `subscription OnDeleteLanguage
 >;
 export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel($filter: ModelSubscriptionChannelFilterInput) {
   onCreateChannel(filter: $filter) {
+    chatSpaceId
     id
-    tenantId
     apiHost
     chatflowId
     name
+    admin
+    members
     createdAt
     updatedAt
     __typename
@@ -148,11 +150,13 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel($filt
 >;
 export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel($filter: ModelSubscriptionChannelFilterInput) {
   onUpdateChannel(filter: $filter) {
+    chatSpaceId
     id
-    tenantId
     apiHost
     chatflowId
     name
+    admin
+    members
     createdAt
     updatedAt
     __typename
@@ -164,11 +168,13 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel($filt
 >;
 export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel($filter: ModelSubscriptionChannelFilterInput) {
   onDeleteChannel(filter: $filter) {
+    chatSpaceId
     id
-    tenantId
     apiHost
     chatflowId
     name
+    admin
+    members
     createdAt
     updatedAt
     __typename
@@ -177,4 +183,328 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel($filt
 ` as GeneratedSubscription<
   APITypes.OnDeleteChannelSubscriptionVariables,
   APITypes.OnDeleteChannelSubscription
+>;
+export const onCreateChannelDocument = /* GraphQL */ `subscription OnCreateChannelDocument(
+  $filter: ModelSubscriptionChannelDocumentFilterInput
+) {
+  onCreateChannelDocument(filter: $filter) {
+    channelId
+    id
+    s3Key
+    fileType
+    fileName
+    fileSize
+    admin
+    members
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateChannelDocumentSubscriptionVariables,
+  APITypes.OnCreateChannelDocumentSubscription
+>;
+export const onUpdateChannelDocument = /* GraphQL */ `subscription OnUpdateChannelDocument(
+  $filter: ModelSubscriptionChannelDocumentFilterInput
+) {
+  onUpdateChannelDocument(filter: $filter) {
+    channelId
+    id
+    s3Key
+    fileType
+    fileName
+    fileSize
+    admin
+    members
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateChannelDocumentSubscriptionVariables,
+  APITypes.OnUpdateChannelDocumentSubscription
+>;
+export const onDeleteChannelDocument = /* GraphQL */ `subscription OnDeleteChannelDocument(
+  $filter: ModelSubscriptionChannelDocumentFilterInput
+) {
+  onDeleteChannelDocument(filter: $filter) {
+    channelId
+    id
+    s3Key
+    fileType
+    fileName
+    fileSize
+    admin
+    members
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteChannelDocumentSubscriptionVariables,
+  APITypes.OnDeleteChannelDocumentSubscription
+>;
+export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
+  onCreateChatSpace(filter: $filter) {
+    ownerId
+    id
+    name
+    isPublic
+    isMultiChannel
+    themeId
+    language
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    settings {
+      autoOpen
+      __typename
+    }
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateChatSpaceSubscriptionVariables,
+  APITypes.OnCreateChatSpaceSubscription
+>;
+export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
+  onUpdateChatSpace(filter: $filter) {
+    ownerId
+    id
+    name
+    isPublic
+    isMultiChannel
+    themeId
+    language
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    settings {
+      autoOpen
+      __typename
+    }
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateChatSpaceSubscriptionVariables,
+  APITypes.OnUpdateChatSpaceSubscription
+>;
+export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
+  onDeleteChatSpace(filter: $filter) {
+    ownerId
+    id
+    name
+    isPublic
+    isMultiChannel
+    themeId
+    language
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    settings {
+      autoOpen
+      __typename
+    }
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteChatSpaceSubscriptionVariables,
+  APITypes.OnDeleteChatSpaceSubscription
+>;
+export const onCreateOrganization = /* GraphQL */ `subscription OnCreateOrganization(
+  $filter: ModelSubscriptionOrganizationFilterInput
+  $owner: String
+) {
+  onCreateOrganization(filter: $filter, owner: $owner) {
+    id
+    name
+    logo
+    admin
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateOrganizationSubscriptionVariables,
+  APITypes.OnCreateOrganizationSubscription
+>;
+export const onUpdateOrganization = /* GraphQL */ `subscription OnUpdateOrganization(
+  $filter: ModelSubscriptionOrganizationFilterInput
+  $owner: String
+) {
+  onUpdateOrganization(filter: $filter, owner: $owner) {
+    id
+    name
+    logo
+    admin
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateOrganizationSubscriptionVariables,
+  APITypes.OnUpdateOrganizationSubscription
+>;
+export const onDeleteOrganization = /* GraphQL */ `subscription OnDeleteOrganization(
+  $filter: ModelSubscriptionOrganizationFilterInput
+  $owner: String
+) {
+  onDeleteOrganization(filter: $filter, owner: $owner) {
+    id
+    name
+    logo
+    admin
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteOrganizationSubscriptionVariables,
+  APITypes.OnDeleteOrganizationSubscription
+>;
+export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
+  $filter: ModelSubscriptionUserFilterInput
+  $owner: String
+) {
+  onCreateUser(filter: $filter, owner: $owner) {
+    id
+    email
+    cognitoId
+    organizationId
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateUserSubscriptionVariables,
+  APITypes.OnCreateUserSubscription
+>;
+export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
+  $filter: ModelSubscriptionUserFilterInput
+  $owner: String
+) {
+  onUpdateUser(filter: $filter, owner: $owner) {
+    id
+    email
+    cognitoId
+    organizationId
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateUserSubscriptionVariables,
+  APITypes.OnUpdateUserSubscription
+>;
+export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
+  $filter: ModelSubscriptionUserFilterInput
+  $owner: String
+) {
+  onDeleteUser(filter: $filter, owner: $owner) {
+    id
+    email
+    cognitoId
+    organizationId
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteUserSubscriptionVariables,
+  APITypes.OnDeleteUserSubscription
 >;

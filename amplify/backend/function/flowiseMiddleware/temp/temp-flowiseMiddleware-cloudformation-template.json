@@ -106,6 +106,28 @@
             "API_DIGITALTWIN_GRAPHQLAPIIDOUTPUT": {
               "Ref": "apidigitaltwinGraphQLAPIIdOutput"
             },
+            "API_DIGITALTWIN_CHANNELTABLE_NAME": {
+              "Fn::Sub": "TemporaryPlaceholderValue"
+            },
+            "API_DIGITALTWIN_CHANNELTABLE_ARN": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:dynamodb:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":table/",
+                  {
+                    "Fn::Sub": "TemporaryPlaceholderValue"
+                  }
+                ]
+              ]
+            },
             "FUNCTION_FLOWISEBROADCAST_NAME": {
               "Ref": "functionflowiseBroadcastName"
             }
@@ -329,6 +351,59 @@
                       {
                         "Ref": "functionflowiseBroadcastName"
                       }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Get*",
+                "dynamodb:BatchGetItem",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:PartiQLSelect"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::Sub": "TemporaryPlaceholderValue"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::Sub": "TemporaryPlaceholderValue"
+                      },
+                      "/index/*"
                     ]
                   ]
                 }

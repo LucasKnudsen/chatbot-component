@@ -118,6 +118,27 @@
     }
   },
   "function": {
+    "adhoc": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "digitaltwinauth"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "broadcastResolver": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -153,13 +174,6 @@
           ],
           "category": "function",
           "resourceName": "flowiseBroadcast"
-        },
-        {
-          "attributes": [
-            "GraphQLAPIIdOutput"
-          ],
-          "category": "api",
-          "resourceName": "digitaltwin"
         }
       ],
       "providerPlugin": "awscloudformation",

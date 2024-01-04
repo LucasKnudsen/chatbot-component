@@ -1,66 +1,4 @@
 {
-  "prod": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-digitaltwin-prod-121451-authRole",
-      "UnauthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-prod-121451-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-prod-121451-authRole",
-      "Region": "ap-southeast-1",
-      "DeploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-      "UnauthRoleName": "amplify-digitaltwin-prod-121451-unauthRole",
-      "StackName": "amplify-digitaltwin-prod-121451",
-      "StackId": "arn:aws:cloudformation:ap-southeast-1:047845575339:stack/amplify-digitaltwin-prod-121451/0bced500-7e28-11ee-9459-02fc87cf7948",
-      "AmplifyAppId": "d1i4jp82axmvxl",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-digitaltwin-prod-121451-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
-    },
-    "categories": {
-      "function": {
-        "flowiseMiddleware": {
-          "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/flowiseMiddleware-6c4a69624432426c7153-build.zip",
-          "secretsPathAmplifyAppId": "d1i4jp82axmvxl"
-        },
-        "flowiseBroadcast": {
-          "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/flowiseBroadcast-6c445345457938754e71-build.zip"
-        },
-        "broadcastResolver": {
-          "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/broadcastResolver-48514771765a73636f48-build.zip"
-        },
-        "detectLanguage": {
-          "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/detectLanguage-6365337473786d414b75-build.zip"
-        },
-        "digitaltwin": {},
-        "transcribeAudio": {
-          "deploymentBucketName": "amplify-digitaltwin-prod-121451-deployment",
-          "s3Key": "amplify-builds/transcribeAudio-584f777262343562564c-build.zip",
-          "secretsPathAmplifyAppId": "d1i4jp82axmvxl"
-        },
-        "fraiastorage": {}
-      },
-      "api": {
-        "digitaltwin": {},
-        "digitaltwinRest": {}
-      },
-      "auth": {
-        "digitaltwinauth": {},
-        "userPoolGroups": {}
-      },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d1i4jp82axmvxl",
-          "type": "cicd"
-        }
-      },
-      "predictions": {
-        "dynamicTranslator": {}
-      },
-      "storage": {
-        "fraiastorage": {}
-      }
-    }
-  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-digitaltwin-dev-91806-authRole",
@@ -75,11 +13,17 @@
       "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-digitaltwin-dev-91806-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
-      "auth": {
-        "digitaltwinauth": {},
-        "userPoolGroups": {}
-      },
       "function": {
+        "flowiseMiddleware": {
+          "secretsPathAmplifyAppId": "d1i4jp82axmvxl",
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/flowiseMiddleware-6c4a69624432426c7153-build.zip"
+        },
+        "transcribeAudio": {
+          "secretsPathAmplifyAppId": "d1i4jp82axmvxl",
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/transcribeAudio-584f777262343562564c-build.zip"
+        },
         "broadcastResolver": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
           "s3Key": "amplify-builds/broadcastResolver-48514771765a73636f48-build.zip"
@@ -92,17 +36,7 @@
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
           "s3Key": "amplify-builds/flowiseBroadcast-6c445345457938754e71-build.zip"
         },
-        "flowiseMiddleware": {
-          "secretsPathAmplifyAppId": "d1i4jp82axmvxl",
-          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/flowiseMiddleware-6c4a69624432426c7153-build.zip"
-        },
-        "digitaltwin": {},
-        "transcribeAudio": {
-          "secretsPathAmplifyAppId": "d1i4jp82axmvxl",
-          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/transcribeAudio-584f777262343562564c-build.zip"
-        }
+        "adhoc": {}
       },
       "hosting": {
         "amplifyhosting": {
@@ -110,12 +44,9 @@
           "type": "cicd"
         }
       },
-      "api": {
-        "digitaltwin": {},
-        "digitaltwinRest": {}
-      },
-      "predictions": {
-        "dynamicTranslator": {}
+      "auth": {
+        "digitaltwinauth": {},
+        "userPoolGroups": {}
       },
       "storage": {
         "fraiastorage": {}

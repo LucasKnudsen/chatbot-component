@@ -1,0 +1,53 @@
+type ChatSpace
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["SuperAdmin"] }
+      { allow: groups, groupsField: "admin" }
+      { allow: public, provider: iam, operations: [get] }
+    ]
+  ) {
+  ownerId: ID! @primaryKey(sortKeyFields: ["id"]) ## Organization or User ID
+  id: ID!
+  name: String!
+  isPublic: Boolean!
+  isMultiChannel: Boolean!
+
+  themeId: String
+  language: String # Code Ref
+  initialPrompts: [InitialPrompt!]
+  theme: ChatSpaceTheme
+  settings: ChatSpaceSettings!
+
+  admin: String!
+}
+
+type InitialPrompt {
+  display: String
+  prompt: String!
+}
+
+type ChatSpaceTheme {
+  isDark: Boolean
+  navbarLogoUrl: String
+  primaryColor: String
+  primaryAccent: String
+  textColor: String
+  textSecondary: String
+  onPrimary: String
+  backgroundColor: String
+  backgroundAccent: String
+  backgroundImageUrl: String
+  bubbleButtonColor: String
+  bubbleButtonLogoUrl: String
+  drawerBackground: String
+  borderColor: String
+  textInputTextColor: String
+  textInputBackgroundColor: String
+  surfaceBackground: String
+  surfaceHoveredBackground: String
+}
+
+type ChatSpaceSettings {
+  autoOpen: Boolean
+}

@@ -51,6 +51,8 @@ export type BotSettings = {
 }
 
 export type BotConfig = {
+  hostId: string
+  spaceId: string
   channelId: string
   language?: string
   themeId?: string
@@ -74,8 +76,6 @@ export const BotManager = (props: BotProps) => {
     try {
       isUser = Boolean(await Auth.currentAuthenticatedUser())
     } catch (error) {}
-
-    console.log(isUser)
 
     try {
       const localChannel = localStorage.getItem(storageKey)

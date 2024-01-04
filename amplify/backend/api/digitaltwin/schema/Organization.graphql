@@ -1,0 +1,16 @@
+type Organization @model @auth(rules: [{ allow: owner }, { allow: groups, groupsField: "admin" }]) {
+  id: ID!
+  name: String!
+  logo: String
+
+  admin: String!
+}
+
+type User @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+
+  email: String!
+  cognitoId: String!
+
+  organizationId: ID
+}
