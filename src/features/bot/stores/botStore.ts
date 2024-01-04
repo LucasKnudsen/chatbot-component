@@ -8,6 +8,7 @@ import {
 } from '@/features/contextual'
 import { Chat } from '@/features/messages/types'
 import { translate } from '@/features/text'
+import { Channel } from '@/graphql'
 import { parseProxy, randomUUID } from '@/utils'
 import { uniqBy } from 'lodash'
 import { createStore } from 'solid-js/store'
@@ -16,7 +17,8 @@ type ExtendedSourceFact = SourceFact & { source: string }
 type ExtendedSourceResource = SourceResource & { source: string }
 
 type BotStore = {
-  chatflowId: string
+  activeChannel: Channel
+  channels: Channel[]
   chat: Chat | null
   history: Chat[]
   loading: boolean
@@ -26,13 +28,14 @@ type BotStore = {
 }
 
 const [botStore, setBotStore] = createStore<BotStore>({
-  chatflowId: '',
+  activeChannel: {} as Channel,
+  channels: [],
   chat: null,
   history: [],
   loading: false,
   clientLanguage: undefined,
   get storageKey() {
-    return `${this.chatflowId}_QUESTIONS`
+    return `${this.activeChannel.chatflowId}_QUESTIONS`
   },
   get hasResources() {
     const q = this.chat
@@ -46,10 +49,10 @@ const [botStore, setBotStore] = createStore<BotStore>({
   },
 })
 
-const initBotStore = (chatflowId: string, clientLanguage?: string) => {
+const initBotStore = (channel: Channel, clientLanguage?: string) => {
   // init chatflowId and clientLanguage first so that getStoredHistory uses correct storageKey
   setBotStore({
-    chatflowId,
+    activeChannel: channel,
     clientLanguage,
   })
 
@@ -57,8 +60,8 @@ const initBotStore = (chatflowId: string, clientLanguage?: string) => {
 
   setBotStore({
     history,
-    chatflowId,
-    clientLanguage,
+    // chatflowId,
+    // clientLanguage,
   })
 }
 

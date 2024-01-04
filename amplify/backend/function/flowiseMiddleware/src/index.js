@@ -133,7 +133,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
     });
 }); };
 exports.handler = handler;
-var getChannel = function (channelId) { return __awaiter(void 0, void 0, void 0, function () {
+var getChannel = function (spaceId, channelId) { return __awaiter(void 0, void 0, void 0, function () {
     var command, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -141,6 +141,7 @@ var getChannel = function (channelId) { return __awaiter(void 0, void 0, void 0,
                 command = new lib_dynamodb_1.GetCommand({
                     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
                     Key: {
+                        chatSpaceId: spaceId,
                         id: channelId,
                     },
                 });
@@ -165,17 +166,17 @@ var getSecret = function (secretName) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var channelId, chatId, socketIOClientId, question, _a, channel, apiKey, endpoint, data, result;
+    var spaceId, channelId, chatId, socketIOClientId, question, _a, channel, apiKey, endpoint, data, result;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 console.time('GET_CONFIG');
-                channelId = body.channelId, chatId = body.chatId, socketIOClientId = body.socketIOClientId, question = body.question;
-                if (!channelId)
+                spaceId = body.spaceId, channelId = body.channelId, chatId = body.chatId, socketIOClientId = body.socketIOClientId, question = body.question;
+                if (!channelId || !spaceId)
                     throw new TypeError('MISSING_CHANNEL_ID');
                 return [4 /*yield*/, Promise.all([
-                        getChannel(channelId),
-                        getSecret("flowiseKey_".concat(channelId)),
+                        getChannel(spaceId, channelId),
+                        getSecret("flowiseKey"),
                     ])];
             case 1:
                 _a = _b.sent(), channel = _a[0], apiKey = _a[1];

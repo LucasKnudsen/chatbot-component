@@ -62,15 +62,23 @@ export const BotManager = (props: BotProps) => {
     } catch (error) {}
 
     try {
+      let channels: Channel[] | undefined
+
       const localChannels = localStorage.getItem(storageKey)
 
-      if (localChannels) return JSON.parse(localChannels) as Channel[]
+      if (localChannels) {
+        channels = JSON.parse(localChannels)
+      }
 
-      const channels = await fetchChannels(props)
+      channels = await fetchChannels(props)
 
       if (!channels) {
         setChannelError('Channels not found')
         return
+      }
+
+      if (!props.isMultiChannel) {
+        botStoreActions.initBotStore(channels[0])
       }
 
       localStorage.setItem(storageKey, JSON.stringify(channels))
@@ -90,7 +98,7 @@ export const BotManager = (props: BotProps) => {
       fallback={<FraiaLoading channelError={channelError} toggleBot={props.toggleBot} />}
     >
       <Bot
-        channel={channels()!}
+        channels={channels()!}
         {...props}
         toggleBot={props.toggleBot}
         class='fixed top-0 left-0 w-full h-full z-50'
@@ -99,18 +107,15 @@ export const BotManager = (props: BotProps) => {
   )
 }
 
-export const Bot = (props: BotProps & { channel: Channel }) => {
+export const Bot = (props: BotProps & { channels: Channel[] }) => {
   const [userInput, setUserInput] = createSignal('')
 
   const [sidebarOpen, setSidebarOpen] = createSignal(false)
 
   const device = useMediaQuery()
 
-  const { chatId, clear: clearChatId } = useChatId(props.channel.chatflowId!)
-  const { clear: clearDefaultLanguage } = useLanguage(
-    props.channel.chatflowId!,
-    props.language || 'en'
-  )
+  const { chatId, clear: clearChatId } = useChatId()
+  const { clear: clearDefaultLanguage } = useLanguage(props.language || 'en')
 
   const {
     suggestedPrompts,
@@ -120,8 +125,6 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
   } = useSuggestedPrompts()
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
-    chatflowId: props.channel.chatflowId!,
-    apiHost: props.channel.apiHost!,
     onToken: botStoreActions.updateAnswer,
   })
 
@@ -139,8 +142,6 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
   }
 
   onMount(() => {
-    botStoreActions.initBotStore(props.channel.chatflowId!, props.language || 'en')
-
     if (botStore.chat) {
       fetchSuggestedPrompts()
     }
@@ -162,7 +163,8 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
 
     const body: IncomingInput = {
       question: value,
-      channelId: props.channel.id,
+      channelId: botStore.activeChannel.id,
+      spaceId: botStore.activeChannel.chatSpaceId,
       history: [],
       chatId: chatId(),
       promptCode: PromptCode.QUESTION,

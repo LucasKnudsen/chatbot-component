@@ -1,17 +1,14 @@
+import { botStore } from '@/features/bot'
 import { SourceDocument } from '@/features/contextual'
 import { isStreamAvailableQuery } from '@/features/messages/queries/sendMessageQuery'
 import { logDev } from '@/utils'
-import socketIOClient from 'socket.io-client'
-import { createSignal, onCleanup, onMount } from 'solid-js'
+import socketIOClient, { Socket } from 'socket.io-client'
+import { createEffect, createSignal, on, onCleanup, onMount } from 'solid-js'
 
 export function useSocket({
-  chatflowId,
-  apiHost,
   onStart,
   onToken,
 }: {
-  chatflowId: string
-  apiHost: string
   onStart?: () => void
   onDocuments?: (documents: SourceDocument[]) => void
   onToken?: (token: string) => void
@@ -20,12 +17,31 @@ export function useSocket({
 
   const [socketIOClientId, setSocketIOClientId] = createSignal('')
 
-  const socket = socketIOClient(apiHost as string)
+  let socket: Socket
 
-  onMount(async () => {
+  onMount(() => initSocket)
+  onCleanup(() => handleCleanup)
+
+  // When the active channel changes, we need to reconnect to the socket server.
+  createEffect(
+    on(
+      () => botStore.activeChannel,
+      () => {
+        socket && handleCleanup()
+
+        setTimeout(() => {
+          initSocket()
+        }, 1000)
+      }
+    )
+  )
+
+  const initSocket = async () => {
+    socket = socketIOClient(botStore.activeChannel.apiHost as string)
+
     const { data } = await isStreamAvailableQuery({
-      chatflowId,
-      apiHost,
+      chatflowId: botStore.activeChannel.chatflowId!,
+      apiHost: botStore.activeChannel.apiHost!,
     })
 
     if (data) {
@@ -44,13 +60,13 @@ export function useSocket({
     // socket.on('sourceDocuments', (docs) => onDocuments?.(docs))
 
     socket.on('token', (t) => onToken?.(t))
-  })
+  }
 
-  onCleanup(() => {
+  const handleCleanup = () => {
     socket.disconnect()
     setSocketIOClientId('')
     setIsChatFlowAvailableToStream(false)
-  })
+  }
 
   return { socketIOClientId, isChatFlowAvailableToStream }
 }

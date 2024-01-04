@@ -1,11 +1,12 @@
 import { createEffect, createSignal, on, onMount } from 'solid-js'
+import { botStore } from '..'
 
 export const SYSTEM_DEFAULT_LANGUAGE = 'en'
 
 export const [currentLanguage, setLanguage] = createSignal<string>('')
 
-export const useLanguage = (chatflowid: string, languageOverride?: string) => {
-  const storageKey = `${chatflowid}_DEFAULT_LANGUAGE`
+export const useLanguage = (languageOverride?: string) => {
+  const storageKey = `${botStore.activeChannel.chatflowId!}_DEFAULT_LANGUAGE`
 
   const clear = () => {
     const newLanguage = languageOverride || SYSTEM_DEFAULT_LANGUAGE

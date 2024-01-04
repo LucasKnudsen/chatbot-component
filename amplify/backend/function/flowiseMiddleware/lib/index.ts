@@ -20,6 +20,7 @@ const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
 
 type ParsedEventBody = {
   promptCode: string
+  spaceId?: string
   channelId?: string
   language?: string
   question?: string
@@ -104,10 +105,11 @@ export const handler = async (
   }
 }
 
-const getChannel = async (channelId: string) => {
+const getChannel = async (spaceId: string, channelId: string) => {
   const command = new GetCommand({
     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
     Key: {
+      chatSpaceId: spaceId,
       id: channelId,
     },
   })
@@ -126,13 +128,13 @@ const getSecret = async (secretName: string) => {
 
 const handleFlowiseRequest = async (body: ParsedEventBody) => {
   console.time('GET_CONFIG')
-  const { channelId, chatId, socketIOClientId, question } = body
+  const { spaceId, channelId, chatId, socketIOClientId, question } = body
 
-  if (!channelId) throw new TypeError('MISSING_CHANNEL_ID')
+  if (!channelId || !spaceId) throw new TypeError('MISSING_CHANNEL_ID')
 
   const [channel, apiKey] = await Promise.all([
-    getChannel(channelId),
-    getSecret(`flowiseKey_${channelId}`),
+    getChannel(spaceId, channelId),
+    getSecret(`flowiseKey`),
   ])
 
   if (!channel) throw new TypeError('CHANNEL_NOT_FOUND')

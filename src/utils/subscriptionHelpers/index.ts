@@ -17,7 +17,7 @@ export const SubscriptionHelper = async <DataType>({
 }: SubscriptionInput<DataType>) => {
   const { key, type } = cache || {}
 
-  key && type && clearSubscription(key, type)
+  key && type && clearSubscription(key, type) // Clear previous subscription if exists
 
   const subscription = (
     (await API.graphql({

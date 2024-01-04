@@ -10,6 +10,7 @@ export type IncomingInput = {
   promptCode: PromptCode
   question: string
   channelId?: string
+  spaceId?: string
   language?: string
 
   previousQuestions?: string[]

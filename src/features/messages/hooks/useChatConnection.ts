@@ -1,6 +1,6 @@
 import { botStoreActions } from '@/features/bot'
 import { SubscriptionEvent } from '@/models'
-import { SubscriptionHelper, clearAllSubscriptions, logDev } from '@/utils'
+import { SubscriptionHelper, clearAllSubscriptions, clearSubscription, logDev } from '@/utils'
 import { Accessor, createEffect, on, onCleanup } from 'solid-js'
 import { ChatResponse } from '../types'
 
@@ -13,11 +13,17 @@ export function useChatConnection({
   isChatFlowAvailableToStream: Accessor<boolean>
   fetchSuggestedPrompts: (language?: string) => void
 }) {
+  onCleanup(clearAllSubscriptions)
+
   createEffect(
-    on(chatId, (chatId) => {
+    on(chatId, (chatId, previousChatId) => {
       if (!chatId) {
         console.warn('No chatId')
         return
+      }
+
+      if (chatId !== previousChatId && previousChatId) {
+        clearSubscription(previousChatId, 'chat-answers') // Clear previous subscription if exists
       }
 
       logDev('Initiated subscription', chatId)
@@ -55,10 +61,6 @@ export function useChatConnection({
       }
     })
   )
-
-  onCleanup(() => {
-    clearAllSubscriptions()
-  })
 
   return null
 }

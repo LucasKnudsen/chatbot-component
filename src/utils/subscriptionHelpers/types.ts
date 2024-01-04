@@ -6,7 +6,7 @@ export type AuthModeType = keyof typeof GRAPHQL_AUTH_MODE
 
 export type SubscriptionCacheKey = {
   key: string
-  type: string
+  type: 'chat-answers'
 }
 
 export type SubscriptionInput<DataType> = {

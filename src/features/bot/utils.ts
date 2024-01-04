@@ -28,7 +28,7 @@ export async function fetchChannels(props: BotProps): Promise<Channel[] | undefi
       authMode: 'AWS_IAM',
     })
 
-    return result.data?.listChannels?.items
+    return result.data?.listChannels?.items as Channel[] | undefined
   } else {
     if (!props.defaultChannelId) return
 
