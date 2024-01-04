@@ -12,6 +12,7 @@ type ChatSpace
   name: String!
   isPublic: Boolean!
   isMultiChannel: Boolean!
+  defaultChannelId: String
 
   themeId: String
   language: String # Code Ref

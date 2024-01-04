@@ -137,6 +137,7 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel($filt
     apiHost
     chatflowId
     name
+    isLive
     admin
     members
     createdAt
@@ -155,6 +156,7 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel($filt
     apiHost
     chatflowId
     name
+    isLive
     admin
     members
     createdAt
@@ -173,6 +175,7 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel($filt
     apiHost
     chatflowId
     name
+    isLive
     admin
     members
     createdAt
@@ -254,6 +257,7 @@ export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($
     name
     isPublic
     isMultiChannel
+    defaultChannelId
     themeId
     language
     initialPrompts {
@@ -303,6 +307,7 @@ export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($
     name
     isPublic
     isMultiChannel
+    defaultChannelId
     themeId
     language
     initialPrompts {
@@ -352,6 +357,7 @@ export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($
     name
     isPublic
     isMultiChannel
+    defaultChannelId
     themeId
     language
     initialPrompts {

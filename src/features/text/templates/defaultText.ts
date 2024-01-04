@@ -6,6 +6,7 @@ export const defaultText: TextConfig = {
   inputPlaceholder: 'Ask me anything...',
   suggestedPromptsTitle: 'SUGGESTIONS',
   viewMedia: 'View media',
+  brandName: 'Fraia',
 
   // Nav bar
   close: 'Close',

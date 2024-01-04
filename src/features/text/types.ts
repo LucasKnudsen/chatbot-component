@@ -4,6 +4,7 @@ export type TextConfig = {
   inputPlaceholder: string
   suggestedPromptsTitle: string
   viewMedia: string
+  brandName: string
 
   // Nav bar
   close: string

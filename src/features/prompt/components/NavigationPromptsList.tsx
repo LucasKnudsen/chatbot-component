@@ -1,10 +1,10 @@
-import { PromptType } from '@/features/bot'
+import { InitialPrompt } from '@/graphql/types'
 import { For } from 'solid-js'
 import { NavigationPrompt } from '.'
 
 type NavigationPromptsProps = {
   title?: string
-  prompts?: PromptType[]
+  prompts?: InitialPrompt[] | null
   onSelect: (prompt: string) => void
   disabled: boolean
 }

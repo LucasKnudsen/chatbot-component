@@ -4,8 +4,8 @@ import { ContextualContainer } from '@/features/contextual'
 import { ChatWindow } from '@/features/messages'
 import { SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
+import { InitialPrompt } from '@/graphql/types'
 import { Show, createMemo, createSignal } from 'solid-js'
-import { PromptType } from '.'
 import { botStore, botStoreActions } from '..'
 import { sidebarPaddingNum } from '../constants'
 import { ResourcesSidebar } from './ResourcesSidebar'
@@ -14,7 +14,7 @@ import { SidebarTabView } from './SidebarTabView'
 type BotDesktopProps = {
   userInput: string
   suggestedPrompts: string[]
-  initialPrompts?: PromptType[]
+  initialPrompts?: InitialPrompt[] | null
   isFetchingSuggestedPrompts: boolean
   onSubmit: (question: string) => void
   onClear: () => void

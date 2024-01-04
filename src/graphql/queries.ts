@@ -137,6 +137,7 @@ export const getChannel = /* GraphQL */ `query GetChannel($chatSpaceId: ID!, $id
     apiHost
     chatflowId
     name
+    isLive
     admin
     members
     createdAt
@@ -170,6 +171,7 @@ export const listChannels = /* GraphQL */ `query ListChannels(
       apiHost
       chatflowId
       name
+      isLive
       admin
       members
       createdAt
@@ -247,6 +249,7 @@ export const getChatSpace = /* GraphQL */ `query GetChatSpace($ownerId: ID!, $id
     name
     isPublic
     isMultiChannel
+    defaultChannelId
     themeId
     language
     initialPrompts {
@@ -311,6 +314,7 @@ export const listChatSpaces = /* GraphQL */ `query ListChatSpaces(
       name
       isPublic
       isMultiChannel
+      defaultChannelId
       themeId
       language
       initialPrompts {

@@ -36,7 +36,10 @@
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
           "s3Key": "amplify-builds/flowiseBroadcast-6c445345457938754e71-build.zip"
         },
-        "adhoc": {}
+        "adhoc": {
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/adhoc-4573386379632b696b78-build.zip"
+        }
       },
       "hosting": {
         "amplifyhosting": {

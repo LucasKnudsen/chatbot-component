@@ -1,0 +1,21 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "auth": {
+      "digitaltwinauth": [
+        "read"
+      ]
+    },
+    "storage": {
+      "ChatSpace:@model(appsync)": [
+        "read"
+      ],
+      "Organization:@model(appsync)": [
+        "read"
+      ],
+      "User:@model(appsync)": [
+        "read"
+      ]
+    }
+  }
+}

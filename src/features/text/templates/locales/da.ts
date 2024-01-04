@@ -6,6 +6,7 @@ export const da: TextConfig = {
   inputPlaceholder: 'Spørg mig om noget...',
   suggestedPromptsTitle: 'Forslag',
   viewMedia: 'Vis medier',
+  brandName: 'Fraia',
 
   // Nav bar
   close: 'Luk',

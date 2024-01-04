@@ -1,25 +1,24 @@
 import './dev.css'
 
 import { chatflows } from './constants'
-import { PromptType } from './features/bot'
 import { Bubble } from './features/bubble'
 import './index.css'
 
-const initialPrompts: PromptType[] = [
-  {
-    display: 'Tell me about Lion Brain',
-    prompt: 'Give me a detailed description of Lion Brain',
-  },
-  {
-    display: 'What is the collaboration between Soft Design and Lion Brain?',
-    prompt:
-      'Give me a detailed description of the collaboration between Soft Design and Lion Brain',
-  },
-  {
-    display: 'Who is the CEO of Lion Brain?',
-    prompt: 'Who is the CEO of Lion Brain',
-  },
-]
+// const initialPrompts: PromptType[] = [
+//   {
+//     display: 'Tell me about Lion Brain',
+//     prompt: 'Give me a detailed description of Lion Brain',
+//   },
+//   {
+//     display: 'What is the collaboration between Soft Design and Lion Brain?',
+//     prompt:
+//       'Give me a detailed description of the collaboration between Soft Design and Lion Brain',
+//   },
+//   {
+//     display: 'Who is the CEO of Lion Brain?',
+//     prompt: 'Who is the CEO of Lion Brain',
+//   },
+// ]
 
 function App() {
   return (
@@ -28,7 +27,7 @@ function App() {
         PL
         <span
           style={{
-            color: 'blue',
+            color: 'darkblue',
           }}
         >
           AI
@@ -40,7 +39,7 @@ function App() {
         Powered by
         <span
           style={{
-            color: 'blue',
+            color: 'darkblue',
           }}
         >
           {' '}
@@ -48,7 +47,7 @@ function App() {
         </span>
       </h2>
 
-      <Bubble {...chatflows.fraia_dev} initialPrompts={initialPrompts} themeId='fraia' />
+      <Bubble {...chatflows.fraia_dev} />
     </div>
   )
 }

@@ -1,8 +1,8 @@
-import { PromptType } from '@/features/bot'
 import { useTheme } from '@/features/theme/hooks'
+import { InitialPrompt } from '@/graphql/types'
 
 type PromptProps = {
-  prompt: PromptType
+  prompt: InitialPrompt
   onClick: (prompt: string) => void
   disabled?: boolean
   class?: string

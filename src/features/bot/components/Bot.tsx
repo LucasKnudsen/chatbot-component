@@ -1,4 +1,3 @@
-import awsconfig from '@/aws-exports'
 import { Nav } from '@/components/Nav'
 import {
   IncomingInput,
@@ -8,100 +7,77 @@ import {
   useSocket,
 } from '@/features/messages'
 import { useSuggestedPrompts } from '@/features/prompt'
-import { TextConfig, detectLanguage } from '@/features/text'
-import { Theme } from '@/features/theme'
-import { queries } from '@/graphql'
-import { Channel, GetChannelQuery } from '@/graphql/types'
+import { detectLanguage } from '@/features/text'
+import { Channel, ChatSpace } from '@/graphql/types'
 import { useMediaQuery } from '@/utils/useMediaQuery'
-import { GraphQLQuery } from '@aws-amplify/api'
-import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
-import { API, Amplify, Auth } from 'aws-amplify'
+import { Auth } from 'aws-amplify'
 import { Match, Show, Switch, createResource, createSignal, onMount } from 'solid-js'
 import { Sidebar } from '.'
-import { botStore, botStoreActions, useChatId, useLanguage } from '..'
+import { botStore, botStoreActions, fetchChannels, useChatId, useLanguage } from '..'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
 import { FraiaLoading } from './FraiaLoading'
 import { MenuSettings } from './MenuSettings'
 import { SidebarTabView } from './SidebarTabView'
 
-Amplify.configure(awsconfig)
-try {
-  Predictions.addPluggable(new AmazonAIConvertPredictionsProvider())
-} catch (error) {}
+// export type PromptType =
+//   | string
+//   | {
+//       display: string
+//       prompt: string
+//     }
 
-type messageType = 'apiMessage' | 'userMessage' | 'usermessagewaiting'
+// export type BotSettings = {
+//   brandName?: string
+//   autoOpen?: boolean
+// }
 
-export type MessageType = {
-  message: string
-  type: messageType
-  sourceDocuments?: any
-}
+// export type BotConfig = {
+//   hostId: string
+//   spaceId: string
+//   channelId: string
+//   language?: string
+//   themeId?: string
+//   initialPrompts?: PromptType[]
+//   text?: Partial<TextConfig>
+//   theme?: Partial<Theme>
+//   settings?: BotSettings
+// }
 
-export type PromptType =
-  | string
-  | {
-      display: string
-      prompt: string
-    }
-
-export type BotSettings = {
-  brandName?: string
-  autoOpen?: boolean
-}
-
-export type BotConfig = {
-  hostId: string
-  spaceId: string
-  channelId: string
-  language?: string
-  themeId?: string
-  initialPrompts?: PromptType[]
-  text?: Partial<TextConfig>
-  theme?: Partial<Theme>
-  settings?: BotSettings
-}
-
-type BotProps = BotConfig & {
+export type BotProps = ChatSpace & {
   class?: string
   toggleBot: () => void
 }
 
 export const BotManager = (props: BotProps) => {
-  const storageKey = 'fraiaChannel'
+  const storageKey = 'fraiaChannels'
   const [channelError, setChannelError] = createSignal('')
 
-  const [channel] = createResource(async () => {
+  const [channels] = createResource(async () => {
+    // TODO: Get all channels (Public lambda vs private graphql)
+
     let isUser = false
     try {
       isUser = Boolean(await Auth.currentAuthenticatedUser())
     } catch (error) {}
 
     try {
-      const localChannel = localStorage.getItem(storageKey)
+      const localChannels = localStorage.getItem(storageKey)
 
-      if (localChannel) return JSON.parse(localChannel) as Channel
+      if (localChannels) return JSON.parse(localChannels) as Channel[]
 
-      const result = await API.graphql<GraphQLQuery<GetChannelQuery>>({
-        query: queries.getChannel,
-        variables: {
-          id: props.channelId,
-        },
-        authMode: isUser ? 'AMAZON_COGNITO_USER_POOLS' : 'AWS_IAM',
-      })
+      const channels = await fetchChannels(props)
 
-      const channel = result.data!.getChannel!
-
-      if (!channel) {
-        setChannelError('Channel not found')
+      if (!channels) {
+        setChannelError('Channels not found')
         return
       }
 
-      localStorage.setItem(storageKey, JSON.stringify(channel))
+      localStorage.setItem(storageKey, JSON.stringify(channels))
 
       setChannelError('')
 
-      return channel
+      return channels
     } catch (error) {
       console.error(error)
       setChannelError('Something went wrong')
@@ -110,17 +86,11 @@ export const BotManager = (props: BotProps) => {
 
   return (
     <Show
-      when={channel() && !channelError()}
-      fallback={
-        <FraiaLoading
-          brandName={props.settings?.brandName}
-          channelError={channelError}
-          toggleBot={props.toggleBot}
-        />
-      }
+      when={channels() && !channelError()}
+      fallback={<FraiaLoading channelError={channelError} toggleBot={props.toggleBot} />}
     >
       <Bot
-        channel={channel()!}
+        channel={channels()!}
         {...props}
         toggleBot={props.toggleBot}
         class='fixed top-0 left-0 w-full h-full z-50'
@@ -137,7 +107,10 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
   const device = useMediaQuery()
 
   const { chatId, clear: clearChatId } = useChatId(props.channel.chatflowId!)
-  const { clear: clearDefaultLanguage } = useLanguage(props.channel.chatflowId!, props.language)
+  const { clear: clearDefaultLanguage } = useLanguage(
+    props.channel.chatflowId!,
+    props.language || 'en'
+  )
 
   const {
     suggestedPrompts,
@@ -166,7 +139,7 @@ export const Bot = (props: BotProps & { channel: Channel }) => {
   }
 
   onMount(() => {
-    botStoreActions.initBotStore(props.channel.chatflowId!, props.language)
+    botStoreActions.initBotStore(props.channel.chatflowId!, props.language || 'en')
 
     if (botStore.chat) {
       fetchSuggestedPrompts()

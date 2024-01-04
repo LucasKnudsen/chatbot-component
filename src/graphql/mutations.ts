@@ -152,6 +152,7 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
     apiHost
     chatflowId
     name
+    isLive
     admin
     members
     createdAt
@@ -173,6 +174,7 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
     apiHost
     chatflowId
     name
+    isLive
     admin
     members
     createdAt
@@ -194,6 +196,7 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
     apiHost
     chatflowId
     name
+    isLive
     admin
     members
     createdAt
@@ -281,6 +284,7 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
     name
     isPublic
     isMultiChannel
+    defaultChannelId
     themeId
     language
     initialPrompts {
@@ -333,6 +337,7 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
     name
     isPublic
     isMultiChannel
+    defaultChannelId
     themeId
     language
     initialPrompts {
@@ -385,6 +390,7 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
     name
     isPublic
     isMultiChannel
+    defaultChannelId
     themeId
     language
     initialPrompts {

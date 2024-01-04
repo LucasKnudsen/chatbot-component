@@ -21,8 +21,8 @@ type Channel
       { allow: groups, groups: ["SuperAdmin"] }
       { allow: groups, groupsField: "admin" }
       { allow: groups, groupsField: "members", operations: [read] }
-      { allow: private, operations: [get] } ## TODO: remove this after custom lambda is implemented
-      { allow: public, provider: iam, operations: [get] } ## TODO: remove this after custom lambda is implemented
+      { allow: private, operations: [read] } ## TODO: remove this after custom lambda is implemented
+      { allow: public, provider: iam, operations: [read] } ## TODO: remove this after custom lambda is implemented
     ]
   ) {
   chatSpaceId: ID! @primaryKey(sortKeyFields: ["id"])
@@ -30,6 +30,7 @@ type Channel
   apiHost: String
   chatflowId: String
   name: String!
+  isLive: Boolean! @default(value: "false")
 
   admin: String!
   members: [String!]

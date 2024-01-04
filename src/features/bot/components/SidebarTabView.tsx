@@ -3,15 +3,15 @@ import { History } from '@/features/messages'
 import { Chat } from '@/features/messages/types'
 import { NavigationPromptsList } from '@/features/prompt'
 import { useText } from '@/features/text'
+import { InitialPrompt } from '@/graphql/types'
 import { createMemo } from 'solid-js'
-import { PromptType } from '.'
 import { botStore } from '..'
 import { sidebarInnerWidthNum } from '../constants'
 
 type SidebarTabViewProps = {
   setQuestion: (question: Chat) => void
   handleSubmit: (question: string) => void
-  initialPrompts?: PromptType[]
+  initialPrompts?: InitialPrompt[] | null
   class?: string
 }
 
