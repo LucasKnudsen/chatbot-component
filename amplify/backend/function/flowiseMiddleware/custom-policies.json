@@ -3,7 +3,10 @@
     "Action": ["ssm:GetParameter", "ssm:GetParameters"],
     "Resource": [
       {
-        "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/flowiseKey_*"
+        "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/flowiseKey*"
+      },
+      {
+        "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/flowiseKey"
       }
     ]
   }

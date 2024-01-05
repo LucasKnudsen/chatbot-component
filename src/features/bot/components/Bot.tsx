@@ -10,7 +10,6 @@ import { useSuggestedPrompts } from '@/features/prompt'
 import { detectLanguage } from '@/features/text'
 import { Channel, ChatSpace } from '@/graphql/types'
 import { useMediaQuery } from '@/utils/useMediaQuery'
-import { Auth } from 'aws-amplify'
 import { Match, Show, Switch, createResource, createSignal, onMount } from 'solid-js'
 import { Sidebar } from '.'
 import { botStore, botStoreActions, fetchChannels, useChatId, useLanguage } from '..'
@@ -56,10 +55,10 @@ export const BotManager = (props: BotProps) => {
   const [channels] = createResource(async () => {
     // TODO: Get all channels (Public lambda vs private graphql)
 
-    let isUser = false
-    try {
-      isUser = Boolean(await Auth.currentAuthenticatedUser())
-    } catch (error) {}
+    // let isUser = false
+    // try {
+    //   isUser = Boolean(await Auth.currentAuthenticatedUser())
+    // } catch (error) {}
 
     try {
       let channels: Channel[] | undefined
