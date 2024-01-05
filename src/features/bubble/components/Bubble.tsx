@@ -32,6 +32,7 @@ export const Bubble = (props: ChatConfig) => {
 
     if (result.status != 200 || !result.data) {
       // TODO: handle error
+      console.error('Error initializing config', result.error)
       return
     }
 

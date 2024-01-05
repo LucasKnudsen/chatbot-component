@@ -18,6 +18,7 @@ type ChatSpace
   language: String # Code Ref
   initialPrompts: [InitialPrompt!]
   theme: ChatSpaceTheme
+  text: ChatSpaceText
   settings: ChatSpaceSettings!
 
   admin: String!
@@ -47,6 +48,25 @@ type ChatSpaceTheme {
   textInputBackgroundColor: String
   surfaceBackground: String
   surfaceHoveredBackground: String
+}
+
+type ChatSpaceText {
+  welcomeMessage: String
+  returnWelcomeMessage: String
+  brandName: String
+  inputPlaceholder: String
+  suggestedPromptsTitle: String
+  viewMedia: String
+  close: String
+  copyText: String
+  copyTextSuccess: String
+  share: String
+  historyTabTitle: String
+  navigationTabTitle: String
+  today: String
+  yesterday: String
+  previous: String
+  noHistory: String
 }
 
 type ChatSpaceSettings {
