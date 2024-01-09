@@ -286,6 +286,25 @@ export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($
       surfaceHoveredBackground
       __typename
     }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
+      __typename
+    }
     settings {
       autoOpen
       __typename
@@ -336,6 +355,25 @@ export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($
       surfaceHoveredBackground
       __typename
     }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
+      __typename
+    }
     settings {
       autoOpen
       __typename
@@ -384,6 +422,25 @@ export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($
       textInputBackgroundColor
       surfaceBackground
       surfaceHoveredBackground
+      __typename
+    }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
       __typename
     }
     settings {

@@ -313,6 +313,25 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
       surfaceHoveredBackground
       __typename
     }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
+      __typename
+    }
     settings {
       autoOpen
       __typename
@@ -366,6 +385,25 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
       surfaceHoveredBackground
       __typename
     }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
+      __typename
+    }
     settings {
       autoOpen
       __typename
@@ -417,6 +455,25 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
       textInputBackgroundColor
       surfaceBackground
       surfaceHoveredBackground
+      __typename
+    }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
       __typename
     }
     settings {

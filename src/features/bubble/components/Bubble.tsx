@@ -3,7 +3,7 @@ import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/pr
 import { Show, Suspense, createResource, createSignal } from 'solid-js'
 import { BotManager } from '../../bot/components/Bot'
 
-import { TextConfig, useText } from '@/features/text'
+import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { TrackingProvider } from '@/features/tracking'
 import StyleSheet from '@/styles'
@@ -20,7 +20,6 @@ try {
 export type ChatConfig = {
   hostId: string
   spaceId: string
-  text?: Partial<TextConfig>
 }
 
 export const Bubble = (props: ChatConfig) => {
@@ -36,10 +35,10 @@ export const Bubble = (props: ChatConfig) => {
       return
     }
 
-    const { themeId, theme, language, settings } = result.data
+    const { themeId, theme, language, settings, text } = result.data
 
     initTheme(themeId, theme)
-    initText(props.text, language || 'en')
+    initText(text, language || 'en')
 
     if (settings?.autoOpen) {
       openBot()

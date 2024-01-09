@@ -278,6 +278,25 @@ export const getChatSpace = /* GraphQL */ `query GetChatSpace($ownerId: ID!, $id
       surfaceHoveredBackground
       __typename
     }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
+      __typename
+    }
     settings {
       autoOpen
       __typename
@@ -341,6 +360,25 @@ export const listChatSpaces = /* GraphQL */ `query ListChatSpaces(
         textInputBackgroundColor
         surfaceBackground
         surfaceHoveredBackground
+        __typename
+      }
+      text {
+        welcomeMessage
+        returnWelcomeMessage
+        brandName
+        inputPlaceholder
+        suggestedPromptsTitle
+        viewMedia
+        close
+        copyText
+        copyTextSuccess
+        share
+        historyTabTitle
+        navigationTabTitle
+        today
+        yesterday
+        previous
+        noHistory
         __typename
       }
       settings {
