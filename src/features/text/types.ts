@@ -1,11 +1,8 @@
 import { ChatSpaceText } from '@/graphql'
 
-type NonNullProperties<T> = {
-  [P in keyof T]: Exclude<T[P], null>
+export type TextConfig = {
+  [K in keyof Omit<ChatSpaceText, '__typename'>]-?: NonNullable<ChatSpaceText[K]>
 }
-
-export type TextConfig = NonNullProperties<Omit<ChatSpaceText, '__typename'>>
-
 // export type TextConfig = {
 //   welcomeMessage: string
 //   returnWelcomeMessage: string

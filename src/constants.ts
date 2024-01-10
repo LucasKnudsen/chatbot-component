@@ -4,8 +4,7 @@ import { ChatConfig } from './features/bubble'
 export const defaultBotProps: ChatConfig = {
   hostId: '',
   spaceId: '',
-  text: undefined,
-
+  // text: undefined,
   // channelId: '',
   // language: undefined,
   // themeId: undefined,
