@@ -17,24 +17,33 @@ type ExtendedSourceFact = SourceFact & { source: string }
 type ExtendedSourceResource = SourceResource & { source: string }
 
 type BotStore = {
-  activeChannel: Channel
+  activeChannel: Channel | null
   channels: Channel[]
   chat: Chat | null
   history: Chat[]
   loading: boolean
   clientLanguage?: string
+  isSidebarOpen: boolean
   readonly storageKey: string
   readonly hasResources: boolean
+  toggleSidebar: () => void
 }
 
 const [botStore, setBotStore] = createStore<BotStore>({
-  activeChannel: {} as Channel,
+  activeChannel: null,
   channels: [],
   chat: null,
   history: [],
   loading: false,
   clientLanguage: undefined,
+  isSidebarOpen: false,
+
   get storageKey() {
+    if (!this.activeChannel) {
+      console.error('No active channel')
+      return ''
+    }
+
     return `${this.activeChannel.chatflowId}_QUESTIONS`
   },
   get hasResources() {
@@ -46,6 +55,10 @@ const [botStore, setBotStore] = createStore<BotStore>({
     )
 
     return anyResourceExists
+  },
+
+  toggleSidebar: () => {
+    setBotStore('isSidebarOpen', (isOpen) => !isOpen)
   },
 })
 

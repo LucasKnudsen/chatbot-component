@@ -1,7 +1,7 @@
 import awsconfig from '@/aws-exports'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Show, Suspense, createResource, createSignal } from 'solid-js'
-import { BotManager } from '../../bot/components/Bot'
+import { BotManager } from '../../bot'
 
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
@@ -61,28 +61,28 @@ export const ChatInitializer = (props: ChatConfig) => {
       <Suspense>
         <BubbleButton />
         {data()?.isMultiChannel}
-      </Suspense>
 
-      <div
-        class={`fixed top-0 left-0 w-screen m-0 min-h-[-webkit-fill-available] z-50 h-full ${
-          configStore.isBotOpened ? 'opacity-1' : 'opacity-0 pointer-events-none'
-        }`}
-        style={{
-          transition: 'transform 350ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
-          'transform-origin': 'bottom right',
-          transform: configStore.isBotOpened ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
-          color: theme().textColor,
-          background: `${theme().backgroundColor} url(${
-            theme().backgroundImageUrl
-          }) no-repeat center / cover`,
-          'z-index': 69420,
-        }}
-        part='bot'
-      >
-        <Show when={isBotStarted()}>
-          <BotManager {...data()!} />
-        </Show>
-      </div>
+        <div
+          class={`fixed top-0 left-0 w-screen m-0 min-h-[-webkit-fill-available] z-50 h-full ${
+            configStore.isBotOpened ? 'opacity-1' : 'opacity-0 pointer-events-none'
+          }`}
+          style={{
+            transition: 'transform 350ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
+            'transform-origin': 'bottom right',
+            transform: configStore.isBotOpened ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
+            color: theme().textColor,
+            background: `${theme().backgroundColor} url(${
+              theme().backgroundImageUrl
+            }) no-repeat center / cover`,
+            'z-index': 69420,
+          }}
+          part='bot'
+        >
+          <Show when={isBotStarted()}>
+            <BotManager {...data()!} />
+          </Show>
+        </div>
+      </Suspense>
     </>
   )
 }

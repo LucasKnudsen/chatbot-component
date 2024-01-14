@@ -1,28 +1,21 @@
 import powerIcon from '@/assets/power-icon.svg'
-import { botStoreActions } from '@/features/bot'
 
+import { botStore } from '@/features/bot'
 import { configStoreActions } from '@/features/chat-init'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
-import { Show } from 'solid-js'
+import { useMediaQuery } from '@/utils/useMediaQuery'
+import { Match, Show, Switch } from 'solid-js'
 import { Button } from '.'
 import { CircleCloseIcon } from './icons/CircleCloseIcon'
 import { MenuIcon } from './icons/MenuIcon'
 
-type NavProps = {
-  sidebarOpen: boolean
-  onClear: () => void
-  onToggleSidebar: () => void
-}
-
-export const Nav = (props: NavProps) => {
+export const Nav = () => {
+  const device = useMediaQuery()
   const { theme } = useTheme()
   const { text } = useText()
 
-  const resetChat = () => {
-    botStoreActions.setChat(null)
-    props.onClear()
-  }
+  const onClickLogo = () => {}
 
   return (
     <div
@@ -31,43 +24,50 @@ export const Nav = (props: NavProps) => {
         background: theme().surfaceBackground,
       }}
     >
-      <div class='flex items-center gap-6'>
-        <img src={theme().navbarLogoUrl} class='h-6 cursor-pointer' onClick={resetChat} />
+      <div class='flex items-center gap-6 w-full flex-nowrap'>
+        <img src={theme().navbarLogoUrl} class='h-6 cursor-pointer' onClick={onClickLogo} />
 
-        <Show when={!props.sidebarOpen}>
-          <Button
-            onClick={configStoreActions.toggleBot}
-            padding='7px'
-            class='animate-fade-in md:hidden'
-          >
-            <img class='m-auto h-3' src={powerIcon} />
-          </Button>
-        </Show>
+        {device() == 'desktop' ? (
+          <>
+            <div class='flex-1' />
+
+            <Button onClick={configStoreActions.toggleBot} class='hidden md:block ml-4'>
+              {text().close}
+            </Button>
+          </>
+        ) : (
+          <>
+            <Show when={!botStore.isSidebarOpen}>
+              <div class='flex-1' />
+
+              <Button onClick={configStoreActions.toggleBot} padding='7px' class='animate-fade-in '>
+                <img class='m-auto h-3' src={powerIcon} />
+              </Button>
+            </Show>
+
+            {/* Dont show drawer button if theres no activeChannel  */}
+            <Show when={Boolean(botStore.activeChannel)}>
+              <div class='flex-1' />
+
+              <Switch>
+                <Match when={botStore.isSidebarOpen}>
+                  <CircleCloseIcon
+                    height={24}
+                    color={theme().primaryColor}
+                    onClick={botStore.toggleSidebar}
+                  />
+                </Match>
+
+                <Match when={!botStore.isSidebarOpen}>
+                  <div class='h-6 flex items-center' onClick={botStore.toggleSidebar}>
+                    <MenuIcon color={theme().primaryColor} />
+                  </div>
+                </Match>
+              </Switch>
+            </Show>
+          </>
+        )}
       </div>
-
-      <div class='md:flex-1' />
-
-      <Button onClick={configStoreActions.toggleBot} class='hidden md:block ml-4'>
-        {text().close}
-      </Button>
-
-      <div class='flex-1 md:hidden' />
-
-      <Show
-        when={props.sidebarOpen}
-        fallback={
-          <div class='h-6 flex items-center' onClick={props.onToggleSidebar}>
-            <MenuIcon class='md:hidden' color={theme().primaryColor} />
-          </div>
-        }
-      >
-        <CircleCloseIcon
-          class='md:hidden'
-          height={24}
-          color={theme().primaryColor}
-          onClick={props.onToggleSidebar}
-        />
-      </Show>
     </div>
   )
 }
