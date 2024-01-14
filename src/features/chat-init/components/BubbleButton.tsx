@@ -1,18 +1,14 @@
 import { useTheme } from '@/features/theme/hooks'
+import { configStore, configStoreActions } from '..'
 
-type Props = {
-  isBotOpened: boolean
-  toggleBot: () => void
-}
-
-export const BubbleButton = (props: Props) => {
+export const BubbleButton = () => {
   const { theme } = useTheme()
 
   return (
     <button
       data-testid='bubble-button'
       part='button'
-      onClick={() => props.toggleBot()}
+      onClick={() => configStoreActions.toggleBot()}
       class='fixed right-5 bottom-5  shadow-lg rounded-full hover:scale-110 active:scale-95 transition-transform duration-200 flex justify-center items-center animate-fade-in w-14 h-14'
       style={{
         background: theme().bubbleButtonColor,
@@ -22,7 +18,7 @@ export const BubbleButton = (props: Props) => {
       <img
         class={
           `stroke-2  absolute duration-200 transition w-7 ` +
-          (props.isBotOpened ? 'scale-0 opacity-0' : 'scale-100 opacity-100')
+          (configStore.isBotOpened ? 'scale-0 opacity-0' : 'scale-100 opacity-100')
         }
         src={theme().bubbleButtonLogoUrl || theme().navbarLogoUrl}
       />
@@ -32,7 +28,9 @@ export const BubbleButton = (props: Props) => {
         style={{ fill: theme().onPrimary }}
         class={
           `absolute duration-200 transition  w-5` +
-          (props.isBotOpened ? 'scale-100 rotate-0 opacity-100' : 'scale-0 -rotate-180 opacity-0')
+          (configStore.isBotOpened
+            ? 'scale-100 rotate-0 opacity-100'
+            : 'scale-0 -rotate-180 opacity-0')
         }
       >
         <path

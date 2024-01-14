@@ -1,4 +1,4 @@
-import { ChatConfig } from './features/bubble'
+import { ChatConfig } from './features/chat-init'
 
 // The props needs to be instantiated with the default values, otherwise it won't be filled from the Object.assign
 export const defaultBotProps: ChatConfig = {

@@ -45,9 +45,9 @@ import { SidebarTabView } from './SidebarTabView'
 
 export type BotProps = ChatSpace & {
   class?: string
-  toggleBot: () => void
 }
 
+// BotManager is the entry point for the bot. It handles the initial loading, fetching channels, checking configurations, etc.
 export const BotManager = (props: BotProps) => {
   const storageKey = 'fraiaChannels'
   const [channelError, setChannelError] = createSignal('')
@@ -71,8 +71,11 @@ export const BotManager = (props: BotProps) => {
         return
       }
 
+      console.log('Config', { ...props })
+
       if (!props.isMultiChannel) {
-        botStoreActions.initBotStore(channels[0])
+        // If there is only one channel, initialize the bot with it
+        // botStoreActions.initBotStore(channels[0])
       }
 
       localStorage.setItem(storageKey, JSON.stringify(channels))
@@ -89,14 +92,9 @@ export const BotManager = (props: BotProps) => {
   return (
     <Show
       when={channels() && !channelError()}
-      fallback={<FraiaLoading channelError={channelError} toggleBot={props.toggleBot} />}
+      fallback={<FraiaLoading channelError={channelError} />}
     >
-      <Bot
-        channels={channels()!}
-        {...props}
-        toggleBot={props.toggleBot}
-        class='fixed top-0 left-0 w-full h-full z-50'
-      />
+      <Bot channels={channels()!} {...props} class='fixed top-0 left-0 w-full h-full z-50' />
     </Show>
   )
 }
@@ -166,7 +164,7 @@ export const Bot = (props: BotProps & { channels: Channel[] }) => {
 
     if (isChatFlowAvailableToStream()) body.socketIOClientId = socketIOClientId()
 
-    // Fires without waiting for response, as the response is handled by a socket
+    // Fires without waiting for response, as the response is handled by a socket connection
     sendMessageQuery(body)
     await detectLanguage(value, true)
 
@@ -184,7 +182,6 @@ export const Bot = (props: BotProps & { channels: Channel[] }) => {
           sidebarOpen={sidebarOpen()}
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen())}
           onClear={clearSuggestions}
-          onToggleBot={props.toggleBot}
         />
 
         <div class='relative md:flex md:px-16 flex-1 overflow-hidden'>
@@ -197,7 +194,6 @@ export const Bot = (props: BotProps & { channels: Channel[] }) => {
                 initialPrompts={props.initialPrompts}
                 onSubmit={handleSubmit}
                 onClear={clear}
-                toggleBot={props.toggleBot}
                 class={props.class}
               />
             </Match>
@@ -209,7 +205,6 @@ export const Bot = (props: BotProps & { channels: Channel[] }) => {
                 initialPrompts={props.initialPrompts}
                 onSubmit={handleSubmit}
                 onClear={clear}
-                toggleBot={props.toggleBot}
                 class={props.class}
               />
             </Match>
@@ -239,11 +234,7 @@ export const Bot = (props: BotProps & { channels: Channel[] }) => {
                   />
                 </div>
 
-                <MenuSettings
-                  toggleBot={props.toggleBot}
-                  setSidebarOpen={setSidebarOpen}
-                  clear={clear}
-                />
+                <MenuSettings setSidebarOpen={setSidebarOpen} clear={clear} />
               </div>
             </Sidebar>
           </Show>

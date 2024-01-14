@@ -2,6 +2,7 @@ import powerIcon from '@/assets/power-icon.svg'
 import { Button } from '@/components'
 import { Divider } from '@/components/Divider'
 import { DeleteIcon } from '@/components/icons/DeleteIcon'
+import { configStoreActions } from '@/features/chat-init'
 import { useTheme } from '@/features/theme'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { For, Show, createMemo } from 'solid-js'
@@ -13,7 +14,6 @@ type MenuItemProps = {
 }
 
 type MenuSettingsProps = {
-  toggleBot: () => void
   clear: () => void
   setSidebarOpen?: (open: boolean) => void
 }
@@ -44,7 +44,7 @@ export const MenuSettings = (props: MenuSettingsProps) => {
       <Divider margin={24} />
 
       <Show when={device() === 'mobile'}>
-        <Button onClick={props.toggleBot} padding='8px'>
+        <Button onClick={configStoreActions.toggleBot} padding='8px'>
           <img class='m-auto' src={powerIcon} />
         </Button>
       </Show>

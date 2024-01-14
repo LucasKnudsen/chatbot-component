@@ -18,7 +18,6 @@ type BotDesktopProps = {
   isFetchingSuggestedPrompts: boolean
   onSubmit: (question: string) => void
   onClear: () => void
-  toggleBot: () => void
   class?: string
 }
 

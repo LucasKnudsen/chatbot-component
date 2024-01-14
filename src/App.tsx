@@ -1,7 +1,7 @@
 import './dev.css'
 
 import { chatflows } from './constants'
-import { Bubble } from './features/bubble'
+import { ChatInitializer } from './features/chat-init'
 import './index.css'
 
 // const initialPrompts: PromptType[] = [
@@ -47,7 +47,7 @@ function App() {
         </span>
       </h2>
 
-      <Bubble {...chatflows.fraia_dev} />
+      <ChatInitializer {...chatflows.fraia_dev} />
     </div>
   )
 }

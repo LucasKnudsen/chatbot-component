@@ -1,10 +1,10 @@
 import { customElement } from 'solid-element'
 import { defaultBotProps } from './constants'
-import { Bubble } from './features/bubble'
+import { ChatInitializer } from './features/chat-init'
 
 export const registerWebComponents = () => {
   if (typeof window === 'undefined') return
   // customElement('fraia-fullchatbot', defaultBotProps, Full)
 
-  customElement('fraia-chatbot', defaultBotProps, Bubble)
+  customElement('fraia-chatbot', defaultBotProps, ChatInitializer)
 }

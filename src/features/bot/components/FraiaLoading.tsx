@@ -1,9 +1,10 @@
 import { TypingBubble } from '@/components'
+import { configStoreActions } from '@/features/chat-init'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme'
 import { Accessor } from 'solid-js'
 
-export const FraiaLoading = (props: { channelError: Accessor<string>; toggleBot: () => void }) => {
+export const FraiaLoading = (props: { channelError: Accessor<string> }) => {
   const { theme } = useTheme()
   const { text } = useText()
 
@@ -29,7 +30,7 @@ export const FraiaLoading = (props: { channelError: Accessor<string>; toggleBot:
           <button
             class='rounded-full px-4 py-2 bg-red-300 text-black'
             onClick={() => {
-              props.toggleBot()
+              configStoreActions.toggleBot()
             }}
           >
             Close

@@ -1,6 +1,6 @@
 /* eslint-disable solid/reactivity */
 
-import { ChatConfig } from './features/bubble'
+import { ChatConfig } from './features/chat-init'
 
 // export const initFull = (props: BotProps & { id?: string }) => {
 //   const fullElement = props.id
