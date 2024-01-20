@@ -1,6 +1,6 @@
 import { customElement } from 'solid-element'
 import { defaultBotProps } from './constants'
-import { ChatInitializer } from './features/chat-init'
+import { ChatInitializer } from './features/portal-init'
 
 export const registerWebComponents = () => {
   if (typeof window === 'undefined') return

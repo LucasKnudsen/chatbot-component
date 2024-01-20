@@ -5,7 +5,7 @@ import { botStore } from '..'
 const [chatId, setChatId] = createSignal<string>('')
 
 export const useChatId = () => {
-  const storageKey = `${botStore.activeChannel.chatflowId!}_CHATID`
+  const storageKey = `${botStore.activeChannel!.chatflowId!}_CHATID`
 
   onMount(() => initChatId)
 

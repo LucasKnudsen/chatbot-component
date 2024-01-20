@@ -1,7 +1,7 @@
 import './dev.css'
 
 import { chatflows } from './constants'
-import { ChatInitializer } from './features/chat-init'
+import { PortalInitializer } from './features/portal-init'
 import './index.css'
 
 // const initialPrompts: PromptType[] = [
@@ -47,7 +47,7 @@ function App() {
         </span>
       </h2>
 
-      <ChatInitializer {...chatflows.fraia_dev} />
+      <PortalInitializer {...chatflows.fraia_dev} />
     </div>
   )
 }

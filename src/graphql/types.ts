@@ -155,9 +155,15 @@ export type CreateChannelInput = {
   apiHost?: string | null,
   chatflowId?: string | null,
   name: string,
+  initialPrompts?: Array< InitialPromptInput > | null,
   isLive: boolean,
   admin: string,
   members?: Array< string > | null,
+};
+
+export type InitialPromptInput = {
+  display?: string | null,
+  prompt: string,
 };
 
 export type ModelChannelConditionInput = {
@@ -179,11 +185,18 @@ export type Channel = {
   apiHost?: string | null,
   chatflowId?: string | null,
   name: string,
+  initialPrompts?:  Array<InitialPrompt > | null,
   isLive: boolean,
   admin: string,
   members?: Array< string > | null,
   createdAt: string,
   updatedAt: string,
+};
+
+export type InitialPrompt = {
+  __typename: "InitialPrompt",
+  display?: string | null,
+  prompt: string,
 };
 
 export type UpdateChannelInput = {
@@ -192,6 +205,7 @@ export type UpdateChannelInput = {
   apiHost?: string | null,
   chatflowId?: string | null,
   name?: string | null,
+  initialPrompts?: Array< InitialPromptInput > | null,
   isLive?: boolean | null,
   admin?: string | null,
   members?: Array< string > | null,
@@ -267,6 +281,60 @@ export type DeleteChannelDocumentInput = {
   id: string,
 };
 
+export type CreateChannelItemInput = {
+  ownerId: string,
+  channelId: string,
+  id?: string | null,
+  type: ChannelItemType,
+  content?: string | null,
+};
+
+export enum ChannelItemType {
+  NOTE = "NOTE",
+  QUESTION = "QUESTION",
+  ANSWER = "ANSWER",
+}
+
+
+export type ModelChannelItemConditionInput = {
+  type?: ModelChannelItemTypeInput | null,
+  content?: ModelStringInput | null,
+  and?: Array< ModelChannelItemConditionInput | null > | null,
+  or?: Array< ModelChannelItemConditionInput | null > | null,
+  not?: ModelChannelItemConditionInput | null,
+};
+
+export type ModelChannelItemTypeInput = {
+  eq?: ChannelItemType | null,
+  ne?: ChannelItemType | null,
+};
+
+export type ChannelItem = {
+  __typename: "ChannelItem",
+  ownerId: string,
+  channelId: string,
+  id: string,
+  type: ChannelItemType,
+  content?: string | null,
+  createdAt: string,
+  updatedAt: string,
+  owner?: string | null,
+};
+
+export type UpdateChannelItemInput = {
+  ownerId: string,
+  channelId: string,
+  id: string,
+  type?: ChannelItemType | null,
+  content?: string | null,
+};
+
+export type DeleteChannelItemInput = {
+  ownerId: string,
+  channelId: string,
+  id: string,
+};
+
 export type CreateChatSpaceInput = {
   ownerId: string,
   id?: string | null,
@@ -276,16 +344,10 @@ export type CreateChatSpaceInput = {
   defaultChannelId?: string | null,
   themeId?: string | null,
   language?: string | null,
-  initialPrompts?: Array< InitialPromptInput > | null,
   theme?: ChatSpaceThemeInput | null,
   text?: ChatSpaceTextInput | null,
   settings: ChatSpaceSettingsInput,
   admin: string,
-};
-
-export type InitialPromptInput = {
-  display?: string | null,
-  prompt: string,
 };
 
 export type ChatSpaceThemeInput = {
@@ -355,19 +417,12 @@ export type ChatSpace = {
   defaultChannelId?: string | null,
   themeId?: string | null,
   language?: string | null,
-  initialPrompts?:  Array<InitialPrompt > | null,
   theme?: ChatSpaceTheme | null,
   text?: ChatSpaceText | null,
   settings: ChatSpaceSettings,
   admin: string,
   createdAt: string,
   updatedAt: string,
-};
-
-export type InitialPrompt = {
-  __typename: "InitialPrompt",
-  display?: string | null,
-  prompt: string,
 };
 
 export type ChatSpaceTheme = {
@@ -426,7 +481,6 @@ export type UpdateChatSpaceInput = {
   defaultChannelId?: string | null,
   themeId?: string | null,
   language?: string | null,
-  initialPrompts?: Array< InitialPromptInput > | null,
   theme?: ChatSpaceThemeInput | null,
   text?: ChatSpaceTextInput | null,
   settings?: ChatSpaceSettingsInput | null,
@@ -442,12 +496,14 @@ export type CreateOrganizationInput = {
   id?: string | null,
   name: string,
   logo?: string | null,
+  email?: string | null,
   admin: string,
 };
 
 export type ModelOrganizationConditionInput = {
   name?: ModelStringInput | null,
   logo?: ModelStringInput | null,
+  email?: ModelStringInput | null,
   admin?: ModelStringInput | null,
   and?: Array< ModelOrganizationConditionInput | null > | null,
   or?: Array< ModelOrganizationConditionInput | null > | null,
@@ -459,16 +515,17 @@ export type Organization = {
   id: string,
   name: string,
   logo?: string | null,
+  email?: string | null,
   admin: string,
   createdAt: string,
   updatedAt: string,
-  owner?: string | null,
 };
 
 export type UpdateOrganizationInput = {
   id: string,
   name?: string | null,
   logo?: string | null,
+  email?: string | null,
   admin?: string | null,
 };
 
@@ -481,12 +538,26 @@ export type CreateUserInput = {
   email: string,
   cognitoId: string,
   organizationId?: string | null,
+  chatSpaceId?: string | null,
+  invitedOn?: string | null,
+  joinedOn?: string | null,
+  status?: UserStatus | null,
 };
+
+export enum UserStatus {
+  INVITED = "INVITED",
+  ACTIVE = "ACTIVE",
+}
+
 
 export type ModelUserConditionInput = {
   email?: ModelStringInput | null,
   cognitoId?: ModelStringInput | null,
   organizationId?: ModelIDInput | null,
+  chatSpaceId?: ModelIDInput | null,
+  invitedOn?: ModelStringInput | null,
+  joinedOn?: ModelStringInput | null,
+  status?: ModelUserStatusInput | null,
   and?: Array< ModelUserConditionInput | null > | null,
   or?: Array< ModelUserConditionInput | null > | null,
   not?: ModelUserConditionInput | null,
@@ -508,12 +579,21 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
+export type ModelUserStatusInput = {
+  eq?: UserStatus | null,
+  ne?: UserStatus | null,
+};
+
 export type User = {
   __typename: "User",
   id: string,
   email: string,
   cognitoId: string,
   organizationId?: string | null,
+  chatSpaceId?: string | null,
+  invitedOn?: string | null,
+  joinedOn?: string | null,
+  status?: UserStatus | null,
   createdAt: string,
   updatedAt: string,
   owner?: string | null,
@@ -524,6 +604,10 @@ export type UpdateUserInput = {
   email?: string | null,
   cognitoId?: string | null,
   organizationId?: string | null,
+  chatSpaceId?: string | null,
+  invitedOn?: string | null,
+  joinedOn?: string | null,
+  status?: UserStatus | null,
 };
 
 export type DeleteUserInput = {
@@ -653,6 +737,38 @@ export type ModelChannelDocumentConnection = {
   nextToken?: string | null,
 };
 
+export type ModelChannelItemPrimaryCompositeKeyConditionInput = {
+  eq?: ModelChannelItemPrimaryCompositeKeyInput | null,
+  le?: ModelChannelItemPrimaryCompositeKeyInput | null,
+  lt?: ModelChannelItemPrimaryCompositeKeyInput | null,
+  ge?: ModelChannelItemPrimaryCompositeKeyInput | null,
+  gt?: ModelChannelItemPrimaryCompositeKeyInput | null,
+  between?: Array< ModelChannelItemPrimaryCompositeKeyInput | null > | null,
+  beginsWith?: ModelChannelItemPrimaryCompositeKeyInput | null,
+};
+
+export type ModelChannelItemPrimaryCompositeKeyInput = {
+  channelId?: string | null,
+  id?: string | null,
+};
+
+export type ModelChannelItemFilterInput = {
+  ownerId?: ModelIDInput | null,
+  channelId?: ModelIDInput | null,
+  id?: ModelIDInput | null,
+  type?: ModelChannelItemTypeInput | null,
+  content?: ModelStringInput | null,
+  and?: Array< ModelChannelItemFilterInput | null > | null,
+  or?: Array< ModelChannelItemFilterInput | null > | null,
+  not?: ModelChannelItemFilterInput | null,
+};
+
+export type ModelChannelItemConnection = {
+  __typename: "ModelChannelItemConnection",
+  items:  Array<ChannelItem | null >,
+  nextToken?: string | null,
+};
+
 export type ModelChatSpaceFilterInput = {
   ownerId?: ModelIDInput | null,
   id?: ModelIDInput | null,
@@ -678,6 +794,7 @@ export type ModelOrganizationFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
   logo?: ModelStringInput | null,
+  email?: ModelStringInput | null,
   admin?: ModelStringInput | null,
   and?: Array< ModelOrganizationFilterInput | null > | null,
   or?: Array< ModelOrganizationFilterInput | null > | null,
@@ -691,10 +808,14 @@ export type ModelOrganizationConnection = {
 };
 
 export type ModelUserFilterInput = {
-  id?: ModelIDInput | null,
+  id?: ModelStringInput | null,
   email?: ModelStringInput | null,
   cognitoId?: ModelStringInput | null,
   organizationId?: ModelIDInput | null,
+  chatSpaceId?: ModelIDInput | null,
+  invitedOn?: ModelStringInput | null,
+  joinedOn?: ModelStringInput | null,
+  status?: ModelUserStatusInput | null,
   and?: Array< ModelUserFilterInput | null > | null,
   or?: Array< ModelUserFilterInput | null > | null,
   not?: ModelUserFilterInput | null,
@@ -798,6 +919,16 @@ export type ModelSubscriptionIntInput = {
   notIn?: Array< number | null > | null,
 };
 
+export type ModelSubscriptionChannelItemFilterInput = {
+  ownerId?: ModelSubscriptionIDInput | null,
+  channelId?: ModelSubscriptionIDInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  type?: ModelSubscriptionStringInput | null,
+  content?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionChannelItemFilterInput | null > | null,
+  or?: Array< ModelSubscriptionChannelItemFilterInput | null > | null,
+};
+
 export type ModelSubscriptionChatSpaceFilterInput = {
   ownerId?: ModelSubscriptionIDInput | null,
   id?: ModelSubscriptionIDInput | null,
@@ -815,15 +946,20 @@ export type ModelSubscriptionOrganizationFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
   logo?: ModelSubscriptionStringInput | null,
+  email?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionOrganizationFilterInput | null > | null,
   or?: Array< ModelSubscriptionOrganizationFilterInput | null > | null,
 };
 
 export type ModelSubscriptionUserFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
+  id?: ModelSubscriptionStringInput | null,
   email?: ModelSubscriptionStringInput | null,
   cognitoId?: ModelSubscriptionStringInput | null,
   organizationId?: ModelSubscriptionIDInput | null,
+  chatSpaceId?: ModelSubscriptionIDInput | null,
+  invitedOn?: ModelSubscriptionStringInput | null,
+  joinedOn?: ModelSubscriptionStringInput | null,
+  status?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionUserFilterInput | null > | null,
   or?: Array< ModelSubscriptionUserFilterInput | null > | null,
 };
@@ -971,6 +1107,11 @@ export type CreateChannelMutation = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
     isLive: boolean,
     admin: string,
     members?: Array< string > | null,
@@ -992,6 +1133,11 @@ export type UpdateChannelMutation = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
     isLive: boolean,
     admin: string,
     members?: Array< string > | null,
@@ -1013,6 +1159,11 @@ export type DeleteChannelMutation = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
     isLive: boolean,
     admin: string,
     members?: Array< string > | null,
@@ -1084,6 +1235,63 @@ export type DeleteChannelDocumentMutation = {
   } | null,
 };
 
+export type CreateChannelItemMutationVariables = {
+  input: CreateChannelItemInput,
+  condition?: ModelChannelItemConditionInput | null,
+};
+
+export type CreateChannelItemMutation = {
+  createChannelItem?:  {
+    __typename: "ChannelItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type UpdateChannelItemMutationVariables = {
+  input: UpdateChannelItemInput,
+  condition?: ModelChannelItemConditionInput | null,
+};
+
+export type UpdateChannelItemMutation = {
+  updateChannelItem?:  {
+    __typename: "ChannelItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type DeleteChannelItemMutationVariables = {
+  input: DeleteChannelItemInput,
+  condition?: ModelChannelItemConditionInput | null,
+};
+
+export type DeleteChannelItemMutation = {
+  deleteChannelItem?:  {
+    __typename: "ChannelItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
 export type CreateChatSpaceMutationVariables = {
   input: CreateChatSpaceInput,
   condition?: ModelChatSpaceConditionInput | null,
@@ -1100,11 +1308,6 @@ export type CreateChatSpaceMutation = {
     defaultChannelId?: string | null,
     themeId?: string | null,
     language?: string | null,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -1171,11 +1374,6 @@ export type UpdateChatSpaceMutation = {
     defaultChannelId?: string | null,
     themeId?: string | null,
     language?: string | null,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -1242,11 +1440,6 @@ export type DeleteChatSpaceMutation = {
     defaultChannelId?: string | null,
     themeId?: string | null,
     language?: string | null,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -1308,10 +1501,10 @@ export type CreateOrganizationMutation = {
     id: string,
     name: string,
     logo?: string | null,
+    email?: string | null,
     admin: string,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -1326,10 +1519,10 @@ export type UpdateOrganizationMutation = {
     id: string,
     name: string,
     logo?: string | null,
+    email?: string | null,
     admin: string,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -1344,10 +1537,10 @@ export type DeleteOrganizationMutation = {
     id: string,
     name: string,
     logo?: string | null,
+    email?: string | null,
     admin: string,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -1363,6 +1556,10 @@ export type CreateUserMutation = {
     email: string,
     cognitoId: string,
     organizationId?: string | null,
+    chatSpaceId?: string | null,
+    invitedOn?: string | null,
+    joinedOn?: string | null,
+    status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -1381,6 +1578,10 @@ export type UpdateUserMutation = {
     email: string,
     cognitoId: string,
     organizationId?: string | null,
+    chatSpaceId?: string | null,
+    invitedOn?: string | null,
+    joinedOn?: string | null,
+    status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -1399,6 +1600,10 @@ export type DeleteUserMutation = {
     email: string,
     cognitoId: string,
     organizationId?: string | null,
+    chatSpaceId?: string | null,
+    invitedOn?: string | null,
+    joinedOn?: string | null,
+    status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -1514,6 +1719,11 @@ export type GetChannelQuery = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
     isLive: boolean,
     admin: string,
     members?: Array< string > | null,
@@ -1541,6 +1751,11 @@ export type ListChannelsQuery = {
       apiHost?: string | null,
       chatflowId?: string | null,
       name: string,
+      initialPrompts?:  Array< {
+        __typename: "InitialPrompt",
+        display?: string | null,
+        prompt: string,
+      } > | null,
       isLive: boolean,
       admin: string,
       members?: Array< string > | null,
@@ -1601,6 +1816,53 @@ export type ListChannelDocumentsQuery = {
   } | null,
 };
 
+export type GetChannelItemQueryVariables = {
+  ownerId: string,
+  channelId: string,
+  id: string,
+};
+
+export type GetChannelItemQuery = {
+  getChannelItem?:  {
+    __typename: "ChannelItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type ListChannelItemsQueryVariables = {
+  ownerId?: string | null,
+  channelIdId?: ModelChannelItemPrimaryCompositeKeyConditionInput | null,
+  filter?: ModelChannelItemFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListChannelItemsQuery = {
+  listChannelItems?:  {
+    __typename: "ModelChannelItemConnection",
+    items:  Array< {
+      __typename: "ChannelItem",
+      ownerId: string,
+      channelId: string,
+      id: string,
+      type: ChannelItemType,
+      content?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetChatSpaceQueryVariables = {
   ownerId: string,
   id: string,
@@ -1617,11 +1879,6 @@ export type GetChatSpaceQuery = {
     defaultChannelId?: string | null,
     themeId?: string | null,
     language?: string | null,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -1694,11 +1951,6 @@ export type ListChatSpacesQuery = {
       defaultChannelId?: string | null,
       themeId?: string | null,
       language?: string | null,
-      initialPrompts?:  Array< {
-        __typename: "InitialPrompt",
-        display?: string | null,
-        prompt: string,
-      } > | null,
       theme?:  {
         __typename: "ChatSpaceTheme",
         isDark?: boolean | null,
@@ -1761,10 +2013,10 @@ export type GetOrganizationQuery = {
     id: string,
     name: string,
     logo?: string | null,
+    email?: string | null,
     admin: string,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -1782,10 +2034,10 @@ export type ListOrganizationsQuery = {
       id: string,
       name: string,
       logo?: string | null,
+      email?: string | null,
       admin: string,
       createdAt: string,
       updatedAt: string,
-      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -1802,6 +2054,10 @@ export type GetUserQuery = {
     email: string,
     cognitoId: string,
     organizationId?: string | null,
+    chatSpaceId?: string | null,
+    invitedOn?: string | null,
+    joinedOn?: string | null,
+    status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -1809,9 +2065,11 @@ export type GetUserQuery = {
 };
 
 export type ListUsersQueryVariables = {
+  id?: string | null,
   filter?: ModelUserFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
 };
 
 export type ListUsersQuery = {
@@ -1823,6 +2081,39 @@ export type ListUsersQuery = {
       email: string,
       cognitoId: string,
       organizationId?: string | null,
+      chatSpaceId?: string | null,
+      invitedOn?: string | null,
+      joinedOn?: string | null,
+      status?: UserStatus | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type UsersByChatSpaceIdQueryVariables = {
+  chatSpaceId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UsersByChatSpaceIdQuery = {
+  usersByChatSpaceId?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
+      id: string,
+      email: string,
+      cognitoId: string,
+      organizationId?: string | null,
+      chatSpaceId?: string | null,
+      invitedOn?: string | null,
+      joinedOn?: string | null,
+      status?: UserStatus | null,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -1966,6 +2257,11 @@ export type OnCreateChannelSubscription = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
     isLive: boolean,
     admin: string,
     members?: Array< string > | null,
@@ -1986,6 +2282,11 @@ export type OnUpdateChannelSubscription = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
     isLive: boolean,
     admin: string,
     members?: Array< string > | null,
@@ -2006,6 +2307,11 @@ export type OnDeleteChannelSubscription = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
     isLive: boolean,
     admin: string,
     members?: Array< string > | null,
@@ -2074,6 +2380,63 @@ export type OnDeleteChannelDocumentSubscription = {
   } | null,
 };
 
+export type OnCreateChannelItemSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelItemFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnCreateChannelItemSubscription = {
+  onCreateChannelItem?:  {
+    __typename: "ChannelItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnUpdateChannelItemSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelItemFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnUpdateChannelItemSubscription = {
+  onUpdateChannelItem?:  {
+    __typename: "ChannelItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnDeleteChannelItemSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelItemFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnDeleteChannelItemSubscription = {
+  onDeleteChannelItem?:  {
+    __typename: "ChannelItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
 export type OnCreateChatSpaceSubscriptionVariables = {
   filter?: ModelSubscriptionChatSpaceFilterInput | null,
 };
@@ -2089,11 +2452,6 @@ export type OnCreateChatSpaceSubscription = {
     defaultChannelId?: string | null,
     themeId?: string | null,
     language?: string | null,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -2159,11 +2517,6 @@ export type OnUpdateChatSpaceSubscription = {
     defaultChannelId?: string | null,
     themeId?: string | null,
     language?: string | null,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -2229,11 +2582,6 @@ export type OnDeleteChatSpaceSubscription = {
     defaultChannelId?: string | null,
     themeId?: string | null,
     language?: string | null,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -2286,7 +2634,6 @@ export type OnDeleteChatSpaceSubscription = {
 
 export type OnCreateOrganizationSubscriptionVariables = {
   filter?: ModelSubscriptionOrganizationFilterInput | null,
-  owner?: string | null,
 };
 
 export type OnCreateOrganizationSubscription = {
@@ -2295,16 +2642,15 @@ export type OnCreateOrganizationSubscription = {
     id: string,
     name: string,
     logo?: string | null,
+    email?: string | null,
     admin: string,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
 export type OnUpdateOrganizationSubscriptionVariables = {
   filter?: ModelSubscriptionOrganizationFilterInput | null,
-  owner?: string | null,
 };
 
 export type OnUpdateOrganizationSubscription = {
@@ -2313,16 +2659,15 @@ export type OnUpdateOrganizationSubscription = {
     id: string,
     name: string,
     logo?: string | null,
+    email?: string | null,
     admin: string,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
 export type OnDeleteOrganizationSubscriptionVariables = {
   filter?: ModelSubscriptionOrganizationFilterInput | null,
-  owner?: string | null,
 };
 
 export type OnDeleteOrganizationSubscription = {
@@ -2331,10 +2676,10 @@ export type OnDeleteOrganizationSubscription = {
     id: string,
     name: string,
     logo?: string | null,
+    email?: string | null,
     admin: string,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -2350,6 +2695,10 @@ export type OnCreateUserSubscription = {
     email: string,
     cognitoId: string,
     organizationId?: string | null,
+    chatSpaceId?: string | null,
+    invitedOn?: string | null,
+    joinedOn?: string | null,
+    status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -2368,6 +2717,10 @@ export type OnUpdateUserSubscription = {
     email: string,
     cognitoId: string,
     organizationId?: string | null,
+    chatSpaceId?: string | null,
+    invitedOn?: string | null,
+    joinedOn?: string | null,
+    status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -2386,6 +2739,10 @@ export type OnDeleteUserSubscription = {
     email: string,
     cognitoId: string,
     organizationId?: string | null,
+    chatSpaceId?: string | null,
+    invitedOn?: string | null,
+    joinedOn?: string | null,
+    status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,

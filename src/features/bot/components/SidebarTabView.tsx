@@ -3,7 +3,6 @@ import { History } from '@/features/messages'
 import { Chat } from '@/features/messages/types'
 import { NavigationPromptsList } from '@/features/prompt'
 import { useText } from '@/features/text'
-import { InitialPrompt } from '@/graphql/types'
 import { createMemo } from 'solid-js'
 import { botStore } from '..'
 import { sidebarInnerWidthNum } from '../constants'
@@ -11,7 +10,6 @@ import { sidebarInnerWidthNum } from '../constants'
 type SidebarTabViewProps = {
   setQuestion: (question: Chat) => void
   handleSubmit: (question: string) => void
-  initialPrompts?: InitialPrompt[] | null
   class?: string
 }
 
@@ -35,7 +33,7 @@ export const SidebarTabView = (props: SidebarTabViewProps) => {
       content: (
         <NavigationPromptsList
           prompts={
-            props.initialPrompts
+            botStore.activeChannel!.initialPrompts
             // botStore.chat?.question ? props.initialPrompts : props.initialPrompts?.slice(0, 3)
           }
           onSelect={props.handleSubmit}

@@ -137,6 +137,11 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel($filt
     apiHost
     chatflowId
     name
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
     isLive
     admin
     members
@@ -156,6 +161,11 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel($filt
     apiHost
     chatflowId
     name
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
     isLive
     admin
     members
@@ -175,6 +185,11 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel($filt
     apiHost
     chatflowId
     name
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
     isLive
     admin
     members
@@ -250,6 +265,66 @@ export const onDeleteChannelDocument = /* GraphQL */ `subscription OnDeleteChann
   APITypes.OnDeleteChannelDocumentSubscriptionVariables,
   APITypes.OnDeleteChannelDocumentSubscription
 >;
+export const onCreateChannelItem = /* GraphQL */ `subscription OnCreateChannelItem(
+  $filter: ModelSubscriptionChannelItemFilterInput
+  $owner: String
+) {
+  onCreateChannelItem(filter: $filter, owner: $owner) {
+    ownerId
+    channelId
+    id
+    type
+    content
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateChannelItemSubscriptionVariables,
+  APITypes.OnCreateChannelItemSubscription
+>;
+export const onUpdateChannelItem = /* GraphQL */ `subscription OnUpdateChannelItem(
+  $filter: ModelSubscriptionChannelItemFilterInput
+  $owner: String
+) {
+  onUpdateChannelItem(filter: $filter, owner: $owner) {
+    ownerId
+    channelId
+    id
+    type
+    content
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateChannelItemSubscriptionVariables,
+  APITypes.OnUpdateChannelItemSubscription
+>;
+export const onDeleteChannelItem = /* GraphQL */ `subscription OnDeleteChannelItem(
+  $filter: ModelSubscriptionChannelItemFilterInput
+  $owner: String
+) {
+  onDeleteChannelItem(filter: $filter, owner: $owner) {
+    ownerId
+    channelId
+    id
+    type
+    content
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteChannelItemSubscriptionVariables,
+  APITypes.OnDeleteChannelItemSubscription
+>;
 export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
   onCreateChatSpace(filter: $filter) {
     ownerId
@@ -260,11 +335,6 @@ export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($
     defaultChannelId
     themeId
     language
-    initialPrompts {
-      display
-      prompt
-      __typename
-    }
     theme {
       isDark
       navbarLogoUrl
@@ -329,11 +399,6 @@ export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($
     defaultChannelId
     themeId
     language
-    initialPrompts {
-      display
-      prompt
-      __typename
-    }
     theme {
       isDark
       navbarLogoUrl
@@ -398,11 +463,6 @@ export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($
     defaultChannelId
     themeId
     language
-    initialPrompts {
-      display
-      prompt
-      __typename
-    }
     theme {
       isDark
       navbarLogoUrl
@@ -459,16 +519,15 @@ export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($
 >;
 export const onCreateOrganization = /* GraphQL */ `subscription OnCreateOrganization(
   $filter: ModelSubscriptionOrganizationFilterInput
-  $owner: String
 ) {
-  onCreateOrganization(filter: $filter, owner: $owner) {
+  onCreateOrganization(filter: $filter) {
     id
     name
     logo
+    email
     admin
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -478,16 +537,15 @@ export const onCreateOrganization = /* GraphQL */ `subscription OnCreateOrganiza
 >;
 export const onUpdateOrganization = /* GraphQL */ `subscription OnUpdateOrganization(
   $filter: ModelSubscriptionOrganizationFilterInput
-  $owner: String
 ) {
-  onUpdateOrganization(filter: $filter, owner: $owner) {
+  onUpdateOrganization(filter: $filter) {
     id
     name
     logo
+    email
     admin
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -497,16 +555,15 @@ export const onUpdateOrganization = /* GraphQL */ `subscription OnUpdateOrganiza
 >;
 export const onDeleteOrganization = /* GraphQL */ `subscription OnDeleteOrganization(
   $filter: ModelSubscriptionOrganizationFilterInput
-  $owner: String
 ) {
-  onDeleteOrganization(filter: $filter, owner: $owner) {
+  onDeleteOrganization(filter: $filter) {
     id
     name
     logo
+    email
     admin
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -523,6 +580,10 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     email
     cognitoId
     organizationId
+    chatSpaceId
+    invitedOn
+    joinedOn
+    status
     createdAt
     updatedAt
     owner
@@ -542,6 +603,10 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     email
     cognitoId
     organizationId
+    chatSpaceId
+    invitedOn
+    joinedOn
+    status
     createdAt
     updatedAt
     owner
@@ -561,6 +626,10 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     email
     cognitoId
     organizationId
+    chatSpaceId
+    invitedOn
+    joinedOn
+    status
     createdAt
     updatedAt
     owner

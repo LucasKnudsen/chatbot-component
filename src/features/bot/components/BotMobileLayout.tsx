@@ -4,14 +4,12 @@ import { ChatWindow } from '@/features/messages'
 import { SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
-import { InitialPrompt } from '@/graphql/types'
 import { Show, createSignal } from 'solid-js'
 import { botStore } from '..'
 
 type BotMobileProps = {
   userInput: string
   suggestedPrompts: string[]
-  initialPrompts?: InitialPrompt[] | null
   isFetchingSuggestedPrompts: boolean
   onSubmit: (question: string) => void
   onClear: () => void

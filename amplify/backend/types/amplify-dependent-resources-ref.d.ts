@@ -47,6 +47,13 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     },
+    "digitaltwinauthVerifyAuthChallengeResponse": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "flowiseBroadcast": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
@@ -55,6 +62,13 @@ export type AmplifyDependentResourcesAttributes = {
       "Region": "string"
     },
     "flowiseMiddleware": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "handleUsers": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

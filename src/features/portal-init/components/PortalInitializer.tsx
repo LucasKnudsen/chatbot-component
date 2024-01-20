@@ -1,6 +1,6 @@
 import awsconfig from '@/aws-exports'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
-import { Show, Suspense, createResource, createSignal } from 'solid-js'
+import { Show, Suspense, createResource } from 'solid-js'
 import { BotManager } from '../../bot'
 
 import { useText } from '@/features/text'
@@ -8,7 +8,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { TrackingProvider } from '@/features/tracking'
 import StyleSheet from '@/styles'
 import { Amplify } from 'aws-amplify'
-import { configStore, configStoreActions, initializeConfig } from '..'
+import { ChatConfig, configStore, configStoreActions, initializeConfig } from '..'
 import { BubbleButton } from './BubbleButton'
 
 Amplify.configure(awsconfig)
@@ -17,14 +17,7 @@ try {
   Predictions.addPluggable(new AmazonAIConvertPredictionsProvider())
 } catch (error) {}
 
-export type ChatConfig = {
-  hostId: string
-  spaceId: string
-}
-
-export const ChatInitializer = (props: ChatConfig) => {
-  const [isBotStarted, setIsBotStarted] = createSignal(false)
-
+export const PortalInitializer = (props: ChatConfig) => {
   const { initTheme, theme } = useTheme()
   const { initText } = useText()
 
@@ -47,8 +40,6 @@ export const ChatInitializer = (props: ChatConfig) => {
       configStoreActions.toggleBot()
     }
 
-    setIsBotStarted(true)
-
     return result.data
   })
 
@@ -58,7 +49,7 @@ export const ChatInitializer = (props: ChatConfig) => {
 
       <TrackingProvider />
 
-      <Suspense>
+      <Suspense fallback='System Loader if autoOpen'>
         <BubbleButton />
         {data()?.isMultiChannel}
 
@@ -78,7 +69,7 @@ export const ChatInitializer = (props: ChatConfig) => {
           }}
           part='bot'
         >
-          <Show when={isBotStarted()}>
+          <Show when={configStore.isBotOpened}>
             <BotManager {...data()!} />
           </Show>
         </div>

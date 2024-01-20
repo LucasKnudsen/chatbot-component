@@ -1,6 +1,6 @@
 /* eslint-disable solid/reactivity */
 
-import { ChatConfig } from './features/chat-init'
+import { ChatConfig } from './features/portal-init'
 
 // export const initFull = (props: BotProps & { id?: string }) => {
 //   const fullElement = props.id

@@ -69,6 +69,14 @@
           ],
           "category": "function",
           "resourceName": "transcribeAudio"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "handleUsers"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -78,7 +86,17 @@
   "auth": {
     "digitaltwinauth": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "digitaltwinauthVerifyAuthChallengeResponse",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OPTIONAL",
         "mfaTypes": [
@@ -149,6 +167,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "digitaltwinauthVerifyAuthChallengeResponse": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "flowiseBroadcast": {
       "build": true,
       "dependsOn": [
@@ -174,6 +197,27 @@
           ],
           "category": "function",
           "resourceName": "flowiseBroadcast"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "handleUsers": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "digitaltwinauth"
         },
         {
           "attributes": [
@@ -256,6 +300,22 @@
         }
       ]
     },
+    "AMPLIFY_function_digitaltwinauthVerifyAuthChallengeResponse_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "digitaltwinauthVerifyAuthChallengeResponse"
+        }
+      ]
+    },
+    "AMPLIFY_function_digitaltwinauthVerifyAuthChallengeResponse_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "digitaltwinauthVerifyAuthChallengeResponse"
+        }
+      ]
+    },
     "AMPLIFY_function_flowiseBroadcast_deploymentBucketName": {
       "usedBy": [
         {
@@ -293,6 +353,22 @@
         {
           "category": "function",
           "resourceName": "flowiseMiddleware"
+        }
+      ]
+    },
+    "AMPLIFY_function_handleUsers_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "handleUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_handleUsers_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "handleUsers"
         }
       ]
     },

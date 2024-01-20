@@ -4,6 +4,7 @@ import { isStreamAvailableQuery } from '@/features/messages/queries/sendMessageQ
 import { logDev } from '@/utils'
 import socketIOClient, { Socket } from 'socket.io-client'
 import { createEffect, createSignal, on, onCleanup, onMount } from 'solid-js'
+import { setIsLoadingSocket } from '..'
 
 export function useSocket({
   onStart,
@@ -18,9 +19,6 @@ export function useSocket({
   const [socketIOClientId, setSocketIOClientId] = createSignal('')
 
   let socket: Socket
-
-  onMount(() => initSocket)
-  onCleanup(() => handleCleanup)
 
   // When the active channel changes, we need to reconnect to the socket server.
   createEffect(
@@ -37,11 +35,13 @@ export function useSocket({
   )
 
   const initSocket = async () => {
-    socket = socketIOClient(botStore.activeChannel.apiHost as string)
+    console.log('socket', socket)
+    if (socket) return
+    socket = socketIOClient(botStore.activeChannel!.apiHost as string)
 
     const { data } = await isStreamAvailableQuery({
-      chatflowId: botStore.activeChannel.chatflowId!,
-      apiHost: botStore.activeChannel.apiHost!,
+      chatflowId: botStore.activeChannel!.chatflowId!,
+      apiHost: botStore.activeChannel!.apiHost!,
     })
 
     if (data) {
@@ -50,8 +50,9 @@ export function useSocket({
     }
 
     socket.on('connect', () => {
-      logDev('In connect', socket.id)
+      logDev('Initiated chat stream', socket.id)
 
+      setIsLoadingSocket(false)
       setSocketIOClientId(socket.id)
     })
 
@@ -63,10 +64,14 @@ export function useSocket({
   }
 
   const handleCleanup = () => {
+    logDev('Closing socket connection')
     socket.disconnect()
     setSocketIOClientId('')
     setIsChatFlowAvailableToStream(false)
   }
+
+  onMount(initSocket)
+  onCleanup(handleCleanup)
 
   return { socketIOClientId, isChatFlowAvailableToStream }
 }

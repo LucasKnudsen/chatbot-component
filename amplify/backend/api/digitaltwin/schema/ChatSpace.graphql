@@ -16,17 +16,11 @@ type ChatSpace
 
   themeId: String
   language: String # Code Ref
-  initialPrompts: [InitialPrompt!]
   theme: ChatSpaceTheme
   text: ChatSpaceText
   settings: ChatSpaceSettings!
 
   admin: String!
-}
-
-type InitialPrompt {
-  display: String
-  prompt: String!
 }
 
 type ChatSpaceTheme {

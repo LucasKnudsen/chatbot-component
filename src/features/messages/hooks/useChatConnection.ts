@@ -26,7 +26,7 @@ export function useChatConnection({
         clearSubscription(previousChatId, 'chat-answers') // Clear previous subscription if exists
       }
 
-      logDev('Initiated subscription', chatId)
+      logDev('Initiated chat sub', chatId)
 
       const onNext = (data: SubscriptionEvent) => {
         logDev('Subscription event', data)

@@ -1,7 +1,7 @@
 import powerIcon from '@/assets/power-icon.svg'
 
-import { botStore } from '@/features/bot'
-import { configStoreActions } from '@/features/chat-init'
+import { botStore, botStoreActions } from '@/features/bot'
+import { configStoreActions } from '@/features/portal-init'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
@@ -15,7 +15,9 @@ export const Nav = () => {
   const { theme } = useTheme()
   const { text } = useText()
 
-  const onClickLogo = () => {}
+  const onClickLogo = () => {
+    botStoreActions.resetActiveChannel()
+  }
 
   return (
     <div

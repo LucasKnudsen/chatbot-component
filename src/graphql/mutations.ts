@@ -152,6 +152,11 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
     apiHost
     chatflowId
     name
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
     isLive
     admin
     members
@@ -174,6 +179,11 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
     apiHost
     chatflowId
     name
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
     isLive
     admin
     members
@@ -196,6 +206,11 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
     apiHost
     chatflowId
     name
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
     isLive
     admin
     members
@@ -274,6 +289,66 @@ export const deleteChannelDocument = /* GraphQL */ `mutation DeleteChannelDocume
   APITypes.DeleteChannelDocumentMutationVariables,
   APITypes.DeleteChannelDocumentMutation
 >;
+export const createChannelItem = /* GraphQL */ `mutation CreateChannelItem(
+  $input: CreateChannelItemInput!
+  $condition: ModelChannelItemConditionInput
+) {
+  createChannelItem(input: $input, condition: $condition) {
+    ownerId
+    channelId
+    id
+    type
+    content
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChannelItemMutationVariables,
+  APITypes.CreateChannelItemMutation
+>;
+export const updateChannelItem = /* GraphQL */ `mutation UpdateChannelItem(
+  $input: UpdateChannelItemInput!
+  $condition: ModelChannelItemConditionInput
+) {
+  updateChannelItem(input: $input, condition: $condition) {
+    ownerId
+    channelId
+    id
+    type
+    content
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChannelItemMutationVariables,
+  APITypes.UpdateChannelItemMutation
+>;
+export const deleteChannelItem = /* GraphQL */ `mutation DeleteChannelItem(
+  $input: DeleteChannelItemInput!
+  $condition: ModelChannelItemConditionInput
+) {
+  deleteChannelItem(input: $input, condition: $condition) {
+    ownerId
+    channelId
+    id
+    type
+    content
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChannelItemMutationVariables,
+  APITypes.DeleteChannelItemMutation
+>;
 export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
   $input: CreateChatSpaceInput!
   $condition: ModelChatSpaceConditionInput
@@ -287,11 +362,6 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
     defaultChannelId
     themeId
     language
-    initialPrompts {
-      display
-      prompt
-      __typename
-    }
     theme {
       isDark
       navbarLogoUrl
@@ -359,11 +429,6 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
     defaultChannelId
     themeId
     language
-    initialPrompts {
-      display
-      prompt
-      __typename
-    }
     theme {
       isDark
       navbarLogoUrl
@@ -431,11 +496,6 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
     defaultChannelId
     themeId
     language
-    initialPrompts {
-      display
-      prompt
-      __typename
-    }
     theme {
       isDark
       navbarLogoUrl
@@ -498,10 +558,10 @@ export const createOrganization = /* GraphQL */ `mutation CreateOrganization(
     id
     name
     logo
+    email
     admin
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -517,10 +577,10 @@ export const updateOrganization = /* GraphQL */ `mutation UpdateOrganization(
     id
     name
     logo
+    email
     admin
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -536,10 +596,10 @@ export const deleteOrganization = /* GraphQL */ `mutation DeleteOrganization(
     id
     name
     logo
+    email
     admin
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -556,6 +616,10 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     email
     cognitoId
     organizationId
+    chatSpaceId
+    invitedOn
+    joinedOn
+    status
     createdAt
     updatedAt
     owner
@@ -575,6 +639,10 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     email
     cognitoId
     organizationId
+    chatSpaceId
+    invitedOn
+    joinedOn
+    status
     createdAt
     updatedAt
     owner
@@ -594,6 +662,10 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     email
     cognitoId
     organizationId
+    chatSpaceId
+    invitedOn
+    joinedOn
+    status
     createdAt
     updatedAt
     owner

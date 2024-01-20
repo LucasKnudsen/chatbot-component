@@ -1,16 +1,28 @@
-type Organization @model @auth(rules: [{ allow: owner }, { allow: groups, groupsField: "admin" }]) {
+type Organization @model @auth(rules: [{ allow: groups, groupsField: "admin" }]) {
   id: ID!
   name: String!
+
   logo: String
+  email: String
 
   admin: String!
 }
 
 type User @model @auth(rules: [{ allow: owner }]) {
-  id: ID!
+  id: String! @primaryKey
 
   email: String!
   cognitoId: String!
-
+  roles: [String!] # Code reference to roles
   organizationId: ID
+  chatSpaceId: ID @index(name: "byChatSpace")
+
+  invitedOn: AWSDateTime
+  joinedOn: AWSDateTime
+  status: UserStatus
+}
+
+enum UserStatus {
+  INVITED
+  ACTIVE
 }

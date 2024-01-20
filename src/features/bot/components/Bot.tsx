@@ -1,6 +1,8 @@
+import { LoadingOverlay } from '@/components'
 import {
   IncomingInput,
   PromptCode,
+  isLoadingSocket,
   sendMessageQuery,
   useChatConnection,
   useSocket,
@@ -73,8 +75,8 @@ export const Bot = (props: ChatSpace & { channels: Channel[] }) => {
 
     const body: IncomingInput = {
       question: value,
-      channelId: botStore.activeChannel.id,
-      spaceId: botStore.activeChannel.chatSpaceId,
+      channelId: botStore.activeChannel!.id,
+      spaceId: botStore.activeChannel!.chatSpaceId,
       history: [],
       chatId: chatId(),
       promptCode: PromptCode.QUESTION,
@@ -91,13 +93,14 @@ export const Bot = (props: ChatSpace & { channels: Channel[] }) => {
 
   return (
     <div class='relative md:flex md:px-16 flex-1 overflow-hidden'>
+      <LoadingOverlay isLoading={isLoadingSocket()} />
+
       <Switch>
         <Match when={['desktop', 'tablet'].includes(device())}>
           <BotDesktopLayout
             userInput={userInput()}
             isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
             suggestedPrompts={suggestedPrompts()}
-            initialPrompts={props.initialPrompts}
             onSubmit={handleSubmit}
             onClear={clear}
           />
@@ -107,7 +110,6 @@ export const Bot = (props: ChatSpace & { channels: Channel[] }) => {
             userInput={userInput()}
             isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
             suggestedPrompts={suggestedPrompts()}
-            initialPrompts={props.initialPrompts}
             onSubmit={handleSubmit}
             onClear={clear}
           />
@@ -126,7 +128,6 @@ export const Bot = (props: ChatSpace & { channels: Channel[] }) => {
             <div class='flex-1 overflow-hidden'>
               <SidebarTabView
                 class='h-full'
-                initialPrompts={props.initialPrompts}
                 setQuestion={(chat) => {
                   botStoreActions.setChat(chat)
                   setSidebarOpen(false)

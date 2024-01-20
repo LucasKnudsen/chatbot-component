@@ -41,7 +41,11 @@
     ],
     "userPoolGroups": false,
     "adminQueries": false,
-    "triggers": {},
+    "triggers": {
+      "VerifyAuthChallengeResponse": [
+        "boilerplate-verify"
+      ]
+    },
     "hostedUI": false,
     "userPoolGroupList": [
       "SuperAdmin"
@@ -62,10 +66,22 @@
       ]
     },
     "breakCircularDependency": true,
-    "dependsOn": [],
+    "dependsOn": [
+      {
+        "category": "function",
+        "resourceName": "digitaltwinauthVerifyAuthChallengeResponse",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      }
+    ],
     "parentStack": {
       "Ref": "AWS::StackId"
     },
-    "permissions": []
+    "permissions": [],
+    "authProviders": [],
+    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"VerifyAuthChallengeResponse\",\n    \"lambdaFunctionName\": \"digitaltwinauthVerifyAuthChallengeResponse\"\n  }\n]"
   }
 }

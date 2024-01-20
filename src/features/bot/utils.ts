@@ -1,5 +1,6 @@
 import {
   Channel,
+  ChatSpace,
   GetChannelQuery,
   GetChannelQueryVariables,
   ListChannelsQuery,
@@ -9,9 +10,8 @@ import {
 
 import { GraphQLQuery } from '@aws-amplify/api'
 import { API, Auth } from 'aws-amplify'
-import { BotProps } from '.'
 
-export async function fetchChannels(props: BotProps): Promise<Channel[] | undefined> {
+export async function fetchChannels(props: ChatSpace): Promise<Channel[] | undefined> {
   let isUser = false
   try {
     isUser = Boolean(await Auth.currentAuthenticatedUser())

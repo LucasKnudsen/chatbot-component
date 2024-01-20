@@ -10,7 +10,8 @@
       "StackName": "amplify-digitaltwin-dev-91806",
       "StackId": "arn:aws:cloudformation:ap-southeast-1:047845575339:stack/amplify-digitaltwin-dev-91806/fff563b0-8f58-11ee-b66b-0a14b2b25086",
       "AmplifyAppId": "d1i4jp82axmvxl",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-digitaltwin-dev-91806-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-digitaltwin-dev-91806-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-digitaltwin-dev-91806-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "function": {
@@ -39,6 +40,14 @@
         "adhoc": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
           "s3Key": "amplify-builds/adhoc-4573386379632b696b78-build.zip"
+        },
+        "handleUsers": {
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/handleUsers-317937432f324232566a-build.zip"
+        },
+        "digitaltwinauthVerifyAuthChallengeResponse": {
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/digitaltwinauthVerifyAuthChallengeResponse-4f6f4e75414f557a554c-build.zip"
         }
       },
       "hosting": {
@@ -53,6 +62,13 @@
       },
       "storage": {
         "fraiastorage": {}
+      },
+      "api": {
+        "digitaltwin": {},
+        "digitaltwinRest": {}
+      },
+      "predictions": {
+        "dynamicTranslator": {}
       }
     }
   }

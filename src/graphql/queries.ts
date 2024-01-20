@@ -137,6 +137,11 @@ export const getChannel = /* GraphQL */ `query GetChannel($chatSpaceId: ID!, $id
     apiHost
     chatflowId
     name
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
     isLive
     admin
     members
@@ -171,6 +176,11 @@ export const listChannels = /* GraphQL */ `query ListChannels(
       apiHost
       chatflowId
       name
+      initialPrompts {
+        display
+        prompt
+        __typename
+      }
       isLive
       admin
       members
@@ -242,6 +252,58 @@ export const listChannelDocuments = /* GraphQL */ `query ListChannelDocuments(
   APITypes.ListChannelDocumentsQueryVariables,
   APITypes.ListChannelDocumentsQuery
 >;
+export const getChannelItem = /* GraphQL */ `query GetChannelItem($ownerId: ID!, $channelId: ID!, $id: ID!) {
+  getChannelItem(ownerId: $ownerId, channelId: $channelId, id: $id) {
+    ownerId
+    channelId
+    id
+    type
+    content
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetChannelItemQueryVariables,
+  APITypes.GetChannelItemQuery
+>;
+export const listChannelItems = /* GraphQL */ `query ListChannelItems(
+  $ownerId: ID
+  $channelIdId: ModelChannelItemPrimaryCompositeKeyConditionInput
+  $filter: ModelChannelItemFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listChannelItems(
+    ownerId: $ownerId
+    channelIdId: $channelIdId
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      ownerId
+      channelId
+      id
+      type
+      content
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListChannelItemsQueryVariables,
+  APITypes.ListChannelItemsQuery
+>;
 export const getChatSpace = /* GraphQL */ `query GetChatSpace($ownerId: ID!, $id: ID!) {
   getChatSpace(ownerId: $ownerId, id: $id) {
     ownerId
@@ -252,11 +314,6 @@ export const getChatSpace = /* GraphQL */ `query GetChatSpace($ownerId: ID!, $id
     defaultChannelId
     themeId
     language
-    initialPrompts {
-      display
-      prompt
-      __typename
-    }
     theme {
       isDark
       navbarLogoUrl
@@ -336,11 +393,6 @@ export const listChatSpaces = /* GraphQL */ `query ListChatSpaces(
       defaultChannelId
       themeId
       language
-      initialPrompts {
-        display
-        prompt
-        __typename
-      }
       theme {
         isDark
         navbarLogoUrl
@@ -403,10 +455,10 @@ export const getOrganization = /* GraphQL */ `query GetOrganization($id: ID!) {
     id
     name
     logo
+    email
     admin
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -424,10 +476,10 @@ export const listOrganizations = /* GraphQL */ `query ListOrganizations(
       id
       name
       logo
+      email
       admin
       createdAt
       updatedAt
-      owner
       __typename
     }
     nextToken
@@ -438,12 +490,16 @@ export const listOrganizations = /* GraphQL */ `query ListOrganizations(
   APITypes.ListOrganizationsQueryVariables,
   APITypes.ListOrganizationsQuery
 >;
-export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
+export const getUser = /* GraphQL */ `query GetUser($id: String!) {
   getUser(id: $id) {
     id
     email
     cognitoId
     organizationId
+    chatSpaceId
+    invitedOn
+    joinedOn
+    status
     createdAt
     updatedAt
     owner
@@ -452,16 +508,28 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
 }
 ` as GeneratedQuery<APITypes.GetUserQueryVariables, APITypes.GetUserQuery>;
 export const listUsers = /* GraphQL */ `query ListUsers(
+  $id: String
   $filter: ModelUserFilterInput
   $limit: Int
   $nextToken: String
+  $sortDirection: ModelSortDirection
 ) {
-  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listUsers(
+    id: $id
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
     items {
       id
       email
       cognitoId
       organizationId
+      chatSpaceId
+      invitedOn
+      joinedOn
+      status
       createdAt
       updatedAt
       owner
@@ -472,3 +540,39 @@ export const listUsers = /* GraphQL */ `query ListUsers(
   }
 }
 ` as GeneratedQuery<APITypes.ListUsersQueryVariables, APITypes.ListUsersQuery>;
+export const usersByChatSpaceId = /* GraphQL */ `query UsersByChatSpaceId(
+  $chatSpaceId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  usersByChatSpaceId(
+    chatSpaceId: $chatSpaceId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      email
+      cognitoId
+      organizationId
+      chatSpaceId
+      invitedOn
+      joinedOn
+      status
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.UsersByChatSpaceIdQueryVariables,
+  APITypes.UsersByChatSpaceIdQuery
+>;

@@ -284,6 +284,12 @@ const setLoading = (loading: boolean) => {
   setBotStore('loading', loading)
 }
 
+const resetActiveChannel = () => {
+  setBotStore('chat', null)
+
+  setBotStore('activeChannel', null)
+}
+
 const clear = () => {
   setBotStore('chat', null)
   setBotStore('history', [])
@@ -296,6 +302,7 @@ const botStoreActions = {
   updateHistoryAnswer,
   createQuestion,
   setChat,
+  resetActiveChannel,
   handleSourceDocuments,
   setLoading,
   clear,

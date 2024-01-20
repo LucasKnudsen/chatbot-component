@@ -58,6 +58,13 @@
           "update"
         ]
       }
+    },
+    "/users": {
+      "name": "/users",
+      "lambdaFunction": "handleUsers",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }
