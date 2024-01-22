@@ -1,30 +1,38 @@
-type Channel
-  @model
-  @auth(
-    rules: [
-      { allow: groups, groups: ["SuperAdmin"] }
-      { allow: groups, groupsField: "admin" }
-      { allow: groups, groupsField: "members", operations: [read] }
-      { allow: private, operations: [read] } ## TODO: remove this after custom lambda is implemented
-      { allow: public, provider: iam, operations: [read] } ## TODO: remove this after custom lambda is implemented
-    ]
-  ) {
-  chatSpaceId: ID! @primaryKey(sortKeyFields: ["id"])
+type Channel @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }, { allow: owner }]) {
   id: ID!
+  chatSpaceId: ID! @index(name: "byChatSpace", queryField: "channelsByChatSpaceId") # For Public purposes
   apiHost: String
   chatflowId: String
 
   name: String!
   initialPrompts: [InitialPrompt!]
-  isLive: Boolean! @default(value: "false")
-
-  admin: String!
-  members: [String!]
+  isPublic: Boolean! @default(value: "false")
 }
 
 type InitialPrompt {
   display: String
   prompt: String!
+}
+
+type ChannelUserAccess @model @auth(rules: [{ allow: owner }]) {
+  # Access ID is concatenation of userId, chatSpaceId, organizationId - with # as delimiter
+  # This is to effectively create retrieve a user's access to Channels within a ChatSpace - within a potential Organization
+  # organizationId are only used in the case of a Portal ChatSpace - otherwise, they are `_`
+  accessId: String! @primaryKey(sortKeyFields: ["channelId"])
+  channelId: ID!
+
+  channelOwnerId: String!
+
+  role: ChannelUserRole!
+  channelName: String!
+  channelDescription: String
+}
+
+enum ChannelUserRole {
+  OWNER ## Can DELETE
+  ADMIN ## Can DELETE
+  WRITE
+  READ
 }
 
 type ChannelDocument

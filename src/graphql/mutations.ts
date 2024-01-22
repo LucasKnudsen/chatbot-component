@@ -147,8 +147,8 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
   $condition: ModelChannelConditionInput
 ) {
   createChannel(input: $input, condition: $condition) {
-    chatSpaceId
     id
+    chatSpaceId
     apiHost
     chatflowId
     name
@@ -158,10 +158,9 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
       __typename
     }
     isLive
-    admin
-    members
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -174,8 +173,8 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
   $condition: ModelChannelConditionInput
 ) {
   updateChannel(input: $input, condition: $condition) {
-    chatSpaceId
     id
+    chatSpaceId
     apiHost
     chatflowId
     name
@@ -185,10 +184,9 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
       __typename
     }
     isLive
-    admin
-    members
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -201,8 +199,8 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
   $condition: ModelChannelConditionInput
 ) {
   deleteChannel(input: $input, condition: $condition) {
-    chatSpaceId
     id
+    chatSpaceId
     apiHost
     chatflowId
     name
@@ -212,16 +210,78 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
       __typename
     }
     isLive
-    admin
-    members
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
 ` as GeneratedMutation<
   APITypes.DeleteChannelMutationVariables,
   APITypes.DeleteChannelMutation
+>;
+export const createChannelUserAccess = /* GraphQL */ `mutation CreateChannelUserAccess(
+  $input: CreateChannelUserAccessInput!
+  $condition: ModelChannelUserAccessConditionInput
+) {
+  createChannelUserAccess(input: $input, condition: $condition) {
+    accessId
+    channelId
+    channelOwnerId
+    role
+    channelName
+    channelDescription
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChannelUserAccessMutationVariables,
+  APITypes.CreateChannelUserAccessMutation
+>;
+export const updateChannelUserAccess = /* GraphQL */ `mutation UpdateChannelUserAccess(
+  $input: UpdateChannelUserAccessInput!
+  $condition: ModelChannelUserAccessConditionInput
+) {
+  updateChannelUserAccess(input: $input, condition: $condition) {
+    accessId
+    channelId
+    channelOwnerId
+    role
+    channelName
+    channelDescription
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChannelUserAccessMutationVariables,
+  APITypes.UpdateChannelUserAccessMutation
+>;
+export const deleteChannelUserAccess = /* GraphQL */ `mutation DeleteChannelUserAccess(
+  $input: DeleteChannelUserAccessInput!
+  $condition: ModelChannelUserAccessConditionInput
+) {
+  deleteChannelUserAccess(input: $input, condition: $condition) {
+    accessId
+    channelId
+    channelOwnerId
+    role
+    channelName
+    channelDescription
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChannelUserAccessMutationVariables,
+  APITypes.DeleteChannelUserAccessMutation
 >;
 export const createChannelDocument = /* GraphQL */ `mutation CreateChannelDocument(
   $input: CreateChannelDocumentInput!
@@ -354,8 +414,8 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
   $condition: ModelChatSpaceConditionInput
 ) {
   createChatSpace(input: $input, condition: $condition) {
-    ownerId
     id
+    hostType
     name
     isPublic
     isMultiChannel
@@ -421,8 +481,8 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
   $condition: ModelChatSpaceConditionInput
 ) {
   updateChatSpace(input: $input, condition: $condition) {
-    ownerId
     id
+    hostType
     name
     isPublic
     isMultiChannel
@@ -488,8 +548,8 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
   $condition: ModelChatSpaceConditionInput
 ) {
   deleteChatSpace(input: $input, condition: $condition) {
-    ownerId
     id
+    hostType
     name
     isPublic
     isMultiChannel
@@ -615,6 +675,7 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     id
     email
     cognitoId
+    roles
     organizationId
     chatSpaceId
     invitedOn
@@ -638,6 +699,7 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     id
     email
     cognitoId
+    roles
     organizationId
     chatSpaceId
     invitedOn
@@ -661,6 +723,7 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     id
     email
     cognitoId
+    roles
     organizationId
     chatSpaceId
     invitedOn

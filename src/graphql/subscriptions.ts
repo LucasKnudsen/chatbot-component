@@ -130,10 +130,13 @@ export const onDeleteLanguageItem = /* GraphQL */ `subscription OnDeleteLanguage
   APITypes.OnDeleteLanguageItemSubscriptionVariables,
   APITypes.OnDeleteLanguageItemSubscription
 >;
-export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel($filter: ModelSubscriptionChannelFilterInput) {
-  onCreateChannel(filter: $filter) {
-    chatSpaceId
+export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
+  $filter: ModelSubscriptionChannelFilterInput
+  $owner: String
+) {
+  onCreateChannel(filter: $filter, owner: $owner) {
     id
+    chatSpaceId
     apiHost
     chatflowId
     name
@@ -143,10 +146,9 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel($filt
       __typename
     }
     isLive
-    admin
-    members
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -154,10 +156,13 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel($filt
   APITypes.OnCreateChannelSubscriptionVariables,
   APITypes.OnCreateChannelSubscription
 >;
-export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel($filter: ModelSubscriptionChannelFilterInput) {
-  onUpdateChannel(filter: $filter) {
-    chatSpaceId
+export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
+  $filter: ModelSubscriptionChannelFilterInput
+  $owner: String
+) {
+  onUpdateChannel(filter: $filter, owner: $owner) {
     id
+    chatSpaceId
     apiHost
     chatflowId
     name
@@ -167,10 +172,9 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel($filt
       __typename
     }
     isLive
-    admin
-    members
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -178,10 +182,13 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel($filt
   APITypes.OnUpdateChannelSubscriptionVariables,
   APITypes.OnUpdateChannelSubscription
 >;
-export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel($filter: ModelSubscriptionChannelFilterInput) {
-  onDeleteChannel(filter: $filter) {
-    chatSpaceId
+export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
+  $filter: ModelSubscriptionChannelFilterInput
+  $owner: String
+) {
+  onDeleteChannel(filter: $filter, owner: $owner) {
     id
+    chatSpaceId
     apiHost
     chatflowId
     name
@@ -191,16 +198,78 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel($filt
       __typename
     }
     isLive
-    admin
-    members
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
 ` as GeneratedSubscription<
   APITypes.OnDeleteChannelSubscriptionVariables,
   APITypes.OnDeleteChannelSubscription
+>;
+export const onCreateChannelUserAccess = /* GraphQL */ `subscription OnCreateChannelUserAccess(
+  $filter: ModelSubscriptionChannelUserAccessFilterInput
+  $owner: String
+) {
+  onCreateChannelUserAccess(filter: $filter, owner: $owner) {
+    accessId
+    channelId
+    channelOwnerId
+    role
+    channelName
+    channelDescription
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateChannelUserAccessSubscriptionVariables,
+  APITypes.OnCreateChannelUserAccessSubscription
+>;
+export const onUpdateChannelUserAccess = /* GraphQL */ `subscription OnUpdateChannelUserAccess(
+  $filter: ModelSubscriptionChannelUserAccessFilterInput
+  $owner: String
+) {
+  onUpdateChannelUserAccess(filter: $filter, owner: $owner) {
+    accessId
+    channelId
+    channelOwnerId
+    role
+    channelName
+    channelDescription
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateChannelUserAccessSubscriptionVariables,
+  APITypes.OnUpdateChannelUserAccessSubscription
+>;
+export const onDeleteChannelUserAccess = /* GraphQL */ `subscription OnDeleteChannelUserAccess(
+  $filter: ModelSubscriptionChannelUserAccessFilterInput
+  $owner: String
+) {
+  onDeleteChannelUserAccess(filter: $filter, owner: $owner) {
+    accessId
+    channelId
+    channelOwnerId
+    role
+    channelName
+    channelDescription
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteChannelUserAccessSubscriptionVariables,
+  APITypes.OnDeleteChannelUserAccessSubscription
 >;
 export const onCreateChannelDocument = /* GraphQL */ `subscription OnCreateChannelDocument(
   $filter: ModelSubscriptionChannelDocumentFilterInput
@@ -327,8 +396,8 @@ export const onDeleteChannelItem = /* GraphQL */ `subscription OnDeleteChannelIt
 >;
 export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
   onCreateChatSpace(filter: $filter) {
-    ownerId
     id
+    hostType
     name
     isPublic
     isMultiChannel
@@ -391,8 +460,8 @@ export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($
 >;
 export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
   onUpdateChatSpace(filter: $filter) {
-    ownerId
     id
+    hostType
     name
     isPublic
     isMultiChannel
@@ -455,8 +524,8 @@ export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($
 >;
 export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
   onDeleteChatSpace(filter: $filter) {
-    ownerId
     id
+    hostType
     name
     isPublic
     isMultiChannel
@@ -579,6 +648,7 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     id
     email
     cognitoId
+    roles
     organizationId
     chatSpaceId
     invitedOn
@@ -602,6 +672,7 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     id
     email
     cognitoId
+    roles
     organizationId
     chatSpaceId
     invitedOn
@@ -625,6 +696,7 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     id
     email
     cognitoId
+    roles
     organizationId
     chatSpaceId
     invitedOn

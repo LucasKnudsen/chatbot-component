@@ -3,7 +3,7 @@
   "parameters": {
     "CloudWatchRule": "NONE",
     "apidigitaltwinGraphQLAPIIdOutput": "4qb6tinm4vaslpyhkmrvvwormu",
-    "s3Key": "amplify-builds/flowiseMiddleware-6c4a69624432426c7153-build.zip",
+    "s3Key": "amplify-builds/flowiseMiddleware-784f423941356d304963-build.zip",
     "functionflowiseBroadcastName": "flowiseBroadcast-dev",
     "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
     "env": "dev",

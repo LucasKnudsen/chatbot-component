@@ -132,6 +132,11 @@ const inviteUser = async (body: EventBody) => {
             Value: 'true',
           },
         ],
+        ClientMetadata: {
+          organizationId: chatSpaceOwnerId,
+          chatSpaceId: chatSpaceId,
+          hostType: 'PORTAL',
+        },
       })
     )
 

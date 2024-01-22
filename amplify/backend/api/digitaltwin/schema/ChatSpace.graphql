@@ -7,8 +7,12 @@ type ChatSpace
       { allow: public, provider: iam, operations: [get] }
     ]
   ) {
-  ownerId: ID! @primaryKey(sortKeyFields: ["id"]) ## Organization or User ID
   id: ID!
+
+  # hostId: ID! @index(sortKeyFields: ["id"]) ## Organization or User ID
+
+  hostType: ChatSpaceHostType!
+
   name: String!
   isPublic: Boolean!
   isMultiChannel: Boolean!
@@ -21,6 +25,11 @@ type ChatSpace
   settings: ChatSpaceSettings!
 
   admin: String!
+}
+
+enum ChatSpaceHostType {
+  HUB ## SaaS-like. The individual. We control these spaces.
+  PORTAL ## Webcomponent-focused. The organization. They control these spaces.
 }
 
 type ChatSpaceTheme {

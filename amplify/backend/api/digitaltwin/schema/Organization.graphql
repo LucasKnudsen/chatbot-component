@@ -15,7 +15,7 @@ type User @model @auth(rules: [{ allow: owner }]) {
   cognitoId: String!
   roles: [String!] # Code reference to roles
   organizationId: ID
-  chatSpaceId: ID @index(name: "byChatSpace")
+  chatSpaceId: ID @index(name: "byChatSpace", queryField: "chatSpaceByChatSpaceId")
 
   invitedOn: AWSDateTime
   joinedOn: AWSDateTime

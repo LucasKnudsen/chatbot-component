@@ -161,6 +161,58 @@
                   }
                 ]
               ]
+            },
+            "API_DIGITALTWIN_CHANNELTABLE_NAME": {
+              "Fn::ImportValue": {
+                "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelTable:Name"
+              }
+            },
+            "API_DIGITALTWIN_CHANNELTABLE_ARN": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:dynamodb:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":table/",
+                  {
+                    "Fn::ImportValue": {
+                      "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelTable:Name"
+                    }
+                  }
+                ]
+              ]
+            },
+            "API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME": {
+              "Fn::ImportValue": {
+                "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelUserAccessTable:Name"
+              }
+            },
+            "API_DIGITALTWIN_CHANNELUSERACCESSTABLE_ARN": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:dynamodb:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":table/",
+                  {
+                    "Fn::ImportValue": {
+                      "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelUserAccessTable:Name"
+                    }
+                  }
+                ]
+              ]
             }
           }
         },
@@ -315,6 +367,138 @@
             {
               "Effect": "Allow",
               "Action": [
+                "dynamodb:Put*",
+                "dynamodb:Create*",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PartiQLInsert",
+                "dynamodb:Get*",
+                "dynamodb:BatchGetItem",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:PartiQLSelect",
+                "dynamodb:Update*",
+                "dynamodb:RestoreTable*",
+                "dynamodb:PartiQLUpdate"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::ImportValue": {
+                          "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelTable:Name"
+                        }
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::ImportValue": {
+                          "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelTable:Name"
+                        }
+                      },
+                      "/index/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Put*",
+                "dynamodb:Create*",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PartiQLInsert",
+                "dynamodb:Get*",
+                "dynamodb:BatchGetItem",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:PartiQLSelect",
+                "dynamodb:Update*",
+                "dynamodb:RestoreTable*",
+                "dynamodb:PartiQLUpdate"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::ImportValue": {
+                          "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelUserAccessTable:Name"
+                        }
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::ImportValue": {
+                          "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelUserAccessTable:Name"
+                        }
+                      },
+                      "/index/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Put*",
+                "dynamodb:Create*",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PartiQLInsert",
                 "dynamodb:Get*",
                 "dynamodb:BatchGetItem",
                 "dynamodb:List*",
@@ -372,6 +556,10 @@
             {
               "Effect": "Allow",
               "Action": [
+                "dynamodb:Put*",
+                "dynamodb:Create*",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PartiQLInsert",
                 "dynamodb:Get*",
                 "dynamodb:BatchGetItem",
                 "dynamodb:List*",
@@ -429,6 +617,10 @@
             {
               "Effect": "Allow",
               "Action": [
+                "dynamodb:Put*",
+                "dynamodb:Create*",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PartiQLInsert",
                 "dynamodb:Get*",
                 "dynamodb:BatchGetItem",
                 "dynamodb:List*",

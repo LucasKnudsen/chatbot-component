@@ -106,6 +106,9 @@
             "API_DIGITALTWIN_GRAPHQLAPIIDOUTPUT": {
               "Ref": "apidigitaltwinGraphQLAPIIdOutput"
             },
+            "FUNCTION_FLOWISEBROADCAST_NAME": {
+              "Ref": "functionflowiseBroadcastName"
+            },
             "API_DIGITALTWIN_CHANNELTABLE_NAME": {
               "Fn::Sub": "TemporaryPlaceholderValue"
             },
@@ -127,9 +130,6 @@
                   }
                 ]
               ]
-            },
-            "FUNCTION_FLOWISEBROADCAST_NAME": {
-              "Ref": "functionflowiseBroadcastName"
             }
           }
         },
@@ -297,7 +297,10 @@
               ],
               "Resource": [
                 {
-                  "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/flowiseKey_*"
+                  "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/flowiseKey*"
+                },
+                {
+                  "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/flowiseKey"
                 }
               ],
               "Effect": "Allow"

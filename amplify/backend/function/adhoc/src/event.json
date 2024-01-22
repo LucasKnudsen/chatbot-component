@@ -1,3 +1,4 @@
 {
-  "isMock": true
+  "isMock": true,
+  "type": "USER"
 }

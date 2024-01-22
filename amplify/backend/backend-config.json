@@ -197,13 +197,6 @@
           ],
           "category": "function",
           "resourceName": "flowiseBroadcast"
-        },
-        {
-          "attributes": [
-            "GraphQLAPIIdOutput"
-          ],
-          "category": "api",
-          "resourceName": "digitaltwin"
         }
       ],
       "providerPlugin": "awscloudformation",

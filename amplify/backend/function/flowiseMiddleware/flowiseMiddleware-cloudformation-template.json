@@ -19,10 +19,6 @@
     "secretsPathAmplifyAppId": {
       "Type": "String"
     },
-    "apidigitaltwinGraphQLAPIIdOutput": {
-      "Type": "String",
-      "Default": "apidigitaltwinGraphQLAPIIdOutput"
-    },
     "functionflowiseBroadcastName": {
       "Type": "String",
       "Default": "functionflowiseBroadcastName"
@@ -103,37 +99,8 @@
                 ]
               ]
             },
-            "API_DIGITALTWIN_GRAPHQLAPIIDOUTPUT": {
-              "Ref": "apidigitaltwinGraphQLAPIIdOutput"
-            },
             "FUNCTION_FLOWISEBROADCAST_NAME": {
               "Ref": "functionflowiseBroadcastName"
-            },
-            "API_DIGITALTWIN_CHANNELTABLE_NAME": {
-              "Fn::ImportValue": {
-                "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelTable:Name"
-              }
-            },
-            "API_DIGITALTWIN_CHANNELTABLE_ARN": {
-              "Fn::Join": [
-                "",
-                [
-                  "arn:aws:dynamodb:",
-                  {
-                    "Ref": "AWS::Region"
-                  },
-                  ":",
-                  {
-                    "Ref": "AWS::AccountId"
-                  },
-                  ":table/",
-                  {
-                    "Fn::ImportValue": {
-                      "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelTable:Name"
-                    }
-                  }
-                ]
-              ]
             }
           }
         },
@@ -358,63 +325,6 @@
                       {
                         "Ref": "functionflowiseBroadcastName"
                       }
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:Get*",
-                "dynamodb:BatchGetItem",
-                "dynamodb:List*",
-                "dynamodb:Describe*",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:PartiQLSelect"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":table/",
-                      {
-                        "Fn::ImportValue": {
-                          "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelTable:Name"
-                        }
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":table/",
-                      {
-                        "Fn::ImportValue": {
-                          "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelTable:Name"
-                        }
-                      },
-                      "/index/*"
                     ]
                   ]
                 }
