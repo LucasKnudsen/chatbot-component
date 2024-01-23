@@ -4,7 +4,7 @@ import { GraphQLQuery } from '@aws-amplify/api'
 
 import { API, Auth } from 'aws-amplify'
 
-export async function initializeConfig(hostId: string, spaceId: string) {
+export async function initializeConfig(spaceId: string) {
   try {
     let isUser = false
     try {
@@ -14,7 +14,6 @@ export async function initializeConfig(hostId: string, spaceId: string) {
     const result = await API.graphql<GraphQLQuery<GetChatSpaceQuery>>({
       query: queries.getChatSpace,
       variables: {
-        ownerId: hostId,
         id: spaceId,
       },
       authMode: isUser ? 'AMAZON_COGNITO_USER_POOLS' : 'AWS_IAM',
@@ -22,17 +21,23 @@ export async function initializeConfig(hostId: string, spaceId: string) {
 
     const data = result.data?.getChatSpace
 
+    if (!data) {
+      return {
+        status: 404,
+        data: null,
+        error: 'NO_CHAT_SPACE',
+      }
+    }
+
     return {
       status: 200,
       data,
     }
   } catch (error) {
-    console.log(error)
-    // TODO: Handle error
     return {
       status: 500,
       data: null,
-      error: 'NO_CONFIG',
+      error: 'CHAT_SPACE_ERROR',
     }
   }
 }

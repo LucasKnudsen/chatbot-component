@@ -156,7 +156,7 @@ export type CreateChannelInput = {
   chatflowId?: string | null,
   name: string,
   initialPrompts?: Array< InitialPromptInput > | null,
-  isLive: boolean,
+  isPublic: boolean,
 };
 
 export type InitialPromptInput = {
@@ -169,7 +169,7 @@ export type ModelChannelConditionInput = {
   apiHost?: ModelStringInput | null,
   chatflowId?: ModelStringInput | null,
   name?: ModelStringInput | null,
-  isLive?: ModelBooleanInput | null,
+  isPublic?: ModelBooleanInput | null,
   and?: Array< ModelChannelConditionInput | null > | null,
   or?: Array< ModelChannelConditionInput | null > | null,
   not?: ModelChannelConditionInput | null,
@@ -199,7 +199,7 @@ export type Channel = {
   chatflowId?: string | null,
   name: string,
   initialPrompts?:  Array<InitialPrompt > | null,
-  isLive: boolean,
+  isPublic: boolean,
   createdAt: string,
   updatedAt: string,
   owner?: string | null,
@@ -218,7 +218,7 @@ export type UpdateChannelInput = {
   chatflowId?: string | null,
   name?: string | null,
   initialPrompts?: Array< InitialPromptInput > | null,
-  isLive?: boolean | null,
+  isPublic?: boolean | null,
 };
 
 export type DeleteChannelInput = {
@@ -227,7 +227,9 @@ export type DeleteChannelInput = {
 
 export type CreateChannelUserAccessInput = {
   accessId: string,
+  chatSpaceId: string,
   channelId: string,
+  organizationId: string,
   channelOwnerId: string,
   role: ChannelUserRole,
   channelName: string,
@@ -243,6 +245,8 @@ export enum ChannelUserRole {
 
 
 export type ModelChannelUserAccessConditionInput = {
+  chatSpaceId?: ModelIDInput | null,
+  organizationId?: ModelIDInput | null,
   channelOwnerId?: ModelStringInput | null,
   role?: ModelChannelUserRoleInput | null,
   channelName?: ModelStringInput | null,
@@ -260,7 +264,9 @@ export type ModelChannelUserRoleInput = {
 export type ChannelUserAccess = {
   __typename: "ChannelUserAccess",
   accessId: string,
+  chatSpaceId: string,
   channelId: string,
+  organizationId: string,
   channelOwnerId: string,
   role: ChannelUserRole,
   channelName: string,
@@ -272,7 +278,9 @@ export type ChannelUserAccess = {
 
 export type UpdateChannelUserAccessInput = {
   accessId: string,
+  chatSpaceId?: string | null,
   channelId: string,
+  organizationId?: string | null,
   channelOwnerId?: string | null,
   role?: ChannelUserRole | null,
   channelName?: string | null,
@@ -405,6 +413,7 @@ export type DeleteChannelItemInput = {
 
 export type CreateChatSpaceInput = {
   id?: string | null,
+  hostId: string,
   hostType: ChatSpaceHostType,
   name: string,
   isPublic: boolean,
@@ -469,6 +478,7 @@ export type ChatSpaceSettingsInput = {
 };
 
 export type ModelChatSpaceConditionInput = {
+  hostId?: ModelIDInput | null,
   hostType?: ModelChatSpaceHostTypeInput | null,
   name?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
@@ -490,6 +500,7 @@ export type ModelChatSpaceHostTypeInput = {
 export type ChatSpace = {
   __typename: "ChatSpace",
   id: string,
+  hostId: string,
   hostType: ChatSpaceHostType,
   name: string,
   isPublic: boolean,
@@ -554,6 +565,7 @@ export type ChatSpaceSettings = {
 
 export type UpdateChatSpaceInput = {
   id: string,
+  hostId?: string | null,
   hostType?: ChatSpaceHostType | null,
   name?: string | null,
   isPublic?: boolean | null,
@@ -760,7 +772,7 @@ export type ModelChannelFilterInput = {
   apiHost?: ModelStringInput | null,
   chatflowId?: ModelStringInput | null,
   name?: ModelStringInput | null,
-  isLive?: ModelBooleanInput | null,
+  isPublic?: ModelBooleanInput | null,
   and?: Array< ModelChannelFilterInput | null > | null,
   or?: Array< ModelChannelFilterInput | null > | null,
   not?: ModelChannelFilterInput | null,
@@ -784,7 +796,9 @@ export type ModelIDKeyConditionInput = {
 
 export type ModelChannelUserAccessFilterInput = {
   accessId?: ModelStringInput | null,
+  chatSpaceId?: ModelIDInput | null,
   channelId?: ModelIDInput | null,
+  organizationId?: ModelIDInput | null,
   channelOwnerId?: ModelStringInput | null,
   role?: ModelChannelUserRoleInput | null,
   channelName?: ModelStringInput | null,
@@ -854,6 +868,7 @@ export type ModelChannelItemConnection = {
 
 export type ModelChatSpaceFilterInput = {
   id?: ModelIDInput | null,
+  hostId?: ModelIDInput | null,
   hostType?: ModelChatSpaceHostTypeInput | null,
   name?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
@@ -960,7 +975,7 @@ export type ModelSubscriptionChannelFilterInput = {
   apiHost?: ModelSubscriptionStringInput | null,
   chatflowId?: ModelSubscriptionStringInput | null,
   name?: ModelSubscriptionStringInput | null,
-  isLive?: ModelSubscriptionBooleanInput | null,
+  isPublic?: ModelSubscriptionBooleanInput | null,
   and?: Array< ModelSubscriptionChannelFilterInput | null > | null,
   or?: Array< ModelSubscriptionChannelFilterInput | null > | null,
 };
@@ -982,7 +997,9 @@ export type ModelSubscriptionIDInput = {
 
 export type ModelSubscriptionChannelUserAccessFilterInput = {
   accessId?: ModelSubscriptionStringInput | null,
+  chatSpaceId?: ModelSubscriptionIDInput | null,
   channelId?: ModelSubscriptionIDInput | null,
+  organizationId?: ModelSubscriptionIDInput | null,
   channelOwnerId?: ModelSubscriptionStringInput | null,
   role?: ModelSubscriptionStringInput | null,
   channelName?: ModelSubscriptionStringInput | null,
@@ -1026,6 +1043,7 @@ export type ModelSubscriptionChannelItemFilterInput = {
 
 export type ModelSubscriptionChatSpaceFilterInput = {
   id?: ModelSubscriptionIDInput | null,
+  hostId?: ModelSubscriptionIDInput | null,
   hostType?: ModelSubscriptionStringInput | null,
   name?: ModelSubscriptionStringInput | null,
   isPublic?: ModelSubscriptionBooleanInput | null,
@@ -1208,7 +1226,7 @@ export type CreateChannelMutation = {
       display?: string | null,
       prompt: string,
     } > | null,
-    isLive: boolean,
+    isPublic: boolean,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -1233,7 +1251,7 @@ export type UpdateChannelMutation = {
       display?: string | null,
       prompt: string,
     } > | null,
-    isLive: boolean,
+    isPublic: boolean,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -1258,7 +1276,7 @@ export type DeleteChannelMutation = {
       display?: string | null,
       prompt: string,
     } > | null,
-    isLive: boolean,
+    isPublic: boolean,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -1274,7 +1292,9 @@ export type CreateChannelUserAccessMutation = {
   createChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
+    chatSpaceId: string,
     channelId: string,
+    organizationId: string,
     channelOwnerId: string,
     role: ChannelUserRole,
     channelName: string,
@@ -1294,7 +1314,9 @@ export type UpdateChannelUserAccessMutation = {
   updateChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
+    chatSpaceId: string,
     channelId: string,
+    organizationId: string,
     channelOwnerId: string,
     role: ChannelUserRole,
     channelName: string,
@@ -1314,7 +1336,9 @@ export type DeleteChannelUserAccessMutation = {
   deleteChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
+    chatSpaceId: string,
     channelId: string,
+    organizationId: string,
     channelOwnerId: string,
     role: ChannelUserRole,
     channelName: string,
@@ -1454,6 +1478,7 @@ export type CreateChatSpaceMutation = {
   createChatSpace?:  {
     __typename: "ChatSpace",
     id: string,
+    hostId: string,
     hostType: ChatSpaceHostType,
     name: string,
     isPublic: boolean,
@@ -1520,6 +1545,7 @@ export type UpdateChatSpaceMutation = {
   updateChatSpace?:  {
     __typename: "ChatSpace",
     id: string,
+    hostId: string,
     hostType: ChatSpaceHostType,
     name: string,
     isPublic: boolean,
@@ -1586,6 +1612,7 @@ export type DeleteChatSpaceMutation = {
   deleteChatSpace?:  {
     __typename: "ChatSpace",
     id: string,
+    hostId: string,
     hostType: ChatSpaceHostType,
     name: string,
     isPublic: boolean,
@@ -1879,7 +1906,7 @@ export type GetChannelQuery = {
       display?: string | null,
       prompt: string,
     } > | null,
-    isLive: boolean,
+    isPublic: boolean,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -1907,7 +1934,7 @@ export type ListChannelsQuery = {
         display?: string | null,
         prompt: string,
       } > | null,
-      isLive: boolean,
+      isPublic: boolean,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -1939,7 +1966,7 @@ export type ChannelsByChatSpaceIdQuery = {
         display?: string | null,
         prompt: string,
       } > | null,
-      isLive: boolean,
+      isPublic: boolean,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -1957,7 +1984,9 @@ export type GetChannelUserAccessQuery = {
   getChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
+    chatSpaceId: string,
     channelId: string,
+    organizationId: string,
     channelOwnerId: string,
     role: ChannelUserRole,
     channelName: string,
@@ -1983,7 +2012,67 @@ export type ListChannelUserAccessesQuery = {
     items:  Array< {
       __typename: "ChannelUserAccess",
       accessId: string,
+      chatSpaceId: string,
       channelId: string,
+      organizationId: string,
+      channelOwnerId: string,
+      role: ChannelUserRole,
+      channelName: string,
+      channelDescription?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ChannelUserAccessByChannelIdQueryVariables = {
+  channelId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelChannelUserAccessFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ChannelUserAccessByChannelIdQuery = {
+  channelUserAccessByChannelId?:  {
+    __typename: "ModelChannelUserAccessConnection",
+    items:  Array< {
+      __typename: "ChannelUserAccess",
+      accessId: string,
+      chatSpaceId: string,
+      channelId: string,
+      organizationId: string,
+      channelOwnerId: string,
+      role: ChannelUserRole,
+      channelName: string,
+      channelDescription?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ChannelUserAccessByOrganizationIdQueryVariables = {
+  organizationId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelChannelUserAccessFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ChannelUserAccessByOrganizationIdQuery = {
+  channelUserAccessByOrganizationId?:  {
+    __typename: "ModelChannelUserAccessConnection",
+    items:  Array< {
+      __typename: "ChannelUserAccess",
+      accessId: string,
+      chatSpaceId: string,
+      channelId: string,
+      organizationId: string,
       channelOwnerId: string,
       role: ChannelUserRole,
       channelName: string,
@@ -2101,6 +2190,7 @@ export type GetChatSpaceQuery = {
   getChatSpace?:  {
     __typename: "ChatSpace",
     id: string,
+    hostId: string,
     hostType: ChatSpaceHostType,
     name: string,
     isPublic: boolean,
@@ -2170,6 +2260,82 @@ export type ListChatSpacesQuery = {
     items:  Array< {
       __typename: "ChatSpace",
       id: string,
+      hostId: string,
+      hostType: ChatSpaceHostType,
+      name: string,
+      isPublic: boolean,
+      isMultiChannel: boolean,
+      defaultChannelId?: string | null,
+      themeId?: string | null,
+      language?: string | null,
+      theme?:  {
+        __typename: "ChatSpaceTheme",
+        isDark?: boolean | null,
+        navbarLogoUrl?: string | null,
+        primaryColor?: string | null,
+        primaryAccent?: string | null,
+        textColor?: string | null,
+        textSecondary?: string | null,
+        onPrimary?: string | null,
+        backgroundColor?: string | null,
+        backgroundAccent?: string | null,
+        backgroundImageUrl?: string | null,
+        bubbleButtonColor?: string | null,
+        bubbleButtonLogoUrl?: string | null,
+        drawerBackground?: string | null,
+        borderColor?: string | null,
+        textInputTextColor?: string | null,
+        textInputBackgroundColor?: string | null,
+        surfaceBackground?: string | null,
+        surfaceHoveredBackground?: string | null,
+      } | null,
+      text?:  {
+        __typename: "ChatSpaceText",
+        welcomeMessage?: string | null,
+        returnWelcomeMessage?: string | null,
+        brandName?: string | null,
+        inputPlaceholder?: string | null,
+        suggestedPromptsTitle?: string | null,
+        viewMedia?: string | null,
+        close?: string | null,
+        copyText?: string | null,
+        copyTextSuccess?: string | null,
+        share?: string | null,
+        historyTabTitle?: string | null,
+        navigationTabTitle?: string | null,
+        today?: string | null,
+        yesterday?: string | null,
+        previous?: string | null,
+        noHistory?: string | null,
+      } | null,
+      settings:  {
+        __typename: "ChatSpaceSettings",
+        autoOpen?: boolean | null,
+      },
+      admin: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ChatSpaceByHostIdQueryVariables = {
+  hostId: string,
+  id?: ModelIDKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelChatSpaceFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ChatSpaceByHostIdQuery = {
+  chatSpaceByHostId?:  {
+    __typename: "ModelChatSpaceConnection",
+    items:  Array< {
+      __typename: "ChatSpace",
+      id: string,
+      hostId: string,
       hostType: ChatSpaceHostType,
       name: string,
       isPublic: boolean,
@@ -2492,7 +2658,7 @@ export type OnCreateChannelSubscription = {
       display?: string | null,
       prompt: string,
     } > | null,
-    isLive: boolean,
+    isPublic: boolean,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -2517,7 +2683,7 @@ export type OnUpdateChannelSubscription = {
       display?: string | null,
       prompt: string,
     } > | null,
-    isLive: boolean,
+    isPublic: boolean,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -2542,7 +2708,7 @@ export type OnDeleteChannelSubscription = {
       display?: string | null,
       prompt: string,
     } > | null,
-    isLive: boolean,
+    isPublic: boolean,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -2558,7 +2724,9 @@ export type OnCreateChannelUserAccessSubscription = {
   onCreateChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
+    chatSpaceId: string,
     channelId: string,
+    organizationId: string,
     channelOwnerId: string,
     role: ChannelUserRole,
     channelName: string,
@@ -2578,7 +2746,9 @@ export type OnUpdateChannelUserAccessSubscription = {
   onUpdateChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
+    chatSpaceId: string,
     channelId: string,
+    organizationId: string,
     channelOwnerId: string,
     role: ChannelUserRole,
     channelName: string,
@@ -2598,7 +2768,9 @@ export type OnDeleteChannelUserAccessSubscription = {
   onDeleteChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
+    chatSpaceId: string,
     channelId: string,
+    organizationId: string,
     channelOwnerId: string,
     role: ChannelUserRole,
     channelName: string,
@@ -2734,6 +2906,7 @@ export type OnCreateChatSpaceSubscription = {
   onCreateChatSpace?:  {
     __typename: "ChatSpace",
     id: string,
+    hostId: string,
     hostType: ChatSpaceHostType,
     name: string,
     isPublic: boolean,
@@ -2799,6 +2972,7 @@ export type OnUpdateChatSpaceSubscription = {
   onUpdateChatSpace?:  {
     __typename: "ChatSpace",
     id: string,
+    hostId: string,
     hostType: ChatSpaceHostType,
     name: string,
     isPublic: boolean,
@@ -2864,6 +3038,7 @@ export type OnDeleteChatSpaceSubscription = {
   onDeleteChatSpace?:  {
     __typename: "ChatSpace",
     id: string,
+    hostId: string,
     hostType: ChatSpaceHostType,
     name: string,
     isPublic: boolean,

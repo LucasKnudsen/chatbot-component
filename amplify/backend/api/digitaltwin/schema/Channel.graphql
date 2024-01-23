@@ -19,7 +19,11 @@ type ChannelUserAccess @model @auth(rules: [{ allow: owner }]) {
   # This is to effectively create retrieve a user's access to Channels within a ChatSpace - within a potential Organization
   # organizationId are only used in the case of a Portal ChatSpace - otherwise, they are `_`
   accessId: String! @primaryKey(sortKeyFields: ["channelId"])
-  channelId: ID!
+  chatSpaceId: ID!
+
+  channelId: ID! @index(name: "byChannel", queryField: "channelUserAccessByChannelId")
+  organizationId: ID!
+    @index(name: "byOrganization", queryField: "channelUserAccessByOrganizationId")
 
   channelOwnerId: String!
 

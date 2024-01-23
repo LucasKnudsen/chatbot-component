@@ -1,3 +1,3 @@
-export * from './Bot'
-export * from './BotManager'
+export * from './FraiaLoading'
+export * from './MenuSettings'
 export * from './Sidebar'

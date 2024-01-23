@@ -9,17 +9,17 @@ import {
 } from '@/features/messages'
 import { useSuggestedPrompts } from '@/features/prompt'
 import { detectLanguage } from '@/features/text'
-import { Channel, ChatSpace } from '@/graphql/types'
+import { ChatSpace } from '@/graphql/types'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Match, Show, Switch, createSignal, onMount } from 'solid-js'
-import { Sidebar } from '.'
 import { botStore, botStoreActions, useChatId, useLanguage } from '..'
+import { Sidebar } from '../components'
+import { MenuSettings } from '../components/MenuSettings'
+import { SidebarTabView } from '../components/SidebarTabView'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
-import { MenuSettings } from './MenuSettings'
-import { SidebarTabView } from './SidebarTabView'
 
-export const Bot = (props: ChatSpace & { channels: Channel[] }) => {
+export const Bot = (props: ChatSpace) => {
   const [userInput, setUserInput] = createSignal('')
 
   const [sidebarOpen, setSidebarOpen] = createSignal(false)

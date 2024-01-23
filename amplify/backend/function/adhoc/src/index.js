@@ -66,6 +66,10 @@ exports.handler = async (event) => {
   const adminEmail = 'fraiaadmin@mail.com'
   const adminGroupName = 'Test-Admin'
 
+  const orgName = 'Chulalongkorn University'
+  const chatSpaceName = 'SCII Portal'
+  const chatSpaceType = 'PORTAL'
+
   const userEmail = 'laksteelhouse@gmail.com'
 
   const organizationId = UUID()
@@ -81,7 +85,7 @@ exports.handler = async (event) => {
           createRecord(process.env.API_DIGITALTWIN_ORGANIZATIONTABLE_NAME, {
             id: UUID(),
             __typename: 'Organization',
-            name: 'FRAIA Internal',
+            name: orgName,
             logo: '',
             admion: adminGroupName,
             createdAt: new Date().toISOString(),
@@ -113,7 +117,7 @@ exports.handler = async (event) => {
               ClientMetadata: {
                 organizationId: organizationId,
                 chatSpaceId: chatSpaceId,
-                hostType: 'HUB',
+                hostType: chatSpaceType,
               },
             })
           ),
@@ -136,8 +140,8 @@ exports.handler = async (event) => {
             hostId: organizationId,
             __typename: 'ChatSpace',
 
-            name: "Chula's Chat Space",
-            hostType: 'HUB',
+            name: chatSpaceName,
+            hostType: chatSpaceType,
 
             isPublic: false,
             isMultiChannel: true,
@@ -240,7 +244,7 @@ exports.handler = async (event) => {
             updatedAt: new Date().toISOString(),
           }),
           createRecord(process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME, {
-            accessId: `${CognitoHubUser.Username}#_#_`,
+            accessId: `${userEmail}#_#_`,
             channelId: channelId,
 
             role: 'OWNER',

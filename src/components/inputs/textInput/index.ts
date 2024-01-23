@@ -1,1 +1,1 @@
-export { TextInput } from './components/TextInput'
+export * from './TextInput'

@@ -157,7 +157,7 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
       prompt
       __typename
     }
-    isLive
+    isPublic
     createdAt
     updatedAt
     owner
@@ -183,7 +183,7 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
       prompt
       __typename
     }
-    isLive
+    isPublic
     createdAt
     updatedAt
     owner
@@ -209,7 +209,7 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
       prompt
       __typename
     }
-    isLive
+    isPublic
     createdAt
     updatedAt
     owner
@@ -226,7 +226,9 @@ export const createChannelUserAccess = /* GraphQL */ `mutation CreateChannelUser
 ) {
   createChannelUserAccess(input: $input, condition: $condition) {
     accessId
+    chatSpaceId
     channelId
+    organizationId
     channelOwnerId
     role
     channelName
@@ -247,7 +249,9 @@ export const updateChannelUserAccess = /* GraphQL */ `mutation UpdateChannelUser
 ) {
   updateChannelUserAccess(input: $input, condition: $condition) {
     accessId
+    chatSpaceId
     channelId
+    organizationId
     channelOwnerId
     role
     channelName
@@ -268,7 +272,9 @@ export const deleteChannelUserAccess = /* GraphQL */ `mutation DeleteChannelUser
 ) {
   deleteChannelUserAccess(input: $input, condition: $condition) {
     accessId
+    chatSpaceId
     channelId
+    organizationId
     channelOwnerId
     role
     channelName
@@ -415,6 +421,7 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
 ) {
   createChatSpace(input: $input, condition: $condition) {
     id
+    hostId
     hostType
     name
     isPublic
@@ -482,6 +489,7 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
 ) {
   updateChatSpace(input: $input, condition: $condition) {
     id
+    hostId
     hostType
     name
     isPublic
@@ -549,6 +557,7 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
 ) {
   deleteChatSpace(input: $input, condition: $condition) {
     id
+    hostId
     hostType
     name
     isPublic

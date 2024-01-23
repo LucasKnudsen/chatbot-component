@@ -1,14 +1,14 @@
 import { Divider } from '@/components/Divider'
-import { TextInput } from '@/components/inputs/textInput'
+import { ChatInput } from '@/components/inputs/chatInput'
 import { ContextualContainer } from '@/features/contextual'
 import { ChatWindow } from '@/features/messages'
 import { SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
 import { Show, createMemo, createSignal } from 'solid-js'
 import { botStore, botStoreActions } from '..'
+import { ResourcesSidebar } from '../components/ResourcesSidebar'
+import { SidebarTabView } from '../components/SidebarTabView'
 import { sidebarPaddingNum } from '../constants'
-import { ResourcesSidebar } from './ResourcesSidebar'
-import { SidebarTabView } from './SidebarTabView'
 
 type BotDesktopProps = {
   userInput: string
@@ -47,7 +47,6 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
               </div>
 
               <SidebarTabView
-                initialPrompts={botStore.activeChannel!.initialPrompts}
                 setQuestion={(chat) => {
                   botStoreActions.setChat(chat)
                 }}
@@ -65,7 +64,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
 
         {/* Input Container */}
         <div class='w-full pb-1 z-1 mt-5 '>
-          <TextInput
+          <ChatInput
             rows={2}
             disabled={botStore.loading}
             defaultValue={props.userInput}

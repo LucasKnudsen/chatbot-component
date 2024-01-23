@@ -21,7 +21,7 @@ export const Nav = () => {
 
   return (
     <div
-      class='flex flex-wrap items-center mx-5 rounded-full pl-6 pr-3 py-2 mt-5'
+      class='flex flex-wrap items-center mx-5 rounded-full pl-6 pr-3 py-2 mt-5 z-50'
       style={{
         background: theme().surfaceBackground,
       }}

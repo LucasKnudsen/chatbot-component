@@ -1,8 +1,10 @@
 import { useTheme } from '@/features/theme/hooks'
-import { JSX } from 'solid-js'
+import { JSX, Show } from 'solid-js'
+import { Spinner } from '../loaders'
 
 type Props = {
   onClick?: () => void | Promise<void>
+  loading?: boolean
   children: JSX.Element
   padding?: string
   class?: string
@@ -15,7 +17,7 @@ export const Button = (props: Props) => {
   return (
     <button
       class={
-        'rounded-full font-medium tracking-widest text-xs active:scale-95 transition hover:brightness-110 ' +
+        'rounded-full font-medium tracking-widest text-xs active:scale-95 transition hover:brightness-110 flex justify-center items-center ' +
         props.class
       }
       style={{
@@ -25,7 +27,12 @@ export const Button = (props: Props) => {
       }}
       onClick={props.onClick}
     >
-      {props.children}
+      <Show
+        when={!props.loading}
+        fallback={<Spinner size={20} backgroundColor={theme().onPrimary} />}
+      >
+        {props.children}
+      </Show>
     </button>
   )
 }

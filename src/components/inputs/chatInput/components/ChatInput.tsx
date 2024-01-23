@@ -17,7 +17,7 @@ type Props = {
   onFocusChange?: (value: boolean) => void
 }
 
-export const TextInput = (props: Props) => {
+export const ChatInput = (props: Props) => {
   const [inputValue, setInputValue] = createSignal(props.defaultValue ?? '')
   let inputRef: HTMLTextAreaElement | undefined
 

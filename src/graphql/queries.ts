@@ -142,7 +142,7 @@ export const getChannel = /* GraphQL */ `query GetChannel($id: ID!) {
       prompt
       __typename
     }
-    isLive
+    isPublic
     createdAt
     updatedAt
     owner
@@ -170,7 +170,7 @@ export const listChannels = /* GraphQL */ `query ListChannels(
         prompt
         __typename
       }
-      isLive
+      isPublic
       createdAt
       updatedAt
       owner
@@ -209,7 +209,7 @@ export const channelsByChatSpaceId = /* GraphQL */ `query ChannelsByChatSpaceId(
         prompt
         __typename
       }
-      isLive
+      isPublic
       createdAt
       updatedAt
       owner
@@ -226,7 +226,9 @@ export const channelsByChatSpaceId = /* GraphQL */ `query ChannelsByChatSpaceId(
 export const getChannelUserAccess = /* GraphQL */ `query GetChannelUserAccess($accessId: String!, $channelId: ID!) {
   getChannelUserAccess(accessId: $accessId, channelId: $channelId) {
     accessId
+    chatSpaceId
     channelId
+    organizationId
     channelOwnerId
     role
     channelName
@@ -259,7 +261,9 @@ export const listChannelUserAccesses = /* GraphQL */ `query ListChannelUserAcces
   ) {
     items {
       accessId
+      chatSpaceId
       channelId
+      organizationId
       channelOwnerId
       role
       channelName
@@ -276,6 +280,78 @@ export const listChannelUserAccesses = /* GraphQL */ `query ListChannelUserAcces
 ` as GeneratedQuery<
   APITypes.ListChannelUserAccessesQueryVariables,
   APITypes.ListChannelUserAccessesQuery
+>;
+export const channelUserAccessByChannelId = /* GraphQL */ `query ChannelUserAccessByChannelId(
+  $channelId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelChannelUserAccessFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  channelUserAccessByChannelId(
+    channelId: $channelId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      accessId
+      chatSpaceId
+      channelId
+      organizationId
+      channelOwnerId
+      role
+      channelName
+      channelDescription
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ChannelUserAccessByChannelIdQueryVariables,
+  APITypes.ChannelUserAccessByChannelIdQuery
+>;
+export const channelUserAccessByOrganizationId = /* GraphQL */ `query ChannelUserAccessByOrganizationId(
+  $organizationId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelChannelUserAccessFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  channelUserAccessByOrganizationId(
+    organizationId: $organizationId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      accessId
+      chatSpaceId
+      channelId
+      organizationId
+      channelOwnerId
+      role
+      channelName
+      channelDescription
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ChannelUserAccessByOrganizationIdQueryVariables,
+  APITypes.ChannelUserAccessByOrganizationIdQuery
 >;
 export const getChannelDocument = /* GraphQL */ `query GetChannelDocument($channelId: ID!, $id: ID!) {
   getChannelDocument(channelId: $channelId, id: $id) {
@@ -388,6 +464,7 @@ export const listChannelItems = /* GraphQL */ `query ListChannelItems(
 export const getChatSpace = /* GraphQL */ `query GetChatSpace($id: ID!) {
   getChatSpace(id: $id) {
     id
+    hostId
     hostType
     name
     isPublic
@@ -457,6 +534,7 @@ export const listChatSpaces = /* GraphQL */ `query ListChatSpaces(
   listChatSpaces(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      hostId
       hostType
       name
       isPublic
@@ -520,6 +598,89 @@ export const listChatSpaces = /* GraphQL */ `query ListChatSpaces(
 ` as GeneratedQuery<
   APITypes.ListChatSpacesQueryVariables,
   APITypes.ListChatSpacesQuery
+>;
+export const chatSpaceByHostId = /* GraphQL */ `query ChatSpaceByHostId(
+  $hostId: ID!
+  $id: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelChatSpaceFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  chatSpaceByHostId(
+    hostId: $hostId
+    id: $id
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      hostId
+      hostType
+      name
+      isPublic
+      isMultiChannel
+      defaultChannelId
+      themeId
+      language
+      theme {
+        isDark
+        navbarLogoUrl
+        primaryColor
+        primaryAccent
+        textColor
+        textSecondary
+        onPrimary
+        backgroundColor
+        backgroundAccent
+        backgroundImageUrl
+        bubbleButtonColor
+        bubbleButtonLogoUrl
+        drawerBackground
+        borderColor
+        textInputTextColor
+        textInputBackgroundColor
+        surfaceBackground
+        surfaceHoveredBackground
+        __typename
+      }
+      text {
+        welcomeMessage
+        returnWelcomeMessage
+        brandName
+        inputPlaceholder
+        suggestedPromptsTitle
+        viewMedia
+        close
+        copyText
+        copyTextSuccess
+        share
+        historyTabTitle
+        navigationTabTitle
+        today
+        yesterday
+        previous
+        noHistory
+        __typename
+      }
+      settings {
+        autoOpen
+        __typename
+      }
+      admin
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ChatSpaceByHostIdQueryVariables,
+  APITypes.ChatSpaceByHostIdQuery
 >;
 export const getOrganization = /* GraphQL */ `query GetOrganization($id: ID!) {
   getOrganization(id: $id) {

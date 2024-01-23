@@ -1,55 +1,55 @@
 import {
   Channel,
+  ChannelUserAccess,
   ChatSpace,
-  GetChannelQuery,
-  GetChannelQueryVariables,
-  ListChannelsQuery,
-  ListChannelsQueryVariables,
+  ChatSpaceHostType,
+  ListChannelUserAccessesQuery,
+  ListChannelUserAccessesQueryVariables,
   queries,
 } from '@/graphql'
+import { logDev } from '@/utils'
 
 import { GraphQLQuery } from '@aws-amplify/api'
-import { API, Auth } from 'aws-amplify'
+import { API } from 'aws-amplify'
 
 export async function fetchChannels(props: ChatSpace): Promise<Channel[] | undefined> {
-  let isUser = false
-  try {
-    isUser = Boolean(await Auth.currentAuthenticatedUser())
-  } catch (error) {}
+  // Query custom Lambda resolver
 
-  if (props.isMultiChannel) {
-    // Fetches all live channels
-    const variables: ListChannelsQueryVariables = {
-      chatSpaceId: props.id,
-      filter: {
-        isLive: {
-          eq: true,
-        },
-      },
-    }
+  return []
+}
 
-    const result = await API.graphql<GraphQLQuery<ListChannelsQuery>>({
-      query: queries.listChannels,
-      variables,
-      authMode: isUser ? 'AMAZON_COGNITO_USER_POOLS' : 'AWS_IAM',
-    })
+export async function fetchChannelAccesses(
+  userId: string,
+  chatSpace: ChatSpace
+): Promise<ChannelUserAccess[] | undefined> {
+  // If HostType is HUB, it means that the individual User is in focus.
+  // If HostType is PORTAL, it means that its a centralized chat portal, made by an organization.
+  const conditionalAccessId =
+    chatSpace.hostType === ChatSpaceHostType.HUB
+      ? `${userId}#_#_`
+      : `${userId}#${chatSpace.id}#${chatSpace.hostId}`
 
-    return result.data?.listChannels?.items as Channel[] | undefined
-  } else {
-    // Fetches the default channel
-    if (!props.defaultChannelId) return
-
-    const variables: GetChannelQueryVariables = {
-      chatSpaceId: props.id,
-      id: props.defaultChannelId,
-    }
-
-    const result = await API.graphql<GraphQLQuery<GetChannelQuery>>({
-      query: queries.getChannel,
-      variables,
-      authMode: isUser ? 'AMAZON_COGNITO_USER_POOLS' : 'AWS_IAM',
-    })
-
-    return [result.data?.getChannel!]
+  const variables: ListChannelUserAccessesQueryVariables = {
+    accessId: conditionalAccessId,
   }
+
+  try {
+    const result = await API.graphql<GraphQLQuery<ListChannelUserAccessesQuery>>({
+      query: queries.listChannelUserAccesses,
+      variables,
+      authMode: 'AMAZON_COGNITO_USER_POOLS',
+    })
+
+    const items = (result.data?.listChannelUserAccesses?.items as ChannelUserAccess[]) ?? []
+
+    return items
+  } catch (error) {
+    logDev(error)
+  }
+}
+
+export async function fetchChannelDetails(channelId: string): Promise<Channel | undefined> {
+  // Query custom Lambda resolver
+
+  return undefined
 }

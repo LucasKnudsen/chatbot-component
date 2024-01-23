@@ -4,12 +4,13 @@ type ChatSpace
     rules: [
       { allow: groups, groups: ["SuperAdmin"] }
       { allow: groups, groupsField: "admin" }
+      { allow: private, operations: [get] }
       { allow: public, provider: iam, operations: [get] }
     ]
   ) {
   id: ID!
-
-  # hostId: ID! @index(sortKeyFields: ["id"]) ## Organization or User ID
+  hostId: ID!
+    @index(sortKeyFields: ["id"], name: "ChatSpaceHostIdIndex", queryField: "chatSpaceByHostId")
 
   hostType: ChatSpaceHostType!
 

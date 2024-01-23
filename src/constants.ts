@@ -1,11 +1,9 @@
 import { ChatConfig } from './features/portal-init'
 
-type DefaultChatFlowsKeys = 'fraia_prod' | 'fraia_dev' | 'private'
-
 // The props needs to be instantiated with the default values, otherwise it won't be filled from the Object.assign
 export const defaultBotProps: ChatConfig = {
-  hostId: '',
   spaceId: '',
+  config: {},
   // text: undefined,
   // channelId: '',
   // language: undefined,
@@ -16,7 +14,7 @@ export const defaultBotProps: ChatConfig = {
   // settings: undefined,
 }
 
-export const chatflows: Record<DefaultChatFlowsKeys, ChatConfig> = {
+export const chatflows: Record<string, ChatConfig> = {
   // concordium: {
   //   chatflowid: 'e8ce12e8-1c2c-40c4-9c4d-70ab337caee9',
   //   apiHost: 'http://aiassistant.lionbrain.ai:3000',
@@ -26,18 +24,27 @@ export const chatflows: Record<DefaultChatFlowsKeys, ChatConfig> = {
   //   apiHost: 'https://lionbrain.softdesign.dk',
   // },
   private: {
-    hostId: 'x',
-    spaceId: 'x',
+    spaceId: 'f05d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
       autoOpen: true,
     },
   },
+  chula: {
+    spaceId: 'f05d64f3-6d58-49d1-8143-d59caa88fd1f',
+    config: {
+      autoOpen: false,
+    },
+  },
   fraia_prod: {
-    hostId: 'f86f6a13-a58c-44d8-87cd-077f559fc0fc',
     spaceId: 'f86f6a13-a58c-44d8-87cd-077f559fc0fc',
+    config: {
+      autoOpen: false,
+    },
   },
   fraia_dev: {
-    hostId: 'f86f6a13-a58c-44d8-87cd-077f559fc0fc',
     spaceId: 'f86f6a13-a58c-44d8-87cd-077f559fc0fc',
+    config: {
+      autoOpen: false,
+    },
   },
 }

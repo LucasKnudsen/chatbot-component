@@ -1,5 +1,5 @@
 import { Collapsible } from '@/components/Collapsible'
-import { TextInput } from '@/components/inputs/textInput'
+import { ChatInput } from '@/components/inputs/chatInput'
 import { ChatWindow } from '@/features/messages'
 import { SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
@@ -45,7 +45,7 @@ export const BotMobileLayout = (props: BotMobileProps) => {
         }}
       >
         <div class='px-6'>
-          <TextInput
+          <ChatInput
             class='mb-2'
             rows={1}
             disabled={botStore.loading}

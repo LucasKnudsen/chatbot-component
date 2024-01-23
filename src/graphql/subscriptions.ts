@@ -145,7 +145,7 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
       prompt
       __typename
     }
-    isLive
+    isPublic
     createdAt
     updatedAt
     owner
@@ -171,7 +171,7 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
       prompt
       __typename
     }
-    isLive
+    isPublic
     createdAt
     updatedAt
     owner
@@ -197,7 +197,7 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
       prompt
       __typename
     }
-    isLive
+    isPublic
     createdAt
     updatedAt
     owner
@@ -214,7 +214,9 @@ export const onCreateChannelUserAccess = /* GraphQL */ `subscription OnCreateCha
 ) {
   onCreateChannelUserAccess(filter: $filter, owner: $owner) {
     accessId
+    chatSpaceId
     channelId
+    organizationId
     channelOwnerId
     role
     channelName
@@ -235,7 +237,9 @@ export const onUpdateChannelUserAccess = /* GraphQL */ `subscription OnUpdateCha
 ) {
   onUpdateChannelUserAccess(filter: $filter, owner: $owner) {
     accessId
+    chatSpaceId
     channelId
+    organizationId
     channelOwnerId
     role
     channelName
@@ -256,7 +260,9 @@ export const onDeleteChannelUserAccess = /* GraphQL */ `subscription OnDeleteCha
 ) {
   onDeleteChannelUserAccess(filter: $filter, owner: $owner) {
     accessId
+    chatSpaceId
     channelId
+    organizationId
     channelOwnerId
     role
     channelName
@@ -397,6 +403,7 @@ export const onDeleteChannelItem = /* GraphQL */ `subscription OnDeleteChannelIt
 export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
   onCreateChatSpace(filter: $filter) {
     id
+    hostId
     hostType
     name
     isPublic
@@ -461,6 +468,7 @@ export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($
 export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
   onUpdateChatSpace(filter: $filter) {
     id
+    hostId
     hostType
     name
     isPublic
@@ -525,6 +533,7 @@ export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($
 export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
   onDeleteChatSpace(filter: $filter) {
     id
+    hostId
     hostType
     name
     isPublic
