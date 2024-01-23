@@ -226,10 +226,10 @@ export const createChannelUserAccess = /* GraphQL */ `mutation CreateChannelUser
 ) {
   createChannelUserAccess(input: $input, condition: $condition) {
     accessId
-    chatSpaceId
     channelId
-    organizationId
-    channelOwnerId
+    chatSpaceId
+    channelHostId
+    channelHostType
     role
     channelName
     channelDescription
@@ -249,10 +249,10 @@ export const updateChannelUserAccess = /* GraphQL */ `mutation UpdateChannelUser
 ) {
   updateChannelUserAccess(input: $input, condition: $condition) {
     accessId
-    chatSpaceId
     channelId
-    organizationId
-    channelOwnerId
+    chatSpaceId
+    channelHostId
+    channelHostType
     role
     channelName
     channelDescription
@@ -272,10 +272,10 @@ export const deleteChannelUserAccess = /* GraphQL */ `mutation DeleteChannelUser
 ) {
   deleteChannelUserAccess(input: $input, condition: $condition) {
     accessId
-    chatSpaceId
     channelId
-    organizationId
-    channelOwnerId
+    chatSpaceId
+    channelHostId
+    channelHostType
     role
     channelName
     channelDescription
@@ -469,10 +469,6 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
       noHistory
       __typename
     }
-    settings {
-      autoOpen
-      __typename
-    }
     admin
     createdAt
     updatedAt
@@ -537,10 +533,6 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
       noHistory
       __typename
     }
-    settings {
-      autoOpen
-      __typename
-    }
     admin
     createdAt
     updatedAt
@@ -603,10 +595,6 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
       yesterday
       previous
       noHistory
-      __typename
-    }
-    settings {
-      autoOpen
       __typename
     }
     admin

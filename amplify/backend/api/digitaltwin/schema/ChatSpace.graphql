@@ -10,9 +10,8 @@ type ChatSpace
   ) {
   id: ID!
   hostId: ID!
-    @index(sortKeyFields: ["id"], name: "ChatSpaceHostIdIndex", queryField: "chatSpaceByHostId")
-
-  hostType: ChatSpaceHostType!
+    @index(sortKeyFields: ["id"], name: "ChatSpaceHostIdIndex", queryField: "chatSpaceByHostId") # To retrieve all ChatSpaces for a Host
+  hostType: HostType!
 
   name: String!
   isPublic: Boolean!
@@ -23,14 +22,14 @@ type ChatSpace
   language: String # Code Ref
   theme: ChatSpaceTheme
   text: ChatSpaceText
-  settings: ChatSpaceSettings!
+  # settings: ChatSpaceSettings!
 
   admin: String!
 }
 
-enum ChatSpaceHostType {
-  HUB ## SaaS-like. The individual. We control these spaces.
-  PORTAL ## Webcomponent-focused. The organization. They control these spaces.
+enum HostType {
+  PRIVATE ## SaaS-like. The individual. We control these spaces. We may do one uniform - or multiple specific.
+  COMPANY ## Webcomponent-focused. The organization. They control these spaces.
 }
 
 type ChatSpaceTheme {
@@ -71,8 +70,4 @@ type ChatSpaceText {
   yesterday: String
   previous: String
   noHistory: String
-}
-
-type ChatSpaceSettings {
-  autoOpen: Boolean
 }

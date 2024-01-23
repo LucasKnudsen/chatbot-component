@@ -214,10 +214,10 @@ export const onCreateChannelUserAccess = /* GraphQL */ `subscription OnCreateCha
 ) {
   onCreateChannelUserAccess(filter: $filter, owner: $owner) {
     accessId
-    chatSpaceId
     channelId
-    organizationId
-    channelOwnerId
+    chatSpaceId
+    channelHostId
+    channelHostType
     role
     channelName
     channelDescription
@@ -237,10 +237,10 @@ export const onUpdateChannelUserAccess = /* GraphQL */ `subscription OnUpdateCha
 ) {
   onUpdateChannelUserAccess(filter: $filter, owner: $owner) {
     accessId
-    chatSpaceId
     channelId
-    organizationId
-    channelOwnerId
+    chatSpaceId
+    channelHostId
+    channelHostType
     role
     channelName
     channelDescription
@@ -260,10 +260,10 @@ export const onDeleteChannelUserAccess = /* GraphQL */ `subscription OnDeleteCha
 ) {
   onDeleteChannelUserAccess(filter: $filter, owner: $owner) {
     accessId
-    chatSpaceId
     channelId
-    organizationId
-    channelOwnerId
+    chatSpaceId
+    channelHostId
+    channelHostType
     role
     channelName
     channelDescription
@@ -451,10 +451,6 @@ export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($
       noHistory
       __typename
     }
-    settings {
-      autoOpen
-      __typename
-    }
     admin
     createdAt
     updatedAt
@@ -516,10 +512,6 @@ export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($
       noHistory
       __typename
     }
-    settings {
-      autoOpen
-      __typename
-    }
     admin
     createdAt
     updatedAt
@@ -579,10 +571,6 @@ export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($
       yesterday
       previous
       noHistory
-      __typename
-    }
-    settings {
-      autoOpen
       __typename
     }
     admin

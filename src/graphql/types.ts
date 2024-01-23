@@ -227,14 +227,20 @@ export type DeleteChannelInput = {
 
 export type CreateChannelUserAccessInput = {
   accessId: string,
-  chatSpaceId: string,
   channelId: string,
-  organizationId: string,
-  channelOwnerId: string,
+  chatSpaceId: string,
+  channelHostId: string,
+  channelHostType: HostType,
   role: ChannelUserRole,
   channelName: string,
   channelDescription?: string | null,
 };
+
+export enum HostType {
+  PRIVATE = "PRIVATE",
+  COMPANY = "COMPANY",
+}
+
 
 export enum ChannelUserRole {
   OWNER = "OWNER",
@@ -246,14 +252,19 @@ export enum ChannelUserRole {
 
 export type ModelChannelUserAccessConditionInput = {
   chatSpaceId?: ModelIDInput | null,
-  organizationId?: ModelIDInput | null,
-  channelOwnerId?: ModelStringInput | null,
+  channelHostId?: ModelStringInput | null,
+  channelHostType?: ModelHostTypeInput | null,
   role?: ModelChannelUserRoleInput | null,
   channelName?: ModelStringInput | null,
   channelDescription?: ModelStringInput | null,
   and?: Array< ModelChannelUserAccessConditionInput | null > | null,
   or?: Array< ModelChannelUserAccessConditionInput | null > | null,
   not?: ModelChannelUserAccessConditionInput | null,
+};
+
+export type ModelHostTypeInput = {
+  eq?: HostType | null,
+  ne?: HostType | null,
 };
 
 export type ModelChannelUserRoleInput = {
@@ -264,10 +275,10 @@ export type ModelChannelUserRoleInput = {
 export type ChannelUserAccess = {
   __typename: "ChannelUserAccess",
   accessId: string,
-  chatSpaceId: string,
   channelId: string,
-  organizationId: string,
-  channelOwnerId: string,
+  chatSpaceId: string,
+  channelHostId: string,
+  channelHostType: HostType,
   role: ChannelUserRole,
   channelName: string,
   channelDescription?: string | null,
@@ -278,10 +289,10 @@ export type ChannelUserAccess = {
 
 export type UpdateChannelUserAccessInput = {
   accessId: string,
-  chatSpaceId?: string | null,
   channelId: string,
-  organizationId?: string | null,
-  channelOwnerId?: string | null,
+  chatSpaceId?: string | null,
+  channelHostId?: string | null,
+  channelHostType?: HostType | null,
   role?: ChannelUserRole | null,
   channelName?: string | null,
   channelDescription?: string | null,
@@ -414,7 +425,7 @@ export type DeleteChannelItemInput = {
 export type CreateChatSpaceInput = {
   id?: string | null,
   hostId: string,
-  hostType: ChatSpaceHostType,
+  hostType: HostType,
   name: string,
   isPublic: boolean,
   isMultiChannel: boolean,
@@ -423,15 +434,8 @@ export type CreateChatSpaceInput = {
   language?: string | null,
   theme?: ChatSpaceThemeInput | null,
   text?: ChatSpaceTextInput | null,
-  settings: ChatSpaceSettingsInput,
   admin: string,
 };
-
-export enum ChatSpaceHostType {
-  HUB = "HUB",
-  PORTAL = "PORTAL",
-}
-
 
 export type ChatSpaceThemeInput = {
   isDark?: boolean | null,
@@ -473,13 +477,9 @@ export type ChatSpaceTextInput = {
   noHistory?: string | null,
 };
 
-export type ChatSpaceSettingsInput = {
-  autoOpen?: boolean | null,
-};
-
 export type ModelChatSpaceConditionInput = {
   hostId?: ModelIDInput | null,
-  hostType?: ModelChatSpaceHostTypeInput | null,
+  hostType?: ModelHostTypeInput | null,
   name?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
   isMultiChannel?: ModelBooleanInput | null,
@@ -492,16 +492,11 @@ export type ModelChatSpaceConditionInput = {
   not?: ModelChatSpaceConditionInput | null,
 };
 
-export type ModelChatSpaceHostTypeInput = {
-  eq?: ChatSpaceHostType | null,
-  ne?: ChatSpaceHostType | null,
-};
-
 export type ChatSpace = {
   __typename: "ChatSpace",
   id: string,
   hostId: string,
-  hostType: ChatSpaceHostType,
+  hostType: HostType,
   name: string,
   isPublic: boolean,
   isMultiChannel: boolean,
@@ -510,7 +505,6 @@ export type ChatSpace = {
   language?: string | null,
   theme?: ChatSpaceTheme | null,
   text?: ChatSpaceText | null,
-  settings: ChatSpaceSettings,
   admin: string,
   createdAt: string,
   updatedAt: string,
@@ -558,15 +552,10 @@ export type ChatSpaceText = {
   noHistory?: string | null,
 };
 
-export type ChatSpaceSettings = {
-  __typename: "ChatSpaceSettings",
-  autoOpen?: boolean | null,
-};
-
 export type UpdateChatSpaceInput = {
   id: string,
   hostId?: string | null,
-  hostType?: ChatSpaceHostType | null,
+  hostType?: HostType | null,
   name?: string | null,
   isPublic?: boolean | null,
   isMultiChannel?: boolean | null,
@@ -575,7 +564,6 @@ export type UpdateChatSpaceInput = {
   language?: string | null,
   theme?: ChatSpaceThemeInput | null,
   text?: ChatSpaceTextInput | null,
-  settings?: ChatSpaceSettingsInput | null,
   admin?: string | null,
 };
 
@@ -796,10 +784,10 @@ export type ModelIDKeyConditionInput = {
 
 export type ModelChannelUserAccessFilterInput = {
   accessId?: ModelStringInput | null,
-  chatSpaceId?: ModelIDInput | null,
   channelId?: ModelIDInput | null,
-  organizationId?: ModelIDInput | null,
-  channelOwnerId?: ModelStringInput | null,
+  chatSpaceId?: ModelIDInput | null,
+  channelHostId?: ModelStringInput | null,
+  channelHostType?: ModelHostTypeInput | null,
   role?: ModelChannelUserRoleInput | null,
   channelName?: ModelStringInput | null,
   channelDescription?: ModelStringInput | null,
@@ -869,7 +857,7 @@ export type ModelChannelItemConnection = {
 export type ModelChatSpaceFilterInput = {
   id?: ModelIDInput | null,
   hostId?: ModelIDInput | null,
-  hostType?: ModelChatSpaceHostTypeInput | null,
+  hostType?: ModelHostTypeInput | null,
   name?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
   isMultiChannel?: ModelBooleanInput | null,
@@ -997,10 +985,10 @@ export type ModelSubscriptionIDInput = {
 
 export type ModelSubscriptionChannelUserAccessFilterInput = {
   accessId?: ModelSubscriptionStringInput | null,
-  chatSpaceId?: ModelSubscriptionIDInput | null,
   channelId?: ModelSubscriptionIDInput | null,
-  organizationId?: ModelSubscriptionIDInput | null,
-  channelOwnerId?: ModelSubscriptionStringInput | null,
+  chatSpaceId?: ModelSubscriptionIDInput | null,
+  channelHostId?: ModelSubscriptionStringInput | null,
+  channelHostType?: ModelSubscriptionStringInput | null,
   role?: ModelSubscriptionStringInput | null,
   channelName?: ModelSubscriptionStringInput | null,
   channelDescription?: ModelSubscriptionStringInput | null,
@@ -1292,10 +1280,10 @@ export type CreateChannelUserAccessMutation = {
   createChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
-    chatSpaceId: string,
     channelId: string,
-    organizationId: string,
-    channelOwnerId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
     role: ChannelUserRole,
     channelName: string,
     channelDescription?: string | null,
@@ -1314,10 +1302,10 @@ export type UpdateChannelUserAccessMutation = {
   updateChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
-    chatSpaceId: string,
     channelId: string,
-    organizationId: string,
-    channelOwnerId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
     role: ChannelUserRole,
     channelName: string,
     channelDescription?: string | null,
@@ -1336,10 +1324,10 @@ export type DeleteChannelUserAccessMutation = {
   deleteChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
-    chatSpaceId: string,
     channelId: string,
-    organizationId: string,
-    channelOwnerId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
     role: ChannelUserRole,
     channelName: string,
     channelDescription?: string | null,
@@ -1479,7 +1467,7 @@ export type CreateChatSpaceMutation = {
     __typename: "ChatSpace",
     id: string,
     hostId: string,
-    hostType: ChatSpaceHostType,
+    hostType: HostType,
     name: string,
     isPublic: boolean,
     isMultiChannel: boolean,
@@ -1526,10 +1514,6 @@ export type CreateChatSpaceMutation = {
       previous?: string | null,
       noHistory?: string | null,
     } | null,
-    settings:  {
-      __typename: "ChatSpaceSettings",
-      autoOpen?: boolean | null,
-    },
     admin: string,
     createdAt: string,
     updatedAt: string,
@@ -1546,7 +1530,7 @@ export type UpdateChatSpaceMutation = {
     __typename: "ChatSpace",
     id: string,
     hostId: string,
-    hostType: ChatSpaceHostType,
+    hostType: HostType,
     name: string,
     isPublic: boolean,
     isMultiChannel: boolean,
@@ -1593,10 +1577,6 @@ export type UpdateChatSpaceMutation = {
       previous?: string | null,
       noHistory?: string | null,
     } | null,
-    settings:  {
-      __typename: "ChatSpaceSettings",
-      autoOpen?: boolean | null,
-    },
     admin: string,
     createdAt: string,
     updatedAt: string,
@@ -1613,7 +1593,7 @@ export type DeleteChatSpaceMutation = {
     __typename: "ChatSpace",
     id: string,
     hostId: string,
-    hostType: ChatSpaceHostType,
+    hostType: HostType,
     name: string,
     isPublic: boolean,
     isMultiChannel: boolean,
@@ -1660,10 +1640,6 @@ export type DeleteChatSpaceMutation = {
       previous?: string | null,
       noHistory?: string | null,
     } | null,
-    settings:  {
-      __typename: "ChatSpaceSettings",
-      autoOpen?: boolean | null,
-    },
     admin: string,
     createdAt: string,
     updatedAt: string,
@@ -1984,10 +1960,10 @@ export type GetChannelUserAccessQuery = {
   getChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
-    chatSpaceId: string,
     channelId: string,
-    organizationId: string,
-    channelOwnerId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
     role: ChannelUserRole,
     channelName: string,
     channelDescription?: string | null,
@@ -2012,10 +1988,10 @@ export type ListChannelUserAccessesQuery = {
     items:  Array< {
       __typename: "ChannelUserAccess",
       accessId: string,
-      chatSpaceId: string,
       channelId: string,
-      organizationId: string,
-      channelOwnerId: string,
+      chatSpaceId: string,
+      channelHostId: string,
+      channelHostType: HostType,
       role: ChannelUserRole,
       channelName: string,
       channelDescription?: string | null,
@@ -2041,10 +2017,10 @@ export type ChannelUserAccessByChannelIdQuery = {
     items:  Array< {
       __typename: "ChannelUserAccess",
       accessId: string,
-      chatSpaceId: string,
       channelId: string,
-      organizationId: string,
-      channelOwnerId: string,
+      chatSpaceId: string,
+      channelHostId: string,
+      channelHostType: HostType,
       role: ChannelUserRole,
       channelName: string,
       channelDescription?: string | null,
@@ -2056,24 +2032,24 @@ export type ChannelUserAccessByChannelIdQuery = {
   } | null,
 };
 
-export type ChannelUserAccessByOrganizationIdQueryVariables = {
-  organizationId: string,
+export type ChannelUserAccessByChannelHostIdQueryVariables = {
+  channelHostId: string,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelChannelUserAccessFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ChannelUserAccessByOrganizationIdQuery = {
-  channelUserAccessByOrganizationId?:  {
+export type ChannelUserAccessByChannelHostIdQuery = {
+  channelUserAccessByChannelHostId?:  {
     __typename: "ModelChannelUserAccessConnection",
     items:  Array< {
       __typename: "ChannelUserAccess",
       accessId: string,
-      chatSpaceId: string,
       channelId: string,
-      organizationId: string,
-      channelOwnerId: string,
+      chatSpaceId: string,
+      channelHostId: string,
+      channelHostType: HostType,
       role: ChannelUserRole,
       channelName: string,
       channelDescription?: string | null,
@@ -2191,7 +2167,7 @@ export type GetChatSpaceQuery = {
     __typename: "ChatSpace",
     id: string,
     hostId: string,
-    hostType: ChatSpaceHostType,
+    hostType: HostType,
     name: string,
     isPublic: boolean,
     isMultiChannel: boolean,
@@ -2238,10 +2214,6 @@ export type GetChatSpaceQuery = {
       previous?: string | null,
       noHistory?: string | null,
     } | null,
-    settings:  {
-      __typename: "ChatSpaceSettings",
-      autoOpen?: boolean | null,
-    },
     admin: string,
     createdAt: string,
     updatedAt: string,
@@ -2261,7 +2233,7 @@ export type ListChatSpacesQuery = {
       __typename: "ChatSpace",
       id: string,
       hostId: string,
-      hostType: ChatSpaceHostType,
+      hostType: HostType,
       name: string,
       isPublic: boolean,
       isMultiChannel: boolean,
@@ -2308,10 +2280,6 @@ export type ListChatSpacesQuery = {
         previous?: string | null,
         noHistory?: string | null,
       } | null,
-      settings:  {
-        __typename: "ChatSpaceSettings",
-        autoOpen?: boolean | null,
-      },
       admin: string,
       createdAt: string,
       updatedAt: string,
@@ -2336,7 +2304,7 @@ export type ChatSpaceByHostIdQuery = {
       __typename: "ChatSpace",
       id: string,
       hostId: string,
-      hostType: ChatSpaceHostType,
+      hostType: HostType,
       name: string,
       isPublic: boolean,
       isMultiChannel: boolean,
@@ -2383,10 +2351,6 @@ export type ChatSpaceByHostIdQuery = {
         previous?: string | null,
         noHistory?: string | null,
       } | null,
-      settings:  {
-        __typename: "ChatSpaceSettings",
-        autoOpen?: boolean | null,
-      },
       admin: string,
       createdAt: string,
       updatedAt: string,
@@ -2724,10 +2688,10 @@ export type OnCreateChannelUserAccessSubscription = {
   onCreateChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
-    chatSpaceId: string,
     channelId: string,
-    organizationId: string,
-    channelOwnerId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
     role: ChannelUserRole,
     channelName: string,
     channelDescription?: string | null,
@@ -2746,10 +2710,10 @@ export type OnUpdateChannelUserAccessSubscription = {
   onUpdateChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
-    chatSpaceId: string,
     channelId: string,
-    organizationId: string,
-    channelOwnerId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
     role: ChannelUserRole,
     channelName: string,
     channelDescription?: string | null,
@@ -2768,10 +2732,10 @@ export type OnDeleteChannelUserAccessSubscription = {
   onDeleteChannelUserAccess?:  {
     __typename: "ChannelUserAccess",
     accessId: string,
-    chatSpaceId: string,
     channelId: string,
-    organizationId: string,
-    channelOwnerId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
     role: ChannelUserRole,
     channelName: string,
     channelDescription?: string | null,
@@ -2907,7 +2871,7 @@ export type OnCreateChatSpaceSubscription = {
     __typename: "ChatSpace",
     id: string,
     hostId: string,
-    hostType: ChatSpaceHostType,
+    hostType: HostType,
     name: string,
     isPublic: boolean,
     isMultiChannel: boolean,
@@ -2954,10 +2918,6 @@ export type OnCreateChatSpaceSubscription = {
       previous?: string | null,
       noHistory?: string | null,
     } | null,
-    settings:  {
-      __typename: "ChatSpaceSettings",
-      autoOpen?: boolean | null,
-    },
     admin: string,
     createdAt: string,
     updatedAt: string,
@@ -2973,7 +2933,7 @@ export type OnUpdateChatSpaceSubscription = {
     __typename: "ChatSpace",
     id: string,
     hostId: string,
-    hostType: ChatSpaceHostType,
+    hostType: HostType,
     name: string,
     isPublic: boolean,
     isMultiChannel: boolean,
@@ -3020,10 +2980,6 @@ export type OnUpdateChatSpaceSubscription = {
       previous?: string | null,
       noHistory?: string | null,
     } | null,
-    settings:  {
-      __typename: "ChatSpaceSettings",
-      autoOpen?: boolean | null,
-    },
     admin: string,
     createdAt: string,
     updatedAt: string,
@@ -3039,7 +2995,7 @@ export type OnDeleteChatSpaceSubscription = {
     __typename: "ChatSpace",
     id: string,
     hostId: string,
-    hostType: ChatSpaceHostType,
+    hostType: HostType,
     name: string,
     isPublic: boolean,
     isMultiChannel: boolean,
@@ -3086,10 +3042,6 @@ export type OnDeleteChatSpaceSubscription = {
       previous?: string | null,
       noHistory?: string | null,
     } | null,
-    settings:  {
-      __typename: "ChatSpaceSettings",
-      autoOpen?: boolean | null,
-    },
     admin: string,
     createdAt: string,
     updatedAt: string,

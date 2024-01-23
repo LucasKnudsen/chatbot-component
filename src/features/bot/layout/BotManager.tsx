@@ -23,8 +23,10 @@ export const BotManager = (props: ChatSpace) => {
 
     try {
       if (openForPublic) {
+        // In this case, we don't need to check for access rights, and can fetch all public channels through a Lambda
         return await handlePublicChannels()
       } else {
+        // In this case, we need to check the access rights of the user
         return await handleChannelAccesses()
       }
 

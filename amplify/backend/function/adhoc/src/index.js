@@ -52,10 +52,9 @@ const {
   AdminDeleteUserCommand,
   AdminSetUserPasswordCommand,
 } = require('@aws-sdk/client-cognito-identity-provider')
+const { channel } = require('diagnostics_channel')
 
 const cognitoClient = new CognitoIdentityProviderClient({ region: process.env.REGION })
-
-const chatSpaceId = 'f05d64f3-6d58-49d1-8143-d59caa88fd1f'
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -63,45 +62,51 @@ const chatSpaceId = 'f05d64f3-6d58-49d1-8143-d59caa88fd1f'
 exports.handler = async (event) => {
   if (!event.isMock) return
 
-  const adminEmail = 'fraiaadmin@mail.com'
-  const adminGroupName = 'Test-Admin'
+  const { organizationId, chatSpaceId, channelId, userEmail, adminEmail } = event
+
+  // --- ADMIN CONFIG ---
+
+  const chatSpaceAdminName = 'Space-Admin'
 
   const orgName = 'Chulalongkorn University'
+
   const chatSpaceName = 'SCII Portal'
-  const chatSpaceType = 'PORTAL'
+  const hostType = 'COMPANY'
 
-  const userEmail = 'laksteelhouse@gmail.com'
+  // --- USER CONFIG ---
 
-  const organizationId = UUID()
+  const userRole = 'READ'
 
   try {
-    switch (event.type) {
-      case 'ADMIN':
+    switch (event.flow) {
+      // This flow creates a new Organization, ChatSpace, Channel, and User
+      case 'COMPANY':
         // 1. Create Organization
         // 2. Create User Group for Chat Space
         // 3. Create Admin User
 
         const [Organization, AdminGroup, CognitoUser] = await Promise.all([
           createRecord(process.env.API_DIGITALTWIN_ORGANIZATIONTABLE_NAME, {
-            id: UUID(),
-            __typename: 'Organization',
+            id: organizationId,
             name: orgName,
             logo: '',
-            admion: adminGroupName,
+
+            admin: chatSpaceAdminName,
+
+            __typename: 'Organization',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }),
 
           cognitoClient.send(
             new CreateGroupCommand({
-              GroupName: adminGroupName,
+              GroupName: chatSpaceAdminName,
               UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
             })
           ),
           cognitoClient.send(
             new AdminCreateUserCommand({
               UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
-              MessageAction: 'SUPPRESS',
               TemporaryPassword: 'Abcd1234',
               Username: adminEmail,
               UserAttributes: [
@@ -115,33 +120,27 @@ exports.handler = async (event) => {
                 },
               ],
               ClientMetadata: {
+                // This is used to pass data to the Invite Lambda Trigger
                 organizationId: organizationId,
                 chatSpaceId: chatSpaceId,
-                hostType: chatSpaceType,
+                hostType: hostType,
               },
             })
           ),
         ])
 
-        // 4. Add to Admin Group
-        // 5. Create Chat Space
+        // 4. Create Chat Space
+        // 5. Creates Channel in ChatSpace
         // 6. Create User record
-        // 7. Set password
-        const [AddToGroupResult, ChatSpace, User] = await Promise.all([
-          cognitoClient.send(
-            new AdminAddUserToGroupCommand({
-              GroupName: adminGroupName,
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
-              Username: adminEmail,
-            })
-          ),
+        // 7. Add to general and specific Admin Groups
+        // 8. Set password
+        const [ChatSpace, Channel, User] = await Promise.all([
           createRecord(process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME, {
             id: chatSpaceId,
             hostId: organizationId,
-            __typename: 'ChatSpace',
 
             name: chatSpaceName,
-            hostType: chatSpaceType,
+            hostType: hostType,
 
             isPublic: false,
             isMultiChannel: true,
@@ -153,7 +152,25 @@ exports.handler = async (event) => {
               autoOpen: false,
             },
 
-            admin: adminGroupName,
+            admin: chatSpaceAdminName,
+
+            __typename: 'ChatSpace',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          }),
+          createRecord(process.env.API_DIGITALTWIN_CHANNELTABLE_NAME, {
+            id: channelId,
+            chatSpaceId: chatSpaceId,
+
+            apiHost: 'https://flowise.testnet.concordium.com',
+            chatflowId: 'f05d64f3-6d58-49d1-8143-d59caa88fd1f',
+
+            name: 'My First Knowledge Base',
+            initialPrompts: [],
+            isPublic: true,
+
+            __typename: 'Channel',
+            owner: CognitoHubUser.Username,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }),
@@ -168,6 +185,21 @@ exports.handler = async (event) => {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }),
+          cognitoClient.send(
+            new AdminAddUserToGroupCommand({
+              GroupName: chatSpaceAdminName,
+              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+              Username: adminEmail,
+            })
+          ),
+          // All Admins are also added to the Admin Group
+          cognitoClient.send(
+            new AdminAddUserToGroupCommand({
+              GroupName: 'Admin',
+              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+              Username: adminEmail,
+            })
+          ),
           cognitoClient.send(
             new AdminSetUserPasswordCommand({
               Password: 'Abcd1234',
@@ -206,7 +238,7 @@ exports.handler = async (event) => {
             ],
             ClientMetadata: {
               chatSpaceId: '123',
-              hostType: 'HUB',
+              hostType: hostType,
             },
           })
         )
@@ -214,9 +246,8 @@ exports.handler = async (event) => {
         // 2. Create User record
         // 3. Create Channel
         // 4. Create ChannelUserAccess
-        const channelId = UUID()
 
-        const [HubUser, Channel, ChannelUserAccess] = await Promise.all([
+        const [HubUser, ChannelUserAccess] = await Promise.all([
           createRecord(process.env.API_DIGITALTWIN_USERTABLE_NAME, {
             id: userEmail,
             cognitoId: CognitoHubUser.Username,
@@ -227,28 +258,18 @@ exports.handler = async (event) => {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }),
-          createRecord(process.env.API_DIGITALTWIN_CHANNELTABLE_NAME, {
-            id: channelId,
+
+          createRecord(process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME, {
+            accessId: `${userEmail}`,
+            channelId: channelId,
             chatSpaceId: chatSpaceId,
 
-            apiHost: 'https://flowise.testnet.concordium.com',
-            chatflowId: 'f05d64f3-6d58-49d1-8143-d59caa88fd1f',
+            channelHostId: organizationId,
+            channelHostType: hostType,
 
-            name: 'My First Knowledge Base',
-            initialPrompts: [],
-            isPublic: true,
-
-            __typename: 'Channel',
-            owner: CognitoHubUser.Username,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          }),
-          createRecord(process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME, {
-            accessId: `${userEmail}#_#_`,
-            channelId: channelId,
-
-            role: 'OWNER',
-            channelOwnerId: userEmail,
+            role: userRole,
+            channelName: 'My First Knowledge Base',
+            channelDescription: 'My First Knowledge Base',
 
             __typename: 'ChannelUserAccess',
             owner: CognitoHubUser.Username,
@@ -290,7 +311,7 @@ exports.handler = async (event) => {
           ),
           cognitoClient.send(
             new DeleteGroupCommand({
-              GroupName: adminGroupName,
+              GroupName: chatSpaceAdminName,
               UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
             })
           ),

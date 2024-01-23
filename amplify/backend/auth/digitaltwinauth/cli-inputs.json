@@ -48,7 +48,8 @@
     },
     "hostedUI": false,
     "userPoolGroupList": [
-      "SuperAdmin"
+      "SuperAdmin",
+      "Admin"
     ],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,

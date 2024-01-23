@@ -2,7 +2,6 @@ import {
   Channel,
   ChannelUserAccess,
   ChatSpace,
-  ChatSpaceHostType,
   ListChannelUserAccessesQuery,
   ListChannelUserAccessesQueryVariables,
   queries,
@@ -22,15 +21,14 @@ export async function fetchChannelAccesses(
   userId: string,
   chatSpace: ChatSpace
 ): Promise<ChannelUserAccess[] | undefined> {
-  // If HostType is HUB, it means that the individual User is in focus.
-  // If HostType is PORTAL, it means that its a centralized chat portal, made by an organization.
-  const conditionalAccessId =
-    chatSpace.hostType === ChatSpaceHostType.HUB
-      ? `${userId}#_#_`
-      : `${userId}#${chatSpace.id}#${chatSpace.hostId}`
+  // If HostType is PRIVATE, it means that the individual User is in focus.
+  // If HostType is COMPANY, it means that its a centralized chat portal, made by an organization.
 
   const variables: ListChannelUserAccessesQueryVariables = {
-    accessId: conditionalAccessId,
+    accessId: userId,
+    filter: {
+      chatSpaceId: { eq: chatSpace.id },
+    },
   }
 
   try {

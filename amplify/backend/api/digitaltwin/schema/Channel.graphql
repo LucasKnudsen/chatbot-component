@@ -15,17 +15,15 @@ type InitialPrompt {
 }
 
 type ChannelUserAccess @model @auth(rules: [{ allow: owner }]) {
-  # Access ID is concatenation of userId, chatSpaceId, organizationId - with # as delimiter
-  # This is to effectively create retrieve a user's access to Channels within a ChatSpace - within a potential Organization
-  # organizationId are only used in the case of a Portal ChatSpace - otherwise, they are `_`
+  # Access ID is the userId. This way a user can effectively retrieve all their accesses.
+  # These can then be filtered by chatSpaceId, hostType, role, etc.
   accessId: String! @primaryKey(sortKeyFields: ["channelId"])
+  channelId: ID! @index(name: "byChannel", queryField: "channelUserAccessByChannelId") # To retrieve all accesses to a Channel
   chatSpaceId: ID!
 
-  channelId: ID! @index(name: "byChannel", queryField: "channelUserAccessByChannelId")
-  organizationId: ID!
-    @index(name: "byOrganization", queryField: "channelUserAccessByOrganizationId")
-
-  channelOwnerId: String!
+  channelHostId: String!
+    @index(name: "byChannelHost", queryField: "channelUserAccessByChannelHostId")
+  channelHostType: HostType!
 
   role: ChannelUserRole!
   channelName: String!
@@ -39,17 +37,7 @@ enum ChannelUserRole {
   READ
 }
 
-type ChannelDocument
-  @model
-  @auth(
-    rules: [
-      { allow: groups, groups: ["SuperAdmin"] }
-      { allow: groups, groupsField: "admin" }
-      { allow: groups, groupsField: "members", operations: [read] }
-      { allow: private, operations: [get] } ## TODO: remove this after custom lambda is implemented
-      { allow: public, provider: iam, operations: [get] } ## TODO: remove this after custom lambda is implemented
-    ]
-  ) {
+type ChannelDocument @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }]) {
   channelId: ID! @primaryKey(sortKeyFields: ["id"])
   id: ID!
 
@@ -57,9 +45,6 @@ type ChannelDocument
   fileType: String
   fileName: String
   fileSize: Int
-
-  admin: String!
-  members: [String!]
 }
 
 type ChannelItem @model @auth(rules: [{ allow: owner }]) {

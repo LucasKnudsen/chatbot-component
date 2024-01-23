@@ -2,5 +2,9 @@
   {
     "groupName": "SuperAdmin",
     "precedence": 1
+  },
+  {
+    "groupName": "Admin",
+    "precedence": 2
   }
 ]
