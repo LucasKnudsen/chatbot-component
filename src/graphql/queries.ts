@@ -361,8 +361,6 @@ export const getChannelDocument = /* GraphQL */ `query GetChannelDocument($chann
     fileType
     fileName
     fileSize
-    admin
-    members
     createdAt
     updatedAt
     __typename
@@ -395,8 +393,6 @@ export const listChannelDocuments = /* GraphQL */ `query ListChannelDocuments(
       fileType
       fileName
       fileSize
-      admin
-      members
       createdAt
       updatedAt
       __typename
@@ -409,8 +405,8 @@ export const listChannelDocuments = /* GraphQL */ `query ListChannelDocuments(
   APITypes.ListChannelDocumentsQueryVariables,
   APITypes.ListChannelDocumentsQuery
 >;
-export const getChannelItem = /* GraphQL */ `query GetChannelItem($ownerId: ID!, $channelId: ID!, $id: ID!) {
-  getChannelItem(ownerId: $ownerId, channelId: $channelId, id: $id) {
+export const getChannelHistoryItem = /* GraphQL */ `query GetChannelHistoryItem($ownerId: ID!, $channelId: ID!, $id: ID!) {
+  getChannelHistoryItem(ownerId: $ownerId, channelId: $channelId, id: $id) {
     ownerId
     channelId
     id
@@ -423,18 +419,18 @@ export const getChannelItem = /* GraphQL */ `query GetChannelItem($ownerId: ID!,
   }
 }
 ` as GeneratedQuery<
-  APITypes.GetChannelItemQueryVariables,
-  APITypes.GetChannelItemQuery
+  APITypes.GetChannelHistoryItemQueryVariables,
+  APITypes.GetChannelHistoryItemQuery
 >;
-export const listChannelItems = /* GraphQL */ `query ListChannelItems(
+export const listChannelHistoryItems = /* GraphQL */ `query ListChannelHistoryItems(
   $ownerId: ID
-  $channelIdId: ModelChannelItemPrimaryCompositeKeyConditionInput
-  $filter: ModelChannelItemFilterInput
+  $channelIdId: ModelChannelHistoryItemPrimaryCompositeKeyConditionInput
+  $filter: ModelChannelHistoryItemFilterInput
   $limit: Int
   $nextToken: String
   $sortDirection: ModelSortDirection
 ) {
-  listChannelItems(
+  listChannelHistoryItems(
     ownerId: $ownerId
     channelIdId: $channelIdId
     filter: $filter
@@ -458,8 +454,8 @@ export const listChannelItems = /* GraphQL */ `query ListChannelItems(
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListChannelItemsQueryVariables,
-  APITypes.ListChannelItemsQuery
+  APITypes.ListChannelHistoryItemsQueryVariables,
+  APITypes.ListChannelHistoryItemsQuery
 >;
 export const getChatSpace = /* GraphQL */ `query GetChatSpace($id: ID!) {
   getChatSpace(id: $id) {
@@ -713,11 +709,10 @@ export const listOrganizations = /* GraphQL */ `query ListOrganizations(
 export const getUser = /* GraphQL */ `query GetUser($id: String!) {
   getUser(id: $id) {
     id
-    email
-    cognitoId
-    roles
     organizationId
     chatSpaceId
+    email
+    cognitoId
     invitedOn
     joinedOn
     status
@@ -744,11 +739,10 @@ export const listUsers = /* GraphQL */ `query ListUsers(
   ) {
     items {
       id
-      email
-      cognitoId
-      roles
       organizationId
       chatSpaceId
+      email
+      cognitoId
       invitedOn
       joinedOn
       status
@@ -762,15 +756,15 @@ export const listUsers = /* GraphQL */ `query ListUsers(
   }
 }
 ` as GeneratedQuery<APITypes.ListUsersQueryVariables, APITypes.ListUsersQuery>;
-export const chatSpaceByChatSpaceId = /* GraphQL */ `query ChatSpaceByChatSpaceId(
-  $chatSpaceId: ID!
+export const userByOrganizationId = /* GraphQL */ `query UserByOrganizationId(
+  $organizationId: ID!
   $sortDirection: ModelSortDirection
   $filter: ModelUserFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  chatSpaceByChatSpaceId(
-    chatSpaceId: $chatSpaceId
+  userByOrganizationId(
+    organizationId: $organizationId
     sortDirection: $sortDirection
     filter: $filter
     limit: $limit
@@ -778,11 +772,10 @@ export const chatSpaceByChatSpaceId = /* GraphQL */ `query ChatSpaceByChatSpaceI
   ) {
     items {
       id
-      email
-      cognitoId
-      roles
       organizationId
       chatSpaceId
+      email
+      cognitoId
       invitedOn
       joinedOn
       status
@@ -796,6 +789,6 @@ export const chatSpaceByChatSpaceId = /* GraphQL */ `query ChatSpaceByChatSpaceI
   }
 }
 ` as GeneratedQuery<
-  APITypes.ChatSpaceByChatSpaceIdQueryVariables,
-  APITypes.ChatSpaceByChatSpaceIdQuery
+  APITypes.UserByOrganizationIdQueryVariables,
+  APITypes.UserByOrganizationIdQuery
 >;

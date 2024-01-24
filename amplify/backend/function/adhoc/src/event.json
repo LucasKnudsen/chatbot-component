@@ -1,9 +1,9 @@
 {
   "isMock": true,
   "flow": "COMPANY",
-  "organizationId": "f05d64f3-6d58-49d1-8143-d59caa88fd1f",
-  "chatSpaceId": "f05d64f3-6d58-49d1-8143-d59caa88fd1f",
-  "channelId": "f05d64f3-6d58-49d1-8143-d59caa88fd1f",
+  "organizationId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
+  "chatSpaceId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
+  "channelId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
 
   "adminEmail": "chula-admin@mail.com",
   "userEmail": "laksteelhouse@gmail.com"

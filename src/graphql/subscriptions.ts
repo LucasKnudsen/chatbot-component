@@ -287,8 +287,6 @@ export const onCreateChannelDocument = /* GraphQL */ `subscription OnCreateChann
     fileType
     fileName
     fileSize
-    admin
-    members
     createdAt
     updatedAt
     __typename
@@ -308,8 +306,6 @@ export const onUpdateChannelDocument = /* GraphQL */ `subscription OnUpdateChann
     fileType
     fileName
     fileSize
-    admin
-    members
     createdAt
     updatedAt
     __typename
@@ -329,8 +325,6 @@ export const onDeleteChannelDocument = /* GraphQL */ `subscription OnDeleteChann
     fileType
     fileName
     fileSize
-    admin
-    members
     createdAt
     updatedAt
     __typename
@@ -340,11 +334,11 @@ export const onDeleteChannelDocument = /* GraphQL */ `subscription OnDeleteChann
   APITypes.OnDeleteChannelDocumentSubscriptionVariables,
   APITypes.OnDeleteChannelDocumentSubscription
 >;
-export const onCreateChannelItem = /* GraphQL */ `subscription OnCreateChannelItem(
-  $filter: ModelSubscriptionChannelItemFilterInput
+export const onCreateChannelHistoryItem = /* GraphQL */ `subscription OnCreateChannelHistoryItem(
+  $filter: ModelSubscriptionChannelHistoryItemFilterInput
   $owner: String
 ) {
-  onCreateChannelItem(filter: $filter, owner: $owner) {
+  onCreateChannelHistoryItem(filter: $filter, owner: $owner) {
     ownerId
     channelId
     id
@@ -357,14 +351,14 @@ export const onCreateChannelItem = /* GraphQL */ `subscription OnCreateChannelIt
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnCreateChannelItemSubscriptionVariables,
-  APITypes.OnCreateChannelItemSubscription
+  APITypes.OnCreateChannelHistoryItemSubscriptionVariables,
+  APITypes.OnCreateChannelHistoryItemSubscription
 >;
-export const onUpdateChannelItem = /* GraphQL */ `subscription OnUpdateChannelItem(
-  $filter: ModelSubscriptionChannelItemFilterInput
+export const onUpdateChannelHistoryItem = /* GraphQL */ `subscription OnUpdateChannelHistoryItem(
+  $filter: ModelSubscriptionChannelHistoryItemFilterInput
   $owner: String
 ) {
-  onUpdateChannelItem(filter: $filter, owner: $owner) {
+  onUpdateChannelHistoryItem(filter: $filter, owner: $owner) {
     ownerId
     channelId
     id
@@ -377,14 +371,14 @@ export const onUpdateChannelItem = /* GraphQL */ `subscription OnUpdateChannelIt
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnUpdateChannelItemSubscriptionVariables,
-  APITypes.OnUpdateChannelItemSubscription
+  APITypes.OnUpdateChannelHistoryItemSubscriptionVariables,
+  APITypes.OnUpdateChannelHistoryItemSubscription
 >;
-export const onDeleteChannelItem = /* GraphQL */ `subscription OnDeleteChannelItem(
-  $filter: ModelSubscriptionChannelItemFilterInput
+export const onDeleteChannelHistoryItem = /* GraphQL */ `subscription OnDeleteChannelHistoryItem(
+  $filter: ModelSubscriptionChannelHistoryItemFilterInput
   $owner: String
 ) {
-  onDeleteChannelItem(filter: $filter, owner: $owner) {
+  onDeleteChannelHistoryItem(filter: $filter, owner: $owner) {
     ownerId
     channelId
     id
@@ -397,8 +391,8 @@ export const onDeleteChannelItem = /* GraphQL */ `subscription OnDeleteChannelIt
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnDeleteChannelItemSubscriptionVariables,
-  APITypes.OnDeleteChannelItemSubscription
+  APITypes.OnDeleteChannelHistoryItemSubscriptionVariables,
+  APITypes.OnDeleteChannelHistoryItemSubscription
 >;
 export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
   onCreateChatSpace(filter: $filter) {
@@ -643,11 +637,10 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
 ) {
   onCreateUser(filter: $filter, owner: $owner) {
     id
-    email
-    cognitoId
-    roles
     organizationId
     chatSpaceId
+    email
+    cognitoId
     invitedOn
     joinedOn
     status
@@ -667,11 +660,10 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
 ) {
   onUpdateUser(filter: $filter, owner: $owner) {
     id
-    email
-    cognitoId
-    roles
     organizationId
     chatSpaceId
+    email
+    cognitoId
     invitedOn
     joinedOn
     status
@@ -691,11 +683,10 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
 ) {
   onDeleteUser(filter: $filter, owner: $owner) {
     id
-    email
-    cognitoId
-    roles
     organizationId
     chatSpaceId
+    email
+    cognitoId
     invitedOn
     joinedOn
     status

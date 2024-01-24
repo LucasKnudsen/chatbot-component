@@ -310,8 +310,6 @@ export type CreateChannelDocumentInput = {
   fileType?: string | null,
   fileName?: string | null,
   fileSize?: number | null,
-  admin: string,
-  members?: Array< string > | null,
 };
 
 export type ModelChannelDocumentConditionInput = {
@@ -319,8 +317,6 @@ export type ModelChannelDocumentConditionInput = {
   fileType?: ModelStringInput | null,
   fileName?: ModelStringInput | null,
   fileSize?: ModelIntInput | null,
-  admin?: ModelStringInput | null,
-  members?: ModelStringInput | null,
   and?: Array< ModelChannelDocumentConditionInput | null > | null,
   or?: Array< ModelChannelDocumentConditionInput | null > | null,
   not?: ModelChannelDocumentConditionInput | null,
@@ -346,8 +342,6 @@ export type ChannelDocument = {
   fileType?: string | null,
   fileName?: string | null,
   fileSize?: number | null,
-  admin: string,
-  members?: Array< string > | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -359,8 +353,6 @@ export type UpdateChannelDocumentInput = {
   fileType?: string | null,
   fileName?: string | null,
   fileSize?: number | null,
-  admin?: string | null,
-  members?: Array< string > | null,
 };
 
 export type DeleteChannelDocumentInput = {
@@ -368,7 +360,7 @@ export type DeleteChannelDocumentInput = {
   id: string,
 };
 
-export type CreateChannelItemInput = {
+export type CreateChannelHistoryItemInput = {
   ownerId: string,
   channelId: string,
   id?: string | null,
@@ -383,12 +375,12 @@ export enum ChannelItemType {
 }
 
 
-export type ModelChannelItemConditionInput = {
+export type ModelChannelHistoryItemConditionInput = {
   type?: ModelChannelItemTypeInput | null,
   content?: ModelStringInput | null,
-  and?: Array< ModelChannelItemConditionInput | null > | null,
-  or?: Array< ModelChannelItemConditionInput | null > | null,
-  not?: ModelChannelItemConditionInput | null,
+  and?: Array< ModelChannelHistoryItemConditionInput | null > | null,
+  or?: Array< ModelChannelHistoryItemConditionInput | null > | null,
+  not?: ModelChannelHistoryItemConditionInput | null,
 };
 
 export type ModelChannelItemTypeInput = {
@@ -396,8 +388,8 @@ export type ModelChannelItemTypeInput = {
   ne?: ChannelItemType | null,
 };
 
-export type ChannelItem = {
-  __typename: "ChannelItem",
+export type ChannelHistoryItem = {
+  __typename: "ChannelHistoryItem",
   ownerId: string,
   channelId: string,
   id: string,
@@ -408,7 +400,7 @@ export type ChannelItem = {
   owner?: string | null,
 };
 
-export type UpdateChannelItemInput = {
+export type UpdateChannelHistoryItemInput = {
   ownerId: string,
   channelId: string,
   id: string,
@@ -416,7 +408,7 @@ export type UpdateChannelItemInput = {
   content?: string | null,
 };
 
-export type DeleteChannelItemInput = {
+export type DeleteChannelHistoryItemInput = {
   ownerId: string,
   channelId: string,
   id: string,
@@ -614,11 +606,10 @@ export type DeleteOrganizationInput = {
 
 export type CreateUserInput = {
   id?: string | null,
-  email: string,
-  cognitoId: string,
-  roles?: Array< string > | null,
   organizationId?: string | null,
   chatSpaceId?: string | null,
+  email: string,
+  cognitoId: string,
   invitedOn?: string | null,
   joinedOn?: string | null,
   status?: UserStatus | null,
@@ -631,11 +622,10 @@ export enum UserStatus {
 
 
 export type ModelUserConditionInput = {
-  email?: ModelStringInput | null,
-  cognitoId?: ModelStringInput | null,
-  roles?: ModelStringInput | null,
   organizationId?: ModelIDInput | null,
   chatSpaceId?: ModelIDInput | null,
+  email?: ModelStringInput | null,
+  cognitoId?: ModelStringInput | null,
   invitedOn?: ModelStringInput | null,
   joinedOn?: ModelStringInput | null,
   status?: ModelUserStatusInput | null,
@@ -652,11 +642,10 @@ export type ModelUserStatusInput = {
 export type User = {
   __typename: "User",
   id: string,
-  email: string,
-  cognitoId: string,
-  roles?: Array< string > | null,
   organizationId?: string | null,
   chatSpaceId?: string | null,
+  email: string,
+  cognitoId: string,
   invitedOn?: string | null,
   joinedOn?: string | null,
   status?: UserStatus | null,
@@ -667,11 +656,10 @@ export type User = {
 
 export type UpdateUserInput = {
   id: string,
-  email?: string | null,
-  cognitoId?: string | null,
-  roles?: Array< string > | null,
   organizationId?: string | null,
   chatSpaceId?: string | null,
+  email?: string | null,
+  cognitoId?: string | null,
   invitedOn?: string | null,
   joinedOn?: string | null,
   status?: UserStatus | null,
@@ -809,8 +797,6 @@ export type ModelChannelDocumentFilterInput = {
   fileType?: ModelStringInput | null,
   fileName?: ModelStringInput | null,
   fileSize?: ModelIntInput | null,
-  admin?: ModelStringInput | null,
-  members?: ModelStringInput | null,
   and?: Array< ModelChannelDocumentFilterInput | null > | null,
   or?: Array< ModelChannelDocumentFilterInput | null > | null,
   not?: ModelChannelDocumentFilterInput | null,
@@ -822,35 +808,35 @@ export type ModelChannelDocumentConnection = {
   nextToken?: string | null,
 };
 
-export type ModelChannelItemPrimaryCompositeKeyConditionInput = {
-  eq?: ModelChannelItemPrimaryCompositeKeyInput | null,
-  le?: ModelChannelItemPrimaryCompositeKeyInput | null,
-  lt?: ModelChannelItemPrimaryCompositeKeyInput | null,
-  ge?: ModelChannelItemPrimaryCompositeKeyInput | null,
-  gt?: ModelChannelItemPrimaryCompositeKeyInput | null,
-  between?: Array< ModelChannelItemPrimaryCompositeKeyInput | null > | null,
-  beginsWith?: ModelChannelItemPrimaryCompositeKeyInput | null,
+export type ModelChannelHistoryItemPrimaryCompositeKeyConditionInput = {
+  eq?: ModelChannelHistoryItemPrimaryCompositeKeyInput | null,
+  le?: ModelChannelHistoryItemPrimaryCompositeKeyInput | null,
+  lt?: ModelChannelHistoryItemPrimaryCompositeKeyInput | null,
+  ge?: ModelChannelHistoryItemPrimaryCompositeKeyInput | null,
+  gt?: ModelChannelHistoryItemPrimaryCompositeKeyInput | null,
+  between?: Array< ModelChannelHistoryItemPrimaryCompositeKeyInput | null > | null,
+  beginsWith?: ModelChannelHistoryItemPrimaryCompositeKeyInput | null,
 };
 
-export type ModelChannelItemPrimaryCompositeKeyInput = {
+export type ModelChannelHistoryItemPrimaryCompositeKeyInput = {
   channelId?: string | null,
   id?: string | null,
 };
 
-export type ModelChannelItemFilterInput = {
+export type ModelChannelHistoryItemFilterInput = {
   ownerId?: ModelIDInput | null,
   channelId?: ModelIDInput | null,
   id?: ModelIDInput | null,
   type?: ModelChannelItemTypeInput | null,
   content?: ModelStringInput | null,
-  and?: Array< ModelChannelItemFilterInput | null > | null,
-  or?: Array< ModelChannelItemFilterInput | null > | null,
-  not?: ModelChannelItemFilterInput | null,
+  and?: Array< ModelChannelHistoryItemFilterInput | null > | null,
+  or?: Array< ModelChannelHistoryItemFilterInput | null > | null,
+  not?: ModelChannelHistoryItemFilterInput | null,
 };
 
-export type ModelChannelItemConnection = {
-  __typename: "ModelChannelItemConnection",
-  items:  Array<ChannelItem | null >,
+export type ModelChannelHistoryItemConnection = {
+  __typename: "ModelChannelHistoryItemConnection",
+  items:  Array<ChannelHistoryItem | null >,
   nextToken?: string | null,
 };
 
@@ -895,11 +881,10 @@ export type ModelOrganizationConnection = {
 
 export type ModelUserFilterInput = {
   id?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  cognitoId?: ModelStringInput | null,
-  roles?: ModelStringInput | null,
   organizationId?: ModelIDInput | null,
   chatSpaceId?: ModelIDInput | null,
+  email?: ModelStringInput | null,
+  cognitoId?: ModelStringInput | null,
   invitedOn?: ModelStringInput | null,
   joinedOn?: ModelStringInput | null,
   status?: ModelUserStatusInput | null,
@@ -1019,14 +1004,14 @@ export type ModelSubscriptionIntInput = {
   notIn?: Array< number | null > | null,
 };
 
-export type ModelSubscriptionChannelItemFilterInput = {
+export type ModelSubscriptionChannelHistoryItemFilterInput = {
   ownerId?: ModelSubscriptionIDInput | null,
   channelId?: ModelSubscriptionIDInput | null,
   id?: ModelSubscriptionIDInput | null,
   type?: ModelSubscriptionStringInput | null,
   content?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionChannelItemFilterInput | null > | null,
-  or?: Array< ModelSubscriptionChannelItemFilterInput | null > | null,
+  and?: Array< ModelSubscriptionChannelHistoryItemFilterInput | null > | null,
+  or?: Array< ModelSubscriptionChannelHistoryItemFilterInput | null > | null,
 };
 
 export type ModelSubscriptionChatSpaceFilterInput = {
@@ -1054,11 +1039,10 @@ export type ModelSubscriptionOrganizationFilterInput = {
 
 export type ModelSubscriptionUserFilterInput = {
   id?: ModelSubscriptionStringInput | null,
-  email?: ModelSubscriptionStringInput | null,
-  cognitoId?: ModelSubscriptionStringInput | null,
-  roles?: ModelSubscriptionStringInput | null,
   organizationId?: ModelSubscriptionIDInput | null,
   chatSpaceId?: ModelSubscriptionIDInput | null,
+  email?: ModelSubscriptionStringInput | null,
+  cognitoId?: ModelSubscriptionStringInput | null,
   invitedOn?: ModelSubscriptionStringInput | null,
   joinedOn?: ModelSubscriptionStringInput | null,
   status?: ModelSubscriptionStringInput | null,
@@ -1351,8 +1335,6 @@ export type CreateChannelDocumentMutation = {
     fileType?: string | null,
     fileName?: string | null,
     fileSize?: number | null,
-    admin: string,
-    members?: Array< string > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1372,8 +1354,6 @@ export type UpdateChannelDocumentMutation = {
     fileType?: string | null,
     fileName?: string | null,
     fileSize?: number | null,
-    admin: string,
-    members?: Array< string > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1393,21 +1373,19 @@ export type DeleteChannelDocumentMutation = {
     fileType?: string | null,
     fileName?: string | null,
     fileSize?: number | null,
-    admin: string,
-    members?: Array< string > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type CreateChannelItemMutationVariables = {
-  input: CreateChannelItemInput,
-  condition?: ModelChannelItemConditionInput | null,
+export type CreateChannelHistoryItemMutationVariables = {
+  input: CreateChannelHistoryItemInput,
+  condition?: ModelChannelHistoryItemConditionInput | null,
 };
 
-export type CreateChannelItemMutation = {
-  createChannelItem?:  {
-    __typename: "ChannelItem",
+export type CreateChannelHistoryItemMutation = {
+  createChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
     id: string,
@@ -1419,14 +1397,14 @@ export type CreateChannelItemMutation = {
   } | null,
 };
 
-export type UpdateChannelItemMutationVariables = {
-  input: UpdateChannelItemInput,
-  condition?: ModelChannelItemConditionInput | null,
+export type UpdateChannelHistoryItemMutationVariables = {
+  input: UpdateChannelHistoryItemInput,
+  condition?: ModelChannelHistoryItemConditionInput | null,
 };
 
-export type UpdateChannelItemMutation = {
-  updateChannelItem?:  {
-    __typename: "ChannelItem",
+export type UpdateChannelHistoryItemMutation = {
+  updateChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
     id: string,
@@ -1438,14 +1416,14 @@ export type UpdateChannelItemMutation = {
   } | null,
 };
 
-export type DeleteChannelItemMutationVariables = {
-  input: DeleteChannelItemInput,
-  condition?: ModelChannelItemConditionInput | null,
+export type DeleteChannelHistoryItemMutationVariables = {
+  input: DeleteChannelHistoryItemInput,
+  condition?: ModelChannelHistoryItemConditionInput | null,
 };
 
-export type DeleteChannelItemMutation = {
-  deleteChannelItem?:  {
-    __typename: "ChannelItem",
+export type DeleteChannelHistoryItemMutation = {
+  deleteChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
     id: string,
@@ -1709,11 +1687,10 @@ export type CreateUserMutation = {
   createUser?:  {
     __typename: "User",
     id: string,
-    email: string,
-    cognitoId: string,
-    roles?: Array< string > | null,
     organizationId?: string | null,
     chatSpaceId?: string | null,
+    email: string,
+    cognitoId: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
@@ -1732,11 +1709,10 @@ export type UpdateUserMutation = {
   updateUser?:  {
     __typename: "User",
     id: string,
-    email: string,
-    cognitoId: string,
-    roles?: Array< string > | null,
     organizationId?: string | null,
     chatSpaceId?: string | null,
+    email: string,
+    cognitoId: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
@@ -1755,11 +1731,10 @@ export type DeleteUserMutation = {
   deleteUser?:  {
     __typename: "User",
     id: string,
-    email: string,
-    cognitoId: string,
-    roles?: Array< string > | null,
     organizationId?: string | null,
     chatSpaceId?: string | null,
+    email: string,
+    cognitoId: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
@@ -2075,8 +2050,6 @@ export type GetChannelDocumentQuery = {
     fileType?: string | null,
     fileName?: string | null,
     fileSize?: number | null,
-    admin: string,
-    members?: Array< string > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2102,8 +2075,6 @@ export type ListChannelDocumentsQuery = {
       fileType?: string | null,
       fileName?: string | null,
       fileSize?: number | null,
-      admin: string,
-      members?: Array< string > | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2111,15 +2082,15 @@ export type ListChannelDocumentsQuery = {
   } | null,
 };
 
-export type GetChannelItemQueryVariables = {
+export type GetChannelHistoryItemQueryVariables = {
   ownerId: string,
   channelId: string,
   id: string,
 };
 
-export type GetChannelItemQuery = {
-  getChannelItem?:  {
-    __typename: "ChannelItem",
+export type GetChannelHistoryItemQuery = {
+  getChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
     id: string,
@@ -2131,20 +2102,20 @@ export type GetChannelItemQuery = {
   } | null,
 };
 
-export type ListChannelItemsQueryVariables = {
+export type ListChannelHistoryItemsQueryVariables = {
   ownerId?: string | null,
-  channelIdId?: ModelChannelItemPrimaryCompositeKeyConditionInput | null,
-  filter?: ModelChannelItemFilterInput | null,
+  channelIdId?: ModelChannelHistoryItemPrimaryCompositeKeyConditionInput | null,
+  filter?: ModelChannelHistoryItemFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
   sortDirection?: ModelSortDirection | null,
 };
 
-export type ListChannelItemsQuery = {
-  listChannelItems?:  {
-    __typename: "ModelChannelItemConnection",
+export type ListChannelHistoryItemsQuery = {
+  listChannelHistoryItems?:  {
+    __typename: "ModelChannelHistoryItemConnection",
     items:  Array< {
-      __typename: "ChannelItem",
+      __typename: "ChannelHistoryItem",
       ownerId: string,
       channelId: string,
       id: string,
@@ -2407,11 +2378,10 @@ export type GetUserQuery = {
   getUser?:  {
     __typename: "User",
     id: string,
-    email: string,
-    cognitoId: string,
-    roles?: Array< string > | null,
     organizationId?: string | null,
     chatSpaceId?: string | null,
+    email: string,
+    cognitoId: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
@@ -2435,11 +2405,10 @@ export type ListUsersQuery = {
     items:  Array< {
       __typename: "User",
       id: string,
-      email: string,
-      cognitoId: string,
-      roles?: Array< string > | null,
       organizationId?: string | null,
       chatSpaceId?: string | null,
+      email: string,
+      cognitoId: string,
       invitedOn?: string | null,
       joinedOn?: string | null,
       status?: UserStatus | null,
@@ -2451,25 +2420,24 @@ export type ListUsersQuery = {
   } | null,
 };
 
-export type ChatSpaceByChatSpaceIdQueryVariables = {
-  chatSpaceId: string,
+export type UserByOrganizationIdQueryVariables = {
+  organizationId: string,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelUserFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ChatSpaceByChatSpaceIdQuery = {
-  chatSpaceByChatSpaceId?:  {
+export type UserByOrganizationIdQuery = {
+  userByOrganizationId?:  {
     __typename: "ModelUserConnection",
     items:  Array< {
       __typename: "User",
       id: string,
-      email: string,
-      cognitoId: string,
-      roles?: Array< string > | null,
       organizationId?: string | null,
       chatSpaceId?: string | null,
+      email: string,
+      cognitoId: string,
       invitedOn?: string | null,
       joinedOn?: string | null,
       status?: UserStatus | null,
@@ -2758,8 +2726,6 @@ export type OnCreateChannelDocumentSubscription = {
     fileType?: string | null,
     fileName?: string | null,
     fileSize?: number | null,
-    admin: string,
-    members?: Array< string > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2778,8 +2744,6 @@ export type OnUpdateChannelDocumentSubscription = {
     fileType?: string | null,
     fileName?: string | null,
     fileSize?: number | null,
-    admin: string,
-    members?: Array< string > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2798,21 +2762,19 @@ export type OnDeleteChannelDocumentSubscription = {
     fileType?: string | null,
     fileName?: string | null,
     fileSize?: number | null,
-    admin: string,
-    members?: Array< string > | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnCreateChannelItemSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelItemFilterInput | null,
+export type OnCreateChannelHistoryItemSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelHistoryItemFilterInput | null,
   owner?: string | null,
 };
 
-export type OnCreateChannelItemSubscription = {
-  onCreateChannelItem?:  {
-    __typename: "ChannelItem",
+export type OnCreateChannelHistoryItemSubscription = {
+  onCreateChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
     id: string,
@@ -2824,14 +2786,14 @@ export type OnCreateChannelItemSubscription = {
   } | null,
 };
 
-export type OnUpdateChannelItemSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelItemFilterInput | null,
+export type OnUpdateChannelHistoryItemSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelHistoryItemFilterInput | null,
   owner?: string | null,
 };
 
-export type OnUpdateChannelItemSubscription = {
-  onUpdateChannelItem?:  {
-    __typename: "ChannelItem",
+export type OnUpdateChannelHistoryItemSubscription = {
+  onUpdateChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
     id: string,
@@ -2843,14 +2805,14 @@ export type OnUpdateChannelItemSubscription = {
   } | null,
 };
 
-export type OnDeleteChannelItemSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelItemFilterInput | null,
+export type OnDeleteChannelHistoryItemSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelHistoryItemFilterInput | null,
   owner?: string | null,
 };
 
-export type OnDeleteChannelItemSubscription = {
-  onDeleteChannelItem?:  {
-    __typename: "ChannelItem",
+export type OnDeleteChannelHistoryItemSubscription = {
+  onDeleteChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
     id: string,
@@ -3108,11 +3070,10 @@ export type OnCreateUserSubscription = {
   onCreateUser?:  {
     __typename: "User",
     id: string,
-    email: string,
-    cognitoId: string,
-    roles?: Array< string > | null,
     organizationId?: string | null,
     chatSpaceId?: string | null,
+    email: string,
+    cognitoId: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
@@ -3131,11 +3092,10 @@ export type OnUpdateUserSubscription = {
   onUpdateUser?:  {
     __typename: "User",
     id: string,
-    email: string,
-    cognitoId: string,
-    roles?: Array< string > | null,
     organizationId?: string | null,
     chatSpaceId?: string | null,
+    email: string,
+    cognitoId: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
@@ -3154,11 +3114,10 @@ export type OnDeleteUserSubscription = {
   onDeleteUser?:  {
     __typename: "User",
     id: string,
-    email: string,
-    cognitoId: string,
-    roles?: Array< string > | null,
     organizationId?: string | null,
     chatSpaceId?: string | null,
+    email: string,
+    cognitoId: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,

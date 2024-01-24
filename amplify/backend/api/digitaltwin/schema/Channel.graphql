@@ -47,7 +47,7 @@ type ChannelDocument @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"
   fileSize: Int
 }
 
-type ChannelItem @model @auth(rules: [{ allow: owner }]) {
+type ChannelHistoryItem @model @auth(rules: [{ allow: owner }]) {
   ownerId: ID! @primaryKey(sortKeyFields: ["channelId", "id"])
   channelId: ID!
   id: ID!

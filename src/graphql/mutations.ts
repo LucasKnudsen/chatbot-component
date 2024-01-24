@@ -300,8 +300,6 @@ export const createChannelDocument = /* GraphQL */ `mutation CreateChannelDocume
     fileType
     fileName
     fileSize
-    admin
-    members
     createdAt
     updatedAt
     __typename
@@ -322,8 +320,6 @@ export const updateChannelDocument = /* GraphQL */ `mutation UpdateChannelDocume
     fileType
     fileName
     fileSize
-    admin
-    members
     createdAt
     updatedAt
     __typename
@@ -344,8 +340,6 @@ export const deleteChannelDocument = /* GraphQL */ `mutation DeleteChannelDocume
     fileType
     fileName
     fileSize
-    admin
-    members
     createdAt
     updatedAt
     __typename
@@ -355,11 +349,11 @@ export const deleteChannelDocument = /* GraphQL */ `mutation DeleteChannelDocume
   APITypes.DeleteChannelDocumentMutationVariables,
   APITypes.DeleteChannelDocumentMutation
 >;
-export const createChannelItem = /* GraphQL */ `mutation CreateChannelItem(
-  $input: CreateChannelItemInput!
-  $condition: ModelChannelItemConditionInput
+export const createChannelHistoryItem = /* GraphQL */ `mutation CreateChannelHistoryItem(
+  $input: CreateChannelHistoryItemInput!
+  $condition: ModelChannelHistoryItemConditionInput
 ) {
-  createChannelItem(input: $input, condition: $condition) {
+  createChannelHistoryItem(input: $input, condition: $condition) {
     ownerId
     channelId
     id
@@ -372,14 +366,14 @@ export const createChannelItem = /* GraphQL */ `mutation CreateChannelItem(
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateChannelItemMutationVariables,
-  APITypes.CreateChannelItemMutation
+  APITypes.CreateChannelHistoryItemMutationVariables,
+  APITypes.CreateChannelHistoryItemMutation
 >;
-export const updateChannelItem = /* GraphQL */ `mutation UpdateChannelItem(
-  $input: UpdateChannelItemInput!
-  $condition: ModelChannelItemConditionInput
+export const updateChannelHistoryItem = /* GraphQL */ `mutation UpdateChannelHistoryItem(
+  $input: UpdateChannelHistoryItemInput!
+  $condition: ModelChannelHistoryItemConditionInput
 ) {
-  updateChannelItem(input: $input, condition: $condition) {
+  updateChannelHistoryItem(input: $input, condition: $condition) {
     ownerId
     channelId
     id
@@ -392,14 +386,14 @@ export const updateChannelItem = /* GraphQL */ `mutation UpdateChannelItem(
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateChannelItemMutationVariables,
-  APITypes.UpdateChannelItemMutation
+  APITypes.UpdateChannelHistoryItemMutationVariables,
+  APITypes.UpdateChannelHistoryItemMutation
 >;
-export const deleteChannelItem = /* GraphQL */ `mutation DeleteChannelItem(
-  $input: DeleteChannelItemInput!
-  $condition: ModelChannelItemConditionInput
+export const deleteChannelHistoryItem = /* GraphQL */ `mutation DeleteChannelHistoryItem(
+  $input: DeleteChannelHistoryItemInput!
+  $condition: ModelChannelHistoryItemConditionInput
 ) {
-  deleteChannelItem(input: $input, condition: $condition) {
+  deleteChannelHistoryItem(input: $input, condition: $condition) {
     ownerId
     channelId
     id
@@ -412,8 +406,8 @@ export const deleteChannelItem = /* GraphQL */ `mutation DeleteChannelItem(
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteChannelItemMutationVariables,
-  APITypes.DeleteChannelItemMutation
+  APITypes.DeleteChannelHistoryItemMutationVariables,
+  APITypes.DeleteChannelHistoryItemMutation
 >;
 export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
   $input: CreateChatSpaceInput!
@@ -670,11 +664,10 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
 ) {
   createUser(input: $input, condition: $condition) {
     id
-    email
-    cognitoId
-    roles
     organizationId
     chatSpaceId
+    email
+    cognitoId
     invitedOn
     joinedOn
     status
@@ -694,11 +687,10 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
 ) {
   updateUser(input: $input, condition: $condition) {
     id
-    email
-    cognitoId
-    roles
     organizationId
     chatSpaceId
+    email
+    cognitoId
     invitedOn
     joinedOn
     status
@@ -718,11 +710,10 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
 ) {
   deleteUser(input: $input, condition: $condition) {
     id
-    email
-    cognitoId
-    roles
     organizationId
     chatSpaceId
+    email
+    cognitoId
     invitedOn
     joinedOn
     status

@@ -11,11 +11,11 @@ type Organization @model @auth(rules: [{ allow: groups, groupsField: "admin" }])
 type User @model @auth(rules: [{ allow: owner }]) {
   id: String! @primaryKey
 
+  organizationId: ID @index(name: "byOrganization", queryField: "userByOrganizationId")
+  chatSpaceId: ID
+
   email: String!
   cognitoId: String!
-  roles: [String!] # Code reference to roles
-  organizationId: ID
-  chatSpaceId: ID @index(name: "byChatSpace", queryField: "chatSpaceByChatSpaceId")
 
   invitedOn: AWSDateTime
   joinedOn: AWSDateTime
