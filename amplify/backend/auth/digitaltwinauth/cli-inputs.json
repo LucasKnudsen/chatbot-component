@@ -42,8 +42,11 @@
     "userPoolGroups": false,
     "adminQueries": false,
     "triggers": {
+      "CustomMessage": [
+        "custom"
+      ],
       "VerifyAuthChallengeResponse": [
-        "boilerplate-verify"
+        "custom"
       ]
     },
     "hostedUI": false,
@@ -70,6 +73,15 @@
     "dependsOn": [
       {
         "category": "function",
+        "resourceName": "digitaltwinauthCustomMessage",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      },
+      {
+        "category": "function",
         "resourceName": "digitaltwinauthVerifyAuthChallengeResponse",
         "triggerProvider": "Cognito",
         "attributes": [
@@ -83,6 +95,6 @@
     },
     "permissions": [],
     "authProviders": [],
-    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"VerifyAuthChallengeResponse\",\n    \"lambdaFunctionName\": \"digitaltwinauthVerifyAuthChallengeResponse\"\n  }\n]"
+    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"CustomMessage\",\n    \"lambdaFunctionName\": \"digitaltwinauthCustomMessage\"\n  },\n  {\n    \"triggerType\": \"VerifyAuthChallengeResponse\",\n    \"lambdaFunctionName\": \"digitaltwinauthVerifyAuthChallengeResponse\"\n  }\n]"
   }
 }

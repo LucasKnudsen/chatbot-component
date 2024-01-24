@@ -2,7 +2,15 @@
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "Lambda resource stack creation using Amplify CLI",
     "Parameters": {
-        "RECAPTCHASECRET": {
+        "REDIRECTURL": {
+          "Type": "String",
+          "Default": ""
+        },
+        "EMAILMESSAGE": {
+          "Type": "String",
+          "Default": ""
+        },
+        "EMAILSUBJECT": {
           "Type": "String",
           "Default": ""
         },
@@ -62,13 +70,13 @@
             "FunctionName": {
                 "Fn::If": [
                     "ShouldNotCreateEnvResources",
-                    "digitaltwinauthVerifyAuthChallengeResponse",
+                    "digitaltwinauthCustomMessage",
                     {
 
                         "Fn::Join": [
                             "",
                             [
-                                "digitaltwinauthVerifyAuthChallengeResponse",
+                                "digitaltwinauthCustomMessage",
                                 "-",
                                 {
                                     "Ref": "env"
@@ -89,10 +97,18 @@
                     "REGION": {
                         "Ref": "AWS::Region"
                     },
-                    "RECAPTCHASECRET": {
-                        "Ref": "RECAPTCHASECRET"
+                    "REDIRECTURL": {
+                        "Ref": "REDIRECTURL"
+                    },
+                    "EMAILSUBJECT": {
+                        "Ref": "EMAILSUBJECT"
+                    },
+                    "EMAILMESSAGE": {
+                        "Ref": "EMAILMESSAGE"
+                    },
+                    "RESOURCENAME": {
+                        "Ref": "resourceName"
                     }
-
                 }
             },
             "Role": { "Fn::GetAtt" : ["LambdaExecutionRole", "Arn"] },
@@ -106,13 +122,13 @@
                 "RoleName": {
                     "Fn::If": [
                         "ShouldNotCreateEnvResources",
-                        "digitaltwinauthVerifyAuthChallengeResponse",
+                        "digitaltwinauthCustomMessage",
                         {
 
                             "Fn::Join": [
                                 "",
                                 [
-                                    "digitaltwinauthVerifyAuthChallengeResponse",
+                                    "digitaltwinauthCustomMessage",
                                     "-",
                                     {
                                         "Ref": "env"

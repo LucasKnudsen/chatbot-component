@@ -102,6 +102,8 @@ exports.handler = async (event) => {
     console.log(error)
   }
 
+  return
+
   // --- USER CONFIG ---
 
   const userRole = 'READ'

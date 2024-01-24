@@ -45,10 +45,8 @@
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
           "s3Key": "amplify-builds/handleUsers-317937432f324232566a-build.zip"
         },
-        "digitaltwinauthVerifyAuthChallengeResponse": {
-          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/digitaltwinauthVerifyAuthChallengeResponse-4f6f4e75414f557a554c-build.zip"
-        }
+        "digitaltwinauthCustomMessage": {},
+        "digitaltwinauthVerifyAuthChallengeResponse": {}
       },
       "hosting": {
         "amplifyhosting": {

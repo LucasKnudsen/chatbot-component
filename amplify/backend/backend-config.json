@@ -93,6 +93,15 @@
             "Name"
           ],
           "category": "function",
+          "resourceName": "digitaltwinauthCustomMessage",
+          "triggerProvider": "Cognito"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
           "resourceName": "digitaltwinauthVerifyAuthChallengeResponse",
           "triggerProvider": "Cognito"
         }
@@ -163,6 +172,11 @@
       "service": "Lambda"
     },
     "detectLanguage": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "digitaltwinauthCustomMessage": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -290,22 +304,6 @@
         {
           "category": "function",
           "resourceName": "detectLanguage"
-        }
-      ]
-    },
-    "AMPLIFY_function_digitaltwinauthVerifyAuthChallengeResponse_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "digitaltwinauthVerifyAuthChallengeResponse"
-        }
-      ]
-    },
-    "AMPLIFY_function_digitaltwinauthVerifyAuthChallengeResponse_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "digitaltwinauthVerifyAuthChallengeResponse"
         }
       ]
     },
