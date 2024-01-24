@@ -45,8 +45,10 @@ export async function fetchChannelAccesses(
   }
 }
 
-export async function fetchChannelDetails(channelId: string): Promise<Channel | undefined> {
+export async function fetchChannelDetails(channelId: string): Promise<Channel> {
   // Query custom Lambda resolver
 
-  return undefined
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  throw new Error('Not implemented')
 }

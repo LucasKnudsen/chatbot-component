@@ -2575,6 +2575,19 @@
     lodash.merge "^4.6.2"
     postcss-selector-parser "6.0.10"
 
+"@tanstack/query-core@5.17.19":
+  version "5.17.19"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.17.19.tgz#212515ccc7a6b913afee6b71ce3e7df2c4d85f7d"
+  integrity sha512-Lzw8FUtnLCc9Jwz0sw9xOjZB+/mCCmJev38v2wHMUl/ioXNIhnNWeMxu0NKUjIhAd62IRB3eAtvxAGDJ55UkyA==
+
+"@tanstack/solid-query@^5.17.19":
+  version "5.17.19"
+  resolved "https://registry.yarnpkg.com/@tanstack/solid-query/-/solid-query-5.17.19.tgz#a9660217c20f2ea0a2c4a3b92ecdea9a9ef5ac1f"
+  integrity sha512-MKvmksjpF91mfjFJ/QnvA3onSObl0mg/Gn8TS5LI+hNJbPy+X1qbDjt1/OrOSwmrnh5nGdEvjJbinoGpLPFLSg==
+  dependencies:
+    "@tanstack/query-core" "5.17.19"
+    solid-js "^1.8.7"
+
 "@tootallnate/quickjs-emscripten@^0.23.0":
   version "0.23.0"
   resolved "https://registry.yarnpkg.com/@tootallnate/quickjs-emscripten/-/quickjs-emscripten-0.23.0.tgz#db4ecfd499a9765ab24002c3b696d02e6d32a12c"
@@ -6411,10 +6424,20 @@ semver@^7.3.7, semver@^7.5.1, semver@^7.5.3, semver@^7.5.4:
   dependencies:
     lru-cache "^6.0.0"
 
+seroval-plugins@^1.0.3:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/seroval-plugins/-/seroval-plugins-1.0.4.tgz#917d2cd103525f0238433a49479def0ce65a56e4"
+  integrity sha512-DQ2IK6oQVvy8k+c2V5x5YCtUa/GGGsUwUBNN9UqohrZ0rWdUapBFpNMYP1bCyRHoxOJjdKGl+dieacFIpU/i1A==
+
 seroval@^0.12.0:
   version "0.12.4"
   resolved "https://registry.yarnpkg.com/seroval/-/seroval-0.12.4.tgz#f680d82f1ab7129e4374f28a122ec01925571e86"
   integrity sha512-JIsZHp98o+okpYN8HEPyI9Blr0gxAUPIGvg3waXrEMFjPz9obiLYMz0uFiUGezKiCK8loosYbn8WsqO8WtAJUA==
+
+seroval@^1.0.3:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/seroval/-/seroval-1.0.4.tgz#0400d24a48b1f6f44b8a3d55af0476a1c5e8643f"
+  integrity sha512-qQs/N+KfJu83rmszFQaTxcoJoPn6KNUruX4KmnmyD0oZkUoiNvJ1rpdYKDf4YHM05k+HOgCxa3yvf15QbVijGg==
 
 set-function-length@^1.1.1:
   version "1.1.1"
@@ -6545,6 +6568,15 @@ solid-js@^1.7.8:
   dependencies:
     csstype "^3.1.0"
     seroval "^0.12.0"
+
+solid-js@^1.8.7:
+  version "1.8.12"
+  resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.8.12.tgz#12903f076cdbd74e13dd6ab47b1006c3a07f5591"
+  integrity sha512-sLE/i6M9FSWlov3a2pTC5ISzanH2aKwqXTZj+bbFt4SUrVb4iGEa7fpILBMOxsQjkv3eXqEk6JVLlogOdTe0UQ==
+  dependencies:
+    csstype "^3.1.0"
+    seroval "^1.0.3"
+    seroval-plugins "^1.0.3"
 
 solid-refresh@^0.5.3:
   version "0.5.3"

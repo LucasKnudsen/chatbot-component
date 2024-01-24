@@ -1,6 +1,7 @@
 import { setIsLoadingSocket } from '@/features/messages'
 import { useTheme } from '@/features/theme'
 import { Channel, ChannelUserAccess, ChatSpace } from '@/graphql'
+import { createMutation } from '@tanstack/solid-query'
 import { botStoreActions, fetchChannelDetails } from '..'
 
 type ChannelOverviewProps = {
@@ -23,27 +24,24 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
 }
 
 const ChannelItem = (props: { channel: Channel | ChannelUserAccess; isPublic: boolean }) => {
+  const channelDetailsMutation = createMutation(() => ({
+    mutationKey: ['channels', (props.channel as ChannelUserAccess).channelId],
+    mutationFn: fetchChannelDetails,
+    onSuccess(data) {
+      console.log('Channel details fetched', data)
+      botStoreActions.initBotStore(data)
+    },
+  }))
+
   const { theme } = useTheme()
 
   const handleClick = async () => {
+    setIsLoadingSocket(true)
+
     if (props.isPublic) {
-      setIsLoadingSocket(true)
       botStoreActions.initBotStore(props.channel as Channel)
     } else {
-      // Get Channel data through Lambda
-      const channelDetails = await fetchChannelDetails(
-        (props.channel as ChannelUserAccess).channelId
-      )
-
-      debugger
-
-      if (!channelDetails) {
-        // Handle error
-        return
-      }
-
-      setIsLoadingSocket(true)
-      botStoreActions.initBotStore(channelDetails)
+      await channelDetailsMutation.mutateAsync((props.channel as ChannelUserAccess).channelId)
     }
   }
 
@@ -56,7 +54,14 @@ const ChannelItem = (props: { channel: Channel | ChannelUserAccess; isPublic: bo
       }}
       onClick={handleClick}
     >
+      {channelDetailsMutation.isPending && (
+        <div class='animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900'></div>
+      )}
       {(props.channel as Channel).name || (props.channel as ChannelUserAccess).channelName}
+
+      {channelDetailsMutation.isError && (
+        <div class='text-red-500'>{channelDetailsMutation.error.message}</div>
+      )}
     </button>
   )
 }

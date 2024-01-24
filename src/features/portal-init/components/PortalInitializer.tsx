@@ -1,5 +1,6 @@
 import awsconfig from '@/aws-exports'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
+import { QueryClient, QueryClientProvider } from '@tanstack/solid-query'
 import { Show, Suspense, createResource, createSignal } from 'solid-js'
 import { BotManager } from '../../bot'
 
@@ -15,6 +16,7 @@ import { ChatConfig, configStore, configStoreActions, initializeConfig } from '.
 import { BubbleButton } from './BubbleButton'
 
 Amplify.configure(awsconfig)
+const queryClient = new QueryClient()
 
 try {
   Predictions.addPluggable(new AmazonAIConvertPredictionsProvider())
@@ -50,7 +52,7 @@ export const PortalInitializer = (props: ChatConfig) => {
   })
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <StyleSheet />
 
       <TrackingProvider />
@@ -117,6 +119,6 @@ export const PortalInitializer = (props: ChatConfig) => {
           </div>
         </Show>
       </Suspense>
-    </>
+    </QueryClientProvider>
   )
 }
