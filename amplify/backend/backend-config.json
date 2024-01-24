@@ -151,6 +151,27 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "fetchChannels": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "flowiseBroadcast": {
       "build": true,
       "dependsOn": [],
@@ -259,6 +280,22 @@
         {
           "category": "function",
           "resourceName": "detectLanguage"
+        }
+      ]
+    },
+    "AMPLIFY_function_fetchChannels_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "fetchChannels"
+        }
+      ]
+    },
+    "AMPLIFY_function_fetchChannels_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "fetchChannels"
         }
       ]
     },

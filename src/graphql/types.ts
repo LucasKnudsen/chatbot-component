@@ -900,6 +900,18 @@ export type ModelUserConnection = {
   nextToken?: string | null,
 };
 
+export type FetchChannelsInput = {
+  flow: FetchFlowType,
+  channelId?: string | null,
+  chatSpaceId?: string | null,
+};
+
+export enum FetchFlowType {
+  BY_CHAT_SPACE = "BY_CHAT_SPACE",
+  BY_ID = "BY_ID",
+}
+
+
 export type ModelSubscriptionCodeItemFilterInput = {
   tenantCode?: ModelSubscriptionStringInput | null,
   tableCode?: ModelSubscriptionStringInput | null,
@@ -2448,6 +2460,30 @@ export type UserByOrganizationIdQuery = {
     } | null >,
     nextToken?: string | null,
   } | null,
+};
+
+export type FetchChannelsQueryVariables = {
+  input: FetchChannelsInput,
+};
+
+export type FetchChannelsQuery = {
+  fetchChannels?:  Array< {
+    __typename: "Channel",
+    id: string,
+    chatSpaceId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
+    isPublic: boolean,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null > | null,
 };
 
 export type Subscribe2channelSubscriptionVariables = {

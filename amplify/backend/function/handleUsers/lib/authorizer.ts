@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken')
 const jwksClient = require('jwks-rsa')
 
 const client = jwksClient({
-  jwksUri: `https://cognito-idp.${process.env.REGION}.amazonaws.com/${process.env.AUTH_DIGITALTWINAUTH_USERPOOLID}/.well-known/jwks.json`,
+  jwksUri: `https://cognito-idp.${process.env.REGION}.amazonaws.com/${process.env.AUTH_FRAIAAUTH_USERPOOLID}/.well-known/jwks.json`,
 })
 
 const getSigningKey = (header, callback) => {

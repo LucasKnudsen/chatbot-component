@@ -1,0 +1,74 @@
+{
+  "arguments": {
+    "isMock": true,
+    "input": {
+      "flow": "BY_ID",
+      "channelId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
+      "chatSpaceId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f"
+    }
+  },
+  "identity": {
+    "claims": {
+      "origin_jti": "9a774ef5-f715-4d6c-98cc-a9c67857c7df",
+      "sub": "021c11bd-067f-4f7f-88df-80f1301d343b",
+      "event_id": "15c74c00-5f2f-4502-9c5a-96101d50d28d",
+      "token_use": "access",
+      "scope": "aws.cognito.signin.user.admin",
+      "auth_time": 1706082048,
+      "iss": "https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_0oFWWpEoM",
+      "exp": 1706090141,
+      "iat": 1706086541,
+      "client_id": "4lig7nh4qo8314b84sn648ri80",
+      "jti": "0a0de276-6b4b-40ca-a6f7-47c1973d449b",
+      "username": "b05d64f3-6d58-49d1-8143-d59caa88fd1f"
+    },
+    "defaultAuthStrategy": "ALLOW",
+    "groups": null,
+    "issuer": "https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_0oFWWpEoM",
+    "sourceIp": ["49.0.80.171"],
+    "sub": "021c11bd-067f-4f7f-88df-80f1301d343b",
+    "username": "b05d64f3-6d58-49d1-8143-d59caa88fd1f"
+  },
+  "source": null,
+  "request": {
+    "headers": {
+      "x-forwarded-for": "49.0.80.171, 18.68.54.16",
+      "sec-ch-ua-mobile": "?0",
+      "cloudfront-viewer-country": "TH",
+      "cloudfront-is-tablet-viewer": "false",
+      "x-amzn-requestid": "68721cae-cfc8-4405-8fae-342e1d2cdebd",
+      "via": "2.0 0ef5179e54d8f76ca2346f0a7056520a.cloudfront.net (CloudFront)",
+      "cloudfront-forwarded-proto": "https",
+      "origin": "http://localhost:5173",
+      "content-length": "407",
+      "x-forwarded-proto": "https",
+      "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+      "host": "4tzp46zswfg2xbxndyzwrizfge.appsync-api.ap-southeast-1.amazonaws.com",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "cloudfront-is-mobile-viewer": "false",
+      "accept": "application/json, text/plain, */*",
+      "cloudfront-viewer-asn": "133481",
+      "cloudfront-is-smarttv-viewer": "false",
+      "x-amzn-appsync-is-vpce-request": "false",
+      "accept-encoding": "gzip, deflate, br",
+      "referer": "http://localhost:5173/",
+      "x-amzn-remote-ip": "49.0.80.171",
+      "content-type": "application/json; charset=UTF-8",
+      "sec-fetch-mode": "cors",
+      "x-amzn-trace-id": "Root=1-65b0d818-4e9adf4306c713c10bc5ddd8",
+      "x-amz-cf-id": "4YjXLUXfOSL4SXMW_sl1rBuJ6cSrnp_S7SXSaLWtXvx7oOBm6AUupw==",
+      "authorization": "eyJraWQiOiJvVUJnUnNlQ2lMOHl3ZTJqeTFNKzdzVGVrRVV3ME9cL3VLWDRCRU1ibThTUT0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIwMjFjMTFiZC0wNjdmLTRmN2YtODhkZi04MGYxMzAxZDM0M2IiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGhlYXN0LTEuYW1hem9uYXdzLmNvbVwvYXAtc291dGhlYXN0LTFfMG9GV1dwRW9NIiwiY2xpZW50X2lkIjoiNGxpZzduaDRxbzgzMTRiODRzbjY0OHJpODAiLCJvcmlnaW5fanRpIjoiOWE3NzRlZjUtZjcxNS00ZDZjLTk4Y2MtYTljNjc4NTdjN2RmIiwiZXZlbnRfaWQiOiIxNWM3NGMwMC01ZjJmLTQ1MDItOWM1YS05NjEwMWQ1MGQyOGQiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6ImF3cy5jb2duaXRvLnNpZ25pbi51c2VyLmFkbWluIiwiYXV0aF90aW1lIjoxNzA2MDgyMDQ4LCJleHAiOjE3MDYwOTAxNDEsImlhdCI6MTcwNjA4NjU0MSwianRpIjoiMGEwZGUyNzYtNmI0Yi00MGNhLWE2ZjctNDdjMTk3M2Q0NDliIiwidXNlcm5hbWUiOiJiMDVkNjRmMy02ZDU4LTQ5ZDEtODE0My1kNTljYWE4OGZkMWYifQ.P4Agwu7BiHPutYax9z5FdopaaLYnhIOdWi9AUZLjB1zMnJCkNk23cIqIu0p4CX2057KLgky7lCPN9l-FET21cM8ezYbw7PMdSHoH-N3bjTG_RK7UXpFfdXe2wgrNy2pxWyoSWv_pOMZW5A7wbfgVF7zpZCvXNM0kuTTeW6xAjZenb1amKc7qFOqAmy8c6Rixi3fYfudW8AIXphKYvx4kwH5sZcIB6YLVBqTOcIvP51OW-oxHOt5Q_5a8w40iX4BQ37y1CszvYLvXn1Z7DU8vv_tyVIhRt0qY_TQ16hg_8_L1Vb2jcMCnZF_yLUnPWatFeIXBAFc6SUWI54XmRnTlKg",
+      "sec-fetch-dest": "empty",
+      "x-amz-user-agent": "aws-amplify/5.3.12 api/1 framework/0",
+      "sec-ch-ua-platform": "\"macOS\"",
+      "cloudfront-is-desktop-viewer": "true",
+      "sec-fetch-site": "cross-site",
+      "sec-ch-ua": "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"",
+      "x-forwarded-port": "443"
+    },
+    "domainName": null
+  },
+  "prev": {
+    "result": {}
+  }
+}

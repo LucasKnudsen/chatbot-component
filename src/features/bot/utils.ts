@@ -2,6 +2,7 @@ import {
   Channel,
   ChannelUserAccess,
   ChatSpace,
+  FetchChannelsQuery,
   ListChannelUserAccessesQuery,
   ListChannelUserAccessesQueryVariables,
   queries,
@@ -11,8 +12,18 @@ import { logDev } from '@/utils'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { API } from 'aws-amplify'
 
-export async function fetchChannels(props: ChatSpace): Promise<Channel[] | undefined> {
-  // Query custom Lambda resolver
+export async function fetchChannels(chatSpaceId: string): Promise<Channel[]> {
+  const { data } = await API.graphql<GraphQLQuery<FetchChannelsQuery>>({
+    query: queries.fetchChannels,
+    variables: {
+      input: {
+        flow: 'BY_CHAT_SPACE',
+        chatSpaceId,
+      },
+    },
+  })
+
+  console.log(data)
 
   return []
 }
@@ -46,9 +57,19 @@ export async function fetchChannelAccesses(
 }
 
 export async function fetchChannelDetails(channelId: string): Promise<Channel> {
-  // Query custom Lambda resolver
+  const { data } = await API.graphql<GraphQLQuery<FetchChannelsQuery>>({
+    query: queries.fetchChannels,
+    variables: {
+      input: {
+        flow: 'BY_ID',
+        channelId,
+      },
+    },
+  })
 
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  if (!data?.fetchChannels?.[0]) {
+    throw new Error('No Channel returned')
+  }
 
-  throw new Error('Not implemented')
+  return data?.fetchChannels?.[0]
 }

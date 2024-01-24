@@ -792,3 +792,26 @@ export const userByOrganizationId = /* GraphQL */ `query UserByOrganizationId(
   APITypes.UserByOrganizationIdQueryVariables,
   APITypes.UserByOrganizationIdQuery
 >;
+export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchChannelsInput!) {
+  fetchChannels(input: $input) {
+    id
+    chatSpaceId
+    apiHost
+    chatflowId
+    name
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    isPublic
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.FetchChannelsQueryVariables,
+  APITypes.FetchChannelsQuery
+>;

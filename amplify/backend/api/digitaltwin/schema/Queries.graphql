@@ -1,0 +1,17 @@
+input FetchChannelsInput {
+  flow: FetchFlowType!
+
+  channelId: ID
+  chatSpaceId: ID
+}
+
+enum FetchFlowType {
+  BY_CHAT_SPACE
+  BY_ID
+}
+
+type Query {
+  fetchChannels(input: FetchChannelsInput!): [Channel]
+    @function(name: "fetchChannels-${env}")
+    @auth(rules: [{ allow: public, provider: iam }, { allow: private }])
+}
