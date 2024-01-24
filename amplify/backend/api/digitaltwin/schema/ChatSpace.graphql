@@ -13,12 +13,11 @@ type ChatSpace @model {
   hostType: HostType!
 
   name: String!
-  isPublic: Boolean!
-  isMultiChannel: Boolean!
-  defaultChannelId: String
-
+  isPublic: Boolean! # For conditional fetching of Channels within a ChatSpace
+  isMultiChannel: Boolean! # For conditional skipping of Channel selection
+  defaultChannelId: String # To retrieve the default Channel for a ChatSpace
   themeId: String
-  language: String # Code Ref
+  defaultLanguage: String # Code Ref
   theme: ChatSpaceTheme
   text: ChatSpaceText
   # settings: ChatSpaceSettings!

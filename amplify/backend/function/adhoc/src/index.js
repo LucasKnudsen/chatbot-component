@@ -175,14 +175,14 @@ exports.handler = async (event) => {
             id: chatSpaceId,
             hostId: organizationId,
 
-            name: chatSpaceName,
             hostType: hostType,
+            name: chatSpaceName,
 
             isPublic: false,
             isMultiChannel: true,
             themeId: 'fraia',
 
-            language: 'en',
+            defaultLanguage: 'en',
             initialPrompts: [],
             settings: {
               autoOpen: false,

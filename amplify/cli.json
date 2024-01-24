@@ -26,7 +26,7 @@
       "enablecaseinsensitivity": true,
       "useinclusiveterminology": true,
       "breakcirculardependency": true,
-      "forcealiasattributes": false,
+      "forcealiasattributes": true,
       "useenabledmfas": true
     },
     "codegen": {

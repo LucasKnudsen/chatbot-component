@@ -10,6 +10,22 @@ export type AmplifyDependentResourcesAttributes = {
       "RootUrl": "string"
     }
   },
+  "auth": {
+    "fraiaauth": {
+      "AppClientID": "string",
+      "AppClientIDWeb": "string",
+      "CreatedSNSRole": "string",
+      "IdentityPoolId": "string",
+      "IdentityPoolName": "string",
+      "UserPoolArn": "string",
+      "UserPoolId": "string",
+      "UserPoolName": "string"
+    },
+    "userPoolGroups": {
+      "AdminGroupRole": "string",
+      "SuperAdminGroupRole": "string"
+    }
+  },
   "function": {
     "adhoc": {
       "Arn": "string",

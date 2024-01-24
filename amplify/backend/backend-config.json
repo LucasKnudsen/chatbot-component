@@ -60,7 +60,50 @@
       "service": "API Gateway"
     }
   },
-  "auth": {},
+  "auth": {
+    "fraiaauth": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OPTIONAL",
+        "mfaTypes": [
+          "SMS",
+          "TOTP"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL",
+          "PHONE_NUMBER"
+        ],
+        "verificationMechanisms": [
+          "PHONE_NUMBER"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    },
+    "userPoolGroups": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito-UserPool-Groups"
+    }
+  },
   "function": {
     "adhoc": {
       "build": true,
@@ -82,16 +125,6 @@
       "service": "Lambda"
     },
     "detectLanguage": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "digitaltwinauthCustomMessage": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "digitaltwinauthVerifyAuthChallengeResponse": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -197,38 +230,6 @@
         {
           "category": "function",
           "resourceName": "detectLanguage"
-        }
-      ]
-    },
-    "AMPLIFY_function_digitaltwinauthCustomMessage_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "digitaltwinauthCustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_digitaltwinauthCustomMessage_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "digitaltwinauthCustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_digitaltwinauthVerifyAuthChallengeResponse_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "digitaltwinauthVerifyAuthChallengeResponse"
-        }
-      ]
-    },
-    "AMPLIFY_function_digitaltwinauthVerifyAuthChallengeResponse_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "digitaltwinauthVerifyAuthChallengeResponse"
         }
       ]
     },

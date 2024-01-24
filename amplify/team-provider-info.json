@@ -44,14 +44,6 @@
         "handleUsers": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
           "s3Key": "amplify-builds/handleUsers-5a49534f46565a7a3644-build.zip"
-        },
-        "digitaltwinauthCustomMessage": {
-          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/digitaltwinauthCustomMessage-707a5a5a733731307230-build.zip"
-        },
-        "digitaltwinauthVerifyAuthChallengeResponse": {
-          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/digitaltwinauthVerifyAuthChallengeResponse-55507556517734364b65-build.zip"
         }
       },
       "hosting": {
@@ -69,6 +61,10 @@
       },
       "predictions": {
         "dynamicTranslator": {}
+      },
+      "auth": {
+        "fraiaauth": {},
+        "userPoolGroups": {}
       }
     }
   }
