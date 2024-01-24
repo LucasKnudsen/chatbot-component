@@ -39,11 +39,11 @@
         },
         "adhoc": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/adhoc-71353132692b45624678-build.zip"
+          "s3Key": "amplify-builds/adhoc-62527a63574a52394565-build.zip"
         },
         "handleUsers": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/handleUsers-5a49534f46565a7a3644-build.zip"
+          "s3Key": "amplify-builds/handleUsers-77617069523378315442-build.zip"
         }
       },
       "hosting": {

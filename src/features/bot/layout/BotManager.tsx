@@ -11,32 +11,6 @@ export const BotManager = (props: ChatSpace) => {
   const openForPublic = props.isPublic
   const [channelError, setChannelError] = createSignal('')
 
-  const [channels] = createResource(async () => {
-    setChannelError('')
-
-    // TODO: Proper caching
-    //   const localChannels = localStorage.getItem(storageKey)
-
-    //   if (localChannels) {
-    //     channels = JSON.parse(localChannels)
-    //   }
-
-    try {
-      if (openForPublic) {
-        // In this case, we don't need to check for access rights, and can fetch all public channels through a Lambda
-        return await handlePublicChannels()
-      } else {
-        // In this case, we need to check the access rights of the user
-        return await handleChannelAccesses()
-      }
-
-      //   localStorage.setItem(storageKey, JSON.stringify(channels))
-    } catch (error) {
-      console.error(error)
-      setChannelError('Something went wrong')
-    }
-  })
-
   const handlePublicChannels = async () => {
     let _channels: Channel[] | undefined = []
 
@@ -63,7 +37,7 @@ export const BotManager = (props: ChatSpace) => {
     }
 
     // Get ChannelUserAccess records
-    const channelAccess = await fetchChannelAccesses(authStore.userDetails.email, props)
+    const channelAccess = await fetchChannelAccesses(authStore.userDetails.id, props)
     console.log('Channel Access', channelAccess)
 
     if (channelAccess?.length === 0) {
@@ -74,6 +48,32 @@ export const BotManager = (props: ChatSpace) => {
 
     return channelAccess
   }
+
+  const [channels] = createResource(async () => {
+    setChannelError('')
+
+    // TODO: Proper caching
+    //   const localChannels = localStorage.getItem(storageKey)
+
+    //   if (localChannels) {
+    //     channels = JSON.parse(localChannels)
+    //   }
+
+    try {
+      if (openForPublic) {
+        // In this case, we don't need to check for access rights, and can fetch all public channels through a Lambda
+        return await handlePublicChannels()
+      } else {
+        // In this case, we need to check the access rights of the user
+        return await handleChannelAccesses()
+      }
+
+      //   localStorage.setItem(storageKey, JSON.stringify(channels))
+    } catch (error) {
+      console.error(error)
+      setChannelError('Something went wrong')
+    }
+  })
 
   return (
     <Suspense fallback={<FraiaLoading />}>

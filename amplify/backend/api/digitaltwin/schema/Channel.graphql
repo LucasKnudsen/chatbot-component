@@ -1,5 +1,4 @@
-type Channel @model {
-  # @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }, { allow: owner }])
+type Channel @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }, { allow: owner }]) {
   id: ID!
   chatSpaceId: ID! @index(name: "byChatSpace", queryField: "channelsByChatSpaceId") # For Public purposes
   apiHost: String
@@ -15,8 +14,7 @@ type InitialPrompt {
   prompt: String!
 }
 
-type ChannelUserAccess @model {
-  # @auth(rules: [{ allow: owner }])
+type ChannelUserAccess @model @auth(rules: [{ allow: owner }]) {
   # Access ID is the userId. This way a user can effectively retrieve all their accesses.
   # These can then be filtered by chatSpaceId, hostType, role, etc.
   accessId: String! @primaryKey(sortKeyFields: ["channelId"])
@@ -27,20 +25,19 @@ type ChannelUserAccess @model {
     @index(name: "byChannelHost", queryField: "channelUserAccessByChannelHostId")
   channelHostType: HostType!
 
-  role: ChannelUserRole!
+  accessType: ChannelAccessType!
   channelName: String!
   channelDescription: String
 }
 
-enum ChannelUserRole {
+enum ChannelAccessType {
   OWNER ## Can DELETE
   ADMIN ## Can DELETE
   WRITE
   READ
 }
 
-type ChannelDocument @model {
-  # @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }])
+type ChannelDocument @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }]) {
   channelId: ID! @primaryKey(sortKeyFields: ["id"])
   id: ID!
 
@@ -50,8 +47,7 @@ type ChannelDocument @model {
   fileSize: Int
 }
 
-type ChannelHistoryItem @model {
-  # @auth(rules: [{ allow: owner }])
+type ChannelHistoryItem @model @auth(rules: [{ allow: owner }]) {
   ownerId: ID! @primaryKey(sortKeyFields: ["channelId", "id"])
   channelId: ID!
   id: ID!

@@ -1,12 +1,27 @@
 {
   "api": {
     "digitaltwin": {
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        }
+      ],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [],
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
           "defaultAuthentication": {
-            "authenticationType": "AWS_IAM"
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authfraiaauth"
+            }
           }
         }
       },
@@ -110,6 +125,13 @@
       "dependsOn": [
         {
           "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
             "GraphQLAPIIdOutput"
           ],
           "category": "api",
@@ -152,6 +174,13 @@
     "handleUsers": {
       "build": true,
       "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        },
         {
           "attributes": [
             "GraphQLAPIIdOutput"

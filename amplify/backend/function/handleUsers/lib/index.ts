@@ -6,7 +6,7 @@
 	API_DIGITALTWIN_ORGANIZATIONTABLE_NAME
 	API_DIGITALTWIN_USERTABLE_ARN
 	API_DIGITALTWIN_USERTABLE_NAME
-	AUTH_DIGITALTWINAUTH_USERPOOLID
+	AUTH_FRAIAAUTH_USERPOOLID
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT */
@@ -119,7 +119,7 @@ const inviteUser = async (body: EventBody) => {
     // 2. If not, create user in Cognito
     const { User } = await cognitoClient.send(
       new AdminCreateUserCommand({
-        UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+        UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
         TemporaryPassword: 'Abcd1234',
         Username: newUser.email,
         UserAttributes: [
@@ -155,7 +155,7 @@ const inviteUser = async (body: EventBody) => {
       cognitoClient.send(
         new AdminAddUserToGroupCommand({
           GroupName: newUser.role,
-          UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+          UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
           Username: newUser.email,
         })
       ),
@@ -168,7 +168,7 @@ const inviteUser = async (body: EventBody) => {
         // Delete user from Cognito
         await cognitoClient.send(
           new AdminDeleteUserCommand({
-            UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+            UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
             Username: newUser.email,
           })
         )

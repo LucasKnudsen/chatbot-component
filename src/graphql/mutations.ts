@@ -19,456 +19,6 @@ export const publish2channel = /* GraphQL */ `mutation Publish2channel($sessionI
   APITypes.Publish2channelMutationVariables,
   APITypes.Publish2channelMutation
 >;
-export const createChannel = /* GraphQL */ `mutation CreateChannel(
-  $input: CreateChannelInput!
-  $condition: ModelChannelConditionInput
-) {
-  createChannel(input: $input, condition: $condition) {
-    id
-    chatSpaceId
-    apiHost
-    chatflowId
-    name
-    initialPrompts {
-      display
-      prompt
-      __typename
-    }
-    isPublic
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateChannelMutationVariables,
-  APITypes.CreateChannelMutation
->;
-export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
-  $input: UpdateChannelInput!
-  $condition: ModelChannelConditionInput
-) {
-  updateChannel(input: $input, condition: $condition) {
-    id
-    chatSpaceId
-    apiHost
-    chatflowId
-    name
-    initialPrompts {
-      display
-      prompt
-      __typename
-    }
-    isPublic
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateChannelMutationVariables,
-  APITypes.UpdateChannelMutation
->;
-export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
-  $input: DeleteChannelInput!
-  $condition: ModelChannelConditionInput
-) {
-  deleteChannel(input: $input, condition: $condition) {
-    id
-    chatSpaceId
-    apiHost
-    chatflowId
-    name
-    initialPrompts {
-      display
-      prompt
-      __typename
-    }
-    isPublic
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteChannelMutationVariables,
-  APITypes.DeleteChannelMutation
->;
-export const createChannelUserAccess = /* GraphQL */ `mutation CreateChannelUserAccess(
-  $input: CreateChannelUserAccessInput!
-  $condition: ModelChannelUserAccessConditionInput
-) {
-  createChannelUserAccess(input: $input, condition: $condition) {
-    accessId
-    channelId
-    chatSpaceId
-    channelHostId
-    channelHostType
-    role
-    channelName
-    channelDescription
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateChannelUserAccessMutationVariables,
-  APITypes.CreateChannelUserAccessMutation
->;
-export const updateChannelUserAccess = /* GraphQL */ `mutation UpdateChannelUserAccess(
-  $input: UpdateChannelUserAccessInput!
-  $condition: ModelChannelUserAccessConditionInput
-) {
-  updateChannelUserAccess(input: $input, condition: $condition) {
-    accessId
-    channelId
-    chatSpaceId
-    channelHostId
-    channelHostType
-    role
-    channelName
-    channelDescription
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateChannelUserAccessMutationVariables,
-  APITypes.UpdateChannelUserAccessMutation
->;
-export const deleteChannelUserAccess = /* GraphQL */ `mutation DeleteChannelUserAccess(
-  $input: DeleteChannelUserAccessInput!
-  $condition: ModelChannelUserAccessConditionInput
-) {
-  deleteChannelUserAccess(input: $input, condition: $condition) {
-    accessId
-    channelId
-    chatSpaceId
-    channelHostId
-    channelHostType
-    role
-    channelName
-    channelDescription
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteChannelUserAccessMutationVariables,
-  APITypes.DeleteChannelUserAccessMutation
->;
-export const createChannelDocument = /* GraphQL */ `mutation CreateChannelDocument(
-  $input: CreateChannelDocumentInput!
-  $condition: ModelChannelDocumentConditionInput
-) {
-  createChannelDocument(input: $input, condition: $condition) {
-    channelId
-    id
-    s3Key
-    fileType
-    fileName
-    fileSize
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateChannelDocumentMutationVariables,
-  APITypes.CreateChannelDocumentMutation
->;
-export const updateChannelDocument = /* GraphQL */ `mutation UpdateChannelDocument(
-  $input: UpdateChannelDocumentInput!
-  $condition: ModelChannelDocumentConditionInput
-) {
-  updateChannelDocument(input: $input, condition: $condition) {
-    channelId
-    id
-    s3Key
-    fileType
-    fileName
-    fileSize
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateChannelDocumentMutationVariables,
-  APITypes.UpdateChannelDocumentMutation
->;
-export const deleteChannelDocument = /* GraphQL */ `mutation DeleteChannelDocument(
-  $input: DeleteChannelDocumentInput!
-  $condition: ModelChannelDocumentConditionInput
-) {
-  deleteChannelDocument(input: $input, condition: $condition) {
-    channelId
-    id
-    s3Key
-    fileType
-    fileName
-    fileSize
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteChannelDocumentMutationVariables,
-  APITypes.DeleteChannelDocumentMutation
->;
-export const createChannelHistoryItem = /* GraphQL */ `mutation CreateChannelHistoryItem(
-  $input: CreateChannelHistoryItemInput!
-  $condition: ModelChannelHistoryItemConditionInput
-) {
-  createChannelHistoryItem(input: $input, condition: $condition) {
-    ownerId
-    channelId
-    id
-    type
-    content
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateChannelHistoryItemMutationVariables,
-  APITypes.CreateChannelHistoryItemMutation
->;
-export const updateChannelHistoryItem = /* GraphQL */ `mutation UpdateChannelHistoryItem(
-  $input: UpdateChannelHistoryItemInput!
-  $condition: ModelChannelHistoryItemConditionInput
-) {
-  updateChannelHistoryItem(input: $input, condition: $condition) {
-    ownerId
-    channelId
-    id
-    type
-    content
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateChannelHistoryItemMutationVariables,
-  APITypes.UpdateChannelHistoryItemMutation
->;
-export const deleteChannelHistoryItem = /* GraphQL */ `mutation DeleteChannelHistoryItem(
-  $input: DeleteChannelHistoryItemInput!
-  $condition: ModelChannelHistoryItemConditionInput
-) {
-  deleteChannelHistoryItem(input: $input, condition: $condition) {
-    ownerId
-    channelId
-    id
-    type
-    content
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteChannelHistoryItemMutationVariables,
-  APITypes.DeleteChannelHistoryItemMutation
->;
-export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
-  $input: CreateChatSpaceInput!
-  $condition: ModelChatSpaceConditionInput
-) {
-  createChatSpace(input: $input, condition: $condition) {
-    id
-    hostId
-    hostType
-    name
-    isPublic
-    isMultiChannel
-    defaultChannelId
-    themeId
-    language
-    theme {
-      isDark
-      navbarLogoUrl
-      primaryColor
-      primaryAccent
-      textColor
-      textSecondary
-      onPrimary
-      backgroundColor
-      backgroundAccent
-      backgroundImageUrl
-      bubbleButtonColor
-      bubbleButtonLogoUrl
-      drawerBackground
-      borderColor
-      textInputTextColor
-      textInputBackgroundColor
-      surfaceBackground
-      surfaceHoveredBackground
-      __typename
-    }
-    text {
-      welcomeMessage
-      returnWelcomeMessage
-      brandName
-      inputPlaceholder
-      suggestedPromptsTitle
-      viewMedia
-      close
-      copyText
-      copyTextSuccess
-      share
-      historyTabTitle
-      navigationTabTitle
-      today
-      yesterday
-      previous
-      noHistory
-      __typename
-    }
-    admin
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateChatSpaceMutationVariables,
-  APITypes.CreateChatSpaceMutation
->;
-export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
-  $input: UpdateChatSpaceInput!
-  $condition: ModelChatSpaceConditionInput
-) {
-  updateChatSpace(input: $input, condition: $condition) {
-    id
-    hostId
-    hostType
-    name
-    isPublic
-    isMultiChannel
-    defaultChannelId
-    themeId
-    language
-    theme {
-      isDark
-      navbarLogoUrl
-      primaryColor
-      primaryAccent
-      textColor
-      textSecondary
-      onPrimary
-      backgroundColor
-      backgroundAccent
-      backgroundImageUrl
-      bubbleButtonColor
-      bubbleButtonLogoUrl
-      drawerBackground
-      borderColor
-      textInputTextColor
-      textInputBackgroundColor
-      surfaceBackground
-      surfaceHoveredBackground
-      __typename
-    }
-    text {
-      welcomeMessage
-      returnWelcomeMessage
-      brandName
-      inputPlaceholder
-      suggestedPromptsTitle
-      viewMedia
-      close
-      copyText
-      copyTextSuccess
-      share
-      historyTabTitle
-      navigationTabTitle
-      today
-      yesterday
-      previous
-      noHistory
-      __typename
-    }
-    admin
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateChatSpaceMutationVariables,
-  APITypes.UpdateChatSpaceMutation
->;
-export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
-  $input: DeleteChatSpaceInput!
-  $condition: ModelChatSpaceConditionInput
-) {
-  deleteChatSpace(input: $input, condition: $condition) {
-    id
-    hostId
-    hostType
-    name
-    isPublic
-    isMultiChannel
-    defaultChannelId
-    themeId
-    language
-    theme {
-      isDark
-      navbarLogoUrl
-      primaryColor
-      primaryAccent
-      textColor
-      textSecondary
-      onPrimary
-      backgroundColor
-      backgroundAccent
-      backgroundImageUrl
-      bubbleButtonColor
-      bubbleButtonLogoUrl
-      drawerBackground
-      borderColor
-      textInputTextColor
-      textInputBackgroundColor
-      surfaceBackground
-      surfaceHoveredBackground
-      __typename
-    }
-    text {
-      welcomeMessage
-      returnWelcomeMessage
-      brandName
-      inputPlaceholder
-      suggestedPromptsTitle
-      viewMedia
-      close
-      copyText
-      copyTextSuccess
-      share
-      historyTabTitle
-      navigationTabTitle
-      today
-      yesterday
-      previous
-      noHistory
-      __typename
-    }
-    admin
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteChatSpaceMutationVariables,
-  APITypes.DeleteChatSpaceMutation
->;
 export const createCodeItem = /* GraphQL */ `mutation CreateCodeItem(
   $input: CreateCodeItemInput!
   $condition: ModelCodeItemConditionInput
@@ -592,6 +142,465 @@ export const deleteLanguageItem = /* GraphQL */ `mutation DeleteLanguageItem(
   APITypes.DeleteLanguageItemMutationVariables,
   APITypes.DeleteLanguageItemMutation
 >;
+export const createChannel = /* GraphQL */ `mutation CreateChannel(
+  $input: CreateChannelInput!
+  $condition: ModelChannelConditionInput
+) {
+  createChannel(input: $input, condition: $condition) {
+    id
+    chatSpaceId
+    apiHost
+    chatflowId
+    name
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    isPublic
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChannelMutationVariables,
+  APITypes.CreateChannelMutation
+>;
+export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
+  $input: UpdateChannelInput!
+  $condition: ModelChannelConditionInput
+) {
+  updateChannel(input: $input, condition: $condition) {
+    id
+    chatSpaceId
+    apiHost
+    chatflowId
+    name
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    isPublic
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChannelMutationVariables,
+  APITypes.UpdateChannelMutation
+>;
+export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
+  $input: DeleteChannelInput!
+  $condition: ModelChannelConditionInput
+) {
+  deleteChannel(input: $input, condition: $condition) {
+    id
+    chatSpaceId
+    apiHost
+    chatflowId
+    name
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    isPublic
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChannelMutationVariables,
+  APITypes.DeleteChannelMutation
+>;
+export const createChannelUserAccess = /* GraphQL */ `mutation CreateChannelUserAccess(
+  $input: CreateChannelUserAccessInput!
+  $condition: ModelChannelUserAccessConditionInput
+) {
+  createChannelUserAccess(input: $input, condition: $condition) {
+    accessId
+    channelId
+    chatSpaceId
+    channelHostId
+    channelHostType
+    accessType
+    channelName
+    channelDescription
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChannelUserAccessMutationVariables,
+  APITypes.CreateChannelUserAccessMutation
+>;
+export const updateChannelUserAccess = /* GraphQL */ `mutation UpdateChannelUserAccess(
+  $input: UpdateChannelUserAccessInput!
+  $condition: ModelChannelUserAccessConditionInput
+) {
+  updateChannelUserAccess(input: $input, condition: $condition) {
+    accessId
+    channelId
+    chatSpaceId
+    channelHostId
+    channelHostType
+    accessType
+    channelName
+    channelDescription
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChannelUserAccessMutationVariables,
+  APITypes.UpdateChannelUserAccessMutation
+>;
+export const deleteChannelUserAccess = /* GraphQL */ `mutation DeleteChannelUserAccess(
+  $input: DeleteChannelUserAccessInput!
+  $condition: ModelChannelUserAccessConditionInput
+) {
+  deleteChannelUserAccess(input: $input, condition: $condition) {
+    accessId
+    channelId
+    chatSpaceId
+    channelHostId
+    channelHostType
+    accessType
+    channelName
+    channelDescription
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChannelUserAccessMutationVariables,
+  APITypes.DeleteChannelUserAccessMutation
+>;
+export const createChannelDocument = /* GraphQL */ `mutation CreateChannelDocument(
+  $input: CreateChannelDocumentInput!
+  $condition: ModelChannelDocumentConditionInput
+) {
+  createChannelDocument(input: $input, condition: $condition) {
+    channelId
+    id
+    s3Key
+    fileType
+    fileName
+    fileSize
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChannelDocumentMutationVariables,
+  APITypes.CreateChannelDocumentMutation
+>;
+export const updateChannelDocument = /* GraphQL */ `mutation UpdateChannelDocument(
+  $input: UpdateChannelDocumentInput!
+  $condition: ModelChannelDocumentConditionInput
+) {
+  updateChannelDocument(input: $input, condition: $condition) {
+    channelId
+    id
+    s3Key
+    fileType
+    fileName
+    fileSize
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChannelDocumentMutationVariables,
+  APITypes.UpdateChannelDocumentMutation
+>;
+export const deleteChannelDocument = /* GraphQL */ `mutation DeleteChannelDocument(
+  $input: DeleteChannelDocumentInput!
+  $condition: ModelChannelDocumentConditionInput
+) {
+  deleteChannelDocument(input: $input, condition: $condition) {
+    channelId
+    id
+    s3Key
+    fileType
+    fileName
+    fileSize
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChannelDocumentMutationVariables,
+  APITypes.DeleteChannelDocumentMutation
+>;
+export const createChannelHistoryItem = /* GraphQL */ `mutation CreateChannelHistoryItem(
+  $input: CreateChannelHistoryItemInput!
+  $condition: ModelChannelHistoryItemConditionInput
+) {
+  createChannelHistoryItem(input: $input, condition: $condition) {
+    ownerId
+    channelId
+    id
+    type
+    content
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChannelHistoryItemMutationVariables,
+  APITypes.CreateChannelHistoryItemMutation
+>;
+export const updateChannelHistoryItem = /* GraphQL */ `mutation UpdateChannelHistoryItem(
+  $input: UpdateChannelHistoryItemInput!
+  $condition: ModelChannelHistoryItemConditionInput
+) {
+  updateChannelHistoryItem(input: $input, condition: $condition) {
+    ownerId
+    channelId
+    id
+    type
+    content
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChannelHistoryItemMutationVariables,
+  APITypes.UpdateChannelHistoryItemMutation
+>;
+export const deleteChannelHistoryItem = /* GraphQL */ `mutation DeleteChannelHistoryItem(
+  $input: DeleteChannelHistoryItemInput!
+  $condition: ModelChannelHistoryItemConditionInput
+) {
+  deleteChannelHistoryItem(input: $input, condition: $condition) {
+    ownerId
+    channelId
+    id
+    type
+    content
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChannelHistoryItemMutationVariables,
+  APITypes.DeleteChannelHistoryItemMutation
+>;
+export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
+  $input: CreateChatSpaceInput!
+  $condition: ModelChatSpaceConditionInput
+) {
+  createChatSpace(input: $input, condition: $condition) {
+    id
+    hostId
+    hostType
+    name
+    isPublic
+    isMultiChannel
+    defaultChannelId
+    themeId
+    defaultLanguage
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
+      __typename
+    }
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChatSpaceMutationVariables,
+  APITypes.CreateChatSpaceMutation
+>;
+export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
+  $input: UpdateChatSpaceInput!
+  $condition: ModelChatSpaceConditionInput
+) {
+  updateChatSpace(input: $input, condition: $condition) {
+    id
+    hostId
+    hostType
+    name
+    isPublic
+    isMultiChannel
+    defaultChannelId
+    themeId
+    defaultLanguage
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
+      __typename
+    }
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChatSpaceMutationVariables,
+  APITypes.UpdateChatSpaceMutation
+>;
+export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
+  $input: DeleteChatSpaceInput!
+  $condition: ModelChatSpaceConditionInput
+) {
+  deleteChatSpace(input: $input, condition: $condition) {
+    id
+    hostId
+    hostType
+    name
+    isPublic
+    isMultiChannel
+    defaultChannelId
+    themeId
+    defaultLanguage
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
+      __typename
+    }
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChatSpaceMutationVariables,
+  APITypes.DeleteChatSpaceMutation
+>;
 export const createOrganization = /* GraphQL */ `mutation CreateOrganization(
   $input: CreateOrganizationInput!
   $condition: ModelOrganizationConditionInput
@@ -664,6 +673,7 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     status
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -686,6 +696,7 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     status
     createdAt
     updatedAt
+    owner
     __typename
   }
 }
@@ -708,6 +719,7 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     status
     createdAt
     updatedAt
+    owner
     __typename
   }
 }

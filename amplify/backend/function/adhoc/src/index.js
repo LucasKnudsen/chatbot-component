@@ -10,6 +10,7 @@
 	API_DIGITALTWIN_ORGANIZATIONTABLE_NAME
 	API_DIGITALTWIN_USERTABLE_ARN
 	API_DIGITALTWIN_USERTABLE_NAME
+	AUTH_FRAIAAUTH_USERPOOLID
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT */
@@ -51,7 +52,6 @@ const {
   AdminDeleteUserCommand,
   AdminSetUserPasswordCommand,
 } = require('@aws-sdk/client-cognito-identity-provider')
-const { channel } = require('diagnostics_channel')
 
 const cognitoClient = new CognitoIdentityProviderClient({ region: process.env.REGION })
 
@@ -61,7 +61,15 @@ const cognitoClient = new CognitoIdentityProviderClient({ region: process.env.RE
 exports.handler = async (event) => {
   if (!event.isMock) return
 
-  const { organizationId, chatSpaceId, channelId, userEmail, adminEmail } = event
+  const {
+    organizationId,
+    chatSpaceId,
+    channelId,
+    userEmail,
+    adminEmail,
+    studentUserId,
+    adminUserId,
+  } = event
 
   // --- ADMIN CONFIG ---
 
@@ -73,35 +81,7 @@ exports.handler = async (event) => {
   const chatSpaceName = 'SCII Portal'
   const hostType = 'COMPANY'
 
-  try {
-    return await cognitoClient.send(
-      new AdminCreateUserCommand({
-        UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
-        TemporaryPassword: 'Abcd1234',
-        Username: 'USERNAME',
-        UserAttributes: [
-          {
-            Name: 'email',
-            Value: adminEmail,
-          },
-          {
-            Name: 'email_verified',
-            Value: 'true',
-          },
-        ],
-        ClientMetadata: {
-          // This is used to pass data to the Invite Lambda Trigger
-          organizationId: organizationId,
-          chatSpaceId: chatSpaceId,
-          hostType: hostType,
-        },
-      })
-    )
-  } catch (error) {
-    console.log(error)
-  }
-
-  return
+  const channelName = 'My First Course'
 
   // --- USER CONFIG ---
 
@@ -124,13 +104,12 @@ exports.handler = async (event) => {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }),
-
           // Create Admin Cognito User
           cognitoClient.send(
             new AdminCreateUserCommand({
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
               TemporaryPassword: 'Abcd1234',
-              Username: adminEmail,
+              Username: adminUserId,
               UserAttributes: [
                 {
                   Name: 'email',
@@ -140,12 +119,21 @@ exports.handler = async (event) => {
                   Name: 'email_verified',
                   Value: 'true',
                 },
+                {
+                  Name: 'preferred_username',
+                  Value: 'admin',
+                },
+                {
+                  Name: 'custom:userId',
+                  Value: adminUserId,
+                },
               ],
               ClientMetadata: {
                 // This is used to pass data to the Invite Lambda Trigger
                 organizationId: organizationId,
                 chatSpaceId: chatSpaceId,
                 hostType: hostType,
+                userRole: 'ADMIN',
               },
             })
           ),
@@ -153,20 +141,18 @@ exports.handler = async (event) => {
           cognitoClient.send(
             new CreateGroupCommand({
               GroupName: orgAdminGroupName,
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
             })
           ),
           // Create Admin Group for Chat Space
           cognitoClient.send(
             new CreateGroupCommand({
               GroupName: chatSpaceAdminGroupName,
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
             })
           ),
         ])
 
-        // 5. Creates Channel in ChatSpace
-        // 6. Create User record
         // 7. Add to general and specific Admin Groups
         // 8. Set password
         const [ChatSpace, Channel, User] = await Promise.all([
@@ -183,10 +169,6 @@ exports.handler = async (event) => {
             themeId: 'fraia',
 
             defaultLanguage: 'en',
-            initialPrompts: [],
-            settings: {
-              autoOpen: false,
-            },
 
             admin: chatSpaceAdminGroupName,
 
@@ -194,6 +176,7 @@ exports.handler = async (event) => {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }),
+          // Creates Channel in ChatSpace
           createRecord(process.env.API_DIGITALTWIN_CHANNELTABLE_NAME, {
             id: channelId,
             chatSpaceId: chatSpaceId,
@@ -201,72 +184,159 @@ exports.handler = async (event) => {
             apiHost: 'https://flowise.testnet.concordium.com',
             chatflowId: 'f05d64f3-6d58-49d1-8143-d59caa88fd1f',
 
-            name: 'My First Knowledge Base',
-            initialPrompts: [],
-            isPublic: true,
+            name: channelName,
+            description: 'This is knowledge base subject zero. Take good care of it!',
+            initialPrompts: [
+              {
+                display: 'What am I doing here?',
+                prompt: 'Tell me what I can do on the FRAIA portal',
+              },
+            ],
+            isPublic: false,
 
+            // owner: CognitoHubUser.Username,
             __typename: 'Channel',
-            owner: CognitoHubUser.Username,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }),
+          // Create Admin User record
           createRecord(process.env.API_DIGITALTWIN_USERTABLE_NAME, {
-            id: adminEmail,
-            __typename: 'User',
-            cognitoId: CognitoUser.User.Username,
-            email: adminEmail,
+            id: adminUserId,
+            organizationId: organizationId,
 
-            organizationId: UUID(),
+            email: adminEmail,
+            cognitoId: CognitoUser.User.Attributes.find((attr) => attr.Name === 'sub').Value,
+
+            name: 'Mr. Admin-san',
+            status: 'ACTIVE',
+            joinedOn: new Date().toISOString(),
+
             owner: CognitoUser.User.Username,
+            __typename: 'User',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }),
+          // Add Admin to Org Group
           cognitoClient.send(
             new AdminAddUserToGroupCommand({
               GroupName: orgAdminGroupName,
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
-              Username: adminEmail,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+              Username: adminUserId,
             })
           ),
+          // Add Admin to Chat Space Admin Group
           cognitoClient.send(
             new AdminAddUserToGroupCommand({
               GroupName: chatSpaceAdminGroupName,
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
-              Username: adminEmail,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+              Username: adminUserId,
             })
           ),
           // All Admins are also added to the Admin Group
           cognitoClient.send(
             new AdminAddUserToGroupCommand({
               GroupName: 'Admin',
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
-              Username: adminEmail,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+              Username: adminUserId,
             })
           ),
+          // cognitoClient.send(
+          //   new AdminSetUserPasswordCommand({
+          //     Password: 'Abcd1234',
+          //     UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+          //     Username: adminUserId,
+          //     Permanent: true,
+          //   })
+          // ),
+        ])
+
+        // Creates a Student User to read the channel
+        const { User: CognitoCompanyUser } = await cognitoClient.send(
+          new AdminCreateUserCommand({
+            UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+            TemporaryPassword: 'Abcd1234',
+            Username: studentUserId,
+            UserAttributes: [
+              {
+                Name: 'email',
+                Value: userEmail,
+              },
+              {
+                Name: 'email_verified',
+                Value: 'true',
+              },
+              {
+                Name: 'preferred_username',
+                Value: 'student',
+              },
+              {
+                Name: 'custom:userId',
+                Value: studentUserId,
+              },
+            ],
+            ClientMetadata: {
+              organizationId: organizationId,
+              chatSpaceId: chatSpaceId,
+              hostType: hostType,
+              userRole: userRole,
+            },
+          })
+        )
+
+        await Promise.all([
+          // Create Student User record
+          createRecord(process.env.API_DIGITALTWIN_USERTABLE_NAME, {
+            id: studentUserId,
+            organizationId: organizationId,
+
+            email: userEmail,
+            cognitoId: CognitoCompanyUser.Attributes.find((attr) => attr.Name === 'sub').Value,
+
+            name: 'Student-san',
+            status: 'ACTIVE',
+            invitedOn: new Date().toISOString(),
+            joinedOn: new Date().toISOString(),
+
+            owner: CognitoCompanyUser.Username,
+            __typename: 'User',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          }),
+
+          // Creates Access record to Channel for Student User
+          createRecord(process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME, {
+            accessId: studentUserId,
+            channelId: channelId,
+            chatSpaceId: chatSpaceId,
+
+            channelHostId: organizationId,
+            channelHostType: hostType,
+
+            accessType: userRole,
+            channelName: channelName,
+            channelDescription: 'This is knowledge base subject zero. Take good care of it!',
+
+            owner: CognitoCompanyUser.Username,
+            __typename: 'ChannelUserAccess',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          }),
+          // Force changes password here
           cognitoClient.send(
             new AdminSetUserPasswordCommand({
               Password: 'Abcd1234',
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
-              Username: adminEmail,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+              Username: studentUserId,
               Permanent: true,
             })
           ),
         ])
 
-        return {
-          Organization,
-          AdminGroup,
-          CognitoUser,
-          AddToGroupResult,
-          ChatSpace,
-          User,
-        }
-
       case 'PRIVATE':
         // 1. Create Cognito User
         const { User: CognitoHubUser } = await cognitoClient.send(
           new AdminCreateUserCommand({
-            UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+            UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
             TemporaryPassword: 'Abcd1234',
             Username: userEmail,
             UserAttributes: [
@@ -322,7 +392,7 @@ exports.handler = async (event) => {
           cognitoClient.send(
             new AdminSetUserPasswordCommand({
               Password: 'Abcd1234',
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
               Username: userEmail,
               Permanent: true,
             })
@@ -348,20 +418,20 @@ exports.handler = async (event) => {
         await Promise.all([
           cognitoClient.send(
             new AdminDeleteUserCommand({
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
               Username: adminEmail,
             })
           ),
           cognitoClient.send(
             new DeleteGroupCommand({
               GroupName: orgAdminGroupName,
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
             })
           ),
           cognitoClient.send(
             new DeleteGroupCommand({
               GroupName: chatSpaceAdminGroupName,
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
             })
           ),
         ])
@@ -373,7 +443,7 @@ exports.handler = async (event) => {
         await cognitoClient
           .send(
             new AdminDeleteUserCommand({
-              UserPoolId: process.env.AUTH_DIGITALTWINAUTH_USERPOOLID,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
               Username: userEmail,
             })
           )

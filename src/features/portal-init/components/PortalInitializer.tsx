@@ -37,10 +37,10 @@ export const PortalInitializer = (props: ChatConfig) => {
       return
     }
 
-    const { themeId, theme, language, text } = result.data
+    const { themeId, theme, defaultLanguage, text } = result.data
 
     initTheme(themeId, theme)
-    initText(text, language || 'en')
+    initText(text, defaultLanguage || 'en')
 
     if (props.config?.autoOpen) {
       configStoreActions.toggleBot()
@@ -57,6 +57,7 @@ export const PortalInitializer = (props: ChatConfig) => {
 
       <Suspense
         fallback={
+          // Show loading screen if autoOpen is true
           props.config?.autoOpen && (
             <div class='fixed w-full h-full flex flex-col justify-center items-center  animate-fade-in gap-4 bg-slate-100'>
               <h1 class='text-5xl tracking-wider'>Chula Knowledge Hub</h1>

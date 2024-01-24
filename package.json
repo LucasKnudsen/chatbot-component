@@ -27,6 +27,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@aws-amplify/cli-extensibility-helper": "^3.0.24",
     "@tailwindcss/typography": "^0.5.10",
     "@types/aws-lambda": "^8.10.126",
     "@types/lodash": "^4.14.202",

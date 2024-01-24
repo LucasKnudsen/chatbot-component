@@ -43,7 +43,7 @@ export const useAuth = () => {
   }
 
   const getInitialData = async (user: any) => {
-    await Promise.all([getUserDetails(user.attributes?.email)])
+    await Promise.all([getUserDetails(user.username)])
 
     // const chatSpace = await fetchChatSpace(user)
     // const channel = await fetchChannels(chatSpace)

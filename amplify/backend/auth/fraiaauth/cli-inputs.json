@@ -20,7 +20,7 @@
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": ["email"],
-    "userpoolClientReadAttributes": ["email"],
+    "userpoolClientReadAttributes": ["email", "custom:userId"],
     "userpoolClientLambdaRole": "fraiaab674e58d_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
     "sharedId": "b674e58d",

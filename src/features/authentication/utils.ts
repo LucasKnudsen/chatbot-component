@@ -4,12 +4,12 @@ import { GraphQLQuery } from '@aws-amplify/api'
 import { API } from 'aws-amplify'
 import { authStoreActions } from '.'
 
-export const getUserDetails = async (email: string) => {
+export const getUserDetails = async (id: string) => {
   try {
     const { data } = await API.graphql<GraphQLQuery<GetUserQuery>>({
       query: queries.getUser,
       variables: {
-        id: email,
+        id,
       },
       authMode: 'AMAZON_COGNITO_USER_POOLS',
     })

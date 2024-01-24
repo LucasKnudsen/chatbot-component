@@ -35,6 +35,8 @@ const ChannelItem = (props: { channel: Channel | ChannelUserAccess; isPublic: bo
         (props.channel as ChannelUserAccess).channelId
       )
 
+      debugger
+
       if (!channelDetails) {
         // Handle error
         return

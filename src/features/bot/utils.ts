@@ -35,7 +35,6 @@ export async function fetchChannelAccesses(
     const result = await API.graphql<GraphQLQuery<ListChannelUserAccessesQuery>>({
       query: queries.listChannelUserAccesses,
       variables,
-      authMode: 'AMAZON_COGNITO_USER_POOLS',
     })
 
     const items = (result.data?.listChannelUserAccesses?.items as ChannelUserAccess[]) ?? []

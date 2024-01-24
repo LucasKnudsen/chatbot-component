@@ -8,6 +8,147 @@ export type SubscriptionEvent = {
   data: string,
 };
 
+export type CreateCodeItemInput = {
+  tenantCode: string,
+  tableCode: string,
+  itemCode: string,
+  internalName: string,
+  internalDescription?: string | null,
+  isEditable: boolean,
+  isActive: boolean,
+  isDisplayed?: boolean | null,
+  isExtended?: boolean | null,
+};
+
+export type ModelCodeItemConditionInput = {
+  internalName?: ModelStringInput | null,
+  internalDescription?: ModelStringInput | null,
+  isEditable?: ModelBooleanInput | null,
+  isActive?: ModelBooleanInput | null,
+  isDisplayed?: ModelBooleanInput | null,
+  isExtended?: ModelBooleanInput | null,
+  and?: Array< ModelCodeItemConditionInput | null > | null,
+  or?: Array< ModelCodeItemConditionInput | null > | null,
+  not?: ModelCodeItemConditionInput | null,
+};
+
+export type ModelStringInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
+export enum ModelAttributeTypes {
+  binary = "binary",
+  binarySet = "binarySet",
+  bool = "bool",
+  list = "list",
+  map = "map",
+  number = "number",
+  numberSet = "numberSet",
+  string = "string",
+  stringSet = "stringSet",
+  _null = "_null",
+}
+
+
+export type ModelSizeInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+};
+
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type CodeItem = {
+  __typename: "CodeItem",
+  tenantCode: string,
+  tableCode: string,
+  itemCode: string,
+  internalName: string,
+  internalDescription?: string | null,
+  isEditable: boolean,
+  isActive: boolean,
+  isDisplayed?: boolean | null,
+  isExtended?: boolean | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateCodeItemInput = {
+  tenantCode: string,
+  tableCode: string,
+  itemCode: string,
+  internalName?: string | null,
+  internalDescription?: string | null,
+  isEditable?: boolean | null,
+  isActive?: boolean | null,
+  isDisplayed?: boolean | null,
+  isExtended?: boolean | null,
+};
+
+export type DeleteCodeItemInput = {
+  tenantCode: string,
+  tableCode: string,
+  itemCode: string,
+};
+
+export type CreateLanguageItemInput = {
+  languageCode: string,
+  tableCode: string,
+  itemCode: string,
+  text: string,
+};
+
+export type ModelLanguageItemConditionInput = {
+  text?: ModelStringInput | null,
+  and?: Array< ModelLanguageItemConditionInput | null > | null,
+  or?: Array< ModelLanguageItemConditionInput | null > | null,
+  not?: ModelLanguageItemConditionInput | null,
+};
+
+export type LanguageItem = {
+  __typename: "LanguageItem",
+  languageCode: string,
+  tableCode: string,
+  itemCode: string,
+  text: string,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateLanguageItemInput = {
+  languageCode: string,
+  tableCode: string,
+  itemCode: string,
+  text?: string | null,
+};
+
+export type DeleteLanguageItemInput = {
+  languageCode: string,
+  tableCode: string,
+  itemCode: string,
+};
+
 export type CreateChannelInput = {
   id?: string | null,
   chatSpaceId: string,
@@ -50,53 +191,6 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
-export enum ModelAttributeTypes {
-  binary = "binary",
-  binarySet = "binarySet",
-  bool = "bool",
-  list = "list",
-  map = "map",
-  number = "number",
-  numberSet = "numberSet",
-  string = "string",
-  stringSet = "stringSet",
-  _null = "_null",
-}
-
-
-export type ModelSizeInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-};
-
-export type ModelStringInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
-};
-
-export type ModelBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-};
-
 export type Channel = {
   __typename: "Channel",
   id: string,
@@ -108,6 +202,7 @@ export type Channel = {
   isPublic: boolean,
   createdAt: string,
   updatedAt: string,
+  owner?: string | null,
 };
 
 export type InitialPrompt = {
@@ -136,7 +231,7 @@ export type CreateChannelUserAccessInput = {
   chatSpaceId: string,
   channelHostId: string,
   channelHostType: HostType,
-  role: ChannelUserRole,
+  accessType: ChannelAccessType,
   channelName: string,
   channelDescription?: string | null,
 };
@@ -147,7 +242,7 @@ export enum HostType {
 }
 
 
-export enum ChannelUserRole {
+export enum ChannelAccessType {
   OWNER = "OWNER",
   ADMIN = "ADMIN",
   WRITE = "WRITE",
@@ -159,7 +254,7 @@ export type ModelChannelUserAccessConditionInput = {
   chatSpaceId?: ModelIDInput | null,
   channelHostId?: ModelStringInput | null,
   channelHostType?: ModelHostTypeInput | null,
-  role?: ModelChannelUserRoleInput | null,
+  accessType?: ModelChannelAccessTypeInput | null,
   channelName?: ModelStringInput | null,
   channelDescription?: ModelStringInput | null,
   and?: Array< ModelChannelUserAccessConditionInput | null > | null,
@@ -172,9 +267,9 @@ export type ModelHostTypeInput = {
   ne?: HostType | null,
 };
 
-export type ModelChannelUserRoleInput = {
-  eq?: ChannelUserRole | null,
-  ne?: ChannelUserRole | null,
+export type ModelChannelAccessTypeInput = {
+  eq?: ChannelAccessType | null,
+  ne?: ChannelAccessType | null,
 };
 
 export type ChannelUserAccess = {
@@ -184,11 +279,12 @@ export type ChannelUserAccess = {
   chatSpaceId: string,
   channelHostId: string,
   channelHostType: HostType,
-  role: ChannelUserRole,
+  accessType: ChannelAccessType,
   channelName: string,
   channelDescription?: string | null,
   createdAt: string,
   updatedAt: string,
+  owner?: string | null,
 };
 
 export type UpdateChannelUserAccessInput = {
@@ -197,7 +293,7 @@ export type UpdateChannelUserAccessInput = {
   chatSpaceId?: string | null,
   channelHostId?: string | null,
   channelHostType?: HostType | null,
-  role?: ChannelUserRole | null,
+  accessType?: ChannelAccessType | null,
   channelName?: string | null,
   channelDescription?: string | null,
 };
@@ -301,6 +397,7 @@ export type ChannelHistoryItem = {
   content?: string | null,
   createdAt: string,
   updatedAt: string,
+  owner?: string | null,
 };
 
 export type UpdateChannelHistoryItemInput = {
@@ -326,7 +423,7 @@ export type CreateChatSpaceInput = {
   isMultiChannel: boolean,
   defaultChannelId?: string | null,
   themeId?: string | null,
-  language?: string | null,
+  defaultLanguage?: string | null,
   theme?: ChatSpaceThemeInput | null,
   text?: ChatSpaceTextInput | null,
   admin: string,
@@ -380,7 +477,7 @@ export type ModelChatSpaceConditionInput = {
   isMultiChannel?: ModelBooleanInput | null,
   defaultChannelId?: ModelStringInput | null,
   themeId?: ModelStringInput | null,
-  language?: ModelStringInput | null,
+  defaultLanguage?: ModelStringInput | null,
   admin?: ModelStringInput | null,
   and?: Array< ModelChatSpaceConditionInput | null > | null,
   or?: Array< ModelChatSpaceConditionInput | null > | null,
@@ -397,7 +494,7 @@ export type ChatSpace = {
   isMultiChannel: boolean,
   defaultChannelId?: string | null,
   themeId?: string | null,
-  language?: string | null,
+  defaultLanguage?: string | null,
   theme?: ChatSpaceTheme | null,
   text?: ChatSpaceText | null,
   admin: string,
@@ -456,7 +553,7 @@ export type UpdateChatSpaceInput = {
   isMultiChannel?: boolean | null,
   defaultChannelId?: string | null,
   themeId?: string | null,
-  language?: string | null,
+  defaultLanguage?: string | null,
   theme?: ChatSpaceThemeInput | null,
   text?: ChatSpaceTextInput | null,
   admin?: string | null,
@@ -464,100 +561,6 @@ export type UpdateChatSpaceInput = {
 
 export type DeleteChatSpaceInput = {
   id: string,
-};
-
-export type CreateCodeItemInput = {
-  tenantCode: string,
-  tableCode: string,
-  itemCode: string,
-  internalName: string,
-  internalDescription?: string | null,
-  isEditable: boolean,
-  isActive: boolean,
-  isDisplayed?: boolean | null,
-  isExtended?: boolean | null,
-};
-
-export type ModelCodeItemConditionInput = {
-  internalName?: ModelStringInput | null,
-  internalDescription?: ModelStringInput | null,
-  isEditable?: ModelBooleanInput | null,
-  isActive?: ModelBooleanInput | null,
-  isDisplayed?: ModelBooleanInput | null,
-  isExtended?: ModelBooleanInput | null,
-  and?: Array< ModelCodeItemConditionInput | null > | null,
-  or?: Array< ModelCodeItemConditionInput | null > | null,
-  not?: ModelCodeItemConditionInput | null,
-};
-
-export type CodeItem = {
-  __typename: "CodeItem",
-  tenantCode: string,
-  tableCode: string,
-  itemCode: string,
-  internalName: string,
-  internalDescription?: string | null,
-  isEditable: boolean,
-  isActive: boolean,
-  isDisplayed?: boolean | null,
-  isExtended?: boolean | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type UpdateCodeItemInput = {
-  tenantCode: string,
-  tableCode: string,
-  itemCode: string,
-  internalName?: string | null,
-  internalDescription?: string | null,
-  isEditable?: boolean | null,
-  isActive?: boolean | null,
-  isDisplayed?: boolean | null,
-  isExtended?: boolean | null,
-};
-
-export type DeleteCodeItemInput = {
-  tenantCode: string,
-  tableCode: string,
-  itemCode: string,
-};
-
-export type CreateLanguageItemInput = {
-  languageCode: string,
-  tableCode: string,
-  itemCode: string,
-  text: string,
-};
-
-export type ModelLanguageItemConditionInput = {
-  text?: ModelStringInput | null,
-  and?: Array< ModelLanguageItemConditionInput | null > | null,
-  or?: Array< ModelLanguageItemConditionInput | null > | null,
-  not?: ModelLanguageItemConditionInput | null,
-};
-
-export type LanguageItem = {
-  __typename: "LanguageItem",
-  languageCode: string,
-  tableCode: string,
-  itemCode: string,
-  text: string,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type UpdateLanguageItemInput = {
-  languageCode: string,
-  tableCode: string,
-  itemCode: string,
-  text?: string | null,
-};
-
-export type DeleteLanguageItemInput = {
-  languageCode: string,
-  tableCode: string,
-  itemCode: string,
 };
 
 export type CreateOrganizationInput = {
@@ -615,6 +618,7 @@ export type CreateUserInput = {
 export enum UserStatus {
   INVITED = "INVITED",
   ACTIVE = "ACTIVE",
+  ARCHIVED = "ARCHIVED",
 }
 
 
@@ -648,6 +652,7 @@ export type User = {
   status?: UserStatus | null,
   createdAt: string,
   updatedAt: string,
+  owner?: string | null,
 };
 
 export type UpdateUserInput = {
@@ -663,6 +668,79 @@ export type UpdateUserInput = {
 
 export type DeleteUserInput = {
   id: string,
+};
+
+export type ModelCodeItemPrimaryCompositeKeyConditionInput = {
+  eq?: ModelCodeItemPrimaryCompositeKeyInput | null,
+  le?: ModelCodeItemPrimaryCompositeKeyInput | null,
+  lt?: ModelCodeItemPrimaryCompositeKeyInput | null,
+  ge?: ModelCodeItemPrimaryCompositeKeyInput | null,
+  gt?: ModelCodeItemPrimaryCompositeKeyInput | null,
+  between?: Array< ModelCodeItemPrimaryCompositeKeyInput | null > | null,
+  beginsWith?: ModelCodeItemPrimaryCompositeKeyInput | null,
+};
+
+export type ModelCodeItemPrimaryCompositeKeyInput = {
+  tableCode?: string | null,
+  itemCode?: string | null,
+};
+
+export type ModelCodeItemFilterInput = {
+  tenantCode?: ModelStringInput | null,
+  tableCode?: ModelStringInput | null,
+  itemCode?: ModelStringInput | null,
+  internalName?: ModelStringInput | null,
+  internalDescription?: ModelStringInput | null,
+  isEditable?: ModelBooleanInput | null,
+  isActive?: ModelBooleanInput | null,
+  isDisplayed?: ModelBooleanInput | null,
+  isExtended?: ModelBooleanInput | null,
+  and?: Array< ModelCodeItemFilterInput | null > | null,
+  or?: Array< ModelCodeItemFilterInput | null > | null,
+  not?: ModelCodeItemFilterInput | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
+export type ModelCodeItemConnection = {
+  __typename: "ModelCodeItemConnection",
+  items:  Array<CodeItem | null >,
+  nextToken?: string | null,
+};
+
+export type ModelLanguageItemPrimaryCompositeKeyConditionInput = {
+  eq?: ModelLanguageItemPrimaryCompositeKeyInput | null,
+  le?: ModelLanguageItemPrimaryCompositeKeyInput | null,
+  lt?: ModelLanguageItemPrimaryCompositeKeyInput | null,
+  ge?: ModelLanguageItemPrimaryCompositeKeyInput | null,
+  gt?: ModelLanguageItemPrimaryCompositeKeyInput | null,
+  between?: Array< ModelLanguageItemPrimaryCompositeKeyInput | null > | null,
+  beginsWith?: ModelLanguageItemPrimaryCompositeKeyInput | null,
+};
+
+export type ModelLanguageItemPrimaryCompositeKeyInput = {
+  tableCode?: string | null,
+  itemCode?: string | null,
+};
+
+export type ModelLanguageItemFilterInput = {
+  languageCode?: ModelStringInput | null,
+  tableCode?: ModelStringInput | null,
+  itemCode?: ModelStringInput | null,
+  text?: ModelStringInput | null,
+  and?: Array< ModelLanguageItemFilterInput | null > | null,
+  or?: Array< ModelLanguageItemFilterInput | null > | null,
+  not?: ModelLanguageItemFilterInput | null,
+};
+
+export type ModelLanguageItemConnection = {
+  __typename: "ModelLanguageItemConnection",
+  items:  Array<LanguageItem | null >,
+  nextToken?: string | null,
 };
 
 export type ModelChannelFilterInput = {
@@ -699,19 +777,13 @@ export type ModelChannelUserAccessFilterInput = {
   chatSpaceId?: ModelIDInput | null,
   channelHostId?: ModelStringInput | null,
   channelHostType?: ModelHostTypeInput | null,
-  role?: ModelChannelUserRoleInput | null,
+  accessType?: ModelChannelAccessTypeInput | null,
   channelName?: ModelStringInput | null,
   channelDescription?: ModelStringInput | null,
   and?: Array< ModelChannelUserAccessFilterInput | null > | null,
   or?: Array< ModelChannelUserAccessFilterInput | null > | null,
   not?: ModelChannelUserAccessFilterInput | null,
 };
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type ModelChannelUserAccessConnection = {
   __typename: "ModelChannelUserAccessConnection",
@@ -778,7 +850,7 @@ export type ModelChatSpaceFilterInput = {
   isMultiChannel?: ModelBooleanInput | null,
   defaultChannelId?: ModelStringInput | null,
   themeId?: ModelStringInput | null,
-  language?: ModelStringInput | null,
+  defaultLanguage?: ModelStringInput | null,
   admin?: ModelStringInput | null,
   and?: Array< ModelChatSpaceFilterInput | null > | null,
   or?: Array< ModelChatSpaceFilterInput | null > | null,
@@ -788,73 +860,6 @@ export type ModelChatSpaceFilterInput = {
 export type ModelChatSpaceConnection = {
   __typename: "ModelChatSpaceConnection",
   items:  Array<ChatSpace | null >,
-  nextToken?: string | null,
-};
-
-export type ModelCodeItemPrimaryCompositeKeyConditionInput = {
-  eq?: ModelCodeItemPrimaryCompositeKeyInput | null,
-  le?: ModelCodeItemPrimaryCompositeKeyInput | null,
-  lt?: ModelCodeItemPrimaryCompositeKeyInput | null,
-  ge?: ModelCodeItemPrimaryCompositeKeyInput | null,
-  gt?: ModelCodeItemPrimaryCompositeKeyInput | null,
-  between?: Array< ModelCodeItemPrimaryCompositeKeyInput | null > | null,
-  beginsWith?: ModelCodeItemPrimaryCompositeKeyInput | null,
-};
-
-export type ModelCodeItemPrimaryCompositeKeyInput = {
-  tableCode?: string | null,
-  itemCode?: string | null,
-};
-
-export type ModelCodeItemFilterInput = {
-  tenantCode?: ModelStringInput | null,
-  tableCode?: ModelStringInput | null,
-  itemCode?: ModelStringInput | null,
-  internalName?: ModelStringInput | null,
-  internalDescription?: ModelStringInput | null,
-  isEditable?: ModelBooleanInput | null,
-  isActive?: ModelBooleanInput | null,
-  isDisplayed?: ModelBooleanInput | null,
-  isExtended?: ModelBooleanInput | null,
-  and?: Array< ModelCodeItemFilterInput | null > | null,
-  or?: Array< ModelCodeItemFilterInput | null > | null,
-  not?: ModelCodeItemFilterInput | null,
-};
-
-export type ModelCodeItemConnection = {
-  __typename: "ModelCodeItemConnection",
-  items:  Array<CodeItem | null >,
-  nextToken?: string | null,
-};
-
-export type ModelLanguageItemPrimaryCompositeKeyConditionInput = {
-  eq?: ModelLanguageItemPrimaryCompositeKeyInput | null,
-  le?: ModelLanguageItemPrimaryCompositeKeyInput | null,
-  lt?: ModelLanguageItemPrimaryCompositeKeyInput | null,
-  ge?: ModelLanguageItemPrimaryCompositeKeyInput | null,
-  gt?: ModelLanguageItemPrimaryCompositeKeyInput | null,
-  between?: Array< ModelLanguageItemPrimaryCompositeKeyInput | null > | null,
-  beginsWith?: ModelLanguageItemPrimaryCompositeKeyInput | null,
-};
-
-export type ModelLanguageItemPrimaryCompositeKeyInput = {
-  tableCode?: string | null,
-  itemCode?: string | null,
-};
-
-export type ModelLanguageItemFilterInput = {
-  languageCode?: ModelStringInput | null,
-  tableCode?: ModelStringInput | null,
-  itemCode?: ModelStringInput | null,
-  text?: ModelStringInput | null,
-  and?: Array< ModelLanguageItemFilterInput | null > | null,
-  or?: Array< ModelLanguageItemFilterInput | null > | null,
-  not?: ModelLanguageItemFilterInput | null,
-};
-
-export type ModelLanguageItemConnection = {
-  __typename: "ModelLanguageItemConnection",
-  items:  Array<LanguageItem | null >,
   nextToken?: string | null,
 };
 
@@ -895,6 +900,49 @@ export type ModelUserConnection = {
   nextToken?: string | null,
 };
 
+export type ModelSubscriptionCodeItemFilterInput = {
+  tenantCode?: ModelSubscriptionStringInput | null,
+  tableCode?: ModelSubscriptionStringInput | null,
+  itemCode?: ModelSubscriptionStringInput | null,
+  internalName?: ModelSubscriptionStringInput | null,
+  internalDescription?: ModelSubscriptionStringInput | null,
+  isEditable?: ModelSubscriptionBooleanInput | null,
+  isActive?: ModelSubscriptionBooleanInput | null,
+  isDisplayed?: ModelSubscriptionBooleanInput | null,
+  isExtended?: ModelSubscriptionBooleanInput | null,
+  and?: Array< ModelSubscriptionCodeItemFilterInput | null > | null,
+  or?: Array< ModelSubscriptionCodeItemFilterInput | null > | null,
+};
+
+export type ModelSubscriptionStringInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  in?: Array< string | null > | null,
+  notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+};
+
+export type ModelSubscriptionLanguageItemFilterInput = {
+  languageCode?: ModelSubscriptionStringInput | null,
+  tableCode?: ModelSubscriptionStringInput | null,
+  itemCode?: ModelSubscriptionStringInput | null,
+  text?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionLanguageItemFilterInput | null > | null,
+  or?: Array< ModelSubscriptionLanguageItemFilterInput | null > | null,
+};
+
 export type ModelSubscriptionChannelFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   chatSpaceId?: ModelSubscriptionIDInput | null,
@@ -921,33 +969,13 @@ export type ModelSubscriptionIDInput = {
   notIn?: Array< string | null > | null,
 };
 
-export type ModelSubscriptionStringInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
-};
-
-export type ModelSubscriptionBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
-};
-
 export type ModelSubscriptionChannelUserAccessFilterInput = {
   accessId?: ModelSubscriptionStringInput | null,
   channelId?: ModelSubscriptionIDInput | null,
   chatSpaceId?: ModelSubscriptionIDInput | null,
   channelHostId?: ModelSubscriptionStringInput | null,
   channelHostType?: ModelSubscriptionStringInput | null,
-  role?: ModelSubscriptionStringInput | null,
+  accessType?: ModelSubscriptionStringInput | null,
   channelName?: ModelSubscriptionStringInput | null,
   channelDescription?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionChannelUserAccessFilterInput | null > | null,
@@ -996,33 +1024,9 @@ export type ModelSubscriptionChatSpaceFilterInput = {
   isMultiChannel?: ModelSubscriptionBooleanInput | null,
   defaultChannelId?: ModelSubscriptionStringInput | null,
   themeId?: ModelSubscriptionStringInput | null,
-  language?: ModelSubscriptionStringInput | null,
-  admin?: ModelSubscriptionStringInput | null,
+  defaultLanguage?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionChatSpaceFilterInput | null > | null,
   or?: Array< ModelSubscriptionChatSpaceFilterInput | null > | null,
-};
-
-export type ModelSubscriptionCodeItemFilterInput = {
-  tenantCode?: ModelSubscriptionStringInput | null,
-  tableCode?: ModelSubscriptionStringInput | null,
-  itemCode?: ModelSubscriptionStringInput | null,
-  internalName?: ModelSubscriptionStringInput | null,
-  internalDescription?: ModelSubscriptionStringInput | null,
-  isEditable?: ModelSubscriptionBooleanInput | null,
-  isActive?: ModelSubscriptionBooleanInput | null,
-  isDisplayed?: ModelSubscriptionBooleanInput | null,
-  isExtended?: ModelSubscriptionBooleanInput | null,
-  and?: Array< ModelSubscriptionCodeItemFilterInput | null > | null,
-  or?: Array< ModelSubscriptionCodeItemFilterInput | null > | null,
-};
-
-export type ModelSubscriptionLanguageItemFilterInput = {
-  languageCode?: ModelSubscriptionStringInput | null,
-  tableCode?: ModelSubscriptionStringInput | null,
-  itemCode?: ModelSubscriptionStringInput | null,
-  text?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionLanguageItemFilterInput | null > | null,
-  or?: Array< ModelSubscriptionLanguageItemFilterInput | null > | null,
 };
 
 export type ModelSubscriptionOrganizationFilterInput = {
@@ -1030,7 +1034,6 @@ export type ModelSubscriptionOrganizationFilterInput = {
   name?: ModelSubscriptionStringInput | null,
   logo?: ModelSubscriptionStringInput | null,
   email?: ModelSubscriptionStringInput | null,
-  admin?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionOrganizationFilterInput | null > | null,
   or?: Array< ModelSubscriptionOrganizationFilterInput | null > | null,
 };
@@ -1058,441 +1061,6 @@ export type Publish2channelMutation = {
     __typename: "SubscriptionEvent",
     sessionId: string,
     data: string,
-  } | null,
-};
-
-export type CreateChannelMutationVariables = {
-  input: CreateChannelInput,
-  condition?: ModelChannelConditionInput | null,
-};
-
-export type CreateChannelMutation = {
-  createChannel?:  {
-    __typename: "Channel",
-    id: string,
-    chatSpaceId: string,
-    apiHost?: string | null,
-    chatflowId?: string | null,
-    name: string,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
-    isPublic: boolean,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateChannelMutationVariables = {
-  input: UpdateChannelInput,
-  condition?: ModelChannelConditionInput | null,
-};
-
-export type UpdateChannelMutation = {
-  updateChannel?:  {
-    __typename: "Channel",
-    id: string,
-    chatSpaceId: string,
-    apiHost?: string | null,
-    chatflowId?: string | null,
-    name: string,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
-    isPublic: boolean,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteChannelMutationVariables = {
-  input: DeleteChannelInput,
-  condition?: ModelChannelConditionInput | null,
-};
-
-export type DeleteChannelMutation = {
-  deleteChannel?:  {
-    __typename: "Channel",
-    id: string,
-    chatSpaceId: string,
-    apiHost?: string | null,
-    chatflowId?: string | null,
-    name: string,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
-    isPublic: boolean,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateChannelUserAccessMutationVariables = {
-  input: CreateChannelUserAccessInput,
-  condition?: ModelChannelUserAccessConditionInput | null,
-};
-
-export type CreateChannelUserAccessMutation = {
-  createChannelUserAccess?:  {
-    __typename: "ChannelUserAccess",
-    accessId: string,
-    channelId: string,
-    chatSpaceId: string,
-    channelHostId: string,
-    channelHostType: HostType,
-    role: ChannelUserRole,
-    channelName: string,
-    channelDescription?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateChannelUserAccessMutationVariables = {
-  input: UpdateChannelUserAccessInput,
-  condition?: ModelChannelUserAccessConditionInput | null,
-};
-
-export type UpdateChannelUserAccessMutation = {
-  updateChannelUserAccess?:  {
-    __typename: "ChannelUserAccess",
-    accessId: string,
-    channelId: string,
-    chatSpaceId: string,
-    channelHostId: string,
-    channelHostType: HostType,
-    role: ChannelUserRole,
-    channelName: string,
-    channelDescription?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteChannelUserAccessMutationVariables = {
-  input: DeleteChannelUserAccessInput,
-  condition?: ModelChannelUserAccessConditionInput | null,
-};
-
-export type DeleteChannelUserAccessMutation = {
-  deleteChannelUserAccess?:  {
-    __typename: "ChannelUserAccess",
-    accessId: string,
-    channelId: string,
-    chatSpaceId: string,
-    channelHostId: string,
-    channelHostType: HostType,
-    role: ChannelUserRole,
-    channelName: string,
-    channelDescription?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateChannelDocumentMutationVariables = {
-  input: CreateChannelDocumentInput,
-  condition?: ModelChannelDocumentConditionInput | null,
-};
-
-export type CreateChannelDocumentMutation = {
-  createChannelDocument?:  {
-    __typename: "ChannelDocument",
-    channelId: string,
-    id: string,
-    s3Key?: string | null,
-    fileType?: string | null,
-    fileName?: string | null,
-    fileSize?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateChannelDocumentMutationVariables = {
-  input: UpdateChannelDocumentInput,
-  condition?: ModelChannelDocumentConditionInput | null,
-};
-
-export type UpdateChannelDocumentMutation = {
-  updateChannelDocument?:  {
-    __typename: "ChannelDocument",
-    channelId: string,
-    id: string,
-    s3Key?: string | null,
-    fileType?: string | null,
-    fileName?: string | null,
-    fileSize?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteChannelDocumentMutationVariables = {
-  input: DeleteChannelDocumentInput,
-  condition?: ModelChannelDocumentConditionInput | null,
-};
-
-export type DeleteChannelDocumentMutation = {
-  deleteChannelDocument?:  {
-    __typename: "ChannelDocument",
-    channelId: string,
-    id: string,
-    s3Key?: string | null,
-    fileType?: string | null,
-    fileName?: string | null,
-    fileSize?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateChannelHistoryItemMutationVariables = {
-  input: CreateChannelHistoryItemInput,
-  condition?: ModelChannelHistoryItemConditionInput | null,
-};
-
-export type CreateChannelHistoryItemMutation = {
-  createChannelHistoryItem?:  {
-    __typename: "ChannelHistoryItem",
-    ownerId: string,
-    channelId: string,
-    id: string,
-    type: ChannelItemType,
-    content?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateChannelHistoryItemMutationVariables = {
-  input: UpdateChannelHistoryItemInput,
-  condition?: ModelChannelHistoryItemConditionInput | null,
-};
-
-export type UpdateChannelHistoryItemMutation = {
-  updateChannelHistoryItem?:  {
-    __typename: "ChannelHistoryItem",
-    ownerId: string,
-    channelId: string,
-    id: string,
-    type: ChannelItemType,
-    content?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteChannelHistoryItemMutationVariables = {
-  input: DeleteChannelHistoryItemInput,
-  condition?: ModelChannelHistoryItemConditionInput | null,
-};
-
-export type DeleteChannelHistoryItemMutation = {
-  deleteChannelHistoryItem?:  {
-    __typename: "ChannelHistoryItem",
-    ownerId: string,
-    channelId: string,
-    id: string,
-    type: ChannelItemType,
-    content?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateChatSpaceMutationVariables = {
-  input: CreateChatSpaceInput,
-  condition?: ModelChatSpaceConditionInput | null,
-};
-
-export type CreateChatSpaceMutation = {
-  createChatSpace?:  {
-    __typename: "ChatSpace",
-    id: string,
-    hostId: string,
-    hostType: HostType,
-    name: string,
-    isPublic: boolean,
-    isMultiChannel: boolean,
-    defaultChannelId?: string | null,
-    themeId?: string | null,
-    language?: string | null,
-    theme?:  {
-      __typename: "ChatSpaceTheme",
-      isDark?: boolean | null,
-      navbarLogoUrl?: string | null,
-      primaryColor?: string | null,
-      primaryAccent?: string | null,
-      textColor?: string | null,
-      textSecondary?: string | null,
-      onPrimary?: string | null,
-      backgroundColor?: string | null,
-      backgroundAccent?: string | null,
-      backgroundImageUrl?: string | null,
-      bubbleButtonColor?: string | null,
-      bubbleButtonLogoUrl?: string | null,
-      drawerBackground?: string | null,
-      borderColor?: string | null,
-      textInputTextColor?: string | null,
-      textInputBackgroundColor?: string | null,
-      surfaceBackground?: string | null,
-      surfaceHoveredBackground?: string | null,
-    } | null,
-    text?:  {
-      __typename: "ChatSpaceText",
-      welcomeMessage?: string | null,
-      returnWelcomeMessage?: string | null,
-      brandName?: string | null,
-      inputPlaceholder?: string | null,
-      suggestedPromptsTitle?: string | null,
-      viewMedia?: string | null,
-      close?: string | null,
-      copyText?: string | null,
-      copyTextSuccess?: string | null,
-      share?: string | null,
-      historyTabTitle?: string | null,
-      navigationTabTitle?: string | null,
-      today?: string | null,
-      yesterday?: string | null,
-      previous?: string | null,
-      noHistory?: string | null,
-    } | null,
-    admin: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateChatSpaceMutationVariables = {
-  input: UpdateChatSpaceInput,
-  condition?: ModelChatSpaceConditionInput | null,
-};
-
-export type UpdateChatSpaceMutation = {
-  updateChatSpace?:  {
-    __typename: "ChatSpace",
-    id: string,
-    hostId: string,
-    hostType: HostType,
-    name: string,
-    isPublic: boolean,
-    isMultiChannel: boolean,
-    defaultChannelId?: string | null,
-    themeId?: string | null,
-    language?: string | null,
-    theme?:  {
-      __typename: "ChatSpaceTheme",
-      isDark?: boolean | null,
-      navbarLogoUrl?: string | null,
-      primaryColor?: string | null,
-      primaryAccent?: string | null,
-      textColor?: string | null,
-      textSecondary?: string | null,
-      onPrimary?: string | null,
-      backgroundColor?: string | null,
-      backgroundAccent?: string | null,
-      backgroundImageUrl?: string | null,
-      bubbleButtonColor?: string | null,
-      bubbleButtonLogoUrl?: string | null,
-      drawerBackground?: string | null,
-      borderColor?: string | null,
-      textInputTextColor?: string | null,
-      textInputBackgroundColor?: string | null,
-      surfaceBackground?: string | null,
-      surfaceHoveredBackground?: string | null,
-    } | null,
-    text?:  {
-      __typename: "ChatSpaceText",
-      welcomeMessage?: string | null,
-      returnWelcomeMessage?: string | null,
-      brandName?: string | null,
-      inputPlaceholder?: string | null,
-      suggestedPromptsTitle?: string | null,
-      viewMedia?: string | null,
-      close?: string | null,
-      copyText?: string | null,
-      copyTextSuccess?: string | null,
-      share?: string | null,
-      historyTabTitle?: string | null,
-      navigationTabTitle?: string | null,
-      today?: string | null,
-      yesterday?: string | null,
-      previous?: string | null,
-      noHistory?: string | null,
-    } | null,
-    admin: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteChatSpaceMutationVariables = {
-  input: DeleteChatSpaceInput,
-  condition?: ModelChatSpaceConditionInput | null,
-};
-
-export type DeleteChatSpaceMutation = {
-  deleteChatSpace?:  {
-    __typename: "ChatSpace",
-    id: string,
-    hostId: string,
-    hostType: HostType,
-    name: string,
-    isPublic: boolean,
-    isMultiChannel: boolean,
-    defaultChannelId?: string | null,
-    themeId?: string | null,
-    language?: string | null,
-    theme?:  {
-      __typename: "ChatSpaceTheme",
-      isDark?: boolean | null,
-      navbarLogoUrl?: string | null,
-      primaryColor?: string | null,
-      primaryAccent?: string | null,
-      textColor?: string | null,
-      textSecondary?: string | null,
-      onPrimary?: string | null,
-      backgroundColor?: string | null,
-      backgroundAccent?: string | null,
-      backgroundImageUrl?: string | null,
-      bubbleButtonColor?: string | null,
-      bubbleButtonLogoUrl?: string | null,
-      drawerBackground?: string | null,
-      borderColor?: string | null,
-      textInputTextColor?: string | null,
-      textInputBackgroundColor?: string | null,
-      surfaceBackground?: string | null,
-      surfaceHoveredBackground?: string | null,
-    } | null,
-    text?:  {
-      __typename: "ChatSpaceText",
-      welcomeMessage?: string | null,
-      returnWelcomeMessage?: string | null,
-      brandName?: string | null,
-      inputPlaceholder?: string | null,
-      suggestedPromptsTitle?: string | null,
-      viewMedia?: string | null,
-      close?: string | null,
-      copyText?: string | null,
-      copyTextSuccess?: string | null,
-      share?: string | null,
-      historyTabTitle?: string | null,
-      navigationTabTitle?: string | null,
-      today?: string | null,
-      yesterday?: string | null,
-      previous?: string | null,
-      noHistory?: string | null,
-    } | null,
-    admin: string,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -1613,6 +1181,450 @@ export type DeleteLanguageItemMutation = {
   } | null,
 };
 
+export type CreateChannelMutationVariables = {
+  input: CreateChannelInput,
+  condition?: ModelChannelConditionInput | null,
+};
+
+export type CreateChannelMutation = {
+  createChannel?:  {
+    __typename: "Channel",
+    id: string,
+    chatSpaceId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
+    isPublic: boolean,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type UpdateChannelMutationVariables = {
+  input: UpdateChannelInput,
+  condition?: ModelChannelConditionInput | null,
+};
+
+export type UpdateChannelMutation = {
+  updateChannel?:  {
+    __typename: "Channel",
+    id: string,
+    chatSpaceId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
+    isPublic: boolean,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type DeleteChannelMutationVariables = {
+  input: DeleteChannelInput,
+  condition?: ModelChannelConditionInput | null,
+};
+
+export type DeleteChannelMutation = {
+  deleteChannel?:  {
+    __typename: "Channel",
+    id: string,
+    chatSpaceId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
+    isPublic: boolean,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type CreateChannelUserAccessMutationVariables = {
+  input: CreateChannelUserAccessInput,
+  condition?: ModelChannelUserAccessConditionInput | null,
+};
+
+export type CreateChannelUserAccessMutation = {
+  createChannelUserAccess?:  {
+    __typename: "ChannelUserAccess",
+    accessId: string,
+    channelId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
+    accessType: ChannelAccessType,
+    channelName: string,
+    channelDescription?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type UpdateChannelUserAccessMutationVariables = {
+  input: UpdateChannelUserAccessInput,
+  condition?: ModelChannelUserAccessConditionInput | null,
+};
+
+export type UpdateChannelUserAccessMutation = {
+  updateChannelUserAccess?:  {
+    __typename: "ChannelUserAccess",
+    accessId: string,
+    channelId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
+    accessType: ChannelAccessType,
+    channelName: string,
+    channelDescription?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type DeleteChannelUserAccessMutationVariables = {
+  input: DeleteChannelUserAccessInput,
+  condition?: ModelChannelUserAccessConditionInput | null,
+};
+
+export type DeleteChannelUserAccessMutation = {
+  deleteChannelUserAccess?:  {
+    __typename: "ChannelUserAccess",
+    accessId: string,
+    channelId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
+    accessType: ChannelAccessType,
+    channelName: string,
+    channelDescription?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type CreateChannelDocumentMutationVariables = {
+  input: CreateChannelDocumentInput,
+  condition?: ModelChannelDocumentConditionInput | null,
+};
+
+export type CreateChannelDocumentMutation = {
+  createChannelDocument?:  {
+    __typename: "ChannelDocument",
+    channelId: string,
+    id: string,
+    s3Key?: string | null,
+    fileType?: string | null,
+    fileName?: string | null,
+    fileSize?: number | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateChannelDocumentMutationVariables = {
+  input: UpdateChannelDocumentInput,
+  condition?: ModelChannelDocumentConditionInput | null,
+};
+
+export type UpdateChannelDocumentMutation = {
+  updateChannelDocument?:  {
+    __typename: "ChannelDocument",
+    channelId: string,
+    id: string,
+    s3Key?: string | null,
+    fileType?: string | null,
+    fileName?: string | null,
+    fileSize?: number | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteChannelDocumentMutationVariables = {
+  input: DeleteChannelDocumentInput,
+  condition?: ModelChannelDocumentConditionInput | null,
+};
+
+export type DeleteChannelDocumentMutation = {
+  deleteChannelDocument?:  {
+    __typename: "ChannelDocument",
+    channelId: string,
+    id: string,
+    s3Key?: string | null,
+    fileType?: string | null,
+    fileName?: string | null,
+    fileSize?: number | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateChannelHistoryItemMutationVariables = {
+  input: CreateChannelHistoryItemInput,
+  condition?: ModelChannelHistoryItemConditionInput | null,
+};
+
+export type CreateChannelHistoryItemMutation = {
+  createChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type UpdateChannelHistoryItemMutationVariables = {
+  input: UpdateChannelHistoryItemInput,
+  condition?: ModelChannelHistoryItemConditionInput | null,
+};
+
+export type UpdateChannelHistoryItemMutation = {
+  updateChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type DeleteChannelHistoryItemMutationVariables = {
+  input: DeleteChannelHistoryItemInput,
+  condition?: ModelChannelHistoryItemConditionInput | null,
+};
+
+export type DeleteChannelHistoryItemMutation = {
+  deleteChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type CreateChatSpaceMutationVariables = {
+  input: CreateChatSpaceInput,
+  condition?: ModelChatSpaceConditionInput | null,
+};
+
+export type CreateChatSpaceMutation = {
+  createChatSpace?:  {
+    __typename: "ChatSpace",
+    id: string,
+    hostId: string,
+    hostType: HostType,
+    name: string,
+    isPublic: boolean,
+    isMultiChannel: boolean,
+    defaultChannelId?: string | null,
+    themeId?: string | null,
+    defaultLanguage?: string | null,
+    theme?:  {
+      __typename: "ChatSpaceTheme",
+      isDark?: boolean | null,
+      navbarLogoUrl?: string | null,
+      primaryColor?: string | null,
+      primaryAccent?: string | null,
+      textColor?: string | null,
+      textSecondary?: string | null,
+      onPrimary?: string | null,
+      backgroundColor?: string | null,
+      backgroundAccent?: string | null,
+      backgroundImageUrl?: string | null,
+      bubbleButtonColor?: string | null,
+      bubbleButtonLogoUrl?: string | null,
+      drawerBackground?: string | null,
+      borderColor?: string | null,
+      textInputTextColor?: string | null,
+      textInputBackgroundColor?: string | null,
+      surfaceBackground?: string | null,
+      surfaceHoveredBackground?: string | null,
+    } | null,
+    text?:  {
+      __typename: "ChatSpaceText",
+      welcomeMessage?: string | null,
+      returnWelcomeMessage?: string | null,
+      brandName?: string | null,
+      inputPlaceholder?: string | null,
+      suggestedPromptsTitle?: string | null,
+      viewMedia?: string | null,
+      close?: string | null,
+      copyText?: string | null,
+      copyTextSuccess?: string | null,
+      share?: string | null,
+      historyTabTitle?: string | null,
+      navigationTabTitle?: string | null,
+      today?: string | null,
+      yesterday?: string | null,
+      previous?: string | null,
+      noHistory?: string | null,
+    } | null,
+    admin: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateChatSpaceMutationVariables = {
+  input: UpdateChatSpaceInput,
+  condition?: ModelChatSpaceConditionInput | null,
+};
+
+export type UpdateChatSpaceMutation = {
+  updateChatSpace?:  {
+    __typename: "ChatSpace",
+    id: string,
+    hostId: string,
+    hostType: HostType,
+    name: string,
+    isPublic: boolean,
+    isMultiChannel: boolean,
+    defaultChannelId?: string | null,
+    themeId?: string | null,
+    defaultLanguage?: string | null,
+    theme?:  {
+      __typename: "ChatSpaceTheme",
+      isDark?: boolean | null,
+      navbarLogoUrl?: string | null,
+      primaryColor?: string | null,
+      primaryAccent?: string | null,
+      textColor?: string | null,
+      textSecondary?: string | null,
+      onPrimary?: string | null,
+      backgroundColor?: string | null,
+      backgroundAccent?: string | null,
+      backgroundImageUrl?: string | null,
+      bubbleButtonColor?: string | null,
+      bubbleButtonLogoUrl?: string | null,
+      drawerBackground?: string | null,
+      borderColor?: string | null,
+      textInputTextColor?: string | null,
+      textInputBackgroundColor?: string | null,
+      surfaceBackground?: string | null,
+      surfaceHoveredBackground?: string | null,
+    } | null,
+    text?:  {
+      __typename: "ChatSpaceText",
+      welcomeMessage?: string | null,
+      returnWelcomeMessage?: string | null,
+      brandName?: string | null,
+      inputPlaceholder?: string | null,
+      suggestedPromptsTitle?: string | null,
+      viewMedia?: string | null,
+      close?: string | null,
+      copyText?: string | null,
+      copyTextSuccess?: string | null,
+      share?: string | null,
+      historyTabTitle?: string | null,
+      navigationTabTitle?: string | null,
+      today?: string | null,
+      yesterday?: string | null,
+      previous?: string | null,
+      noHistory?: string | null,
+    } | null,
+    admin: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteChatSpaceMutationVariables = {
+  input: DeleteChatSpaceInput,
+  condition?: ModelChatSpaceConditionInput | null,
+};
+
+export type DeleteChatSpaceMutation = {
+  deleteChatSpace?:  {
+    __typename: "ChatSpace",
+    id: string,
+    hostId: string,
+    hostType: HostType,
+    name: string,
+    isPublic: boolean,
+    isMultiChannel: boolean,
+    defaultChannelId?: string | null,
+    themeId?: string | null,
+    defaultLanguage?: string | null,
+    theme?:  {
+      __typename: "ChatSpaceTheme",
+      isDark?: boolean | null,
+      navbarLogoUrl?: string | null,
+      primaryColor?: string | null,
+      primaryAccent?: string | null,
+      textColor?: string | null,
+      textSecondary?: string | null,
+      onPrimary?: string | null,
+      backgroundColor?: string | null,
+      backgroundAccent?: string | null,
+      backgroundImageUrl?: string | null,
+      bubbleButtonColor?: string | null,
+      bubbleButtonLogoUrl?: string | null,
+      drawerBackground?: string | null,
+      borderColor?: string | null,
+      textInputTextColor?: string | null,
+      textInputBackgroundColor?: string | null,
+      surfaceBackground?: string | null,
+      surfaceHoveredBackground?: string | null,
+    } | null,
+    text?:  {
+      __typename: "ChatSpaceText",
+      welcomeMessage?: string | null,
+      returnWelcomeMessage?: string | null,
+      brandName?: string | null,
+      inputPlaceholder?: string | null,
+      suggestedPromptsTitle?: string | null,
+      viewMedia?: string | null,
+      close?: string | null,
+      copyText?: string | null,
+      copyTextSuccess?: string | null,
+      share?: string | null,
+      historyTabTitle?: string | null,
+      navigationTabTitle?: string | null,
+      today?: string | null,
+      yesterday?: string | null,
+      previous?: string | null,
+      noHistory?: string | null,
+    } | null,
+    admin: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type CreateOrganizationMutationVariables = {
   input: CreateOrganizationInput,
   condition?: ModelOrganizationConditionInput | null,
@@ -1685,6 +1697,7 @@ export type CreateUserMutation = {
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1706,6 +1719,7 @@ export type UpdateUserMutation = {
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1727,329 +1741,7 @@ export type DeleteUserMutation = {
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
-  } | null,
-};
-
-export type GetChannelQueryVariables = {
-  id: string,
-};
-
-export type GetChannelQuery = {
-  getChannel?:  {
-    __typename: "Channel",
-    id: string,
-    chatSpaceId: string,
-    apiHost?: string | null,
-    chatflowId?: string | null,
-    name: string,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
-    isPublic: boolean,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListChannelsQueryVariables = {
-  filter?: ModelChannelFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListChannelsQuery = {
-  listChannels?:  {
-    __typename: "ModelChannelConnection",
-    items:  Array< {
-      __typename: "Channel",
-      id: string,
-      chatSpaceId: string,
-      apiHost?: string | null,
-      chatflowId?: string | null,
-      name: string,
-      initialPrompts?:  Array< {
-        __typename: "InitialPrompt",
-        display?: string | null,
-        prompt: string,
-      } > | null,
-      isPublic: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GetChannelUserAccessQueryVariables = {
-  accessId: string,
-  channelId: string,
-};
-
-export type GetChannelUserAccessQuery = {
-  getChannelUserAccess?:  {
-    __typename: "ChannelUserAccess",
-    accessId: string,
-    channelId: string,
-    chatSpaceId: string,
-    channelHostId: string,
-    channelHostType: HostType,
-    role: ChannelUserRole,
-    channelName: string,
-    channelDescription?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListChannelUserAccessesQueryVariables = {
-  accessId?: string | null,
-  channelId?: ModelIDKeyConditionInput | null,
-  filter?: ModelChannelUserAccessFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  sortDirection?: ModelSortDirection | null,
-};
-
-export type ListChannelUserAccessesQuery = {
-  listChannelUserAccesses?:  {
-    __typename: "ModelChannelUserAccessConnection",
-    items:  Array< {
-      __typename: "ChannelUserAccess",
-      accessId: string,
-      channelId: string,
-      chatSpaceId: string,
-      channelHostId: string,
-      channelHostType: HostType,
-      role: ChannelUserRole,
-      channelName: string,
-      channelDescription?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GetChannelDocumentQueryVariables = {
-  channelId: string,
-  id: string,
-};
-
-export type GetChannelDocumentQuery = {
-  getChannelDocument?:  {
-    __typename: "ChannelDocument",
-    channelId: string,
-    id: string,
-    s3Key?: string | null,
-    fileType?: string | null,
-    fileName?: string | null,
-    fileSize?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListChannelDocumentsQueryVariables = {
-  channelId?: string | null,
-  id?: ModelIDKeyConditionInput | null,
-  filter?: ModelChannelDocumentFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  sortDirection?: ModelSortDirection | null,
-};
-
-export type ListChannelDocumentsQuery = {
-  listChannelDocuments?:  {
-    __typename: "ModelChannelDocumentConnection",
-    items:  Array< {
-      __typename: "ChannelDocument",
-      channelId: string,
-      id: string,
-      s3Key?: string | null,
-      fileType?: string | null,
-      fileName?: string | null,
-      fileSize?: number | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GetChannelHistoryItemQueryVariables = {
-  ownerId: string,
-  channelId: string,
-  id: string,
-};
-
-export type GetChannelHistoryItemQuery = {
-  getChannelHistoryItem?:  {
-    __typename: "ChannelHistoryItem",
-    ownerId: string,
-    channelId: string,
-    id: string,
-    type: ChannelItemType,
-    content?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListChannelHistoryItemsQueryVariables = {
-  ownerId?: string | null,
-  channelIdId?: ModelChannelHistoryItemPrimaryCompositeKeyConditionInput | null,
-  filter?: ModelChannelHistoryItemFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  sortDirection?: ModelSortDirection | null,
-};
-
-export type ListChannelHistoryItemsQuery = {
-  listChannelHistoryItems?:  {
-    __typename: "ModelChannelHistoryItemConnection",
-    items:  Array< {
-      __typename: "ChannelHistoryItem",
-      ownerId: string,
-      channelId: string,
-      id: string,
-      type: ChannelItemType,
-      content?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GetChatSpaceQueryVariables = {
-  id: string,
-};
-
-export type GetChatSpaceQuery = {
-  getChatSpace?:  {
-    __typename: "ChatSpace",
-    id: string,
-    hostId: string,
-    hostType: HostType,
-    name: string,
-    isPublic: boolean,
-    isMultiChannel: boolean,
-    defaultChannelId?: string | null,
-    themeId?: string | null,
-    language?: string | null,
-    theme?:  {
-      __typename: "ChatSpaceTheme",
-      isDark?: boolean | null,
-      navbarLogoUrl?: string | null,
-      primaryColor?: string | null,
-      primaryAccent?: string | null,
-      textColor?: string | null,
-      textSecondary?: string | null,
-      onPrimary?: string | null,
-      backgroundColor?: string | null,
-      backgroundAccent?: string | null,
-      backgroundImageUrl?: string | null,
-      bubbleButtonColor?: string | null,
-      bubbleButtonLogoUrl?: string | null,
-      drawerBackground?: string | null,
-      borderColor?: string | null,
-      textInputTextColor?: string | null,
-      textInputBackgroundColor?: string | null,
-      surfaceBackground?: string | null,
-      surfaceHoveredBackground?: string | null,
-    } | null,
-    text?:  {
-      __typename: "ChatSpaceText",
-      welcomeMessage?: string | null,
-      returnWelcomeMessage?: string | null,
-      brandName?: string | null,
-      inputPlaceholder?: string | null,
-      suggestedPromptsTitle?: string | null,
-      viewMedia?: string | null,
-      close?: string | null,
-      copyText?: string | null,
-      copyTextSuccess?: string | null,
-      share?: string | null,
-      historyTabTitle?: string | null,
-      navigationTabTitle?: string | null,
-      today?: string | null,
-      yesterday?: string | null,
-      previous?: string | null,
-      noHistory?: string | null,
-    } | null,
-    admin: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListChatSpacesQueryVariables = {
-  filter?: ModelChatSpaceFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListChatSpacesQuery = {
-  listChatSpaces?:  {
-    __typename: "ModelChatSpaceConnection",
-    items:  Array< {
-      __typename: "ChatSpace",
-      id: string,
-      hostId: string,
-      hostType: HostType,
-      name: string,
-      isPublic: boolean,
-      isMultiChannel: boolean,
-      defaultChannelId?: string | null,
-      themeId?: string | null,
-      language?: string | null,
-      theme?:  {
-        __typename: "ChatSpaceTheme",
-        isDark?: boolean | null,
-        navbarLogoUrl?: string | null,
-        primaryColor?: string | null,
-        primaryAccent?: string | null,
-        textColor?: string | null,
-        textSecondary?: string | null,
-        onPrimary?: string | null,
-        backgroundColor?: string | null,
-        backgroundAccent?: string | null,
-        backgroundImageUrl?: string | null,
-        bubbleButtonColor?: string | null,
-        bubbleButtonLogoUrl?: string | null,
-        drawerBackground?: string | null,
-        borderColor?: string | null,
-        textInputTextColor?: string | null,
-        textInputBackgroundColor?: string | null,
-        surfaceBackground?: string | null,
-        surfaceHoveredBackground?: string | null,
-      } | null,
-      text?:  {
-        __typename: "ChatSpaceText",
-        welcomeMessage?: string | null,
-        returnWelcomeMessage?: string | null,
-        brandName?: string | null,
-        inputPlaceholder?: string | null,
-        suggestedPromptsTitle?: string | null,
-        viewMedia?: string | null,
-        close?: string | null,
-        copyText?: string | null,
-        copyTextSuccess?: string | null,
-        share?: string | null,
-        historyTabTitle?: string | null,
-        navigationTabTitle?: string | null,
-        today?: string | null,
-        yesterday?: string | null,
-        previous?: string | null,
-        noHistory?: string | null,
-      } | null,
-      admin: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
+    owner?: string | null,
   } | null,
 };
 
@@ -2149,6 +1841,496 @@ export type ListLanguageItemsQuery = {
   } | null,
 };
 
+export type GetChannelQueryVariables = {
+  id: string,
+};
+
+export type GetChannelQuery = {
+  getChannel?:  {
+    __typename: "Channel",
+    id: string,
+    chatSpaceId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
+    isPublic: boolean,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type ListChannelsQueryVariables = {
+  filter?: ModelChannelFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListChannelsQuery = {
+  listChannels?:  {
+    __typename: "ModelChannelConnection",
+    items:  Array< {
+      __typename: "Channel",
+      id: string,
+      chatSpaceId: string,
+      apiHost?: string | null,
+      chatflowId?: string | null,
+      name: string,
+      initialPrompts?:  Array< {
+        __typename: "InitialPrompt",
+        display?: string | null,
+        prompt: string,
+      } > | null,
+      isPublic: boolean,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ChannelsByChatSpaceIdQueryVariables = {
+  chatSpaceId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelChannelFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ChannelsByChatSpaceIdQuery = {
+  channelsByChatSpaceId?:  {
+    __typename: "ModelChannelConnection",
+    items:  Array< {
+      __typename: "Channel",
+      id: string,
+      chatSpaceId: string,
+      apiHost?: string | null,
+      chatflowId?: string | null,
+      name: string,
+      initialPrompts?:  Array< {
+        __typename: "InitialPrompt",
+        display?: string | null,
+        prompt: string,
+      } > | null,
+      isPublic: boolean,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetChannelUserAccessQueryVariables = {
+  accessId: string,
+  channelId: string,
+};
+
+export type GetChannelUserAccessQuery = {
+  getChannelUserAccess?:  {
+    __typename: "ChannelUserAccess",
+    accessId: string,
+    channelId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
+    accessType: ChannelAccessType,
+    channelName: string,
+    channelDescription?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type ListChannelUserAccessesQueryVariables = {
+  accessId?: string | null,
+  channelId?: ModelIDKeyConditionInput | null,
+  filter?: ModelChannelUserAccessFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListChannelUserAccessesQuery = {
+  listChannelUserAccesses?:  {
+    __typename: "ModelChannelUserAccessConnection",
+    items:  Array< {
+      __typename: "ChannelUserAccess",
+      accessId: string,
+      channelId: string,
+      chatSpaceId: string,
+      channelHostId: string,
+      channelHostType: HostType,
+      accessType: ChannelAccessType,
+      channelName: string,
+      channelDescription?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ChannelUserAccessByChannelIdQueryVariables = {
+  channelId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelChannelUserAccessFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ChannelUserAccessByChannelIdQuery = {
+  channelUserAccessByChannelId?:  {
+    __typename: "ModelChannelUserAccessConnection",
+    items:  Array< {
+      __typename: "ChannelUserAccess",
+      accessId: string,
+      channelId: string,
+      chatSpaceId: string,
+      channelHostId: string,
+      channelHostType: HostType,
+      accessType: ChannelAccessType,
+      channelName: string,
+      channelDescription?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ChannelUserAccessByChannelHostIdQueryVariables = {
+  channelHostId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelChannelUserAccessFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ChannelUserAccessByChannelHostIdQuery = {
+  channelUserAccessByChannelHostId?:  {
+    __typename: "ModelChannelUserAccessConnection",
+    items:  Array< {
+      __typename: "ChannelUserAccess",
+      accessId: string,
+      channelId: string,
+      chatSpaceId: string,
+      channelHostId: string,
+      channelHostType: HostType,
+      accessType: ChannelAccessType,
+      channelName: string,
+      channelDescription?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetChannelDocumentQueryVariables = {
+  channelId: string,
+  id: string,
+};
+
+export type GetChannelDocumentQuery = {
+  getChannelDocument?:  {
+    __typename: "ChannelDocument",
+    channelId: string,
+    id: string,
+    s3Key?: string | null,
+    fileType?: string | null,
+    fileName?: string | null,
+    fileSize?: number | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListChannelDocumentsQueryVariables = {
+  channelId?: string | null,
+  id?: ModelIDKeyConditionInput | null,
+  filter?: ModelChannelDocumentFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListChannelDocumentsQuery = {
+  listChannelDocuments?:  {
+    __typename: "ModelChannelDocumentConnection",
+    items:  Array< {
+      __typename: "ChannelDocument",
+      channelId: string,
+      id: string,
+      s3Key?: string | null,
+      fileType?: string | null,
+      fileName?: string | null,
+      fileSize?: number | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetChannelHistoryItemQueryVariables = {
+  ownerId: string,
+  channelId: string,
+  id: string,
+};
+
+export type GetChannelHistoryItemQuery = {
+  getChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type ListChannelHistoryItemsQueryVariables = {
+  ownerId?: string | null,
+  channelIdId?: ModelChannelHistoryItemPrimaryCompositeKeyConditionInput | null,
+  filter?: ModelChannelHistoryItemFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListChannelHistoryItemsQuery = {
+  listChannelHistoryItems?:  {
+    __typename: "ModelChannelHistoryItemConnection",
+    items:  Array< {
+      __typename: "ChannelHistoryItem",
+      ownerId: string,
+      channelId: string,
+      id: string,
+      type: ChannelItemType,
+      content?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetChatSpaceQueryVariables = {
+  id: string,
+};
+
+export type GetChatSpaceQuery = {
+  getChatSpace?:  {
+    __typename: "ChatSpace",
+    id: string,
+    hostId: string,
+    hostType: HostType,
+    name: string,
+    isPublic: boolean,
+    isMultiChannel: boolean,
+    defaultChannelId?: string | null,
+    themeId?: string | null,
+    defaultLanguage?: string | null,
+    theme?:  {
+      __typename: "ChatSpaceTheme",
+      isDark?: boolean | null,
+      navbarLogoUrl?: string | null,
+      primaryColor?: string | null,
+      primaryAccent?: string | null,
+      textColor?: string | null,
+      textSecondary?: string | null,
+      onPrimary?: string | null,
+      backgroundColor?: string | null,
+      backgroundAccent?: string | null,
+      backgroundImageUrl?: string | null,
+      bubbleButtonColor?: string | null,
+      bubbleButtonLogoUrl?: string | null,
+      drawerBackground?: string | null,
+      borderColor?: string | null,
+      textInputTextColor?: string | null,
+      textInputBackgroundColor?: string | null,
+      surfaceBackground?: string | null,
+      surfaceHoveredBackground?: string | null,
+    } | null,
+    text?:  {
+      __typename: "ChatSpaceText",
+      welcomeMessage?: string | null,
+      returnWelcomeMessage?: string | null,
+      brandName?: string | null,
+      inputPlaceholder?: string | null,
+      suggestedPromptsTitle?: string | null,
+      viewMedia?: string | null,
+      close?: string | null,
+      copyText?: string | null,
+      copyTextSuccess?: string | null,
+      share?: string | null,
+      historyTabTitle?: string | null,
+      navigationTabTitle?: string | null,
+      today?: string | null,
+      yesterday?: string | null,
+      previous?: string | null,
+      noHistory?: string | null,
+    } | null,
+    admin: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListChatSpacesQueryVariables = {
+  filter?: ModelChatSpaceFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListChatSpacesQuery = {
+  listChatSpaces?:  {
+    __typename: "ModelChatSpaceConnection",
+    items:  Array< {
+      __typename: "ChatSpace",
+      id: string,
+      hostId: string,
+      hostType: HostType,
+      name: string,
+      isPublic: boolean,
+      isMultiChannel: boolean,
+      defaultChannelId?: string | null,
+      themeId?: string | null,
+      defaultLanguage?: string | null,
+      theme?:  {
+        __typename: "ChatSpaceTheme",
+        isDark?: boolean | null,
+        navbarLogoUrl?: string | null,
+        primaryColor?: string | null,
+        primaryAccent?: string | null,
+        textColor?: string | null,
+        textSecondary?: string | null,
+        onPrimary?: string | null,
+        backgroundColor?: string | null,
+        backgroundAccent?: string | null,
+        backgroundImageUrl?: string | null,
+        bubbleButtonColor?: string | null,
+        bubbleButtonLogoUrl?: string | null,
+        drawerBackground?: string | null,
+        borderColor?: string | null,
+        textInputTextColor?: string | null,
+        textInputBackgroundColor?: string | null,
+        surfaceBackground?: string | null,
+        surfaceHoveredBackground?: string | null,
+      } | null,
+      text?:  {
+        __typename: "ChatSpaceText",
+        welcomeMessage?: string | null,
+        returnWelcomeMessage?: string | null,
+        brandName?: string | null,
+        inputPlaceholder?: string | null,
+        suggestedPromptsTitle?: string | null,
+        viewMedia?: string | null,
+        close?: string | null,
+        copyText?: string | null,
+        copyTextSuccess?: string | null,
+        share?: string | null,
+        historyTabTitle?: string | null,
+        navigationTabTitle?: string | null,
+        today?: string | null,
+        yesterday?: string | null,
+        previous?: string | null,
+        noHistory?: string | null,
+      } | null,
+      admin: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ChatSpaceByHostIdQueryVariables = {
+  hostId: string,
+  id?: ModelIDKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelChatSpaceFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ChatSpaceByHostIdQuery = {
+  chatSpaceByHostId?:  {
+    __typename: "ModelChatSpaceConnection",
+    items:  Array< {
+      __typename: "ChatSpace",
+      id: string,
+      hostId: string,
+      hostType: HostType,
+      name: string,
+      isPublic: boolean,
+      isMultiChannel: boolean,
+      defaultChannelId?: string | null,
+      themeId?: string | null,
+      defaultLanguage?: string | null,
+      theme?:  {
+        __typename: "ChatSpaceTheme",
+        isDark?: boolean | null,
+        navbarLogoUrl?: string | null,
+        primaryColor?: string | null,
+        primaryAccent?: string | null,
+        textColor?: string | null,
+        textSecondary?: string | null,
+        onPrimary?: string | null,
+        backgroundColor?: string | null,
+        backgroundAccent?: string | null,
+        backgroundImageUrl?: string | null,
+        bubbleButtonColor?: string | null,
+        bubbleButtonLogoUrl?: string | null,
+        drawerBackground?: string | null,
+        borderColor?: string | null,
+        textInputTextColor?: string | null,
+        textInputBackgroundColor?: string | null,
+        surfaceBackground?: string | null,
+        surfaceHoveredBackground?: string | null,
+      } | null,
+      text?:  {
+        __typename: "ChatSpaceText",
+        welcomeMessage?: string | null,
+        returnWelcomeMessage?: string | null,
+        brandName?: string | null,
+        inputPlaceholder?: string | null,
+        suggestedPromptsTitle?: string | null,
+        viewMedia?: string | null,
+        close?: string | null,
+        copyText?: string | null,
+        copyTextSuccess?: string | null,
+        share?: string | null,
+        historyTabTitle?: string | null,
+        navigationTabTitle?: string | null,
+        today?: string | null,
+        yesterday?: string | null,
+        previous?: string | null,
+        noHistory?: string | null,
+      } | null,
+      admin: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetOrganizationQueryVariables = {
   id: string,
 };
@@ -2206,6 +2388,7 @@ export type GetUserQuery = {
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -2232,164 +2415,7 @@ export type ListUsersQuery = {
       status?: UserStatus | null,
       createdAt: string,
       updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type ChannelsByChatSpaceIdQueryVariables = {
-  chatSpaceId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelChannelFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ChannelsByChatSpaceIdQuery = {
-  channelsByChatSpaceId?:  {
-    __typename: "ModelChannelConnection",
-    items:  Array< {
-      __typename: "Channel",
-      id: string,
-      chatSpaceId: string,
-      apiHost?: string | null,
-      chatflowId?: string | null,
-      name: string,
-      initialPrompts?:  Array< {
-        __typename: "InitialPrompt",
-        display?: string | null,
-        prompt: string,
-      } > | null,
-      isPublic: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type ChannelUserAccessByChannelIdQueryVariables = {
-  channelId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelChannelUserAccessFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ChannelUserAccessByChannelIdQuery = {
-  channelUserAccessByChannelId?:  {
-    __typename: "ModelChannelUserAccessConnection",
-    items:  Array< {
-      __typename: "ChannelUserAccess",
-      accessId: string,
-      channelId: string,
-      chatSpaceId: string,
-      channelHostId: string,
-      channelHostType: HostType,
-      role: ChannelUserRole,
-      channelName: string,
-      channelDescription?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type ChannelUserAccessByChannelHostIdQueryVariables = {
-  channelHostId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelChannelUserAccessFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ChannelUserAccessByChannelHostIdQuery = {
-  channelUserAccessByChannelHostId?:  {
-    __typename: "ModelChannelUserAccessConnection",
-    items:  Array< {
-      __typename: "ChannelUserAccess",
-      accessId: string,
-      channelId: string,
-      chatSpaceId: string,
-      channelHostId: string,
-      channelHostType: HostType,
-      role: ChannelUserRole,
-      channelName: string,
-      channelDescription?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type ChatSpaceByHostIdQueryVariables = {
-  hostId: string,
-  id?: ModelIDKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelChatSpaceFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ChatSpaceByHostIdQuery = {
-  chatSpaceByHostId?:  {
-    __typename: "ModelChatSpaceConnection",
-    items:  Array< {
-      __typename: "ChatSpace",
-      id: string,
-      hostId: string,
-      hostType: HostType,
-      name: string,
-      isPublic: boolean,
-      isMultiChannel: boolean,
-      defaultChannelId?: string | null,
-      themeId?: string | null,
-      language?: string | null,
-      theme?:  {
-        __typename: "ChatSpaceTheme",
-        isDark?: boolean | null,
-        navbarLogoUrl?: string | null,
-        primaryColor?: string | null,
-        primaryAccent?: string | null,
-        textColor?: string | null,
-        textSecondary?: string | null,
-        onPrimary?: string | null,
-        backgroundColor?: string | null,
-        backgroundAccent?: string | null,
-        backgroundImageUrl?: string | null,
-        bubbleButtonColor?: string | null,
-        bubbleButtonLogoUrl?: string | null,
-        drawerBackground?: string | null,
-        borderColor?: string | null,
-        textInputTextColor?: string | null,
-        textInputBackgroundColor?: string | null,
-        surfaceBackground?: string | null,
-        surfaceHoveredBackground?: string | null,
-      } | null,
-      text?:  {
-        __typename: "ChatSpaceText",
-        welcomeMessage?: string | null,
-        returnWelcomeMessage?: string | null,
-        brandName?: string | null,
-        inputPlaceholder?: string | null,
-        suggestedPromptsTitle?: string | null,
-        viewMedia?: string | null,
-        close?: string | null,
-        copyText?: string | null,
-        copyTextSuccess?: string | null,
-        share?: string | null,
-        historyTabTitle?: string | null,
-        navigationTabTitle?: string | null,
-        today?: string | null,
-        yesterday?: string | null,
-        previous?: string | null,
-        noHistory?: string | null,
-      } | null,
-      admin: string,
-      createdAt: string,
-      updatedAt: string,
+      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2418,6 +2444,7 @@ export type UserByOrganizationIdQuery = {
       status?: UserStatus | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2432,426 +2459,6 @@ export type Subscribe2channelSubscription = {
     __typename: "SubscriptionEvent",
     sessionId: string,
     data: string,
-  } | null,
-};
-
-export type OnCreateChannelSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelFilterInput | null,
-};
-
-export type OnCreateChannelSubscription = {
-  onCreateChannel?:  {
-    __typename: "Channel",
-    id: string,
-    chatSpaceId: string,
-    apiHost?: string | null,
-    chatflowId?: string | null,
-    name: string,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
-    isPublic: boolean,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateChannelSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelFilterInput | null,
-};
-
-export type OnUpdateChannelSubscription = {
-  onUpdateChannel?:  {
-    __typename: "Channel",
-    id: string,
-    chatSpaceId: string,
-    apiHost?: string | null,
-    chatflowId?: string | null,
-    name: string,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
-    isPublic: boolean,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteChannelSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelFilterInput | null,
-};
-
-export type OnDeleteChannelSubscription = {
-  onDeleteChannel?:  {
-    __typename: "Channel",
-    id: string,
-    chatSpaceId: string,
-    apiHost?: string | null,
-    chatflowId?: string | null,
-    name: string,
-    initialPrompts?:  Array< {
-      __typename: "InitialPrompt",
-      display?: string | null,
-      prompt: string,
-    } > | null,
-    isPublic: boolean,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateChannelUserAccessSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelUserAccessFilterInput | null,
-};
-
-export type OnCreateChannelUserAccessSubscription = {
-  onCreateChannelUserAccess?:  {
-    __typename: "ChannelUserAccess",
-    accessId: string,
-    channelId: string,
-    chatSpaceId: string,
-    channelHostId: string,
-    channelHostType: HostType,
-    role: ChannelUserRole,
-    channelName: string,
-    channelDescription?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateChannelUserAccessSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelUserAccessFilterInput | null,
-};
-
-export type OnUpdateChannelUserAccessSubscription = {
-  onUpdateChannelUserAccess?:  {
-    __typename: "ChannelUserAccess",
-    accessId: string,
-    channelId: string,
-    chatSpaceId: string,
-    channelHostId: string,
-    channelHostType: HostType,
-    role: ChannelUserRole,
-    channelName: string,
-    channelDescription?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteChannelUserAccessSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelUserAccessFilterInput | null,
-};
-
-export type OnDeleteChannelUserAccessSubscription = {
-  onDeleteChannelUserAccess?:  {
-    __typename: "ChannelUserAccess",
-    accessId: string,
-    channelId: string,
-    chatSpaceId: string,
-    channelHostId: string,
-    channelHostType: HostType,
-    role: ChannelUserRole,
-    channelName: string,
-    channelDescription?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateChannelDocumentSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelDocumentFilterInput | null,
-};
-
-export type OnCreateChannelDocumentSubscription = {
-  onCreateChannelDocument?:  {
-    __typename: "ChannelDocument",
-    channelId: string,
-    id: string,
-    s3Key?: string | null,
-    fileType?: string | null,
-    fileName?: string | null,
-    fileSize?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateChannelDocumentSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelDocumentFilterInput | null,
-};
-
-export type OnUpdateChannelDocumentSubscription = {
-  onUpdateChannelDocument?:  {
-    __typename: "ChannelDocument",
-    channelId: string,
-    id: string,
-    s3Key?: string | null,
-    fileType?: string | null,
-    fileName?: string | null,
-    fileSize?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteChannelDocumentSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelDocumentFilterInput | null,
-};
-
-export type OnDeleteChannelDocumentSubscription = {
-  onDeleteChannelDocument?:  {
-    __typename: "ChannelDocument",
-    channelId: string,
-    id: string,
-    s3Key?: string | null,
-    fileType?: string | null,
-    fileName?: string | null,
-    fileSize?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateChannelHistoryItemSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelHistoryItemFilterInput | null,
-};
-
-export type OnCreateChannelHistoryItemSubscription = {
-  onCreateChannelHistoryItem?:  {
-    __typename: "ChannelHistoryItem",
-    ownerId: string,
-    channelId: string,
-    id: string,
-    type: ChannelItemType,
-    content?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateChannelHistoryItemSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelHistoryItemFilterInput | null,
-};
-
-export type OnUpdateChannelHistoryItemSubscription = {
-  onUpdateChannelHistoryItem?:  {
-    __typename: "ChannelHistoryItem",
-    ownerId: string,
-    channelId: string,
-    id: string,
-    type: ChannelItemType,
-    content?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteChannelHistoryItemSubscriptionVariables = {
-  filter?: ModelSubscriptionChannelHistoryItemFilterInput | null,
-};
-
-export type OnDeleteChannelHistoryItemSubscription = {
-  onDeleteChannelHistoryItem?:  {
-    __typename: "ChannelHistoryItem",
-    ownerId: string,
-    channelId: string,
-    id: string,
-    type: ChannelItemType,
-    content?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateChatSpaceSubscriptionVariables = {
-  filter?: ModelSubscriptionChatSpaceFilterInput | null,
-};
-
-export type OnCreateChatSpaceSubscription = {
-  onCreateChatSpace?:  {
-    __typename: "ChatSpace",
-    id: string,
-    hostId: string,
-    hostType: HostType,
-    name: string,
-    isPublic: boolean,
-    isMultiChannel: boolean,
-    defaultChannelId?: string | null,
-    themeId?: string | null,
-    language?: string | null,
-    theme?:  {
-      __typename: "ChatSpaceTheme",
-      isDark?: boolean | null,
-      navbarLogoUrl?: string | null,
-      primaryColor?: string | null,
-      primaryAccent?: string | null,
-      textColor?: string | null,
-      textSecondary?: string | null,
-      onPrimary?: string | null,
-      backgroundColor?: string | null,
-      backgroundAccent?: string | null,
-      backgroundImageUrl?: string | null,
-      bubbleButtonColor?: string | null,
-      bubbleButtonLogoUrl?: string | null,
-      drawerBackground?: string | null,
-      borderColor?: string | null,
-      textInputTextColor?: string | null,
-      textInputBackgroundColor?: string | null,
-      surfaceBackground?: string | null,
-      surfaceHoveredBackground?: string | null,
-    } | null,
-    text?:  {
-      __typename: "ChatSpaceText",
-      welcomeMessage?: string | null,
-      returnWelcomeMessage?: string | null,
-      brandName?: string | null,
-      inputPlaceholder?: string | null,
-      suggestedPromptsTitle?: string | null,
-      viewMedia?: string | null,
-      close?: string | null,
-      copyText?: string | null,
-      copyTextSuccess?: string | null,
-      share?: string | null,
-      historyTabTitle?: string | null,
-      navigationTabTitle?: string | null,
-      today?: string | null,
-      yesterday?: string | null,
-      previous?: string | null,
-      noHistory?: string | null,
-    } | null,
-    admin: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateChatSpaceSubscriptionVariables = {
-  filter?: ModelSubscriptionChatSpaceFilterInput | null,
-};
-
-export type OnUpdateChatSpaceSubscription = {
-  onUpdateChatSpace?:  {
-    __typename: "ChatSpace",
-    id: string,
-    hostId: string,
-    hostType: HostType,
-    name: string,
-    isPublic: boolean,
-    isMultiChannel: boolean,
-    defaultChannelId?: string | null,
-    themeId?: string | null,
-    language?: string | null,
-    theme?:  {
-      __typename: "ChatSpaceTheme",
-      isDark?: boolean | null,
-      navbarLogoUrl?: string | null,
-      primaryColor?: string | null,
-      primaryAccent?: string | null,
-      textColor?: string | null,
-      textSecondary?: string | null,
-      onPrimary?: string | null,
-      backgroundColor?: string | null,
-      backgroundAccent?: string | null,
-      backgroundImageUrl?: string | null,
-      bubbleButtonColor?: string | null,
-      bubbleButtonLogoUrl?: string | null,
-      drawerBackground?: string | null,
-      borderColor?: string | null,
-      textInputTextColor?: string | null,
-      textInputBackgroundColor?: string | null,
-      surfaceBackground?: string | null,
-      surfaceHoveredBackground?: string | null,
-    } | null,
-    text?:  {
-      __typename: "ChatSpaceText",
-      welcomeMessage?: string | null,
-      returnWelcomeMessage?: string | null,
-      brandName?: string | null,
-      inputPlaceholder?: string | null,
-      suggestedPromptsTitle?: string | null,
-      viewMedia?: string | null,
-      close?: string | null,
-      copyText?: string | null,
-      copyTextSuccess?: string | null,
-      share?: string | null,
-      historyTabTitle?: string | null,
-      navigationTabTitle?: string | null,
-      today?: string | null,
-      yesterday?: string | null,
-      previous?: string | null,
-      noHistory?: string | null,
-    } | null,
-    admin: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteChatSpaceSubscriptionVariables = {
-  filter?: ModelSubscriptionChatSpaceFilterInput | null,
-};
-
-export type OnDeleteChatSpaceSubscription = {
-  onDeleteChatSpace?:  {
-    __typename: "ChatSpace",
-    id: string,
-    hostId: string,
-    hostType: HostType,
-    name: string,
-    isPublic: boolean,
-    isMultiChannel: boolean,
-    defaultChannelId?: string | null,
-    themeId?: string | null,
-    language?: string | null,
-    theme?:  {
-      __typename: "ChatSpaceTheme",
-      isDark?: boolean | null,
-      navbarLogoUrl?: string | null,
-      primaryColor?: string | null,
-      primaryAccent?: string | null,
-      textColor?: string | null,
-      textSecondary?: string | null,
-      onPrimary?: string | null,
-      backgroundColor?: string | null,
-      backgroundAccent?: string | null,
-      backgroundImageUrl?: string | null,
-      bubbleButtonColor?: string | null,
-      bubbleButtonLogoUrl?: string | null,
-      drawerBackground?: string | null,
-      borderColor?: string | null,
-      textInputTextColor?: string | null,
-      textInputBackgroundColor?: string | null,
-      surfaceBackground?: string | null,
-      surfaceHoveredBackground?: string | null,
-    } | null,
-    text?:  {
-      __typename: "ChatSpaceText",
-      welcomeMessage?: string | null,
-      returnWelcomeMessage?: string | null,
-      brandName?: string | null,
-      inputPlaceholder?: string | null,
-      suggestedPromptsTitle?: string | null,
-      viewMedia?: string | null,
-      close?: string | null,
-      copyText?: string | null,
-      copyTextSuccess?: string | null,
-      share?: string | null,
-      historyTabTitle?: string | null,
-      navigationTabTitle?: string | null,
-      today?: string | null,
-      yesterday?: string | null,
-      previous?: string | null,
-      noHistory?: string | null,
-    } | null,
-    admin: string,
-    createdAt: string,
-    updatedAt: string,
   } | null,
 };
 
@@ -2966,6 +2573,444 @@ export type OnDeleteLanguageItemSubscription = {
   } | null,
 };
 
+export type OnCreateChannelSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnCreateChannelSubscription = {
+  onCreateChannel?:  {
+    __typename: "Channel",
+    id: string,
+    chatSpaceId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
+    isPublic: boolean,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnUpdateChannelSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnUpdateChannelSubscription = {
+  onUpdateChannel?:  {
+    __typename: "Channel",
+    id: string,
+    chatSpaceId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
+    isPublic: boolean,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnDeleteChannelSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnDeleteChannelSubscription = {
+  onDeleteChannel?:  {
+    __typename: "Channel",
+    id: string,
+    chatSpaceId: string,
+    apiHost?: string | null,
+    chatflowId?: string | null,
+    name: string,
+    initialPrompts?:  Array< {
+      __typename: "InitialPrompt",
+      display?: string | null,
+      prompt: string,
+    } > | null,
+    isPublic: boolean,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnCreateChannelUserAccessSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelUserAccessFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnCreateChannelUserAccessSubscription = {
+  onCreateChannelUserAccess?:  {
+    __typename: "ChannelUserAccess",
+    accessId: string,
+    channelId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
+    accessType: ChannelAccessType,
+    channelName: string,
+    channelDescription?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnUpdateChannelUserAccessSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelUserAccessFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnUpdateChannelUserAccessSubscription = {
+  onUpdateChannelUserAccess?:  {
+    __typename: "ChannelUserAccess",
+    accessId: string,
+    channelId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
+    accessType: ChannelAccessType,
+    channelName: string,
+    channelDescription?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnDeleteChannelUserAccessSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelUserAccessFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnDeleteChannelUserAccessSubscription = {
+  onDeleteChannelUserAccess?:  {
+    __typename: "ChannelUserAccess",
+    accessId: string,
+    channelId: string,
+    chatSpaceId: string,
+    channelHostId: string,
+    channelHostType: HostType,
+    accessType: ChannelAccessType,
+    channelName: string,
+    channelDescription?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnCreateChannelDocumentSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelDocumentFilterInput | null,
+};
+
+export type OnCreateChannelDocumentSubscription = {
+  onCreateChannelDocument?:  {
+    __typename: "ChannelDocument",
+    channelId: string,
+    id: string,
+    s3Key?: string | null,
+    fileType?: string | null,
+    fileName?: string | null,
+    fileSize?: number | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateChannelDocumentSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelDocumentFilterInput | null,
+};
+
+export type OnUpdateChannelDocumentSubscription = {
+  onUpdateChannelDocument?:  {
+    __typename: "ChannelDocument",
+    channelId: string,
+    id: string,
+    s3Key?: string | null,
+    fileType?: string | null,
+    fileName?: string | null,
+    fileSize?: number | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteChannelDocumentSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelDocumentFilterInput | null,
+};
+
+export type OnDeleteChannelDocumentSubscription = {
+  onDeleteChannelDocument?:  {
+    __typename: "ChannelDocument",
+    channelId: string,
+    id: string,
+    s3Key?: string | null,
+    fileType?: string | null,
+    fileName?: string | null,
+    fileSize?: number | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateChannelHistoryItemSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelHistoryItemFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnCreateChannelHistoryItemSubscription = {
+  onCreateChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnUpdateChannelHistoryItemSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelHistoryItemFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnUpdateChannelHistoryItemSubscription = {
+  onUpdateChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnDeleteChannelHistoryItemSubscriptionVariables = {
+  filter?: ModelSubscriptionChannelHistoryItemFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnDeleteChannelHistoryItemSubscription = {
+  onDeleteChannelHistoryItem?:  {
+    __typename: "ChannelHistoryItem",
+    ownerId: string,
+    channelId: string,
+    id: string,
+    type: ChannelItemType,
+    content?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnCreateChatSpaceSubscriptionVariables = {
+  filter?: ModelSubscriptionChatSpaceFilterInput | null,
+};
+
+export type OnCreateChatSpaceSubscription = {
+  onCreateChatSpace?:  {
+    __typename: "ChatSpace",
+    id: string,
+    hostId: string,
+    hostType: HostType,
+    name: string,
+    isPublic: boolean,
+    isMultiChannel: boolean,
+    defaultChannelId?: string | null,
+    themeId?: string | null,
+    defaultLanguage?: string | null,
+    theme?:  {
+      __typename: "ChatSpaceTheme",
+      isDark?: boolean | null,
+      navbarLogoUrl?: string | null,
+      primaryColor?: string | null,
+      primaryAccent?: string | null,
+      textColor?: string | null,
+      textSecondary?: string | null,
+      onPrimary?: string | null,
+      backgroundColor?: string | null,
+      backgroundAccent?: string | null,
+      backgroundImageUrl?: string | null,
+      bubbleButtonColor?: string | null,
+      bubbleButtonLogoUrl?: string | null,
+      drawerBackground?: string | null,
+      borderColor?: string | null,
+      textInputTextColor?: string | null,
+      textInputBackgroundColor?: string | null,
+      surfaceBackground?: string | null,
+      surfaceHoveredBackground?: string | null,
+    } | null,
+    text?:  {
+      __typename: "ChatSpaceText",
+      welcomeMessage?: string | null,
+      returnWelcomeMessage?: string | null,
+      brandName?: string | null,
+      inputPlaceholder?: string | null,
+      suggestedPromptsTitle?: string | null,
+      viewMedia?: string | null,
+      close?: string | null,
+      copyText?: string | null,
+      copyTextSuccess?: string | null,
+      share?: string | null,
+      historyTabTitle?: string | null,
+      navigationTabTitle?: string | null,
+      today?: string | null,
+      yesterday?: string | null,
+      previous?: string | null,
+      noHistory?: string | null,
+    } | null,
+    admin: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateChatSpaceSubscriptionVariables = {
+  filter?: ModelSubscriptionChatSpaceFilterInput | null,
+};
+
+export type OnUpdateChatSpaceSubscription = {
+  onUpdateChatSpace?:  {
+    __typename: "ChatSpace",
+    id: string,
+    hostId: string,
+    hostType: HostType,
+    name: string,
+    isPublic: boolean,
+    isMultiChannel: boolean,
+    defaultChannelId?: string | null,
+    themeId?: string | null,
+    defaultLanguage?: string | null,
+    theme?:  {
+      __typename: "ChatSpaceTheme",
+      isDark?: boolean | null,
+      navbarLogoUrl?: string | null,
+      primaryColor?: string | null,
+      primaryAccent?: string | null,
+      textColor?: string | null,
+      textSecondary?: string | null,
+      onPrimary?: string | null,
+      backgroundColor?: string | null,
+      backgroundAccent?: string | null,
+      backgroundImageUrl?: string | null,
+      bubbleButtonColor?: string | null,
+      bubbleButtonLogoUrl?: string | null,
+      drawerBackground?: string | null,
+      borderColor?: string | null,
+      textInputTextColor?: string | null,
+      textInputBackgroundColor?: string | null,
+      surfaceBackground?: string | null,
+      surfaceHoveredBackground?: string | null,
+    } | null,
+    text?:  {
+      __typename: "ChatSpaceText",
+      welcomeMessage?: string | null,
+      returnWelcomeMessage?: string | null,
+      brandName?: string | null,
+      inputPlaceholder?: string | null,
+      suggestedPromptsTitle?: string | null,
+      viewMedia?: string | null,
+      close?: string | null,
+      copyText?: string | null,
+      copyTextSuccess?: string | null,
+      share?: string | null,
+      historyTabTitle?: string | null,
+      navigationTabTitle?: string | null,
+      today?: string | null,
+      yesterday?: string | null,
+      previous?: string | null,
+      noHistory?: string | null,
+    } | null,
+    admin: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteChatSpaceSubscriptionVariables = {
+  filter?: ModelSubscriptionChatSpaceFilterInput | null,
+};
+
+export type OnDeleteChatSpaceSubscription = {
+  onDeleteChatSpace?:  {
+    __typename: "ChatSpace",
+    id: string,
+    hostId: string,
+    hostType: HostType,
+    name: string,
+    isPublic: boolean,
+    isMultiChannel: boolean,
+    defaultChannelId?: string | null,
+    themeId?: string | null,
+    defaultLanguage?: string | null,
+    theme?:  {
+      __typename: "ChatSpaceTheme",
+      isDark?: boolean | null,
+      navbarLogoUrl?: string | null,
+      primaryColor?: string | null,
+      primaryAccent?: string | null,
+      textColor?: string | null,
+      textSecondary?: string | null,
+      onPrimary?: string | null,
+      backgroundColor?: string | null,
+      backgroundAccent?: string | null,
+      backgroundImageUrl?: string | null,
+      bubbleButtonColor?: string | null,
+      bubbleButtonLogoUrl?: string | null,
+      drawerBackground?: string | null,
+      borderColor?: string | null,
+      textInputTextColor?: string | null,
+      textInputBackgroundColor?: string | null,
+      surfaceBackground?: string | null,
+      surfaceHoveredBackground?: string | null,
+    } | null,
+    text?:  {
+      __typename: "ChatSpaceText",
+      welcomeMessage?: string | null,
+      returnWelcomeMessage?: string | null,
+      brandName?: string | null,
+      inputPlaceholder?: string | null,
+      suggestedPromptsTitle?: string | null,
+      viewMedia?: string | null,
+      close?: string | null,
+      copyText?: string | null,
+      copyTextSuccess?: string | null,
+      share?: string | null,
+      historyTabTitle?: string | null,
+      navigationTabTitle?: string | null,
+      today?: string | null,
+      yesterday?: string | null,
+      previous?: string | null,
+      noHistory?: string | null,
+    } | null,
+    admin: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnCreateOrganizationSubscriptionVariables = {
   filter?: ModelSubscriptionOrganizationFilterInput | null,
 };
@@ -3019,6 +3064,7 @@ export type OnDeleteOrganizationSubscription = {
 
 export type OnCreateUserSubscriptionVariables = {
   filter?: ModelSubscriptionUserFilterInput | null,
+  owner?: string | null,
 };
 
 export type OnCreateUserSubscription = {
@@ -3034,11 +3080,13 @@ export type OnCreateUserSubscription = {
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
 export type OnUpdateUserSubscriptionVariables = {
   filter?: ModelSubscriptionUserFilterInput | null,
+  owner?: string | null,
 };
 
 export type OnUpdateUserSubscription = {
@@ -3054,11 +3102,13 @@ export type OnUpdateUserSubscription = {
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
 export type OnDeleteUserSubscriptionVariables = {
   filter?: ModelSubscriptionUserFilterInput | null,
+  owner?: string | null,
 };
 
 export type OnDeleteUserSubscription = {
@@ -3074,5 +3124,6 @@ export type OnDeleteUserSubscription = {
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };

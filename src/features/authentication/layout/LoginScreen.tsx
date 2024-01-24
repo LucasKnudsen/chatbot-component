@@ -70,9 +70,8 @@ export const LoginScreen = () => {
                     username: value,
                   }))
                 }
-                label='Your email'
+                label='Your login'
                 inputProps={{
-                  type: 'email',
                   placeholder: 'example@mail.com',
                 }}
               />

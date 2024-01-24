@@ -1,5 +1,6 @@
 import { queries } from '@/graphql'
 import { GetChatSpaceQuery } from '@/graphql/types'
+import { logDev } from '@/utils'
 import { GraphQLQuery } from '@aws-amplify/api'
 
 import { API, Auth } from 'aws-amplify'
@@ -34,6 +35,7 @@ export async function initializeConfig(spaceId: string) {
       data,
     }
   } catch (error) {
+    logDev('CHAT SPACE INIT ERROR', error)
     return {
       status: 500,
       data: null,
