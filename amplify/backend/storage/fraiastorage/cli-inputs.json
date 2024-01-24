@@ -8,13 +8,5 @@
   ],
   "authAccess": [
     "CREATE_AND_UPDATE"
-  ],
-  "triggerFunction": "NONE",
-  "groupAccess": {
-    "SuperAdmin": [
-      "CREATE_AND_UPDATE",
-      "READ",
-      "DELETE"
-    ]
-  }
+  ]
 }

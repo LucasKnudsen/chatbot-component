@@ -2,11 +2,5 @@
   "AppSyncApiName": "digitaltwin",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2023-12-15T12:25:45.036Z",
-  "AuthCognitoUserPoolId": {
-    "Fn::GetAtt": [
-      "authdigitaltwinauth",
-      "Outputs.UserPoolId"
-    ]
-  }
+  "AuthModeLastUpdated": "2024-01-24T04:36:57.757Z"
 }

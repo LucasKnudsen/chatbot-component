@@ -1,35 +1,12 @@
 {
   "api": {
     "digitaltwin": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "digitaltwinauth"
-        }
-      ],
+      "dependsOn": [],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "authdigitaltwinauth"
-              }
-            },
-            {
-              "authenticationType": "AWS_IAM"
-            }
-          ],
+          "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDate": "2024-12-14T12:25:26.664Z",
-              "apiKeyExpirationDays": 365,
-              "description": "API_KEY"
-            },
-            "authenticationType": "API_KEY"
+            "authenticationType": "AWS_IAM"
           }
         }
       },
@@ -83,78 +60,11 @@
       "service": "API Gateway"
     }
   },
-  "auth": {
-    "digitaltwinauth": {
-      "customAuth": false,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "digitaltwinauthCustomMessage",
-          "triggerProvider": "Cognito"
-        },
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "digitaltwinauthVerifyAuthChallengeResponse",
-          "triggerProvider": "Cognito"
-        }
-      ],
-      "frontendAuthConfig": {
-        "mfaConfiguration": "OPTIONAL",
-        "mfaTypes": [
-          "TOTP"
-        ],
-        "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 8
-        },
-        "signupAttributes": [],
-        "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
-      },
-      "providerPlugin": "awscloudformation",
-      "service": "Cognito"
-    },
-    "userPoolGroups": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "digitaltwinauth"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Cognito-UserPool-Groups"
-    }
-  },
+  "auth": {},
   "function": {
     "adhoc": {
       "build": true,
       "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "digitaltwinauth"
-        },
         {
           "attributes": [
             "GraphQLAPIIdOutput"
@@ -188,17 +98,7 @@
     },
     "flowiseBroadcast": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput",
-            "GraphQLAPIKeyOutput"
-          ],
-          "category": "api",
-          "resourceName": "digitaltwin"
-        }
-      ],
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -219,13 +119,6 @@
     "handleUsers": {
       "build": true,
       "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "digitaltwinauth"
-        },
         {
           "attributes": [
             "GraphQLAPIIdOutput"
@@ -304,6 +197,38 @@
         {
           "category": "function",
           "resourceName": "detectLanguage"
+        }
+      ]
+    },
+    "AMPLIFY_function_digitaltwinauthCustomMessage_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "digitaltwinauthCustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_digitaltwinauthCustomMessage_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "digitaltwinauthCustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_digitaltwinauthVerifyAuthChallengeResponse_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "digitaltwinauthVerifyAuthChallengeResponse"
+        }
+      ]
+    },
+    "AMPLIFY_function_digitaltwinauthVerifyAuthChallengeResponse_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "digitaltwinauthVerifyAuthChallengeResponse"
         }
       ]
     },
@@ -413,22 +338,7 @@
   },
   "storage": {
     "fraiastorage": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "digitaltwinauth"
-        },
-        {
-          "attributes": [
-            "SuperAdminGroupRole"
-          ],
-          "category": "auth",
-          "resourceName": "userPoolGroups"
-        }
-      ],
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"
     }

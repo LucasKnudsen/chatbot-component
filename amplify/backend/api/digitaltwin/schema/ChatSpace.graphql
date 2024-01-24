@@ -1,13 +1,12 @@
-type ChatSpace
-  @model
-  @auth(
-    rules: [
-      { allow: groups, groups: ["SuperAdmin"] }
-      { allow: groups, groupsField: "admin" }
-      { allow: private, operations: [get] }
-      { allow: public, provider: iam, operations: [get] }
-    ]
-  ) {
+type ChatSpace @model {
+  # @auth(
+  #   rules: [
+  #     { allow: groups, groups: ["SuperAdmin"] }
+  #     { allow: groups, groupsField: "admin" }
+  #     { allow: private, operations: [get] }
+  #     { allow: public, provider: iam, operations: [get] }
+  #   ]
+  # )
   id: ID!
   hostId: ID!
     @index(sortKeyFields: ["id"], name: "ChatSpaceHostIdIndex", queryField: "chatSpaceByHostId") # To retrieve all ChatSpaces for a Host

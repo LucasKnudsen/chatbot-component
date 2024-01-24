@@ -1,11 +1,6 @@
 {
   "lambdaLayers": [],
   "permissions": {
-    "auth": {
-      "digitaltwinauth": [
-        "read"
-      ]
-    },
     "storage": {
       "Channel:@model(appsync)": [
         "create",

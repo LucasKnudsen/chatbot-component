@@ -2,28 +2,12 @@ export type AmplifyDependentResourcesAttributes = {
   "api": {
     "digitaltwin": {
       "GraphQLAPIEndpointOutput": "string",
-      "GraphQLAPIIdOutput": "string",
-      "GraphQLAPIKeyOutput": "string"
+      "GraphQLAPIIdOutput": "string"
     },
     "digitaltwinRest": {
       "ApiId": "string",
       "ApiName": "string",
       "RootUrl": "string"
-    }
-  },
-  "auth": {
-    "digitaltwinauth": {
-      "AppClientID": "string",
-      "AppClientIDWeb": "string",
-      "IdentityPoolId": "string",
-      "IdentityPoolName": "string",
-      "UserPoolArn": "string",
-      "UserPoolId": "string",
-      "UserPoolName": "string"
-    },
-    "userPoolGroups": {
-      "AdminGroupRole": "string",
-      "SuperAdminGroupRole": "string"
     }
   },
   "function": {
@@ -42,6 +26,13 @@ export type AmplifyDependentResourcesAttributes = {
       "Region": "string"
     },
     "detectLanguage": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "digitaltwinauthCustomMessage": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

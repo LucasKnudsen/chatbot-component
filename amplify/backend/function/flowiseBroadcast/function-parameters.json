@@ -1,12 +1,4 @@
 {
   "lambdaLayers": [],
-  "permissions": {
-    "api": {
-      "digitaltwin": [
-        "Query",
-        "Mutation",
-        "Subscription"
-      ]
-    }
-  }
+  "permissions": {}
 }

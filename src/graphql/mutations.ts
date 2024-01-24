@@ -19,129 +19,6 @@ export const publish2channel = /* GraphQL */ `mutation Publish2channel($sessionI
   APITypes.Publish2channelMutationVariables,
   APITypes.Publish2channelMutation
 >;
-export const createCodeItem = /* GraphQL */ `mutation CreateCodeItem(
-  $input: CreateCodeItemInput!
-  $condition: ModelCodeItemConditionInput
-) {
-  createCodeItem(input: $input, condition: $condition) {
-    tenantCode
-    tableCode
-    itemCode
-    internalName
-    internalDescription
-    isEditable
-    isActive
-    isDisplayed
-    isExtended
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateCodeItemMutationVariables,
-  APITypes.CreateCodeItemMutation
->;
-export const updateCodeItem = /* GraphQL */ `mutation UpdateCodeItem(
-  $input: UpdateCodeItemInput!
-  $condition: ModelCodeItemConditionInput
-) {
-  updateCodeItem(input: $input, condition: $condition) {
-    tenantCode
-    tableCode
-    itemCode
-    internalName
-    internalDescription
-    isEditable
-    isActive
-    isDisplayed
-    isExtended
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateCodeItemMutationVariables,
-  APITypes.UpdateCodeItemMutation
->;
-export const deleteCodeItem = /* GraphQL */ `mutation DeleteCodeItem(
-  $input: DeleteCodeItemInput!
-  $condition: ModelCodeItemConditionInput
-) {
-  deleteCodeItem(input: $input, condition: $condition) {
-    tenantCode
-    tableCode
-    itemCode
-    internalName
-    internalDescription
-    isEditable
-    isActive
-    isDisplayed
-    isExtended
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteCodeItemMutationVariables,
-  APITypes.DeleteCodeItemMutation
->;
-export const createLanguageItem = /* GraphQL */ `mutation CreateLanguageItem(
-  $input: CreateLanguageItemInput!
-  $condition: ModelLanguageItemConditionInput
-) {
-  createLanguageItem(input: $input, condition: $condition) {
-    languageCode
-    tableCode
-    itemCode
-    text
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateLanguageItemMutationVariables,
-  APITypes.CreateLanguageItemMutation
->;
-export const updateLanguageItem = /* GraphQL */ `mutation UpdateLanguageItem(
-  $input: UpdateLanguageItemInput!
-  $condition: ModelLanguageItemConditionInput
-) {
-  updateLanguageItem(input: $input, condition: $condition) {
-    languageCode
-    tableCode
-    itemCode
-    text
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateLanguageItemMutationVariables,
-  APITypes.UpdateLanguageItemMutation
->;
-export const deleteLanguageItem = /* GraphQL */ `mutation DeleteLanguageItem(
-  $input: DeleteLanguageItemInput!
-  $condition: ModelLanguageItemConditionInput
-) {
-  deleteLanguageItem(input: $input, condition: $condition) {
-    languageCode
-    tableCode
-    itemCode
-    text
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteLanguageItemMutationVariables,
-  APITypes.DeleteLanguageItemMutation
->;
 export const createChannel = /* GraphQL */ `mutation CreateChannel(
   $input: CreateChannelInput!
   $condition: ModelChannelConditionInput
@@ -160,7 +37,6 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
     isPublic
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -186,7 +62,6 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
     isPublic
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -212,7 +87,6 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
     isPublic
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -235,7 +109,6 @@ export const createChannelUserAccess = /* GraphQL */ `mutation CreateChannelUser
     channelDescription
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -258,7 +131,6 @@ export const updateChannelUserAccess = /* GraphQL */ `mutation UpdateChannelUser
     channelDescription
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -281,7 +153,6 @@ export const deleteChannelUserAccess = /* GraphQL */ `mutation DeleteChannelUser
     channelDescription
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -361,7 +232,6 @@ export const createChannelHistoryItem = /* GraphQL */ `mutation CreateChannelHis
     content
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -381,7 +251,6 @@ export const updateChannelHistoryItem = /* GraphQL */ `mutation UpdateChannelHis
     content
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -401,7 +270,6 @@ export const deleteChannelHistoryItem = /* GraphQL */ `mutation DeleteChannelHis
     content
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -601,6 +469,129 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
   APITypes.DeleteChatSpaceMutationVariables,
   APITypes.DeleteChatSpaceMutation
 >;
+export const createCodeItem = /* GraphQL */ `mutation CreateCodeItem(
+  $input: CreateCodeItemInput!
+  $condition: ModelCodeItemConditionInput
+) {
+  createCodeItem(input: $input, condition: $condition) {
+    tenantCode
+    tableCode
+    itemCode
+    internalName
+    internalDescription
+    isEditable
+    isActive
+    isDisplayed
+    isExtended
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateCodeItemMutationVariables,
+  APITypes.CreateCodeItemMutation
+>;
+export const updateCodeItem = /* GraphQL */ `mutation UpdateCodeItem(
+  $input: UpdateCodeItemInput!
+  $condition: ModelCodeItemConditionInput
+) {
+  updateCodeItem(input: $input, condition: $condition) {
+    tenantCode
+    tableCode
+    itemCode
+    internalName
+    internalDescription
+    isEditable
+    isActive
+    isDisplayed
+    isExtended
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateCodeItemMutationVariables,
+  APITypes.UpdateCodeItemMutation
+>;
+export const deleteCodeItem = /* GraphQL */ `mutation DeleteCodeItem(
+  $input: DeleteCodeItemInput!
+  $condition: ModelCodeItemConditionInput
+) {
+  deleteCodeItem(input: $input, condition: $condition) {
+    tenantCode
+    tableCode
+    itemCode
+    internalName
+    internalDescription
+    isEditable
+    isActive
+    isDisplayed
+    isExtended
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteCodeItemMutationVariables,
+  APITypes.DeleteCodeItemMutation
+>;
+export const createLanguageItem = /* GraphQL */ `mutation CreateLanguageItem(
+  $input: CreateLanguageItemInput!
+  $condition: ModelLanguageItemConditionInput
+) {
+  createLanguageItem(input: $input, condition: $condition) {
+    languageCode
+    tableCode
+    itemCode
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateLanguageItemMutationVariables,
+  APITypes.CreateLanguageItemMutation
+>;
+export const updateLanguageItem = /* GraphQL */ `mutation UpdateLanguageItem(
+  $input: UpdateLanguageItemInput!
+  $condition: ModelLanguageItemConditionInput
+) {
+  updateLanguageItem(input: $input, condition: $condition) {
+    languageCode
+    tableCode
+    itemCode
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateLanguageItemMutationVariables,
+  APITypes.UpdateLanguageItemMutation
+>;
+export const deleteLanguageItem = /* GraphQL */ `mutation DeleteLanguageItem(
+  $input: DeleteLanguageItemInput!
+  $condition: ModelLanguageItemConditionInput
+) {
+  deleteLanguageItem(input: $input, condition: $condition) {
+    languageCode
+    tableCode
+    itemCode
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteLanguageItemMutationVariables,
+  APITypes.DeleteLanguageItemMutation
+>;
 export const createOrganization = /* GraphQL */ `mutation CreateOrganization(
   $input: CreateOrganizationInput!
   $condition: ModelOrganizationConditionInput
@@ -673,7 +664,6 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -696,7 +686,6 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -719,7 +708,6 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }

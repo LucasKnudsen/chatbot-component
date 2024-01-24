@@ -19,122 +19,8 @@ export const subscribe2channel = /* GraphQL */ `subscription Subscribe2channel($
   APITypes.Subscribe2channelSubscriptionVariables,
   APITypes.Subscribe2channelSubscription
 >;
-export const onCreateCodeItem = /* GraphQL */ `subscription OnCreateCodeItem($filter: ModelSubscriptionCodeItemFilterInput) {
-  onCreateCodeItem(filter: $filter) {
-    tenantCode
-    tableCode
-    itemCode
-    internalName
-    internalDescription
-    isEditable
-    isActive
-    isDisplayed
-    isExtended
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnCreateCodeItemSubscriptionVariables,
-  APITypes.OnCreateCodeItemSubscription
->;
-export const onUpdateCodeItem = /* GraphQL */ `subscription OnUpdateCodeItem($filter: ModelSubscriptionCodeItemFilterInput) {
-  onUpdateCodeItem(filter: $filter) {
-    tenantCode
-    tableCode
-    itemCode
-    internalName
-    internalDescription
-    isEditable
-    isActive
-    isDisplayed
-    isExtended
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnUpdateCodeItemSubscriptionVariables,
-  APITypes.OnUpdateCodeItemSubscription
->;
-export const onDeleteCodeItem = /* GraphQL */ `subscription OnDeleteCodeItem($filter: ModelSubscriptionCodeItemFilterInput) {
-  onDeleteCodeItem(filter: $filter) {
-    tenantCode
-    tableCode
-    itemCode
-    internalName
-    internalDescription
-    isEditable
-    isActive
-    isDisplayed
-    isExtended
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnDeleteCodeItemSubscriptionVariables,
-  APITypes.OnDeleteCodeItemSubscription
->;
-export const onCreateLanguageItem = /* GraphQL */ `subscription OnCreateLanguageItem(
-  $filter: ModelSubscriptionLanguageItemFilterInput
-) {
-  onCreateLanguageItem(filter: $filter) {
-    languageCode
-    tableCode
-    itemCode
-    text
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnCreateLanguageItemSubscriptionVariables,
-  APITypes.OnCreateLanguageItemSubscription
->;
-export const onUpdateLanguageItem = /* GraphQL */ `subscription OnUpdateLanguageItem(
-  $filter: ModelSubscriptionLanguageItemFilterInput
-) {
-  onUpdateLanguageItem(filter: $filter) {
-    languageCode
-    tableCode
-    itemCode
-    text
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnUpdateLanguageItemSubscriptionVariables,
-  APITypes.OnUpdateLanguageItemSubscription
->;
-export const onDeleteLanguageItem = /* GraphQL */ `subscription OnDeleteLanguageItem(
-  $filter: ModelSubscriptionLanguageItemFilterInput
-) {
-  onDeleteLanguageItem(filter: $filter) {
-    languageCode
-    tableCode
-    itemCode
-    text
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnDeleteLanguageItemSubscriptionVariables,
-  APITypes.OnDeleteLanguageItemSubscription
->;
-export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
-  $filter: ModelSubscriptionChannelFilterInput
-  $owner: String
-) {
-  onCreateChannel(filter: $filter, owner: $owner) {
+export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel($filter: ModelSubscriptionChannelFilterInput) {
+  onCreateChannel(filter: $filter) {
     id
     chatSpaceId
     apiHost
@@ -148,7 +34,6 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
     isPublic
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -156,11 +41,8 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
   APITypes.OnCreateChannelSubscriptionVariables,
   APITypes.OnCreateChannelSubscription
 >;
-export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
-  $filter: ModelSubscriptionChannelFilterInput
-  $owner: String
-) {
-  onUpdateChannel(filter: $filter, owner: $owner) {
+export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel($filter: ModelSubscriptionChannelFilterInput) {
+  onUpdateChannel(filter: $filter) {
     id
     chatSpaceId
     apiHost
@@ -174,7 +56,6 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
     isPublic
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -182,11 +63,8 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
   APITypes.OnUpdateChannelSubscriptionVariables,
   APITypes.OnUpdateChannelSubscription
 >;
-export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
-  $filter: ModelSubscriptionChannelFilterInput
-  $owner: String
-) {
-  onDeleteChannel(filter: $filter, owner: $owner) {
+export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel($filter: ModelSubscriptionChannelFilterInput) {
+  onDeleteChannel(filter: $filter) {
     id
     chatSpaceId
     apiHost
@@ -200,7 +78,6 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
     isPublic
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -210,9 +87,8 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
 >;
 export const onCreateChannelUserAccess = /* GraphQL */ `subscription OnCreateChannelUserAccess(
   $filter: ModelSubscriptionChannelUserAccessFilterInput
-  $owner: String
 ) {
-  onCreateChannelUserAccess(filter: $filter, owner: $owner) {
+  onCreateChannelUserAccess(filter: $filter) {
     accessId
     channelId
     chatSpaceId
@@ -223,7 +99,6 @@ export const onCreateChannelUserAccess = /* GraphQL */ `subscription OnCreateCha
     channelDescription
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -233,9 +108,8 @@ export const onCreateChannelUserAccess = /* GraphQL */ `subscription OnCreateCha
 >;
 export const onUpdateChannelUserAccess = /* GraphQL */ `subscription OnUpdateChannelUserAccess(
   $filter: ModelSubscriptionChannelUserAccessFilterInput
-  $owner: String
 ) {
-  onUpdateChannelUserAccess(filter: $filter, owner: $owner) {
+  onUpdateChannelUserAccess(filter: $filter) {
     accessId
     channelId
     chatSpaceId
@@ -246,7 +120,6 @@ export const onUpdateChannelUserAccess = /* GraphQL */ `subscription OnUpdateCha
     channelDescription
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -256,9 +129,8 @@ export const onUpdateChannelUserAccess = /* GraphQL */ `subscription OnUpdateCha
 >;
 export const onDeleteChannelUserAccess = /* GraphQL */ `subscription OnDeleteChannelUserAccess(
   $filter: ModelSubscriptionChannelUserAccessFilterInput
-  $owner: String
 ) {
-  onDeleteChannelUserAccess(filter: $filter, owner: $owner) {
+  onDeleteChannelUserAccess(filter: $filter) {
     accessId
     channelId
     chatSpaceId
@@ -269,7 +141,6 @@ export const onDeleteChannelUserAccess = /* GraphQL */ `subscription OnDeleteCha
     channelDescription
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -336,9 +207,8 @@ export const onDeleteChannelDocument = /* GraphQL */ `subscription OnDeleteChann
 >;
 export const onCreateChannelHistoryItem = /* GraphQL */ `subscription OnCreateChannelHistoryItem(
   $filter: ModelSubscriptionChannelHistoryItemFilterInput
-  $owner: String
 ) {
-  onCreateChannelHistoryItem(filter: $filter, owner: $owner) {
+  onCreateChannelHistoryItem(filter: $filter) {
     ownerId
     channelId
     id
@@ -346,7 +216,6 @@ export const onCreateChannelHistoryItem = /* GraphQL */ `subscription OnCreateCh
     content
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -356,9 +225,8 @@ export const onCreateChannelHistoryItem = /* GraphQL */ `subscription OnCreateCh
 >;
 export const onUpdateChannelHistoryItem = /* GraphQL */ `subscription OnUpdateChannelHistoryItem(
   $filter: ModelSubscriptionChannelHistoryItemFilterInput
-  $owner: String
 ) {
-  onUpdateChannelHistoryItem(filter: $filter, owner: $owner) {
+  onUpdateChannelHistoryItem(filter: $filter) {
     ownerId
     channelId
     id
@@ -366,7 +234,6 @@ export const onUpdateChannelHistoryItem = /* GraphQL */ `subscription OnUpdateCh
     content
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -376,9 +243,8 @@ export const onUpdateChannelHistoryItem = /* GraphQL */ `subscription OnUpdateCh
 >;
 export const onDeleteChannelHistoryItem = /* GraphQL */ `subscription OnDeleteChannelHistoryItem(
   $filter: ModelSubscriptionChannelHistoryItemFilterInput
-  $owner: String
 ) {
-  onDeleteChannelHistoryItem(filter: $filter, owner: $owner) {
+  onDeleteChannelHistoryItem(filter: $filter) {
     ownerId
     channelId
     id
@@ -386,7 +252,6 @@ export const onDeleteChannelHistoryItem = /* GraphQL */ `subscription OnDeleteCh
     content
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -577,6 +442,117 @@ export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($
   APITypes.OnDeleteChatSpaceSubscriptionVariables,
   APITypes.OnDeleteChatSpaceSubscription
 >;
+export const onCreateCodeItem = /* GraphQL */ `subscription OnCreateCodeItem($filter: ModelSubscriptionCodeItemFilterInput) {
+  onCreateCodeItem(filter: $filter) {
+    tenantCode
+    tableCode
+    itemCode
+    internalName
+    internalDescription
+    isEditable
+    isActive
+    isDisplayed
+    isExtended
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateCodeItemSubscriptionVariables,
+  APITypes.OnCreateCodeItemSubscription
+>;
+export const onUpdateCodeItem = /* GraphQL */ `subscription OnUpdateCodeItem($filter: ModelSubscriptionCodeItemFilterInput) {
+  onUpdateCodeItem(filter: $filter) {
+    tenantCode
+    tableCode
+    itemCode
+    internalName
+    internalDescription
+    isEditable
+    isActive
+    isDisplayed
+    isExtended
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateCodeItemSubscriptionVariables,
+  APITypes.OnUpdateCodeItemSubscription
+>;
+export const onDeleteCodeItem = /* GraphQL */ `subscription OnDeleteCodeItem($filter: ModelSubscriptionCodeItemFilterInput) {
+  onDeleteCodeItem(filter: $filter) {
+    tenantCode
+    tableCode
+    itemCode
+    internalName
+    internalDescription
+    isEditable
+    isActive
+    isDisplayed
+    isExtended
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteCodeItemSubscriptionVariables,
+  APITypes.OnDeleteCodeItemSubscription
+>;
+export const onCreateLanguageItem = /* GraphQL */ `subscription OnCreateLanguageItem(
+  $filter: ModelSubscriptionLanguageItemFilterInput
+) {
+  onCreateLanguageItem(filter: $filter) {
+    languageCode
+    tableCode
+    itemCode
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateLanguageItemSubscriptionVariables,
+  APITypes.OnCreateLanguageItemSubscription
+>;
+export const onUpdateLanguageItem = /* GraphQL */ `subscription OnUpdateLanguageItem(
+  $filter: ModelSubscriptionLanguageItemFilterInput
+) {
+  onUpdateLanguageItem(filter: $filter) {
+    languageCode
+    tableCode
+    itemCode
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateLanguageItemSubscriptionVariables,
+  APITypes.OnUpdateLanguageItemSubscription
+>;
+export const onDeleteLanguageItem = /* GraphQL */ `subscription OnDeleteLanguageItem(
+  $filter: ModelSubscriptionLanguageItemFilterInput
+) {
+  onDeleteLanguageItem(filter: $filter) {
+    languageCode
+    tableCode
+    itemCode
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteLanguageItemSubscriptionVariables,
+  APITypes.OnDeleteLanguageItemSubscription
+>;
 export const onCreateOrganization = /* GraphQL */ `subscription OnCreateOrganization(
   $filter: ModelSubscriptionOrganizationFilterInput
 ) {
@@ -631,11 +607,8 @@ export const onDeleteOrganization = /* GraphQL */ `subscription OnDeleteOrganiza
   APITypes.OnDeleteOrganizationSubscriptionVariables,
   APITypes.OnDeleteOrganizationSubscription
 >;
-export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
-  $filter: ModelSubscriptionUserFilterInput
-  $owner: String
-) {
-  onCreateUser(filter: $filter, owner: $owner) {
+export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: ModelSubscriptionUserFilterInput) {
+  onCreateUser(filter: $filter) {
     id
     organizationId
     chatSpaceId
@@ -646,7 +619,6 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -654,11 +626,8 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
   APITypes.OnCreateUserSubscriptionVariables,
   APITypes.OnCreateUserSubscription
 >;
-export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
-  $filter: ModelSubscriptionUserFilterInput
-  $owner: String
-) {
-  onUpdateUser(filter: $filter, owner: $owner) {
+export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: ModelSubscriptionUserFilterInput) {
+  onUpdateUser(filter: $filter) {
     id
     organizationId
     chatSpaceId
@@ -669,7 +638,6 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -677,11 +645,8 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
   APITypes.OnUpdateUserSubscriptionVariables,
   APITypes.OnUpdateUserSubscription
 >;
-export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
-  $filter: ModelSubscriptionUserFilterInput
-  $owner: String
-) {
-  onDeleteUser(filter: $filter, owner: $owner) {
+export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser($filter: ModelSubscriptionUserFilterInput) {
+  onDeleteUser(filter: $filter) {
     id
     organizationId
     chatSpaceId
@@ -692,7 +657,6 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }

@@ -1,4 +1,5 @@
-type Organization @model @auth(rules: [{ allow: groups, groupsField: "admin" }]) {
+type Organization @model {
+  # @auth(rules: [{ allow: groups, groupsField: "admin" }])
   id: ID!
   name: String!
 
@@ -8,7 +9,8 @@ type Organization @model @auth(rules: [{ allow: groups, groupsField: "admin" }])
   admin: String!
 }
 
-type User @model @auth(rules: [{ allow: owner }]) {
+type User @model {
+  # @auth(rules: [{ allow: owner }])
   id: String! @primaryKey
 
   organizationId: ID @index(name: "byOrganization", queryField: "userByOrganizationId")
