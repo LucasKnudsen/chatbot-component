@@ -1,3 +1,4 @@
+import { Spinner } from '@/components/loaders'
 import { setIsLoadingSocket } from '@/features/messages'
 import { useTheme } from '@/features/theme'
 import { Channel, ChannelUserAccess, ChatSpace } from '@/graphql'
@@ -13,7 +14,7 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
   return (
     <div class='w-full h-full flex flex-col justify-center items-center animate-fade-in gap-4'>
       <div class='text-lg text-red-500 text-center'>
-        <h1 class='text-xl font-bold leading-tight tracking-tight '>Select a course</h1>
+        <h1 class='text-xl  leading-tight tracking-tight '>Select a course</h1>
 
         {props.channels?.map((channel) => (
           <ChannelItem channel={channel} isPublic={props.chatSpace.isPublic} />
@@ -36,6 +37,8 @@ const ChannelItem = (props: { channel: Channel | ChannelUserAccess; isPublic: bo
   const { theme } = useTheme()
 
   const handleClick = async () => {
+    if (channelDetailsMutation.isPending) return
+
     setIsLoadingSocket(true)
 
     if (props.isPublic) {
@@ -47,21 +50,29 @@ const ChannelItem = (props: { channel: Channel | ChannelUserAccess; isPublic: bo
 
   return (
     <button
-      class=' m-4 px-4 py-2 rounded-md'
+      disabled={channelDetailsMutation.isPending}
+      class=' m-4 px-4 py-2 rounded-md flex justify-center items-center gap-4'
       style={{
         background: theme()?.surfaceHoveredBackground,
         color: theme()?.textColor,
+        border: `1px solid ${theme()?.borderColor}`,
       }}
       onClick={handleClick}
     >
-      {channelDetailsMutation.isPending && (
-        <div class='animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900'></div>
-      )}
-      {(props.channel as Channel).name || (props.channel as ChannelUserAccess).channelName}
+      {channelDetailsMutation.isPending && <Spinner size={24} />}
+      <div class='relative'>
+        <h3 class='text-md font-semibold'>
+          {(props.channel as Channel).name || (props.channel as ChannelUserAccess).channelName}
+        </h3>
+        <p class='text-xs italic'>
+          {(props.channel as Channel).description ||
+            (props.channel as ChannelUserAccess).channelDescription}
+        </p>
 
-      {channelDetailsMutation.isError && (
-        <div class='text-red-500'>{channelDetailsMutation.error.message}</div>
-      )}
+        {channelDetailsMutation.isError && (
+          <div class='text-red-500'>{channelDetailsMutation.error.message}</div>
+        )}
+      </div>
     </button>
   )
 }

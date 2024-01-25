@@ -140,6 +140,7 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
     apiHost
     chatflowId
     name
+    description
     initialPrompts {
       display
       prompt
@@ -166,6 +167,7 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
     apiHost
     chatflowId
     name
+    description
     initialPrompts {
       display
       prompt
@@ -192,6 +194,7 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
     apiHost
     chatflowId
     name
+    description
     initialPrompts {
       display
       prompt

@@ -15,7 +15,13 @@ import { AppSyncResolverHandler } from 'aws-lambda'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 const ddbService = new DynamoDBClient({ region: process.env.REGION })
 
-import { DynamoDBDocumentClient, GetCommand, GetCommandInput } from '@aws-sdk/lib-dynamodb'
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  GetCommandInput,
+  QueryCommand,
+  QueryCommandInput,
+} from '@aws-sdk/lib-dynamodb'
 import { authorizeToken } from './authorizers'
 const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
 
@@ -31,6 +37,8 @@ type Arguments = {
 export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => {
   console.time('HANDLER')
 
+  let isAuthorized = false
+
   try {
     const { isMock, input } = event.arguments
     !isMock && console.log(`EVENT : ${event}`)
@@ -39,12 +47,9 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
 
     switch (input.flow) {
       case 'BY_ID':
-        const isAuthorized = await authorizeToken(
-          event.request.headers.authorization,
-          (identity) => {
-            return authorizeChannelReadAccess(identity, input.channelId!)
-          }
-        )
+        isAuthorized = await authorizeToken(event.request.headers.authorization, (identity) => {
+          return authorizeChannelReadAccess(identity, input.channelId!)
+        })
 
         if (!isAuthorized) {
           throw new Error('Unauthorized to fetch channel')
@@ -55,7 +60,13 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
         break
 
       case 'BY_CHAT_SPACE':
-        data = []
+        isAuthorized = await authorizePublicAttribute(input.chatSpaceId!)
+
+        if (!isAuthorized) {
+          throw new Error('Unauthorized to fetch channels')
+        }
+
+        data = await fetchChannelsByChatSpace(input.chatSpaceId!)
 
         break
 
@@ -88,7 +99,7 @@ const fetchSingleChannel = async (channelId: string) => {
   return [Item]
 }
 
-const authorizeChannelReadAccess = async (identity: any, channelId: string) => {
+const authorizeChannelReadAccess = async (identity: any, channelId: string): Promise<boolean> => {
   const params: GetCommandInput = {
     TableName: process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME,
     Key: {
@@ -107,4 +118,43 @@ const authorizeChannelReadAccess = async (identity: any, channelId: string) => {
   // Since READ is the lowest level of access, we can assume that the user has access to the channel
 
   return true
+}
+
+const fetchChannelsByChatSpace = async (chatSpaceId: string) => {
+  const params: QueryCommandInput = {
+    TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
+    IndexName: 'byChatSpace',
+    KeyConditionExpression: 'chatSpaceId = :chatSpaceId',
+    ExpressionAttributeValues: {
+      ':chatSpaceId': chatSpaceId,
+    },
+  }
+
+  const { Items } = await ddbDocClient.send(new QueryCommand(params))
+
+  return Items
+}
+
+const authorizePublicAttribute = async (chatSpaceId: string): Promise<boolean> => {
+  // Check if chatSpace is public
+  const params: GetCommandInput = {
+    TableName: process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME,
+    Key: {
+      id: chatSpaceId,
+    },
+  }
+
+  const { Item } = await ddbDocClient.send(new GetCommand(params))
+
+  if (!Item) {
+    console.error('ChatSpace not found')
+    return false
+  }
+
+  if (Item.isPublic) {
+    return true
+  }
+
+  console.error('ChatSpace is not public')
+  return false
 }

@@ -152,6 +152,7 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
     apiHost
     chatflowId
     name
+    description
     initialPrompts {
       display
       prompt
@@ -178,6 +179,7 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
     apiHost
     chatflowId
     name
+    description
     initialPrompts {
       display
       prompt
@@ -204,6 +206,7 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
     apiHost
     chatflowId
     name
+    description
     initialPrompts {
       display
       prompt

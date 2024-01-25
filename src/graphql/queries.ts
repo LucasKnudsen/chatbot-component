@@ -137,6 +137,7 @@ export const getChannel = /* GraphQL */ `query GetChannel($id: ID!) {
     apiHost
     chatflowId
     name
+    description
     initialPrompts {
       display
       prompt
@@ -165,6 +166,7 @@ export const listChannels = /* GraphQL */ `query ListChannels(
       apiHost
       chatflowId
       name
+      description
       initialPrompts {
         display
         prompt
@@ -204,6 +206,7 @@ export const channelsByChatSpaceId = /* GraphQL */ `query ChannelsByChatSpaceId(
       apiHost
       chatflowId
       name
+      description
       initialPrompts {
         display
         prompt
@@ -799,6 +802,7 @@ export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchCha
     apiHost
     chatflowId
     name
+    description
     initialPrompts {
       display
       prompt

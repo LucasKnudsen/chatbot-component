@@ -43,14 +43,15 @@ var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
 var authorizers_1 = require("./authorizers");
 var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, isMock, input_1, data, _b, isAuthorized, error_1;
+    var isAuthorized, _a, isMock, input_1, data, _b, error_1;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 console.time('HANDLER');
+                isAuthorized = false;
                 _c.label = 1;
             case 1:
-                _c.trys.push([1, 8, , 9]);
+                _c.trys.push([1, 10, , 11]);
                 _a = event.arguments, isMock = _a.isMock, input_1 = _a.input;
                 !isMock && console.log("EVENT : ".concat(event));
                 data = void 0;
@@ -59,7 +60,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     case 'BY_ID': return [3 /*break*/, 2];
                     case 'BY_CHAT_SPACE': return [3 /*break*/, 5];
                 }
-                return [3 /*break*/, 6];
+                return [3 /*break*/, 8];
             case 2: return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) {
                     return authorizeChannelReadAccess(identity, input_1.channelId);
                 })];
@@ -71,22 +72,29 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 return [4 /*yield*/, fetchSingleChannel(input_1.channelId)];
             case 4:
                 data = _c.sent();
-                return [3 /*break*/, 7];
-            case 5:
-                data = [];
-                return [3 /*break*/, 7];
+                return [3 /*break*/, 9];
+            case 5: return [4 /*yield*/, authorizePublicAttribute(input_1.chatSpaceId)];
             case 6:
+                isAuthorized = _c.sent();
+                if (!isAuthorized) {
+                    throw new Error('Unauthorized to fetch channels');
+                }
+                return [4 /*yield*/, fetchChannelsByChatSpace(input_1.chatSpaceId)];
+            case 7:
+                data = _c.sent();
+                return [3 /*break*/, 9];
+            case 8:
                 console.timeEnd('HANDLER');
                 throw new Error('Invalid flow');
-            case 7:
+            case 9:
                 console.timeEnd('HANDLER');
                 return [2 /*return*/, data];
-            case 8:
+            case 10:
                 error_1 = _c.sent();
                 console.error('DEFAULT ERROR', error_1);
                 console.timeEnd('HANDLER');
                 throw error_1;
-            case 9: return [2 /*return*/];
+            case 11: return [2 /*return*/];
         }
     });
 }); };
@@ -130,6 +138,52 @@ var authorizeChannelReadAccess = function (identity, channelId) { return __await
                 }
                 // Since READ is the lowest level of access, we can assume that the user has access to the channel
                 return [2 /*return*/, true];
+        }
+    });
+}); };
+var fetchChannelsByChatSpace = function (chatSpaceId) { return __awaiter(void 0, void 0, void 0, function () {
+    var params, Items;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                params = {
+                    TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
+                    IndexName: 'byChatSpace',
+                    KeyConditionExpression: 'chatSpaceId = :chatSpaceId',
+                    ExpressionAttributeValues: {
+                        ':chatSpaceId': chatSpaceId
+                    }
+                };
+                return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.QueryCommand(params))];
+            case 1:
+                Items = (_a.sent()).Items;
+                return [2 /*return*/, Items];
+        }
+    });
+}); };
+var authorizePublicAttribute = function (chatSpaceId) { return __awaiter(void 0, void 0, void 0, function () {
+    var params, Item;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                params = {
+                    TableName: process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME,
+                    Key: {
+                        id: chatSpaceId
+                    }
+                };
+                return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.GetCommand(params))];
+            case 1:
+                Item = (_a.sent()).Item;
+                if (!Item) {
+                    console.error('ChatSpace not found');
+                    return [2 /*return*/, false];
+                }
+                if (Item.isPublic) {
+                    return [2 /*return*/, true];
+                }
+                console.error('ChatSpace is not public');
+                return [2 /*return*/, false];
         }
     });
 }); };

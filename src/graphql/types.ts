@@ -155,6 +155,7 @@ export type CreateChannelInput = {
   apiHost?: string | null,
   chatflowId?: string | null,
   name: string,
+  description?: string | null,
   initialPrompts?: Array< InitialPromptInput > | null,
   isPublic: boolean,
 };
@@ -169,6 +170,7 @@ export type ModelChannelConditionInput = {
   apiHost?: ModelStringInput | null,
   chatflowId?: ModelStringInput | null,
   name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
   and?: Array< ModelChannelConditionInput | null > | null,
   or?: Array< ModelChannelConditionInput | null > | null,
@@ -198,6 +200,7 @@ export type Channel = {
   apiHost?: string | null,
   chatflowId?: string | null,
   name: string,
+  description?: string | null,
   initialPrompts?:  Array<InitialPrompt > | null,
   isPublic: boolean,
   createdAt: string,
@@ -217,6 +220,7 @@ export type UpdateChannelInput = {
   apiHost?: string | null,
   chatflowId?: string | null,
   name?: string | null,
+  description?: string | null,
   initialPrompts?: Array< InitialPromptInput > | null,
   isPublic?: boolean | null,
 };
@@ -749,6 +753,7 @@ export type ModelChannelFilterInput = {
   apiHost?: ModelStringInput | null,
   chatflowId?: ModelStringInput | null,
   name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
   and?: Array< ModelChannelFilterInput | null > | null,
   or?: Array< ModelChannelFilterInput | null > | null,
@@ -961,6 +966,7 @@ export type ModelSubscriptionChannelFilterInput = {
   apiHost?: ModelSubscriptionStringInput | null,
   chatflowId?: ModelSubscriptionStringInput | null,
   name?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
   isPublic?: ModelSubscriptionBooleanInput | null,
   and?: Array< ModelSubscriptionChannelFilterInput | null > | null,
   or?: Array< ModelSubscriptionChannelFilterInput | null > | null,
@@ -1206,6 +1212,7 @@ export type CreateChannelMutation = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    description?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -1231,6 +1238,7 @@ export type UpdateChannelMutation = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    description?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -1256,6 +1264,7 @@ export type DeleteChannelMutation = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    description?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -1865,6 +1874,7 @@ export type GetChannelQuery = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    description?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -1893,6 +1903,7 @@ export type ListChannelsQuery = {
       apiHost?: string | null,
       chatflowId?: string | null,
       name: string,
+      description?: string | null,
       initialPrompts?:  Array< {
         __typename: "InitialPrompt",
         display?: string | null,
@@ -1925,6 +1936,7 @@ export type ChannelsByChatSpaceIdQuery = {
       apiHost?: string | null,
       chatflowId?: string | null,
       name: string,
+      description?: string | null,
       initialPrompts?:  Array< {
         __typename: "InitialPrompt",
         display?: string | null,
@@ -2474,6 +2486,7 @@ export type FetchChannelsQuery = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    description?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -2622,6 +2635,7 @@ export type OnCreateChannelSubscription = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    description?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -2647,6 +2661,7 @@ export type OnUpdateChannelSubscription = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    description?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -2672,6 +2687,7 @@ export type OnDeleteChannelSubscription = {
     apiHost?: string | null,
     chatflowId?: string | null,
     name: string,
+    description?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,

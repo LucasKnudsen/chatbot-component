@@ -5,6 +5,8 @@ type Channel @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }, { a
   chatflowId: String
 
   name: String!
+  description: String
+
   initialPrompts: [InitialPrompt!]
   isPublic: Boolean! @default(value: "false")
 }

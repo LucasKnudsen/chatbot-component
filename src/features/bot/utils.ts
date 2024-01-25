@@ -12,7 +12,7 @@ import { logDev } from '@/utils'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { API } from 'aws-amplify'
 
-export async function fetchChannels(chatSpaceId: string): Promise<Channel[]> {
+export async function fetchPublicChannels(chatSpaceId: string): Promise<Channel[]> {
   const { data } = await API.graphql<GraphQLQuery<FetchChannelsQuery>>({
     query: queries.fetchChannels,
     variables: {

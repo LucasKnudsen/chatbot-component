@@ -1,4 +1,12 @@
 "use strict";
+/* Amplify Params - DO NOT EDIT
+    API_DIGITALTWIN_CHANNELTABLE_ARN
+    API_DIGITALTWIN_CHANNELTABLE_NAME
+    API_DIGITALTWIN_GRAPHQLAPIIDOUTPUT
+    ENV
+    FUNCTION_FLOWISEBROADCAST_NAME
+    REGION
+Amplify Params - DO NOT EDIT */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,23 +43,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.handler = void 0;
 var axios_1 = require("axios");
-// @ts-ignore
-var client_ssm_1 = require("@aws-sdk/client-ssm");
-// @ts-ignore
 var openai_1 = require("openai");
-// @ts-ignore
 var client_dynamodb_1 = require("@aws-sdk/client-dynamodb");
-// @ts-ignore
-var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
-// @ts-ignore
+var client_ssm_1 = require("@aws-sdk/client-ssm");
+var ddbService = new client_dynamodb_1.DynamoDBClient({ region: process.env.REGION });
 var client_lambda_1 = require("@aws-sdk/client-lambda");
+var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
+var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
 var ssmClient = new client_ssm_1.SSMClient({ region: process.env.REGION });
 var client = new client_lambda_1.LambdaClient({ region: process.env.REGION });
-var ddbService = new client_dynamodb_1.DynamoDBClient({ region: process.env.REGION });
-var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
     var responseStatus, responseBody, body, answer, _a, params, command, _b, error_1;
     var _c, _d;
@@ -78,12 +81,12 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 params = {
                     body: {
                         sessionId: body.chatId,
-                        data: answer,
-                    },
+                        data: answer
+                    }
                 };
                 command = new client_lambda_1.InvokeCommand({
                     FunctionName: process.env.FUNCTION_FLOWISEBROADCAST_NAME,
-                    Payload: JSON.stringify(params),
+                    Payload: JSON.stringify(params)
                 });
                 return [4 /*yield*/, client.send(command)];
             case 4:
@@ -103,7 +106,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 // TODO: Check if sourceDocuments
                 console.log("ANSWER:", {
                     text: answer.text,
-                    amountOfSourceDocuments: (_c = answer.sourceDocuments) === null || _c === void 0 ? void 0 : _c.length,
+                    amountOfSourceDocuments: (_c = answer.sourceDocuments) === null || _c === void 0 ? void 0 : _c.length
                 });
                 responseBody = answer;
                 return [3 /*break*/, 12];
@@ -115,7 +118,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     message: error_1.message,
                     status: responseStatus,
                     type: error_1.type,
-                    stack: error_1.stack,
+                    stack: error_1.stack
                 };
                 return [3 /*break*/, 12];
             case 11:
@@ -125,15 +128,15 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                         body: JSON.stringify(responseBody),
                         headers: {
                             'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Headers': '*',
-                        },
+                            'Access-Control-Allow-Headers': '*'
+                        }
                     }];
             case 12: return [2 /*return*/];
         }
     });
 }); };
 exports.handler = handler;
-var getChannel = function (spaceId, channelId) { return __awaiter(void 0, void 0, void 0, function () {
+var getChannel = function (channelId) { return __awaiter(void 0, void 0, void 0, function () {
     var command, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -141,9 +144,8 @@ var getChannel = function (spaceId, channelId) { return __awaiter(void 0, void 0
                 command = new lib_dynamodb_1.GetCommand({
                     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
                     Key: {
-                        chatSpaceId: spaceId,
-                        id: channelId,
-                    },
+                        id: channelId
+                    }
                 });
                 return [4 /*yield*/, ddbDocClient.send(command)];
             case 1:
@@ -174,10 +176,7 @@ var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, vo
                 spaceId = body.spaceId, channelId = body.channelId, chatId = body.chatId, socketIOClientId = body.socketIOClientId, question = body.question;
                 if (!channelId || !spaceId)
                     throw new TypeError('MISSING_CHANNEL_ID');
-                return [4 /*yield*/, Promise.all([
-                        getChannel(spaceId, channelId),
-                        getSecret("flowiseKey"),
-                    ])];
+                return [4 /*yield*/, Promise.all([getChannel(channelId), getSecret("flowiseKey")])];
             case 1:
                 _a = _b.sent(), channel = _a[0], apiKey = _a[1];
                 if (!channel)
@@ -189,16 +188,16 @@ var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, vo
                     question: question,
                     overrideConfig: {
                         sessionId: {
-                            RedisBackedChatMemory_1: chatId,
-                        },
+                            RedisBackedChatMemory_1: chatId
+                        }
                     },
-                    socketIOClientId: socketIOClientId,
+                    socketIOClientId: socketIOClientId
                 };
                 console.timeEnd('GET_CONFIG');
-                return [4 /*yield*/, axios_1.default.post(endpoint, data, {
+                return [4 /*yield*/, axios_1["default"].post(endpoint, data, {
                         headers: {
-                            Authorization: apiKey,
-                        },
+                            Authorization: apiKey
+                        }
                     })];
             case 2:
                 result = _b.sent();
@@ -219,9 +218,9 @@ var initiateOpenAI = function () { return __awaiter(void 0, void 0, void 0, func
                 apiKey = _a.sent();
                 if (!apiKey)
                     throw new TypeError('OPENAI_API_KEY_NOT_FOUND');
-                return [2 /*return*/, new openai_1.default({
+                return [2 /*return*/, new openai_1["default"]({
                         organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
-                        apiKey: apiKey,
+                        apiKey: apiKey
                     })];
         }
     });
@@ -250,7 +249,7 @@ var handleSuggestedPrompts = function (body, isMock) { return __awaiter(void 0, 
                 prompt = "Help me formulate two short concise follow up questions that would encourage the user to proceed with this conversation. They should be non-repetitive and based on the questions asked so far: \"".concat(previousQuestions.join(', '), "\".    \n      Give me the list of questions in a JSON list. You MUST understand and use the following language code as the language for the questions: \"").concat(language, "\". Do not say anything else, ONLY send me back a JSON list. Response example: { \"questions\": [\"What is...\", \"Tell me more about ...\"] }. \n      ");
                 return [4 /*yield*/, openai.chat.completions.create({
                         messages: [{ role: 'user', content: prompt }],
-                        model: 'gpt-3.5-turbo',
+                        model: 'gpt-3.5-turbo'
                     })];
             case 2:
                 chatCompletion = _a.sent();

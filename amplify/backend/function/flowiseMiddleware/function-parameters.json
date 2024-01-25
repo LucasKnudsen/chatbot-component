@@ -8,6 +8,11 @@
       "flowiseBroadcast": [
         "read"
       ]
+    },
+    "storage": {
+      "Channel:@model(appsync)": [
+        "read"
+      ]
     }
   }
 }

@@ -1,22 +1,26 @@
+/* Amplify Params - DO NOT EDIT
+	API_DIGITALTWIN_CHANNELTABLE_ARN
+	API_DIGITALTWIN_CHANNELTABLE_NAME
+	API_DIGITALTWIN_GRAPHQLAPIIDOUTPUT
+	ENV
+	FUNCTION_FLOWISEBROADCAST_NAME
+	REGION
+Amplify Params - DO NOT EDIT */
+
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import axios from 'axios'
-
-// @ts-ignore
-import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm'
-// @ts-ignore
 import OpenAI from 'openai'
-// @ts-ignore
+
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
-// @ts-ignore
-import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb'
-// @ts-ignore
+import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm'
+const ddbService = new DynamoDBClient({ region: process.env.REGION })
+
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda'
+import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb'
+const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
 
 const ssmClient = new SSMClient({ region: process.env.REGION })
 const client = new LambdaClient({ region: process.env.REGION })
-
-const ddbService = new DynamoDBClient({ region: process.env.REGION })
-const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
 
 type ParsedEventBody = {
   promptCode: string
@@ -105,11 +109,10 @@ export const handler = async (
   }
 }
 
-const getChannel = async (spaceId: string, channelId: string) => {
+const getChannel = async (channelId: string) => {
   const command = new GetCommand({
     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
     Key: {
-      chatSpaceId: spaceId,
       id: channelId,
     },
   })
@@ -132,10 +135,7 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
 
   if (!channelId || !spaceId) throw new TypeError('MISSING_CHANNEL_ID')
 
-  const [channel, apiKey] = await Promise.all([
-    getChannel(spaceId, channelId),
-    getSecret(`flowiseKey`),
-  ])
+  const [channel, apiKey] = await Promise.all([getChannel(channelId), getSecret(`flowiseKey`)])
 
   if (!channel) throw new TypeError('CHANNEL_NOT_FOUND')
   if (!apiKey) throw new TypeError('FLOWISE_API_KEY_NOT_FOUND')

@@ -5,7 +5,9 @@
     "baseUrl": "./",
     "rootDir": "./lib",
     "paths": {
-      "src": ["./lib"]
+      "src": ["./lib"],
+      "@aws-sdk/*": ["./src/node_modules/@aws-sdk/*"],
+      "openai": ["./src/node_modules/openai"]
     }
   },
   "include": ["lib"]

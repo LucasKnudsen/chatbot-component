@@ -1,7 +1,7 @@
 import { SignOutButton, authStore } from '@/features/authentication'
 import { Channel, ChatSpace } from '@/graphql'
 import { Match, Suspense, Switch, createResource, createSignal } from 'solid-js'
-import { Bot, botStore, botStoreActions, fetchChannelAccesses } from '..'
+import { Bot, botStore, botStoreActions, fetchChannelAccesses, fetchPublicChannels } from '..'
 import { FraiaLoading } from '../components/FraiaLoading'
 import { ChannelsOverview } from './ChannelsOverview'
 
@@ -15,10 +15,10 @@ export const BotManager = (props: ChatSpace) => {
     let _channels: Channel[] | undefined = []
 
     // Get public channels through Lambda
+    _channels = await fetchPublicChannels(props.id)
 
     if (_channels?.length === 0) {
       setChannelError('No channels found')
-
       return []
     }
 
