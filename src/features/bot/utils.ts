@@ -1,7 +1,6 @@
 import {
   Channel,
   ChannelUserAccess,
-  ChatSpace,
   FetchChannelsQuery,
   ListChannelUserAccessesQuery,
   ListChannelUserAccessesQueryVariables,
@@ -30,15 +29,15 @@ export async function fetchPublicChannels(chatSpaceId: string): Promise<Channel[
 
 export async function fetchChannelAccesses(
   userId: string,
-  chatSpace: ChatSpace
-): Promise<ChannelUserAccess[] | undefined> {
+  chatSpaceId: string
+): Promise<ChannelUserAccess[]> {
   // If HostType is PRIVATE, it means that the individual User is in focus.
   // If HostType is COMPANY, it means that its a centralized chat portal, made by an organization.
 
   const variables: ListChannelUserAccessesQueryVariables = {
     accessId: userId,
     filter: {
-      chatSpaceId: { eq: chatSpace.id },
+      chatSpaceId: { eq: chatSpaceId },
     },
   }
 
@@ -48,11 +47,12 @@ export async function fetchChannelAccesses(
       variables,
     })
 
-    const items = (result.data?.listChannelUserAccesses?.items as ChannelUserAccess[]) ?? []
+    const items = (result.data?.listChannelUserAccesses?.items as ChannelUserAccess[]) || []
 
     return items
   } catch (error) {
-    logDev(error)
+    logDev('Fetching channel accesses ', error)
+    throw new Error('Error fetching channel accesses')
   }
 }
 

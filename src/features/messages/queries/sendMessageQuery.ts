@@ -1,3 +1,4 @@
+import { botStore } from '@/features/bot'
 import { sendRequest } from '@/utils/index'
 import { API } from 'aws-amplify'
 
@@ -21,6 +22,8 @@ export type IncomingInput = {
 }
 
 export async function sendMessageQuery(body: IncomingInput) {
+  if (!botStore.activeChannel) throw new Error('No active channel')
+
   try {
     // TODO: Test timeout of the REST API. (There's a 30 second timeout on AppSync)
     const answer = await API.post('digitaltwinRest', '/flowise/middleware', {

@@ -154,6 +154,7 @@ export type CreateChannelInput = {
   chatSpaceId: string,
   apiHost?: string | null,
   chatflowId?: string | null,
+  apiKey?: string | null,
   name: string,
   description?: string | null,
   initialPrompts?: Array< InitialPromptInput > | null,
@@ -169,6 +170,7 @@ export type ModelChannelConditionInput = {
   chatSpaceId?: ModelIDInput | null,
   apiHost?: ModelStringInput | null,
   chatflowId?: ModelStringInput | null,
+  apiKey?: ModelStringInput | null,
   name?: ModelStringInput | null,
   description?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
@@ -199,6 +201,7 @@ export type Channel = {
   chatSpaceId: string,
   apiHost?: string | null,
   chatflowId?: string | null,
+  apiKey?: string | null,
   name: string,
   description?: string | null,
   initialPrompts?:  Array<InitialPrompt > | null,
@@ -219,6 +222,7 @@ export type UpdateChannelInput = {
   chatSpaceId?: string | null,
   apiHost?: string | null,
   chatflowId?: string | null,
+  apiKey?: string | null,
   name?: string | null,
   description?: string | null,
   initialPrompts?: Array< InitialPromptInput > | null,
@@ -367,7 +371,7 @@ export type DeleteChannelDocumentInput = {
 export type CreateChannelHistoryItemInput = {
   ownerId: string,
   channelId: string,
-  id?: string | null,
+  timestamp?: string | null,
   type: ChannelItemType,
   content?: string | null,
 };
@@ -396,10 +400,9 @@ export type ChannelHistoryItem = {
   __typename: "ChannelHistoryItem",
   ownerId: string,
   channelId: string,
-  id: string,
+  timestamp: string,
   type: ChannelItemType,
   content?: string | null,
-  createdAt: string,
   updatedAt: string,
   owner?: string | null,
 };
@@ -407,7 +410,7 @@ export type ChannelHistoryItem = {
 export type UpdateChannelHistoryItemInput = {
   ownerId: string,
   channelId: string,
-  id: string,
+  timestamp: string,
   type?: ChannelItemType | null,
   content?: string | null,
 };
@@ -415,7 +418,7 @@ export type UpdateChannelHistoryItemInput = {
 export type DeleteChannelHistoryItemInput = {
   ownerId: string,
   channelId: string,
-  id: string,
+  timestamp: string,
 };
 
 export type CreateChatSpaceInput = {
@@ -752,6 +755,7 @@ export type ModelChannelFilterInput = {
   chatSpaceId?: ModelIDInput | null,
   apiHost?: ModelStringInput | null,
   chatflowId?: ModelStringInput | null,
+  apiKey?: ModelStringInput | null,
   name?: ModelStringInput | null,
   description?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
@@ -826,13 +830,13 @@ export type ModelChannelHistoryItemPrimaryCompositeKeyConditionInput = {
 
 export type ModelChannelHistoryItemPrimaryCompositeKeyInput = {
   channelId?: string | null,
-  id?: string | null,
+  timestamp?: string | null,
 };
 
 export type ModelChannelHistoryItemFilterInput = {
   ownerId?: ModelIDInput | null,
   channelId?: ModelIDInput | null,
-  id?: ModelIDInput | null,
+  timestamp?: ModelStringInput | null,
   type?: ModelChannelItemTypeInput | null,
   content?: ModelStringInput | null,
   and?: Array< ModelChannelHistoryItemFilterInput | null > | null,
@@ -965,6 +969,7 @@ export type ModelSubscriptionChannelFilterInput = {
   chatSpaceId?: ModelSubscriptionIDInput | null,
   apiHost?: ModelSubscriptionStringInput | null,
   chatflowId?: ModelSubscriptionStringInput | null,
+  apiKey?: ModelSubscriptionStringInput | null,
   name?: ModelSubscriptionStringInput | null,
   description?: ModelSubscriptionStringInput | null,
   isPublic?: ModelSubscriptionBooleanInput | null,
@@ -1026,7 +1031,7 @@ export type ModelSubscriptionIntInput = {
 export type ModelSubscriptionChannelHistoryItemFilterInput = {
   ownerId?: ModelSubscriptionIDInput | null,
   channelId?: ModelSubscriptionIDInput | null,
-  id?: ModelSubscriptionIDInput | null,
+  timestamp?: ModelSubscriptionStringInput | null,
   type?: ModelSubscriptionStringInput | null,
   content?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionChannelHistoryItemFilterInput | null > | null,
@@ -1211,6 +1216,7 @@ export type CreateChannelMutation = {
     chatSpaceId: string,
     apiHost?: string | null,
     chatflowId?: string | null,
+    apiKey?: string | null,
     name: string,
     description?: string | null,
     initialPrompts?:  Array< {
@@ -1237,6 +1243,7 @@ export type UpdateChannelMutation = {
     chatSpaceId: string,
     apiHost?: string | null,
     chatflowId?: string | null,
+    apiKey?: string | null,
     name: string,
     description?: string | null,
     initialPrompts?:  Array< {
@@ -1263,6 +1270,7 @@ export type DeleteChannelMutation = {
     chatSpaceId: string,
     apiHost?: string | null,
     chatflowId?: string | null,
+    apiKey?: string | null,
     name: string,
     description?: string | null,
     initialPrompts?:  Array< {
@@ -1410,10 +1418,9 @@ export type CreateChannelHistoryItemMutation = {
     __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
-    id: string,
+    timestamp: string,
     type: ChannelItemType,
     content?: string | null,
-    createdAt: string,
     updatedAt: string,
     owner?: string | null,
   } | null,
@@ -1429,10 +1436,9 @@ export type UpdateChannelHistoryItemMutation = {
     __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
-    id: string,
+    timestamp: string,
     type: ChannelItemType,
     content?: string | null,
-    createdAt: string,
     updatedAt: string,
     owner?: string | null,
   } | null,
@@ -1448,10 +1454,9 @@ export type DeleteChannelHistoryItemMutation = {
     __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
-    id: string,
+    timestamp: string,
     type: ChannelItemType,
     content?: string | null,
-    createdAt: string,
     updatedAt: string,
     owner?: string | null,
   } | null,
@@ -1873,6 +1878,7 @@ export type GetChannelQuery = {
     chatSpaceId: string,
     apiHost?: string | null,
     chatflowId?: string | null,
+    apiKey?: string | null,
     name: string,
     description?: string | null,
     initialPrompts?:  Array< {
@@ -1902,6 +1908,7 @@ export type ListChannelsQuery = {
       chatSpaceId: string,
       apiHost?: string | null,
       chatflowId?: string | null,
+      apiKey?: string | null,
       name: string,
       description?: string | null,
       initialPrompts?:  Array< {
@@ -1935,6 +1942,7 @@ export type ChannelsByChatSpaceIdQuery = {
       chatSpaceId: string,
       apiHost?: string | null,
       chatflowId?: string | null,
+      apiKey?: string | null,
       name: string,
       description?: string | null,
       initialPrompts?:  Array< {
@@ -2110,7 +2118,7 @@ export type ListChannelDocumentsQuery = {
 export type GetChannelHistoryItemQueryVariables = {
   ownerId: string,
   channelId: string,
-  id: string,
+  timestamp: string,
 };
 
 export type GetChannelHistoryItemQuery = {
@@ -2118,10 +2126,9 @@ export type GetChannelHistoryItemQuery = {
     __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
-    id: string,
+    timestamp: string,
     type: ChannelItemType,
     content?: string | null,
-    createdAt: string,
     updatedAt: string,
     owner?: string | null,
   } | null,
@@ -2129,7 +2136,7 @@ export type GetChannelHistoryItemQuery = {
 
 export type ListChannelHistoryItemsQueryVariables = {
   ownerId?: string | null,
-  channelIdId?: ModelChannelHistoryItemPrimaryCompositeKeyConditionInput | null,
+  channelIdTimestamp?: ModelChannelHistoryItemPrimaryCompositeKeyConditionInput | null,
   filter?: ModelChannelHistoryItemFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
@@ -2143,10 +2150,9 @@ export type ListChannelHistoryItemsQuery = {
       __typename: "ChannelHistoryItem",
       ownerId: string,
       channelId: string,
-      id: string,
+      timestamp: string,
       type: ChannelItemType,
       content?: string | null,
-      createdAt: string,
       updatedAt: string,
       owner?: string | null,
     } | null >,
@@ -2485,6 +2491,7 @@ export type FetchChannelsQuery = {
     chatSpaceId: string,
     apiHost?: string | null,
     chatflowId?: string | null,
+    apiKey?: string | null,
     name: string,
     description?: string | null,
     initialPrompts?:  Array< {
@@ -2634,6 +2641,7 @@ export type OnCreateChannelSubscription = {
     chatSpaceId: string,
     apiHost?: string | null,
     chatflowId?: string | null,
+    apiKey?: string | null,
     name: string,
     description?: string | null,
     initialPrompts?:  Array< {
@@ -2660,6 +2668,7 @@ export type OnUpdateChannelSubscription = {
     chatSpaceId: string,
     apiHost?: string | null,
     chatflowId?: string | null,
+    apiKey?: string | null,
     name: string,
     description?: string | null,
     initialPrompts?:  Array< {
@@ -2686,6 +2695,7 @@ export type OnDeleteChannelSubscription = {
     chatSpaceId: string,
     apiHost?: string | null,
     chatflowId?: string | null,
+    apiKey?: string | null,
     name: string,
     description?: string | null,
     initialPrompts?:  Array< {
@@ -2830,10 +2840,9 @@ export type OnCreateChannelHistoryItemSubscription = {
     __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
-    id: string,
+    timestamp: string,
     type: ChannelItemType,
     content?: string | null,
-    createdAt: string,
     updatedAt: string,
     owner?: string | null,
   } | null,
@@ -2849,10 +2858,9 @@ export type OnUpdateChannelHistoryItemSubscription = {
     __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
-    id: string,
+    timestamp: string,
     type: ChannelItemType,
     content?: string | null,
-    createdAt: string,
     updatedAt: string,
     owner?: string | null,
   } | null,
@@ -2868,10 +2876,9 @@ export type OnDeleteChannelHistoryItemSubscription = {
     __typename: "ChannelHistoryItem",
     ownerId: string,
     channelId: string,
-    id: string,
+    timestamp: string,
     type: ChannelItemType,
     content?: string | null,
-    createdAt: string,
     updatedAt: string,
     owner?: string | null,
   } | null,

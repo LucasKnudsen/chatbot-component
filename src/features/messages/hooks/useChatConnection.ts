@@ -17,13 +17,15 @@ export function useChatConnection({
 
   createEffect(
     on(chatId, (chatId, previousChatId) => {
-      if (!chatId) {
+      const cacheName = 'chat-answers'
+
+      if (chatId) {
         console.warn('No chatId')
         return
       }
 
-      if (chatId !== previousChatId && previousChatId) {
-        clearSubscription(previousChatId, 'chat-answers') // Clear previous subscription if exists
+      if (previousChatId && chatId !== previousChatId) {
+        clearSubscription(previousChatId, cacheName) // Clear previous subscription if exists
       }
 
       logDev('Initiated chat sub', chatId)
@@ -52,7 +54,7 @@ export function useChatConnection({
           variables: { sessionId: chatId },
           cache: {
             key: chatId,
-            type: 'chat-answers',
+            type: cacheName,
           },
           onNext,
         })

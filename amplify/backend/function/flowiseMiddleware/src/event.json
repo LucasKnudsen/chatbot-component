@@ -1,5 +1,6 @@
 {
   "isMock": true,
+  "body": "{\"channelId\":\"0c7ab27e-8634-44cf-adab-0773f4249e10\",\"question\":\"Send me a PING\",\"history\":[],\"chatId\":\"1f5b2099-f133-4fdf-a83b-0aad0b30dfe5\",\"previousQuestions\":[\"Give me a detailed description of Lion Brain\",\"Hvor er i fra\",\"Hvad med Soft Design\"],\"promptCode\":\"question\",\"language\":\"da\"}",
   "resource": "/flowise/middleware",
   "path": "/flowise/middleware",
   "httpMethod": "POST",
@@ -97,6 +98,5 @@
     "domainName": "zg7aws7xvd.execute-api.ap-southeast-1.amazonaws.com",
     "apiId": "zg7aws7xvd"
   },
-  "body": "{\"spaceId\":\"f86f6a13-a58c-44d8-87cd-077f559fc0fc\",\"channelId\":\"f86f6a13-a58c-44d8-87cd-077f559fc0fc\",\"question\":\"Send me a PING\",\"history\":[],\"chatId\":\"1f5b2099-f133-4fdf-a83b-0aad0b30dfe5\",\"previousQuestions\":[\"Give me a detailed description of Lion Brain\",\"Hvor er i fra\",\"Hvad med Soft Design\"],\"promptCode\":\"question\",\"language\":\"da\"}",
   "isBase64Encoded": false
 }

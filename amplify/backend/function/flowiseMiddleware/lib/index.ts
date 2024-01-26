@@ -24,7 +24,6 @@ const client = new LambdaClient({ region: process.env.REGION })
 
 type ParsedEventBody = {
   promptCode: string
-  spaceId?: string
   channelId?: string
   language?: string
   question?: string
@@ -131,14 +130,15 @@ const getSecret = async (secretName: string) => {
 
 const handleFlowiseRequest = async (body: ParsedEventBody) => {
   console.time('GET_CONFIG')
-  const { spaceId, channelId, chatId, socketIOClientId, question } = body
+  const { channelId, chatId, socketIOClientId, question } = body
 
-  if (!channelId || !spaceId) throw new TypeError('MISSING_CHANNEL_ID')
+  if (!channelId) throw new TypeError('MISSING_CHANNEL_ID')
 
-  const [channel, apiKey] = await Promise.all([getChannel(channelId), getSecret(`flowiseKey`)])
+  const [channel] = await Promise.all([getChannel(channelId)])
 
   if (!channel) throw new TypeError('CHANNEL_NOT_FOUND')
-  if (!apiKey) throw new TypeError('FLOWISE_API_KEY_NOT_FOUND')
+
+  if (!channel.apiKey) throw new TypeError('FLOWISE_API_KEY_NOT_FOUND')
 
   const endpoint = `${channel.apiHost}/api/v1/prediction/${channel.chatflowId}`
 
@@ -155,7 +155,7 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
   console.timeEnd('GET_CONFIG')
   const result = await axios.post(endpoint, data, {
     headers: {
-      Authorization: apiKey,
+      Authorization: channel.apiKey,
     },
   })
 

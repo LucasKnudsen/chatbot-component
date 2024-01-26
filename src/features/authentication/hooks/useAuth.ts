@@ -35,6 +35,8 @@ export const useAuth = () => {
 
       console.log('Evaluated user', user)
 
+      // TODO: IF hostType is COMPANY, check if user is a member of the company
+
       authStoreActions.setAuthStore('authenticating', false)
       authStoreActions.setAuthStore('isAuthenticated', true)
     } catch (error) {

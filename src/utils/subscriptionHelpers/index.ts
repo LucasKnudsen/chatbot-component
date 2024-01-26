@@ -46,8 +46,8 @@ export const SubscriptionHelper = async <DataType>({
 }
 
 export const clearSubscription = (key: string, type: string) => {
-  if (subscriptionsCache()[key] && subscriptionsCache()[key]![type]) {
-    subscriptionsCache()[key]![type].unsubscribe()
+  if (subscriptionsCache()[key] && subscriptionsCache()[key][type]) {
+    subscriptionsCache()[key][type].unsubscribe()
 
     setSubscriptionsCache((prev) => {
       const updatedCache = { ...prev }

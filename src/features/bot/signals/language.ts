@@ -6,7 +6,7 @@ export const SYSTEM_DEFAULT_LANGUAGE = 'en'
 export const [currentLanguage, setLanguage] = createSignal<string>('')
 
 export const useLanguage = (languageOverride?: string) => {
-  const storageKey = `${botStore.activeChannel.chatflowId!}_DEFAULT_LANGUAGE`
+  const storageKey = `${botStore.activeChannel!.id}_DEFAULT_LANGUAGE`
 
   const clear = () => {
     const newLanguage = languageOverride || SYSTEM_DEFAULT_LANGUAGE

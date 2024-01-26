@@ -1,11 +1,10 @@
-import { queries } from '@/graphql'
-import { GetChatSpaceQuery } from '@/graphql/types'
+import { ChatSpace, GetChatSpaceQuery, queries } from '@/graphql'
 import { logDev } from '@/utils'
 import { GraphQLQuery } from '@aws-amplify/api'
 
 import { API, Auth } from 'aws-amplify'
 
-export async function initializeConfig(spaceId: string) {
+export async function initializeConfig(spaceId: string): Promise<ChatSpace> {
   try {
     let isUser = false
     try {
@@ -23,23 +22,12 @@ export async function initializeConfig(spaceId: string) {
     const data = result.data?.getChatSpace
 
     if (!data) {
-      return {
-        status: 404,
-        data: null,
-        error: 'NO_CHAT_SPACE',
-      }
+      throw new Error('CHAT_SPACE_NOT_FOUND')
     }
 
-    return {
-      status: 200,
-      data,
-    }
+    return data
   } catch (error) {
     logDev('CHAT SPACE INIT ERROR', error)
-    return {
-      status: 500,
-      data: null,
-      error: 'CHAT_SPACE_ERROR',
-    }
+    throw new Error('CHAT_SPACE_INIT_ERROR')
   }
 }

@@ -3,6 +3,7 @@ type Channel @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }, { a
   chatSpaceId: ID! @index(name: "byChatSpace", queryField: "channelsByChatSpaceId") # For Public purposes
   apiHost: String
   chatflowId: String
+  apiKey: String
 
   name: String!
   description: String
@@ -49,10 +50,12 @@ type ChannelDocument @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"
   fileSize: Int
 }
 
-type ChannelHistoryItem @model @auth(rules: [{ allow: owner }]) {
-  ownerId: ID! @primaryKey(sortKeyFields: ["channelId", "id"])
+type ChannelHistoryItem
+  @model(timestamps: { createdAt: "timestamp" })
+  @auth(rules: [{ allow: owner }]) {
+  ownerId: ID! @primaryKey(sortKeyFields: ["channelId", "timestamp"])
   channelId: ID!
-  id: ID!
+  timestamp: AWSDateTime!
 
   type: ChannelItemType!
   content: String

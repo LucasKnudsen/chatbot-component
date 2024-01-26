@@ -168,20 +168,20 @@ var getSecret = function (secretName) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var spaceId, channelId, chatId, socketIOClientId, question, _a, channel, apiKey, endpoint, data, result;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var channelId, chatId, socketIOClientId, question, channel, endpoint, data, result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
                 console.time('GET_CONFIG');
-                spaceId = body.spaceId, channelId = body.channelId, chatId = body.chatId, socketIOClientId = body.socketIOClientId, question = body.question;
-                if (!channelId || !spaceId)
+                channelId = body.channelId, chatId = body.chatId, socketIOClientId = body.socketIOClientId, question = body.question;
+                if (!channelId)
                     throw new TypeError('MISSING_CHANNEL_ID');
-                return [4 /*yield*/, Promise.all([getChannel(channelId), getSecret("flowiseKey")])];
+                return [4 /*yield*/, Promise.all([getChannel(channelId)])];
             case 1:
-                _a = _b.sent(), channel = _a[0], apiKey = _a[1];
+                channel = (_a.sent())[0];
                 if (!channel)
                     throw new TypeError('CHANNEL_NOT_FOUND');
-                if (!apiKey)
+                if (!channel.apiKey)
                     throw new TypeError('FLOWISE_API_KEY_NOT_FOUND');
                 endpoint = "".concat(channel.apiHost, "/api/v1/prediction/").concat(channel.chatflowId);
                 data = {
@@ -196,11 +196,11 @@ var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, vo
                 console.timeEnd('GET_CONFIG');
                 return [4 /*yield*/, axios_1["default"].post(endpoint, data, {
                         headers: {
-                            Authorization: apiKey
+                            Authorization: channel.apiKey
                         }
                     })];
             case 2:
-                result = _b.sent();
+                result = _a.sent();
                 return [2 /*return*/, result.data];
         }
     });

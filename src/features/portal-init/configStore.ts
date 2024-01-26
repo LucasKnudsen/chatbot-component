@@ -1,11 +1,14 @@
+import { ChatSpace } from '@/graphql'
 import { createStore } from 'solid-js/store'
 
 type ChatConfigStore = {
   isBotOpened: boolean
+  chatSpaceConfig: ChatSpace
 }
 
 const [configStore, setConfigStore] = createStore<ChatConfigStore>({
   isBotOpened: false,
+  chatSpaceConfig: {} as any,
 })
 
 const openBot = () => {
@@ -26,6 +29,7 @@ const toggleBot = () => {
 
 const configStoreActions = {
   toggleBot,
+  setConfigStore,
 }
 
 export { configStore, configStoreActions, setConfigStore }

@@ -136,6 +136,7 @@ export const getChannel = /* GraphQL */ `query GetChannel($id: ID!) {
     chatSpaceId
     apiHost
     chatflowId
+    apiKey
     name
     description
     initialPrompts {
@@ -165,6 +166,7 @@ export const listChannels = /* GraphQL */ `query ListChannels(
       chatSpaceId
       apiHost
       chatflowId
+      apiKey
       name
       description
       initialPrompts {
@@ -205,6 +207,7 @@ export const channelsByChatSpaceId = /* GraphQL */ `query ChannelsByChatSpaceId(
       chatSpaceId
       apiHost
       chatflowId
+      apiKey
       name
       description
       initialPrompts {
@@ -408,14 +411,21 @@ export const listChannelDocuments = /* GraphQL */ `query ListChannelDocuments(
   APITypes.ListChannelDocumentsQueryVariables,
   APITypes.ListChannelDocumentsQuery
 >;
-export const getChannelHistoryItem = /* GraphQL */ `query GetChannelHistoryItem($ownerId: ID!, $channelId: ID!, $id: ID!) {
-  getChannelHistoryItem(ownerId: $ownerId, channelId: $channelId, id: $id) {
+export const getChannelHistoryItem = /* GraphQL */ `query GetChannelHistoryItem(
+  $ownerId: ID!
+  $channelId: ID!
+  $timestamp: AWSDateTime!
+) {
+  getChannelHistoryItem(
+    ownerId: $ownerId
+    channelId: $channelId
+    timestamp: $timestamp
+  ) {
     ownerId
     channelId
-    id
+    timestamp
     type
     content
-    createdAt
     updatedAt
     owner
     __typename
@@ -427,7 +437,7 @@ export const getChannelHistoryItem = /* GraphQL */ `query GetChannelHistoryItem(
 >;
 export const listChannelHistoryItems = /* GraphQL */ `query ListChannelHistoryItems(
   $ownerId: ID
-  $channelIdId: ModelChannelHistoryItemPrimaryCompositeKeyConditionInput
+  $channelIdTimestamp: ModelChannelHistoryItemPrimaryCompositeKeyConditionInput
   $filter: ModelChannelHistoryItemFilterInput
   $limit: Int
   $nextToken: String
@@ -435,7 +445,7 @@ export const listChannelHistoryItems = /* GraphQL */ `query ListChannelHistoryIt
 ) {
   listChannelHistoryItems(
     ownerId: $ownerId
-    channelIdId: $channelIdId
+    channelIdTimestamp: $channelIdTimestamp
     filter: $filter
     limit: $limit
     nextToken: $nextToken
@@ -444,10 +454,9 @@ export const listChannelHistoryItems = /* GraphQL */ `query ListChannelHistoryIt
     items {
       ownerId
       channelId
-      id
+      timestamp
       type
       content
-      createdAt
       updatedAt
       owner
       __typename
@@ -801,6 +810,7 @@ export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchCha
     chatSpaceId
     apiHost
     chatflowId
+    apiKey
     name
     description
     initialPrompts {

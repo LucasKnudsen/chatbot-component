@@ -139,6 +139,7 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
     chatSpaceId
     apiHost
     chatflowId
+    apiKey
     name
     description
     initialPrompts {
@@ -166,6 +167,7 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
     chatSpaceId
     apiHost
     chatflowId
+    apiKey
     name
     description
     initialPrompts {
@@ -193,6 +195,7 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
     chatSpaceId
     apiHost
     chatflowId
+    apiKey
     name
     description
     initialPrompts {
@@ -344,10 +347,9 @@ export const onCreateChannelHistoryItem = /* GraphQL */ `subscription OnCreateCh
   onCreateChannelHistoryItem(filter: $filter, owner: $owner) {
     ownerId
     channelId
-    id
+    timestamp
     type
     content
-    createdAt
     updatedAt
     owner
     __typename
@@ -364,10 +366,9 @@ export const onUpdateChannelHistoryItem = /* GraphQL */ `subscription OnUpdateCh
   onUpdateChannelHistoryItem(filter: $filter, owner: $owner) {
     ownerId
     channelId
-    id
+    timestamp
     type
     content
-    createdAt
     updatedAt
     owner
     __typename
@@ -384,10 +385,9 @@ export const onDeleteChannelHistoryItem = /* GraphQL */ `subscription OnDeleteCh
   onDeleteChannelHistoryItem(filter: $filter, owner: $owner) {
     ownerId
     channelId
-    id
+    timestamp
     type
     content
-    createdAt
     updatedAt
     owner
     __typename

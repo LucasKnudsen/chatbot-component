@@ -1,7 +1,7 @@
 import './dev.css'
 
 import { chatflows } from './constants'
-import { PortalInitializer } from './features/portal-init'
+import { FraiaPortal } from './features/portal-init'
 import './index.css'
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
         </span>
       </h2>
 
-      <PortalInitializer {...chatflows.chula} />
+      <FraiaPortal {...chatflows.chula} />
     </div>
   )
 }

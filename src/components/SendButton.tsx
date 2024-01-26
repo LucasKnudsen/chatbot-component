@@ -54,7 +54,7 @@ export const DeleteButton = (props: SendButtonProps) => {
   )
 }
 
-export const Spinner = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
+const Spinner = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
   <svg
     {...props}
     class={'animate-spin -ml-1 mr-3 h-5 w-5 ' + props.class}

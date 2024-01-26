@@ -1,7 +1,6 @@
 import { Button } from '@/components'
 import { Nav } from '@/components/Nav'
 import { TextInput } from '@/components/inputs'
-import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme'
 import { Auth } from 'aws-amplify'
 import { createSignal } from 'solid-js'
@@ -15,7 +14,7 @@ export const LoginScreen = () => {
   const [loading, setLoading] = createSignal(false)
 
   const { theme } = useTheme()
-  const { text } = useText()
+  // const { text } = useText()
 
   const handleSignIn = async () => {
     setLoading(true)

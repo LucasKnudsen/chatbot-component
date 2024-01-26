@@ -1,102 +1,81 @@
 import { SignOutButton, authStore } from '@/features/authentication'
-import { Channel, ChatSpace } from '@/graphql'
-import { Match, Suspense, Switch, createResource, createSignal } from 'solid-js'
+import { configStore } from '@/features/portal-init'
+import { Channel, ChannelUserAccess } from '@/graphql'
+import { logDev } from '@/utils'
+import { createQuery } from '@tanstack/solid-query'
+import { Match, Switch } from 'solid-js'
 import { Bot, botStore, botStoreActions, fetchChannelAccesses, fetchPublicChannels } from '..'
 import { FraiaLoading } from '../components/FraiaLoading'
 import { ChannelsOverview } from './ChannelsOverview'
 
-// BotManager is the entry point for the bot. It handles the initial loading, fetching channels, checking configurations, etc.
-export const BotManager = (props: ChatSpace) => {
-  const storageKey = `channels-${props.id}`
-  const openForPublic = props.isPublic
-  const [channelError, setChannelError] = createSignal('')
+export const BotManager = () => {
+  // const storageKey = `channels-${props.id}`
+  const openForPublic = configStore.chatSpaceConfig.isPublic
 
-  const handlePublicChannels = async () => {
-    let _channels: Channel[] | undefined = []
-
-    // Get public channels through Lambda
-    _channels = await fetchPublicChannels(props.id)
-
-    if (_channels?.length === 0) {
-      setChannelError('No channels found')
-      return []
-    }
-
-    if (!props.isMultiChannel) {
-      // If there is only one channel, initialize the bot with it
-      botStoreActions.initBotStore(_channels[0])
-    }
-
-    return _channels
-  }
-
-  const handleChannelAccesses = async () => {
-    if (!authStore.userDetails?.email) {
-      setChannelError('User details not found')
-      return []
-    }
-
-    // Get ChannelUserAccess records
-    const channelAccess = await fetchChannelAccesses(authStore.userDetails.id, props)
-    console.log('Channel Access', channelAccess)
-
-    if (channelAccess?.length === 0) {
-      setChannelError('You do not have access to any knowledge channels')
-
-      return []
-    }
-
-    return channelAccess
-  }
-
-  const [channels] = createResource(async () => {
-    setChannelError('')
-
-    // TODO: Proper caching
-    //   const localChannels = localStorage.getItem(storageKey)
-
-    //   if (localChannels) {
-    //     channels = JSON.parse(localChannels)
-    //   }
-
-    try {
+  const channelsQuery = createQuery(() => ({
+    queryKey: ['channels'],
+    queryFn: async (): Promise<Channel[] | ChannelUserAccess[]> => {
+      logDev('Fetching channels')
       if (openForPublic) {
         // In this case, we don't need to check for access rights, and can fetch all public channels through a Lambda
-        return await handlePublicChannels()
-      } else {
-        // In this case, we need to check the access rights of the user
-        return await handleChannelAccesses()
-      }
+        const publicChannels = await fetchPublicChannels(configStore.chatSpaceConfig.id)
 
-      //   localStorage.setItem(storageKey, JSON.stringify(channels))
-    } catch (error) {
-      console.error(error)
-      setChannelError('Something went wrong')
-    }
-  })
+        if (publicChannels?.length === 0) {
+          throw new Error('No public channels found')
+        }
+
+        if (!configStore.chatSpaceConfig.isMultiChannel) {
+          // If there is only one channel, initialize the bot with it
+          botStoreActions.initBotStore(publicChannels[0])
+        }
+        return publicChannels
+      } else {
+        // In this case, we fetch and show a list of access rights of the user
+        if (!authStore.userDetails?.id) {
+          throw new Error('No user details found')
+        }
+
+        // Get ChannelUserAccess records
+        const channelAccesses = await fetchChannelAccesses(
+          authStore.userDetails.id,
+          configStore.chatSpaceConfig.id
+        )
+
+        if (channelAccesses?.length === 0) {
+          throw new Error(
+            'You currently do not have access to any knowledge channels. Contact your administrator.'
+          )
+        }
+
+        return channelAccesses
+      }
+    },
+  }))
 
   return (
-    <Suspense fallback={<FraiaLoading />}>
-      <Switch>
-        <Match when={channelError()}>
-          <div class='w-full h-full flex flex-col justify-center items-center animate-fade-in gap-4'>
-            <div class='text-lg  text-red-500 text-center'>
-              <p class='mb-4'>Error: {channelError()}</p>
-            </div>
+    <Switch>
+      <Match when={channelsQuery.isPending}>
+        <FraiaLoading />
+      </Match>
 
-            <SignOutButton />
+      <Match when={channelsQuery.isError}>
+        <div class='w-full h-full flex flex-col justify-center items-center animate-fade-in gap-4'>
+          <div class='text-lg  text-red-500 text-center'>
+            <p class='mb-4'>Error: {channelsQuery.error?.message}</p>
           </div>
-        </Match>
 
-        <Match when={Boolean(botStore.activeChannel)}>
-          <Bot {...props} />
-        </Match>
+          <SignOutButton />
+        </div>
+      </Match>
 
-        {/* Overview over all the Channels  */}
-        <Match when={props.isMultiChannel && Boolean(!botStore.activeChannel)}>
-          <ChannelsOverview chatSpace={props} channels={channels()} />
-        </Match>
-      </Switch>
-    </Suspense>
+      <Match when={Boolean(botStore.activeChannel)}>
+        <Bot {...configStore.chatSpaceConfig} />
+      </Match>
+
+      {/* Overview over all the Channels  */}
+      <Match when={Boolean(!botStore.activeChannel)}>
+        <ChannelsOverview chatSpace={configStore.chatSpaceConfig} channels={channelsQuery.data} />
+      </Match>
+    </Switch>
   )
 }

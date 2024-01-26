@@ -27,7 +27,7 @@ export const Bot = (props: ChatSpace) => {
   const device = useMediaQuery()
 
   const { chatId, clear: clearChatId } = useChatId()
-  const { clear: clearDefaultLanguage } = useLanguage(props.language || 'en')
+  const { clear: clearDefaultLanguage } = useLanguage(props.defaultLanguage || 'en')
 
   const {
     suggestedPrompts,
