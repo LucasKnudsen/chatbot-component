@@ -1,15 +1,13 @@
-import { Resources } from '@/features/contextual'
-
 import { Expandable } from '@/components'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { For, Match, Show, Switch, createMemo } from 'solid-js'
 
+import { botStore } from '@/features/bot'
 import Picture from './Picture'
 import Video from './Video'
 
 type Props = {
-  resources: Resources
   class?: string
 }
 
@@ -19,7 +17,11 @@ const Gallery = (props: Props) => {
   const { theme } = useTheme()
   const { text } = useText()
 
-  const imagesAndVideos = createMemo(() => [...props.resources.picture, ...props.resources.video])
+  const imagesAndVideos = createMemo(() =>
+    botStore.activeContextuals.filter((element) => {
+      return element.type === 'picture' || element.type === 'video'
+    })
+  )
 
   const scrollIntoView = () => {
     const galleryContainer = document.getElementById('gallery-container')

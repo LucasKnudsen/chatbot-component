@@ -8,17 +8,6 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
-export const subscribe2channel = /* GraphQL */ `subscription Subscribe2channel($sessionId: String!) {
-  subscribe2channel(sessionId: $sessionId) {
-    sessionId
-    data
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.Subscribe2channelSubscriptionVariables,
-  APITypes.Subscribe2channelSubscription
->;
 export const onCreateCodeItem = /* GraphQL */ `subscription OnCreateCodeItem($filter: ModelSubscriptionCodeItemFilterInput) {
   onCreateCodeItem(filter: $filter) {
     tenantCode
@@ -732,4 +721,15 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
 ` as GeneratedSubscription<
   APITypes.OnDeleteUserSubscriptionVariables,
   APITypes.OnDeleteUserSubscription
+>;
+export const subscribe2channel = /* GraphQL */ `subscription Subscribe2channel($sessionId: String!) {
+  subscribe2channel(sessionId: $sessionId) {
+    sessionId
+    data
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.Subscribe2channelSubscriptionVariables,
+  APITypes.Subscribe2channelSubscription
 >;

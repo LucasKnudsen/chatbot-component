@@ -31,7 +31,10 @@ type BotStore = {
   isAwaitingAnswer: boolean
   isSidebarOpen: boolean
   readonly storageKey: string
-  readonly hasResources: boolean
+  readonly activeHistory: ChannelHistoryItem[]
+  readonly activeFacts: ContextualElement[]
+  readonly activeContextuals: ContextualElement[]
+  readonly activeAnswer: string
   toggleSidebar: () => void
 }
 
@@ -49,15 +52,30 @@ const [botStore, setBotStore] = createStore<BotStore>({
 
     return `${this.activeChannel.chatflowId}_QUESTIONS`
   },
-  get hasResources() {
-    const q = this.chat
-    if (!q) return false
 
-    const anyResourceExists = Object.keys(q.resources).some(
-      (key) => q.resources[key as ContextualElementType].length > 0
-    )
+  get activeHistory() {
+    return this.activeChannel?.history || []
+  },
 
-    return anyResourceExists
+  get activeFacts() {
+    const chat = this.activeChannel?.activeChat as ChannelHistoryItem
+    if (!chat) return []
+
+    return chat.resources?.filter((el) => el.type === ContextualElementType.fact) || []
+  },
+
+  get activeContextuals() {
+    const chat = this.activeChannel?.activeChat as ChannelHistoryItem
+    if (!chat) return []
+
+    return chat.resources?.filter((el) => el.type !== ContextualElementType.fact) || []
+  },
+
+  get activeAnswer() {
+    const chat = this.activeChannel?.activeChat as ChannelHistoryItem
+    if (!chat) return ''
+
+    return chat.answer || ''
   },
 
   toggleSidebar: () => {

@@ -372,7 +372,7 @@ export type CreateChannelHistoryItemInput = {
   ownerId: string,
   channelId: string,
   timestamp?: string | null,
-  question?: string | null,
+  question: string,
   answer?: string | null,
   resources?: Array< ContextualElementInput > | null,
 };
@@ -409,7 +409,7 @@ export type ChannelHistoryItem = {
   ownerId: string,
   channelId: string,
   timestamp: string,
-  question?: string | null,
+  question: string,
   answer?: string | null,
   resources?:  Array<ContextualElement > | null,
   updatedAt: string,
@@ -1440,7 +1440,7 @@ export type CreateChannelHistoryItemMutation = {
     ownerId: string,
     channelId: string,
     timestamp: string,
-    question?: string | null,
+    question: string,
     answer?: string | null,
     resources?:  Array< {
       __typename: "ContextualElement",
@@ -1468,7 +1468,7 @@ export type UpdateChannelHistoryItemMutation = {
     ownerId: string,
     channelId: string,
     timestamp: string,
-    question?: string | null,
+    question: string,
     answer?: string | null,
     resources?:  Array< {
       __typename: "ContextualElement",
@@ -1496,7 +1496,7 @@ export type DeleteChannelHistoryItemMutation = {
     ownerId: string,
     channelId: string,
     timestamp: string,
-    question?: string | null,
+    question: string,
     answer?: string | null,
     resources?:  Array< {
       __typename: "ContextualElement",
@@ -2178,7 +2178,7 @@ export type GetChannelHistoryItemQuery = {
     ownerId: string,
     channelId: string,
     timestamp: string,
-    question?: string | null,
+    question: string,
     answer?: string | null,
     resources?:  Array< {
       __typename: "ContextualElement",
@@ -2212,7 +2212,7 @@ export type ListChannelHistoryItemsQuery = {
       ownerId: string,
       channelId: string,
       timestamp: string,
-      question?: string | null,
+      question: string,
       answer?: string | null,
       resources?:  Array< {
         __typename: "ContextualElement",
@@ -2577,18 +2577,6 @@ export type FetchChannelsQuery = {
   } | null > | null,
 };
 
-export type Subscribe2channelSubscriptionVariables = {
-  sessionId: string,
-};
-
-export type Subscribe2channelSubscription = {
-  subscribe2channel?:  {
-    __typename: "SubscriptionEvent",
-    sessionId: string,
-    data: string,
-  } | null,
-};
-
 export type OnCreateCodeItemSubscriptionVariables = {
   filter?: ModelSubscriptionCodeItemFilterInput | null,
 };
@@ -2912,7 +2900,7 @@ export type OnCreateChannelHistoryItemSubscription = {
     ownerId: string,
     channelId: string,
     timestamp: string,
-    question?: string | null,
+    question: string,
     answer?: string | null,
     resources?:  Array< {
       __typename: "ContextualElement",
@@ -2940,7 +2928,7 @@ export type OnUpdateChannelHistoryItemSubscription = {
     ownerId: string,
     channelId: string,
     timestamp: string,
-    question?: string | null,
+    question: string,
     answer?: string | null,
     resources?:  Array< {
       __typename: "ContextualElement",
@@ -2968,7 +2956,7 @@ export type OnDeleteChannelHistoryItemSubscription = {
     ownerId: string,
     channelId: string,
     timestamp: string,
-    question?: string | null,
+    question: string,
     answer?: string | null,
     resources?:  Array< {
       __typename: "ContextualElement",
@@ -3285,5 +3273,17 @@ export type OnDeleteUserSubscription = {
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
+  } | null,
+};
+
+export type Subscribe2channelSubscriptionVariables = {
+  sessionId: string,
+};
+
+export type Subscribe2channelSubscription = {
+  subscribe2channel?:  {
+    __typename: "SubscriptionEvent",
+    sessionId: string,
+    data: string,
   } | null,
 };

@@ -8,7 +8,7 @@ import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Marked } from '@ts-stack/markdown'
-import { For, Show, createEffect, on } from 'solid-js'
+import { For, Show, createEffect, createMemo, on } from 'solid-js'
 
 import { LinkIcon } from '@/components/icons/LinkIcon'
 import Gallery from './Gallery/Gallery'
@@ -17,13 +17,17 @@ export const ChatWindow = () => {
   let botMessageEl: HTMLDivElement | undefined
   let chatWindowEl: HTMLDivElement | undefined
 
+  const links = createMemo(() =>
+    botStore.activeContextuals.filter((element) => element.type === 'link')
+  )
+
   const { text } = useText()
   const { theme } = useTheme()
   const device = useMediaQuery()
 
   createEffect(() => {
     if (botMessageEl) {
-      botMessageEl.innerHTML = Marked.parse(botStore.chat?.answer || '')
+      botMessageEl.innerHTML = Marked.parse(botStore.activeAnswer)
     }
   })
 
@@ -44,7 +48,7 @@ export const ChatWindow = () => {
 
   createEffect(
     on(
-      () => botStore.chat?.answer,
+      () => botStore.activeAnswer,
       () => scrollChatWindowToBottom(),
       { defer: true }
     )
@@ -60,13 +64,13 @@ export const ChatWindow = () => {
   )
 
   const onCopy = () => {
-    navigator.clipboard.writeText(botStore.chat?.answer!)
+    navigator.clipboard.writeText(botStore.activeAnswer!)
   }
 
   const onShare = () => {
     navigator.share?.({
-      title: botStore.chat?.question!,
-      text: botStore.chat?.answer!,
+      title: botStore.activeChannel?.activeChat?.question,
+      text: botStore.activeAnswer!,
     })
   }
 
@@ -84,7 +88,7 @@ export const ChatWindow = () => {
           <div>
             <MessageIcon width={30} color={theme().primaryColor} />
           </div>
-          {botStore.chat?.question}
+          {botStore.activeChannel?.activeChat?.question}
         </div>
 
         <Settings
@@ -115,7 +119,7 @@ export const ChatWindow = () => {
         class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative gap-y-8'
       >
         {/* Loading  */}
-        <Show when={botStore.isAwaitingAnswer && !botStore.chat?.answer}>
+        <Show when={botStore.isAwaitingAnswer && !botStore.activeAnswer}>
           <div class='flex mt-4 px-6 md:px-0'>
             <TypingBubble />
           </div>
@@ -129,20 +133,18 @@ export const ChatWindow = () => {
         />
 
         {/* Gallery  */}
-        <Gallery resources={botStore.chat?.resources!} class='px-6 md:px-0 animate-fade-in' />
+        <Gallery class='px-6 md:px-0 animate-fade-in' />
 
         {/* Mobile resources  */}
         <Show when={device() == 'mobile'}>
           <div class='flex flex-col'>
-            <Show when={botStore.chat?.resources.fact.length}>
+            <Show when={botStore.activeFacts.length}>
               <div class='flex overflow-x-scroll whitespace-nowrap gap-x-4 px-6 md:px-0 no-scrollbar mt-2 '>
-                <For each={botStore.chat?.resources?.fact ?? []}>
-                  {(element) => <Fact fact={element} />}
-                </For>
+                <For each={botStore.activeFacts}>{(element) => <Fact fact={element} />}</For>
               </div>
             </Show>
 
-            <Show when={botStore.chat?.resources.link.length}>
+            <Show when={links().length}>
               <div class='px-6 md:px-0 animate-fade-in'>
                 <div
                   class='font-bold text-xs mt-8'
@@ -156,9 +158,7 @@ export const ChatWindow = () => {
                 <Divider margin={8} />
               </div>
               <div class='flex overflow-x-scroll gap-x-4 px-6 no-scrollbar mt-2 '>
-                <For each={botStore.chat?.resources?.link ?? []}>
-                  {(element) => <LinkInline link={element} />}
-                </For>
+                <For each={links()}>{(element) => <LinkInline link={element} />}</For>
               </div>
             </Show>
           </div>

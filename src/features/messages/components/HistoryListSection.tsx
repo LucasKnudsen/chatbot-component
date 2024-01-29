@@ -1,12 +1,12 @@
 import { Divider } from '@/components/Divider'
 import { useTheme } from '@/features/theme/hooks'
+import { ChannelHistoryItem } from '@/graphql'
 import { For, Show } from 'solid-js'
-import { Chat } from '../types'
 
 type HistoryListSectionProps = {
   title: string
-  history: Chat[]
-  onSelect: (chat: Chat) => void
+  history: ChannelHistoryItem[]
+  onSelect: (chat: ChannelHistoryItem) => void
   disabled: boolean
 }
 

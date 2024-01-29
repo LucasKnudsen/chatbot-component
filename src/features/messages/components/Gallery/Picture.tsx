@@ -1,4 +1,4 @@
-import { ContextualElement } from '@/features/contextual'
+import { ContextualElement } from '@/graphql'
 import { createSignal, onCleanup } from 'solid-js'
 
 type Props = {
@@ -51,8 +51,8 @@ const Picture = ({ element }: Props) => {
     >
       <img
         class={`rounded-lg object-cover h-full w-full`}
-        src={element.value as string}
-        alt={element.description}
+        src={element.value!}
+        alt={element.description!}
         loading='lazy'
         onError={(e) => (e.currentTarget.style.display = 'none')}
         onClick={handleImageClick}
@@ -75,8 +75,8 @@ const Picture = ({ element }: Props) => {
         >
           <img
             class='max-w-3xl max-h-full rounded-lg transition-transform duration-300 ease-in-out animate-fade-in'
-            src={element.value as string}
-            alt={element.description}
+            src={element.value!}
+            alt={element.description!}
             onClick={handleCloseZoom}
             style={isZoomed() ? 'transform: scale(1)' : 'transform: scale(0)'}
           />

@@ -174,7 +174,16 @@
     },
     "flowiseBroadcast": {
       "build": true,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },

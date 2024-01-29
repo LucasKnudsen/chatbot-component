@@ -1,4 +1,5 @@
 import { Divider, IconButton, MicrophoneIcon, SendButton } from '@/components'
+import { botStore } from '@/features/bot'
 import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { API, Storage } from 'aws-amplify'
@@ -11,7 +12,6 @@ type Props = {
   rows?: number
   defaultValue?: string
   fontSize?: number
-  disabled?: boolean
   class?: string
   onSubmit: (value: string) => void
   onFocusChange?: (value: boolean) => void
@@ -44,7 +44,7 @@ export const ChatInput = (props: Props) => {
   }
 
   createEffect(() => {
-    if (!props.disabled && device() == 'desktop' && inputRef) inputRef.focus()
+    if (!botStore.isAwaitingAnswer && device() == 'desktop' && inputRef) inputRef.focus()
   })
 
   onMount(() => {
@@ -75,7 +75,7 @@ export const ChatInput = (props: Props) => {
         onInput={handleInput}
         value={inputValue()}
         fontSize={props.fontSize}
-        disabled={props.disabled}
+        disabled={botStore.isAwaitingAnswer}
         placeholder={props.placeholder}
         rows={props.rows}
         onFocusChange={props.onFocusChange}
@@ -85,10 +85,12 @@ export const ChatInput = (props: Props) => {
       <SendButton
         data-testid='submit-question'
         sendButtonColor={
-          props.disabled || inputValue() === '' ? theme().textSecondary : theme().primaryColor
+          botStore.isAwaitingAnswer || inputValue() === ''
+            ? theme().textSecondary
+            : theme().primaryColor
         }
         type='button'
-        isDisabled={props.disabled || inputValue() === ''}
+        isDisabled={botStore.isAwaitingAnswer || inputValue() === ''}
         class='ml-2'
         on:click={submit}
       >

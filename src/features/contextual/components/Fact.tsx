@@ -1,6 +1,6 @@
 import { useTheme } from '@/features/theme/hooks'
+import { ContextualElement } from '@/graphql'
 import { Show } from 'solid-js'
-import { ContextualElement } from '..'
 
 type Props = {
   fact: ContextualElement

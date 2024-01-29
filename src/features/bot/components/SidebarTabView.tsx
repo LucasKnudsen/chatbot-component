@@ -1,14 +1,14 @@
 import { TabView } from '@/components/TabView'
 import { History } from '@/features/messages'
-import { Chat } from '@/features/messages/types'
 import { NavigationPromptsList } from '@/features/prompt'
 import { useText } from '@/features/text'
+import { ChannelHistoryItem } from '@/graphql'
 import { createMemo } from 'solid-js'
 import { botStore } from '..'
 import { sidebarInnerWidthNum } from '../constants'
 
 type SidebarTabViewProps = {
-  setQuestion: (question: Chat) => void
+  setQuestion: (question: ChannelHistoryItem) => void
   handleSubmit: (question: string) => void
   class?: string
 }
@@ -21,7 +21,7 @@ export const SidebarTabView = (props: SidebarTabViewProps) => {
       title: text().historyTabTitle,
       content: (
         <History
-          history={botStore.history}
+          history={botStore.activeHistory}
           onSelect={props.setQuestion}
           disabled={botStore.isAwaitingAnswer}
         />
@@ -47,7 +47,7 @@ export const SidebarTabView = (props: SidebarTabViewProps) => {
 
   return (
     <div class={props.class} style={{ width: sidebarInnerWidthNum + 'px' }}>
-      <TabView initialIndex={botStore.chat ? 1 : 0} tabs={tabs()} />
+      <TabView initialIndex={botStore.activeChannel?.activeChat ? 1 : 0} tabs={tabs()} />
     </div>
   )
 }

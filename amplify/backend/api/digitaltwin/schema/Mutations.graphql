@@ -6,4 +6,5 @@ type SubscriptionEvent {
 type Mutation {
   publish2channel(sessionId: String!, data: AWSJSON!): SubscriptionEvent
     @function(name: "broadcastResolver-${env}")
+    @aws_iam
 }

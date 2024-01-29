@@ -1,7 +1,7 @@
 import { Divider } from '@/components/Divider'
 import { CircleDocumentIcon } from '@/components/icons/CircleDocumentIcon'
 import { useTheme } from '@/features/theme/hooks'
-import { ContextualElement } from '..'
+import { ContextualElement } from '@/graphql'
 
 type Props = {
   link: ContextualElement
@@ -19,7 +19,7 @@ export const Link = (props: Props) => {
     <a
       data-testid='link-resource'
       class='hover:no-underline border rounded-xl '
-      href={props.link.value}
+      href={props.link.value!}
       target='_blank'
       rel='noreferrer'
       style={{

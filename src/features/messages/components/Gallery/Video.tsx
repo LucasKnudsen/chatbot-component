@@ -1,4 +1,4 @@
-import { ContextualElement } from '@/features/contextual'
+import { ContextualElement } from '@/graphql'
 
 type Props = {
   element: ContextualElement
@@ -9,11 +9,11 @@ const Video = (props: Props) => {
     <video
       data-testid='video-resource'
       class='rounded-lg hover:shadow-lg transition-all duration-300 ease-in-out h-full w-full  object-cover '
-      src={props.element.value as string}
+      src={props.element.value!}
       muted
       autoplay
       controls
-      aria-label={props.element.description}
+      aria-label={props.element.description!}
       onError={(e) => (e.currentTarget.style.display = 'none')}
     />
   )

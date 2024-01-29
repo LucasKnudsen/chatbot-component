@@ -1,13 +1,13 @@
 import { botStore } from '@/features/bot'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
+import { ChannelHistoryItem } from '@/graphql'
 import { Show, createMemo } from 'solid-js'
 import { HistoryListSection } from '.'
-import { Chat } from '../types'
 
 type HistoryProps = {
-  history: Chat[]
-  onSelect: (chat: Chat) => void
+  history: ChannelHistoryItem[]
+  onSelect: (chat: ChannelHistoryItem) => void
   disabled?: boolean
 }
 
@@ -35,18 +35,18 @@ export const History = (props: HistoryProps) => {
   })
 
   const todayChats = createMemo(() =>
-    botStore.history.filter((h) => new Date(h.createdAt) >= todayStartOfDay())
+    botStore.activeHistory.filter((h) => new Date(h.timestamp) >= todayStartOfDay())
   )
 
   const yesterdayChats = createMemo(() => {
-    return botStore.history.filter(
+    return botStore.activeHistory.filter(
       (h) =>
-        new Date(h.createdAt) >= yesterdayStartOfDay() && new Date(h.createdAt) < todayStartOfDay()
+        new Date(h.timestamp) >= yesterdayStartOfDay() && new Date(h.timestamp) < todayStartOfDay()
     )
   })
 
   const remainingChats = createMemo(() => {
-    return botStore.history.filter((h) => new Date(h.createdAt) < yesterdayStartOfDay())
+    return botStore.activeHistory.filter((h) => new Date(h.timestamp) < yesterdayStartOfDay())
   })
 
   return (
@@ -60,7 +60,7 @@ export const History = (props: HistoryProps) => {
       </style>
 
       <Show
-        when={botStore.history.length}
+        when={botStore.activeHistory.length}
         fallback={
           <div class='text-center' style={{ color: theme().textSecondary }}>
             {text().noHistory}

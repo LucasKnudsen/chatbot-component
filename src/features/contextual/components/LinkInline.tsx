@@ -1,6 +1,6 @@
 import { CircleDocumentIcon } from '@/components/icons/CircleDocumentIcon'
 import { useTheme } from '@/features/theme/hooks'
-import { ContextualElement } from '..'
+import { ContextualElement } from '@/graphql'
 
 type Props = {
   link: ContextualElement
@@ -15,7 +15,7 @@ export const LinkInline = (props: Props) => {
     <a
       data-testid='link-resource'
       class='flex hover:no-underline border rounded-xl max-w-[80%]'
-      href={props.link.value}
+      href={props.link.value!}
       target='_blank'
       rel='noreferrer'
       style={{

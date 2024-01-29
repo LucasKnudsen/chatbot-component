@@ -2,7 +2,6 @@
 /* Amplify Params - DO NOT EDIT
     API_DIGITALTWIN_GRAPHQLAPIENDPOINTOUTPUT
     API_DIGITALTWIN_GRAPHQLAPIIDOUTPUT
-    API_DIGITALTWIN_GRAPHQLAPIKEYOUTPUT
     ENV
     REGION
 Amplify Params - DO NOT EDIT */
@@ -42,55 +41,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.handler = void 0;
-var GRAPHQL_ENDPOINT = process.env.API_DIGITALTWIN_GRAPHQLAPIENDPOINTOUTPUT;
-var GRAPHQL_API_KEY = process.env.API_DIGITALTWIN_GRAPHQLAPIKEYOUTPUT;
-var node_fetch_1 = require("node-fetch");
+exports.__esModule = true;
+exports.handler = exports.publish2channel = void 0;
 var mutation_1 = require("./mutation");
+exports.publish2channel = "\n  mutation Publish2channel($sessionId: String!, $data: AWSJSON!) {\n    publish2channel(sessionId: $sessionId, data: $data) {\n      sessionId\n      data\n      __typename\n    }\n  }\n";
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var responseStatus, responseBody, response, _a, sessionId, data, variables, options, request, error_1;
+    var responseStatus, responseBody, _a, sessionId, data, variables, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 console.log('EVENT BODY: ', event.body);
-                if (!GRAPHQL_API_KEY || !GRAPHQL_ENDPOINT) {
-                    return [2 /*return*/, {
-                            statusCode: 500,
-                            body: JSON.stringify({
-                                message: 'Missing GraphQL API Key or Endpoint',
-                                type: 'INVALID_GRAPHQL_API_KEY_OR_ENDPOINT',
-                            }),
-                        }];
-                }
                 responseStatus = 200;
                 _b.label = 1;
             case 1:
-                _b.trys.push([1, 4, 5, 6]);
+                _b.trys.push([1, 3, 4, 5]);
                 _a = event.body, sessionId = _a.sessionId, data = _a.data;
                 variables = {
                     sessionId: sessionId,
-                    data: JSON.stringify(data),
+                    data: JSON.stringify(data)
                 };
-                options = {
-                    method: 'POST',
-                    headers: {
-                        'x-api-key': GRAPHQL_API_KEY,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ query: mutation_1.publish2channel, variables: variables, authMode: 'API_KEY' }),
-                };
-                request = new node_fetch_1.Request(GRAPHQL_ENDPOINT, options);
-                return [4 /*yield*/, (0, node_fetch_1.default)(request)];
+                return [4 /*yield*/, (0, mutation_1.graphqlMutation)({ query: exports.publish2channel, variables: variables, authMode: 'AWS_IAM' })];
             case 2:
-                response = _b.sent();
-                return [4 /*yield*/, response.json()];
-            case 3:
                 responseBody = _b.sent();
                 if (responseBody.errors)
                     responseStatus = 400;
-                return [3 /*break*/, 6];
-            case 4:
+                return [3 /*break*/, 5];
+            case 3:
                 error_1 = _b.sent();
                 console.error('DETFAULT ERROR', error_1);
                 responseStatus = 400;
@@ -98,18 +74,18 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     message: error_1.message,
                     status: responseStatus,
                     type: error_1.type,
-                    stack: error_1.stack,
+                    stack: error_1.stack
                 };
-                return [3 /*break*/, 6];
-            case 5: return [2 /*return*/, {
+                return [3 /*break*/, 5];
+            case 4: return [2 /*return*/, {
                     statusCode: responseStatus,
                     body: JSON.stringify(responseBody),
                     headers: {
                         'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Headers': '*',
-                    },
+                        'Access-Control-Allow-Headers': '*'
+                    }
                 }];
-            case 6: return [2 /*return*/];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

@@ -14,7 +14,13 @@ type Props = {
 }
 
 export const ContextualContainer = (props: Props) => {
-  const facts = createMemo(() => botStore.chat?.resources?.fact ?? [])
+  const facts = createMemo(() => botStore.activeFacts)
+  const links = createMemo(() =>
+    botStore.activeContextuals.filter((element) => element.type === 'link')
+  )
+  const iframes = createMemo(() =>
+    botStore.activeContextuals.filter((element) => element.type === 'iframe')
+  )
 
   const [animateFacts] = createAutoAnimate()
   const [animateLinks] = createAutoAnimate()
@@ -57,12 +63,8 @@ export const ContextualContainer = (props: Props) => {
           ref={animateLinks}
           class='flex-1 flex flex-col py-4 gap-4 overflow-y-scroll custom-scrollbar pr-0.5'
         >
-          <For each={botStore.chat?.resources?.link ?? []}>
-            {(element) => <Link link={element} />}
-          </For>
-          <For each={botStore.chat?.resources?.iframe ?? []}>
-            {(element) => <Iframe element={element} />}
-          </For>
+          <For each={links()}>{(element) => <Link link={element} />}</For>
+          <For each={iframes()}>{(element) => <Iframe element={element} />}</For>
         </div>
       </div>
     </div>

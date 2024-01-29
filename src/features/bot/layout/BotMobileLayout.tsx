@@ -24,11 +24,13 @@ export const BotMobileLayout = (props: BotMobileProps) => {
     <div class='flex flex-col flex-1 h-full overflow-hidden'>
       <div class='flex flex-col flex-1 overflow-hidden text-base pt-6'>
         <Show
-          when={botStore.chat}
+          when={botStore.activeChannel?.activeChat}
           fallback={
             <div class='flex flex-1 items-end px-6 '>
               <h1 class='text-4xl md:text-5xl max-w-md h-fit mb-6 font-extralight tracking-wide leading-tight'>
-                {botStore.history.length ? text().returnWelcomeMessage : text().welcomeMessage}
+                {botStore.activeHistory.length
+                  ? text().returnWelcomeMessage
+                  : text().welcomeMessage}
               </h1>
             </div>
           }
@@ -47,7 +49,6 @@ export const BotMobileLayout = (props: BotMobileProps) => {
           <ChatInput
             class='mb-2'
             rows={1}
-            disabled={botStore.isAwaitingAnswer}
             defaultValue={props.userInput}
             onSubmit={props.onSubmit}
             placeholder={text().inputPlaceholder}

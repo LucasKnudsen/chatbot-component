@@ -23,7 +23,11 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
 
   const [resourcesToggled, setResourcesToggled] = createSignal(true)
 
-  const resourcesOpen = createMemo(() => botStore.hasResources && resourcesToggled())
+  const resourcesOpen = createMemo(
+    () =>
+      (Boolean(botStore.activeContextuals.length) || Boolean(botStore.activeFacts.length)) &&
+      resourcesToggled()
+  )
 
   return (
     <>
@@ -35,13 +39,15 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
         }}
       >
         <Show
-          when={botStore.chat}
+          when={botStore.activeChannel?.activeChat}
           fallback={
             <div class='flex flex-1 overflow-hidden  mb-6 '>
               {/* Welcome message */}
               <div class='flex flex-1 items-end '>
                 <h1 class='text-5xl max-w-md h-fit font-light tracking-wide leading-tight '>
-                  {botStore.history.length ? text().returnWelcomeMessage : text().welcomeMessage}
+                  {botStore.activeHistory.length
+                    ? text().returnWelcomeMessage
+                    : text().welcomeMessage}
                 </h1>
               </div>
 
@@ -65,7 +71,6 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
         <div class='w-full pb-1 z-1 mt-5 '>
           <ChatInput
             rows={2}
-            disabled={botStore.isAwaitingAnswer}
             defaultValue={props.userInput}
             onSubmit={props.onSubmit}
             placeholder={text().inputPlaceholder}
@@ -77,7 +82,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
       </div>
 
       {/* Resources Sidebar */}
-      <Show when={botStore.chat}>
+      <Show when={botStore.activeChannel?.activeChat}>
         <ResourcesSidebar
           open={resourcesOpen()}
           toggle={() => setResourcesToggled(!resourcesToggled())}

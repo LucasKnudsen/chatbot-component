@@ -29,9 +29,9 @@ const fetch = async (language?: string) => {
   clear()
 
   // Take only the questions from today. We don't want to suggest questions from previous days. Take latest 5.
-  const previousQuestions = botStore.history
-    .filter((question) => new Date(question.createdAt).toDateString() === new Date().toDateString())
-    .map((question) => question.question)
+  const previousQuestions = botStore.activeHistory
+    .filter((chat) => new Date(chat.timestamp).toDateString() === new Date().toDateString())
+    .map((chat) => chat.question)
     .slice(-5)
 
   // Don't send if there are no relevant previous questions
@@ -44,8 +44,6 @@ const fetch = async (language?: string) => {
     previousQuestions,
     promptCode: PromptCode.SUGGESTED_PROMPTS,
     language: language || currentLanguage(),
-    history: [],
-    // chatId: '123',
   }
 
   setSuggestedPromptsStore({ isFetching: true })
