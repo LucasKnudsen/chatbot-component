@@ -1,4 +1,5 @@
 import { botStoreActions } from '@/features/bot'
+import { suggestedPromptsStoreActions } from '@/features/prompt'
 import { SubscriptionEvent } from '@/models'
 import { SubscriptionHelper, clearAllSubscriptions, clearSubscription, logDev } from '@/utils'
 import { Accessor, createEffect, on, onCleanup } from 'solid-js'
@@ -7,11 +8,9 @@ import { ChatResponse } from '../types'
 export function useChatConnection({
   chatId,
   isChatFlowAvailableToStream,
-  fetchSuggestedPrompts,
 }: {
   chatId: Accessor<string>
   isChatFlowAvailableToStream: Accessor<boolean>
-  fetchSuggestedPrompts: (language?: string) => void
 }) {
   onCleanup(clearAllSubscriptions)
 
@@ -42,10 +41,10 @@ export function useChatConnection({
         botStoreActions.handleSourceDocuments(response.sourceDocuments)
 
         // Saves end answer in history rather than at every stream update
-        botStoreActions.updateHistoryAnswer(response.text)
+        botStoreActions.updateAnswerInHistory(response.text)
 
         botStoreActions.setLoading(false)
-        fetchSuggestedPrompts()
+        suggestedPromptsStoreActions.fetch()
       }
 
       try {

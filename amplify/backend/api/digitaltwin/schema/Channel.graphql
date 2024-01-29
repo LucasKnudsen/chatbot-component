@@ -57,12 +57,27 @@ type ChannelHistoryItem
   channelId: ID!
   timestamp: AWSDateTime!
 
-  type: ChannelItemType!
-  content: String
+  question: String
+  answer: String
+
+  resources: [ContextualElement!]
 }
 
-enum ChannelItemType {
-  NOTE
-  QUESTION
-  ANSWER
+type ContextualElement {
+  id: String
+  source: String
+  type: ContextualElementType
+  value: String
+
+  header: String
+  description: String
+  thumbnail: String
+}
+
+enum ContextualElementType {
+  fact
+  link
+  video
+  iframe
+  picture
 }

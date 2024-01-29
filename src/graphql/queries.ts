@@ -424,8 +424,18 @@ export const getChannelHistoryItem = /* GraphQL */ `query GetChannelHistoryItem(
     ownerId
     channelId
     timestamp
-    type
-    content
+    question
+    answer
+    resources {
+      id
+      source
+      type
+      value
+      header
+      description
+      thumbnail
+      __typename
+    }
     updatedAt
     owner
     __typename
@@ -455,8 +465,18 @@ export const listChannelHistoryItems = /* GraphQL */ `query ListChannelHistoryIt
       ownerId
       channelId
       timestamp
-      type
-      content
+      question
+      answer
+      resources {
+        id
+        source
+        type
+        value
+        header
+        description
+        thumbnail
+        __typename
+      }
       updatedAt
       owner
       __typename

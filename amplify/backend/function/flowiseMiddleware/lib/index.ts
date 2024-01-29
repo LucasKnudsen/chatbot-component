@@ -22,11 +22,17 @@ const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
 const ssmClient = new SSMClient({ region: process.env.REGION })
 const client = new LambdaClient({ region: process.env.REGION })
 
+type ShortTermMemory = {
+  type: 'apiMessage' | 'userMessage'
+  message: string
+}
+
 type ParsedEventBody = {
   promptCode: string
   channelId?: string
   language?: string
   question?: string
+  memory: ShortTermMemory[]
   previousQuestions?: string[]
   chatId?: string
   socketIOClientId?: string
@@ -144,11 +150,12 @@ const handleFlowiseRequest = async (body: ParsedEventBody) => {
 
   const data = {
     question,
-    overrideConfig: {
-      sessionId: {
-        RedisBackedChatMemory_1: chatId,
-      },
-    },
+    // overrideConfig: {
+    //   sessionId: {
+    //     RedisBackedChatMemory_1: chatId,
+    //   },
+    // },
+    history: body.memory,
     socketIOClientId,
   }
 

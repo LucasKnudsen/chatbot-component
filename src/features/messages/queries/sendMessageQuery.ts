@@ -7,6 +7,11 @@ export enum PromptCode {
   SUGGESTED_PROMPTS = 'suggestedPrompts',
 }
 
+export type ShortTermMemory = {
+  type: 'apiMessage' | 'userMessage'
+  message: string
+}
+
 export type IncomingInput = {
   promptCode: PromptCode
   question: string
@@ -15,7 +20,7 @@ export type IncomingInput = {
   language?: string
 
   previousQuestions?: string[]
-  history?: []
+  memory?: ShortTermMemory[]
   overrideConfig?: Record<string, unknown>
   socketIOClientId?: string
   chatId?: string

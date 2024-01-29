@@ -363,8 +363,18 @@ export const createChannelHistoryItem = /* GraphQL */ `mutation CreateChannelHis
     ownerId
     channelId
     timestamp
-    type
-    content
+    question
+    answer
+    resources {
+      id
+      source
+      type
+      value
+      header
+      description
+      thumbnail
+      __typename
+    }
     updatedAt
     owner
     __typename
@@ -382,8 +392,18 @@ export const updateChannelHistoryItem = /* GraphQL */ `mutation UpdateChannelHis
     ownerId
     channelId
     timestamp
-    type
-    content
+    question
+    answer
+    resources {
+      id
+      source
+      type
+      value
+      header
+      description
+      thumbnail
+      __typename
+    }
     updatedAt
     owner
     __typename
@@ -401,8 +421,18 @@ export const deleteChannelHistoryItem = /* GraphQL */ `mutation DeleteChannelHis
     ownerId
     channelId
     timestamp
-    type
-    content
+    question
+    answer
+    resources {
+      id
+      source
+      type
+      value
+      header
+      description
+      thumbnail
+      __typename
+    }
     updatedAt
     owner
     __typename

@@ -12,8 +12,7 @@ import { sidebarPaddingNum } from '../constants'
 
 type BotDesktopProps = {
   userInput: string
-  suggestedPrompts: string[]
-  isFetchingSuggestedPrompts: boolean
+
   onSubmit: (question: string) => void
   onClear: () => void
   class?: string
@@ -48,7 +47,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
 
               <SidebarTabView
                 setQuestion={(chat) => {
-                  botStoreActions.setChat(chat)
+                  botStoreActions.setActiveChat(chat)
                 }}
                 handleSubmit={(question) => {
                   props.onSubmit(question)
@@ -66,7 +65,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
         <div class='w-full pb-1 z-1 mt-5 '>
           <ChatInput
             rows={2}
-            disabled={botStore.loading}
+            disabled={botStore.isAwaitingAnswer}
             defaultValue={props.userInput}
             onSubmit={props.onSubmit}
             placeholder={text().inputPlaceholder}
@@ -74,12 +73,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
         </div>
 
         {/* Suggested Prompt Container */}
-        <SuggestedPrompts
-          handleSubmit={props.onSubmit}
-          suggestedPrompts={props.suggestedPrompts}
-          isFetching={props.isFetchingSuggestedPrompts}
-          loading={botStore.loading}
-        />
+        <SuggestedPrompts handleSubmit={props.onSubmit} />
       </div>
 
       {/* Resources Sidebar */}

@@ -51,8 +51,5 @@ export const useAuth = () => {
     // const channel = await fetchChannels(chatSpace)
     // const channelAccesses = await fetchChannelAccesses(user.id, chatSpace)
     //
-    // chatStoreActions.setChatStore('chatSpace', chatSpace)
-    // chatStoreActions.setChatStore('channel', channel)
-    // chatStoreActions.setChatStore('channelAccesses', channelAccesses)
   }
 }

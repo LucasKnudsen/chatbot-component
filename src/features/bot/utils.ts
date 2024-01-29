@@ -1,7 +1,9 @@
 import {
   Channel,
+  ChannelHistoryItem,
   ChannelUserAccess,
   FetchChannelsQuery,
+  ListChannelHistoryItemsQuery,
   ListChannelUserAccessesQuery,
   ListChannelUserAccessesQueryVariables,
   queries,
@@ -72,4 +74,21 @@ export async function fetchChannelDetails(channelId: string): Promise<Channel> {
   }
 
   return data?.fetchChannels?.[0]
+}
+
+export async function fetchChannelHistory(
+  channelId: string,
+  userId: string
+): Promise<ChannelHistoryItem[]> {
+  const { data } = await API.graphql<GraphQLQuery<ListChannelHistoryItemsQuery>>({
+    query: queries.listChannelHistoryItems,
+    variables: {
+      userId,
+      channelId,
+    },
+  })
+
+  const history = (data?.listChannelHistoryItems?.items as ChannelHistoryItem[]) || []
+
+  return history
 }

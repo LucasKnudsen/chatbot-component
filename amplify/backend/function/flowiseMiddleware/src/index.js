@@ -186,11 +186,12 @@ var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, vo
                 endpoint = "".concat(channel.apiHost, "/api/v1/prediction/").concat(channel.chatflowId);
                 data = {
                     question: question,
-                    overrideConfig: {
-                        sessionId: {
-                            RedisBackedChatMemory_1: chatId
-                        }
-                    },
+                    // overrideConfig: {
+                    //   sessionId: {
+                    //     RedisBackedChatMemory_1: chatId,
+                    //   },
+                    // },
+                    history: body.memory,
                     socketIOClientId: socketIOClientId
                 };
                 console.timeEnd('GET_CONFIG');

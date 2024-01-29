@@ -1,28 +1,34 @@
+import { authStore } from '@/features/authentication'
+import { SourceDocument, SourceFact, SourceResource } from '@/features/contextual'
+import { configStore } from '@/features/portal-init'
+import { translate } from '@/features/text'
 import {
+  Channel,
+  ChannelDocument,
+  ChannelHistoryItem,
+  ChannelUserAccess,
   ContextualElement,
   ContextualElementType,
-  Resources,
-  SourceDocument,
-  SourceFact,
-  SourceResource,
-} from '@/features/contextual'
-import { Chat } from '@/features/messages/types'
-import { translate } from '@/features/text'
-import { Channel } from '@/graphql'
-import { parseProxy, randomUUID } from '@/utils'
+} from '@/graphql'
+import { parseProxy } from '@/utils'
 import { uniqBy } from 'lodash'
 import { createStore } from 'solid-js/store'
+import { SYSTEM_DEFAULT_LANGUAGE, fetchChannelHistory } from '..'
 
 type ExtendedSourceFact = SourceFact & { source: string }
 type ExtendedSourceResource = SourceResource & { source: string }
 
+type ActiveChannelType = Channel & {
+  history: ChannelHistoryItem[]
+  library: ChannelDocument[]
+  access?: ChannelUserAccess
+  activeChat?: ChannelHistoryItem | null
+}
+
 type BotStore = {
-  activeChannel: Channel | null
+  activeChannel: ActiveChannelType | null
   channels: Channel[]
-  chat: Chat | null
-  history: Chat[]
-  loading: boolean
-  clientLanguage?: string
+  isAwaitingAnswer: boolean
   isSidebarOpen: boolean
   readonly storageKey: string
   readonly hasResources: boolean
@@ -32,10 +38,7 @@ type BotStore = {
 const [botStore, setBotStore] = createStore<BotStore>({
   activeChannel: null,
   channels: [],
-  chat: null,
-  history: [],
-  loading: false,
-  clientLanguage: undefined,
+  isAwaitingAnswer: false,
   isSidebarOpen: false,
 
   get storageKey() {
@@ -62,19 +65,24 @@ const [botStore, setBotStore] = createStore<BotStore>({
   },
 })
 
-const initBotStore = (channel: Channel, clientLanguage?: string) => {
-  // init chatflowId and clientLanguage first so that getStoredHistory uses correct storageKey
-  setBotStore({
-    activeChannel: channel,
-    clientLanguage,
-  })
+const initBotStore = async (channel: Channel) => {
+  let history: ChannelHistoryItem[] = []
 
-  const history = getStoredHistory()
+  if (authStore.userDetails?.id) {
+    history = await fetchChannelHistory(channel.id, authStore.userDetails.id)
+  } else {
+    // Check and load history from local storage
+    history = getStoredHistory()
+  }
 
   setBotStore({
-    history,
-    // chatflowId,
-    // clientLanguage,
+    activeChannel: {
+      ...channel,
+      history,
+      library: [],
+      access: undefined,
+      activeChat: undefined,
+    },
   })
 }
 
@@ -84,26 +92,26 @@ const getStoredHistory = () => {
   if (data) {
     const questions = JSON.parse(data)
 
-    return questions as Chat[]
+    return questions as ChannelHistoryItem[]
   }
 
   return []
 }
 
-const storeHistory = (history: Chat[]) => {
+const storeHistory = (history: ChannelHistoryItem[]) => {
   localStorage.setItem(botStore.storageKey, JSON.stringify(history))
 }
 
-const addHistory = (newQuestion: Chat) => {
-  setBotStore('history', (prev) => {
+const addToHistory = (newQuestion: ChannelHistoryItem) => {
+  setBotStore('activeChannel', 'history', (prev) => {
     const newHistory = [...prev, newQuestion]
     storeHistory(newHistory)
     return newHistory
   })
 }
 
-const updateHistory = (chat: Chat) => {
-  setBotStore('history', (prev) => {
+const updateHistory = (chat: ChannelHistoryItem) => {
+  setBotStore('activeChannel', 'history', (prev) => {
     prev.pop()
 
     const newHistory = [...prev, chat]
@@ -113,77 +121,75 @@ const updateHistory = (chat: Chat) => {
   })
 }
 
-const updateHistoryAnswer = (answer: string) => {
-  const oldQ = botStore.chat
+const updateAnswerInHistory = (answer: string) => {
+  const activeChat = botStore.activeChannel?.activeChat
 
-  if (oldQ === null) return
+  if (activeChat == null) return
 
-  const updatedQ = {
-    ...oldQ,
-    answer: oldQ.answer + answer,
+  const updatedChat = {
+    ...activeChat,
+    answer: activeChat.answer + answer,
   }
 
-  updateHistory(parseProxy(updatedQ))
+  updateHistory(parseProxy(updatedChat))
 }
 
-const updateAnswer = (answer: string, shouldOverwrite: boolean = false) => {
-  const oldQ = botStore.chat
+const updateAnswer = (answer: string, shouldOverrideAnswer: boolean = false) => {
+  const activeChat = botStore.activeChannel?.activeChat
 
-  if (oldQ === null) return
+  if (activeChat == null) return
 
-  if (shouldOverwrite) {
-    setChat({
-      ...oldQ,
-      answer,
-    })
-    return
-  }
-
-  setChat({ ...oldQ, answer: oldQ.answer + answer })
+  setActiveChat({
+    ...activeChat,
+    answer: shouldOverrideAnswer ? answer : activeChat.answer + answer,
+  })
+  return
 }
 
-const buildQuestion = (question: string, id: string) => {
-  const q: Chat = {
-    id,
-    createdAt: new Date().toISOString(),
+const buildQuestion = (question: string) => {
+  const ownerId = authStore.userDetails?.id
+  const channelId = botStore.activeChannel?.id
+
+  if (!ownerId || !channelId) throw new Error('No owner or channel id')
+
+  const newHistoryItem: ChannelHistoryItem = {
+    ownerId,
+    channelId,
+    timestamp: new Date().toISOString(),
     question: question,
     answer: '',
-    resources: {
-      fact: [],
-      iframe: [],
-      picture: [],
-      link: [],
-      video: [],
-    },
+    resources: [],
+
+    __typename: 'ChannelHistoryItem',
+    updatedAt: new Date().toISOString(),
   }
 
-  return q
+  return newHistoryItem
 }
 
 const createQuestion = (question: string) => {
-  const uuid = randomUUID()
-
-  setChat(buildQuestion(question, uuid))
-  addHistory(buildQuestion(question, uuid))
+  setActiveChat(buildQuestion(question))
+  addToHistory(buildQuestion(question))
 }
 
 const handleFacts = async (facts: ExtendedSourceFact[]) => {
-  const oldQ = botStore.chat
+  const activeChat = botStore.activeChannel?.activeChat
 
-  if (oldQ === null) return
+  if (activeChat == null) return
 
   let factElements: ContextualElement[] = facts.map((f) => ({
     id: f.id,
     source: f.source,
-    type: ContextualElementType.FACT,
+    type: ContextualElementType.fact,
     value: f.value,
     header: f.name,
+    __typename: 'ContextualElement',
   }))
 
   setBotStore(
-    'chat',
+    'activeChannel',
+    'activeChat',
     'resources',
-    'fact',
     factElements.map((f) => ({
       ...f,
       value: '',
@@ -196,7 +202,10 @@ const handleFacts = async (facts: ExtendedSourceFact[]) => {
       const parsedValue = Array.isArray(f.value) ? f.value.join(', ') : f.value
 
       const encodedText = `${f.header} | ${parsedValue}`
-      const translatedText = await translate(encodedText, botStore.clientLanguage)
+      const translatedText = await translate(
+        encodedText,
+        configStore.chatSpaceConfig.defaultLanguage || SYSTEM_DEFAULT_LANGUAGE
+      )
 
       const [header, value] = translatedText.split('|')
 
@@ -208,43 +217,33 @@ const handleFacts = async (facts: ExtendedSourceFact[]) => {
     })
   )
 
-  setBotStore('chat', 'resources', 'fact', factElements)
+  setBotStore('activeChannel', 'activeChat', 'resources', factElements)
 
-  updateHistory(parseProxy(botStore.chat!))
+  updateHistory(parseProxy(botStore.activeChannel?.activeChat!))
 }
 
 const handleLinkedResources = async (linkedResources: ExtendedSourceResource[]) => {
-  const oldQ = botStore.chat
+  const activeChat = botStore.activeChannel?.activeChat
 
-  if (oldQ === null) return
+  if (activeChat == null) return
 
-  const resources = linkedResources.reduce<Resources>((acc, resource) => {
-    const { link, description, type, id, thumbnail } = resource
+  const contextualElements: ContextualElement[] = linkedResources.map((r) => ({
+    id: r.id,
+    source: r.source,
+    type: r.type as ContextualElementType,
+    value: r.link,
+    header: r.description,
+    __typename: 'ContextualElement',
+  }))
 
-    // duplicate existing resources of type
-    const resourcesOfType = [
-      ...acc[type as keyof Resources],
-      {
-        id,
-        value: link,
-        description,
-        type: type as ContextualElementType,
-        source: resource.source,
-        thumbnail,
-      },
-    ]
+  const uniqueElements = uniqBy(contextualElements, 'id')
 
-    const uniqResourcesOfType = uniqBy(resourcesOfType, 'id')
+  setBotStore('activeChannel', 'activeChat', 'resources', (prev) => ({
+    ...prev,
+    ...uniqueElements,
+  }))
 
-    return {
-      ...acc,
-      [type]: uniqResourcesOfType,
-    }
-  }, oldQ.resources)
-
-  setBotStore('chat', 'resources', (prev) => ({ ...prev, ...resources }))
-
-  updateHistory(parseProxy(botStore.chat!))
+  updateHistory(parseProxy(botStore.activeChannel?.activeChat!))
 }
 
 const handleSourceDocuments = async (documents: SourceDocument[]) => {
@@ -276,32 +275,30 @@ const handleSourceDocuments = async (documents: SourceDocument[]) => {
   await handleFacts(uniqueFacts)
 }
 
-const setChat = (chat: Chat | null) => {
-  setBotStore('chat', chat)
+const setActiveChat = (chat: ChannelHistoryItem | null) => {
+  setBotStore('activeChannel', 'activeChat', chat)
 }
 
 const setLoading = (loading: boolean) => {
-  setBotStore('loading', loading)
+  setBotStore('isAwaitingAnswer', loading)
 }
 
 const resetActiveChannel = () => {
-  setBotStore('chat', null)
-
   setBotStore('activeChannel', null)
 }
 
 const clear = () => {
-  setBotStore('chat', null)
-  setBotStore('history', [])
+  // setBotStore('chat', null)
+  // setBotStore('history', [])
   localStorage.removeItem(botStore.storageKey)
 }
 
 const botStoreActions = {
   initBotStore,
   updateAnswer,
-  updateHistoryAnswer,
+  updateAnswerInHistory,
   createQuestion,
-  setChat,
+  setActiveChat,
   resetActiveChannel,
   handleSourceDocuments,
   setLoading,

@@ -7,19 +7,18 @@ import {
   useChatConnection,
   useSocket,
 } from '@/features/messages'
-import { useSuggestedPrompts } from '@/features/prompt'
+import { suggestedPromptsStoreActions } from '@/features/prompt'
 import { detectLanguage } from '@/features/text'
-import { ChatSpace } from '@/graphql/types'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Match, Show, Switch, createSignal, onMount } from 'solid-js'
-import { botStore, botStoreActions, useChatId, useLanguage } from '..'
+import { botStore, botStoreActions, useChatId } from '..'
 import { Sidebar } from '../components'
 import { MenuSettings } from '../components/MenuSettings'
 import { SidebarTabView } from '../components/SidebarTabView'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
 
-export const Bot = (props: ChatSpace) => {
+export const Bot = () => {
   const [userInput, setUserInput] = createSignal('')
 
   const [sidebarOpen, setSidebarOpen] = createSignal(false)
@@ -27,14 +26,6 @@ export const Bot = (props: ChatSpace) => {
   const device = useMediaQuery()
 
   const { chatId, clear: clearChatId } = useChatId()
-  const { clear: clearDefaultLanguage } = useLanguage(props.defaultLanguage || 'en')
-
-  const {
-    suggestedPrompts,
-    fetchSuggestedPrompts,
-    clearSuggestions,
-    isFetching: isFetchingSuggestedPrompts,
-  } = useSuggestedPrompts()
 
   const { socketIOClientId, isChatFlowAvailableToStream } = useSocket({
     onToken: botStoreActions.updateAnswer,
@@ -43,19 +34,17 @@ export const Bot = (props: ChatSpace) => {
   useChatConnection({
     chatId,
     isChatFlowAvailableToStream,
-    fetchSuggestedPrompts,
   })
 
   const clear = () => {
     botStoreActions.clear()
-    clearSuggestions()
+    suggestedPromptsStoreActions.clear()
     clearChatId()
-    clearDefaultLanguage()
   }
 
   onMount(() => {
-    if (botStore.chat) {
-      fetchSuggestedPrompts()
+    if (botStore.activeChannel?.activeChat) {
+      suggestedPromptsStoreActions.fetch()
     }
   })
 
@@ -69,7 +58,7 @@ export const Bot = (props: ChatSpace) => {
 
     botStoreActions.setLoading(true)
 
-    clearSuggestions()
+    suggestedPromptsStoreActions.clear()
 
     botStoreActions.createQuestion(value)
 
@@ -77,7 +66,7 @@ export const Bot = (props: ChatSpace) => {
       question: value,
       channelId: botStore.activeChannel!.id,
       spaceId: botStore.activeChannel!.chatSpaceId,
-      history: [],
+      memory: [],
       chatId: chatId(),
       promptCode: PromptCode.QUESTION,
     }
@@ -97,27 +86,15 @@ export const Bot = (props: ChatSpace) => {
 
       <Switch>
         <Match when={['desktop', 'tablet'].includes(device())}>
-          <BotDesktopLayout
-            userInput={userInput()}
-            isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
-            suggestedPrompts={suggestedPrompts()}
-            onSubmit={handleSubmit}
-            onClear={clear}
-          />
+          <BotDesktopLayout userInput={userInput()} onSubmit={handleSubmit} onClear={clear} />
         </Match>
         <Match when={device() == 'mobile'}>
-          <BotMobileLayout
-            userInput={userInput()}
-            isFetchingSuggestedPrompts={isFetchingSuggestedPrompts()}
-            suggestedPrompts={suggestedPrompts()}
-            onSubmit={handleSubmit}
-            onClear={clear}
-          />
+          <BotMobileLayout userInput={userInput()} onSubmit={handleSubmit} onClear={clear} />
         </Match>
       </Switch>
 
       {/* Sidebar drawer */}
-      <Show when={device() == 'mobile' || botStore.chat}>
+      <Show when={device() == 'mobile' || botStore.activeChannel?.activeChat}>
         <Sidebar
           open={sidebarOpen()}
           onToggle={() => {
@@ -129,7 +106,7 @@ export const Bot = (props: ChatSpace) => {
               <SidebarTabView
                 class='h-full'
                 setQuestion={(chat) => {
-                  botStoreActions.setChat(chat)
+                  botStoreActions.setActiveChat(chat)
                   setSidebarOpen(false)
                 }}
                 handleSubmit={(question) => {

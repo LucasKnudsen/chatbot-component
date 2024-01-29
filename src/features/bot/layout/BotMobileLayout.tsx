@@ -9,8 +9,7 @@ import { botStore } from '..'
 
 type BotMobileProps = {
   userInput: string
-  suggestedPrompts: string[]
-  isFetchingSuggestedPrompts: boolean
+
   onSubmit: (question: string) => void
   onClear: () => void
   class?: string
@@ -48,7 +47,7 @@ export const BotMobileLayout = (props: BotMobileProps) => {
           <ChatInput
             class='mb-2'
             rows={1}
-            disabled={botStore.loading}
+            disabled={botStore.isAwaitingAnswer}
             defaultValue={props.userInput}
             onSubmit={props.onSubmit}
             placeholder={text().inputPlaceholder}
@@ -57,12 +56,7 @@ export const BotMobileLayout = (props: BotMobileProps) => {
         </div>
 
         <Collapsible open={isFocused()}>
-          <SuggestedPrompts
-            handleSubmit={props.onSubmit}
-            suggestedPrompts={props.suggestedPrompts}
-            isFetching={props.isFetchingSuggestedPrompts}
-            loading={botStore.loading}
-          />
+          <SuggestedPrompts handleSubmit={props.onSubmit} />
         </Collapsible>
       </div>
     </div>

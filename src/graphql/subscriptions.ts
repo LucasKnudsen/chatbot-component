@@ -348,8 +348,18 @@ export const onCreateChannelHistoryItem = /* GraphQL */ `subscription OnCreateCh
     ownerId
     channelId
     timestamp
-    type
-    content
+    question
+    answer
+    resources {
+      id
+      source
+      type
+      value
+      header
+      description
+      thumbnail
+      __typename
+    }
     updatedAt
     owner
     __typename
@@ -367,8 +377,18 @@ export const onUpdateChannelHistoryItem = /* GraphQL */ `subscription OnUpdateCh
     ownerId
     channelId
     timestamp
-    type
-    content
+    question
+    answer
+    resources {
+      id
+      source
+      type
+      value
+      header
+      description
+      thumbnail
+      __typename
+    }
     updatedAt
     owner
     __typename
@@ -386,8 +406,18 @@ export const onDeleteChannelHistoryItem = /* GraphQL */ `subscription OnDeleteCh
     ownerId
     channelId
     timestamp
-    type
-    content
+    question
+    answer
+    resources {
+      id
+      source
+      type
+      value
+      header
+      description
+      thumbnail
+      __typename
+    }
     updatedAt
     owner
     __typename

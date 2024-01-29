@@ -1,7 +1,7 @@
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { createQuery } from '@tanstack/solid-query'
 import { Match, Show, Switch } from 'solid-js'
-import { BotManager } from '../../bot'
+import { BotManager, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
 
 import { TypingBubble } from '@/components'
 import { Nav } from '@/components/Nav'
@@ -24,7 +24,8 @@ export const PortalInitializer = (props: ChatConfig) => {
       const { themeId, theme, defaultLanguage, text } = result
 
       initTheme(themeId, theme)
-      initText(text, defaultLanguage || 'en')
+      initText(text, defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
+      initLanguage(defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
       configStoreActions.setConfigStore('chatSpaceConfig', result)
 
       if (props.config?.autoOpen) {
@@ -37,6 +38,7 @@ export const PortalInitializer = (props: ChatConfig) => {
 
   const { initTheme, theme } = useTheme()
   const { initText } = useText()
+  const { initLanguage } = useLanguage()
 
   return (
     <Switch>

@@ -23,7 +23,7 @@ export const SidebarTabView = (props: SidebarTabViewProps) => {
         <History
           history={botStore.history}
           onSelect={props.setQuestion}
-          disabled={botStore.loading}
+          disabled={botStore.isAwaitingAnswer}
         />
       ),
     }
@@ -37,7 +37,7 @@ export const SidebarTabView = (props: SidebarTabViewProps) => {
             // botStore.chat?.question ? props.initialPrompts : props.initialPrompts?.slice(0, 3)
           }
           onSelect={props.handleSubmit}
-          disabled={botStore.loading}
+          disabled={botStore.isAwaitingAnswer}
         />
       ),
     }

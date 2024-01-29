@@ -69,7 +69,7 @@ export const BotManager = () => {
       </Match>
 
       <Match when={Boolean(botStore.activeChannel)}>
-        <Bot {...configStore.chatSpaceConfig} />
+        <Bot />
       </Match>
 
       {/* Overview over all the Channels  */}
