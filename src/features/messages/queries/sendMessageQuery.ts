@@ -26,8 +26,6 @@ export type IncomingInput = {
 }
 
 export async function sendMessageQuery(body: IncomingInput) {
-  if (!botStore.activeChannel) throw new Error('No active channel')
-
   try {
     // TODO: Test timeout of the REST API. (There's a 30 second timeout on AppSync)
     const answer = await API.post('digitaltwinRest', '/flowise/middleware', {
@@ -40,6 +38,31 @@ export async function sendMessageQuery(body: IncomingInput) {
   } catch (error) {
     return { error: error as Error }
   }
+}
+
+export async function flowiseMessageQuery(body: IncomingInput) {
+  if (!botStore.activeChannel) throw new Error('No active channel')
+
+  const response = await fetch(
+    `${botStore.activeChannel.apiHost}/api/v1/prediction/${botStore.activeChannel.chatflowId}`,
+    {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: botStore.activeChannel.apiKey!,
+      },
+
+      body: JSON.stringify({
+        chatflowid: botStore.activeChannel.chatflowId,
+        apiHost: botStore.activeChannel.apiHost,
+        question: body.question,
+        socketIOClientId: body.socketIOClientId,
+      }),
+    }
+  )
+
+  console.log(await response.json())
 }
 
 export const isStreamAvailableQuery = ({

@@ -54,6 +54,15 @@ export const ChatWindow = () => {
     )
   )
 
+  // createEffect(
+  //   on(
+  //     () => botStore.activeFacts.length,
+  //     () => {
+  //       setTimeout(() => scrollChatWindowToBottom(), 250)
+  //     }
+  //   )
+  // )
+
   // shows a bit of the resources when they are loaded
   createEffect(
     on(

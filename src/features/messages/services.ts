@@ -102,9 +102,11 @@ export const initLLMStream = async (channel: Channel) => {
 
     // socket.on('start', () => onStart?.())
 
-    // socket.on('sourceDocuments', (docs) => onDocuments?.(docs))
+    socket.on('sourceDocuments', botStoreActions.handleSourceDocuments)
 
     socket.on('token', botStoreActions.updateAnswer)
+
+    socket.on('stop', () => logDev('Socket stopped'))
 
     socket.on('disconnect', () => {
       logDev('Socket disconnected')

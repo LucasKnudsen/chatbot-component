@@ -5,8 +5,8 @@ import {
   LLMStreamId,
   PromptCode,
   clearLLMStream,
+  flowiseMessageQuery,
   initiatingLLMStream,
-  sendMessageQuery,
 } from '@/features/messages'
 import { suggestedPromptsStoreActions } from '@/features/prompt'
 import { detectLanguage } from '@/features/text'
@@ -49,10 +49,13 @@ export const Bot = () => {
     }
 
     // Fires without waiting for response, as the response is handled by a socket connection
-    sendMessageQuery(body)
-    await detectLanguage(value, true)
+    await Promise.allSettled([flowiseMessageQuery(body), detectLanguage(value, true)])
 
     setUserInput('')
+
+    botStoreActions.setLoading(false)
+
+    suggestedPromptsStoreActions.fetch()
   }
 
   onMount(() => {

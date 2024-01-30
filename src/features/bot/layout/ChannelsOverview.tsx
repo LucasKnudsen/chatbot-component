@@ -1,6 +1,7 @@
 import { Spinner } from '@/components/loaders'
 import { useTheme } from '@/features/theme'
 import { Channel, ChannelUserAccess, ChatSpace } from '@/graphql'
+import { useHovered } from '@/utils'
 import { createMutation } from '@tanstack/solid-query'
 import { botStoreActions, fetchChannelDetails } from '..'
 
@@ -24,6 +25,8 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
 }
 
 const ChannelItem = (props: { channel: Channel | ChannelUserAccess; isPublic: boolean }) => {
+  const [hoverRef, isHovered] = useHovered()
+
   const channelDetailsMutation = createMutation(() => ({
     mutationKey: ['channels', (props.channel as ChannelUserAccess).channelId],
 
@@ -44,10 +47,11 @@ const ChannelItem = (props: { channel: Channel | ChannelUserAccess; isPublic: bo
 
   return (
     <button
+      ref={hoverRef}
       disabled={channelDetailsMutation.isPending}
-      class=' m-4 px-4 py-2 rounded-md flex justify-center items-center gap-4'
+      class=' m-4 px-4 py-2 rounded-md flex justify-center items-center gap-4 w-full'
       style={{
-        background: theme()?.surfaceHoveredBackground,
+        background: isHovered() ? theme()?.surfaceHoveredBackground : theme()?.surfaceBackground,
         color: theme()?.textColor,
         border: `1px solid ${theme()?.borderColor}`,
       }}

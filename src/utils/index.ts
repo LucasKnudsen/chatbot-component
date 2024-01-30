@@ -1,4 +1,7 @@
+import useHovered from './useHovered'
+
 export * from './subscriptionHelpers'
+export { useHovered }
 
 export const isNotDefined = <T>(value: T | undefined | null): value is undefined | null =>
   value === undefined || value === null
