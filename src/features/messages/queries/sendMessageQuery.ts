@@ -62,7 +62,7 @@ export async function flowiseMessageQuery(body: IncomingInput) {
     }
   )
 
-  console.log(await response.json())
+  return response
 }
 
 export const isStreamAvailableQuery = ({

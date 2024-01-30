@@ -13,7 +13,7 @@ import {
 } from '@/graphql'
 import { parseProxy } from '@/utils'
 import { uniqBy } from 'lodash'
-import { createStore } from 'solid-js/store'
+import { createStore, reconcile } from 'solid-js/store'
 import { SYSTEM_DEFAULT_LANGUAGE, fetchChannelHistory } from '..'
 
 type ExtendedSourceFact = SourceFact & { source: string }
@@ -23,7 +23,7 @@ type ActiveChannelType = Channel & {
   history: ChannelHistoryItem[]
   library: ChannelDocument[]
   access?: ChannelUserAccess
-  activeChat?: ChannelHistoryItem | null
+  activeChat?: Partial<ChannelHistoryItem> | null
 }
 
 type BotStore = {
@@ -98,7 +98,7 @@ const initBotStore = async (channel: Channel) => {
     console.log('HISTORY: ', history)
   } else {
     // Check and load history from local storage
-    history = getStoredHistory()
+    history = getLocalHistory()
     await Promise.all([initLLMStream(channel)])
   }
 
@@ -113,7 +113,7 @@ const initBotStore = async (channel: Channel) => {
   })
 }
 
-const getStoredHistory = () => {
+const getLocalHistory = () => {
   const data = localStorage.getItem(botStore.storageKey)
 
   if (data) {
@@ -125,51 +125,56 @@ const getStoredHistory = () => {
   return []
 }
 
-const storeHistory = (history: ChannelHistoryItem[]) => {
+const storeLocalHistory = (history: ChannelHistoryItem[]) => {
   localStorage.setItem(botStore.storageKey, JSON.stringify(history))
 }
 
-const addToHistory = (newQuestion: ChannelHistoryItem) => {
+const addToHistory = (item: ChannelHistoryItem) => {
   setBotStore('activeChannel', 'history', (prev) => {
-    const newHistory = [...prev, newQuestion]
-    storeHistory(newHistory)
-    return newHistory
+    const newHistory = [...prev, item]
+
+    storeLocalHistory(newHistory)
+
+    return parseProxy(newHistory)
   })
 }
 
-const updateHistory = (chat: ChannelHistoryItem) => {
-  setBotStore('activeChannel', 'history', (prev) => {
-    prev.pop()
+// const updateHistory = (chat: ChannelHistoryItem) => {
+//   setBotStore('activeChannel', 'history', (prev) => {
+//     prev.pop()
 
-    const newHistory = [...prev, chat]
+//     const newHistory = [...prev, chat]
 
-    storeHistory(newHistory)
-    return newHistory
-  })
-}
+//     storeLocalHistory(newHistory)
+//     return newHistory
+//   })
+// }
 
-const updateAnswerInHistory = (answer: string) => {
-  const activeChat = botStore.activeChannel?.activeChat
+// const updateAnswerInHistory = (answer: string) => {
+//   const activeChat = botStore.activeChannel?.activeChat
 
-  if (activeChat == null) return
+//   if (activeChat == null) return
 
-  const updatedChat = {
-    ...activeChat,
-    answer: activeChat.answer + answer,
-  }
+//   const updatedChat = {
+//     ...activeChat,
+//     answer: activeChat.answer + answer,
+//   }
 
-  updateHistory(parseProxy(updatedChat))
-}
+//   updateHistory(parseProxy(updatedChat))
+// }
 
 const updateAnswer = (answer: string, shouldOverrideAnswer: boolean = false) => {
   const activeChat = botStore.activeChannel?.activeChat
 
   if (activeChat == null) return
 
-  setActiveChat({
-    ...activeChat,
-    answer: shouldOverrideAnswer ? answer : activeChat.answer + answer,
-  })
+  setBotStore(
+    'activeChannel',
+    'activeChat',
+    'answer',
+    shouldOverrideAnswer ? answer : activeChat.answer + answer
+  )
+
   return
 }
 
@@ -179,24 +184,17 @@ const buildQuestion = (question: string) => {
 
   if (!ownerId || !channelId) throw new Error('No owner or channel id')
 
-  const newHistoryItem: ChannelHistoryItem = {
+  const newHistoryItem: Partial<ChannelHistoryItem> = {
     ownerId,
     channelId,
     timestamp: new Date().toISOString(),
     question: question,
     answer: '',
     resources: [],
-
-    __typename: 'ChannelHistoryItem',
     updatedAt: new Date().toISOString(),
   }
 
-  return newHistoryItem
-}
-
-const createQuestion = (question: string) => {
-  setActiveChat(buildQuestion(question))
-  addToHistory(buildQuestion(question))
+  setActiveChat(newHistoryItem)
 }
 
 const handleFacts = async (facts: ExtendedSourceFact[]) => {
@@ -246,7 +244,7 @@ const handleFacts = async (facts: ExtendedSourceFact[]) => {
 
   setBotStore('activeChannel', 'activeChat', 'resources', factElements)
 
-  updateHistory(parseProxy(botStore.activeChannel?.activeChat!))
+  // updateHistory(parseProxy(botStore.activeChannel?.activeChat!))
 }
 
 const handleLinkedResources = async (linkedResources: ExtendedSourceResource[]) => {
@@ -270,7 +268,7 @@ const handleLinkedResources = async (linkedResources: ExtendedSourceResource[]) 
     ...uniqueElements,
   }))
 
-  updateHistory(parseProxy(botStore.activeChannel?.activeChat!))
+  // updateHistory(parseProxy(botStore.activeChannel?.activeChat!))
 }
 
 const handleSourceDocuments = async (documents: SourceDocument[]) => {
@@ -302,8 +300,9 @@ const handleSourceDocuments = async (documents: SourceDocument[]) => {
   await handleFacts(uniqueFacts)
 }
 
-const setActiveChat = (chat: ChannelHistoryItem | null) => {
-  setBotStore('activeChannel', 'activeChat', chat)
+const setActiveChat = (chat: Partial<ChannelHistoryItem> | null) => {
+  console.log('Setting active chat: ', chat)
+  setBotStore('activeChannel', 'activeChat', reconcile(parseProxy(chat)))
 }
 
 const setLoading = (loading: boolean) => {
@@ -323,9 +322,9 @@ const clear = () => {
 const botStoreActions = {
   initBotStore,
   updateAnswer,
+  addToHistory,
   setBotStore,
-  updateAnswerInHistory,
-  createQuestion,
+  buildQuestion,
   setActiveChat,
   resetActiveChannel,
   handleSourceDocuments,

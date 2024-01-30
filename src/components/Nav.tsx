@@ -7,7 +7,7 @@ import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Match, Show, Switch } from 'solid-js'
-import { Button } from '.'
+import { Button, ChevronIcon } from '.'
 import { CircleCloseIcon } from './icons/CircleCloseIcon'
 import { MenuIcon } from './icons/MenuIcon'
 
@@ -30,6 +30,27 @@ export const Nav = () => {
     >
       <div class='flex items-center gap-6 w-full flex-nowrap'>
         <img src={theme().navbarLogoUrl} class='h-6 cursor-pointer' onClick={onClickLogo} />
+
+        {botStore.activeChannel && (
+          <>
+            <ChevronIcon
+              onClick={botStoreActions.resetActiveChannel}
+              class='rotate-90 transform cursor-pointer'
+              style={{
+                color: theme().primaryColor,
+              }}
+            />
+
+            <p
+              class='font-medium '
+              style={{
+                color: theme().primaryColor,
+              }}
+            >
+              {botStore.activeChannel?.name}
+            </p>
+          </>
+        )}
 
         {device() == 'desktop' ? (
           <>

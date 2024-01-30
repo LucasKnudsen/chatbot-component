@@ -15,6 +15,30 @@ export const isEmpty = (value: string | undefined | null): value is undefined =>
 export const isNotEmpty = (value: string | undefined | null): value is string =>
   value !== undefined && value !== null && value !== ''
 
+export const removeTypenameFromInput = <T>(input: T): T => {
+  if (input === null || input === undefined) return input
+
+  if (Array.isArray(input)) {
+    return input.map(removeTypenameFromInput) as any
+  }
+
+  if (typeof input === 'object') {
+    const newInput: any = { ...input }
+    delete newInput['__typename']
+
+    // Recursively remove __typename from nested objects
+    for (const key in newInput) {
+      if (newInput.hasOwnProperty(key)) {
+        newInput[key] = removeTypenameFromInput(newInput[key])
+      }
+    }
+
+    return newInput
+  }
+
+  return input
+}
+
 export const randomUUID = (): string => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0

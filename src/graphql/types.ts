@@ -375,6 +375,7 @@ export type CreateChannelHistoryItemInput = {
   question: string,
   answer?: string | null,
   resources?: Array< ContextualElementInput > | null,
+  updatedAt?: string | null,
 };
 
 export type ContextualElementInput = {
@@ -399,6 +400,7 @@ export enum ContextualElementType {
 export type ModelChannelHistoryItemConditionInput = {
   question?: ModelStringInput | null,
   answer?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelChannelHistoryItemConditionInput | null > | null,
   or?: Array< ModelChannelHistoryItemConditionInput | null > | null,
   not?: ModelChannelHistoryItemConditionInput | null,
@@ -434,6 +436,7 @@ export type UpdateChannelHistoryItemInput = {
   question?: string | null,
   answer?: string | null,
   resources?: Array< ContextualElementInput > | null,
+  updatedAt?: string | null,
 };
 
 export type DeleteChannelHistoryItemInput = {
@@ -860,6 +863,7 @@ export type ModelChannelHistoryItemFilterInput = {
   timestamp?: ModelStringInput | null,
   question?: ModelStringInput | null,
   answer?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelChannelHistoryItemFilterInput | null > | null,
   or?: Array< ModelChannelHistoryItemFilterInput | null > | null,
   not?: ModelChannelHistoryItemFilterInput | null,
@@ -1055,6 +1059,7 @@ export type ModelSubscriptionChannelHistoryItemFilterInput = {
   timestamp?: ModelSubscriptionStringInput | null,
   question?: ModelSubscriptionStringInput | null,
   answer?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionChannelHistoryItemFilterInput | null > | null,
   or?: Array< ModelSubscriptionChannelHistoryItemFilterInput | null > | null,
 };

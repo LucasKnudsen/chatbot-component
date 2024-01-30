@@ -41,7 +41,7 @@ export const initiateChatConnection = async (channelId: string) => {
     botStoreActions.handleSourceDocuments(response.sourceDocuments)
 
     // Saves end answer in history rather than at every stream update
-    botStoreActions.updateAnswerInHistory(response.text)
+    // botStoreActions.updateAnswerInHistory(response.text)
 
     botStoreActions.setLoading(false)
     suggestedPromptsStoreActions.fetch()

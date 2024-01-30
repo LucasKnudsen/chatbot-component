@@ -13,7 +13,7 @@ import { detectLanguage } from '@/features/text'
 import { clearAllSubscriptionsOfType } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Match, Show, Switch, createSignal, onCleanup, onMount } from 'solid-js'
-import { botStore, botStoreActions } from '..'
+import { botStore, botStoreActions, createHistoryRecord } from '..'
 import { Sidebar } from '../components'
 import { MenuSettings } from '../components/MenuSettings'
 import { SidebarTabView } from '../components/SidebarTabView'
@@ -37,7 +37,7 @@ export const Bot = () => {
 
     suggestedPromptsStoreActions.clear()
 
-    botStoreActions.createQuestion(value)
+    botStoreActions.buildQuestion(value)
 
     const body: IncomingInput = {
       question: value,
@@ -56,6 +56,10 @@ export const Bot = () => {
     botStoreActions.setLoading(false)
 
     suggestedPromptsStoreActions.fetch()
+
+    setTimeout(() => {
+      createHistoryRecord(botStore.activeChannel?.activeChat!)
+    }, 500)
   }
 
   onMount(() => {

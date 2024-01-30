@@ -1,7 +1,6 @@
 import { createSignal, onCleanup } from 'solid-js'
 
 const useHovered = (): [(element: HTMLElement) => void, () => boolean] => {
-  let element: HTMLElement | undefined
   const [isHovered, setIsHovered] = createSignal(false)
 
   const handleMouseOver = () => setIsHovered(true)
@@ -9,7 +8,6 @@ const useHovered = (): [(element: HTMLElement) => void, () => boolean] => {
 
   const setRef = (el: HTMLElement) => {
     if (el) {
-      element = el
       el.addEventListener('mouseover', handleMouseOver)
       el.addEventListener('mouseout', handleMouseOut)
 
