@@ -1,11 +1,9 @@
 import powerIcon from '@/assets/power-icon.svg'
 import { Button } from '@/components'
 import { Divider } from '@/components/Divider'
-import { DeleteIcon } from '@/components/icons/DeleteIcon'
 import { configStoreActions } from '@/features/portal-init'
-import { useTheme } from '@/features/theme'
 import { useMediaQuery } from '@/utils/useMediaQuery'
-import { For, Show, createMemo } from 'solid-js'
+import { Show } from 'solid-js'
 
 type MenuItemProps = {
   name: string
@@ -13,33 +11,27 @@ type MenuItemProps = {
   icon: any
 }
 
-type MenuSettingsProps = {
-  clear: () => void
-  setSidebarOpen?: (open: boolean) => void
-}
-
-export const MenuSettings = (props: MenuSettingsProps) => {
+export const MenuSettings = () => {
   const device = useMediaQuery()
-  const { theme } = useTheme()
 
-  const menuItems = createMemo<MenuItemProps[]>(() => [
-    {
-      name: 'Clear History',
-      icon: <DeleteIcon width={15} color={theme().primaryColor} />,
-      onClick: () => {
-        props.clear()
-        props.setSidebarOpen?.(false)
-      },
-    },
-  ])
+  // const menuItems = createMemo<MenuItemProps[]>(() => [
+  //   {
+  //     name: 'Clear History',
+  //     icon: <DeleteIcon width={15} color={theme().primaryColor} />,
+  //     onClick: () => {
+  //       props.clear()
+  //       botStoreActions.setBotStore('isSidebarOpen', false)
+  //     },
+  //   },
+  // ])
 
   return (
     <div class='flex flex-col '>
       <Divider margin={24} />
 
-      <ul>
+      {/* <ul>
         <For each={menuItems()}>{(item) => <MenuItem {...item} />}</For>
-      </ul>
+      </ul> */}
 
       <Divider margin={24} />
 

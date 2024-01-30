@@ -16,14 +16,13 @@ export type IncomingInput = {
   promptCode: PromptCode
   question: string
   channelId?: string
-  spaceId?: string
+  sessionId?: string
   language?: string
 
   previousQuestions?: string[]
   memory?: ShortTermMemory[]
   overrideConfig?: Record<string, unknown>
   socketIOClientId?: string
-  chatId?: string
 }
 
 export async function sendMessageQuery(body: IncomingInput) {

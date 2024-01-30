@@ -2,6 +2,7 @@ import powerIcon from '@/assets/power-icon.svg'
 
 import { botStore, botStoreActions } from '@/features/bot'
 import { configStoreActions } from '@/features/portal-init'
+import { suggestedPromptsStoreActions } from '@/features/prompt'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
@@ -17,6 +18,7 @@ export const Nav = () => {
 
   const onClickLogo = () => {
     botStoreActions.resetActiveChannel()
+    suggestedPromptsStoreActions.clear()
   }
 
   return (
@@ -42,7 +44,7 @@ export const Nav = () => {
             <Show when={!botStore.isSidebarOpen}>
               <div class='flex-1' />
 
-              <Button onClick={configStoreActions.toggleBot} padding='7px' class='animate-fade-in '>
+              <Button onClick={configStoreActions.toggleBot} padding='6px' class='animate-fade-in '>
                 <img class='m-auto h-3' src={powerIcon} />
               </Button>
             </Show>
@@ -54,6 +56,7 @@ export const Nav = () => {
               <Switch>
                 <Match when={botStore.isSidebarOpen}>
                   <CircleCloseIcon
+                    class='cursor-pointer'
                     height={24}
                     color={theme().primaryColor}
                     onClick={botStore.toggleSidebar}
@@ -61,7 +64,10 @@ export const Nav = () => {
                 </Match>
 
                 <Match when={!botStore.isSidebarOpen}>
-                  <div class='h-6 flex items-center' onClick={botStore.toggleSidebar}>
+                  <div
+                    class='w-10 h-6 flex items-center cursor-pointer'
+                    onClick={botStore.toggleSidebar}
+                  >
                     <MenuIcon color={theme().primaryColor} />
                   </div>
                 </Match>

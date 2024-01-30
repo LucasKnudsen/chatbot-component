@@ -11,7 +11,6 @@ type BotMobileProps = {
   userInput: string
 
   onSubmit: (question: string) => void
-  onClear: () => void
   class?: string
 }
 

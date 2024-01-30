@@ -1,5 +1,6 @@
 import { authStore } from '@/features/authentication'
 import { SourceDocument, SourceFact, SourceResource } from '@/features/contextual'
+import { initLLMStream, initiateChatConnection } from '@/features/messages'
 import { configStore } from '@/features/portal-init'
 import { translate } from '@/features/text'
 import {
@@ -87,10 +88,18 @@ const initBotStore = async (channel: Channel) => {
   let history: ChannelHistoryItem[] = []
 
   if (authStore.userDetails?.id) {
-    history = await fetchChannelHistory(channel.id, authStore.userDetails.id)
+    // Fetch history from API
+    ;[history] = await Promise.all([
+      fetchChannelHistory(channel.id, authStore.userDetails.id),
+      initiateChatConnection(channel.id),
+      initLLMStream(channel),
+    ])
+
+    console.log('HISTORY: ', history)
   } else {
     // Check and load history from local storage
     history = getStoredHistory()
+    await Promise.all([initiateChatConnection(channel.id), initLLMStream(channel)])
   }
 
   setBotStore({
@@ -314,6 +323,7 @@ const clear = () => {
 const botStoreActions = {
   initBotStore,
   updateAnswer,
+  setBotStore,
   updateAnswerInHistory,
   createQuestion,
   setActiveChat,

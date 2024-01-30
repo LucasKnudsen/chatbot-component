@@ -42,15 +42,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.handler = exports.publish2channel = void 0;
+exports.handler = void 0;
 var mutation_1 = require("./mutation");
-exports.publish2channel = "\n  mutation Publish2channel($sessionId: String!, $data: AWSJSON!) {\n    publish2channel(sessionId: $sessionId, data: $data) {\n      sessionId\n      data\n      __typename\n    }\n  }\n";
-var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var responseStatus, responseBody, _a, sessionId, data, variables, error_1;
+var publish2channel = /* GraphQL */ "\n  mutation Publish2channel($sessionId: String!, $data: AWSJSON!) {\n    publish2channel(sessionId: $sessionId, data: $data) {\n      sessionId\n      data\n      __typename\n    }\n  }\n";
+var handler = function (event, context) { return __awaiter(void 0, void 0, void 0, function () {
+    var isMock, responseStatus, responseBody, _a, sessionId, data, variables, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                console.log('EVENT BODY: ', event.body);
+                isMock = event.isMock || false;
+                isMock && console.log("EVENT: ".concat(event));
                 responseStatus = 200;
                 _b.label = 1;
             case 1:
@@ -60,7 +61,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     sessionId: sessionId,
                     data: JSON.stringify(data)
                 };
-                return [4 /*yield*/, (0, mutation_1.graphqlMutation)({ query: exports.publish2channel, variables: variables, authMode: 'AWS_IAM' })];
+                return [4 /*yield*/, (0, mutation_1.graphqlMutation)({ query: publish2channel, variables: variables })];
             case 2:
                 responseBody = _b.sent();
                 if (responseBody.errors)
@@ -77,14 +78,16 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     stack: error_1.stack
                 };
                 return [3 /*break*/, 5];
-            case 4: return [2 /*return*/, {
-                    statusCode: responseStatus,
-                    body: JSON.stringify(responseBody),
-                    headers: {
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Headers': '*'
-                    }
-                }];
+            case 4:
+                console.log('RESPONSE BODY: ', responseBody);
+                return [2 /*return*/, {
+                        statusCode: responseStatus,
+                        body: JSON.stringify(responseBody),
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Headers': '*'
+                        }
+                    }];
             case 5: return [2 /*return*/];
         }
     });

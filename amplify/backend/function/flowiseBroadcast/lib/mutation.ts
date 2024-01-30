@@ -11,7 +11,7 @@ const AWS_REGION = process.env.REGION
 export const graphqlMutation = async (body: {
   query: string
   variables: any
-  authMode: string
+  authMode?: string
 }) => {
   const endpoint = new URL(GRAPHQL_ENDPOINT)
 

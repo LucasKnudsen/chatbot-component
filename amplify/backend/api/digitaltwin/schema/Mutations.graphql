@@ -1,4 +1,4 @@
-type SubscriptionEvent {
+type SubscriptionEvent @aws_iam {
   sessionId: String!
   data: AWSJSON!
 }

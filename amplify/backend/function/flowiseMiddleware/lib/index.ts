@@ -22,19 +22,26 @@ const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
 const ssmClient = new SSMClient({ region: process.env.REGION })
 const client = new LambdaClient({ region: process.env.REGION })
 
+export enum PromptCode {
+  QUESTION = 'question',
+  SUGGESTED_PROMPTS = 'suggestedPrompts',
+}
+
 type ShortTermMemory = {
   type: 'apiMessage' | 'userMessage'
   message: string
 }
 
 type ParsedEventBody = {
-  promptCode: string
+  promptCode: PromptCode
+  question: string
   channelId?: string
+  sessionId?: string
   language?: string
-  question?: string
-  memory: ShortTermMemory[]
+
   previousQuestions?: string[]
-  chatId?: string
+  memory?: ShortTermMemory[]
+  overrideConfig?: Record<string, unknown>
   socketIOClientId?: string
 }
 
@@ -59,7 +66,7 @@ export const handler = async (
 
         const params = {
           body: {
-            sessionId: body.chatId,
+            sessionId: `${body.channelId}#${body.sessionId}`,
             data: answer,
           },
         }
@@ -136,7 +143,7 @@ const getSecret = async (secretName: string) => {
 
 const handleFlowiseRequest = async (body: ParsedEventBody) => {
   console.time('GET_CONFIG')
-  const { channelId, chatId, socketIOClientId, question } = body
+  const { channelId, socketIOClientId, question } = body
 
   if (!channelId) throw new TypeError('MISSING_CHANNEL_ID')
 

@@ -5,10 +5,10 @@
 	REGION
 Amplify Params - DO NOT EDIT */
 
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+import { APIGatewayProxyHandler } from 'aws-lambda'
 import { graphqlMutation } from './mutation'
 
-export const publish2channel = /* GraphQL */ `
+const publish2channel = /* GraphQL */ `
   mutation Publish2channel($sessionId: String!, $data: AWSJSON!) {
     publish2channel(sessionId: $sessionId, data: $data) {
       sessionId
@@ -18,8 +18,9 @@ export const publish2channel = /* GraphQL */ `
   }
 `
 
-export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  console.log('EVENT BODY: ', event.body)
+export const handler: APIGatewayProxyHandler = async (event, context) => {
+  const isMock = (event as any).isMock || false
+  isMock && console.log(`EVENT: ${event}`)
 
   let responseStatus = 200
   let responseBody
@@ -32,7 +33,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       data: JSON.stringify(data),
     }
 
-    responseBody = await graphqlMutation({ query: publish2channel, variables, authMode: 'AWS_IAM' })
+    responseBody = await graphqlMutation({ query: publish2channel, variables })
 
     if (responseBody.errors) responseStatus = 400
   } catch (error: any) {
@@ -46,6 +47,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       stack: error.stack,
     }
   } finally {
+    console.log('RESPONSE BODY: ', responseBody)
     return {
       statusCode: responseStatus,
       body: JSON.stringify(responseBody),

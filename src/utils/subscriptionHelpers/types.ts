@@ -4,9 +4,11 @@ import { ZenObservable } from 'zen-observable-ts'
 
 export type AuthModeType = keyof typeof GRAPHQL_AUTH_MODE
 
+export type SubscriptionType = 'chat-listener'
+
 export type SubscriptionCacheKey = {
   key: string
-  type: 'chat-answers'
+  type: SubscriptionType
 }
 
 export type SubscriptionInput<DataType> = {
@@ -19,7 +21,7 @@ export type SubscriptionInput<DataType> = {
 }
 
 export type SubscriptionCache = {
-  [type: string]: {
+  [Type in SubscriptionType]?: {
     [key: string]: ZenObservable.Subscription
   }
 }

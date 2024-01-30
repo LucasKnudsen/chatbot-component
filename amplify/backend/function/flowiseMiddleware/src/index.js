@@ -44,7 +44,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.handler = void 0;
+exports.handler = exports.PromptCode = void 0;
 var axios_1 = require("axios");
 var openai_1 = require("openai");
 var client_dynamodb_1 = require("@aws-sdk/client-dynamodb");
@@ -55,6 +55,11 @@ var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
 var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
 var ssmClient = new client_ssm_1.SSMClient({ region: process.env.REGION });
 var client = new client_lambda_1.LambdaClient({ region: process.env.REGION });
+var PromptCode;
+(function (PromptCode) {
+    PromptCode["QUESTION"] = "question";
+    PromptCode["SUGGESTED_PROMPTS"] = "suggestedPrompts";
+})(PromptCode = exports.PromptCode || (exports.PromptCode = {}));
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
     var responseStatus, responseBody, body, answer, _a, params, command, _b, error_1;
     var _c, _d;
@@ -80,7 +85,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 answer = _e.sent();
                 params = {
                     body: {
-                        sessionId: body.chatId,
+                        sessionId: "".concat(body.channelId, "#").concat(body.sessionId),
                         data: answer
                     }
                 };
@@ -168,12 +173,12 @@ var getSecret = function (secretName) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var channelId, chatId, socketIOClientId, question, channel, endpoint, data, result;
+    var channelId, socketIOClientId, question, channel, endpoint, data, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 console.time('GET_CONFIG');
-                channelId = body.channelId, chatId = body.chatId, socketIOClientId = body.socketIOClientId, question = body.question;
+                channelId = body.channelId, socketIOClientId = body.socketIOClientId, question = body.question;
                 if (!channelId)
                     throw new TypeError('MISSING_CHANNEL_ID');
                 return [4 /*yield*/, Promise.all([getChannel(channelId)])];

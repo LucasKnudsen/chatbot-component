@@ -3,7 +3,12 @@ import { API } from 'aws-amplify'
 import { createSignal } from 'solid-js'
 import { Observable } from 'zen-observable-ts'
 import { logDev } from '..'
-import { SubscriptionCache, SubscriptionInput } from './types'
+import {
+  SubscriptionCache,
+  SubscriptionCacheKey,
+  SubscriptionInput,
+  SubscriptionType,
+} from './types'
 
 export const [subscriptionsCache, setSubscriptionsCache] = createSignal<SubscriptionCache>({})
 
@@ -35,9 +40,9 @@ export const SubscriptionHelper = async <DataType>({
   if (key && type) {
     setSubscriptionsCache((prev) => ({
       ...prev,
-      [key]: {
-        ...(prev[key] || {}),
-        [type]: subscription,
+      [type]: {
+        ...(prev[type] || {}),
+        [key]: subscription,
       },
     }))
   }
@@ -45,26 +50,32 @@ export const SubscriptionHelper = async <DataType>({
   return subscription
 }
 
-export const clearSubscription = (key: string, type: string) => {
-  if (subscriptionsCache()[key] && subscriptionsCache()[key][type]) {
-    subscriptionsCache()[key][type].unsubscribe()
+export const clearSubscription = (key: string, type: SubscriptionCacheKey['type']) => {
+  if (subscriptionsCache()[type] && subscriptionsCache()[type]?.[key]) {
+    subscriptionsCache()[type]?.[key].unsubscribe()
 
     setSubscriptionsCache((prev) => {
       const updatedCache = { ...prev }
-      delete updatedCache[key]![type]
+      delete updatedCache[type]![key]
       return updatedCache
     })
   }
 }
 
+export const clearAllSubscriptionsOfType = (type: SubscriptionType) => {
+  logDev('clearAllSubscriptionsOfType', type)
+
+  if (!subscriptionsCache()[type]) return
+
+  Object.keys(subscriptionsCache()[type]!).forEach((key) => {
+    clearSubscription(key, type)
+  })
+}
+
 export const clearAllSubscriptions = () => {
   logDev('clearAllSubscriptions')
-  Object.keys(subscriptionsCache()).forEach((key) => {
-    let k = key as keyof typeof subscriptionsCache
-    if (!subscriptionsCache()[k]) return
 
-    Object.keys(subscriptionsCache()[k]!).forEach((type) => {
-      clearSubscription(k, type)
-    })
+  Object.keys(subscriptionsCache()).forEach((type) => {
+    clearAllSubscriptionsOfType(type as SubscriptionType)
   })
 }

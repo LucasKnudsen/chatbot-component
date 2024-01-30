@@ -1,5 +1,4 @@
 import { Spinner } from '@/components/loaders'
-import { setIsLoadingSocket } from '@/features/messages'
 import { useTheme } from '@/features/theme'
 import { Channel, ChannelUserAccess, ChatSpace } from '@/graphql'
 import { createMutation } from '@tanstack/solid-query'
@@ -27,26 +26,21 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
 const ChannelItem = (props: { channel: Channel | ChannelUserAccess; isPublic: boolean }) => {
   const channelDetailsMutation = createMutation(() => ({
     mutationKey: ['channels', (props.channel as ChannelUserAccess).channelId],
-    mutationFn: fetchChannelDetails,
-    onSuccess(data) {
-      console.log('Channel details fetched', data)
-      botStoreActions.initBotStore(data)
+
+    mutationFn: async () => {
+      let _channel = props.channel as Channel
+
+      if (!props.isPublic) {
+        _channel = await fetchChannelDetails((props.channel as ChannelUserAccess).channelId)
+      }
+
+      await botStoreActions.initBotStore(_channel)
+
+      return _channel
     },
   }))
 
   const { theme } = useTheme()
-
-  const handleClick = async () => {
-    if (channelDetailsMutation.isPending) return
-
-    setIsLoadingSocket(true)
-
-    if (props.isPublic) {
-      botStoreActions.initBotStore(props.channel as Channel)
-    } else {
-      await channelDetailsMutation.mutateAsync((props.channel as ChannelUserAccess).channelId)
-    }
-  }
 
   return (
     <button
@@ -57,7 +51,7 @@ const ChannelItem = (props: { channel: Channel | ChannelUserAccess; isPublic: bo
         color: theme()?.textColor,
         border: `1px solid ${theme()?.borderColor}`,
       }}
-      onClick={handleClick}
+      onClick={() => channelDetailsMutation.mutateAsync()}
     >
       {channelDetailsMutation.isPending && <Spinner size={24} />}
       <div class='relative'>
