@@ -13,8 +13,8 @@ const client = jwksClient({
   jwksUri: `https://cognito-idp.${process.env.REGION}.amazonaws.com/${process.env.AUTH_FRAIAAUTH_USERPOOLID}/.well-known/jwks.json`,
 })
 
-const getSigningKey = (header, callback) => {
-  client.getSigningKey(header.kid, (err, key) => {
+const getSigningKey = (header: any, callback: any) => {
+  client.getSigningKey(header.kid, (err: any, key: any) => {
     if (err) {
       callback(err, null)
     } else {
@@ -34,7 +34,7 @@ const authorize = async (
 
   const decodedToken = await new Promise((resolve, reject) => {
     // Validate and decode the token
-    jwt.verify(token, getSigningKey, { algorithms: ['RS256'] }, (err, decoded) => {
+    jwt.verify(token, getSigningKey, { algorithms: ['RS256'] }, (err: any, decoded: any) => {
       if (err) {
         reject(err)
       } else {

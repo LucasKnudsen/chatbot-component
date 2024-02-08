@@ -40,7 +40,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.handler = void 0;
 // @ts-ignore
 var openai_1 = require("openai");
@@ -70,13 +70,13 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
             case 2:
                 apiKey = _f.sent();
                 console.log('API KEY');
-                openai = new openai_1.default({
+                openai = new openai_1["default"]({
                     organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
-                    apiKey: apiKey,
+                    apiKey: apiKey
                 });
                 input = {
                     Bucket: process.env.STORAGE_FRAIASTORAGE_BUCKETNAME,
-                    Key: s3Key,
+                    Key: s3Key
                 };
                 return [4 /*yield*/, s3Client.send(new client_s3_1.GetObjectCommand(input))];
             case 3:
@@ -89,13 +89,13 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
             case 4: return [4 /*yield*/, _b.apply(void 0, [_d.apply(_c, [_f.sent(), 'base64']),
                     s3Key,
                     {
-                        type: type,
+                        type: type
                     }])];
             case 5:
                 file = _f.sent();
                 return [4 /*yield*/, openai.audio.transcriptions.create({
                         file: file,
-                        model: 'whisper-1',
+                        model: 'whisper-1'
                     })];
             case 6:
                 transcription = _f.sent();
@@ -111,7 +111,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     message: error_1.message || error_1,
                     status: responseStatus,
                     type: error_1.type,
-                    stack: error_1.stack,
+                    stack: error_1.stack
                 };
                 return [3 /*break*/, 9];
             case 8:
@@ -121,8 +121,8 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                         body: JSON.stringify(responseBody),
                         headers: {
                             'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Headers': '*',
-                        },
+                            'Access-Control-Allow-Headers': '*'
+                        }
                     }];
             case 9: return [2 /*return*/];
         }

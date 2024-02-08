@@ -43,26 +43,30 @@ export async function sendMessageQuery(body: IncomingInput) {
 export async function flowiseMessageQuery(body: IncomingInput) {
   if (!botStore.activeChannel) throw new Error('No active channel')
 
-  const response = await fetch(
-    `${botStore.activeChannel.apiHost}/api/v1/prediction/${botStore.activeChannel.chatflowId}`,
-    {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: botStore.activeChannel.apiKey!,
-      },
+  try {
+    const response = await fetch(
+      `${botStore.activeChannel.apiHost}/api/v1/prediction/${botStore.activeChannel.chatflowId}`,
+      {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: botStore.activeChannel.apiKey!,
+        },
 
-      body: JSON.stringify({
-        chatflowid: botStore.activeChannel.chatflowId,
-        apiHost: botStore.activeChannel.apiHost,
-        question: body.question,
-        socketIOClientId: body.socketIOClientId,
-      }),
-    }
-  )
+        body: JSON.stringify({
+          chatflowid: botStore.activeChannel.chatflowId,
+          apiHost: botStore.activeChannel.apiHost,
+          question: body.question,
+          socketIOClientId: body.socketIOClientId,
+        }),
+      }
+    )
 
-  return response
+    return response
+  } catch (error) {
+    console.error('Error querying flowise', error)
+  }
 }
 
 export const isStreamAvailableQuery = ({

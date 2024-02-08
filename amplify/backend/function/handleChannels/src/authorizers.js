@@ -1,5 +1,4 @@
 "use strict";
-// @ts-nocheck
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -37,20 +36,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.authorize = void 0;
-var client_dynamodb_1 = require("@aws-sdk/client-dynamodb");
-var ddbService = new client_dynamodb_1.DynamoDBClient({ region: process.env.REGION });
-var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
-var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
+exports.authorizeToken = void 0;
 var jwt = require('jsonwebtoken');
 var jwksClient = require('jwks-rsa');
+var region = process.env.REGION;
+var userPoolId = process.env.AUTH_FRAIAAUTH_USERPOOLID;
 var client = jwksClient({
-    jwksUri: "https://cognito-idp.".concat(process.env.REGION, ".amazonaws.com/").concat(process.env.AUTH_FRAIAAUTH_USERPOOLID, "/.well-known/jwks.json")
+    jwksUri: "https://cognito-idp.".concat(region, ".amazonaws.com/").concat(userPoolId, "/.well-known/jwks.json")
 });
 var getSigningKey = function (header, callback) {
     client.getSigningKey(header.kid, function (err, key) {
         if (err) {
-            callback(err, null);
+            callback(err);
         }
         else {
             var signingKey = key.getPublicKey();
@@ -58,8 +55,8 @@ var getSigningKey = function (header, callback) {
         }
     });
 };
-var authorize = function (token, chatSpaceIds) { return __awaiter(void 0, void 0, void 0, function () {
-    var decodedToken, chatSpace, userGroups;
+var authorizeToken = function (token, onSuccess) { return __awaiter(void 0, void 0, void 0, function () {
+    var identity;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -77,47 +74,12 @@ var authorize = function (token, chatSpaceIds) { return __awaiter(void 0, void 0
                                 resolve(decoded);
                             }
                         });
-                    })
-                    // Use the decoded token to authorize the user
-                    // Get the ChatSpace and check if admin exists on the User groups
-                ];
+                    })];
             case 1:
-                decodedToken = _a.sent();
-                return [4 /*yield*/, getChatSpace(chatSpaceIds)];
-            case 2:
-                chatSpace = _a.sent();
-                userGroups = decodedToken['cognito:groups'];
-                if (!chatSpace) {
-                    throw new Error('CHAT_SPACE_NOT_FOUND');
-                }
-                if (!userGroups.includes(chatSpace.admin)) {
-                    throw new Error('UNAUTHORIZED');
-                }
-                return [2 /*return*/];
+                identity = _a.sent();
+                return [4 /*yield*/, onSuccess(identity)];
+            case 2: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
-exports.authorize = authorize;
-var getChatSpace = function (_a) {
-    var chatSpaceOwnerId = _a.chatSpaceOwnerId, chatSpaceId = _a.chatSpaceId;
-    return __awaiter(void 0, void 0, void 0, function () {
-        var params, command, Item;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    params = {
-                        TableName: process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME,
-                        Key: {
-                            ownerId: chatSpaceOwnerId,
-                            id: chatSpaceId
-                        }
-                    };
-                    command = new lib_dynamodb_1.GetCommand(params);
-                    return [4 /*yield*/, ddbDocClient.send(command)];
-                case 1:
-                    Item = (_b.sent()).Item;
-                    return [2 /*return*/, Item];
-            }
-        });
-    });
-};
+exports.authorizeToken = authorizeToken;

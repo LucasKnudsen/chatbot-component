@@ -17,14 +17,17 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
         <h1 class='text-xl  leading-tight tracking-tight '>Select a course</h1>
 
         {props.channels?.map((channel) => (
-          <ChannelItem channel={channel} isPublic={props.chatSpace.isPublic} />
+          <ChannelItem channel={channel} isChatSpacePublic={props.chatSpace.isPublic} />
         ))}
       </div>
     </div>
   )
 }
 
-const ChannelItem = (props: { channel: Channel | ChannelUserAccess; isPublic: boolean }) => {
+const ChannelItem = (props: {
+  channel: Channel | ChannelUserAccess
+  isChatSpacePublic: boolean
+}) => {
   const [hoverRef, isHovered] = useHovered()
 
   const channelDetailsMutation = createMutation(() => ({
@@ -33,7 +36,7 @@ const ChannelItem = (props: { channel: Channel | ChannelUserAccess; isPublic: bo
     mutationFn: async () => {
       let _channel = props.channel as Channel
 
-      if (!props.isPublic) {
+      if (!props.isChatSpacePublic) {
         _channel = await fetchChannelDetails((props.channel as ChannelUserAccess).channelId)
       }
 

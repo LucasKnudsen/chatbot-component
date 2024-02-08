@@ -15,7 +15,7 @@ export const BotManager = () => {
   const channelsQuery = createQuery(() => ({
     queryKey: ['channels'],
     queryFn: async (): Promise<Channel[] | ChannelUserAccess[]> => {
-      logDev('Fetching channels')
+      logDev('Fetching channels', openForPublic)
       if (openForPublic) {
         // In this case, we don't need to check for access rights, and can fetch all public channels through a Lambda
         const publicChannels = await fetchPublicChannels(configStore.chatSpaceConfig.id)
@@ -28,6 +28,7 @@ export const BotManager = () => {
           // If there is only one channel, initialize the bot with it
           botStoreActions.initBotStore(publicChannels[0])
         }
+
         return publicChannels
       } else {
         // In this case, we fetch and show a list of access rights of the user

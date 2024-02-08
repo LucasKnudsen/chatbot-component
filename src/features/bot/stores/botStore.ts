@@ -87,10 +87,10 @@ const [botStore, setBotStore] = createStore<BotStore>({
 const initBotStore = async (channel: Channel) => {
   let history: ChannelHistoryItem[] = []
 
-  if (authStore.userDetails?.id) {
+  if (authStore.sessionId) {
     // Fetch history from API
     ;[history] = await Promise.all([
-      fetchChannelHistory(channel.id, authStore.userDetails.id),
+      fetchChannelHistory(channel.id, authStore.sessionId),
       // initiateChatConnection(channel.id),
       initLLMStream(channel),
     ])
@@ -179,7 +179,7 @@ const updateAnswer = (answer: string, shouldOverrideAnswer: boolean = false) => 
 }
 
 const buildQuestion = (question: string) => {
-  const ownerId = authStore.userDetails?.id
+  const ownerId = authStore.sessionId
   const channelId = botStore.activeChannel?.id
 
   if (!ownerId || !channelId) throw new Error('No owner or channel id')

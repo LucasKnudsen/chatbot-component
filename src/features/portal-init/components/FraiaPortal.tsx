@@ -7,7 +7,13 @@ import { PortalInitializer } from '.'
 import { ChatConfig } from '..'
 
 Amplify.configure(awsconfig)
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 export const FraiaPortal = (props: ChatConfig) => {
   return (

@@ -1,11 +1,11 @@
 input FetchChannelsInput {
-  flow: FetchFlowType!
+  flow: FetchChannelsFlowType!
 
   channelId: ID
   chatSpaceId: ID
 }
 
-enum FetchFlowType {
+enum FetchChannelsFlowType {
   BY_CHAT_SPACE
   BY_ID
 }

@@ -29,9 +29,7 @@ export async function fetchPublicChannels(chatSpaceId: string): Promise<Channel[
     },
   })
 
-  console.log(data)
-
-  return []
+  return (data?.fetchChannels as Channel[]) || []
 }
 
 export async function fetchChannelAccesses(

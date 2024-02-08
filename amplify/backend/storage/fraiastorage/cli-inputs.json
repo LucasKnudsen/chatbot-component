@@ -4,9 +4,22 @@
   "bucketName": "fraiastorage",
   "storageAccess": "authAndGuest",
   "guestAccess": [
-    "CREATE_AND_UPDATE"
+    "CREATE_AND_UPDATE",
+    "READ"
   ],
   "authAccess": [
-    "CREATE_AND_UPDATE"
-  ]
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "groupAccess": {
+    "SuperAdmin": [
+      "CREATE_AND_UPDATE",
+      "READ",
+      "DELETE"
+    ],
+    "Admin": [
+      "CREATE_AND_UPDATE",
+      "READ"
+    ]
+  }
 }

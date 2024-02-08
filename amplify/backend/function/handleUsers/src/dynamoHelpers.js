@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.listUsers = exports.getUser = exports.createUser = void 0;
 var client_dynamodb_1 = require("@aws-sdk/client-dynamodb");
 var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
@@ -52,9 +52,9 @@ var listUsers = function (chatSpaceId) { return __awaiter(void 0, void 0, void 0
                     KeyConditions: {
                         chatSpaceId: {
                             ComparisonOperator: 'EQ',
-                            AttributeValueList: [chatSpaceId],
-                        },
-                    },
+                            AttributeValueList: [chatSpaceId]
+                        }
+                    }
                 };
                 command = new lib_dynamodb_1.QueryCommand(params);
                 return [4 /*yield*/, ddbDocClient.send(command)];
@@ -73,8 +73,8 @@ var getUser = function (userId) { return __awaiter(void 0, void 0, void 0, funct
                 params = {
                     TableName: process.env.API_DIGITALTWIN_USERTABLE_NAME,
                     Key: {
-                        id: userId,
-                    },
+                        id: userId
+                    }
                 };
                 command = new lib_dynamodb_1.GetCommand(params);
                 return [4 /*yield*/, ddbDocClient.send(command)];
@@ -106,8 +106,8 @@ var createUser = function (_a) {
                             status: 'INVITED',
                             invitedOn: new Date().toISOString(),
                             createdAt: new Date().toISOString(),
-                            updatedAt: new Date().toISOString(),
-                        },
+                            updatedAt: new Date().toISOString()
+                        }
                     };
                     command = new lib_dynamodb_1.PutCommand(params);
                     return [4 /*yield*/, ddbDocClient.send(command)];

@@ -42,6 +42,13 @@
         ]
       }
     },
+    "/users": {
+      "name": "/users",
+      "lambdaFunction": "handleUsers",
+      "permissions": {
+        "setting": "open"
+      }
+    },
     "/transcribe": {
       "name": "/transcribe",
       "lambdaFunction": "transcribeAudio",
@@ -56,14 +63,19 @@
           "create",
           "read",
           "update"
-        ]
-      }
-    },
-    "/users": {
-      "name": "/users",
-      "lambdaFunction": "handleUsers",
-      "permissions": {
-        "setting": "open"
+        ],
+        "groups": {
+          "SuperAdmin": [
+            "create",
+            "read",
+            "update"
+          ],
+          "Admin": [
+            "create",
+            "read",
+            "update"
+          ]
+        }
       }
     }
   }

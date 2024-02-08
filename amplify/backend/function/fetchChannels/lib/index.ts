@@ -10,6 +10,7 @@
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT */
+
 import { AppSyncResolverHandler } from 'aws-lambda'
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
@@ -22,8 +23,9 @@ import {
   QueryCommand,
   QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb'
-import { authorizeToken } from './authorizers'
 const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
+
+import { authorizeToken } from './authorizers'
 
 type Arguments = {
   isMock?: boolean
@@ -41,14 +43,14 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
 
   try {
     const { isMock, input } = event.arguments
-    !isMock && console.log(`EVENT : ${event}`)
+    !isMock && console.log(`EVENT`, event)
 
     let data: any
 
     switch (input.flow) {
       case 'BY_ID':
         isAuthorized = await authorizeToken(event.request.headers.authorization, (identity) => {
-          return authorizeChannelReadAccess(identity, input.channelId!)
+          return authorizeChannelAccess(identity, input.channelId!)
         })
 
         if (!isAuthorized) {
@@ -60,10 +62,16 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
         break
 
       case 'BY_CHAT_SPACE':
-        isAuthorized = await authorizePublicAttribute(input.chatSpaceId!)
+        const isPublic = await authorizePublicAttribute(input.chatSpaceId!)
 
-        if (!isAuthorized) {
-          throw new Error('Unauthorized to fetch channels')
+        if (!isPublic) {
+          isAuthorized = await authorizeToken(event.request.headers.authorization, (identity) => {
+            return authorizeAdminAccess(identity, input.chatSpaceId!)
+          })
+
+          if (!isAuthorized) {
+            throw new Error('Unauthorized to fetch channels')
+          }
         }
 
         data = await fetchChannelsByChatSpace(input.chatSpaceId!)
@@ -99,7 +107,15 @@ const fetchSingleChannel = async (channelId: string) => {
   return [Item]
 }
 
-const authorizeChannelReadAccess = async (identity: any, channelId: string): Promise<boolean> => {
+const authorizeAdminAccess = async (identity: any, chatSpaceId: string): Promise<boolean> => {
+  // Get User's Groups & organizationId
+  // Get Organization's Groups
+  // Check if User's Groups is indeed a part of Organization's Groups
+
+  return true
+}
+
+const authorizeChannelAccess = async (identity: any, channelId: string): Promise<boolean> => {
   const params: GetCommandInput = {
     TableName: process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME,
     Key: {
@@ -114,8 +130,6 @@ const authorizeChannelReadAccess = async (identity: any, channelId: string): Pro
     console.error('Channel Access not found on User')
     return false
   }
-
-  // Since READ is the lowest level of access, we can assume that the user has access to the channel
 
   return true
 }
@@ -155,6 +169,5 @@ const authorizePublicAttribute = async (chatSpaceId: string): Promise<boolean> =
     return true
   }
 
-  console.error('ChatSpace is not public')
   return false
 }

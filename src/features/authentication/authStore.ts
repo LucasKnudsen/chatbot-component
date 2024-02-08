@@ -1,4 +1,5 @@
 import { User } from '@/graphql'
+import { randomUUID } from '@/utils'
 import { createStore } from 'solid-js/store'
 
 type AuthStore = {
@@ -25,7 +26,7 @@ const [authStore, setAuthStore] = createStore<AuthStore>({
 
       default:
         // If there's no Auth user or sessionId in localStorage, create a sessionId
-        const sessionId = Math.random().toString(36).substring(2, 15)
+        const sessionId = randomUUID()
 
         localStorage.setItem('sessionId', sessionId)
 

@@ -7,6 +7,10 @@
     API_DIGITALTWIN_CHATSPACETABLE_ARN
     API_DIGITALTWIN_CHATSPACETABLE_NAME
     API_DIGITALTWIN_GRAPHQLAPIIDOUTPUT
+    API_DIGITALTWIN_ORGANIZATIONTABLE_ARN
+    API_DIGITALTWIN_ORGANIZATIONTABLE_NAME
+    API_DIGITALTWIN_USERTABLE_ARN
+    API_DIGITALTWIN_USERTABLE_NAME
     AUTH_FRAIAAUTH_USERPOOLID
     ENV
     REGION
@@ -55,96 +59,55 @@ var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
 var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
 var authorizers_1 = require("./authorizers");
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var isAuthorized, _a, isMock, input_1, data, _b, isPublic, error_1;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var isAuthorized, _a, isMock, input_1, _b, _c, error_1;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
                 console.time('HANDLER');
                 isAuthorized = false;
-                _c.label = 1;
+                _d.label = 1;
             case 1:
-                _c.trys.push([1, 12, , 13]);
+                _d.trys.push([1, 9, , 10]);
                 _a = event.arguments, isMock = _a.isMock, input_1 = _a.input;
                 !isMock && console.log("EVENT", event);
-                data = void 0;
+                !isMock && console.log("EVENT", event.arguments.input);
                 _b = input_1.flow;
                 switch (_b) {
-                    case 'BY_ID': return [3 /*break*/, 2];
-                    case 'BY_CHAT_SPACE': return [3 /*break*/, 5];
+                    case 'UPDATE': return [3 /*break*/, 2];
                 }
-                return [3 /*break*/, 10];
-            case 2: return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) {
-                    return authorizeChannelAccess(identity, input_1.channelId);
+                return [3 /*break*/, 7];
+            case 2:
+                if (!isMock) return [3 /*break*/, 3];
+                _c = true;
+                return [3 /*break*/, 5];
+            case 3: return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) {
+                    return authorizeUpdateAccess(identity, input_1.data.id);
                 })];
-            case 3:
-                isAuthorized = _c.sent();
-                if (!isAuthorized) {
-                    throw new Error('Unauthorized to fetch channel');
-                }
-                return [4 /*yield*/, fetchSingleChannel(input_1.channelId)];
             case 4:
-                data = _c.sent();
-                return [3 /*break*/, 11];
-            case 5: return [4 /*yield*/, authorizePublicAttribute(input_1.chatSpaceId)];
-            case 6:
-                isPublic = _c.sent();
-                if (!!isPublic) return [3 /*break*/, 8];
-                return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) {
-                        return authorizeAdminAccess(identity, input_1.chatSpaceId);
-                    })];
-            case 7:
-                isAuthorized = _c.sent();
+                _c = _d.sent();
+                _d.label = 5;
+            case 5:
+                isAuthorized = _c;
                 if (!isAuthorized) {
-                    throw new Error('Unauthorized to fetch channels');
+                    throw new Error('Unauthorized to update channel');
                 }
-                _c.label = 8;
-            case 8: return [4 /*yield*/, fetchChannelsByChatSpace(input_1.chatSpaceId)];
+                return [4 /*yield*/, updateChannel(input_1.data)];
+            case 6: return [2 /*return*/, _d.sent()];
+            case 7: return [3 /*break*/, 8];
+            case 8:
+                console.timeEnd('HANDLER');
+                return [3 /*break*/, 10];
             case 9:
-                data = _c.sent();
-                return [3 /*break*/, 11];
-            case 10:
-                console.timeEnd('HANDLER');
-                throw new Error('Invalid flow');
-            case 11:
-                console.timeEnd('HANDLER');
-                return [2 /*return*/, data];
-            case 12:
-                error_1 = _c.sent();
+                error_1 = _d.sent();
                 console.error('DEFAULT ERROR', error_1);
                 console.timeEnd('HANDLER');
                 throw error_1;
-            case 13: return [2 /*return*/];
+            case 10: return [2 /*return*/];
         }
     });
 }); };
 exports.handler = handler;
-var fetchSingleChannel = function (channelId) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, Item;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                params = {
-                    TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
-                    Key: {
-                        id: channelId
-                    }
-                };
-                return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.GetCommand(params))];
-            case 1:
-                Item = (_a.sent()).Item;
-                return [2 /*return*/, [Item]];
-        }
-    });
-}); };
-var authorizeAdminAccess = function (identity, chatSpaceId) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        // Get User's Groups & organizationId
-        // Get Organization's Groups
-        // Check if User's Groups is indeed a part of Organization's Groups
-        return [2 /*return*/, true];
-    });
-}); };
-var authorizeChannelAccess = function (identity, channelId) { return __awaiter(void 0, void 0, void 0, function () {
+var authorizeUpdateAccess = function (identity, channelId) { return __awaiter(void 0, void 0, void 0, function () {
     var params, Item;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -163,52 +126,68 @@ var authorizeChannelAccess = function (identity, channelId) { return __awaiter(v
                     console.error('Channel Access not found on User');
                     return [2 /*return*/, false];
                 }
+                if (Item.accessType === 'READ') {
+                    return [2 /*return*/, false];
+                }
                 return [2 /*return*/, true];
         }
     });
 }); };
-var fetchChannelsByChatSpace = function (chatSpaceId) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, Items;
+var updateChannel = function (data) { return __awaiter(void 0, void 0, void 0, function () {
+    var params, Attributes;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 params = {
                     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
-                    IndexName: 'byChatSpace',
-                    KeyConditionExpression: 'chatSpaceId = :chatSpaceId',
-                    ExpressionAttributeValues: {
-                        ':chatSpaceId': chatSpaceId
-                    }
-                };
-                return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.QueryCommand(params))];
-            case 1:
-                Items = (_a.sent()).Items;
-                return [2 /*return*/, Items];
-        }
-    });
-}); };
-var authorizePublicAttribute = function (chatSpaceId) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, Item;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                params = {
-                    TableName: process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME,
                     Key: {
-                        id: chatSpaceId
+                        id: data.id
+                    },
+                    ReturnValues: 'ALL_NEW',
+                    AttributeUpdates: {
+                        chatflowId: {
+                            Action: 'PUT',
+                            Value: data.chatflowId
+                        },
+                        apiHost: {
+                            Action: 'PUT',
+                            Value: data.apiHost
+                        },
+                        apiKey: {
+                            Action: 'PUT',
+                            Value: data.apiKey
+                        },
+                        name: {
+                            Action: 'PUT',
+                            Value: data.name
+                        },
+                        description: {
+                            Action: 'PUT',
+                            Value: data.description
+                        },
+                        //   chatSpaceId: {
+                        //     Action: 'PUT',
+                        //     Value: data.chatSpaceId,
+                        //   },
+                        isPublic: {
+                            Action: 'PUT',
+                            Value: data.isPublic
+                        },
+                        initialPrompts: {
+                            Action: 'PUT',
+                            Value: data.initialPrompts
+                        },
+                        updatedAt: {
+                            Action: 'PUT',
+                            Value: new Date().toISOString()
+                        }
                     }
                 };
-                return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.GetCommand(params))];
+                console.log(params);
+                return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.UpdateCommand(params))];
             case 1:
-                Item = (_a.sent()).Item;
-                if (!Item) {
-                    console.error('ChatSpace not found');
-                    return [2 /*return*/, false];
-                }
-                if (Item.isPublic) {
-                    return [2 /*return*/, true];
-                }
-                return [2 /*return*/, false];
+                Attributes = (_a.sent()).Attributes;
+                return [2 /*return*/, Attributes];
         }
     });
 }); };

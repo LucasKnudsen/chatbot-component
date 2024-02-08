@@ -60,7 +60,7 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "transcribeAudio"
+          "resourceName": "handleUsers"
         },
         {
           "attributes": [
@@ -68,7 +68,28 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "handleUsers"
+          "resourceName": "transcribeAudio"
+        },
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
+            "SuperAdminGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        },
+        {
+          "attributes": [
+            "AdminGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -208,6 +229,27 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "handleChannels": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "handleUsers": {
       "build": true,
       "dependsOn": [
@@ -217,6 +259,28 @@
           ],
           "category": "auth",
           "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "onChannelUpdate": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
         },
         {
           "attributes": [
@@ -355,6 +419,22 @@
         }
       ]
     },
+    "AMPLIFY_function_handleChannels_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "handleChannels"
+        }
+      ]
+    },
+    "AMPLIFY_function_handleChannels_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "handleChannels"
+        }
+      ]
+    },
     "AMPLIFY_function_handleUsers_deploymentBucketName": {
       "usedBy": [
         {
@@ -368,6 +448,22 @@
         {
           "category": "function",
           "resourceName": "handleUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_onChannelUpdate_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "onChannelUpdate"
+        }
+      ]
+    },
+    "AMPLIFY_function_onChannelUpdate_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "onChannelUpdate"
         }
       ]
     },
@@ -421,7 +517,29 @@
   },
   "storage": {
     "fraiastorage": {
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
+            "SuperAdminGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        },
+        {
+          "attributes": [
+            "AdminGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "S3"
     }

@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.handler = void 0;
 var client_comprehend_1 = require("@aws-sdk/client-comprehend"); // ES Modules import
 var client = new client_comprehend_1.ComprehendClient({ region: process.env.REGION });
@@ -51,8 +51,8 @@ function handler(event) {
                                 statusCode: 400,
                                 body: JSON.stringify({
                                     message: 'Missing body',
-                                    type: 'INVALID_BODY',
-                                }),
+                                    type: 'INVALID_BODY'
+                                })
                             }];
                     }
                     responseStatus = 200;
@@ -60,7 +60,7 @@ function handler(event) {
                 case 1:
                     _a.trys.push([1, 3, 4, 5]);
                     command = new client_comprehend_1.DetectDominantLanguageCommand({
-                        Text: event.body,
+                        Text: event.body
                     });
                     return [4 /*yield*/, client.send(command)
                         // Find the object with the highest score
@@ -72,7 +72,7 @@ function handler(event) {
                     });
                     responseBody = {
                         languageCode: bestLanguage.LanguageCode,
-                        score: bestLanguage.Score,
+                        score: bestLanguage.Score
                     };
                     return [3 /*break*/, 5];
                 case 3:
@@ -83,7 +83,7 @@ function handler(event) {
                         message: error_1.message,
                         status: responseStatus,
                         type: error_1.type,
-                        stack: error_1.stack,
+                        stack: error_1.stack
                     };
                     return [3 /*break*/, 5];
                 case 4: return [2 /*return*/, {
@@ -91,8 +91,8 @@ function handler(event) {
                         body: JSON.stringify(responseBody),
                         headers: {
                             'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Headers': '*',
-                        },
+                            'Access-Control-Allow-Headers': '*'
+                        }
                     }];
                 case 5: return [2 /*return*/];
             }

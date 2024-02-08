@@ -1,13 +1,6 @@
-import {
-  AmplifyAuthCognitoStackTemplate,
-  AmplifyProjectInfo,
-} from '@aws-amplify/cli-extensibility-helper'
+import { AmplifyAuthCognitoStackTemplate } from '@aws-amplify/cli-extensibility-helper'
 
-export function override(
-  resources: AmplifyAuthCognitoStackTemplate,
-  amplifyProjectInfo: AmplifyProjectInfo
-) {
-  //customAttributeName Member must have length less than or equal to 20
+export function override(resources: AmplifyAuthCognitoStackTemplate) {
   const customAttribute = {
     attributeDataType: 'String',
     developerOnlyAttribute: false,
@@ -16,5 +9,5 @@ export function override(
     required: false,
   }
 
-  resources.userPool.schema = [customAttribute]
+  resources.userPool!.schema = [customAttribute]
 }
