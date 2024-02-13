@@ -8,8 +8,14 @@ import { Nav } from '@/components/Nav'
 import { AuthProvider } from '@/features/authentication'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
-import { ChatConfig, PortalWrapper, configStore, configStoreActions, initializeConfig } from '..'
-import { BubbleButton } from './BubbleButton'
+import {
+  ChatConfig,
+  PortalButton,
+  PortalContainer,
+  configStore,
+  configStoreActions,
+  initializeConfig,
+} from '..'
 
 try {
   Predictions.addPluggable(new AmazonAIConvertPredictionsProvider())
@@ -64,9 +70,9 @@ export const PortalInitializer = (props: ChatConfig) => {
       <Match when={configQuery.isError}>{null}</Match>
 
       <Match when={configQuery.isSuccess && configQuery.data}>
-        <BubbleButton />
+        <PortalButton />
 
-        <PortalWrapper>
+        <PortalContainer>
           <AuthProvider isPublic={Boolean(configQuery.data!.isPublic)}>
             <Show when={configStore.isBotOpened}>
               <div
@@ -80,7 +86,7 @@ export const PortalInitializer = (props: ChatConfig) => {
               </div>
             </Show>
           </AuthProvider>
-        </PortalWrapper>
+        </PortalContainer>
       </Match>
     </Switch>
   )

@@ -1,6 +1,6 @@
-import { Button } from '@/components'
-import { Nav } from '@/components/Nav'
+import { Button, CircleCloseIcon } from '@/components'
 import { TextInput } from '@/components/inputs'
+import { configStoreActions } from '@/features/portal-init'
 import { useTheme } from '@/features/theme'
 import { Auth } from 'aws-amplify'
 import { createSignal } from 'solid-js'
@@ -24,9 +24,16 @@ export const LoginScreen = () => {
 
   return (
     <>
-      <Nav />
+      <div class='absolute right-5 top-5'>
+        <CircleCloseIcon
+          class='cursor-pointer'
+          height={24}
+          color={theme().primaryColor}
+          onClick={configStoreActions.toggleBot}
+        />
+      </div>
 
-      <div class='flex flex-col items-center justify-center h-[calc(100%-80px)] lg:py-0'>
+      <div class='flex flex-col items-center justify-center h-full lg:py-0'>
         <div
           class='flex items-center mb-6 text-2xl font-semibold '
           style={{

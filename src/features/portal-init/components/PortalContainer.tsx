@@ -2,7 +2,7 @@ import { useTheme } from '@/features/theme'
 import { JSX } from 'solid-js'
 import { configStore } from '..'
 
-export const PortalWrapper = (props: { children: JSX.Element }) => {
+export const PortalContainer = (props: { children: JSX.Element }) => {
   const { theme } = useTheme()
 
   return (

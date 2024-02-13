@@ -1,7 +1,7 @@
 import { useTheme } from '@/features/theme/hooks'
 import { configStore, configStoreActions } from '..'
 
-export const BubbleButton = () => {
+export const PortalButton = () => {
   const { theme } = useTheme()
 
   return (
