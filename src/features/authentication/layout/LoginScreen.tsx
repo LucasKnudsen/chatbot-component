@@ -8,7 +8,7 @@ import fraiaLogo from '../../../assets/logo.svg'
 
 export const LoginScreen = () => {
   const [input, setInput] = createSignal({
-    username: import.meta.env.DEV ? 'laksteelhouse@gmail.com' : '',
+    username: import.meta.env.DEV ? 'student' : '',
     password: import.meta.env.DEV ? 'Abcd1234' : '',
   })
   const [loading, setLoading] = createSignal(false)
@@ -17,6 +17,8 @@ export const LoginScreen = () => {
   // const { text } = useText()
 
   const handleSignIn = async () => {
+    // TODO: Use useMutation from solid-query
+    // TODO: Error handling
     setLoading(true)
     await Auth.signIn(input())
     setLoading(false)
@@ -96,7 +98,7 @@ export const LoginScreen = () => {
                   placeholder: '••••••••',
                 }}
               />
-
+              {/* 
               <div class='flex items-center justify-between'>
                 <a
                   href='#'
@@ -107,14 +109,10 @@ export const LoginScreen = () => {
                 >
                   Forgot password?
                 </a>
-              </div>
+              </div> */}
 
-              <Button
-                class='w-full h-10 rounded-lg text-md'
-                loading={loading()}
-                onClick={handleSignIn}
-              >
-                Sign In
+              <Button padding='4px 20px' loading={loading()} onClick={handleSignIn}>
+                Log In
               </Button>
 
               {/* <p class='text-sm font-light text-gray-500 dark:text-gray-400'>

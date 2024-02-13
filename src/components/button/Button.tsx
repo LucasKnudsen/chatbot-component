@@ -29,7 +29,7 @@ export const Button = (props: Props) => {
     >
       <Show
         when={!props.loading}
-        fallback={<Spinner size={20} backgroundColor={theme().onPrimary} />}
+        fallback={<Spinner size={16} backgroundColor={theme().onPrimary} />}
       >
         {props.children}
       </Show>
