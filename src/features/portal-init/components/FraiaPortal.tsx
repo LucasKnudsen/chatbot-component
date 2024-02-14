@@ -7,6 +7,7 @@ import { PortalInitializer } from '.'
 import { ChatConfig } from '..'
 
 Amplify.configure(awsconfig)
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
