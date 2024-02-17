@@ -1,7 +1,0 @@
-{
-  "isMock": true,
-  "headers": {
-    "Authorization": "eyJraWQiOiJPTlVXZzVvMXhXS1FueEFFMVFJSGZLV04wUk54Ukk4Wm5Dd1NTMElpMm1FPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI4OWJkYWM4Mi05YTI1LTQ5MjUtODkyYi0wYjc4NzA3ZGI4ZDkiLCJjb2duaXRvOmdyb3VwcyI6WyJUZXN0LUFkbWluIl0sImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGhlYXN0LTEuYW1hem9uYXdzLmNvbVwvYXAtc291dGhlYXN0LTFfd1ZpbW1oc2x6IiwiY29nbml0bzp1c2VybmFtZSI6Ijg5YmRhYzgyLTlhMjUtNDkyNS04OTJiLTBiNzg3MDdkYjhkOSIsIm9yaWdpbl9qdGkiOiJmOWE3NzM4Mi0xMTcxLTRlMDYtYWRlZC1jODEyNDFmODIxYjEiLCJhdWQiOiI1ZHF1aGxpM2pqOG8zNjVrZGUxcWlybWQxcSIsImV2ZW50X2lkIjoiODJlNjIzNDEtYjgyZi00Mjg4LWJiODYtM2RkMGVjNjYwZDQ4IiwidG9rZW5fdXNlIjoiaWQiLCJhdXRoX3RpbWUiOjE3MDQyNzA3ODUsImV4cCI6MTcwNTAyOTA5MSwiaWF0IjoxNzA1MDI1NDkxLCJqdGkiOiJhM2JjM2E5MS00ZThjLTRkNTMtOWZlNi02MjJjNjc4OGQ2YWUiLCJlbWFpbCI6ImZyYWlhYWRtaW5AbWFpbC5jb20ifQ.dH_RBr_ePkKM3pU1x2nVlaWTwRqyH3EO4fLXaTFz2adgbGPO4RmFyRpsXcwM6HABTBhqa1mMZGlC9-132Mqidw3iwgL0-A37cRNwzOcHXgkYUpBCZ2IffSXJGZamiBaWGnjjdUslVTQ5K86AkWjm6okWp9r1a7ctr6jZEQ7zi7oyAgWCSe9yJ1hGKqwJmSXs5Y-EUpUn-yygVKUuJJinlrnAkcMpm0hYzIYR8eUPcsbtyR2oyQ5rsRFPu93Uh0PxGcksc1O9hSZInUxe8E_qQYXTWNtYCUtvWqI1d757HXTQQzvNjOHWqkrCjBBtdczzaphGXUtTXrACj6dEUWCVQQ"
-  },
-  "body": "{\"action\": \"invite\", \"chatSpaceId\": \"f86f6a13-a58c-44d8-87cd-077f559fc0fc\", \"chatSpaceOwnerId\": \"f86f6a13-a58c-44d8-87cd-077f559fc0fc\", \"userId\": \"fraiaadmin@mail.com\", \"newUser\": {\"email\": \"laksteelhouse@gmail.com\", \"role\": \"Test-Admin\"}}"
-}

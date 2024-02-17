@@ -1,38 +1,20 @@
 import './dev.css'
-
-import { chatflows } from './constants'
-import { FraiaPortal } from './features/portal-init'
 import './index.css'
+
+import { FraiaPortal } from './features/portal-init'
+import LayoutDefault from './layouts/default'
+import { chatflows } from './constants'
 
 function App() {
   return (
-    <div class='w-full h-screen flex flex-col justify-center items-center bg-slate-100'>
-      <h1 class='text-3xl md:text-6xl tracking-widest'>
-        PL
-        <span
-          style={{
-            color: 'darkblue',
-          }}
-        >
-          AI
-        </span>
-        GROUND
-      </h1>
-
-      <h2 class='text-lg italic tracking-widest'>
-        Powered by
-        <span
-          style={{
-            color: 'darkblue',
-          }}
-        >
-          {' '}
-          Fraia
-        </span>
-      </h2>
-
+    <LayoutDefault>
+      <div class='flex flex-col justify-center items-start h-full'>
+        <h1 class='text-[32px] leading-[54px] font-extralight text-[#5B93FF]'>
+          Welcome to <span class='font-medium'>Fraia AI</span>
+        </h1>
+      </div>
       <FraiaPortal {...chatflows.chula} />
-    </div>
+    </LayoutDefault>
   )
 }
 

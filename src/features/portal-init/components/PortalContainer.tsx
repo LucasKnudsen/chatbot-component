@@ -1,9 +1,12 @@
-import { useTheme } from '@/features/theme'
 import { JSX } from 'solid-js'
+import { authStore } from '@/features/authentication/authStore'
 import { configStore } from '..'
+import { useTheme } from '@/features/theme'
 
 export const PortalContainer = (props: { children: JSX.Element }) => {
   const { theme } = useTheme()
+
+  console.log(authStore.isAuthenticated)
 
   return (
     <div
@@ -15,9 +18,11 @@ export const PortalContainer = (props: { children: JSX.Element }) => {
         'transform-origin': 'bottom right',
         transform: configStore.isBotOpened ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
         color: theme().textColor,
-        background: `${theme().backgroundColor} url(${
-          theme().backgroundImageUrl
-        }) no-repeat center / cover`,
+        background: authStore.isAuthenticated
+          ? `url(${theme().backgroundImageUrl}) no-repeat center center / cover`
+          : `linear-gradient(to bottom, rgba(223, 221, 232, 0.8), rgba(223, 221, 232, 0.8)),
+        url(${theme().backgroundImageUrl}) no-repeat center center / cover`,
+
         'z-index': 69420,
       }}
       part='bot'

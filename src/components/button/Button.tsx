@@ -1,6 +1,7 @@
-import { useTheme } from '@/features/theme/hooks'
 import { JSX, Show } from 'solid-js'
+
 import { Spinner } from '../loaders'
+import { useTheme } from '@/features/theme/hooks'
 
 type Props = {
   onClick?: () => void | Promise<void>
@@ -17,7 +18,7 @@ export const Button = (props: Props) => {
   return (
     <button
       class={
-        'rounded-full font-medium tracking-widest text-xs active:scale-95 transition hover:brightness-110 flex justify-center items-center ' +
+        'rounded-full font-bold text-sm leading-[17px] active:scale-95 transition hover:brightness-110 flex justify-center items-center ' +
         props.class
       }
       style={{
