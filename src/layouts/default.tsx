@@ -1,6 +1,6 @@
-import { Component, JSXElement } from 'solid-js'
+import { JSX } from 'solid-js'
 
-const LayoutDefault: Component<{ children: JSXElement }> = (props) => {
+function LayoutDefault(props: { children: JSX.Element }) {
   return <div class='relative h-screen w-full p-10 lg:p-24'>{props.children}</div>
 }
 

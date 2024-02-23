@@ -1,0 +1,11 @@
+{
+  "arguments": {
+    "isMock": true,
+    "input": {
+      "flow": "LIST_BY_CHANNEL",
+      "data": {
+        "channelId": "0c7ab27e-8634-44cf-adab-0773f4249e10"
+      }
+    }
+  }
+}

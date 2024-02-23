@@ -1,11 +1,12 @@
 import { Button, CircleCloseIcon } from '@/components'
 
 import { Auth } from 'aws-amplify'
-import IconLock from '@/assets/icon-lock.svg'
-import IconUser from '@/assets/icon-user.svg'
 import LayoutDefault from '@/layouts/default'
-import Logo from '@/assets/logo3.svg'
+import { LockIcon } from '@/components/icons/LockIcon'
+import { LogoIcon } from '@/components/icons/LogoIcon'
+import { UserIcon } from '@/components/icons/UserIcon'
 import { configStoreActions } from '@/features/portal-init'
+import { createMutation } from '@tanstack/solid-query'
 import { createSignal } from 'solid-js'
 import { useTheme } from '@/features/theme'
 
@@ -16,18 +17,18 @@ export const LoginScreen = () => {
     username: import.meta.env.DEV ? 'student' : '',
     password: import.meta.env.DEV ? 'Abcd1234' : '',
   })
-  const [loading, setLoading] = createSignal(false)
+
+  // const [loading, setLoading] = createSignal(false)
 
   const { theme } = useTheme()
-  // const { text } = useText()
 
-  const handleSignIn = async () => {
-    // TODO: Use useMutation from solid-query
-    // TODO: Error handling
-    setLoading(true)
-    await Auth.signIn(input())
-    setLoading(false)
-  }
+  const loginMutation = createMutation(() => ({
+    mutationFn: async () => {
+      await Auth.signIn(input())
+    },
+  }))
+
+  const handleSubmit = (e: Event) => e.preventDefault()
 
   return (
     <LayoutDefault>
@@ -42,54 +43,67 @@ export const LoginScreen = () => {
 
       <div class='flex flex-col items-center lg:items-start justify-center h-full'>
         <div class='mb-16'>
-          <img class='mb-4' src={Logo} alt='logo' />
-          <h4 class='text-base leading-[17px] font-light text-[#939393]'>
+          <div class='mb-4'>
+            <LogoIcon color={theme().primaryColor} />
+          </div>
+          <h4
+            class='text-base leading-[17px] font-light'
+            style={{
+              color: theme().textSecondary,
+            }}
+          >
             The most personalized AI catchphrase
           </h4>
         </div>
 
         <div class='max-w-[640px] w-full mx-auto lg:ml-0 lg:mr-0'>
-          <form action='#'>
-            <div class='auth-input mb-6'>
-              <label for='username' class='auth-input__label'>
-                <img src={IconUser} alt='user icon' />
-                <span class='px-3.5'>USER NAME</span>
-              </label>
-              <span class='auth-input__divider'></span>
-              <input
-                id='username'
-                type='text'
-                value={input().username}
-                onChange={(value) =>
-                  setInput((prev) => ({
-                    ...prev,
-                    username: value.currentTarget.value,
-                  }))
-                }
-                placeholder='Write your user name'
-                class='auth-input__control'
-              />
-            </div>
-
-            <div class='auth-input mb-[50px]'>
-              <label for='password' class='auth-input__label'>
-                <img src={IconLock} alt='lock icon' />
-                <span class='px-3.5'>PASSWORD</span>
-              </label>
-              <span class='auth-input__divider'></span>
-              <input
-                id='password'
-                type='password'
-                value={input().password}
-                onChange={(value) =>
-                  setInput((prev) => ({
-                    ...prev,
-                    username: value.currentTarget.value,
-                  }))
-                }
-                placeholder='••••••••'
-                class='auth-input__control'
-              />
+          <form onSubmit={handleSubmit}>
+            <div class='mb-[50px]'>
+              <div class='auth-input mb-6'>
+                <label for='username' class='auth-input__label'>
+                  <UserIcon color={theme().primaryColor} />
+                  <span class='px-3.5'>USER NAME</span>
+                </label>
+                <span class='auth-input__divider'></span>
+                <input
+                  id='username'
+                  type='text'
+                  value={input().username}
+                  onChange={(value) =>
+                    setInput((prev) => ({
+                      ...prev,
+                      username: value.currentTarget.value,
+                    }))
+                  }
+                  placeholder='Write your user name'
+                  class='auth-input__control'
+                />
+              </div>
+              <div class='auth-input'>
+                <label for='password' class='auth-input__label'>
+                  <LockIcon color={theme().primaryColor} />
+                  <span class='px-3.5'>PASSWORD</span>
+                </label>
+                <span class='auth-input__divider'></span>
+                <input
+                  id='password'
+                  type='password'
+                  value={input().password}
+                  onChange={(value) =>
+                    setInput((prev) => ({
+                      ...prev,
+                      username: value.currentTarget.value,
+                    }))
+                  }
+                  placeholder='••••••••'
+                  class='auth-input__control tracking-[1em]'
+                />
+              </div>
+              {loginMutation.error?.message ? (
+                <div class='text-sm pt-4 text-[var(--errorColor)]'>
+                  {loginMutation.error?.message}
+                </div>
+              ) : null}
             </div>
 
             {/* reference only */}
@@ -137,9 +151,10 @@ export const LoginScreen = () => {
 
             <Button
               class='mx-auto lg:ml-0 lg:mr-0'
+              type='submit'
               padding='6px 20px'
-              loading={loading()}
-              onClick={handleSignIn}
+              loading={loginMutation.isPending}
+              onClick={loginMutation.mutateAsync}
             >
               Log In{' '}
               <svg

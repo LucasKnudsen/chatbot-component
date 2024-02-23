@@ -29,7 +29,7 @@ export const PortalInitializer = (props: ChatConfig) => {
 
       const { themeId, theme, defaultLanguage, text } = result
 
-      initTheme(themeId, theme)
+      initTheme(import.meta.env.DEV ? 'bubbles' : themeId, import.meta.env.DEV ? null : theme)
       initText(text, defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
       initLanguage(defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
       configStoreActions.setConfigStore('chatSpaceConfig', result)
@@ -46,47 +46,73 @@ export const PortalInitializer = (props: ChatConfig) => {
   const { initText } = useText()
   const { initLanguage } = useLanguage()
 
+  const assignTheme = theme()
+
   return (
-    <Switch>
-      <Match when={configQuery.isPending && props.config?.autoOpen}>
-        <div class='fixed w-full h-full flex flex-col justify-center items-center  animate-fade-in gap-4 bg-slate-100'>
-          <h1 class='text-5xl tracking-wider'>Chula Knowledge Hub</h1>
+    <>
+      <style jsx dynamic>
+        {`
+          :root {
+            --primaryColor: ${assignTheme.primaryColor};
+            --primaryAccent: ${assignTheme.primaryAccent};
+            --textColor: ${assignTheme.textColor};
+            --textSecondary: ${assignTheme.textSecondary};
+            --onPrimary: ${assignTheme.onPrimary};
+            --backgroundColor: '${assignTheme.backgroundColor};
+            --backgroundAccent: ${assignTheme.backgroundAccent};
+            --bubbleButtonColor: ${assignTheme.bubbleButtonColor};
+            --drawerBackground: ${assignTheme.drawerBackground};
+            --borderColor: ${assignTheme.borderColor};
+            --textInputTextColor: ${assignTheme.textInputTextColor};
+            --textInputBackgroundColor: ${assignTheme.textInputBackgroundColor};
+            --errorColor: ${assignTheme.errorColor};
+            --surfaceBackground: ${assignTheme.surfaceBackground};
+            --surfaceHoveredBackground: ${assignTheme.surfaceHoveredBackground};
+          }
+        `}
+      </style>
 
-          <p>
-            Powered by{' '}
-            <span
-              style={{
-                color: theme().primaryColor,
-              }}
-              class='font-bold'
-            >
-              Fraia
-            </span>
-          </p>
+      <Switch>
+        <Match when={configQuery.isPending && props.config?.autoOpen}>
+          <div class='fixed w-full h-full flex flex-col justify-center items-center  animate-fade-in gap-4 bg-slate-100'>
+            <h1 class='text-5xl tracking-wider'>Chula Knowledge Hub</h1>
 
-          <TypingBubble />
-        </div>
-      </Match>
-      <Match when={configQuery.isError}>{null}</Match>
-
-      <Match when={configQuery.isSuccess && configQuery.data}>
-        <PortalButton />
-
-        <PortalContainer>
-          <AuthProvider isPublic={Boolean(configQuery.data!.isPublic)}>
-            <Show when={configStore.isBotOpened}>
-              <div
-                class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'
-                style={{ background: 'rgba(223, 221, 232, 0.4)' }}
+            <p>
+              Powered by{' '}
+              <span
+                style={{
+                  color: theme().primaryColor,
+                }}
+                class='font-bold'
               >
-                <Nav />
+                Fraia
+              </span>
+            </p>
 
-                <BotManager />
-              </div>
-            </Show>
-          </AuthProvider>
-        </PortalContainer>
-      </Match>
-    </Switch>
+            <TypingBubble />
+          </div>
+        </Match>
+        <Match when={configQuery.isError}>{null}</Match>
+
+        <Match when={configQuery.isSuccess && configQuery.data}>
+          <PortalButton />
+
+          <PortalContainer>
+            <AuthProvider isPublic={Boolean(configQuery.data!.isPublic)}>
+              <Show when={configStore.isBotOpened}>
+                <div
+                  class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'
+                  style={{ background: 'rgba(223, 221, 232, 0.4)' }}
+                >
+                  <Nav />
+
+                  <BotManager />
+                </div>
+              </Show>
+            </AuthProvider>
+          </PortalContainer>
+        </Match>
+      </Switch>
+    </>
   )
 }

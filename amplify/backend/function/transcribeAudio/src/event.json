@@ -1,0 +1,4 @@
+{
+  "isMock": true,
+  "body": "{\"s3Key\": \"_/test-recording.webm\", \"type\": \"audio/webm\"}"
+}

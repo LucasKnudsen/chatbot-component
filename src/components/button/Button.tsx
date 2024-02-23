@@ -1,7 +1,9 @@
 import { JSX, Show } from 'solid-js'
 
-import { Spinner } from '../loaders'
+import { TypingBubble } from '@/components'
 import { useTheme } from '@/features/theme/hooks'
+
+// import { Spinner } from '../loaders'
 
 type Props = {
   onClick?: () => void | Promise<void>
@@ -9,6 +11,7 @@ type Props = {
   children: JSX.Element
   padding?: string
   class?: string
+  type?: 'button' | 'submit' | 'reset' | undefined
 }
 
 export const Button = (props: Props) => {
@@ -17,6 +20,7 @@ export const Button = (props: Props) => {
 
   return (
     <button
+      type={props.type}
       class={
         'rounded-full font-bold text-sm leading-[17px] active:scale-95 transition hover:brightness-110 flex justify-center items-center ' +
         props.class
@@ -30,8 +34,13 @@ export const Button = (props: Props) => {
     >
       <Show
         when={!props.loading}
-        fallback={<Spinner size={16} backgroundColor={theme().onPrimary} />}
+        fallback={
+          <div class='relative top-0.5'>
+            <TypingBubble color={theme().backgroundColor} />
+          </div>
+        }
       >
+        {/* <Spinner size={16} backgroundColor={theme().onPrimary} /> */}
         {props.children}
       </Show>
     </button>

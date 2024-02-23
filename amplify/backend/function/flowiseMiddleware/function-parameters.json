@@ -1,0 +1,21 @@
+{
+  "lambdaLayers": [],
+  "secretNames": [
+    "openai_key"
+  ],
+  "permissions": {
+    "function": {
+      "flowiseBroadcast": [
+        "read"
+      ]
+    },
+    "storage": {
+      "fraiastorage": [
+        "read"
+      ],
+      "Channel:@model(appsync)": [
+        "read"
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "arguments": {
+    "isMock": true,
+    "input": {
+      "flow": "UPDATE",
+      "data": {
+        "id": "1",
+        "name": "test"
+      }
+    }
+  }
+}

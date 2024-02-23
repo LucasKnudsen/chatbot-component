@@ -1,0 +1,12 @@
+{
+  "extends": "../../../../tsconfig.amplify",
+  "compilerOptions": {
+    "outDir": "./src",
+    "baseUrl": "./",
+    "rootDir": "./lib",
+    "paths": {
+      "src": ["./lib"]
+    }
+  },
+  "include": ["lib"]
+}

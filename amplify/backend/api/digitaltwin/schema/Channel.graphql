@@ -1,0 +1,107 @@
+type Channel @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }, { allow: owner }]) {
+  id: ID!
+  chatSpaceId: ID! @index(name: "byChatSpace", queryField: "channelsByChatSpaceId") # For Public purposes
+  apiHost: String
+  chatflowId: String
+  indexChatflowId: String
+  apiKey: String
+
+  name: String!
+  subtitle: String
+  description: String
+  avatar: String # URL to an image
+  initialPrompts: [InitialPrompt!]
+  isPublic: Boolean! @default(value: "false")
+}
+
+type InitialPrompt {
+  display: String
+  prompt: String!
+}
+
+type ChannelUserAccess @model @auth(rules: [{ allow: owner }]) {
+  # Access ID is the userId. This way a user can effectively retrieve all their accesses.
+  # These can then be filtered by chatSpaceId, hostType, role, etc.
+  accessId: String! @primaryKey(sortKeyFields: ["channelId"])
+  channelId: ID! @index(name: "byChannel", queryField: "channelUserAccessByChannelId") # To retrieve all accesses to a Channel
+  chatSpaceId: ID!
+
+  channelHostId: String!
+    @index(name: "byChannelHost", queryField: "channelUserAccessByChannelHostId")
+  channelHostType: HostType!
+
+  accessType: ChannelAccessType!
+  channelName: String!
+  channelDescription: String
+}
+
+enum ChannelAccessType {
+  OWNER ## Can DELETE
+  ADMIN ## Can DELETE
+  WRITE
+  READ
+}
+
+type ChannelDocument @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }]) {
+  channelId: ID! @primaryKey(sortKeyFields: ["id"])
+  id: ID!
+  title: String!
+
+  s3KeyRawText: String
+  s3KeyOriginal: String
+  description: String
+  includeInLibrary: Boolean! @default(value: "false")
+  documentType: ChannelDocumentType!
+  source: String
+
+  fileName: String
+  fileType: String
+  fileSuffix: String
+  fileSize: Int
+  uploadedBy: ID
+}
+
+enum ChannelDocumentType {
+  TRANSCRIPTION
+  DOCUMENT
+  WEBSITE
+  TEXT
+}
+
+type ChannelHistoryItem
+  @model(timestamps: { createdAt: "timestamp" })
+  @auth(rules: [{ allow: owner }]) {
+  ownerId: ID! @primaryKey(sortKeyFields: ["channelId", "timestamp"])
+  channelId: ID!
+    @index(
+      name: "byChannel"
+      sortKeyFields: ["timestamp"]
+      queryField: "channelHistoryItemsByChannelId"
+    )
+  timestamp: AWSDateTime!
+
+  question: String!
+  answer: String
+
+  resources: [ContextualElement!]
+  updatedAt: AWSDateTime!
+}
+
+type ContextualElement {
+  id: String
+  source: String
+  type: ContextualElementType
+  value: String
+
+  header: String
+  description: String
+  thumbnail: String
+}
+
+enum ContextualElementType {
+  fact
+  link
+  video
+  iframe
+  picture
+}

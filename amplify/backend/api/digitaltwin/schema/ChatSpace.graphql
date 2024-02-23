@@ -1,0 +1,72 @@
+type ChatSpace
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["SuperAdmin"] }
+      { allow: groups, groupsField: "admin" }
+      { allow: private, operations: [get] }
+      { allow: public, provider: iam, operations: [get] }
+    ]
+  ) {
+  id: ID!
+  hostId: ID!
+    @index(sortKeyFields: ["id"], name: "ChatSpaceHostIdIndex", queryField: "chatSpaceByHostId") # To retrieve all ChatSpaces for a Host
+  hostType: HostType!
+
+  name: String!
+  isPublic: Boolean! # For conditional fetching of Channels within a ChatSpace
+  isMultiChannel: Boolean! # For conditional skipping of Channel selection
+  defaultChannelId: String # To retrieve the default Channel for a ChatSpace
+  themeId: String
+  defaultLanguage: String # Code Ref
+  theme: ChatSpaceTheme
+  text: ChatSpaceText
+  # settings: ChatSpaceSettings!
+
+  admin: String!
+}
+
+enum HostType {
+  PRIVATE ## SaaS-like. The individual. We control these spaces. We may do one uniform - or multiple specific.
+  COMPANY ## Webcomponent-focused. The organization. They control these spaces.
+}
+
+type ChatSpaceTheme {
+  isDark: Boolean
+  navbarLogoUrl: String
+  primaryColor: String
+  primaryAccent: String
+  textColor: String
+  textSecondary: String
+  onPrimary: String
+  backgroundColor: String
+  backgroundAccent: String
+  backgroundImageUrl: String
+  bubbleButtonColor: String
+  bubbleButtonLogoUrl: String
+  drawerBackground: String
+  borderColor: String
+  textInputTextColor: String
+  textInputBackgroundColor: String
+  surfaceBackground: String
+  surfaceHoveredBackground: String
+}
+
+type ChatSpaceText {
+  welcomeMessage: String
+  returnWelcomeMessage: String
+  brandName: String
+  inputPlaceholder: String
+  suggestedPromptsTitle: String
+  viewMedia: String
+  close: String
+  copyText: String
+  copyTextSuccess: String
+  share: String
+  historyTabTitle: String
+  navigationTabTitle: String
+  today: String
+  yesterday: String
+  previous: String
+  noHistory: String
+}

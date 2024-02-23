@@ -18,16 +18,22 @@ export const PortalContainer = (props: { children: JSX.Element }) => {
         'transform-origin': 'bottom right',
         transform: configStore.isBotOpened ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
         color: theme().textColor,
-        background: authStore.isAuthenticated
-          ? `url(${theme().backgroundImageUrl}) no-repeat center center / cover`
-          : `linear-gradient(to bottom, rgba(223, 221, 232, 0.8), rgba(223, 221, 232, 0.8)),
-        url(${theme().backgroundImageUrl}) no-repeat center center / cover`,
+        background: `url(${theme().backgroundImageUrl}) no-repeat center center / cover ${
+          theme().backgroundColor
+        }`,
 
         'z-index': 69420,
       }}
       part='bot'
     >
-      {props.children}
+      <div
+        class='absolute inset-0 w-full h-full'
+        style={{
+          background: theme().backgroundOverlay,
+        }}
+      >
+        {props.children}
+      </div>
     </div>
   )
 }

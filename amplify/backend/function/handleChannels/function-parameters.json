@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "auth": {
+      "fraiaauth": [
+        "read"
+      ]
+    },
+    "storage": {
+      "Channel:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "ChannelUserAccess:@model(appsync)": [
+        "read"
+      ],
+      "ChatSpace:@model(appsync)": [
+        "read"
+      ],
+      "Organization:@model(appsync)": [
+        "read"
+      ],
+      "User:@model(appsync)": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

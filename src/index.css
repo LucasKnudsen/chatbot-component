@@ -15,8 +15,7 @@
 
 body {
   font-family: var(--font-sans);
-  background-image: linear-gradient(to bottom, rgba(223, 221, 232, 0.4), rgba(223, 221, 232, 0.4)),
-    url('./assets/background-2.png');
+  background-image: url('./assets/background-2.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -454,7 +453,7 @@ input {
   display: flex;
   align-items: center;
   min-width: 162px;
-  color: #1f0808;
+  color: var(--textColor);
 }
 
 .auth-input__divider {
@@ -469,9 +468,9 @@ input {
   min-width: 0;
   padding: 0 0 0 60px;
   height: 45px;
-  color: #1f0808;
+  color: var(--textColor);
 }
 
 .auth-input__control::placeholder {
-  color: #939393;
+  color: var(--textSecondary);
 }

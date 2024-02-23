@@ -21,12 +21,14 @@ export const defaultTheme: Theme = {
   onPrimary: 'rgba(255, 255, 255, 1)',
   backgroundColor: 'rgba(255, 255, 255, 1)',
   backgroundAccent: 'white',
+  backgroundOverlay: 'rgba(223, 221, 232, 0.4)',
   backgroundImageUrl: background2,
   bubbleButtonColor: 'rgba(91, 147, 255, 0.2)',
   drawerBackground: 'rgba(255, 255, 255, 0.75)',
   borderColor: 'rgba(147, 147, 147, 0.25)',
   textInputTextColor: 'rgba(128, 114, 166, 1)',
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
+  errorColor: 'red',
   surfaceBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.08) 0%, rgba(218, 145, 221, 0.08) 100%)',
   surfaceHoveredBackground:
@@ -37,8 +39,7 @@ const fraia: Theme = {
   isDark: false,
   navbarLogoUrl: logo,
 
-  // primaryColor: 'rgba(255,118,118,255)',
-  primaryColor: 'rgb(91, 147, 255)',
+  primaryColor: 'rgba(255,118,118,255)',
   primaryAccent: 'rgba(255,118,118,0.2)',
   textColor: 'rgba(31, 8, 8, 1)',
   textSecondary: 'rgba(147, 147, 147, 1)',
@@ -47,7 +48,7 @@ const fraia: Theme = {
   backgroundAccent: '#ffffff',
   bubbleButtonColor: 'rgba(236, 236, 236, 1)',
   bubbleButtonLogoUrl: newLogo,
-  backgroundImageUrl: background2,
+  backgroundImageUrl: background3,
 
   drawerBackground: 'rgba(255, 255, 255, 0.75)',
   borderColor: 'rgba(147, 147, 147, 0.25)',

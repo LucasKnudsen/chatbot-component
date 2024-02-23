@@ -1,0 +1,16 @@
+{
+  "arguments": {
+    "isMock": true,
+    "input": {
+      "flow": "LIST",
+
+      "data": {
+        "channelId": "0c7ab27e-8634-44cf-adab-0773f4249e10",
+        "id": "0c7ab27e-8634-44cf-adab-0773f4249e11",
+        "description": null,
+        "includeInLibrary": true,
+        "documentType": "DOCUMENT"
+      }
+    }
+  }
+}

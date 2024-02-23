@@ -1,0 +1,5 @@
+type Subscription {
+  subscribe2channel(sessionId: String!): SubscriptionEvent
+    @aws_subscribe(mutations: ["publish2channel"])
+    @auth(rules: [{ allow: public, provider: iam }, { allow: private }])
+}

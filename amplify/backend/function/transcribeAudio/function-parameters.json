@@ -1,0 +1,13 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "storage": {
+      "fraiastorage": [
+        "read"
+      ]
+    }
+  },
+  "secretNames": [
+    "openai_key"
+  ]
+}
