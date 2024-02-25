@@ -12,6 +12,30 @@ enum HandleChannelsFlowType {
   UPDATE
   CREATE
   DELETE
+  LIST
+  GET
+}
+
+input HandleChannelHistoryInput {
+  flow: HandleChannelHistoryFlowType!
+  data: AWSJSON
+}
+
+enum HandleChannelHistoryFlowType {
+  LIST_BY_CHANNEL
+  LIST_BY_OWNER
+  CREATE
+  DELETE
+}
+
+input HandleStorageInput {
+  flow: HandleChannelsFlowType!
+  channelId: String!
+  filesToRetrieve: AWSJSON
+}
+
+type HandleStorageOutput {
+  signedUrls: [String!]
 }
 
 type Mutation {
@@ -21,5 +45,21 @@ type Mutation {
 
   handleChannels(input: HandleChannelsInput!): Channel
     @function(name: "handleChannels-${env}")
+    @auth(rules: [{ allow: private }])
+
+  handleChannelDocuments(input: HandleChannelsInput!): [ChannelDocument!]
+    @function(name: "handleChannelDocuments-${env}")
+    @auth(rules: [{ allow: private }])
+
+  handleChannelHistory(input: HandleChannelHistoryInput!): [ChannelHistoryItem!]
+    @function(name: "handleChannelHistory-${env}")
+    @auth(rules: [{ allow: private }])
+
+  handleStorage(input: HandleStorageInput!): HandleStorageOutput!
+    @function(name: "handleStorage-${env}")
+    @auth(rules: [{ allow: private }])
+
+  indexKnowledge(input: AWSJSON!): ChannelDocument
+    @function(name: "knowledgeIndexing-${env}")
     @auth(rules: [{ allow: private }])
 }

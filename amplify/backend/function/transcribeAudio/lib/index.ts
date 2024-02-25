@@ -4,20 +4,21 @@
 	STORAGE_FRAIASTORAGE_BUCKETNAME
 Amplify Params - DO NOT EDIT */
 
-// @ts-ignore
-import OpenAI, { toFile } from 'openai'
-// @ts-ignore
-import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
-// @ts-ignore
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+import { createReadStream } from 'fs'
+import OpenAI from 'openai'
+
+import { createChannelDocumentRecord, saveTextToS3, writeS3Object } from './storage'
+import { convertWebmToMp3, getAudioDuration, splitAudioIntoChunk } from './utils'
 
 const ssmClient = new SSMClient({ region: process.env.REGION })
-const s3Client = new S3Client({ region: process.env.REGION })
 
 type ParsedEventBody = {
   s3Key: string
   type: string
+  fileName: string
+  channelId: string
   base64?: string
 }
 
@@ -32,7 +33,53 @@ export const handler = async (
   try {
     !event.isMock && console.log(`EVENT BODY: ${event.body}`)
 
-    const { s3Key, type } = JSON.parse(event.body || '') as ParsedEventBody
+    const { s3Key, type, channelId, fileName } = JSON.parse(event.body || '') as ParsedEventBody
+
+    // Get file from S3
+    // Chunk file into 10 minute parts
+    // Transcribe each part
+    // Concatenate parts
+    // Save to S3
+    // Save to DynamoDB
+    // Index in Brain
+
+    const tempFilePath = `./tmp/file-to-transcribe.mp3`
+
+    await writeS3Object(s3Key, tempFilePath)
+
+    return
+
+    let path = tempFilePath
+
+    const chunkDurations = 10 * 60 // 10 minutes
+
+    // Gets audio duration to predetermine chunks
+    let audioFormat = await getAudioDuration(path)
+
+    if (audioFormat.format_name.includes('webm')) {
+      // If the audio format is indeed webm, the system cannot interpret duration. We'll have to convert to Mp3.
+      const pathToConvertedFile = `./tmp/formatted.mp3`
+
+      await convertWebmToMp3(path, pathToConvertedFile)
+
+      path = pathToConvertedFile
+
+      // Gets audio duration of converted file
+      audioFormat = await getAudioDuration(pathToConvertedFile)
+    }
+
+    const { duration } = audioFormat
+
+    // Splits audio into chunks based on duration
+    let loopIndex = 0
+    for (let i = 0; i < duration; i += chunkDurations) {
+      await splitAudioIntoChunk(path, i, chunkDurations, loopIndex)
+      loopIndex++
+    }
+
+    console.log('Successfully splits audio')
+
+    // Initiates OpenAI
 
     const secretName = process.env.openai_key
 
@@ -40,42 +87,48 @@ export const handler = async (
 
     const apiKey = await getSecret(secretName)
 
-    console.log('API KEY')
+    if (!apiKey) throw new TypeError('OPENAI_API_KEY_NOT_FOUND')
 
     const openai = new OpenAI({
       organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
       apiKey,
     })
 
-    const input = {
-      Bucket: process.env.STORAGE_FRAIASTORAGE_BUCKETNAME,
-      Key: s3Key,
+    console.log('Successfully initiated OpenAI')
+
+    let fullTranscription = ''
+    const transcriptionPromises = []
+    // Builds promises to be fired asynchronously
+    for (let i = 0; i < loopIndex; i++) {
+      console.log(`Initiating transcription for file ${i + 1}.`)
+
+      transcriptionPromises.push(
+        openai.audio.transcriptions.create({
+          file: createReadStream(`./tmp/chunk-${i + 1}.mp3`),
+          model: 'whisper-1',
+        })
+      )
     }
 
-    const { Body } = await s3Client.send(new GetObjectCommand(input))
+    const transcriptions = await Promise.all(transcriptionPromises)
 
-    console.log('S3')
-
-    console.time('TRANSCRIPTION')
-
-    const file = await toFile(
-      Buffer.from(await Body.transformToString('base64'), 'base64'),
-      s3Key,
-      {
-        type: type,
-      }
-    )
-
-    const transcription = await openai.audio.transcriptions.create({
-      file,
-      model: 'whisper-1',
+    transcriptions.forEach((t) => {
+      fullTranscription += t.text
     })
 
-    console.timeEnd('TRANSCRIPTION')
+    // Saves full transcription in S3
+    const s3TranscriptionKey = await saveTextToS3(
+      `_/${channelId}/transcriptions/${fileName}-${new Date().toISOString()}`,
+      fullTranscription
+    )
 
-    console.log(transcription)
+    // Saves a record in DB to reference to the different documents.
+    await createChannelDocumentRecord({
+      s3KeyRaw: s3Key,
+      s3KeyTranscription: s3TranscriptionKey,
+    })
 
-    responseBody = transcription.text
+    responseBody = fullTranscription
   } catch (error: any) {
     console.error('DEFAULT ERROR', error)
 

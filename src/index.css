@@ -9,8 +9,16 @@
   src: url(@/assets/AlbertSans-VariableFont_wght.ttf);
 } */
 
-* {
-  font-family: 'Albert Sans', sans-serif;
+:root {
+  --font-sans: 'Albert Sans', sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-image: url('./assets/background-2.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .textarea-hide-handle {
@@ -427,5 +435,42 @@ input {
   background-color: transparent;
   border: none;
   padding: 10px 10px;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-sans);
+}
+
+.auth-input {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #c2c2c2;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 16px;
+  line-height: 17px;
+  font-weight: 300;
+}
+
+.auth-input__label {
+  display: flex;
+  align-items: center;
+  min-width: 162px;
+  color: var(--textColor);
+}
+
+.auth-input__divider {
+  width: 1px;
+  height: 45px;
+  background: #c2c2c2;
+}
+
+.auth-input__control {
+  outline: none;
+  flex: 1;
+  min-width: 0;
+  padding: 0 0 0 60px;
+  height: 45px;
+  color: var(--textColor);
+}
+
+.auth-input__control::placeholder {
+  color: var(--textSecondary);
 }

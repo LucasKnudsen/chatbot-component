@@ -25,9 +25,16 @@
         ]
       }
     },
-    "/flowise/middleware": {
-      "name": "/flowise/middleware",
-      "lambdaFunction": "flowiseMiddleware",
+    "/users": {
+      "name": "/users",
+      "lambdaFunction": "handleUsers",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/transcribe": {
+      "name": "/transcribe",
+      "lambdaFunction": "transcribeAudio",
       "permissions": {
         "setting": "protected",
         "auth": [
@@ -39,19 +46,48 @@
           "create",
           "read",
           "update"
-        ]
+        ],
+        "groups": {
+          "SuperAdmin": [
+            "create",
+            "read",
+            "update"
+          ],
+          "Admin": [
+            "create",
+            "read",
+            "update"
+          ]
+        }
       }
     },
-    "/users": {
-      "name": "/users",
-      "lambdaFunction": "handleUsers",
+    "/scraper/websites": {
+      "name": "/scraper/websites",
+      "lambdaFunction": "websiteScraping",
       "permissions": {
-        "setting": "open"
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update"
+        ],
+        "groups": {
+          "SuperAdmin": [
+            "create",
+            "read",
+            "update"
+          ],
+          "Admin": [
+            "create",
+            "read",
+            "update"
+          ]
+        }
       }
     },
-    "/transcribe": {
-      "name": "/transcribe",
-      "lambdaFunction": "transcribeAudio",
+    "/flowise/middleware": {
+      "name": "/flowise/middleware",
+      "lambdaFunction": "flowiseMiddleware",
       "permissions": {
         "setting": "protected",
         "auth": [

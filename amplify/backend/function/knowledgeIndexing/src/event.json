@@ -1,0 +1,19 @@
+{
+  "arguments": {
+    "isMock": true,
+    "input": {
+      "id": "3b1f2de4-80be-46fb-8ecf-5bfeec2d7611",
+      "channelId": "0c7ab27e-8634-44cf-adab-0773f4249e10",
+      "documentType": "DOCUMENT",
+      "fileName": "e-Visa_F0290580.pdf",
+      "fileSize": 279225,
+      "fileSuffix": "pdf",
+      "fileType": "application/pdf",
+      "includeInLibrary": true,
+      "s3KeyRawText": "_/0c7ab27e-8634-44cf-adab-0773f4249e10/3b1f2de4-80be-46fb-8ecf-5bfeec2d7611/raw.txt",
+      "s3KeyOriginal": "_/0c7ab27e-8634-44cf-adab-0773f4249e10/3b1f2de4-80be-46fb-8ecf-5bfeec2d7611/original.pdf",
+      "title": "e-Visa_F0290580",
+      "uploadedBy": "a05d64f3-6d58-49d1-8143-d59caa88fd1f"
+    }
+  }
+}

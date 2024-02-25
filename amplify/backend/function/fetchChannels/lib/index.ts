@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 /* Amplify Params - DO NOT EDIT
 	API_DIGITALTWIN_CHANNELTABLE_ARN
 	API_DIGITALTWIN_CHANNELTABLE_NAME
@@ -49,9 +51,12 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
 
     switch (input.flow) {
       case 'BY_ID':
-        isAuthorized = await authorizeToken(event.request.headers.authorization, (identity) => {
-          return authorizeChannelAccess(identity, input.channelId!)
-        })
+        isAuthorized = await authorizeToken(
+          event.request.headers.authorization,
+          async (identity) => {
+            return await authorizeChannelAccess(identity, input.channelId!)
+          }
+        )
 
         if (!isAuthorized) {
           throw new Error('Unauthorized to fetch channel')
@@ -65,16 +70,19 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
         const isPublic = await authorizePublicAttribute(input.chatSpaceId!)
 
         if (!isPublic) {
-          isAuthorized = await authorizeToken(event.request.headers.authorization, (identity) => {
-            return authorizeAdminAccess(identity, input.chatSpaceId!)
-          })
+          isAuthorized = await authorizeToken(
+            event.request.headers.authorization,
+            async (identity) => {
+              return await authorizeAdminAccess(identity, input.chatSpaceId!)
+            }
+          )
 
           if (!isAuthorized) {
             throw new Error('Unauthorized to fetch channels')
           }
         }
 
-        data = await fetchChannelsByChatSpace(input.chatSpaceId!)
+        data = await fetchChannelsByChatSpace(input.chatSpaceId!, isPublic)
 
         break
 
@@ -134,7 +142,7 @@ const authorizeChannelAccess = async (identity: any, channelId: string): Promise
   return true
 }
 
-const fetchChannelsByChatSpace = async (chatSpaceId: string) => {
+const fetchChannelsByChatSpace = async (chatSpaceId: string, isPublic: boolean) => {
   const params: QueryCommandInput = {
     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
     IndexName: 'byChatSpace',
@@ -142,6 +150,7 @@ const fetchChannelsByChatSpace = async (chatSpaceId: string) => {
     ExpressionAttributeValues: {
       ':chatSpaceId': chatSpaceId,
     },
+    FilterExpression: isPublic ? 'isPublic = :isPublic' : undefined,
   }
 
   const { Items } = await ddbDocClient.send(new QueryCommand(params))

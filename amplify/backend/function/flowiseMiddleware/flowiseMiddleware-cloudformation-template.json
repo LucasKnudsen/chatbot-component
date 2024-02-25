@@ -26,6 +26,10 @@
     "apidigitaltwinGraphQLAPIIdOutput": {
       "Type": "String",
       "Default": "apidigitaltwinGraphQLAPIIdOutput"
+    },
+    "storagefraiastorageBucketName": {
+      "Type": "String",
+      "Default": "storagefraiastorageBucketName"
     }
   },
   "Conditions": {
@@ -134,6 +138,9 @@
             },
             "API_DIGITALTWIN_GRAPHQLAPIIDOUTPUT": {
               "Ref": "apidigitaltwinGraphQLAPIIdOutput"
+            },
+            "STORAGE_FRAIASTORAGE_BUCKETNAME": {
+              "Ref": "storagefraiastorageBucketName"
             }
           }
         },
@@ -358,6 +365,43 @@
                       {
                         "Ref": "functionflowiseBroadcastName"
                       }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": "s3:ListBucket",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "storagefraiastorageBucketName"
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "storagefraiastorageBucketName"
+                      },
+                      "/*"
                     ]
                   ]
                 }

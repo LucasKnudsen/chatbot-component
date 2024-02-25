@@ -10,6 +10,9 @@
       ]
     },
     "storage": {
+      "fraiastorage": [
+        "read"
+      ],
       "Channel:@model(appsync)": [
         "read"
       ]

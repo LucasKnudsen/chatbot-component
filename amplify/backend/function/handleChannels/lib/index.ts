@@ -15,11 +15,7 @@
 	REGION
 Amplify Params - DO NOT EDIT */
 
-import { AppSyncResolverHandler } from 'aws-lambda'
-
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
-const ddbService = new DynamoDBClient({ region: process.env.REGION })
-
 import {
   DynamoDBDocumentClient,
   GetCommand,
@@ -27,6 +23,9 @@ import {
   UpdateCommand,
   UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb'
+import { AppSyncResolverHandler } from 'aws-lambda'
+
+const ddbService = new DynamoDBClient({ region: process.env.REGION })
 const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
 
 import { authorizeToken } from './authorizers'
@@ -38,6 +37,7 @@ type Arguments = {
     data: {
       id: string
       chatflowId: string
+      indexChatflowId: string
       apiHost: string
       apiKey: string
       name: string
@@ -66,8 +66,8 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
       case 'UPDATE':
         isAuthorized = isMock
           ? true
-          : await authorizeToken(event.request.headers.authorization, (identity) => {
-              return authorizeUpdateAccess(identity, input.data.id)
+          : await authorizeToken(event.request.headers.authorization, async (identity) => {
+              return await authorizeUpdateAccess(identity, input.data.id)
             })
 
         if (!isAuthorized) {
@@ -106,6 +106,8 @@ const authorizeUpdateAccess = async (identity: any, channelId: string): Promise<
   }
 
   if (Item.accessType === 'READ') {
+    console.error('Write access not allowed for user')
+
     return false
   }
 
@@ -123,6 +125,10 @@ const updateChannel = async (data: Arguments['input']['data']) => {
       chatflowId: {
         Action: 'PUT',
         Value: data.chatflowId,
+      },
+      indexChatflowId: {
+        Action: 'PUT',
+        Value: data.indexChatflowId,
       },
       apiHost: {
         Action: 'PUT',

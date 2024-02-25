@@ -1,15 +1,15 @@
-import powerIcon from '@/assets/power-icon.svg'
-
-import { botStore, botStoreActions } from '@/features/bot'
-import { configStoreActions } from '@/features/portal-init'
-import { suggestedPromptsStoreActions } from '@/features/prompt'
-import { useText } from '@/features/text'
-import { useTheme } from '@/features/theme/hooks'
-import { useMediaQuery } from '@/utils/useMediaQuery'
-import { Match, Show, Switch } from 'solid-js'
 import { Button, ChevronIcon } from '.'
+import { Match, Show, Switch } from 'solid-js'
+import { botStore, botStoreActions } from '@/features/bot'
+
 import { CircleCloseIcon } from './icons/CircleCloseIcon'
 import { MenuIcon } from './icons/MenuIcon'
+import { configStoreActions } from '@/features/portal-init'
+import powerIcon from '@/assets/power-icon.svg'
+import { suggestedPromptsStoreActions } from '@/features/prompt'
+import { useMediaQuery } from '@/utils/useMediaQuery'
+import { useText } from '@/features/text'
+import { useTheme } from '@/features/theme/hooks'
 
 export const Nav = () => {
   const device = useMediaQuery()
@@ -23,7 +23,7 @@ export const Nav = () => {
 
   return (
     <div
-      class='flex flex-wrap items-center mx-5 rounded-full pl-6 pr-3 py-2 mt-5 z-50'
+      class='flex flex-wrap items-center mx-5 rounded-full pl-6 pr-2 py-3.5 mt-5 z-50'
       style={{
         background: theme().surfaceBackground,
       }}
@@ -54,11 +54,17 @@ export const Nav = () => {
 
         {device() == 'desktop' ? (
           <>
-            <div class='flex-1' />
-
-            <Button onClick={configStoreActions.toggleBot} class='hidden md:block ml-4'>
+            {/* will use if needed */}
+            {/* <Button onClick={configStoreActions.toggleBot} class='hidden md:block ml-4'>
               {text().close}
-            </Button>
+            </Button> */}
+
+            <CircleCloseIcon
+              class='cursor-pointer ml-auto'
+              height={24}
+              color={theme().primaryColor}
+              onClick={configStoreActions.toggleBot}
+            />
           </>
         ) : (
           <>

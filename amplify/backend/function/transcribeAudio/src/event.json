@@ -1,4 +1,4 @@
 {
   "isMock": true,
-  "body": "{\"s3Key\": \"public/test.webm\", \"type\": \"audio/webm\"}"
+  "body": "{\"s3Key\": \"_/test-recording.webm\", \"type\": \"audio/webm\"}"
 }

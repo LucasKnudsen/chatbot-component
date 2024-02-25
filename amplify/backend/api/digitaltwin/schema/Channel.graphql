@@ -3,11 +3,13 @@ type Channel @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }, { a
   chatSpaceId: ID! @index(name: "byChatSpace", queryField: "channelsByChatSpaceId") # For Public purposes
   apiHost: String
   chatflowId: String
+  indexChatflowId: String
   apiKey: String
 
   name: String!
+  subtitle: String
   description: String
-
+  avatar: String # URL to an image
   initialPrompts: [InitialPrompt!]
   isPublic: Boolean! @default(value: "false")
 }
@@ -43,11 +45,27 @@ enum ChannelAccessType {
 type ChannelDocument @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }]) {
   channelId: ID! @primaryKey(sortKeyFields: ["id"])
   id: ID!
+  title: String!
 
-  s3Key: String
-  fileType: String
+  s3KeyRawText: String
+  s3KeyOriginal: String
+  description: String
+  includeInLibrary: Boolean! @default(value: "false")
+  documentType: ChannelDocumentType!
+  source: String
+
   fileName: String
+  fileType: String
+  fileSuffix: String
   fileSize: Int
+  uploadedBy: ID
+}
+
+enum ChannelDocumentType {
+  TRANSCRIPTION
+  DOCUMENT
+  WEBSITE
+  TEXT
 }
 
 type ChannelHistoryItem
@@ -55,6 +73,11 @@ type ChannelHistoryItem
   @auth(rules: [{ allow: owner }]) {
   ownerId: ID! @primaryKey(sortKeyFields: ["channelId", "timestamp"])
   channelId: ID!
+    @index(
+      name: "byChannel"
+      sortKeyFields: ["timestamp"]
+      queryField: "channelHistoryItemsByChannelId"
+    )
   timestamp: AWSDateTime!
 
   question: String!

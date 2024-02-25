@@ -52,14 +52,6 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "flowiseMiddleware"
-        },
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
           "resourceName": "handleUsers"
         },
         {
@@ -90,6 +82,22 @@
           ],
           "category": "auth",
           "resourceName": "userPoolGroups"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "websiteScraping"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "flowiseMiddleware"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -220,6 +228,55 @@
         },
         {
           "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "fraiastorage"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "handleChannelDocuments": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "handleChannelHistory": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
             "GraphQLAPIIdOutput"
           ],
           "category": "api",
@@ -250,6 +307,34 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "handleStorage": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "fraiastorage"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "handleUsers": {
       "build": true,
       "dependsOn": [
@@ -259,6 +344,34 @@
           ],
           "category": "auth",
           "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "knowledgeIndexing": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "fraiastorage"
         },
         {
           "attributes": [
@@ -304,6 +417,11 @@
           "resourceName": "fraiastorage"
         }
       ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "websiteScraping": {
+      "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
@@ -419,6 +537,38 @@
         }
       ]
     },
+    "AMPLIFY_function_handleChannelDocuments_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "handleChannelDocuments"
+        }
+      ]
+    },
+    "AMPLIFY_function_handleChannelDocuments_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "handleChannelDocuments"
+        }
+      ]
+    },
+    "AMPLIFY_function_handleChannelHistory_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "handleChannelHistory"
+        }
+      ]
+    },
+    "AMPLIFY_function_handleChannelHistory_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "handleChannelHistory"
+        }
+      ]
+    },
     "AMPLIFY_function_handleChannels_deploymentBucketName": {
       "usedBy": [
         {
@@ -435,6 +585,22 @@
         }
       ]
     },
+    "AMPLIFY_function_handleStorage_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "handleStorage"
+        }
+      ]
+    },
+    "AMPLIFY_function_handleStorage_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "handleStorage"
+        }
+      ]
+    },
     "AMPLIFY_function_handleUsers_deploymentBucketName": {
       "usedBy": [
         {
@@ -448,6 +614,22 @@
         {
           "category": "function",
           "resourceName": "handleUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_knowledgeIndexing_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "knowledgeIndexing"
+        }
+      ]
+    },
+    "AMPLIFY_function_knowledgeIndexing_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "knowledgeIndexing"
         }
       ]
     },
@@ -488,6 +670,22 @@
         {
           "category": "function",
           "resourceName": "transcribeAudio"
+        }
+      ]
+    },
+    "AMPLIFY_function_websiteScraping_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "websiteScraping"
+        }
+      ]
+    },
+    "AMPLIFY_function_websiteScraping_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "websiteScraping"
         }
       ]
     },

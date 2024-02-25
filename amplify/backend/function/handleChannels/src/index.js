@@ -54,8 +54,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.handler = void 0;
 var client_dynamodb_1 = require("@aws-sdk/client-dynamodb");
-var ddbService = new client_dynamodb_1.DynamoDBClient({ region: process.env.REGION });
 var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
+var ddbService = new client_dynamodb_1.DynamoDBClient({ region: process.env.REGION });
 var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
 var authorizers_1 = require("./authorizers");
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
@@ -80,9 +80,14 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 if (!isMock) return [3 /*break*/, 3];
                 _c = true;
                 return [3 /*break*/, 5];
-            case 3: return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) {
-                    return authorizeUpdateAccess(identity, input_1.data.id);
-                })];
+            case 3: return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, authorizeUpdateAccess(identity, input_1.data.id)];
+                            case 1: return [2 /*return*/, _a.sent()];
+                        }
+                    });
+                }); })];
             case 4:
                 _c = _d.sent();
                 _d.label = 5;
@@ -127,6 +132,7 @@ var authorizeUpdateAccess = function (identity, channelId) { return __awaiter(vo
                     return [2 /*return*/, false];
                 }
                 if (Item.accessType === 'READ') {
+                    console.error('Write access not allowed for user');
                     return [2 /*return*/, false];
                 }
                 return [2 /*return*/, true];
@@ -148,6 +154,10 @@ var updateChannel = function (data) { return __awaiter(void 0, void 0, void 0, f
                         chatflowId: {
                             Action: 'PUT',
                             Value: data.chatflowId
+                        },
+                        indexChatflowId: {
+                            Action: 'PUT',
+                            Value: data.indexChatflowId
                         },
                         apiHost: {
                             Action: 'PUT',

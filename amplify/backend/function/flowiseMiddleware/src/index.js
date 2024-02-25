@@ -44,14 +44,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.handler = exports.PromptCode = void 0;
+exports.getChannel = exports.handler = exports.PromptCode = void 0;
 var axios_1 = require("axios");
 var openai_1 = require("openai");
 var client_dynamodb_1 = require("@aws-sdk/client-dynamodb");
 var client_ssm_1 = require("@aws-sdk/client-ssm");
-var ddbService = new client_dynamodb_1.DynamoDBClient({ region: process.env.REGION });
 var client_lambda_1 = require("@aws-sdk/client-lambda");
 var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
+var ddbService = new client_dynamodb_1.DynamoDBClient({ region: process.env.REGION });
 var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
 var ssmClient = new client_ssm_1.SSMClient({ region: process.env.REGION });
 var client = new client_lambda_1.LambdaClient({ region: process.env.REGION });
@@ -159,6 +159,7 @@ var getChannel = function (channelId) { return __awaiter(void 0, void 0, void 0,
         }
     });
 }); };
+exports.getChannel = getChannel;
 var getSecret = function (secretName) { return __awaiter(void 0, void 0, void 0, function () {
     var command, Parameter;
     return __generator(this, function (_a) {
@@ -181,7 +182,7 @@ var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, vo
                 channelId = body.channelId, socketIOClientId = body.socketIOClientId, question = body.question;
                 if (!channelId)
                     throw new TypeError('MISSING_CHANNEL_ID');
-                return [4 /*yield*/, Promise.all([getChannel(channelId)])];
+                return [4 /*yield*/, Promise.all([(0, exports.getChannel)(channelId)])];
             case 1:
                 channel = (_a.sent())[0];
                 if (!channel)

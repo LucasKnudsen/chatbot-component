@@ -1,9 +1,10 @@
-import { Spinner } from '@/components/loaders'
-import { useTheme } from '@/features/theme'
 import { Channel, ChannelUserAccess, ChatSpace } from '@/graphql'
-import { useHovered } from '@/utils'
-import { createMutation } from '@tanstack/solid-query'
 import { botStoreActions, fetchChannelDetails } from '..'
+
+import { Spinner } from '@/components/loaders'
+import { createMutation } from '@tanstack/solid-query'
+import { useHovered } from '@/utils'
+import { useTheme } from '@/features/theme'
 
 type ChannelOverviewProps = {
   chatSpace: ChatSpace
@@ -13,6 +14,9 @@ type ChannelOverviewProps = {
 export const ChannelsOverview = (props: ChannelOverviewProps) => {
   return (
     <div class='w-full h-full flex flex-col justify-center items-center animate-fade-in gap-4'>
+      <h1>
+        Please choose the FRAIA AI knowledge hub <br /> you want to use :
+      </h1>
       <div class='text-lg text-red-500 text-center'>
         <h1 class='text-xl  leading-tight tracking-tight '>Select a course</h1>
 

@@ -13,10 +13,11 @@ import OpenAI from 'openai'
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm'
-const ddbService = new DynamoDBClient({ region: process.env.REGION })
 
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda'
 import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb'
+
+const ddbService = new DynamoDBClient({ region: process.env.REGION })
 const ddbDocClient = DynamoDBDocumentClient.from(ddbService)
 
 const ssmClient = new SSMClient({ region: process.env.REGION })
@@ -32,7 +33,7 @@ type ShortTermMemory = {
   message: string
 }
 
-type ParsedEventBody = {
+export type ParsedEventBody = {
   promptCode: PromptCode
   question: string
   channelId?: string
@@ -121,7 +122,7 @@ export const handler = async (
   }
 }
 
-const getChannel = async (channelId: string) => {
+export const getChannel = async (channelId: string) => {
   const command = new GetCommand({
     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
     Key: {

@@ -7,7 +7,9 @@
     "paths": {
       "src": ["./lib"],
       "@aws-sdk/*": ["./src/node_modules/@aws-sdk/*"],
-      "openai": ["./src/node_modules/openai"]
+      "openai": ["./src/node_modules/openai"],
+      "jsonwebtoken": ["./src/node_modules/jsonwebtoken"],
+      "jwks-rsa": ["./src/node_modules/jwks-rsa"]
     }
   },
   "include": ["lib"]

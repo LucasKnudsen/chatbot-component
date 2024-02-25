@@ -5,12 +5,14 @@
   "main": "index.js",
   "license": "Apache-2.0",
   "dependencies": {
-    "openai": "^4.20.1",
-    "@aws-sdk/client-ssm": "latest",
     "@aws-sdk/client-s3": "latest",
-    "@aws-sdk/lib-storage": "latest"
+    "@aws-sdk/client-ssm": "latest",
+    "@aws-sdk/client-mediaconvert": "latest",
+    "@aws-sdk/lib-storage": "latest",
+    "openai": "^4.20.1"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.92"
+    "@types/aws-lambda": "^8.10.92",
+    "@types/ffmpeg": "^1.0.7"
   }
 }

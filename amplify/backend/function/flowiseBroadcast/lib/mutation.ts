@@ -13,7 +13,7 @@ export const graphqlMutation = async (body: {
   variables: any
   authMode?: string
 }) => {
-  const endpoint = new URL(GRAPHQL_ENDPOINT)
+  const endpoint = new URL(GRAPHQL_ENDPOINT!)
 
   const signer = new SignatureV4({
     credentials: defaultProvider(),

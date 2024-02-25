@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "auth": {
+      "fraiaauth": [
+        "read"
+      ]
+    },
+    "storage": {
+      "fraiastorage": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Channel:@model(appsync)": [
+        "read"
+      ],
+      "ChannelUserAccess:@model(appsync)": [
+        "read"
+      ],
+      "ChannelDocument:@model(appsync)": [
+        "create",
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

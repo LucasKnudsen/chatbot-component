@@ -1,0 +1,16 @@
+{
+  "extends": "../../../../tsconfig.amplify",
+  "compilerOptions": {
+    "outDir": "./src",
+    "baseUrl": "./",
+    "rootDir": "./lib",
+    "paths": {
+      "src": ["./lib"],
+      "@aws-sdk/*": ["./src/node_modules/@aws-sdk/*"],
+      "jsonwebtoken": ["./src/node_modules/jsonwebtoken"],
+      "pdf-parse": ["./src/node_modules/pdf-parse"],
+      "jwks-rsa": ["./src/node_modules/jwks-rsa"]
+    }
+  },
+  "include": ["lib"]
+}

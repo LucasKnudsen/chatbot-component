@@ -1,9 +1,9 @@
+import { ChatSpaceTheme } from '@/graphql/types'
 import background2 from '@/assets/background-2.png'
 import background3 from '@/assets/background-3.png'
+import logo from '@/assets/logo_final.png'
 import newLogo from '@/assets/logo.svg'
 import newLogo2 from '@/assets/logo2.svg'
-import logo from '@/assets/logo_final.png'
-import { ChatSpaceTheme } from '@/graphql/types'
 
 type NonNullProperties<T> = {
   [P in keyof T]: Exclude<T[P], null>
@@ -21,12 +21,14 @@ export const defaultTheme: Theme = {
   onPrimary: 'rgba(255, 255, 255, 1)',
   backgroundColor: 'rgba(255, 255, 255, 1)',
   backgroundAccent: 'white',
+  backgroundOverlay: 'rgba(223, 221, 232, 0.4)',
   backgroundImageUrl: background2,
   bubbleButtonColor: 'rgba(91, 147, 255, 0.2)',
   drawerBackground: 'rgba(255, 255, 255, 0.75)',
   borderColor: 'rgba(147, 147, 147, 0.25)',
   textInputTextColor: 'rgba(128, 114, 166, 1)',
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
+  errorColor: 'red',
   surfaceBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.08) 0%, rgba(218, 145, 221, 0.08) 100%)',
   surfaceHoveredBackground:
@@ -53,7 +55,7 @@ const fraia: Theme = {
   textInputTextColor: 'rgba(128, 114, 166, 1)',
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
   surfaceHoveredBackground: 'rgba(255,118,118,0.08)',
-  surfaceBackground: 'rgba(63, 56, 99, 0.07)',
+  surfaceBackground: 'rgba(91, 147, 255, 0.1)',
 }
 
 const midnight: Theme = {

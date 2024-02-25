@@ -1,16 +1,5 @@
 "use strict";
-/* Amplify Params - DO NOT EDIT
-    API_DIGITALTWIN_CHANNELTABLE_ARN
-    API_DIGITALTWIN_CHANNELTABLE_NAME
-    API_DIGITALTWIN_CHANNELUSERACCESSTABLE_ARN
-    API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME
-    API_DIGITALTWIN_CHATSPACETABLE_ARN
-    API_DIGITALTWIN_CHATSPACETABLE_NAME
-    API_DIGITALTWIN_GRAPHQLAPIIDOUTPUT
-    AUTH_FRAIAAUTH_USERPOOLID
-    ENV
-    REGION
-Amplify Params - DO NOT EDIT */
+//@ts-nocheck
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -73,9 +62,14 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     case 'BY_CHAT_SPACE': return [3 /*break*/, 5];
                 }
                 return [3 /*break*/, 10];
-            case 2: return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) {
-                    return authorizeChannelAccess(identity, input_1.channelId);
-                })];
+            case 2: return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, authorizeChannelAccess(identity, input_1.channelId)];
+                            case 1: return [2 /*return*/, _a.sent()];
+                        }
+                    });
+                }); })];
             case 3:
                 isAuthorized = _c.sent();
                 if (!isAuthorized) {
@@ -89,16 +83,21 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
             case 6:
                 isPublic = _c.sent();
                 if (!!isPublic) return [3 /*break*/, 8];
-                return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) {
-                        return authorizeAdminAccess(identity, input_1.chatSpaceId);
-                    })];
+                return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) { return __awaiter(void 0, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, authorizeAdminAccess(identity, input_1.chatSpaceId)];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        });
+                    }); })];
             case 7:
                 isAuthorized = _c.sent();
                 if (!isAuthorized) {
                     throw new Error('Unauthorized to fetch channels');
                 }
                 _c.label = 8;
-            case 8: return [4 /*yield*/, fetchChannelsByChatSpace(input_1.chatSpaceId)];
+            case 8: return [4 /*yield*/, fetchChannelsByChatSpace(input_1.chatSpaceId, isPublic)];
             case 9:
                 data = _c.sent();
                 return [3 /*break*/, 11];
@@ -167,7 +166,7 @@ var authorizeChannelAccess = function (identity, channelId) { return __awaiter(v
         }
     });
 }); };
-var fetchChannelsByChatSpace = function (chatSpaceId) { return __awaiter(void 0, void 0, void 0, function () {
+var fetchChannelsByChatSpace = function (chatSpaceId, isPublic) { return __awaiter(void 0, void 0, void 0, function () {
     var params, Items;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -178,7 +177,8 @@ var fetchChannelsByChatSpace = function (chatSpaceId) { return __awaiter(void 0,
                     KeyConditionExpression: 'chatSpaceId = :chatSpaceId',
                     ExpressionAttributeValues: {
                         ':chatSpaceId': chatSpaceId
-                    }
+                    },
+                    FilterExpression: isPublic ? 'isPublic = :isPublic' : undefined
                 };
                 return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.QueryCommand(params))];
             case 1:
