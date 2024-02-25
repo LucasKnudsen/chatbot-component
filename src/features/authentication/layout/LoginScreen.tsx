@@ -7,9 +7,8 @@ import { configStoreActions } from '@/features/portal-init'
 import { useTheme } from '@/features/theme'
 import LayoutDefault from '@/layouts/default'
 import { createMutation } from '@tanstack/solid-query'
+import { Auth } from 'aws-amplify'
 import { createSignal } from 'solid-js'
-
-// import { TextInput } from '@/components/inputs'
 
 export const LoginScreen = () => {
   const [input, setInput] = createSignal({
@@ -17,14 +16,11 @@ export const LoginScreen = () => {
     password: import.meta.env.DEV ? 'Abcd1234' : '',
   })
 
-  // const [loading, setLoading] = createSignal(false)
-
   const { theme } = useTheme()
 
   const loginMutation = createMutation(() => ({
     mutationFn: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      // await Auth.signIn(input())
+      await Auth.signIn(input())
     },
   }))
 
@@ -105,49 +101,6 @@ export const LoginScreen = () => {
                 </div>
               ) : null}
             </div>
-
-            {/* reference only */}
-            {/* <TextInput
-              value={input().username}
-              onChange={(value) =>
-                setInput((prev) => ({
-                  ...prev,
-                  username: value,
-                }))
-              }
-              label='Your login'
-              inputProps={{
-                placeholder: 'example@mail.com',
-              }}
-            />
-
-            <TextInput
-              value={input().password}
-              onChange={(value) =>
-                setInput((prev) => ({
-                  ...prev,
-                  password: value,
-                }))
-              }
-              label='Your password'
-              inputProps={{
-                type: 'password',
-                placeholder: '••••••••',
-              }}
-            /> */}
-
-            {/* 
-              <div class='flex items-center justify-between'>
-                <a
-                  href='#'
-                  class='text-sm font-medium hover:underline'
-                  style={{
-                    color: theme().primaryColor,
-                  }}
-                >
-                  Forgot password?
-                </a>
-              </div> */}
 
             <Button
               class='mx-auto lg:ml-0 lg:mr-0'
