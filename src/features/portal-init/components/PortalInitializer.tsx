@@ -58,7 +58,7 @@ export const PortalInitializer = (props: ChatConfig) => {
             --textColor: ${assignTheme.textColor};
             --textSecondary: ${assignTheme.textSecondary};
             --onPrimary: ${assignTheme.onPrimary};
-            --backgroundColor: '${assignTheme.backgroundColor};
+            --backgroundColor: ${assignTheme.backgroundColor};
             --backgroundAccent: ${assignTheme.backgroundAccent};
             --bubbleButtonColor: ${assignTheme.bubbleButtonColor};
             --drawerBackground: ${assignTheme.drawerBackground};
@@ -100,10 +100,7 @@ export const PortalInitializer = (props: ChatConfig) => {
           <PortalContainer>
             <AuthProvider isPublic={Boolean(configQuery.data!.isPublic)}>
               <Show when={configStore.isBotOpened}>
-                <div
-                  class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'
-                  style={{ background: 'rgba(223, 221, 232, 0.4)' }}
-                >
+                <div class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'>
                   <Nav />
 
                   <BotManager />

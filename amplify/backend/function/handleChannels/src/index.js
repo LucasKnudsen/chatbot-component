@@ -140,60 +140,37 @@ var authorizeUpdateAccess = function (identity, channelId) { return __awaiter(vo
     });
 }); };
 var updateChannel = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, Attributes;
+    var updateExpression, expressionAttributeValues, expressionAttributeNames, params, Attributes;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                updateExpression = 'SET updatedAt = :updatedAt , #channelName = :channelName';
+                expressionAttributeValues = {
+                    ':channelName': data.name,
+                    ':updatedAt': new Date().toISOString()
+                };
+                expressionAttributeNames = {
+                    '#channelName': 'name'
+                };
+                // Add dynamic attributes from 'data' to the update expression
+                Object.keys(data).forEach(function (key) {
+                    if (key !== 'id' && key !== 'name') {
+                        // Append to update expression
+                        updateExpression += ", ".concat(key, " = :").concat(key);
+                        // Add to expression attribute values
+                        expressionAttributeValues[":".concat(key)] = data[key];
+                    }
+                });
                 params = {
                     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
                     Key: {
                         id: data.id
                     },
                     ReturnValues: 'ALL_NEW',
-                    AttributeUpdates: {
-                        chatflowId: {
-                            Action: 'PUT',
-                            Value: data.chatflowId
-                        },
-                        indexChatflowId: {
-                            Action: 'PUT',
-                            Value: data.indexChatflowId
-                        },
-                        apiHost: {
-                            Action: 'PUT',
-                            Value: data.apiHost
-                        },
-                        apiKey: {
-                            Action: 'PUT',
-                            Value: data.apiKey
-                        },
-                        name: {
-                            Action: 'PUT',
-                            Value: data.name
-                        },
-                        description: {
-                            Action: 'PUT',
-                            Value: data.description
-                        },
-                        //   chatSpaceId: {
-                        //     Action: 'PUT',
-                        //     Value: data.chatSpaceId,
-                        //   },
-                        isPublic: {
-                            Action: 'PUT',
-                            Value: data.isPublic
-                        },
-                        initialPrompts: {
-                            Action: 'PUT',
-                            Value: data.initialPrompts
-                        },
-                        updatedAt: {
-                            Action: 'PUT',
-                            Value: new Date().toISOString()
-                        }
-                    }
+                    UpdateExpression: updateExpression,
+                    ExpressionAttributeValues: expressionAttributeValues,
+                    ExpressionAttributeNames: expressionAttributeNames
                 };
-                console.log(params);
                 return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.UpdateCommand(params))];
             case 1:
                 Attributes = (_a.sent()).Attributes;

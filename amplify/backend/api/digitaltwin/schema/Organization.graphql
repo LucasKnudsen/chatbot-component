@@ -16,6 +16,7 @@ type User @model @auth(rules: [{ allow: owner }]) {
 
   email: String!
   cognitoId: String!
+  name: String
 
   invitedOn: AWSDateTime
   joinedOn: AWSDateTime

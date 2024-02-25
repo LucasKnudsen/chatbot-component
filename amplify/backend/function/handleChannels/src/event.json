@@ -4,8 +4,10 @@
     "input": {
       "flow": "UPDATE",
       "data": {
-        "id": "1",
-        "name": "test"
+        "id": "0c7ab27e-8634-44cf-adab-0773f4249e10",
+        "name": "FRAIA Test Knowledge",
+        "subtitle": "Where it all began...",
+        "description": "This is a test knowledge base"
       }
     }
   }

@@ -41,6 +41,8 @@ type Arguments = {
       apiHost: string
       apiKey: string
       name: string
+      subtitle: string
+      avatar: string
       description: string
       chatSpaceId: string
       isPublic: boolean
@@ -115,58 +117,36 @@ const authorizeUpdateAccess = async (identity: any, channelId: string): Promise<
 }
 
 const updateChannel = async (data: Arguments['input']['data']) => {
+  // Initialize parts of the update expression
+  let updateExpression = 'SET updatedAt = :updatedAt , #channelName = :channelName'
+  const expressionAttributeValues: any = {
+    ':channelName': data.name,
+    ':updatedAt': new Date().toISOString(), // always update 'updatedAt'
+  }
+  const expressionAttributeNames = {
+    '#channelName': 'name',
+  }
+
+  // Add dynamic attributes from 'data' to the update expression
+  Object.keys(data).forEach((key) => {
+    if (key !== 'id' && key !== 'name') {
+      // Append to update expression
+      updateExpression += `, ${key} = :${key}`
+      // Add to expression attribute values
+      expressionAttributeValues[`:${key}`] = data[key]
+    }
+  })
+
   const params: UpdateCommandInput = {
     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
     Key: {
       id: data.id,
     },
     ReturnValues: 'ALL_NEW',
-    AttributeUpdates: {
-      chatflowId: {
-        Action: 'PUT',
-        Value: data.chatflowId,
-      },
-      indexChatflowId: {
-        Action: 'PUT',
-        Value: data.indexChatflowId,
-      },
-      apiHost: {
-        Action: 'PUT',
-        Value: data.apiHost,
-      },
-      apiKey: {
-        Action: 'PUT',
-        Value: data.apiKey,
-      },
-      name: {
-        Action: 'PUT',
-        Value: data.name,
-      },
-      description: {
-        Action: 'PUT',
-        Value: data.description,
-      },
-      //   chatSpaceId: {
-      //     Action: 'PUT',
-      //     Value: data.chatSpaceId,
-      //   },
-      isPublic: {
-        Action: 'PUT',
-        Value: data.isPublic,
-      },
-      initialPrompts: {
-        Action: 'PUT',
-        Value: data.initialPrompts,
-      },
-
-      updatedAt: {
-        Action: 'PUT',
-        Value: new Date().toISOString(),
-      },
-    },
+    UpdateExpression: updateExpression,
+    ExpressionAttributeValues: expressionAttributeValues,
+    ExpressionAttributeNames: expressionAttributeNames,
   }
-
-  console.log(params)
 
   const { Attributes } = await ddbDocClient.send(new UpdateCommand(params))
 

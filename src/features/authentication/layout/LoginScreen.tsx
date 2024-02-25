@@ -42,8 +42,8 @@ export const LoginScreen = () => {
       </div>
 
       <div class='flex flex-col items-center lg:items-start justify-center h-full'>
-        <div class='mb-16'>
-          <div class='mb-4'>
+        <div class='text-center lg:text-left mb-16'>
+          <div class='inline-block mb-4'>
             <LogoIcon color={theme().primaryColor} />
           </div>
           <h4

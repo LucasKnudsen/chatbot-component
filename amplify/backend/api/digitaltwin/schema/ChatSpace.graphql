@@ -39,9 +39,11 @@ type ChatSpaceTheme {
   textColor: String
   textSecondary: String
   onPrimary: String
+  errorColor: String
   backgroundColor: String
   backgroundAccent: String
   backgroundImageUrl: String
+  backgroundOverlay: String
   bubbleButtonColor: String
   bubbleButtonLogoUrl: String
   drawerBackground: String
