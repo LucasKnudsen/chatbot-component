@@ -1,14 +1,13 @@
 import { Button, CircleCloseIcon } from '@/components'
 
-import { Auth } from 'aws-amplify'
-import LayoutDefault from '@/layouts/default'
 import { LockIcon } from '@/components/icons/LockIcon'
 import { LogoIcon } from '@/components/icons/LogoIcon'
 import { UserIcon } from '@/components/icons/UserIcon'
 import { configStoreActions } from '@/features/portal-init'
+import { useTheme } from '@/features/theme'
+import LayoutDefault from '@/layouts/default'
 import { createMutation } from '@tanstack/solid-query'
 import { createSignal } from 'solid-js'
-import { useTheme } from '@/features/theme'
 
 // import { TextInput } from '@/components/inputs'
 
@@ -24,7 +23,8 @@ export const LoginScreen = () => {
 
   const loginMutation = createMutation(() => ({
     mutationFn: async () => {
-      await Auth.signIn(input())
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // await Auth.signIn(input())
     },
   }))
 

@@ -1,4 +1,4 @@
-import { JSX, Show } from 'solid-js'
+import { JSX } from 'solid-js'
 
 import { TypingBubble } from '@/components'
 import { useTheme } from '@/features/theme/hooks'
@@ -22,7 +22,7 @@ export const Button = (props: Props) => {
     <button
       type={props.type}
       class={
-        'rounded-full font-bold text-sm leading-[17px] active:scale-95 transition hover:brightness-110 flex justify-center items-center ' +
+        'relative rounded-full font-bold text-sm leading-[17px] active:scale-95 transition hover:brightness-110 ' +
         props.class
       }
       style={{
@@ -32,17 +32,27 @@ export const Button = (props: Props) => {
       }}
       onClick={props.onClick}
     >
-      <Show
-        when={!props.loading}
-        fallback={
-          <div class='relative top-0.5'>
-            <TypingBubble color={theme().backgroundColor} />
-          </div>
-        }
+      {/* CONTENT   */}
+      <div
+        class='flex justify-center items-center transition '
+        style={{
+          opacity: props.loading ? 0 : 1,
+        }}
       >
-        {/* <Spinner size={16} backgroundColor={theme().onPrimary} /> */}
         {props.children}
-      </Show>
+      </div>
+
+      {/* LOADER  */}
+      <div
+        class='absolute transition top-0.5 inset-0 flex justify-center items-center'
+        style={{
+          opacity: props.loading ? 1 : 0,
+        }}
+      >
+        <TypingBubble color={theme().backgroundColor} />
+      </div>
+
+      {/* <Spinner size={16} backgroundColor={theme().onPrimary} /> */}
     </button>
   )
 }
