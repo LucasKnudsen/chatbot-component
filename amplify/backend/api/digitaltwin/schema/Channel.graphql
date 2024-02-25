@@ -8,8 +8,9 @@ type Channel @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }, { a
 
   name: String!
   subtitle: String
-  description: String
   avatar: String # URL to an image
+  description: String
+
   initialPrompts: [InitialPrompt!]
   isPublic: Boolean! @default(value: "false")
 }

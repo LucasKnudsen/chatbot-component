@@ -136,8 +136,11 @@ export const getChannel = /* GraphQL */ `query GetChannel($id: ID!) {
     chatSpaceId
     apiHost
     chatflowId
+    indexChatflowId
     apiKey
     name
+    subtitle
+    avatar
     description
     initialPrompts {
       display
@@ -166,8 +169,11 @@ export const listChannels = /* GraphQL */ `query ListChannels(
       chatSpaceId
       apiHost
       chatflowId
+      indexChatflowId
       apiKey
       name
+      subtitle
+      avatar
       description
       initialPrompts {
         display
@@ -207,8 +213,11 @@ export const channelsByChatSpaceId = /* GraphQL */ `query ChannelsByChatSpaceId(
       chatSpaceId
       apiHost
       chatflowId
+      indexChatflowId
       apiKey
       name
+      subtitle
+      avatar
       description
       initialPrompts {
         display
@@ -363,10 +372,18 @@ export const getChannelDocument = /* GraphQL */ `query GetChannelDocument($chann
   getChannelDocument(channelId: $channelId, id: $id) {
     channelId
     id
-    s3Key
-    fileType
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
     fileName
+    fileType
+    fileSuffix
     fileSize
+    uploadedBy
     createdAt
     updatedAt
     __typename
@@ -395,10 +412,18 @@ export const listChannelDocuments = /* GraphQL */ `query ListChannelDocuments(
     items {
       channelId
       id
-      s3Key
-      fileType
+      title
+      s3KeyRawText
+      s3KeyOriginal
+      description
+      includeInLibrary
+      documentType
+      source
       fileName
+      fileType
+      fileSuffix
       fileSize
+      uploadedBy
       createdAt
       updatedAt
       __typename
@@ -489,6 +514,50 @@ export const listChannelHistoryItems = /* GraphQL */ `query ListChannelHistoryIt
   APITypes.ListChannelHistoryItemsQueryVariables,
   APITypes.ListChannelHistoryItemsQuery
 >;
+export const channelHistoryItemsByChannelId = /* GraphQL */ `query ChannelHistoryItemsByChannelId(
+  $channelId: ID!
+  $timestamp: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelChannelHistoryItemFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  channelHistoryItemsByChannelId(
+    channelId: $channelId
+    timestamp: $timestamp
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      ownerId
+      channelId
+      timestamp
+      question
+      answer
+      resources {
+        id
+        source
+        type
+        value
+        header
+        description
+        thumbnail
+        __typename
+      }
+      updatedAt
+      owner
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ChannelHistoryItemsByChannelIdQueryVariables,
+  APITypes.ChannelHistoryItemsByChannelIdQuery
+>;
 export const getChatSpace = /* GraphQL */ `query GetChatSpace($id: ID!) {
   getChatSpace(id: $id) {
     id
@@ -508,9 +577,11 @@ export const getChatSpace = /* GraphQL */ `query GetChatSpace($id: ID!) {
       textColor
       textSecondary
       onPrimary
+      errorColor
       backgroundColor
       backgroundAccent
       backgroundImageUrl
+      backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
       drawerBackground
@@ -574,9 +645,11 @@ export const listChatSpaces = /* GraphQL */ `query ListChatSpaces(
         textColor
         textSecondary
         onPrimary
+        errorColor
         backgroundColor
         backgroundAccent
         backgroundImageUrl
+        backgroundOverlay
         bubbleButtonColor
         bubbleButtonLogoUrl
         drawerBackground
@@ -653,9 +726,11 @@ export const chatSpaceByHostId = /* GraphQL */ `query ChatSpaceByHostId(
         textColor
         textSecondary
         onPrimary
+        errorColor
         backgroundColor
         backgroundAccent
         backgroundImageUrl
+        backgroundOverlay
         bubbleButtonColor
         bubbleButtonLogoUrl
         drawerBackground
@@ -745,6 +820,7 @@ export const getUser = /* GraphQL */ `query GetUser($id: String!) {
     chatSpaceId
     email
     cognitoId
+    name
     invitedOn
     joinedOn
     status
@@ -775,6 +851,7 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       chatSpaceId
       email
       cognitoId
+      name
       invitedOn
       joinedOn
       status
@@ -808,6 +885,7 @@ export const userByOrganizationId = /* GraphQL */ `query UserByOrganizationId(
       chatSpaceId
       email
       cognitoId
+      name
       invitedOn
       joinedOn
       status
@@ -830,8 +908,11 @@ export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchCha
     chatSpaceId
     apiHost
     chatflowId
+    indexChatflowId
     apiKey
     name
+    subtitle
+    avatar
     description
     initialPrompts {
       display

@@ -151,8 +151,11 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
     chatSpaceId
     apiHost
     chatflowId
+    indexChatflowId
     apiKey
     name
+    subtitle
+    avatar
     description
     initialPrompts {
       display
@@ -179,8 +182,11 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
     chatSpaceId
     apiHost
     chatflowId
+    indexChatflowId
     apiKey
     name
+    subtitle
+    avatar
     description
     initialPrompts {
       display
@@ -207,8 +213,11 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
     chatSpaceId
     apiHost
     chatflowId
+    indexChatflowId
     apiKey
     name
+    subtitle
+    avatar
     description
     initialPrompts {
       display
@@ -302,10 +311,18 @@ export const createChannelDocument = /* GraphQL */ `mutation CreateChannelDocume
   createChannelDocument(input: $input, condition: $condition) {
     channelId
     id
-    s3Key
-    fileType
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
     fileName
+    fileType
+    fileSuffix
     fileSize
+    uploadedBy
     createdAt
     updatedAt
     __typename
@@ -322,10 +339,18 @@ export const updateChannelDocument = /* GraphQL */ `mutation UpdateChannelDocume
   updateChannelDocument(input: $input, condition: $condition) {
     channelId
     id
-    s3Key
-    fileType
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
     fileName
+    fileType
+    fileSuffix
     fileSize
+    uploadedBy
     createdAt
     updatedAt
     __typename
@@ -342,10 +367,18 @@ export const deleteChannelDocument = /* GraphQL */ `mutation DeleteChannelDocume
   deleteChannelDocument(input: $input, condition: $condition) {
     channelId
     id
-    s3Key
-    fileType
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
     fileName
+    fileType
+    fileSuffix
     fileSize
+    uploadedBy
     createdAt
     updatedAt
     __typename
@@ -464,9 +497,11 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
       textColor
       textSecondary
       onPrimary
+      errorColor
       backgroundColor
       backgroundAccent
       backgroundImageUrl
+      backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
       drawerBackground
@@ -528,9 +563,11 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
       textColor
       textSecondary
       onPrimary
+      errorColor
       backgroundColor
       backgroundAccent
       backgroundImageUrl
+      backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
       drawerBackground
@@ -592,9 +629,11 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
       textColor
       textSecondary
       onPrimary
+      errorColor
       backgroundColor
       backgroundAccent
       backgroundImageUrl
+      backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
       drawerBackground
@@ -701,6 +740,7 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     chatSpaceId
     email
     cognitoId
+    name
     invitedOn
     joinedOn
     status
@@ -724,6 +764,7 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     chatSpaceId
     email
     cognitoId
+    name
     invitedOn
     joinedOn
     status
@@ -747,6 +788,7 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     chatSpaceId
     email
     cognitoId
+    name
     invitedOn
     joinedOn
     status
@@ -759,4 +801,118 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
 ` as GeneratedMutation<
   APITypes.DeleteUserMutationVariables,
   APITypes.DeleteUserMutation
+>;
+export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: HandleChannelsInput!) {
+  handleChannels(input: $input) {
+    id
+    chatSpaceId
+    apiHost
+    chatflowId
+    indexChatflowId
+    apiKey
+    name
+    subtitle
+    avatar
+    description
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    isPublic
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.HandleChannelsMutationVariables,
+  APITypes.HandleChannelsMutation
+>;
+export const handleChannelDocuments = /* GraphQL */ `mutation HandleChannelDocuments($input: HandleChannelsInput!) {
+  handleChannelDocuments(input: $input) {
+    channelId
+    id
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
+    fileName
+    fileType
+    fileSuffix
+    fileSize
+    uploadedBy
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.HandleChannelDocumentsMutationVariables,
+  APITypes.HandleChannelDocumentsMutation
+>;
+export const handleChannelHistory = /* GraphQL */ `mutation HandleChannelHistory($input: HandleChannelHistoryInput!) {
+  handleChannelHistory(input: $input) {
+    ownerId
+    channelId
+    timestamp
+    question
+    answer
+    resources {
+      id
+      source
+      type
+      value
+      header
+      description
+      thumbnail
+      __typename
+    }
+    updatedAt
+    owner
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.HandleChannelHistoryMutationVariables,
+  APITypes.HandleChannelHistoryMutation
+>;
+export const handleStorage = /* GraphQL */ `mutation HandleStorage($input: HandleStorageInput!) {
+  handleStorage(input: $input) {
+    signedUrls
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.HandleStorageMutationVariables,
+  APITypes.HandleStorageMutation
+>;
+export const indexKnowledge = /* GraphQL */ `mutation IndexKnowledge($input: AWSJSON!) {
+  indexKnowledge(input: $input) {
+    channelId
+    id
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
+    fileName
+    fileType
+    fileSuffix
+    fileSize
+    uploadedBy
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.IndexKnowledgeMutationVariables,
+  APITypes.IndexKnowledgeMutation
 >;

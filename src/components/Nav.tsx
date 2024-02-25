@@ -1,20 +1,18 @@
-import { Button, ChevronIcon } from '.'
-import { Match, Show, Switch } from 'solid-js'
 import { botStore, botStoreActions } from '@/features/bot'
+import { Match, Show, Switch } from 'solid-js'
+import { Button, ChevronIcon } from '.'
 
+import powerIcon from '@/assets/power-icon.svg'
+import { configStoreActions } from '@/features/portal-init'
+import { suggestedPromptsStoreActions } from '@/features/prompt'
+import { useTheme } from '@/features/theme/hooks'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 import { CircleCloseIcon } from './icons/CircleCloseIcon'
 import { MenuIcon } from './icons/MenuIcon'
-import { configStoreActions } from '@/features/portal-init'
-import powerIcon from '@/assets/power-icon.svg'
-import { suggestedPromptsStoreActions } from '@/features/prompt'
-import { useMediaQuery } from '@/utils/useMediaQuery'
-import { useText } from '@/features/text'
-import { useTheme } from '@/features/theme/hooks'
 
 export const Nav = () => {
   const device = useMediaQuery()
   const { theme } = useTheme()
-  const { text } = useText()
 
   const onClickLogo = () => {
     botStoreActions.resetActiveChannel()

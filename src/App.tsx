@@ -1,11 +1,10 @@
 import './dev.css'
 import './index.css'
-import type {} from 'solid-styled-jsx'
 
+import { useTheme } from '@/features/theme'
+import { chatflows } from './constants'
 import { FraiaPortal } from './features/portal-init'
 import LayoutDefault from './layouts/default'
-import { chatflows } from './constants'
-import { useTheme } from '@/features/theme'
 
 function App() {
   const { theme } = useTheme()

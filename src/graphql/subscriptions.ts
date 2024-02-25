@@ -128,8 +128,11 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
     chatSpaceId
     apiHost
     chatflowId
+    indexChatflowId
     apiKey
     name
+    subtitle
+    avatar
     description
     initialPrompts {
       display
@@ -156,8 +159,11 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
     chatSpaceId
     apiHost
     chatflowId
+    indexChatflowId
     apiKey
     name
+    subtitle
+    avatar
     description
     initialPrompts {
       display
@@ -184,8 +190,11 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
     chatSpaceId
     apiHost
     chatflowId
+    indexChatflowId
     apiKey
     name
+    subtitle
+    avatar
     description
     initialPrompts {
       display
@@ -278,10 +287,18 @@ export const onCreateChannelDocument = /* GraphQL */ `subscription OnCreateChann
   onCreateChannelDocument(filter: $filter) {
     channelId
     id
-    s3Key
-    fileType
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
     fileName
+    fileType
+    fileSuffix
     fileSize
+    uploadedBy
     createdAt
     updatedAt
     __typename
@@ -297,10 +314,18 @@ export const onUpdateChannelDocument = /* GraphQL */ `subscription OnUpdateChann
   onUpdateChannelDocument(filter: $filter) {
     channelId
     id
-    s3Key
-    fileType
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
     fileName
+    fileType
+    fileSuffix
     fileSize
+    uploadedBy
     createdAt
     updatedAt
     __typename
@@ -316,10 +341,18 @@ export const onDeleteChannelDocument = /* GraphQL */ `subscription OnDeleteChann
   onDeleteChannelDocument(filter: $filter) {
     channelId
     id
-    s3Key
-    fileType
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
     fileName
+    fileType
+    fileSuffix
     fileSize
+    uploadedBy
     createdAt
     updatedAt
     __typename
@@ -435,9 +468,11 @@ export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($
       textColor
       textSecondary
       onPrimary
+      errorColor
       backgroundColor
       backgroundAccent
       backgroundImageUrl
+      backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
       drawerBackground
@@ -496,9 +531,11 @@ export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($
       textColor
       textSecondary
       onPrimary
+      errorColor
       backgroundColor
       backgroundAccent
       backgroundImageUrl
+      backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
       drawerBackground
@@ -557,9 +594,11 @@ export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($
       textColor
       textSecondary
       onPrimary
+      errorColor
       backgroundColor
       backgroundAccent
       backgroundImageUrl
+      backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
       drawerBackground
@@ -663,6 +702,7 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     chatSpaceId
     email
     cognitoId
+    name
     invitedOn
     joinedOn
     status
@@ -686,6 +726,7 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     chatSpaceId
     email
     cognitoId
+    name
     invitedOn
     joinedOn
     status
@@ -709,6 +750,7 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     chatSpaceId
     email
     cognitoId
+    name
     invitedOn
     joinedOn
     status

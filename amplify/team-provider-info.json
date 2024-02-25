@@ -54,7 +54,7 @@
         },
         "handleChannels": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/handleChannels-50486f33774135694d37-build.zip"
+          "s3Key": "amplify-builds/handleChannels-6e62696b2f5366444478-build.zip"
         },
         "handleStorage": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",

@@ -1,5 +1,5 @@
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
-import { BotManager, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
+import { Match, Show, Switch } from 'solid-js'
 import {
   ChatConfig,
   PortalButton,
@@ -8,14 +8,15 @@ import {
   configStoreActions,
   initializeConfig,
 } from '..'
-import { Match, Show, Switch } from 'solid-js'
+import { BotManager, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
 
-import { AuthProvider } from '@/features/authentication'
-import { Nav } from '@/components/Nav'
 import { TypingBubble } from '@/components'
-import { createQuery } from '@tanstack/solid-query'
+import { Nav } from '@/components/Nav'
+import { AuthProvider } from '@/features/authentication'
 import { useText } from '@/features/text'
+import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
+import { createQuery } from '@tanstack/solid-query'
 
 try {
   Predictions.addPluggable(new AmazonAIConvertPredictionsProvider())
@@ -29,7 +30,10 @@ export const PortalInitializer = (props: ChatConfig) => {
 
       const { themeId, theme, defaultLanguage, text } = result
 
-      initTheme(import.meta.env.DEV ? 'bubbles' : themeId, import.meta.env.DEV ? null : theme)
+      initTheme(
+        import.meta.env.DEV ? 'bubbles' : (themeId as keyof typeof themes),
+        import.meta.env.DEV ? null : theme
+      )
       initText(text, defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
       initLanguage(defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
       configStoreActions.setConfigStore('chatSpaceConfig', result)
@@ -50,7 +54,7 @@ export const PortalInitializer = (props: ChatConfig) => {
 
   return (
     <>
-      <style jsx dynamic>
+      <style>
         {`
           :root {
             --primaryColor: ${assignTheme.primaryColor};

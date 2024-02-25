@@ -1,8 +1,25 @@
 import { GetUserQuery, queries } from '@/graphql'
 import { logDev } from '@/utils'
 import { GraphQLQuery } from '@aws-amplify/api'
-import { API } from 'aws-amplify'
-import { authStoreActions } from '.'
+import { API, Auth } from 'aws-amplify'
+import { authStoreActions } from './authStore'
+
+export const authenticate = async (user?: any) => {
+  try {
+    authStoreActions.setAuthStore('authenticating', true)
+
+    user ||= await Auth.currentAuthenticatedUser()
+
+    await Promise.all([getUserDetails(user.username)])
+
+    // TODO: IF hostType is COMPANY, check if user is a member of the company
+
+    authStoreActions.setAuthStore('authenticating', false)
+    authStoreActions.setAuthStore('isAuthenticated', true)
+  } catch (error) {
+    logDev(error)
+  }
+}
 
 export const getUserDetails = async (id: string) => {
   try {

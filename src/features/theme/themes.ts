@@ -1,9 +1,9 @@
-import { ChatSpaceTheme } from '@/graphql/types'
 import background2 from '@/assets/background-2.png'
 import background3 from '@/assets/background-3.png'
-import logo from '@/assets/logo_final.png'
 import newLogo from '@/assets/logo.svg'
 import newLogo2 from '@/assets/logo2.svg'
+import logo from '@/assets/logo_final.png'
+import { ChatSpaceTheme } from '@/graphql/types'
 
 type NonNullProperties<T> = {
   [P in keyof T]: Exclude<T[P], null>
@@ -97,7 +97,7 @@ const ugly: Theme = {
   surfaceBackground: 'brown',
 }
 
-export const themes: Record<string, Theme> = {
+export const themes = {
   bubbles: defaultTheme,
   ugly,
   midnight,

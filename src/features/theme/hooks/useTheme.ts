@@ -1,12 +1,16 @@
 import { ChatSpaceTheme } from '@/graphql/types'
 import { isEmpty } from 'lodash'
 import { createSignal } from 'solid-js'
-import { Theme, defaultTheme, themes } from '..'
+import { Theme, defaultTheme } from '..'
+import { themes } from '../themes' // Direct import to mitigate init error
 
-const [theme, setTheme] = createSignal<Theme>(defaultTheme)
+const [theme, setTheme] = createSignal<Theme>(themes.bubbles)
 
 export const useTheme = () => {
-  const initTheme = (themeKey?: string | null, themeOverrides?: ChatSpaceTheme | null) => {
+  const initTheme = (
+    themeKey?: keyof typeof themes | null,
+    themeOverrides?: ChatSpaceTheme | null
+  ) => {
     let theme = defaultTheme
 
     if (themeKey) {
