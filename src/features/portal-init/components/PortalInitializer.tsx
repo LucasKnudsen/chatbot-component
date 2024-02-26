@@ -1,4 +1,3 @@
-import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 import { Match, Show, Switch } from 'solid-js'
 import {
   ChatConfig,
@@ -18,17 +17,17 @@ import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
 import { createQuery } from '@tanstack/solid-query'
 
-try {
-  Predictions.addPluggable(new AmazonAIConvertPredictionsProvider())
-} catch (error) {}
-
 export const PortalInitializer = (props: ChatConfig) => {
+  console.log('Rendering PortalInitializer')
+
   const configQuery = createQuery(() => ({
-    queryKey: ['chatSpace'],
+    queryKey: ['chatSpace', props.spaceId],
     queryFn: async () => {
       const result = await initializeConfig(props.spaceId)
 
       const { themeId, theme, defaultLanguage, text } = result
+
+      configStoreActions.setConfigStore('chatSpaceConfig', result)
 
       initTheme(
         import.meta.env.DEV ? 'bubbles' : (themeId as keyof typeof themes),
@@ -36,7 +35,6 @@ export const PortalInitializer = (props: ChatConfig) => {
       )
       initText(text, defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
       initLanguage(defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
-      configStoreActions.setConfigStore('chatSpaceConfig', result)
 
       if (props.config?.autoOpen) {
         configStoreActions.toggleBot()
@@ -52,11 +50,15 @@ export const PortalInitializer = (props: ChatConfig) => {
 
   const assignTheme = theme()
 
+  console.log(configQuery)
+  console.log('Is success', configQuery.isSuccess)
+  console.log('Is pending', configQuery.isPending)
+
   return (
-    <>
+    <PortalContainer>
       <style>
         {`
-          :root {
+          :host {
             --primaryColor: ${assignTheme.primaryColor};
             --primaryAccent: ${assignTheme.primaryAccent};
             --textColor: ${assignTheme.textColor};
@@ -76,47 +78,51 @@ export const PortalInitializer = (props: ChatConfig) => {
         `}
       </style>
 
-      <Switch>
+      <Switch
+        fallback={
+          <div class='absolute top-[50%] left-[50%] h-10 z-[200]'>
+            <TypingBubble />
+            THIS IS FALLBACK
+          </div>
+        }
+      >
+        {/* LOADING ON AUTO OPEN (Make this UI equal to App.tsx)  */}
         <Match when={configQuery.isPending && props.config?.autoOpen}>
-          <div class='fixed w-full h-full flex flex-col justify-center items-center  animate-fade-in gap-4 bg-slate-100'>
-            <h1 class='text-5xl tracking-wider'>Chula Knowledge Hub</h1>
-
-            <p>
-              Powered by{' '}
-              <span
-                style={{
-                  color: theme().primaryColor,
-                }}
-                class='font-bold'
-              >
-                Fraia
-              </span>
-            </p>
+          <div class='fixed flex justify-between items-center h-full w-full p-10 lg:p-24'>
+            <h1 class='text-[32px] leading-[54px] font-extralight text-[var(--primaryColor)]'>
+              Welcome to <span class='font-medium'>Fraia AI</span>
+            </h1>
 
             <TypingBubble />
           </div>
         </Match>
-        <Match when={configQuery.isError}>{null}</Match>
 
-        <Match when={configQuery.isSuccess && configQuery.data}>
+        {/* ERROR - TODO  */}
+        <Match when={configQuery.isError}>
+          <div class='fixed w-full h-full flex flex-col justify-center items-center  animate-fade-in gap-4 bg-slate-100'>
+            {configQuery.error?.message}
+          </div>
+        </Match>
+
+        <Match when={configQuery.data}>
           <PortalButton />
 
-          <PortalContainer>
-            <AuthProvider isPublic={Boolean(configQuery.data!.isPublic)}>
-              <Show when={configStore.isBotOpened}>
-                <div
-                  class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'
-                  style={{ background: 'rgba(223, 221, 232, 0.4)' }}
-                >
-                  <Nav />
+          {/* <PortalContainer> */}
+          <AuthProvider isPublic={Boolean(configQuery.data!.isPublic)}>
+            <Show when={configStore.isBotOpened}>
+              <div
+                class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'
+                style={{ background: 'rgba(223, 221, 232, 0.4)' }}
+              >
+                <Nav />
 
-                  <BotManager />
-                </div>
-              </Show>
-            </AuthProvider>
-          </PortalContainer>
+                <BotManager />
+              </div>
+            </Show>
+          </AuthProvider>
+          {/* </PortalContainer> */}
         </Match>
       </Switch>
-    </>
+    </PortalContainer>
   )
 }

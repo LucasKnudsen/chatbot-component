@@ -9,16 +9,20 @@
   src: url(@/assets/AlbertSans-VariableFont_wght.ttf);
 } */
 
-:root {
+:host {
   --font-sans: 'Albert Sans', sans-serif;
+}
+
+* {
+  font-family: var(--font-sans);
 }
 
 body {
   font-family: var(--font-sans);
-  background-image: url('./assets/background-2.png');
+  /* background-image: url('./assets/background-2.png');
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: center; */
 }
 
 .textarea-hide-handle {

@@ -1,12 +1,9 @@
-import { JSX } from 'solid-js'
-import { authStore } from '@/features/authentication/authStore'
-import { configStore } from '..'
 import { useTheme } from '@/features/theme'
+import { JSX } from 'solid-js'
+import { configStore } from '..'
 
 export const PortalContainer = (props: { children: JSX.Element }) => {
   const { theme } = useTheme()
-
-  console.log(authStore.isAuthenticated)
 
   return (
     <div
