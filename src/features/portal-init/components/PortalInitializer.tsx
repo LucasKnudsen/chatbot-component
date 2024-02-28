@@ -1,24 +1,21 @@
-import { Match, Show, Switch } from 'solid-js'
-import {
-  ChatConfig,
-  PortalButton,
-  PortalContainer,
-  configStore,
-  configStoreActions,
-  initializeConfig,
-} from '..'
-import { BotManager, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
+import { createSignal, onMount } from 'solid-js'
+import { ChatConfig, configStoreActions, initializeConfig } from '..'
+import { SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
 
-import { TypingBubble } from '@/components'
-import { Nav } from '@/components/Nav'
-import { AuthProvider } from '@/features/authentication'
 import { useText } from '@/features/text'
 import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
 import { createQuery } from '@tanstack/solid-query'
 
 export const PortalInitializer = (props: ChatConfig) => {
-  console.log('Rendering PortalInitializer')
+  const [hasInitialized, setHasInitialized] = createSignal(false)
+
+  onMount(async () => {
+    console.log('Starting PortalInitializer')
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    console.log('Finished PortalInitializer')
+    setHasInitialized(true)
+  })
 
   const configQuery = createQuery(() => ({
     queryKey: ['chatSpace', props.spaceId],
@@ -53,9 +50,10 @@ export const PortalInitializer = (props: ChatConfig) => {
   console.log(configQuery)
   console.log('Is success', configQuery.isSuccess)
   console.log('Is pending', configQuery.isPending)
+  console.log(hasInitialized())
 
   return (
-    <PortalContainer>
+    <>
       <style>
         {`
           :host {
@@ -78,51 +76,34 @@ export const PortalInitializer = (props: ChatConfig) => {
         `}
       </style>
 
-      <Switch
-        fallback={
-          <div class='absolute top-[50%] left-[50%] h-10 z-[200]'>
-            <TypingBubble />
-            THIS IS FALLBACK
-          </div>
-        }
-      >
-        {/* LOADING ON AUTO OPEN (Make this UI equal to App.tsx)  */}
-        <Match when={configQuery.isPending && props.config?.autoOpen}>
-          <div class='fixed flex justify-between items-center h-full w-full p-10 lg:p-24'>
-            <h1 class='text-[32px] leading-[54px] font-extralight text-[var(--primaryColor)]'>
-              Welcome to <span class='font-medium'>Fraia AI</span>
-            </h1>
-
-            <TypingBubble />
-          </div>
-        </Match>
-
-        {/* ERROR - TODO  */}
-        <Match when={configQuery.isError}>
-          <div class='fixed w-full h-full flex flex-col justify-center items-center  animate-fade-in gap-4 bg-slate-100'>
-            {configQuery.error?.message}
-          </div>
-        </Match>
-
-        <Match when={configQuery.data}>
-          <PortalButton />
-
-          {/* <PortalContainer> */}
-          <AuthProvider isPublic={Boolean(configQuery.data!.isPublic)}>
-            <Show when={configStore.isBotOpened}>
-              <div
-                class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'
-                style={{ background: 'rgba(223, 221, 232, 0.4)' }}
-              >
-                <Nav />
-
-                <BotManager />
-              </div>
-            </Show>
-          </AuthProvider>
-          {/* </PortalContainer> */}
-        </Match>
-      </Switch>
-    </PortalContainer>
+      {configQuery.isPending ? <h1>LOADING</h1> : <h1>NOT LOADING</h1>}
+    </>
   )
 }
+
+//  ;<Switch
+//    fallback={
+//      <div class='absolute top-[50%] left-[50%] h-10 z-[200]'>
+//        <TypingBubble />
+//        THIS IS FALLBACK
+//      </div>
+//    }
+//  >
+//    {/* LOADING ON AUTO OPEN (Make this UI equal to App.tsx)  */}
+//    <Match when={configQuery.isPending}>
+//      <div class='fixed flex justify-between items-center h-full w-full p-10 lg:p-24'>
+//        <h1 class='text-[32px] leading-[54px] font-extralight text-[var(--primaryColor)]'>
+//          Welcome to <span class='font-medium'>Fraia Twin</span>
+//        </h1>
+
+//        <TypingBubble />
+//      </div>
+//    </Match>
+
+//    {/* ERROR - TODO  */}
+//    <Match when={configQuery.isError}>
+//      <div class='fixed w-full h-full flex flex-col justify-center items-center  animate-fade-in gap-4 bg-slate-100'>
+//        {configQuery.error?.message}
+//      </div>
+//    </Match>
+//  </Switch>

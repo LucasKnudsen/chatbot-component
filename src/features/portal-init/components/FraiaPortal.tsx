@@ -23,7 +23,6 @@ try {
 } catch (error) {}
 
 export const FraiaPortal = (props: ChatConfig) => {
-  console.log('Rendering FraiaPortal', props)
   return (
     <QueryClientProvider client={queryClient}>
       <StyleSheet />

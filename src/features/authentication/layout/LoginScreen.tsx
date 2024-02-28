@@ -20,7 +20,7 @@ export const LoginScreen = () => {
 
   const loginMutation = createMutation(() => ({
     mutationFn: async () => {
-      await Auth.signIn(input())
+      await Auth.signIn(input().username, input().password)
     },
   }))
 

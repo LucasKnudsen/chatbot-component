@@ -66,6 +66,7 @@ enum ChannelDocumentType {
   TRANSCRIPTION
   DOCUMENT
   WEBSITE
+  YOUTUBE
   TEXT
 }
 
