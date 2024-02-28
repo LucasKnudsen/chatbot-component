@@ -1,4 +1,5 @@
 import { Button, CircleCloseIcon } from '@/components'
+import { Show, createSignal } from 'solid-js'
 
 import { Auth } from 'aws-amplify'
 import LayoutDefault from '@/layouts/default'
@@ -7,7 +8,6 @@ import { LogoIcon } from '@/components/icons/LogoIcon'
 import { UserIcon } from '@/components/icons/UserIcon'
 import { configStoreActions } from '@/features/portal-init'
 import { createMutation } from '@tanstack/solid-query'
-import { createSignal } from 'solid-js'
 import { useTheme } from '@/features/theme'
 
 // import { TextInput } from '@/components/inputs'
@@ -85,19 +85,40 @@ export const LoginScreen = () => {
                   <span class='px-3.5'>PASSWORD</span>
                 </label>
                 <span class='auth-input__divider'></span>
-                <input
-                  id='password'
-                  type='password'
-                  value={input().password}
-                  onChange={(value) =>
-                    setInput((prev) => ({
-                      ...prev,
-                      username: value.currentTarget.value,
-                    }))
-                  }
-                  placeholder='••••••••'
-                  class='auth-input__control tracking-[1em]'
-                />
+                <div class='relative'>
+                  <input
+                    id='password'
+                    type='password'
+                    value={input().password}
+                    onChange={(value) =>
+                      setInput((prev) => ({
+                        ...prev,
+                        username: value.currentTarget.value,
+                      }))
+                    }
+                    placeholder='••••••••'
+                    class='auth-input__control tracking-[1em]'
+                  />
+                  <span class='absolute top-0 right-0'>
+                    <Show when={false}>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='24'
+                        height='24'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        stroke-width='2'
+                        stroke-linecap='round'
+                        stroke-linejoin='round'
+                        class='lucide lucide-eye'
+                      >
+                        <path d='M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z' />
+                        <circle cx='12' cy='12' r='3' />
+                      </svg>
+                    </Show>
+                  </span>
+                </div>
               </div>
               {loginMutation.error?.message ? (
                 <div class='text-sm pt-4 text-[var(--errorColor)]'>

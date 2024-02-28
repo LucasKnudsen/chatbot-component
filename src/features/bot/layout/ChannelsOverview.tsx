@@ -13,20 +13,42 @@ type ChannelOverviewProps = {
 
 export const ChannelsOverview = (props: ChannelOverviewProps) => {
   return (
-    <div class='flex flex-col h-full pt-[106px] pb-10 px-[100px] animate-fade-in'>
-      <h1 class='text-5xl font-light mb-[50px]'>
+    <div class='flex flex-col h-full pt-10 md:pt-[106px] pb-10 px-[35px] md:px-[100px] animate-fade-in'>
+      <h1 class='text-3xl sm:text-4xl md:text-5xl font-light mb-[50px] max-w-[1016px] w-full'>
         Please choose the{' '}
-        <span class='font-bold text-[var(--primaryColor)]'>FRAIA AI knowledge hub</span> <br /> you
-        want to use :
+        <span class='font-bold text-[var(--primaryColor)]'>FRAIA AI knowledge hub</span> you want to
+        use:
       </h1>
 
-      <div class='flex flex-wrap gap-x-[50px] overflow-x-auto overflow-y-hidden'>
+      <div class='grid grid-cols-2 sm:flex flex-nowrap gap-5 md:gap-10 lg:gap-[50px] overflow-x-auto overflow-y-hidden'>
         {props.channels?.map((channel) => (
           <ChannelItem channel={channel} isChatSpacePublic={props.chatSpace.isPublic} />
         ))}
+        <div class='menu-card flex items-center justify-center'>
+          <div class='m-auto text-center'>
+            <div class='flex items-center justify-center w-[54px] h-[54px] mx-auto mb-3 md:mb-[25px] bg-[var(--primaryColor)] rounded-full'>
+              <svg
+                width='25'
+                height='25'
+                viewBox='0 0 25 25'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  d='M13.584 0V24.48H10.848V0H13.584ZM0 10.992H24.432V13.488H0V10.992Z'
+                  fill='white'
+                />
+              </svg>
+            </div>
+
+            <span class='block text-sm md:text-base md:leading-[20px] max-w-[145px] w-full'>
+              Create your own knowledge
+            </span>
+          </div>
+        </div>
       </div>
 
-      <div class='text-center font-bold mt-auto underline text-[var(-textColor)]'>
+      <div class='text-center text-sm md:text-base font-bold mt-auto underline text-[var(--primaryColor)] pt-10'>
         Why I have to choose an AI?
       </div>
     </div>
@@ -54,21 +76,18 @@ const ChannelItem = (props: {
   }))
 
   let ref: HTMLDivElement | undefined
-  let getContentHeight: any
 
   const [height, setHeight] = createSignal(null)
 
   onMount(() => {
-    getContentHeight = () => (ref ? `${ref.offsetHeight}px` : '0')
     setHeight(() => ref?.offsetHeight ?? (null as any))
-    console.log(height())
   }) // div
 
   return (
     <div class='menu-card' onClick={() => channelDetailsMutation.mutateAsync()}>
       {channelDetailsMutation.isPending && <Spinner size={24} />}
       <div class='relative'>
-        <h3 class='font-medium'>
+        <h3 class='text-sm md:text-base font-medium'>
           {(props.channel as Channel).name || (props.channel as ChannelUserAccess).channelName}
         </h3>
 

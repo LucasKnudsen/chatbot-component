@@ -487,19 +487,24 @@ input {
 .menu-card {
   display: flex;
   flex-direction: column;
-  width: 320px;
-  height: 480px;
   border-radius: 15px;
   padding: 20px 20px 0;
-  @apply transition-colors;
+  @apply transition-colors w-full h-full md:w-[320px] md:h-[380px];
   color: var(--primaryColor);
   background-color: rgba(244, 244, 244, 0.2);
-  border: 1px solid var(--primaryColor);
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(194, 194, 194, 1);
   cursor: pointer;
 }
 
 .menu-card:hover {
   background-color: rgba(91, 147, 255, 0.05);
+  border-color: var(--primaryColor);
+}
+
+.menu-card:hover .menu-card__title {
+  font-weight: 700;
 }
 
 .menu-card:hover .menu-card__content {
@@ -525,9 +530,10 @@ input {
   display: block;
 }
 
-/* .menu-card:hover .menu-card__description {
-  display: block;
-} */
+.menu-card:hover .menu-card__description {
+  visibility: visible;
+  opacity: 1;
+}
 
 .menu-card__content {
   margin-top: auto;
@@ -571,15 +577,18 @@ input {
 }
 
 .menu-card__title {
-  font-size: 48px;
-  line-height: 54px;
   font-weight: 300;
+  @apply text-2xl md:text-[48px] md:leading-[54px];
 }
 
 .menu-card__icon {
   display: none;
   transition: rotate 100ms linear;
   rotate: -45deg;
+}
+
+.menu-card__icon svg {
+  @apply w-5 h-5 md:w-8 md:h-8;
 }
 
 .menu-card__divider {
@@ -592,4 +601,6 @@ input {
   line-height: 25px;
   padding-top: 15px;
   padding-bottom: 15px;
+  visibility: hidden;
+  opacity: 0;
 }

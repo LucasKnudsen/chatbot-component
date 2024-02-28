@@ -8,13 +8,11 @@ import { configStoreActions } from '@/features/portal-init'
 import powerIcon from '@/assets/power-icon.svg'
 import { suggestedPromptsStoreActions } from '@/features/prompt'
 import { useMediaQuery } from '@/utils/useMediaQuery'
-import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 
 export const Nav = () => {
   const device = useMediaQuery()
   const { theme } = useTheme()
-  const { text } = useText()
 
   const onClickLogo = () => {
     botStoreActions.resetActiveChannel()
@@ -22,7 +20,7 @@ export const Nav = () => {
   }
 
   return (
-    <div class='pt-10 px-10'>
+    <div class='pt-5 md:pt-10 px-5 md:px-10'>
       <div
         class='flex flex-wrap items-center rounded-full pl-6 pr-2 py-3.5 z-50'
         style={{
