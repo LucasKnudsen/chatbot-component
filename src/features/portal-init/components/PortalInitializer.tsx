@@ -1,7 +1,17 @@
-import { createSignal, onMount } from 'solid-js'
-import { ChatConfig, configStoreActions, initializeConfig } from '..'
-import { SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
+import { Show, createSignal, onMount } from 'solid-js'
+import {
+  ChatConfig,
+  PortalButton,
+  PortalContainer,
+  configStore,
+  configStoreActions,
+  initializeConfig,
+} from '..'
+import { BotManager, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
 
+import { TypingBubble } from '@/components'
+import { Nav } from '@/components/Nav'
+import { AuthProvider } from '@/features/authentication'
 import { useText } from '@/features/text'
 import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
@@ -77,6 +87,36 @@ export const PortalInitializer = (props: ChatConfig) => {
       </style>
 
       {configQuery.isPending ? <h1>LOADING</h1> : <h1>NOT LOADING</h1>}
+
+      <Show
+        when={hasInitialized()}
+        fallback={
+          <div class='fixed flex justify-between items-center h-full w-full p-10 lg:p-24'>
+            <h1 class='text-[32px] leading-[54px] font-extralight text-[var(--primaryColor)]'>
+              Welcome to <span class='font-medium'>Fraia Twin</span>
+            </h1>
+
+            <TypingBubble />
+          </div>
+        }
+      >
+        <PortalButton />
+
+        <PortalContainer>
+          <AuthProvider isPublic={Boolean(configQuery.data?.isPublic)}>
+            <Show when={configStore.isBotOpened}>
+              <div
+                class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'
+                style={{ background: 'rgba(223, 221, 232, 0.4)' }}
+              >
+                <Nav />
+
+                <BotManager />
+              </div>
+            </Show>
+          </AuthProvider>
+        </PortalContainer>
+      </Show>
     </>
   )
 }
