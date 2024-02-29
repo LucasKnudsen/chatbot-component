@@ -20,14 +20,15 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
         use:
       </h1>
 
-      <div class='grid grid-cols-2 sm:flex flex-nowrap gap-5 md:gap-10 lg:gap-[50px] overflow-x-auto overflow-y-hidden'>
+      <div class='grid grid-cols-2 md:flex flex-nowrap gap-5 md:gap-10 lg:gap-[50px] overflow-x-auto overflow-y-hidden pb-2'>
         {props.channels?.map((channel) => (
           <ChannelItem channel={channel} isChatSpacePublic={props.chatSpace.isPublic} />
         ))}
         <div class='menu-card flex items-center justify-center'>
           <div class='m-auto text-center'>
-            <div class='flex items-center justify-center w-[54px] h-[54px] mx-auto mb-3 md:mb-[25px] bg-[var(--primaryColor)] rounded-full'>
+            <div class='flex items-center justify-center w-11 h-11 md:w-[54px] md:h-[54px] mx-auto mb-3 md:mb-[25px] bg-[var(--primaryColor)] rounded-full'>
               <svg
+                class='w-5 h-5 md:w-6 md:h-6'
                 width='25'
                 height='25'
                 viewBox='0 0 25 25'
@@ -81,10 +82,10 @@ const ChannelItem = (props: {
 
   onMount(() => {
     setHeight(() => ref?.offsetHeight ?? (null as any))
-  }) // div
+  })
 
   return (
-    <div class='menu-card' onClick={() => channelDetailsMutation.mutateAsync()}>
+    <div class='menu-card aspect-square' onClick={() => channelDetailsMutation.mutateAsync()}>
       {channelDetailsMutation.isPending && <Spinner size={24} />}
       <div class='relative'>
         <h3 class='text-sm md:text-base font-medium'>
@@ -103,21 +104,24 @@ const ChannelItem = (props: {
       >
         <div class='menu-card__avatar'></div>
         <div class='menu-card__heading'>
-          <h1 class='menu-card__title'>FRAIA.AI</h1>
+          <h1 class='menu-card__title'>FRAIA.AI </h1>
           <span class='menu-card__icon'>
             <ArrowRightIcon />
           </span>
         </div>
-        <div class='menu-card__divider'></div>
-        <div ref={ref} class='menu-card__description'>
-          <p class='line-clamp-2'>
-            {(props.channel as Channel).description ||
-              (props.channel as ChannelUserAccess).channelDescription}
-          </p>
+
+        <div ref={ref}>
+          <div class='menu-card__divider'></div>
+          <div class='menu-card__description'>
+            <p class='line-clamp-2'>
+              {(props.channel as Channel).description ||
+                (props.channel as ChannelUserAccess).channelDescription}
+            </p>
+          </div>
+          <span class='menu-card__icon'>
+            <ArrowRightIcon />
+          </span>
         </div>
-        <span class='menu-card__icon'>
-          <ArrowRightIcon />
-        </span>
       </div>
     </div>
   )

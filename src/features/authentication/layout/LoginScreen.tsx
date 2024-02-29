@@ -93,7 +93,7 @@ export const LoginScreen = () => {
                     onChange={(value) =>
                       setInput((prev) => ({
                         ...prev,
-                        username: value.currentTarget.value,
+                        password: value.currentTarget.value,
                       }))
                     }
                     placeholder='••••••••'

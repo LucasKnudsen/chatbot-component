@@ -489,13 +489,17 @@ input {
   flex-direction: column;
   border-radius: 15px;
   padding: 20px 20px 0;
-  @apply transition-colors w-full h-full md:w-[320px] md:h-[380px];
+  @apply w-full h-full md:max-w-[320px] md:min-w-[320px] md:h-[380px];
   color: var(--primaryColor);
   background-color: rgba(244, 244, 244, 0.2);
   border-style: solid;
   border-width: 1px;
   border-color: rgba(194, 194, 194, 1);
   cursor: pointer;
+  overflow: hidden;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
 }
 
 .menu-card:hover {
@@ -516,7 +520,8 @@ input {
 }
 
 .menu-card:hover .menu-card__heading .menu-card__icon {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .menu-card:hover .menu-card__icon {
@@ -524,6 +529,8 @@ input {
   justify-content: flex-end;
   padding-bottom: 15px;
   rotate: 0deg;
+  opacity: 1;
+  visibility: visible;
 }
 
 .menu-card:hover .menu-card__divider {
@@ -533,12 +540,16 @@ input {
 .menu-card:hover .menu-card__description {
   visibility: visible;
   opacity: 1;
+  z-index: 1;
 }
 
 .menu-card__content {
   margin-top: auto;
   transform: translateY(var(--hovered-translate-y));
-  @apply transition-transform;
+
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
 }
 
 .menu-card__avatar {
@@ -573,18 +584,23 @@ input {
 }
 
 .menu-card__heading .menu-card__icon {
-  display: block;
+  opacity: 1;
+  visibility: visible;
 }
 
 .menu-card__title {
   font-weight: 300;
+  transition: font-weight 200ms ease-in;
   @apply text-2xl md:text-[48px] md:leading-[54px];
 }
 
 .menu-card__icon {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
   transition: rotate 100ms linear;
   rotate: -45deg;
+
+  @apply transition-opacity;
 }
 
 .menu-card__icon svg {
@@ -597,10 +613,10 @@ input {
 }
 
 .menu-card__description {
+  position: relative;
+  z-index: -1;
   font-size: 16px;
   line-height: 25px;
   padding-top: 15px;
   padding-bottom: 15px;
-  visibility: hidden;
-  opacity: 0;
 }
