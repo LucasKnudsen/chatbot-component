@@ -1,4 +1,4 @@
-import { Show, createSignal, onMount } from 'solid-js'
+import { Show } from 'solid-js'
 import {
   ChatConfig,
   PortalButton,
@@ -15,20 +15,14 @@ import { AuthProvider } from '@/features/authentication'
 import { useText } from '@/features/text'
 import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
-import { createQuery } from '@tanstack/solid-query'
+import { createQuery } from '@/hooks'
 
 export const PortalInitializer = (props: ChatConfig) => {
-  const [hasInitialized, setHasInitialized] = createSignal(false)
+  const { initTheme, theme } = useTheme()
+  const { initText } = useText()
+  const { initLanguage } = useLanguage()
 
-  onMount(async () => {
-    console.log('Starting PortalInitializer')
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    console.log('Finished PortalInitializer')
-    setHasInitialized(true)
-  })
-
-  const configQuery = createQuery(() => ({
-    queryKey: ['chatSpace', props.spaceId],
+  const configQuery = createQuery({
     queryFn: async () => {
       const result = await initializeConfig(props.spaceId)
 
@@ -46,21 +40,11 @@ export const PortalInitializer = (props: ChatConfig) => {
       if (props.config?.autoOpen) {
         configStoreActions.toggleBot()
       }
-
       return result
     },
-  }))
-
-  const { initTheme, theme } = useTheme()
-  const { initText } = useText()
-  const { initLanguage } = useLanguage()
+  })
 
   const assignTheme = theme()
-
-  console.log(configQuery)
-  console.log('Is success', configQuery.isSuccess)
-  console.log('Is pending', configQuery.isPending)
-  console.log(hasInitialized())
 
   return (
     <>
@@ -86,10 +70,8 @@ export const PortalInitializer = (props: ChatConfig) => {
         `}
       </style>
 
-      {configQuery.isPending ? <h1>LOADING</h1> : <h1>NOT LOADING</h1>}
-
       <Show
-        when={hasInitialized()}
+        when={configQuery.data()}
         fallback={
           <div class='fixed flex justify-between items-center h-full w-full p-10 lg:p-24'>
             <h1 class='text-[32px] leading-[54px] font-extralight text-[var(--primaryColor)]'>
@@ -103,7 +85,7 @@ export const PortalInitializer = (props: ChatConfig) => {
         <PortalButton />
 
         <PortalContainer>
-          <AuthProvider isPublic={Boolean(configQuery.data?.isPublic)}>
+          <AuthProvider isPublic={Boolean(configQuery.data()?.isPublic)}>
             <Show when={configStore.isBotOpened}>
               <div
                 class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'

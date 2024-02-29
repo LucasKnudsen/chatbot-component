@@ -2,9 +2,9 @@ import { Channel, ChannelUserAccess, ChatSpace } from '@/graphql'
 import { botStoreActions, fetchChannelDetails } from '..'
 
 import { Spinner } from '@/components/loaders'
-import { createMutation } from '@tanstack/solid-query'
-import { useHovered } from '@/utils'
 import { useTheme } from '@/features/theme'
+import { createMutation } from '@/hooks'
+import { useHovered } from '@/utils'
 
 type ChannelOverviewProps = {
   chatSpace: ChatSpace
@@ -34,9 +34,7 @@ const ChannelItem = (props: {
 }) => {
   const [hoverRef, isHovered] = useHovered()
 
-  const channelDetailsMutation = createMutation(() => ({
-    mutationKey: ['channels', (props.channel as ChannelUserAccess).channelId],
-
+  const channelDetailsMutation = createMutation({
     mutationFn: async () => {
       let _channel = props.channel as Channel
 
@@ -48,23 +46,23 @@ const ChannelItem = (props: {
 
       return _channel
     },
-  }))
+  })
 
   const { theme } = useTheme()
 
   return (
     <button
       ref={hoverRef}
-      disabled={channelDetailsMutation.isPending}
+      disabled={channelDetailsMutation.isLoading()}
       class=' m-4 px-4 py-2 rounded-md flex justify-center items-center gap-4 w-full'
       style={{
         background: isHovered() ? theme()?.surfaceHoveredBackground : theme()?.surfaceBackground,
         color: theme()?.textColor,
         border: `1px solid ${theme()?.borderColor}`,
       }}
-      onClick={() => channelDetailsMutation.mutateAsync()}
+      onClick={() => channelDetailsMutation.mutate()}
     >
-      {channelDetailsMutation.isPending && <Spinner size={24} />}
+      {channelDetailsMutation.isLoading() && <Spinner size={24} />}
       <div class='relative'>
         <h3 class='text-md font-semibold'>
           {(props.channel as Channel).name || (props.channel as ChannelUserAccess).channelName}
@@ -74,8 +72,8 @@ const ChannelItem = (props: {
             (props.channel as ChannelUserAccess).channelDescription}
         </p>
 
-        {channelDetailsMutation.isError && (
-          <div class='text-red-500'>{channelDetailsMutation.error.message}</div>
+        {channelDetailsMutation.error() && (
+          <div class='text-red-500'>{channelDetailsMutation.error().message}</div>
         )}
       </div>
     </button>

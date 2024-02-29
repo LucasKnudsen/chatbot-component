@@ -22,7 +22,7 @@ export const Button = (props: Props) => {
     <button
       type={props.type}
       class={
-        'relative rounded-full font-bold text-sm leading-[17px] active:scale-95 transition hover:brightness-110 ' +
+        'relative rounded-full font-semibold text-sm leading-[17px] active:scale-95 transition hover:brightness-110 ' +
         props.class
       }
       style={{
