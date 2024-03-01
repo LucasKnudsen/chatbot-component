@@ -225,6 +225,8 @@ export const onCreateChannelUserAccess = /* GraphQL */ `subscription OnCreateCha
     accessType
     channelName
     channelDescription
+    channelSubtitle
+    channelAvatar
     createdAt
     updatedAt
     owner
@@ -248,6 +250,8 @@ export const onUpdateChannelUserAccess = /* GraphQL */ `subscription OnUpdateCha
     accessType
     channelName
     channelDescription
+    channelSubtitle
+    channelAvatar
     createdAt
     updatedAt
     owner
@@ -271,6 +275,8 @@ export const onDeleteChannelUserAccess = /* GraphQL */ `subscription OnDeleteCha
     accessType
     channelName
     channelDescription
+    channelSubtitle
+    channelAvatar
     createdAt
     updatedAt
     owner

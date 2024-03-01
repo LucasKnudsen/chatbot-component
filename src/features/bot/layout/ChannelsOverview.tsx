@@ -1,10 +1,10 @@
 import { Channel, ChannelUserAccess, ChatSpace } from '@/graphql'
+import { createSignal, onMount } from 'solid-js'
 import { botStoreActions, fetchChannelDetails } from '..'
 
+import { ArrowRightIcon } from '@/components/icons/ArrowRightIcon'
 import { Spinner } from '@/components/loaders'
-import { createMutation } from '@tanstack/solid-query'
-import { useHovered } from '@/utils'
-import { useTheme } from '@/features/theme'
+import { createMutation } from '@/hooks'
 
 type ChannelOverviewProps = {
   chatSpace: ChatSpace
@@ -13,16 +13,48 @@ type ChannelOverviewProps = {
 
 export const ChannelsOverview = (props: ChannelOverviewProps) => {
   return (
-    <div class='w-full h-full flex flex-col justify-center items-center animate-fade-in gap-4'>
-      <h1>
-        Please choose the FRAIA AI knowledge hub <br /> you want to use :
+    <div class='flex flex-col h-full pt-10 md:pt-16 pb-10 px-[35px] md:px-[100px] animate-fade-in'>
+      <h1 class='text-3xl sm:text-4xl md:text-5xl font-light mb-[50px] max-w-[1016px] w-full leading-3'>
+        Please choose the
+        <br />
+        <span class='font-bold text-[var(--primaryColor)]'>FRAIA AI Knowledge Base</span>
+        <br />
+        you want to use:
       </h1>
-      <div class='text-lg text-red-500 text-center'>
-        <h1 class='text-xl  leading-tight tracking-tight '>Select a course</h1>
 
+      <div class='grid grid-cols-2 md:flex flex-nowrap gap-5 md:gap-10 lg:gap-[50px] overflow-x-auto overflow-y-hidden pb-2'>
         {props.channels?.map((channel) => (
           <ChannelItem channel={channel} isChatSpacePublic={props.chatSpace.isPublic} />
         ))}
+
+        {/* Create new knowledge base button */}
+        <div class='menu-card flex items-center justify-center'>
+          <div class='m-auto text-center'>
+            <div class='flex items-center justify-center w-11 h-11 md:w-[54px] md:h-[54px] mx-auto mb-3 md:mb-[25px] bg-[var(--primaryColor)] rounded-full'>
+              <svg
+                class='w-5 h-5 md:w-6 md:h-6'
+                width='25'
+                height='25'
+                viewBox='0 0 25 25'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  d='M13.584 0V24.48H10.848V0H13.584ZM0 10.992H24.432V13.488H0V10.992Z'
+                  fill='white'
+                />
+              </svg>
+            </div>
+
+            <span class='block text-sm md:text-base md:leading-[20px] max-w-[145px] w-full'>
+              Create your own knowledge
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class='text-center text-sm md:text-base font-bold mt-auto underline text-[var(--primaryColor)] pt-10'>
+        Why I have to choose an AI?
       </div>
     </div>
   )
@@ -32,11 +64,7 @@ const ChannelItem = (props: {
   channel: Channel | ChannelUserAccess
   isChatSpacePublic: boolean
 }) => {
-  const [hoverRef, isHovered] = useHovered()
-
-  const channelDetailsMutation = createMutation(() => ({
-    mutationKey: ['channels', (props.channel as ChannelUserAccess).channelId],
-
+  const channelDetailsMutation = createMutation({
     mutationFn: async () => {
       let _channel = props.channel as Channel
 
@@ -48,36 +76,70 @@ const ChannelItem = (props: {
 
       return _channel
     },
-  }))
+  })
 
-  const { theme } = useTheme()
+  let ref: HTMLDivElement | undefined
+
+  const [height, setHeight] = createSignal(null)
+
+  onMount(() => {
+    setHeight(() => ref?.offsetHeight ?? (null as any))
+  })
 
   return (
-    <button
-      ref={hoverRef}
-      disabled={channelDetailsMutation.isPending}
-      class=' m-4 px-4 py-2 rounded-md flex justify-center items-center gap-4 w-full'
-      style={{
-        background: isHovered() ? theme()?.surfaceHoveredBackground : theme()?.surfaceBackground,
-        color: theme()?.textColor,
-        border: `1px solid ${theme()?.borderColor}`,
-      }}
-      onClick={() => channelDetailsMutation.mutateAsync()}
-    >
-      {channelDetailsMutation.isPending && <Spinner size={24} />}
-      <div class='relative'>
-        <h3 class='text-md font-semibold'>
-          {(props.channel as Channel).name || (props.channel as ChannelUserAccess).channelName}
-        </h3>
-        <p class='text-xs italic'>
-          {(props.channel as Channel).description ||
-            (props.channel as ChannelUserAccess).channelDescription}
-        </p>
+    <div class='menu-card aspect-square' onClick={() => channelDetailsMutation.mutate()}>
+      {channelDetailsMutation.isLoading() && <Spinner size={24} />}
 
-        {channelDetailsMutation.isError && (
-          <div class='text-red-500'>{channelDetailsMutation.error.message}</div>
+      <div class='relative'>
+        <h3 class='text-sm md:text-base font-medium'>
+          {(props.channel as Channel).subtitle ||
+            (props.channel as ChannelUserAccess).channelSubtitle}
+        </h3>
+
+        {channelDetailsMutation.error() && (
+          <div class='text-red-500'>{channelDetailsMutation.error().message}</div>
         )}
       </div>
-    </button>
+      <div
+        class='menu-card__content'
+        style={{
+          '--hovered-translate-y': `${height()}px`,
+        }}
+      >
+        <div
+          class={`menu-card__avatar`}
+          style={{
+            'background-image':
+              (props.channel as Channel).avatar ||
+              (props.channel as ChannelUserAccess).channelAvatar ||
+              'linear-gradient(to right, #ed4264, #ffedbc)',
+          }}
+        ></div>
+
+        <div class='menu-card__heading'>
+          <h1 class='menu-card__title'>
+            {' '}
+            {(props.channel as Channel).name || (props.channel as ChannelUserAccess).channelName}
+          </h1>
+
+          <span class='menu-card__icon'>
+            <ArrowRightIcon />
+          </span>
+        </div>
+
+        <div ref={ref}>
+          <div class='menu-card__divider'></div>
+          <div class='menu-card__description'>
+            <p class='line-clamp-2'>
+              {(props.channel as Channel).description ||
+                (props.channel as ChannelUserAccess).channelDescription}
+            </p>
+          </div>
+          <span class='menu-card__icon'>
+            <ArrowRightIcon />
+          </span>
+        </div>
+      </div>
+    </div>
   )
 }

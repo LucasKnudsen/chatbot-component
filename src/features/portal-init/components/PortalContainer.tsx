@@ -1,12 +1,9 @@
-import { JSX } from 'solid-js'
-import { authStore } from '@/features/authentication/authStore'
-import { configStore } from '..'
 import { useTheme } from '@/features/theme'
+import { JSX } from 'solid-js'
+import { configStore } from '..'
 
 export const PortalContainer = (props: { children: JSX.Element }) => {
   const { theme } = useTheme()
-
-  console.log(authStore.isAuthenticated)
 
   return (
     <div
@@ -14,7 +11,7 @@ export const PortalContainer = (props: { children: JSX.Element }) => {
         configStore.isBotOpened ? 'opacity-1' : 'opacity-0 pointer-events-none'
       }`}
       style={{
-        transition: 'transform 350ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
+        transition: 'transform 350ms cubic-bezier(0, 1.2, 1, 1), opacity 250ms ease-out',
         'transform-origin': 'bottom right',
         transform: configStore.isBotOpened ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
         color: theme().textColor,

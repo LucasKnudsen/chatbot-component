@@ -1,20 +1,23 @@
 import { SignOutButton, authStore } from '@/features/authentication'
 import { configStore } from '@/features/portal-init'
-import { Channel, ChannelUserAccess } from '@/graphql'
+import { createQuery } from '@/hooks'
 import { logDev } from '@/utils'
-import { createQuery } from '@tanstack/solid-query'
 import { Match, Switch } from 'solid-js'
-import { Bot, botStore, botStoreActions, fetchChannelAccesses, fetchPublicChannels } from '..'
-import { FraiaLoading } from '../components/FraiaLoading'
+import {
+  Bot,
+  FraiaLoading,
+  botStore,
+  botStoreActions,
+  fetchChannelAccesses,
+  fetchPublicChannels,
+} from '..'
 import { ChannelsOverview } from './ChannelsOverview'
 
 export const BotManager = () => {
-  // const storageKey = `channels-${props.id}`
   const openForPublic = configStore.chatSpaceConfig.isPublic
 
-  const channelsQuery = createQuery(() => ({
-    queryKey: ['channels'],
-    queryFn: async (): Promise<Channel[] | ChannelUserAccess[]> => {
+  const channelsQuery = createQuery({
+    queryFn: async () => {
       logDev('Fetching channels', openForPublic)
       if (openForPublic) {
         // In this case, we don't need to check for access rights, and can fetch all public channels through a Lambda
@@ -51,31 +54,37 @@ export const BotManager = () => {
         return channelAccesses
       }
     },
-  }))
+  })
 
   return (
     <Switch>
-      <Match when={channelsQuery.isPending}>
+      {/* Loading  */}
+      <Match when={channelsQuery.isLoading()}>
         <FraiaLoading />
       </Match>
 
-      <Match when={channelsQuery.isError}>
+      {/* Simplistic error handling */}
+      <Match when={channelsQuery.error()}>
         <div class='w-full h-full flex flex-col justify-center items-center animate-fade-in gap-4'>
           <div class='text-lg  text-red-500 text-center'>
-            <p class='mb-4'>Error: {channelsQuery.error?.message}</p>
+            <p class='mb-4'>Error: {channelsQuery.error()?.message}</p>
           </div>
 
           <SignOutButton />
         </div>
       </Match>
 
+      {/* Single Knowledge Base View */}
       <Match when={Boolean(botStore.activeChannel)}>
         <Bot />
       </Match>
 
       {/* Overview over all the Channels  */}
       <Match when={Boolean(!botStore.activeChannel)}>
-        <ChannelsOverview chatSpace={configStore.chatSpaceConfig} channels={channelsQuery.data} />
+        <ChannelsOverview
+          chatSpace={configStore.chatSpaceConfig}
+          channels={channelsQuery.data() || []}
+        />
       </Match>
     </Switch>
   )

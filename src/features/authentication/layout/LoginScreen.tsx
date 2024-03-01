@@ -1,14 +1,14 @@
 import { Button, CircleCloseIcon } from '@/components'
+import { Show, createSignal } from 'solid-js'
 
 import { LockIcon } from '@/components/icons/LockIcon'
 import { LogoIcon } from '@/components/icons/LogoIcon'
 import { UserIcon } from '@/components/icons/UserIcon'
 import { configStoreActions } from '@/features/portal-init'
 import { useTheme } from '@/features/theme'
+import { createMutation } from '@/hooks'
 import LayoutDefault from '@/layouts/default'
-import { createMutation } from '@tanstack/solid-query'
 import { Auth } from 'aws-amplify'
-import { createSignal } from 'solid-js'
 
 export const LoginScreen = () => {
   const [input, setInput] = createSignal({
@@ -18,13 +18,22 @@ export const LoginScreen = () => {
 
   const { theme } = useTheme()
 
-  const loginMutation = createMutation(() => ({
+  const signInMutation = createMutation({
     mutationFn: async () => {
-      await Auth.signIn(input())
-    },
-  }))
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
-  const handleSubmit = (e: Event) => e.preventDefault()
+      return await Auth.signIn({
+        username: input().username,
+        password: input().password,
+      })
+    },
+    onSuccess: (data) => {
+      console.log('success', data)
+    },
+    onError: (error) => {
+      console.error(error)
+    },
+  })
 
   return (
     <LayoutDefault>
@@ -38,8 +47,8 @@ export const LoginScreen = () => {
       </div>
 
       <div class='flex flex-col items-center lg:items-start justify-center h-full'>
-        <div class='mb-16'>
-          <div class='mb-4'>
+        <div class='text-center lg:text-left mb-16'>
+          <div class='inline-block mb-4'>
             <LogoIcon color={theme().primaryColor} />
           </div>
           <h4
@@ -53,7 +62,7 @@ export const LoginScreen = () => {
         </div>
 
         <div class='max-w-[640px] w-full mx-auto lg:ml-0 lg:mr-0'>
-          <form onSubmit={handleSubmit}>
+          <form>
             <div class='mb-[50px]'>
               <div class='auth-input mb-6'>
                 <label for='username' class='auth-input__label'>
@@ -80,34 +89,56 @@ export const LoginScreen = () => {
                   <LockIcon color={theme().primaryColor} />
                   <span class='px-3.5'>PASSWORD</span>
                 </label>
+
                 <span class='auth-input__divider'></span>
-                <input
-                  id='password'
-                  type='password'
-                  value={input().password}
-                  onChange={(value) =>
-                    setInput((prev) => ({
-                      ...prev,
-                      username: value.currentTarget.value,
-                    }))
-                  }
-                  placeholder='••••••••'
-                  class='auth-input__control tracking-[1em]'
-                />
+                <div class='relative'>
+                  <input
+                    id='password'
+                    type='password'
+                    value={input().password}
+                    onChange={(value) =>
+                      setInput((prev) => ({
+                        ...prev,
+                        password: value.currentTarget.value,
+                      }))
+                    }
+                    placeholder='••••••••'
+                    class='auth-input__control tracking-[1em]'
+                  />
+                  <span class='absolute top-0 right-0'>
+                    <Show when={false}>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='24'
+                        height='24'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        stroke-width='2'
+                        stroke-linecap='round'
+                        stroke-linejoin='round'
+                        class='lucide lucide-eye'
+                      >
+                        <path d='M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z' />
+                        <circle cx='12' cy='12' r='3' />
+                      </svg>
+                    </Show>
+                  </span>
+                </div>
               </div>
-              {loginMutation.error?.message ? (
+              {signInMutation.error()?.message ? (
                 <div class='text-sm pt-4 text-[var(--errorColor)]'>
-                  {loginMutation.error?.message}
+                  {signInMutation.error()?.message}
                 </div>
               ) : null}
             </div>
 
             <Button
               class='mx-auto lg:ml-0 lg:mr-0'
-              type='submit'
+              type='button'
               padding='6px 20px'
-              loading={loginMutation.isPending}
-              onClick={loginMutation.mutateAsync}
+              loading={signInMutation.isLoading()}
+              onClick={signInMutation.mutate}
             >
               Log In{' '}
               <svg

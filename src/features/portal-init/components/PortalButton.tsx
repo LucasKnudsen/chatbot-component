@@ -2,6 +2,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { configStore, configStoreActions } from '..'
 
 export const PortalButton = () => {
+  console.log('Rendering PortalButton')
   const { theme } = useTheme()
 
   return (

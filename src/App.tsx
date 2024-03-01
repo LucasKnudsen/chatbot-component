@@ -18,7 +18,7 @@ function App() {
             color: theme().primaryColor,
           }}
         >
-          Welcome to <span class='font-medium'>Fraia AI</span>
+          Placeholder <span class='font-medium'>Website</span>
         </h1>
       </div>
       <FraiaPortal {...chatflows.chula} />

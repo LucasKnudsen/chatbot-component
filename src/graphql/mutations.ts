@@ -248,6 +248,8 @@ export const createChannelUserAccess = /* GraphQL */ `mutation CreateChannelUser
     accessType
     channelName
     channelDescription
+    channelSubtitle
+    channelAvatar
     createdAt
     updatedAt
     owner
@@ -271,6 +273,8 @@ export const updateChannelUserAccess = /* GraphQL */ `mutation UpdateChannelUser
     accessType
     channelName
     channelDescription
+    channelSubtitle
+    channelAvatar
     createdAt
     updatedAt
     owner
@@ -294,6 +298,8 @@ export const deleteChannelUserAccess = /* GraphQL */ `mutation DeleteChannelUser
     accessType
     channelName
     channelDescription
+    channelSubtitle
+    channelAvatar
     createdAt
     updatedAt
     owner
