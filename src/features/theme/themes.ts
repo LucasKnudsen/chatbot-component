@@ -25,14 +25,13 @@ export const defaultTheme: Theme = {
   backgroundImageUrl: background2,
   bubbleButtonColor: 'rgba(91, 147, 255, 0.2)',
   drawerBackground: 'rgba(255, 255, 255, 0.75)',
-  borderColor: 'rgba(147, 147, 147, 0.25)',
+  borderColor: 'rgba(194, 194, 194, 1)',
   textInputTextColor: 'rgba(128, 114, 166, 1)',
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
   errorColor: 'red',
   surfaceBackground:
     'linear-gradient(90deg, rgba(91, 147, 255, 0.08) 0%, rgba(218, 145, 221, 0.08) 100%)',
-  surfaceHoveredBackground:
-    'linear-gradient(90deg, rgba(91, 147, 255, 0.25) 0%, rgba(218, 145, 221, 0.25) 100%)',
+  surfaceHoveredBackground: 'rgba(91, 147, 255, 0.05)',
 }
 
 const fraia: Theme = {
