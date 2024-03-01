@@ -66,9 +66,16 @@ var handler = function (event, context) { return __awaiter(void 0, void 0, void 
                 // Loop over each record and check if name or description has been updated
                 return [4 /*yield*/, Promise.all(modifyRecords.map(function (record) {
                         if (record["new"].name !== record.old.name ||
-                            record["new"].description !== record.old.description) {
+                            record["new"].description !== record.old.description ||
+                            record["new"].subtitle !== record.old.subtitle ||
+                            record["new"].avatar !== record.old.avatar) {
                             // If name or description has been updated, we should look for all access records and update the channel name and description
-                            return updateChannelUserAccess(record["new"].id, record["new"].name, record["new"].description);
+                            return updateChannelUserAccess(record["new"].id, {
+                                channelName: record["new"].name,
+                                channelDescription: record["new"].description,
+                                channelSubtitle: record["new"].subtitle,
+                                channelAvatar: record["new"].avatar
+                            });
                         }
                     }))];
             case 1:
@@ -79,7 +86,7 @@ var handler = function (event, context) { return __awaiter(void 0, void 0, void 
     });
 }); };
 exports.handler = handler;
-var updateChannelUserAccess = function (channelId, name, description) { return __awaiter(void 0, void 0, void 0, function () {
+var updateChannelUserAccess = function (channelId, attributes) { return __awaiter(void 0, void 0, void 0, function () {
     var queryCommand, Items;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -98,21 +105,31 @@ var updateChannelUserAccess = function (channelId, name, description) { return _
                 console.log('Items to update: ', Items.length);
                 // Update each access record with the new channel name and description
                 return [4 /*yield*/, Promise.all(Items.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
-                        var updateCommand;
+                        var updateExpression, expressionAttributeValues, updateCommand;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
+                                    updateExpression = 'SET updatedAt = :updatedAt';
+                                    expressionAttributeValues = {
+                                        ':updatedAt': new Date().toISOString()
+                                    };
+                                    // Add dynamic attributes from 'data' to the update expression
+                                    Object.keys(attributes).forEach(function (key) {
+                                        if (key !== 'id' && key !== 'name') {
+                                            // Append to update expression
+                                            updateExpression += ", ".concat(key, " = :").concat(key);
+                                            // Add to expression attribute values
+                                            expressionAttributeValues[":".concat(key)] = attributes[key];
+                                        }
+                                    });
                                     updateCommand = {
                                         TableName: process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME,
                                         Key: {
                                             accessId: item.accessId,
                                             channelId: item.channelId
                                         },
-                                        UpdateExpression: 'SET channelName = :channelName, channelDescription = :channelDescription',
-                                        ExpressionAttributeValues: {
-                                            ':channelName': name,
-                                            ':channelDescription': description
-                                        }
+                                        UpdateExpression: updateExpression,
+                                        ExpressionAttributeValues: expressionAttributeValues
                                     };
                                     return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.UpdateCommand(updateCommand))];
                                 case 1:

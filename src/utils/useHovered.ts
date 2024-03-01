@@ -3,17 +3,17 @@ import { createSignal, onCleanup } from 'solid-js'
 const useHovered = (): [(element: HTMLElement) => void, () => boolean] => {
   const [isHovered, setIsHovered] = createSignal(false)
 
-  const handleMouseOver = () => setIsHovered(true)
-  const handleMouseOut = () => setIsHovered(false)
+  const handleMouseEnter = () => setIsHovered(true)
+  const handleMouseLeave = () => setIsHovered(false)
 
   const setRef = (el: HTMLElement) => {
     if (el) {
-      el.addEventListener('mouseover', handleMouseOver)
-      el.addEventListener('mouseout', handleMouseOut)
+      el.addEventListener('mouseenter', handleMouseEnter)
+      el.addEventListener('mouseleave', handleMouseLeave)
 
       onCleanup(() => {
-        el.removeEventListener('mouseover', handleMouseOver)
-        el.removeEventListener('mouseout', handleMouseOut)
+        el.removeEventListener('mouseenter', handleMouseEnter)
+        el.removeEventListener('mouseleave', handleMouseLeave)
       })
     }
   }

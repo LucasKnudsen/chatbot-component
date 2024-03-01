@@ -50,13 +50,13 @@ export const PortalInitializer = (props: ChatConfig) => {
     <>
       <style>
         {`
-          :host {
+          :host, :root {
             --primaryColor: ${assignTheme.primaryColor};
             --primaryAccent: ${assignTheme.primaryAccent};
             --textColor: ${assignTheme.textColor};
             --textSecondary: ${assignTheme.textSecondary};
             --onPrimary: ${assignTheme.onPrimary};
-            --backgroundColor: '${assignTheme.backgroundColor};
+            --backgroundColor: ${assignTheme.backgroundColor};
             --backgroundAccent: ${assignTheme.backgroundAccent};
             --bubbleButtonColor: ${assignTheme.bubbleButtonColor};
             --drawerBackground: ${assignTheme.drawerBackground};
@@ -102,30 +102,3 @@ export const PortalInitializer = (props: ChatConfig) => {
     </>
   )
 }
-
-//  ;<Switch
-//    fallback={
-//      <div class='absolute top-[50%] left-[50%] h-10 z-[200]'>
-//        <TypingBubble />
-//        THIS IS FALLBACK
-//      </div>
-//    }
-//  >
-//    {/* LOADING ON AUTO OPEN (Make this UI equal to App.tsx)  */}
-//    <Match when={configQuery.isPending}>
-//      <div class='fixed flex justify-between items-center h-full w-full p-10 lg:p-24'>
-//        <h1 class='text-[32px] leading-[54px] font-extralight text-[var(--primaryColor)]'>
-//          Welcome to <span class='font-medium'>Fraia Twin</span>
-//        </h1>
-
-//        <TypingBubble />
-//      </div>
-//    </Match>
-
-//    {/* ERROR - TODO  */}
-//    <Match when={configQuery.isError}>
-//      <div class='fixed w-full h-full flex flex-col justify-center items-center  animate-fade-in gap-4 bg-slate-100'>
-//        {configQuery.error?.message}
-//      </div>
-//    </Match>
-//  </Switch>

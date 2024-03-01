@@ -14,7 +14,6 @@ import {
 import { ChannelsOverview } from './ChannelsOverview'
 
 export const BotManager = () => {
-  // const storageKey = `channels-${props.id}`
   const openForPublic = configStore.chatSpaceConfig.isPublic
 
   const channelsQuery = createQuery({
@@ -57,14 +56,14 @@ export const BotManager = () => {
     },
   })
 
-  console.log(channelsQuery.data())
-
   return (
     <Switch>
+      {/* Loading  */}
       <Match when={channelsQuery.isLoading()}>
         <FraiaLoading />
       </Match>
 
+      {/* Simplistic error handling */}
       <Match when={channelsQuery.error()}>
         <div class='w-full h-full flex flex-col justify-center items-center animate-fade-in gap-4'>
           <div class='text-lg  text-red-500 text-center'>
@@ -75,6 +74,7 @@ export const BotManager = () => {
         </div>
       </Match>
 
+      {/* Single Knowledge Base View */}
       <Match when={Boolean(botStore.activeChannel)}>
         <Bot />
       </Match>

@@ -248,6 +248,8 @@ export const getChannelUserAccess = /* GraphQL */ `query GetChannelUserAccess($a
     accessType
     channelName
     channelDescription
+    channelSubtitle
+    channelAvatar
     createdAt
     updatedAt
     owner
@@ -283,6 +285,8 @@ export const listChannelUserAccesses = /* GraphQL */ `query ListChannelUserAcces
       accessType
       channelName
       channelDescription
+      channelSubtitle
+      channelAvatar
       createdAt
       updatedAt
       owner
@@ -319,6 +323,8 @@ export const channelUserAccessByChannelId = /* GraphQL */ `query ChannelUserAcce
       accessType
       channelName
       channelDescription
+      channelSubtitle
+      channelAvatar
       createdAt
       updatedAt
       owner
@@ -355,6 +361,8 @@ export const channelUserAccessByChannelHostId = /* GraphQL */ `query ChannelUser
       accessType
       channelName
       channelDescription
+      channelSubtitle
+      channelAvatar
       createdAt
       updatedAt
       owner

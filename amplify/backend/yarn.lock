@@ -89,9 +89,9 @@
     aws-cdk-lib "~2.80.0"
 
 "@aws-amplify/graphql-transformer-interfaces@^3.3.2":
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/graphql-transformer-interfaces/-/graphql-transformer-interfaces-3.3.3.tgz#bd720fe1ba2dbdaa3346c843667e1c82dd25cd1c"
-  integrity sha512-m/Stnk3z8x/FJaNFXnXM4Kwd9L+qurON1ktJyMXB9cq20lCpi93413iG5856FTQx6/Re0tnS15GueiV/neP5ug==
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/graphql-transformer-interfaces/-/graphql-transformer-interfaces-3.4.0.tgz#7812017abbe4ea391f69e24dffe4984a6576c154"
+  integrity sha512-vnPP/JPm/+oGQQQ3/5k7TSDWy9pF1eNtNPBpO238cNeFsS21FNEHT7x3goFSijRZUVYeDgwT4/B4agjc7D74Aw==
   dependencies:
     graphql "^15.5.0"
 
@@ -218,9 +218,9 @@
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
 
 "@types/node@^16.9.2":
-  version "16.18.84"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.84.tgz#6e9b24aeaa612de3e190917e90b85147841b7d1a"
-  integrity sha512-mtn6ixzrUK5IMf6gyyMVUsm0TIeF3IYpUr3i0HHTuPJVbdZ6kc93poZ+wCkFNtxXoP/tyGrdVPOL6/WqGXjfXw==
+  version "16.18.86"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.86.tgz#87426ce3747a4c135229e15765cbf9c5a18d280c"
+  integrity sha512-QMvdZf+ZTSiv7gspwhqbfB7Y5DmbYgCsUnakS8Ul9uRbJQehDKaM7SL+GbcDS003Lh7VK4YlelHsRm9HCv26eA==
 
 "@types/triple-beam@^1.3.2":
   version "1.3.5"

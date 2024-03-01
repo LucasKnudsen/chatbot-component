@@ -34,6 +34,8 @@ type ChannelUserAccess @model @auth(rules: [{ allow: owner }]) {
   accessType: ChannelAccessType!
   channelName: String!
   channelDescription: String
+  channelSubtitle: String
+  channelAvatar: String # URL to an image
 }
 
 enum ChannelAccessType {
