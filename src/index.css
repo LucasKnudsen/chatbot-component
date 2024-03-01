@@ -512,10 +512,6 @@ input {
   border-color: var(--primaryColor);
 }
 
-.menu-card:hover .menu-card__title {
-  font-weight: 400;
-}
-
 .menu-card:hover .menu-card__content {
   transform: translateY(0);
 }

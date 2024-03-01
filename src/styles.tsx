@@ -1,4 +1,4 @@
-// import styles from './index.css?inline'
+import styles from './index.css?inline'
 
 import { onMount } from 'solid-js'
 
@@ -38,7 +38,7 @@ const StyleSheet = () => {
       }
       `}
 
-      {/* {styles} */}
+      {styles}
     </style>
   )
 }
