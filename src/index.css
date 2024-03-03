@@ -492,6 +492,7 @@ input {
 .menu-card {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   border-radius: 15px;
   padding: 20px 20px 0;
   @apply w-full h-full md:max-w-[320px] md:min-w-[320px] md:h-[380px];
@@ -502,51 +503,40 @@ input {
   border-color: rgba(194, 194, 194, 1);
   cursor: pointer;
   overflow: hidden;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-property: color, background-color, border-color;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
 }
 
+.menu-card.active,
 .menu-card:hover {
   background-color: rgba(91, 147, 255, 0.05);
   border-color: var(--primaryColor);
 }
 
+.menu-card.active .menu-card__content,
 .menu-card:hover .menu-card__content {
   transform: translateY(0);
 }
 
+.menu-card.active .menu-card__avatar,
 .menu-card:hover .menu-card__avatar {
   border-color: var(--primaryColor);
 }
 
-.menu-card:hover .menu-card__heading .menu-card__icon {
-  opacity: 0;
-  visibility: hidden;
-}
-
+.menu-card.active .menu-card__icon,
 .menu-card:hover .menu-card__icon {
-  display: flex;
-  justify-content: flex-end;
-  padding-bottom: 15px;
   rotate: 0deg;
-  opacity: 1;
-  visibility: visible;
 }
 
-.menu-card:hover .menu-card__divider {
-  display: block;
-}
-
+.menu-card.active .menu-card__description,
 .menu-card:hover .menu-card__description {
   visibility: visible;
   opacity: 1;
-  z-index: 1;
 }
 
 .menu-card__content {
-  margin-top: auto;
-  transform: translateY(var(--hovered-translate-y));
+  transform: translateY(var(--hovered-translate-y, 0));
 
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -583,11 +573,6 @@ input {
   margin-bottom: 15px;
 }
 
-.menu-card__heading .menu-card__icon {
-  opacity: 1;
-  visibility: visible;
-}
-
 .menu-card__title {
   font-weight: 300;
   transition: font-weight 200ms ease-in;
@@ -595,12 +580,12 @@ input {
 }
 
 .menu-card__icon {
-  opacity: 0;
-  visibility: hidden;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+
   transition: rotate 100ms linear;
   rotate: -45deg;
-
-  @apply transition-opacity;
 }
 
 .menu-card__icon svg {
@@ -609,7 +594,7 @@ input {
 
 .menu-card__divider {
   border-bottom: 1px solid var(--primaryColor);
-  display: none;
+  margin-bottom: 20px;
 }
 
 .menu-card__description {
@@ -617,6 +602,4 @@ input {
   z-index: -1;
   font-size: 16px;
   line-height: 25px;
-  padding-top: 15px;
-  padding-bottom: 15px;
 }
