@@ -1,5 +1,4 @@
 import { JSX } from 'solid-js'
-
 import { TypingBubble } from '@/components'
 import { useTheme } from '@/features/theme/hooks'
 

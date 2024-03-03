@@ -1,14 +1,14 @@
-import { botStore, botStoreActions } from '@/features/bot'
-import { Match, Show, Switch } from 'solid-js'
 import { Button, ChevronIcon } from '.'
+import { Match, Show, Switch } from 'solid-js'
+import { botStore, botStoreActions } from '@/features/bot'
 
-import powerIcon from '@/assets/power-icon.svg'
-import { configStoreActions } from '@/features/portal-init'
-import { suggestedPromptsStoreActions } from '@/features/prompt'
-import { useTheme } from '@/features/theme/hooks'
-import { useMediaQuery } from '@/utils/useMediaQuery'
 import { CircleCloseIcon } from './icons/CircleCloseIcon'
 import { MenuIcon } from './icons/MenuIcon'
+import { configStoreActions } from '@/features/portal-init'
+import powerIcon from '@/assets/power-icon.svg'
+import { suggestedPromptsStoreActions } from '@/features/prompt'
+import { useMediaQuery } from '@/utils/useMediaQuery'
+import { useTheme } from '@/features/theme/hooks'
 
 export const Nav = () => {
   const device = useMediaQuery()
@@ -22,7 +22,7 @@ export const Nav = () => {
   return (
     <div class='pt-5 md:pt-10 px-5 md:px-10'>
       <div
-        class='flex flex-wrap items-center rounded-full pl-6 pr-2 py-3.5 z-50'
+        class='flex flex-wrap items-center rounded-full p-2.5 sm:pl-6 sm:pr-2 sm:py-3.5 z-50'
         style={{
           background: theme().surfaceBackground,
         }}
@@ -73,7 +73,7 @@ export const Nav = () => {
                 <Button
                   onClick={configStoreActions.toggleBot}
                   padding='6px'
-                  class='animate-fade-in '
+                  class='border border-[var(--onPrimary)] animate-fade-in'
                 >
                   <img class='m-auto h-3' src={powerIcon} />
                 </Button>
