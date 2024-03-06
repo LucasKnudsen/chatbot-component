@@ -59,30 +59,26 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
       throw new Error('Unauthorized to index knowledge')
     }
 
-    // Gets channel to get endpoint details
+    // Gets channel to set endpoint details
     const channel = await getChannel(input.channelId)
+    // TODO: Find a way to get the database attribute from ChatSpace
+    // channel.chatSpaceId
 
-    const endpoint = `${channel.apiHost}/api/v1/vector/upsert/${channel.indexChatflowId}`
+    const endpoint = `${channel.apiHost}/api/v1/vector/upsert/${channel.chatflowId}`
 
-    // If the document is not a plain text file, parse it and upload raw text to S3
-    if (input.fileType !== 'text/plain') {
-      let parsedText = ''
-
-      switch (input.fileType) {
-        case 'application/pdf':
-          parsedText = await parsePDF(input.s3KeyOriginal)
-
-          break
-
-        default:
-          throw new Error('Document type not supported for parsing raw text')
-      }
-
-      // Uploads it to S3
+    // If the document is a PDF, parse it and upload the raw text to S3
+    if (input.fileType == 'application/pdf') {
+      const parsedText = await parsePDF(input.s3KeyOriginal)
       await uploadRawText(parsedText, input.s3KeyRawText)
     }
 
     const formData = await generateFormData(input.s3KeyRawText)
+
+    const database = 'fraia_test'
+    formData.append('database', database)
+    formData.append('tableName', `fraia_${input.channelId.replaceAll('-', '_')}`)
+
+    console.log('endpoint', endpoint)
 
     const result = await fetch(endpoint, {
       method: 'POST',

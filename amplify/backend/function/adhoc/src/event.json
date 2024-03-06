@@ -1,12 +1,13 @@
 {
   "isMock": true,
   "flow": "COMPANY",
-  "organizationId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
-  "chatSpaceId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
-  "channelId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
-  "adminUserId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
-  "adminEmail": "chula-admin@mail.com",
+  "organizationId": "yy5d64f3-6d58-49d1-8143-d59caa88fd1f",
+  "chatSpaceId": "yy5d64f3-6d58-49d1-8143-d59caa88fd1f",
+  "channelId": "yy5d64f3-6d58-49d1-8143-d59caa88fd1f",
+  "adminUserId": "yy5d64f3-6d58-49d1-8143-d59caa88fd1f",
+  "adminEmail": "test-1@seier.ai",
+  "adminUsername": "seier-admin-1",
 
   "userEmail": "laksteelhouse@gmail.com",
-  "studentUserId": "b05d64f3-6d58-49d1-8143-d59caa88fd1f"
+  "studentUserId": "y05d64f3-6d58-49d1-8143-d59caa88fd1f"
 }

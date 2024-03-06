@@ -13,7 +13,10 @@
         "delete"
       ],
       "ChannelUserAccess:@model(appsync)": [
-        "read"
+        "create",
+        "read",
+        "update",
+        "delete"
       ],
       "ChatSpace:@model(appsync)": [
         "read"

@@ -66,14 +66,14 @@ var authorizers_1 = require("./authorizers");
 var parsers_1 = require("./parsers");
 var utils_1 = require("./utils");
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, isMock, input_1, isAuthorized, _b, channel, endpoint, parsedText, _c, formData, result, channelDocument, error_1;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var _a, isMock, input_1, isAuthorized, _b, channel, endpoint, parsedText, formData, database, result, channelDocument, error_1;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 console.time('HANDLER');
-                _d.label = 1;
+                _c.label = 1;
             case 1:
-                _d.trys.push([1, 15, , 16]);
+                _c.trys.push([1, 12, , 13]);
                 _a = event.arguments, isMock = _a.isMock, input_1 = _a.input;
                 !isMock && console.log(event);
                 if (!isMock) return [3 /*break*/, 2];
@@ -88,39 +88,35 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     });
                 }); })];
             case 3:
-                _b = _d.sent();
-                _d.label = 4;
+                _b = _c.sent();
+                _c.label = 4;
             case 4:
                 isAuthorized = _b;
                 if (!isAuthorized) {
                     throw new Error('Unauthorized to index knowledge');
                 }
-                return [4 /*yield*/, (0, utils_1.getChannel)(input_1.channelId)];
+                return [4 /*yield*/, (0, utils_1.getChannel)(input_1.channelId)
+                    // TODO: Find a way to get the database attribute from ChatSpace
+                    // channel.chatSpaceId
+                ];
             case 5:
-                channel = _d.sent();
-                endpoint = "".concat(channel.apiHost, "/api/v1/vector/upsert/").concat(channel.indexChatflowId);
-                if (!(input_1.fileType !== 'text/plain')) return [3 /*break*/, 11];
-                parsedText = '';
-                _c = input_1.fileType;
-                switch (_c) {
-                    case 'application/pdf': return [3 /*break*/, 6];
-                }
-                return [3 /*break*/, 8];
-            case 6: return [4 /*yield*/, (0, parsers_1.parsePDF)(input_1.s3KeyOriginal)];
+                channel = _c.sent();
+                endpoint = "".concat(channel.apiHost, "/api/v1/vector/upsert/").concat(channel.chatflowId);
+                if (!(input_1.fileType == 'application/pdf')) return [3 /*break*/, 8];
+                return [4 /*yield*/, (0, parsers_1.parsePDF)(input_1.s3KeyOriginal)];
+            case 6:
+                parsedText = _c.sent();
+                return [4 /*yield*/, (0, utils_1.uploadRawText)(parsedText, input_1.s3KeyRawText)];
             case 7:
-                parsedText = _d.sent();
-                return [3 /*break*/, 9];
-            case 8: throw new Error('Document type not supported for parsing raw text');
-            case 9: 
-            // Uploads it to S3
-            return [4 /*yield*/, (0, utils_1.uploadRawText)(parsedText, input_1.s3KeyRawText)];
-            case 10:
-                // Uploads it to S3
-                _d.sent();
-                _d.label = 11;
-            case 11: return [4 /*yield*/, (0, utils_1.generateFormData)(input_1.s3KeyRawText)];
-            case 12:
-                formData = _d.sent();
+                _c.sent();
+                _c.label = 8;
+            case 8: return [4 /*yield*/, (0, utils_1.generateFormData)(input_1.s3KeyRawText)];
+            case 9:
+                formData = _c.sent();
+                database = 'fraia_test';
+                formData.append('database', database);
+                formData.append('tableName', "fraia_".concat(input_1.channelId.replaceAll('-', '_')));
+                console.log('endpoint', endpoint);
                 return [4 /*yield*/, (0, node_fetch_1["default"])(endpoint, {
                         method: 'POST',
                         body: formData,
@@ -128,22 +124,22 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                             Authorization: channel.apiKey
                         }
                     })];
-            case 13:
-                result = _d.sent();
+            case 10:
+                result = _c.sent();
                 if (!result.ok) {
                     throw new Error("HTTP error! status: ".concat(result.status));
                 }
                 return [4 /*yield*/, (0, utils_1.createChannelDocument)(__assign({}, input_1))];
-            case 14:
-                channelDocument = _d.sent();
+            case 11:
+                channelDocument = _c.sent();
                 console.timeEnd('HANDLER');
                 return [2 /*return*/, channelDocument];
-            case 15:
-                error_1 = _d.sent();
+            case 12:
+                error_1 = _c.sent();
                 console.error('DEFAULT ERROR', error_1);
                 console.timeEnd('HANDLER');
                 throw error_1;
-            case 16: return [2 /*return*/];
+            case 13: return [2 /*return*/];
         }
     });
 }); };

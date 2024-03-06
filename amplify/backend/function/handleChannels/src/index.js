@@ -15,6 +15,17 @@
     ENV
     REGION
 Amplify Params - DO NOT EDIT */
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -59,55 +70,89 @@ var ddbService = new client_dynamodb_1.DynamoDBClient({ region: process.env.REGI
 var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
 var authorizers_1 = require("./authorizers");
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var isAuthorized, _a, isMock, input_1, _b, _c, error_1;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var isAuthorized, identity, _a, isMock, input_1, _b, _c, chatSpace_1, _d, newChannel, error_1;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0:
                 console.time('HANDLER');
                 isAuthorized = false;
-                _d.label = 1;
+                _e.label = 1;
             case 1:
-                _d.trys.push([1, 9, , 10]);
+                _e.trys.push([1, 16, , 17]);
                 _a = event.arguments, isMock = _a.isMock, input_1 = _a.input;
-                !isMock && console.log("EVENT", event);
-                !isMock && console.log("EVENT", event.arguments.input);
+                !isMock && console.log(event);
+                !isMock && console.log("EVENT input", event.arguments.input);
                 _b = input_1.flow;
                 switch (_b) {
                     case 'UPDATE': return [3 /*break*/, 2];
+                    case 'CREATE': return [3 /*break*/, 7];
                 }
-                return [3 /*break*/, 7];
+                return [3 /*break*/, 14];
             case 2:
                 if (!isMock) return [3 /*break*/, 3];
-                _c = true;
+                _c = { username: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f' };
                 return [3 /*break*/, 5];
             case 3: return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0: return [4 /*yield*/, authorizeUpdateAccess(identity, input_1.data.id)];
-                            case 1: return [2 /*return*/, _a.sent()];
+                            case 1:
+                                isAuthorized = _a.sent();
+                                if (!isAuthorized) {
+                                    throw new Error('Unauthorized to update channel');
+                                }
+                                return [2 /*return*/, identity];
                         }
                     });
                 }); })];
             case 4:
-                _c = _d.sent();
-                _d.label = 5;
+                _c = _e.sent();
+                _e.label = 5;
             case 5:
-                isAuthorized = _c;
-                if (!isAuthorized) {
-                    throw new Error('Unauthorized to update channel');
-                }
+                identity = _c;
                 return [4 /*yield*/, updateChannel(input_1.data)];
-            case 6: return [2 /*return*/, _d.sent()];
-            case 7: return [3 /*break*/, 8];
+            case 6: return [2 /*return*/, _e.sent()];
+            case 7: return [4 /*yield*/, getChatSpace(input_1.data.chatSpaceId)];
             case 8:
+                chatSpace_1 = _e.sent();
+                if (!isMock) return [3 /*break*/, 9];
+                _d = { username: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f' };
+                return [3 /*break*/, 11];
+            case 9: return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, authorizeCreateAccess(identity, chatSpace_1)];
+                            case 1:
+                                isAuthorized = _a.sent();
+                                if (!isAuthorized) {
+                                    throw new Error('Unauthorized to create new channel');
+                                }
+                                return [2 /*return*/, identity];
+                        }
+                    });
+                }); })];
+            case 10:
+                _d = _e.sent();
+                _e.label = 11;
+            case 11:
+                identity = _d;
+                return [4 /*yield*/, createChannel(input_1.data)];
+            case 12:
+                newChannel = _e.sent();
+                return [4 /*yield*/, createChannelAccess(input_1.data, identity, chatSpace_1)];
+            case 13:
+                _e.sent();
+                return [2 /*return*/, newChannel];
+            case 14: return [3 /*break*/, 15];
+            case 15:
                 console.timeEnd('HANDLER');
-                return [3 /*break*/, 10];
-            case 9:
-                error_1 = _d.sent();
+                return [3 /*break*/, 17];
+            case 16:
+                error_1 = _e.sent();
                 console.error('DEFAULT ERROR', error_1);
                 console.timeEnd('HANDLER');
                 throw error_1;
-            case 10: return [2 /*return*/];
+            case 17: return [2 /*return*/];
         }
     });
 }); };
@@ -137,6 +182,12 @@ var authorizeUpdateAccess = function (identity, channelId) { return __awaiter(vo
                 }
                 return [2 /*return*/, true];
         }
+    });
+}); };
+var authorizeCreateAccess = function (identity, chatSpace) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a;
+    return __generator(this, function (_b) {
+        return [2 /*return*/, (_a = identity['cognito:groups']) === null || _a === void 0 ? void 0 : _a.includes(chatSpace.admin)];
     });
 }); };
 var updateChannel = function (data) { return __awaiter(void 0, void 0, void 0, function () {
@@ -175,6 +226,74 @@ var updateChannel = function (data) { return __awaiter(void 0, void 0, void 0, f
             case 1:
                 Attributes = (_a.sent()).Attributes;
                 return [2 /*return*/, Attributes];
+        }
+    });
+}); };
+var createChannel = function (data) { return __awaiter(void 0, void 0, void 0, function () {
+    var params;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                params = {
+                    TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
+                    Item: __assign(__assign({}, data), { __typename: 'Channel', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() })
+                };
+                return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.PutCommand(params))];
+            case 1:
+                _a.sent();
+                return [2 /*return*/, params.Item];
+        }
+    });
+}); };
+var createChannelAccess = function (data, identity, chatSpace) { return __awaiter(void 0, void 0, void 0, function () {
+    var params;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                params = {
+                    TableName: process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME,
+                    Item: {
+                        accessId: identity.username,
+                        channelId: data.id,
+                        chatSpaceId: data.chatSpaceId,
+                        channelHostId: chatSpace.hostId,
+                        channelHostType: chatSpace.hostType,
+                        accessType: 'ADMIN',
+                        channelName: data.name,
+                        channelDescription: data.description,
+                        channelAvatar: data.avatar,
+                        channelSubtitle: data.subtitle,
+                        owner: identity.username,
+                        __typename: 'ChannelUserAccess',
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    }
+                };
+                return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.PutCommand(params))];
+            case 1:
+                _a.sent();
+                return [2 /*return*/, params.Item];
+        }
+    });
+}); };
+var getChatSpace = function (chatSpaceId) { return __awaiter(void 0, void 0, void 0, function () {
+    var params, Item;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                params = {
+                    TableName: process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME,
+                    Key: {
+                        id: chatSpaceId
+                    }
+                };
+                return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.GetCommand(params))];
+            case 1:
+                Item = (_a.sent()).Item;
+                if (!Item) {
+                    throw new Error('ChatSpace not found');
+                }
+                return [2 /*return*/, Item];
         }
     });
 }); };

@@ -95,7 +95,12 @@ const getChannel = async (channelId: string) => {
 const createChannelDocument = async (input: Record<string, any>) => {
   const params: PutCommandInput = {
     TableName: process.env.API_DIGITALTWIN_CHANNELDOCUMENTTABLE_NAME,
-    Item: { ...input, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+    Item: {
+      ...input,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      __typename: 'ChannelDocument',
+    },
   }
 
   await ddbDocClient.send(new PutCommand(params))

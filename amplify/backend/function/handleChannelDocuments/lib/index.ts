@@ -94,7 +94,7 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
         return await listChannelDocuments(input.data.channelId)
 
       default:
-        break
+        throw new Error('Invalid flow')
     }
 
     console.timeEnd('HANDLER')
@@ -139,6 +139,7 @@ const authorizeAccess = async (
 const createChannelDocument = async (data: Arguments['input']['data']) => {
   const Item = {
     ...data,
+    __typename: 'ChannelDocument',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   }

@@ -24,6 +24,7 @@ type ChatSpace
   # settings: ChatSpaceSettings!
 
   admin: String!
+  database: String!
 }
 
 enum HostType {

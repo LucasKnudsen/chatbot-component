@@ -156,7 +156,7 @@ var createChannelDocument = function (input) { return __awaiter(void 0, void 0, 
             case 0:
                 params = {
                     TableName: process.env.API_DIGITALTWIN_CHANNELDOCUMENTTABLE_NAME,
-                    Item: __assign(__assign({}, input), { createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() })
+                    Item: __assign(__assign({}, input), { createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), __typename: 'ChannelDocument' })
                 };
                 return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.PutCommand(params))];
             case 1:

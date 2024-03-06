@@ -1,0 +1,4 @@
+{
+  "isMock": true,
+  "body": "{\"channelId\":\"xx5d64f3-6d58-49d1-8143-d59caa88fd1f\", \"dataset\": [{\"question\": \"When is Lucas leaving Thailand?\", \"answer\": \"On the 23rd of March\"}, {\"question\": \"Where will Lucas fly to?\", \"answer\": \"Lucas will fly to Denmark\"}]}"
+}

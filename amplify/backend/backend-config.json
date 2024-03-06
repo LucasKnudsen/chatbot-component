@@ -98,6 +98,22 @@
           ],
           "category": "function",
           "resourceName": "flowiseMiddleware"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "youtubeScraping"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "combEvaluator"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -172,6 +188,20 @@
     },
     "broadcastResolver": {
       "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "combEvaluator": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "fraiastorage"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -424,6 +454,20 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "youtubeScraping": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "fraiastorage"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "hosting": {
@@ -462,6 +506,22 @@
         {
           "category": "function",
           "resourceName": "broadcastResolver"
+        }
+      ]
+    },
+    "AMPLIFY_function_combEvaluator_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "combEvaluator"
+        }
+      ]
+    },
+    "AMPLIFY_function_combEvaluator_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "combEvaluator"
         }
       ]
     },
@@ -686,6 +746,22 @@
         {
           "category": "function",
           "resourceName": "websiteScraping"
+        }
+      ]
+    },
+    "AMPLIFY_function_youtubeScraping_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "youtubeScraping"
+        }
+      ]
+    },
+    "AMPLIFY_function_youtubeScraping_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "youtubeScraping"
         }
       ]
     },
