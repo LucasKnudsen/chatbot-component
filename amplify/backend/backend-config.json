@@ -477,22 +477,6 @@
     }
   },
   "parameters": {
-    "AMPLIFY_function_adhoc_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "adhoc"
-        }
-      ]
-    },
-    "AMPLIFY_function_adhoc_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "adhoc"
-        }
-      ]
-    },
     "AMPLIFY_function_broadcastResolver_deploymentBucketName": {
       "usedBy": [
         {
