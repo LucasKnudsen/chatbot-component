@@ -146,7 +146,7 @@
         },
         "fetchChannels": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
-          "s3Key": "amplify-builds/fetchChannels-556e674b614974387579-build.zip"
+          "s3Key": "amplify-builds/fetchChannels-716369673941474c5656-build.zip"
         },
         "flowiseBroadcast": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
@@ -188,7 +188,10 @@
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
           "s3Key": "amplify-builds/youtubeScraping-4679337a3851744c6539-build.zip"
         },
-        "adhoc": {}
+        "adhoc": {
+          "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
+          "s3Key": "amplify-builds/adhoc-377337494c796d4c6f42-build.zip"
+        }
       },
       "hosting": {
         "amplifyhosting": {
@@ -197,7 +200,18 @@
         }
       },
       "auth": {
-        "fraiaauth": {}
+        "fraiaauth": {},
+        "userPoolGroups": {}
+      },
+      "api": {
+        "digitaltwin": {},
+        "digitaltwinRest": {}
+      },
+      "predictions": {
+        "dynamicTranslator": {}
+      },
+      "storage": {
+        "fraiastorage": {}
       }
     }
   }
