@@ -33,7 +33,7 @@ export const Settings = (props: Props) => {
 
   // Function to handle document click
   const handleDocumentClick = (e: MouseEvent) => {
-    if (menuRef && !menuRef.contains(e.target as Node)) {
+    if (menuRef && !(menuRef as HTMLDivElement).contains(e.target as Node)) {
       closeMenu()
     }
   }
