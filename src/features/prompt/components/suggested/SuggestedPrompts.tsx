@@ -1,4 +1,4 @@
-import { LoadingBubble } from '@/components/bubbles/LoadingBubble'
+import { TypingBubble } from '@/components'
 import { botStore } from '@/features/bot'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
@@ -45,7 +45,7 @@ export const SuggestedPrompts = (props: Props) => {
             </p>
 
             <div class='flex overflow-x-scroll max-md:px-6 md:pl-6 whitespace-nowrap gap-x-6 no-scrollbar '>
-              <Show when={suggestedPromptsStore.prompts.length > 0} fallback={<LoadingBubble />}>
+              <Show when={suggestedPromptsStore.prompts.length > 0} fallback={<TypingBubble />}>
                 <For each={suggestedPromptsStore.prompts}>
                   {(p) => (
                     <Prompt
