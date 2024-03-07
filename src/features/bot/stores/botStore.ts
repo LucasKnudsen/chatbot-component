@@ -94,8 +94,6 @@ const initBotStore = async (channel: Channel) => {
       // initiateChatConnection(channel.id),
       initLLMStream(channel),
     ])
-
-    console.log('HISTORY: ', history)
   } else {
     // Check and load history from local storage
     history = getLocalHistory()

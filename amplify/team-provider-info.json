@@ -38,7 +38,7 @@
         },
         "fetchChannels": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/fetchChannels-556e674b614974387579-build.zip"
+          "s3Key": "amplify-builds/fetchChannels-716369673941474c5656-build.zip"
         },
         "flowiseBroadcast": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
@@ -97,6 +97,13 @@
       },
       "storage": {
         "fraiastorage": {}
+      },
+      "api": {
+        "digitaltwin": {},
+        "digitaltwinRest": {}
+      },
+      "predictions": {
+        "dynamicTranslator": {}
       }
     }
   },

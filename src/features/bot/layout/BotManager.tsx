@@ -18,8 +18,8 @@ export const BotManager = () => {
 
   const channelsQuery = createQuery({
     queryFn: async () => {
-      logDev('Fetching channels', openForPublic)
       if (openForPublic) {
+        logDev('Is public')
         // In this case, we don't need to check for access rights, and can fetch all public channels through a Lambda
         const publicChannels = await fetchPublicChannels(configStore.chatSpaceConfig.id)
 

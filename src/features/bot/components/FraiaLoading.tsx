@@ -1,28 +1,30 @@
 import { TypingBubble } from '@/components'
-import { useText } from '@/features/text'
+import { LogoIcon } from '@/components/icons/LogoIcon'
 import { useTheme } from '@/features/theme'
+import LayoutDefault from '@/layouts/default'
 
 export const FraiaLoading = () => {
   const { theme } = useTheme()
-  const { text } = useText()
 
   return (
-    <div class='w-full h-full flex flex-col justify-center items-center  animate-fade-in gap-4'>
-      <h1 class='text-5xl tracking-wider'>{text().brandName || 'AI Chatbot'}</h1>
+    <LayoutDefault>
+      <div class='h-full flex flex-col justify-center   animate-fade-in gap-4'>
+        <div class='text-center lg:text-left mb-16'>
+          <div class='inline-block mb-4'>
+            <LogoIcon color={theme().primaryColor} />
+          </div>
+          <h4
+            class='text-base leading-[17px] font-light'
+            style={{
+              color: theme().textSecondary,
+            }}
+          >
+            The most personalized AI catchphrase
+          </h4>
+        </div>
 
-      <p>
-        Powered by{' '}
-        <span
-          style={{
-            color: theme().primaryColor,
-          }}
-          class='font-bold'
-        >
-          Fraia
-        </span>
-      </p>
-
-      <TypingBubble />
-    </div>
+        <TypingBubble />
+      </div>
+    </LayoutDefault>
   )
 }
