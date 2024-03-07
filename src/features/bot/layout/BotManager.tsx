@@ -1,7 +1,9 @@
 import { SignOutButton, authStore } from '@/features/authentication'
 import { configStore } from '@/features/portal-init'
 import { createQuery } from '@/hooks'
+import LayoutDefault from '@/layouts/default'
 import { logDev } from '@/utils'
+import { parseError } from '@/utils/errorHandlers'
 import { Match, Switch } from 'solid-js'
 import {
   Bot,
@@ -65,13 +67,15 @@ export const BotManager = () => {
 
       {/* Simplistic error handling */}
       <Match when={channelsQuery.error()}>
-        <div class='w-full h-full flex flex-col justify-center items-center animate-fade-in gap-4'>
-          <div class='text-lg  text-red-500 text-center'>
-            <p class='mb-4'>Error: {channelsQuery.error()?.message}</p>
-          </div>
+        <LayoutDefault>
+          <div class=' h-full flex flex-col justify-center  animate-fade-in gap-4'>
+            <div class='text-lg  text-red-500 text-center'>
+              <p class='mb-4'>Error: {parseError(channelsQuery.error())?.message}</p>
+            </div>
 
-          <SignOutButton />
-        </div>
+            <SignOutButton />
+          </div>
+        </LayoutDefault>
       </Match>
 
       {/* Single Knowledge Base View */}

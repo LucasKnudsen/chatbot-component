@@ -1,4 +1,5 @@
 import { botStore } from '@/features/bot'
+import { configStore } from '@/features/portal-init'
 import { sendRequest } from '@/utils/index'
 import { API } from 'aws-amplify'
 
@@ -27,7 +28,6 @@ export type IncomingInput = {
 
 export async function sendMessageQuery(body: IncomingInput) {
   try {
-    // TODO: Test timeout of the REST API. (There's a 30 second timeout on AppSync)
     const answer = await API.post('digitaltwinRest', '/flowise/middleware', {
       body,
     })
@@ -43,25 +43,31 @@ export async function sendMessageQuery(body: IncomingInput) {
 export async function flowiseMessageQuery(body: IncomingInput) {
   if (!botStore.activeChannel) throw new Error('No active channel')
 
-  try {
-    const response = await fetch(
-      `${botStore.activeChannel.apiHost}/api/v1/prediction/${botStore.activeChannel.chatflowId}`,
-      {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: botStore.activeChannel.apiKey!,
-        },
+  const { apiHost, chatflowId, apiKey, id } = botStore.activeChannel
+  const { database } = configStore.chatSpaceConfig
 
-        body: JSON.stringify({
-          chatflowid: botStore.activeChannel.chatflowId,
-          apiHost: botStore.activeChannel.apiHost,
-          question: body.question,
-          socketIOClientId: body.socketIOClientId,
-        }),
-      }
-    )
+  try {
+    const response = await fetch(`${apiHost}/api/v1/prediction/${chatflowId}`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: apiKey!,
+      },
+
+      body: JSON.stringify({
+        overrideConfig: {
+          database,
+          tableName: `fraia_${(id as any).replaceAll('-', '_')}`,
+          returnSourceDocuments: true,
+        },
+        chatflowid: botStore.activeChannel.chatflowId,
+        apiHost: botStore.activeChannel.apiHost,
+        question: body.question,
+        history: body.memory,
+        socketIOClientId: body.socketIOClientId,
+      }),
+    })
 
     return response
   } catch (error) {

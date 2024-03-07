@@ -31,8 +31,8 @@ const fetch = async (language?: string) => {
   // Take only the questions from today. We don't want to suggest questions from previous days. Take latest 5.
   const previousQuestions = botStore.activeHistory
     .filter((chat) => new Date(chat.timestamp).toDateString() === new Date().toDateString())
-    .map((chat) => chat.question)
     .slice(-5)
+    .map((chat) => chat.question)
 
   // Don't send if there are no relevant previous questions
   if (previousQuestions.length === 0) {

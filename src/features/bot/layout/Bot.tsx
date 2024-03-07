@@ -37,13 +37,18 @@ export const Bot = () => {
 
     suggestedPromptsStoreActions.clear()
 
+    const memory = botStore.activeHistory.slice(-5).flatMap((chat) => [
+      { type: 'userMessage', message: chat.question },
+      { type: 'apiMessage', message: chat.answer },
+    ]) as { type: 'apiMessage' | 'userMessage'; message: string }[]
+
     botStoreActions.buildQuestion(value)
 
     const body: IncomingInput = {
       question: value,
       sessionId: authStore.sessionId,
       channelId: botStore.activeChannel!.id,
-      memory: [],
+      memory,
       promptCode: PromptCode.QUESTION,
       socketIOClientId: LLMStreamId(),
     }
