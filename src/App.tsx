@@ -1,5 +1,4 @@
 import './dev.css'
-import './index.css'
 
 import { useTheme } from '@/features/theme'
 import { chatflows } from './constants'

@@ -1,6 +1,6 @@
 import { Channel, ChannelUserAccess, ChatSpace } from '@/graphql'
-import { createSignal, onMount } from 'solid-js'
 import { botStoreActions, fetchChannelDetails } from '..'
+import { createSignal, onMount } from 'solid-js'
 
 import { ArrowRightIcon } from '@/components/icons/ArrowRightIcon'
 import { Spinner } from '@/components/loaders'
@@ -12,6 +12,30 @@ type ChannelOverviewProps = {
 }
 
 export const ChannelsOverview = (props: ChannelOverviewProps) => {
+  let wrapper: HTMLDivElement | undefined
+  let content: HTMLDivElement | undefined
+  let shadowLeft: HTMLDivElement | undefined
+  let shadowRight: HTMLDivElement | undefined
+
+  onMount(() => {
+    let contentScrollWidth = content?.scrollWidth ?? 0 - (wrapper?.scrollWidth ?? 0)
+
+    if (content) {
+      // check if overflow is present
+      if (content.scrollWidth != Math.max(content.offsetWidth, content.clientWidth)) {
+        // add initial style opacity to 1 in shadowRight
+        if (shadowRight) shadowRight.style.opacity = '1'
+
+        content.addEventListener('scroll', function () {
+          let currentScroll = this.scrollLeft / contentScrollWidth
+
+          if (shadowLeft) shadowLeft.style.opacity = currentScroll.toString()
+          if (shadowRight) shadowRight.style.opacity = (1 - currentScroll).toString()
+        })
+      }
+    }
+  })
+
   return (
     <div class='flex flex-col h-full pt-10 md:pt-16 pb-10 px-[35px] md:px-[100px] animate-fade-in'>
       <h1 class='text-3xl sm:text-4xl md:text-5xl font-light mb-[50px] max-w-[1016px] w-full leading-3'>
@@ -22,11 +46,31 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
         you want to use:
       </h1>
 
-      <div class='grid grid-cols-2 md:flex flex-nowrap gap-5 md:gap-10 lg:gap-[50px] overflow-x-auto overflow-y-hidden pb-2'>
-        {props.channels?.map((channel) => (
-          <ChannelItem channel={channel} isChatSpacePublic={props.chatSpace.isPublic} />
-        ))}
-
+      <div class='flex gap-5 md:gap-10 lg:gap-[50px]'>
+        <div ref={wrapper} class='relative min-w-0 rounded-[15px] overflow-hidden'>
+          <div
+            ref={shadowLeft}
+            class='absolute z-10 w-5 h-full top-0 -left-5 bottom-0 opacity-0'
+            style={{
+              'box-shadow': 'rgba(91, 147, 255, 0.45) 15px 0 15px 0',
+            }}
+          ></div>
+          <div
+            ref={content}
+            class='grid grid-cols-2 md:flex flex-nowrap gap-5 md:gap-10 lg:gap-[50px] overflow-x-auto overflow-y-hidden pb-1'
+          >
+            {props.channels?.map((channel) => (
+              <ChannelItem channel={channel} isChatSpacePublic={props.chatSpace.isPublic} />
+            ))}
+          </div>
+          <div
+            ref={shadowRight}
+            class='absolute z-10 w-5 h-full top-0 -right-5 bottom-0 opacity-0'
+            style={{
+              'box-shadow': 'rgba(91, 147, 255, 0.2) -15px 0 15px 0',
+            }}
+          ></div>
+        </div>
         {/* Create new knowledge base button */}
         <div class='menu-card flex items-center justify-center'>
           <div class='m-auto text-center'>
@@ -87,9 +131,12 @@ const ChannelItem = (props: {
   })
 
   return (
-    <div class='menu-card aspect-square' onClick={() => channelDetailsMutation.mutate()}>
-      {channelDetailsMutation.isLoading() && <Spinner size={24} />}
-
+    <div
+      class={`menu-card relative aspect-square ${
+        channelDetailsMutation.isLoading() ? 'active' : ''
+      }`}
+      onClick={() => channelDetailsMutation.mutate()}
+    >
       <div class='relative'>
         <h3 class='text-sm md:text-base font-medium'>
           {(props.channel as Channel).subtitle ||
@@ -116,30 +163,27 @@ const ChannelItem = (props: {
           }}
         ></div>
 
-        <div class='menu-card__heading'>
-          <h1 class='menu-card__title'>
+        <div class='menu-card__heading pr-8'>
+          <h1 class='menu-card__title line-clamp-3'>
             {' '}
             {(props.channel as Channel).name || (props.channel as ChannelUserAccess).channelName}
           </h1>
-
-          <span class='menu-card__icon'>
-            <ArrowRightIcon />
-          </span>
         </div>
 
-        <div ref={ref}>
+        <div ref={ref} class='min-h-[130px]'>
           <div class='menu-card__divider'></div>
-          <div class='menu-card__description'>
+          <div class='menu-card__description pr-8'>
             <p class='line-clamp-2'>
               {(props.channel as Channel).description ||
                 (props.channel as ChannelUserAccess).channelDescription}
             </p>
           </div>
-          <span class='menu-card__icon'>
-            <ArrowRightIcon />
-          </span>
         </div>
       </div>
+
+      <span class='menu-card__icon'>
+        {channelDetailsMutation.isLoading() ? <Spinner size={24} /> : <ArrowRightIcon />}
+      </span>
     </div>
   )
 }
