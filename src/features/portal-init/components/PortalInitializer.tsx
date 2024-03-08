@@ -7,7 +7,7 @@ import {
   configStoreActions,
   initializeConfig,
 } from '..'
-import { BotManager, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
+import { BotManager, SYSTEM_DEFAULT_LANGUAGE, botStore, useLanguage } from '../../bot'
 
 import { TypingBubble } from '@/components'
 import { Nav } from '@/components/Nav'
@@ -15,6 +15,7 @@ import { AuthProvider } from '@/features/authentication'
 import { useText } from '@/features/text'
 import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
+import { Channel } from '@/graphql'
 import { createQuery } from '@/hooks'
 
 export const PortalInitializer = (props: ChatConfig) => {
@@ -63,10 +64,31 @@ export const PortalInitializer = (props: ChatConfig) => {
         <PortalContainer>
           <AuthProvider isPublic={Boolean(configQuery.data()?.isPublic)}>
             <Show when={configStore.isBotOpened}>
-              <div class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in '>
-                <Nav />
+              <div class='fixed top-0 left-0 flex flex-row flex-nowrap h-full w-full overflow-hidden animate-fade-in '>
+                <div class='flex flex-col w-full h-full '>
+                  <Nav />
 
-                <BotManager />
+                  <BotManager />
+                </div>
+
+                <div
+                  class={`h-screen overflow-hidden px-5 transition-all bg-[var(--surfaceHoveredBackground)]
+                  justify-center items-center 
+                  border-l border-[var(--borderColor)]
+                  `}
+                  style={{
+                    width: botStore.activeChannel ? '82px' : '0',
+                  }}
+                >
+                  <div
+                    class={`w-9 h-9 rounded-full`}
+                    style={{
+                      'background-image':
+                        (botStore.activeChannel as Channel)?.avatar ||
+                        'linear-gradient(to right, #ed4264, #ffedbc)',
+                    }}
+                  ></div>
+                </div>
               </div>
             </Show>
           </AuthProvider>

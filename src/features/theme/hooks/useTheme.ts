@@ -48,7 +48,5 @@ const injectIntoRoot = (theme: Theme) => {
       }
     `
 
-  console.log('styleElement', styleElement)
-
   document.head.appendChild(styleElement)
 }
