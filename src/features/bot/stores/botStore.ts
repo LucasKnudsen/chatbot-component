@@ -31,7 +31,7 @@ type BotStore = {
   channels: Channel[]
   isAwaitingAnswer: boolean
   isSidebarOpen: boolean
-  readonly storageKey: string
+  readonly localStorageKey: string
   readonly activeHistory: ChannelHistoryItem[]
   readonly activeFacts: ContextualElement[]
   readonly activeContextuals: ContextualElement[]
@@ -45,13 +45,13 @@ const [botStore, setBotStore] = createStore<BotStore>({
   isAwaitingAnswer: false,
   isSidebarOpen: false,
 
-  get storageKey() {
+  get localStorageKey() {
     if (!this.activeChannel) {
       console.error('No active channel')
       return ''
     }
 
-    return `${this.activeChannel.chatflowId}_QUESTIONS`
+    return `${authStore.sessionId}:${this.activeChannel.id}_HIST`
   },
 
   get activeHistory() {
@@ -87,32 +87,33 @@ const [botStore, setBotStore] = createStore<BotStore>({
 const initBotStore = async (channel: Channel) => {
   let history: ChannelHistoryItem[] = []
 
-  if (authStore.sessionId) {
+  if (authStore.userDetails?.id) {
     // Fetch history from API
     ;[history] = await Promise.all([
-      fetchChannelHistory(channel.id, authStore.sessionId),
+      fetchChannelHistory(channel.id, authStore.userDetails.id),
       // initiateChatConnection(channel.id),
       initLLMStream(channel),
     ])
   } else {
     // Check and load history from local storage
-    history = getLocalHistory()
+    history = getLocalHistory(channel.id)
     await Promise.all([initLLMStream(channel)])
   }
 
-  setBotStore({
-    activeChannel: {
-      ...channel,
-      history,
-      library: [],
-      access: undefined,
-      activeChat: undefined,
-    },
+  setBotStore('activeChannel', {
+    ...channel,
+    library: [],
+    history,
+    access: undefined,
+    activeChat: undefined,
   })
 }
 
-const getLocalHistory = () => {
-  const data = localStorage.getItem(botStore.storageKey)
+const getLocalHistory = (channelId: string) => {
+  const key = `${authStore.sessionId}:${channelId}_HIST`
+  const data = localStorage.getItem(key)
+
+  console.log(key, data)
 
   if (data) {
     const questions = JSON.parse(data)
@@ -124,7 +125,7 @@ const getLocalHistory = () => {
 }
 
 const storeLocalHistory = (history: ChannelHistoryItem[]) => {
-  localStorage.setItem(botStore.storageKey, JSON.stringify(history))
+  localStorage.setItem(botStore.localStorageKey, JSON.stringify(history))
 }
 
 const addToHistory = (item: ChannelHistoryItem) => {
@@ -314,7 +315,7 @@ const resetActiveChannel = () => {
 const clear = () => {
   // setBotStore('chat', null)
   // setBotStore('history', [])
-  localStorage.removeItem(botStore.storageKey)
+  localStorage.removeItem(botStore.localStorageKey)
 }
 
 const botStoreActions = {

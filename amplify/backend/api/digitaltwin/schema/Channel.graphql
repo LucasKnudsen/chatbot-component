@@ -73,7 +73,7 @@ enum ChannelDocumentType {
 
 type ChannelHistoryItem
   @model(timestamps: { createdAt: "timestamp" })
-  @auth(rules: [{ allow: owner }]) {
+  @auth(rules: [{ allow: owner }, { allow: public, operations: [create], provider: iam }]) {
   ownerId: ID! @primaryKey(sortKeyFields: ["channelId", "timestamp"])
   channelId: ID!
     @index(
