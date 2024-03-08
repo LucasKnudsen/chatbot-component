@@ -18,7 +18,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { createQuery } from '@/hooks'
 
 export const PortalInitializer = (props: ChatConfig) => {
-  const { initTheme, theme } = useTheme()
+  const { initTheme } = useTheme()
   const { initText } = useText()
   const { initLanguage } = useLanguage()
 
@@ -44,32 +44,8 @@ export const PortalInitializer = (props: ChatConfig) => {
     },
   })
 
-  const assignTheme = theme()
-
   return (
     <>
-      <style>
-        {`
-          :host, :root {
-            --primaryColor: ${assignTheme.primaryColor};
-            --primaryAccent: ${assignTheme.primaryAccent};
-            --textColor: ${assignTheme.textColor};
-            --textSecondary: ${assignTheme.textSecondary};
-            --onPrimary: ${assignTheme.onPrimary};
-            --backgroundColor: ${assignTheme.backgroundColor};
-            --backgroundAccent: ${assignTheme.backgroundAccent};
-            --bubbleButtonColor: ${assignTheme.bubbleButtonColor};
-            --drawerBackground: ${assignTheme.drawerBackground};
-            --borderColor: ${assignTheme.borderColor};
-            --textInputTextColor: ${assignTheme.textInputTextColor};
-            --textInputBackgroundColor: ${assignTheme.textInputBackgroundColor};
-            --errorColor: ${assignTheme.errorColor};
-            --surfaceBackground: ${assignTheme.surfaceBackground};
-            --surfaceHoveredBackground: ${assignTheme.surfaceHoveredBackground};
-          }
-        `}
-      </style>
-
       <Show
         when={configQuery.data()}
         fallback={
@@ -87,10 +63,7 @@ export const PortalInitializer = (props: ChatConfig) => {
         <PortalContainer>
           <AuthProvider isPublic={Boolean(configQuery.data()?.isPublic)}>
             <Show when={configStore.isBotOpened}>
-              <div
-                class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'
-                style={{ background: 'rgba(223, 221, 232, 0.4)' }}
-              >
+              <div class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in '>
                 <Nav />
 
                 <BotManager />

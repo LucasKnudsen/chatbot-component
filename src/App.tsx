@@ -1,22 +1,14 @@
 import './dev.css'
 
-import { useTheme } from '@/features/theme'
 import { chatflows } from './constants'
 import { FraiaPortal } from './features/portal-init'
 import LayoutDefault from './layouts/default'
 
 function App() {
-  const { theme } = useTheme()
-
   return (
     <LayoutDefault>
       <div class='flex flex-col justify-center items-start h-full'>
-        <h1
-          class='text-[32px] leading-[54px] font-extralight'
-          style={{
-            color: theme().primaryColor,
-          }}
-        >
+        <h1 class='text-[32px] leading-[54px] font-extralight  ' style={{}}>
           Placeholder <span class='font-medium'>Website</span>
         </h1>
       </div>

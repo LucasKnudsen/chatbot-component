@@ -32,7 +32,23 @@ export const useTheme = () => {
     }
 
     setTheme(theme)
+    injectIntoRoot(theme)
   }
 
   return { theme, initTheme }
+}
+
+const injectIntoRoot = (theme: Theme) => {
+  const styleElement = document.createElement('style')
+  styleElement.textContent = `
+      :host, :root {
+        ${Object.entries(theme)
+          .map(([key, value]) => typeof value === 'string' && `--${key}: ${value};`)
+          .join('\n')}
+      }
+    `
+
+  console.log('styleElement', styleElement)
+
+  document.head.appendChild(styleElement)
 }

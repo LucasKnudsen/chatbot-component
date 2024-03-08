@@ -79,7 +79,7 @@ export const Bot = () => {
   })
 
   return (
-    <div class='relative md:flex md:px-16 flex-1 overflow-hidden'>
+    <div class='relative md:flex md:px-16 flex-1 overflow-hidden animate-fade-in '>
       <LoadingOverlay isLoading={initiatingLLMStream()} />
 
       <Switch>
