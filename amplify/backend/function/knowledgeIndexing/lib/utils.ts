@@ -70,9 +70,7 @@ const uploadRawText = async (body: string, path: string) => {
     ContentType: 'text/plain',
   }
 
-  const result = await s3Client.send(new PutObjectCommand(input))
-
-  console.log(result)
+  await s3Client.send(new PutObjectCommand(input))
 }
 
 const getChannel = async (channelId: string) => {
@@ -87,6 +85,23 @@ const getChannel = async (channelId: string) => {
 
   if (!Item) {
     throw new Error('Channel not found')
+  }
+
+  return Item
+}
+
+const getChatSpace = async (chatSpaceId: string) => {
+  const params: GetCommandInput = {
+    TableName: process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME,
+    Key: {
+      id: chatSpaceId,
+    },
+  }
+
+  const { Item } = await ddbDocClient.send(new GetCommand(params))
+
+  if (!Item) {
+    throw new Error('ChatSpace not found')
   }
 
   return Item
@@ -108,4 +123,11 @@ const createChannelDocument = async (input: Record<string, any>) => {
   return params.Item
 }
 
-export { authorizeUpdateAccess, createChannelDocument, generateFormData, getChannel, uploadRawText }
+export {
+  authorizeUpdateAccess,
+  createChannelDocument,
+  generateFormData,
+  getChannel,
+  getChatSpace,
+  uploadRawText,
+}

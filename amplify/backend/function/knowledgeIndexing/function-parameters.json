@@ -21,6 +21,9 @@
       "ChannelDocument:@model(appsync)": [
         "create",
         "read"
+      ],
+      "ChatSpace:@model(appsync)": [
+        "read"
       ]
     }
   },

@@ -66,7 +66,7 @@
         },
         "knowledgeIndexing": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/knowledgeIndexing-613141392f4b4b736931-build.zip"
+          "s3Key": "amplify-builds/knowledgeIndexing-4b2f4f65534a61597444-build.zip"
         },
         "onChannelUpdate": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",

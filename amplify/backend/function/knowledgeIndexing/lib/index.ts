@@ -5,6 +5,8 @@
 	API_DIGITALTWIN_CHANNELTABLE_NAME
 	API_DIGITALTWIN_CHANNELUSERACCESSTABLE_ARN
 	API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME
+	API_DIGITALTWIN_CHATSPACETABLE_ARN
+	API_DIGITALTWIN_CHATSPACETABLE_NAME
 	API_DIGITALTWIN_GRAPHQLAPIIDOUTPUT
 	AUTH_FRAIAAUTH_USERPOOLID
 	ENV
@@ -22,6 +24,7 @@ import {
   createChannelDocument,
   generateFormData,
   getChannel,
+  getChatSpace,
   uploadRawText,
 } from './utils'
 
@@ -59,10 +62,9 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
       throw new Error('Unauthorized to index knowledge')
     }
 
-    // Gets channel to set endpoint details
+    // Gets channel and chatspace to set endpoint details
     const channel = await getChannel(input.channelId)
-    // TODO: Find a way to get the database attribute from ChatSpace
-    // channel.chatSpaceId
+    const chatSpace = await getChatSpace(channel.chatSpaceId)
 
     const endpoint = `${channel.apiHost}/api/v1/vector/upsert/${channel.chatflowId}`
 
@@ -74,11 +76,10 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
 
     const formData = await generateFormData(input.s3KeyRawText)
 
-    const database = 'fraia_test'
-    formData.append('database', database)
+    formData.append('database', chatSpace.database)
     formData.append('tableName', `fraia_${input.channelId.replaceAll('-', '_')}`)
 
-    console.log('endpoint', endpoint)
+    console.log('endpoint', endpoint, chatSpace.database, input.channelId)
 
     const result = await fetch(endpoint, {
       method: 'POST',
@@ -92,12 +93,17 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
       throw new Error(`HTTP error! status: ${result.status}`)
     }
 
+    // No need to create a ChannelDocument if local mock
+    if (isMock) {
+      console.timeEnd('HANDLER')
+      return 'MOCK SUCCESSFUL RESPONSE'
+    }
+
     const channelDocument = await createChannelDocument({
       ...input,
     })
 
     console.timeEnd('HANDLER')
-
     return channelDocument
   } catch (error: any) {
     console.error('DEFAULT ERROR', error)

@@ -47,7 +47,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.uploadRawText = exports.getChannel = exports.generateFormData = exports.createChannelDocument = exports.authorizeUpdateAccess = void 0;
+exports.uploadRawText = exports.getChatSpace = exports.getChannel = exports.generateFormData = exports.createChannelDocument = exports.authorizeUpdateAccess = void 0;
 var FormData = require("form-data");
 var client_s3_1 = require("@aws-sdk/client-s3");
 var client_dynamodb_1 = require("@aws-sdk/client-dynamodb");
@@ -108,7 +108,7 @@ var generateFormData = function (s3Key) { return __awaiter(void 0, void 0, void 
 }); };
 exports.generateFormData = generateFormData;
 var uploadRawText = function (body, path) { return __awaiter(void 0, void 0, void 0, function () {
-    var input, result;
+    var input;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -120,8 +120,7 @@ var uploadRawText = function (body, path) { return __awaiter(void 0, void 0, voi
                 };
                 return [4 /*yield*/, s3Client.send(new client_s3_1.PutObjectCommand(input))];
             case 1:
-                result = _a.sent();
-                console.log(result);
+                _a.sent();
                 return [2 /*return*/];
         }
     });
@@ -149,6 +148,28 @@ var getChannel = function (channelId) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 exports.getChannel = getChannel;
+var getChatSpace = function (chatSpaceId) { return __awaiter(void 0, void 0, void 0, function () {
+    var params, Item;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                params = {
+                    TableName: process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME,
+                    Key: {
+                        id: chatSpaceId
+                    }
+                };
+                return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.GetCommand(params))];
+            case 1:
+                Item = (_a.sent()).Item;
+                if (!Item) {
+                    throw new Error('ChatSpace not found');
+                }
+                return [2 /*return*/, Item];
+        }
+    });
+}); };
+exports.getChatSpace = getChatSpace;
 var createChannelDocument = function (input) { return __awaiter(void 0, void 0, void 0, function () {
     var params;
     return __generator(this, function (_a) {

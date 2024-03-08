@@ -168,6 +168,32 @@
             },
             "STORAGE_FRAIASTORAGE_BUCKETNAME": {
               "Ref": "storagefraiastorageBucketName"
+            },
+            "API_DIGITALTWIN_CHATSPACETABLE_NAME": {
+              "Fn::ImportValue": {
+                "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChatSpaceTable:Name"
+              }
+            },
+            "API_DIGITALTWIN_CHATSPACETABLE_ARN": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:dynamodb:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":table/",
+                  {
+                    "Fn::ImportValue": {
+                      "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChatSpaceTable:Name"
+                    }
+                  }
+                ]
+              ]
             }
           }
         },
@@ -526,6 +552,63 @@
                       {
                         "Fn::ImportValue": {
                           "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChannelDocumentTable:Name"
+                        }
+                      },
+                      "/index/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Get*",
+                "dynamodb:BatchGetItem",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:PartiQLSelect"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::ImportValue": {
+                          "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChatSpaceTable:Name"
+                        }
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::ImportValue": {
+                          "Fn::Sub": "${apidigitaltwinGraphQLAPIIdOutput}:GetAtt:ChatSpaceTable:Name"
                         }
                       },
                       "/index/*"

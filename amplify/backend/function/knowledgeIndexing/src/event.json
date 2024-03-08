@@ -6,13 +6,13 @@
       "id": "3b1f2de4-80be-46fb-8ecf-5bfeec2d7611",
       "channelId": "0c7ab27e-8634-44cf-adab-0773f4249e10",
       "documentType": "DOCUMENT",
-      "fileName": "test.txt",
+      "fileName": "test.pdf",
       "fileSize": 279225,
-      "fileSuffix": "txt",
-      "fileType": "text/plain",
+      "fileSuffix": "pdf",
+      "fileType": "application/pdf",
       "includeInLibrary": true,
-      "s3KeyRawText": "Lucas nut preference.txt",
-      "s3KeyOriginal": "_/0c7ab27e-8634-44cf-adab-0773f4249e10/3b1f2de4-80be-46fb-8ecf-5bfeec2d7611/original.pdf",
+      "s3KeyRawText": "test/Seier.txt",
+      "s3KeyOriginal": "test/Seier.pdf",
       "title": "test",
       "uploadedBy": "a05d64f3-6d58-49d1-8143-d59caa88fd1f"
     }

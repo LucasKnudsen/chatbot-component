@@ -13,6 +13,10 @@ const parsePDF = async (pdfPath: string): Promise<string> => {
 
   const data = await pdf(await Body.transformToByteArray())
 
+  // // Split the text into half
+  // const split = Math.floor(data.text.length / 100)
+  // const section = data.text.substr(0, split)
+
   return data.text
 }
 
