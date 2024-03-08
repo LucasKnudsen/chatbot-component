@@ -23,6 +23,12 @@ export const chatflows: Record<string, ChatConfig> = {
   //   chatflowid: 'ac2aa23a-5c82-4f50-8b7a-76f87887fc38',
   //   apiHost: 'https://lionbrain.softdesign.dk',
   // },
+  staging: {
+    spaceId: 'za5d64f3-6d58-49d1-8143-d59caa88fd1f',
+    config: {
+      autoOpen: false,
+    },
+  },
   test: {
     spaceId: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
