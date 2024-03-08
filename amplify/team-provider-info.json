@@ -26,7 +26,7 @@
         },
         "adhoc": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/adhoc-68766b393162574b6a2b-build.zip"
+          "s3Key": "amplify-builds/adhoc-6d6664683042476b4576-build.zip"
         },
         "broadcastResolver": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
@@ -46,7 +46,7 @@
         },
         "handleChannelDocuments": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/handleChannelDocuments-526f4c4563715963756d-build.zip"
+          "s3Key": "amplify-builds/handleChannelDocuments-3372775a2b75766e524f-build.zip"
         },
         "handleChannelHistory": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
@@ -54,7 +54,7 @@
         },
         "handleChannels": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/handleChannels-6e62696b2f5366444478-build.zip"
+          "s3Key": "amplify-builds/handleChannels-68464d5149354f704d6d-build.zip"
         },
         "handleStorage": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
@@ -66,7 +66,7 @@
         },
         "knowledgeIndexing": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/knowledgeIndexing-52444b5a366c6d32614e-build.zip"
+          "s3Key": "amplify-builds/knowledgeIndexing-47797474555639645242-build.zip"
         },
         "onChannelUpdate": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
@@ -74,7 +74,15 @@
         },
         "websiteScraping": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/websiteScraping-45673747463641383039-build.zip"
+          "s3Key": "amplify-builds/websiteScraping-584f33515a6863724157-build.zip"
+        },
+        "youtubeScraping": {
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/youtubeScraping-4679337a3851744c6539-build.zip"
+        },
+        "combEvaluator": {
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/combEvaluator-39782b585231747a3750-build.zip"
         }
       },
       "hosting": {

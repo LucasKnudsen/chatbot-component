@@ -1,13 +1,16 @@
-import { useTheme } from '@/features/theme/hooks'
-import { For, JSX, Show, createEffect, createSignal, onCleanup } from 'solid-js'
-import { Divider } from '../Divider'
+import { JSX, createEffect, createSignal, onCleanup } from 'solid-js'
+
 import { SettingsButton } from '../icons'
+import { useTheme } from '@/features/theme/hooks'
+
+// import { Divider } from '../Divider'
 
 type Props = {
-  menuItems: MenuItemProps[]
+  // menuItems: MenuItemProps[]
   minWidth?: string
   transformOrigin?: string
   class?: string
+  children?: JSX.Element
 }
 
 export const Settings = (props: Props) => {
@@ -54,7 +57,7 @@ export const Settings = (props: Props) => {
 
   return (
     <>
-      <div ref={menuRef} class={'relative inline-block text-left'}>
+      <div ref={menuRef} class='relative inline-block text-left'>
         <div class={props.class}>
           <button type='button' class='flex items-center' onClick={toggleMenu}>
             <SettingsButton />
@@ -63,13 +66,13 @@ export const Settings = (props: Props) => {
 
         {/* <Show when={isOpen()}> */}
         <div
-          class='absolute right-0 mt-2 w-fit border rounded-lg shadow-lg z-10 backdrop-blur-md '
+          class='absolute left-0 mt-2 w-fit border rounded-lg shadow-lg z-10 backdrop-blur-md '
           style={{
             'border-color': theme().borderColor,
             background: theme().drawerBackground,
             'min-width': props.minWidth || '200px',
             transition: 'transform 250ms cubic-bezier(0, 1.2, 1, 1), opacity 150ms ease-out',
-            'transform-origin': props.transformOrigin || 'top right',
+            'transform-origin': props.transformOrigin || 'top left',
             transform: isOpen() ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
           }}
         >
@@ -77,7 +80,8 @@ export const Settings = (props: Props) => {
             class='p-2'
             onClick={handleMenuClick} // Prevent closing when clicking inside the menu
           >
-            <For each={props.menuItems}>
+            {props.children}
+            {/* <For each={props.menuItems}>
               {(item, index) => (
                 <>
                   <MenuItem
@@ -93,7 +97,7 @@ export const Settings = (props: Props) => {
                   </Show>
                 </>
               )}
-            </For>
+            </For> */}
           </div>
         </div>
         {/* </Show> */}
@@ -108,29 +112,15 @@ type MenuItemProps = {
   icon?: JSX.Element
 }
 
-const MenuItem = (props: MenuItemProps) => {
-  const { theme } = useTheme()
-
-  const primaryAccent = theme().primaryAccent
-
+export const MenuItem = (props: MenuItemProps) => {
   return (
-    <>
-      <style>
-        {`
-        .settings-menu-item:hover {
-          background: ${primaryAccent};
-        }
-      `}
-      </style>
-
-      <button
-        type='button'
-        class='flex text-sm w-full p-3 rounded-lg items-center font-medium settings-menu-item '
-        onClick={props.onClick}
-      >
-        {props.icon}
-        <span class='ml-3 whitespace-nowrap'>{props.label}</span>
-      </button>
-    </>
+    <button
+      type='button'
+      class='flex text-sm w-full p-3 rounded-lg items-center font-medium hover:bg-[var(--primaryAccent)]'
+      onClick={props.onClick}
+    >
+      {props.icon}
+      <span class='ml-3 whitespace-nowrap'>{props.label}</span>
+    </button>
   )
 }

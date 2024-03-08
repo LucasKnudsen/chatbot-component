@@ -1,4 +1,4 @@
-import { Show } from 'solid-js'
+import { BotManager, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
 import {
   ChatConfig,
   PortalButton,
@@ -7,15 +7,15 @@ import {
   configStoreActions,
   initializeConfig,
 } from '..'
-import { BotManager, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
 
-import { TypingBubble } from '@/components'
-import { Nav } from '@/components/Nav'
 import { AuthProvider } from '@/features/authentication'
-import { useText } from '@/features/text'
-import { themes } from '@/features/theme'
-import { useTheme } from '@/features/theme/hooks'
+import { Nav } from '@/components/nav'
+import { Show } from 'solid-js'
+import { TypingBubble } from '@/components'
 import { createQuery } from '@/hooks'
+import { themes } from '@/features/theme'
+import { useText } from '@/features/text'
+import { useTheme } from '@/features/theme/hooks'
 
 export const PortalInitializer = (props: ChatConfig) => {
   const { initTheme, theme } = useTheme()
@@ -88,7 +88,7 @@ export const PortalInitializer = (props: ChatConfig) => {
           <AuthProvider isPublic={Boolean(configQuery.data()?.isPublic)}>
             <Show when={configStore.isBotOpened}>
               <div
-                class='fixed top-0 left-0 flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'
+                class='flex flex-col h-full w-full overflow-hidden animate-fade-in backdrop-blur-lg'
                 style={{ background: 'rgba(223, 221, 232, 0.4)' }}
               >
                 <Nav />

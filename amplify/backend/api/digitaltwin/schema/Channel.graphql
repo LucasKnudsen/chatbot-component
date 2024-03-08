@@ -3,7 +3,6 @@ type Channel @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }, { a
   chatSpaceId: ID! @index(name: "byChatSpace", queryField: "channelsByChatSpaceId") # For Public purposes
   apiHost: String
   chatflowId: String
-  indexChatflowId: String
   apiKey: String
 
   name: String!
@@ -35,7 +34,7 @@ type ChannelUserAccess @model @auth(rules: [{ allow: owner }]) {
   channelName: String!
   channelDescription: String
   channelSubtitle: String
-  channelAvatar: String # URL to an image
+  channelAvatar: String # URL to an image or a mesh string
 }
 
 enum ChannelAccessType {
@@ -69,7 +68,7 @@ enum ChannelDocumentType {
   DOCUMENT
   WEBSITE
   YOUTUBE
-  TEXT
+  TEXT ## Text field input
 }
 
 type ChannelHistoryItem

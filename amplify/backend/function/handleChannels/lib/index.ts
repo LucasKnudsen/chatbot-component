@@ -20,6 +20,8 @@ import {
   DynamoDBDocumentClient,
   GetCommand,
   GetCommandInput,
+  PutCommand,
+  PutCommandInput,
   UpdateCommand,
   UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb'
@@ -54,29 +56,68 @@ type Arguments = {
   }
 }
 
+type Identity = {
+  sub: string
+  iss: string
+  client_id: string
+  origin_jti: string
+  event_id: string
+  token_use: string
+  scope: string
+  auth_time: number
+  exp: number
+  iat: number
+  jti: string
+  username: string
+}
+
 export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => {
   console.time('HANDLER')
 
   let isAuthorized = false
+  let identity: any
 
   try {
     const { isMock, input } = event.arguments
-    !isMock && console.log(`EVENT`, event)
-    !isMock && console.log(`EVENT`, event.arguments.input)
+    !isMock && console.log(event)
+    !isMock && console.log(`EVENT input`, event.arguments.input)
 
     switch (input.flow) {
       case 'UPDATE':
-        isAuthorized = isMock
-          ? true
+        identity = isMock
+          ? { username: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f' }
           : await authorizeToken(event.request.headers.authorization, async (identity) => {
-              return await authorizeUpdateAccess(identity, input.data.id)
+              isAuthorized = await authorizeUpdateAccess(identity, input.data.id)
+
+              if (!isAuthorized) {
+                throw new Error('Unauthorized to update channel')
+              }
+
+              return identity
             })
 
-        if (!isAuthorized) {
-          throw new Error('Unauthorized to update channel')
-        }
-
         return await updateChannel(input.data)
+
+      case 'CREATE':
+        const chatSpace = await getChatSpace(input.data.chatSpaceId)
+
+        identity = isMock
+          ? { username: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f' }
+          : await authorizeToken(event.request.headers.authorization, async (identity) => {
+              isAuthorized = await authorizeCreateAccess(identity, chatSpace)
+
+              if (!isAuthorized) {
+                throw new Error('Unauthorized to create new channel')
+              }
+
+              return identity
+            })
+
+        const newChannel = await createChannel(input.data)
+
+        await createChannelAccess(input.data, identity, chatSpace)
+
+        return newChannel
 
       default:
         break
@@ -91,7 +132,7 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
   }
 }
 
-const authorizeUpdateAccess = async (identity: any, channelId: string): Promise<boolean> => {
+const authorizeUpdateAccess = async (identity: Identity, channelId: string): Promise<boolean> => {
   const params: GetCommandInput = {
     TableName: process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME,
     Key: {
@@ -114,6 +155,10 @@ const authorizeUpdateAccess = async (identity: any, channelId: string): Promise<
   }
 
   return true
+}
+
+const authorizeCreateAccess = async (identity: Identity, chatSpace: any): Promise<boolean> => {
+  return identity['cognito:groups']?.includes(chatSpace.admin)
 }
 
 const updateChannel = async (data: Arguments['input']['data']) => {
@@ -151,4 +196,69 @@ const updateChannel = async (data: Arguments['input']['data']) => {
   const { Attributes } = await ddbDocClient.send(new UpdateCommand(params))
 
   return Attributes
+}
+
+const createChannel = async (data: Arguments['input']['data']) => {
+  const params: PutCommandInput = {
+    TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
+    Item: {
+      ...data,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+  }
+
+  await ddbDocClient.send(new PutCommand(params))
+
+  return data
+}
+
+const createChannelAccess = async (
+  data: Arguments['input']['data'],
+  identity: any,
+  chatSpace: any
+) => {
+  const params: PutCommandInput = {
+    TableName: process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME,
+    Item: {
+      accessId: identity.username,
+      channelId: data.id,
+      chatSpaceId: data.chatSpaceId,
+
+      channelHostId: chatSpace.hostId,
+      channelHostType: chatSpace.hostType,
+
+      accessType: 'ADMIN',
+      channelName: data.name,
+      channelDescription: data.description,
+      channelAvatar: data.avatar,
+      channelSubtitle: data.subtitle,
+
+      owner: identity.username,
+      __typename: 'ChannelUserAccess',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+  }
+
+  await ddbDocClient.send(new PutCommand(params))
+
+  return data
+}
+
+const getChatSpace = async (chatSpaceId: string) => {
+  const params: GetCommandInput = {
+    TableName: process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME,
+    Key: {
+      id: chatSpaceId,
+    },
+  }
+
+  const { Item } = await ddbDocClient.send(new GetCommand(params))
+
+  if (!Item) {
+    throw new Error('ChatSpace not found')
+  }
+
+  return Item
 }

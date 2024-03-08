@@ -128,7 +128,6 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
     chatSpaceId
     apiHost
     chatflowId
-    indexChatflowId
     apiKey
     name
     subtitle
@@ -159,7 +158,6 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
     chatSpaceId
     apiHost
     chatflowId
-    indexChatflowId
     apiKey
     name
     subtitle
@@ -190,7 +188,6 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
     chatSpaceId
     apiHost
     chatflowId
-    indexChatflowId
     apiKey
     name
     subtitle
@@ -509,6 +506,7 @@ export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($
       __typename
     }
     admin
+    database
     createdAt
     updatedAt
     __typename
@@ -572,6 +570,7 @@ export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($
       __typename
     }
     admin
+    database
     createdAt
     updatedAt
     __typename
@@ -635,6 +634,7 @@ export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($
       __typename
     }
     admin
+    database
     createdAt
     updatedAt
     __typename

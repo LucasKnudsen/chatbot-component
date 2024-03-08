@@ -2553,6 +2553,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@popperjs/core@^2.11.8":
+  version "2.11.8"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
+  integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
+
 "@rushstack/eslint-patch@^1.1.3":
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.5.1.tgz#5f1b518ec5fa54437c0b7c4a821546c64fed6922"
@@ -6556,6 +6561,11 @@ solid-js@^1.7.8:
     csstype "^3.1.0"
     seroval "^0.12.0"
 
+solid-popper@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/solid-popper/-/solid-popper-0.3.0.tgz#83eea03b367c801f0c79e5dd130c6efa1006e6e4"
+  integrity sha512-XlfEWAyxGGqFgg/uRpF+BemSfCqjbLA8p6fToDa+6v3paw3eBQj0TU08aBOIj2VeigaEiz8ZTlDx1eBLVRivBg==
+
 solid-refresh@^0.5.3:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/solid-refresh/-/solid-refresh-0.5.3.tgz#41b97fa1ee655d86125abda8e398861683f926b6"
@@ -6571,6 +6581,11 @@ solid-styled-jsx@^0.27.1:
   integrity sha512-s/BidA5ii4cGuWbk4cB3qajXkZuBfqaoQPhw0Exzbc8Y3fqy2g0qshmJyop0iuSZgJ8FpJ9UeYVLhRF0GZbVpA==
   dependencies:
     babel-plugin-transform-rename-import "^2.3.0"
+
+solid-use@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/solid-use/-/solid-use-0.8.0.tgz#d46258c45edb0f4c621285e0ad1aa6b6a674d79b"
+  integrity sha512-YX+XmcKLvSx3bwMimMhFy40ZkDnShnUcEw6cW6fSscwKEgl1TG3GlgAvkBmQ3AeWjvQSd8+HGTr82ImsrjkkqA==
 
 source-map-js@^1.0.2:
   version "1.0.2"
@@ -6776,6 +6791,13 @@ tapable@^2.2.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-2.2.1.tgz#1967a73ef4060a82f12ab96af86d52fdb76eeca0"
   integrity sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==
+
+terracotta@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/terracotta/-/terracotta-1.0.5.tgz#633d3aa630f686f383e2577d156c14d261f7eb4c"
+  integrity sha512-4jkpXGKemeWjsBGDoBK1tnovGfIEMM8+Fa99T0TD4VYUaZq6hXHEWMfHshxy1h+DzsanDAwSBIBM0NnOohzijw==
+  dependencies:
+    solid-use "^0.8.0"
 
 text-hex@1.0.x:
   version "1.0.0"

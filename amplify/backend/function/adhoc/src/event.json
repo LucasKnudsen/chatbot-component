@@ -1,12 +1,12 @@
 {
   "isMock": true,
   "flow": "COMPANY",
-  "organizationId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
-  "chatSpaceId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
-  "channelId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
-  "adminUserId": "a05d64f3-6d58-49d1-8143-d59caa88fd1f",
-  "adminEmail": "chula-admin@mail.com",
+  "organizationId": "x05d64f3-6d58-49d1-8143-d59caa88fd1f",
+  "chatSpaceId": "x05d64f3-6d58-49d1-8143-d59caa88fd1f",
+  "channelId": "x05d64f3-6d58-49d1-8143-d59caa88fd1f",
+  "adminUserId": "x05d64f3-6d58-49d1-8143-d59caa88fd1f",
+  "adminEmail": "lucas.knudsen@fraia.ai",
 
-  "userEmail": "laksteelhouse@gmail.com",
-  "studentUserId": "b05d64f3-6d58-49d1-8143-d59caa88fd1f"
+  "userEmail": "alaksteelhouse@gmail.com",
+  "studentUserId": "y05d64f3-6d58-49d1-8143-d59caa88fd1f"
 }

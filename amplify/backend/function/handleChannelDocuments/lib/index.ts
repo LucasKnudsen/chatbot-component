@@ -94,7 +94,7 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
         return await listChannelDocuments(input.data.channelId)
 
       default:
-        break
+        throw new Error('Invalid flow')
     }
 
     console.timeEnd('HANDLER')

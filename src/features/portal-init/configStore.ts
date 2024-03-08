@@ -1,14 +1,18 @@
+import { Channel, ChannelUserAccess } from '@/graphql'
+
 import { ChatSpace } from '@/graphql'
 import { createStore } from 'solid-js/store'
 
 type ChatConfigStore = {
   isBotOpened: boolean
   chatSpaceConfig: ChatSpace
+  channels: Channel[] | ChannelUserAccess[]
 }
 
 const [configStore, setConfigStore] = createStore<ChatConfigStore>({
   isBotOpened: false,
   chatSpaceConfig: {} as any,
+  channels: [],
 })
 
 const openBot = () => {

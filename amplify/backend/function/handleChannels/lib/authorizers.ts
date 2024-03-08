@@ -36,7 +36,7 @@ const getSigningKey = (header: any, callback: any) => {
 
 const authorizeToken = async (
   token: string,
-  onSuccess: (identity: Identity) => Promise<boolean>
+  onSuccess: (identity: Identity) => Promise<Identity>
 ) => {
   if (!token) {
     throw new Error('MISSING_TOKEN')

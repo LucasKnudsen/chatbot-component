@@ -73,15 +73,18 @@ exports.handler = async (event) => {
 
   // --- ADMIN CONFIG ---
 
-  const orgAdminGroupName = 'Org-Admin'
-  const chatSpaceAdminGroupName = 'Space-Admin'
+  const orgAdminGroupName = 'FRAIA-ORG-Admin'
+  const chatSpaceAdminGroupName = 'FRAIA-HUB-Admin'
+  const includeReadUser = false
 
-  const orgName = 'Chulalongkorn University'
+  const orgName = 'Fraia Tech'
+  const orgLogo =
+    'https://assets-global.website-files.com/659e41404eb26f00cd0ae340/659e42ee393ac4ac04c036a5_Layer%201.svg'
 
-  const chatSpaceName = 'SCII Portal'
+  const chatSpaceName = 'Fraia Test'
   const hostType = 'COMPANY'
 
-  const channelName = 'My First Course'
+  const channelName = 'Happy Days'
 
   // --- USER CONFIG ---
 
@@ -96,7 +99,7 @@ exports.handler = async (event) => {
           createRecord(process.env.API_DIGITALTWIN_ORGANIZATIONTABLE_NAME, {
             id: organizationId,
             name: orgName,
-            logo: 'https://careers.chula.ac.th/assets/img/logo-alternative.png',
+            logo: orgLogo,
 
             admin: orgAdminGroupName,
 
@@ -153,8 +156,8 @@ exports.handler = async (event) => {
           ),
         ])
 
-        // 7. Add to general and specific Admin Groups
-        // 8. Set password
+        console.log('Organization and Admin User Created: ')
+
         const [ChatSpace, Channel, User] = await Promise.all([
           // Create Chat Space
           createRecord(process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME, {
@@ -166,7 +169,7 @@ exports.handler = async (event) => {
 
             isPublic: false,
             isMultiChannel: true,
-            themeId: 'fraia',
+            themeId: 'bubbles',
 
             defaultLanguage: 'en',
 
@@ -216,6 +219,24 @@ exports.handler = async (event) => {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }),
+          // Creates Access record to Channel for Admin User
+          createRecord(process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME, {
+            accessId: adminUserId,
+            channelId,
+            chatSpaceId,
+
+            channelHostId: organizationId,
+            channelHostType: hostType,
+
+            accessType: 'ADMIN',
+            channelName: channelName,
+            channelDescription: 'This is knowledge base subject zero. Take good care of it!',
+
+            owner: CognitoUser.User.Username,
+            __typename: 'ChannelUserAccess',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          }),
           // Add Admin to Org Group
           cognitoClient.send(
             new AdminAddUserToGroupCommand({
@@ -240,6 +261,7 @@ exports.handler = async (event) => {
               Username: adminUserId,
             })
           ),
+          // Force changes password here
           // cognitoClient.send(
           //   new AdminSetUserPasswordCommand({
           //     Password: 'Abcd1234',
@@ -250,87 +272,92 @@ exports.handler = async (event) => {
           // ),
         ])
 
-        // Creates a Student User to read the channel
-        const { User: CognitoCompanyUser } = await cognitoClient.send(
-          new AdminCreateUserCommand({
-            UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
-            TemporaryPassword: 'Abcd1234',
-            Username: studentUserId,
-            UserAttributes: [
-              {
-                Name: 'email',
-                Value: userEmail,
-              },
-              {
-                Name: 'email_verified',
-                Value: 'true',
-              },
-              {
-                Name: 'preferred_username',
-                Value: 'student',
-              },
-              {
-                Name: 'custom:userId',
-                Value: studentUserId,
-              },
-            ],
-            ClientMetadata: {
-              organizationId: organizationId,
-              chatSpaceId: chatSpaceId,
-              hostType: hostType,
-              userRole: userRole,
-            },
-          })
-        )
+        // IF WE ALSO WANT A READ USER
+        // if (includeReadUser) {
+        //   // Creates a Student User to read the channel
+        //   const { User: CognitoCompanyUser } = await cognitoClient.send(
+        //     new AdminCreateUserCommand({
+        //       UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+        //       TemporaryPassword: 'Abcd1234',
+        //       Username: studentUserId,
+        //       UserAttributes: [
+        //         {
+        //           Name: 'email',
+        //           Value: userEmail,
+        //         },
+        //         {
+        //           Name: 'email_verified',
+        //           Value: 'true',
+        //         },
+        //         {
+        //           Name: 'preferred_username',
+        //           Value: 'student',
+        //         },
+        //         {
+        //           Name: 'custom:userId',
+        //           Value: studentUserId,
+        //         },
+        //       ],
+        //       ClientMetadata: {
+        //         organizationId: organizationId,
+        //         chatSpaceId: chatSpaceId,
+        //         hostType: hostType,
+        //         userRole: userRole,
+        //       },
+        //     })
+        //   )
 
-        await Promise.all([
-          // Create Student User record
-          createRecord(process.env.API_DIGITALTWIN_USERTABLE_NAME, {
-            id: studentUserId,
-            organizationId: organizationId,
+        //   await Promise.all([
+        //     // Create Student User record
+        //     createRecord(process.env.API_DIGITALTWIN_USERTABLE_NAME, {
+        //       id: studentUserId,
+        //       organizationId: organizationId,
 
-            email: userEmail,
-            cognitoId: CognitoCompanyUser.Attributes.find((attr) => attr.Name === 'sub').Value,
+        //       email: userEmail,
+        //       cognitoId: CognitoCompanyUser.Attributes.find((attr) => attr.Name === 'sub').Value,
 
-            name: 'Student-san',
-            status: 'ACTIVE',
-            invitedOn: new Date().toISOString(),
-            joinedOn: new Date().toISOString(),
+        //       name: 'Student-san',
+        //       status: 'ACTIVE',
+        //       invitedOn: new Date().toISOString(),
+        //       joinedOn: new Date().toISOString(),
 
-            owner: CognitoCompanyUser.Username,
-            __typename: 'User',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          }),
+        //       owner: CognitoCompanyUser.Username,
+        //       __typename: 'User',
+        //       createdAt: new Date().toISOString(),
+        //       updatedAt: new Date().toISOString(),
+        //     }),
 
-          // Creates Access record to Channel for Student User
-          createRecord(process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME, {
-            accessId: studentUserId,
-            channelId: channelId,
-            chatSpaceId: chatSpaceId,
+        //     // Creates Access record to Channel for Student User
+        //     createRecord(process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME, {
+        //       accessId: studentUserId,
+        //       channelId: channelId,
+        //       chatSpaceId: chatSpaceId,
 
-            channelHostId: organizationId,
-            channelHostType: hostType,
+        //       channelHostId: organizationId,
+        //       channelHostType: hostType,
 
-            accessType: userRole,
-            channelName: channelName,
-            channelDescription: 'This is knowledge base subject zero. Take good care of it!',
+        //       accessType: userRole,
+        //       channelName: channelName,
+        //       channelDescription: 'This is knowledge base subject zero. Take good care of it!',
 
-            owner: CognitoCompanyUser.Username,
-            __typename: 'ChannelUserAccess',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          }),
-          // Force changes password here
-          cognitoClient.send(
-            new AdminSetUserPasswordCommand({
-              Password: 'Abcd1234',
-              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
-              Username: studentUserId,
-              Permanent: true,
-            })
-          ),
-        ])
+        //       owner: CognitoCompanyUser.Username,
+        //       __typename: 'ChannelUserAccess',
+        //       createdAt: new Date().toISOString(),
+        //       updatedAt: new Date().toISOString(),
+        //     }),
+        //     // Force changes password here
+        //     cognitoClient.send(
+        //       new AdminSetUserPasswordCommand({
+        //         Password: 'Abcd1234',
+        //         UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+        //         Username: studentUserId,
+        //         Permanent: true,
+        //       })
+        //     ),
+        //   ])
+        // }
+
+        break
 
       case 'PRIVATE':
         // 1. Create Cognito User

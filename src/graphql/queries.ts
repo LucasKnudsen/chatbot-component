@@ -136,7 +136,6 @@ export const getChannel = /* GraphQL */ `query GetChannel($id: ID!) {
     chatSpaceId
     apiHost
     chatflowId
-    indexChatflowId
     apiKey
     name
     subtitle
@@ -169,7 +168,6 @@ export const listChannels = /* GraphQL */ `query ListChannels(
       chatSpaceId
       apiHost
       chatflowId
-      indexChatflowId
       apiKey
       name
       subtitle
@@ -213,7 +211,6 @@ export const channelsByChatSpaceId = /* GraphQL */ `query ChannelsByChatSpaceId(
       chatSpaceId
       apiHost
       chatflowId
-      indexChatflowId
       apiKey
       name
       subtitle
@@ -620,6 +617,7 @@ export const getChatSpace = /* GraphQL */ `query GetChatSpace($id: ID!) {
       __typename
     }
     admin
+    database
     createdAt
     updatedAt
     __typename
@@ -688,6 +686,7 @@ export const listChatSpaces = /* GraphQL */ `query ListChatSpaces(
         __typename
       }
       admin
+      database
       createdAt
       updatedAt
       __typename
@@ -769,6 +768,7 @@ export const chatSpaceByHostId = /* GraphQL */ `query ChatSpaceByHostId(
         __typename
       }
       admin
+      database
       createdAt
       updatedAt
       __typename
@@ -916,7 +916,6 @@ export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchCha
     chatSpaceId
     apiHost
     chatflowId
-    indexChatflowId
     apiKey
     name
     subtitle

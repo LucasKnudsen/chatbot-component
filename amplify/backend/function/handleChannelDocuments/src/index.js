@@ -132,7 +132,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 }
                 return [4 /*yield*/, listChannelDocuments(input_1.data.channelId)];
             case 11: return [2 /*return*/, _e.sent()];
-            case 12: return [3 /*break*/, 13];
+            case 12: throw new Error('Invalid flow');
             case 13:
                 console.timeEnd('HANDLER');
                 return [3 /*break*/, 15];

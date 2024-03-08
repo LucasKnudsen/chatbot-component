@@ -151,7 +151,6 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
     chatSpaceId
     apiHost
     chatflowId
-    indexChatflowId
     apiKey
     name
     subtitle
@@ -182,7 +181,6 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
     chatSpaceId
     apiHost
     chatflowId
-    indexChatflowId
     apiKey
     name
     subtitle
@@ -213,7 +211,6 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
     chatSpaceId
     apiHost
     chatflowId
-    indexChatflowId
     apiKey
     name
     subtitle
@@ -538,6 +535,7 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
       __typename
     }
     admin
+    database
     createdAt
     updatedAt
     __typename
@@ -604,6 +602,7 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
       __typename
     }
     admin
+    database
     createdAt
     updatedAt
     __typename
@@ -670,6 +669,7 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
       __typename
     }
     admin
+    database
     createdAt
     updatedAt
     __typename
@@ -814,7 +814,6 @@ export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: Han
     chatSpaceId
     apiHost
     chatflowId
-    indexChatflowId
     apiKey
     name
     subtitle

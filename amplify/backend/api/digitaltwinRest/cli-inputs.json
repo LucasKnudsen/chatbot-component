@@ -113,6 +113,40 @@
           ]
         }
       }
+    },
+    "/scraper/youtube": {
+      "name": "/scraper/youtube",
+      "lambdaFunction": "youtubeScraping",
+      "permissions": {
+        "setting": "protected",
+        "auth": [
+          "create",
+          "read",
+          "update"
+        ],
+        "guest": [
+          "read"
+        ],
+        "groups": {
+          "SuperAdmin": [
+            "create",
+            "read",
+            "update"
+          ],
+          "Admin": [
+            "create",
+            "read",
+            "update"
+          ]
+        }
+      }
+    },
+    "/comb/evaluate": {
+      "name": "/comb/evaluate",
+      "lambdaFunction": "combEvaluator",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }
