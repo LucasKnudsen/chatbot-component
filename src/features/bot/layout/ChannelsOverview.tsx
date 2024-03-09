@@ -72,7 +72,7 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
           ></div>
         </div>
         {/* Create new knowledge base button */}
-        <div class='menu-card flex items-center justify-center'>
+        <div class='menu-card hidden sm:flex items-center justify-center'>
           <div class='m-auto text-center'>
             <div class='flex items-center justify-center w-11 h-11 md:w-[54px] md:h-[54px] mx-auto mb-3 md:mb-[25px] bg-[var(--primaryColor)] rounded-full'>
               <svg
@@ -96,6 +96,22 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
           </div>
         </div>
       </div>
+
+      <button class='fixed right-5 bottom-5 flex sm:hidden justify-center items-center shadow-lg rounded-full w-[45px] h-[45px] bg-[var(--primaryColor)]'>
+        <svg
+          class='w-5 h-5'
+          width='25'
+          height='25'
+          viewBox='0 0 25 25'
+          fill='none'
+          xmlns='http://www.w3.org/2000/svg'
+        >
+          <path
+            d='M13.584 0V24.48H10.848V0H13.584ZM0 10.992H24.432V13.488H0V10.992Z'
+            fill='white'
+          />
+        </svg>
+      </button>
 
       <div class='text-center text-sm md:text-base font-bold mt-auto underline text-[var(--primaryColor)] pt-10'>
         Why I have to choose an AI?
@@ -132,7 +148,7 @@ const ChannelItem = (props: {
 
   return (
     <div
-      class={`menu-card relative aspect-square ${
+      class={`menu-card flex relative aspect-square ${
         channelDetailsMutation.isLoading() ? 'active' : ''
       }`}
       onClick={() => channelDetailsMutation.mutate()}

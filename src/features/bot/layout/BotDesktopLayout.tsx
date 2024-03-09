@@ -1,14 +1,15 @@
-import { Divider } from '@/components/Divider'
-import { ChatInput } from '@/components/inputs/chatInput'
-import { ContextualContainer } from '@/features/contextual'
-import { ChatWindow } from '@/features/messages'
-import { SuggestedPrompts } from '@/features/prompt'
-import { useText } from '@/features/text'
 import { Show, createMemo, createSignal } from 'solid-js'
 import { botStore, botStoreActions } from '..'
+
+import { ChatInput } from '@/components/inputs/chatInput'
+import { ChatWindow } from '@/features/messages'
+import { ContextualContainer } from '@/features/contextual'
+import { Divider } from '@/components/Divider'
 import { ResourcesSidebar } from '../components/ResourcesSidebar'
 import { SidebarTabView } from '../components/SidebarTabView'
+import { SuggestedPrompts } from '@/features/prompt'
 import { sidebarPaddingNum } from '../constants'
+import { useText } from '@/features/text'
 
 type BotDesktopProps = {
   userInput: string
@@ -67,7 +68,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
         <Divider margin={0} />
 
         {/* Input Container */}
-        <div class='w-full pb-1 z-1 mt-5 '>
+        <div class='pb-1 pt-5 '>
           <ChatInput
             rows={2}
             defaultValue={props.userInput}
