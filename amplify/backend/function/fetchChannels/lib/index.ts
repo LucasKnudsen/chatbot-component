@@ -67,13 +67,13 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
         break
 
       case 'BY_CHAT_SPACE':
-        const isPublic = await authorizePublicAttribute(input.chatSpaceId!)
+        const chatSpace = await getChatSpace(input.chatSpaceId!)
 
-        if (!isPublic) {
+        if (!chatSpace.isPublic) {
           isAuthorized = await authorizeToken(
             event.request.headers.authorization,
             async (identity) => {
-              return await authorizeAdminAccess(identity, input.chatSpaceId!)
+              return await authorizeAdminAccess(identity, chatSpace)
             }
           )
 
@@ -82,7 +82,7 @@ export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => 
           }
         }
 
-        data = await fetchChannelsByChatSpace(input.chatSpaceId!, isPublic)
+        data = await fetchChannelsByChatSpace(input.chatSpaceId!, chatSpace.isPublic)
 
         break
 
@@ -115,12 +115,8 @@ const fetchSingleChannel = async (channelId: string) => {
   return [Item]
 }
 
-const authorizeAdminAccess = async (identity: any, chatSpaceId: string): Promise<boolean> => {
-  // Get User's Groups & organizationId
-  // Get Organization's Groups
-  // Check if User's Groups is indeed a part of Organization's Groups
-
-  return true
+const authorizeAdminAccess = async (identity: any, chatSpace: any): Promise<boolean> => {
+  return identity['cognito:groups']?.includes(chatSpace.admin)
 }
 
 const authorizeChannelAccess = async (identity: any, channelId: string): Promise<boolean> => {
@@ -149,6 +145,7 @@ const fetchChannelsByChatSpace = async (chatSpaceId: string, isPublic: boolean) 
     KeyConditionExpression: 'chatSpaceId = :chatSpaceId',
     ExpressionAttributeValues: {
       ':chatSpaceId': chatSpaceId,
+      ':isPublic': isPublic,
     },
     FilterExpression: isPublic ? 'isPublic = :isPublic' : undefined,
   }
@@ -158,7 +155,7 @@ const fetchChannelsByChatSpace = async (chatSpaceId: string, isPublic: boolean) 
   return Items
 }
 
-const authorizePublicAttribute = async (chatSpaceId: string): Promise<boolean> => {
+const getChatSpace = async (chatSpaceId: string): Promise<boolean> => {
   // Check if chatSpace is public
   const params: GetCommandInput = {
     TableName: process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME,
@@ -170,13 +167,8 @@ const authorizePublicAttribute = async (chatSpaceId: string): Promise<boolean> =
   const { Item } = await ddbDocClient.send(new GetCommand(params))
 
   if (!Item) {
-    console.error('ChatSpace not found')
-    return false
+    throw new Error('ChatSpace not found')
   }
 
-  if (Item.isPublic) {
-    return true
-  }
-
-  return false
+  return Item
 }

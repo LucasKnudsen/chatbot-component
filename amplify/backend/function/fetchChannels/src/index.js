@@ -44,7 +44,7 @@ var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
 var ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(ddbService);
 var authorizers_1 = require("./authorizers");
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var isAuthorized, _a, isMock, input_1, data, _b, isPublic, error_1;
+    var isAuthorized, _a, isMock, input_1, data, _b, chatSpace_1, error_1;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
@@ -79,14 +79,14 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
             case 4:
                 data = _c.sent();
                 return [3 /*break*/, 11];
-            case 5: return [4 /*yield*/, authorizePublicAttribute(input_1.chatSpaceId)];
+            case 5: return [4 /*yield*/, getChatSpace(input_1.chatSpaceId)];
             case 6:
-                isPublic = _c.sent();
-                if (!!isPublic) return [3 /*break*/, 8];
+                chatSpace_1 = _c.sent();
+                if (!!chatSpace_1.isPublic) return [3 /*break*/, 8];
                 return [4 /*yield*/, (0, authorizers_1.authorizeToken)(event.request.headers.authorization, function (identity) { return __awaiter(void 0, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, authorizeAdminAccess(identity, input_1.chatSpaceId)];
+                                case 0: return [4 /*yield*/, authorizeAdminAccess(identity, chatSpace_1)];
                                 case 1: return [2 /*return*/, _a.sent()];
                             }
                         });
@@ -97,7 +97,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     throw new Error('Unauthorized to fetch channels');
                 }
                 _c.label = 8;
-            case 8: return [4 /*yield*/, fetchChannelsByChatSpace(input_1.chatSpaceId, isPublic)];
+            case 8: return [4 /*yield*/, fetchChannelsByChatSpace(input_1.chatSpaceId, chatSpace_1.isPublic)];
             case 9:
                 data = _c.sent();
                 return [3 /*break*/, 11];
@@ -135,12 +135,10 @@ var fetchSingleChannel = function (channelId) { return __awaiter(void 0, void 0,
         }
     });
 }); };
-var authorizeAdminAccess = function (identity, chatSpaceId) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        // Get User's Groups & organizationId
-        // Get Organization's Groups
-        // Check if User's Groups is indeed a part of Organization's Groups
-        return [2 /*return*/, true];
+var authorizeAdminAccess = function (identity, chatSpace) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a;
+    return __generator(this, function (_b) {
+        return [2 /*return*/, (_a = identity['cognito:groups']) === null || _a === void 0 ? void 0 : _a.includes(chatSpace.admin)];
     });
 }); };
 var authorizeChannelAccess = function (identity, channelId) { return __awaiter(void 0, void 0, void 0, function () {
@@ -176,7 +174,8 @@ var fetchChannelsByChatSpace = function (chatSpaceId, isPublic) { return __await
                     IndexName: 'byChatSpace',
                     KeyConditionExpression: 'chatSpaceId = :chatSpaceId',
                     ExpressionAttributeValues: {
-                        ':chatSpaceId': chatSpaceId
+                        ':chatSpaceId': chatSpaceId,
+                        ':isPublic': isPublic
                     },
                     FilterExpression: isPublic ? 'isPublic = :isPublic' : undefined
                 };
@@ -187,7 +186,7 @@ var fetchChannelsByChatSpace = function (chatSpaceId, isPublic) { return __await
         }
     });
 }); };
-var authorizePublicAttribute = function (chatSpaceId) { return __awaiter(void 0, void 0, void 0, function () {
+var getChatSpace = function (chatSpaceId) { return __awaiter(void 0, void 0, void 0, function () {
     var params, Item;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -202,13 +201,9 @@ var authorizePublicAttribute = function (chatSpaceId) { return __awaiter(void 0,
             case 1:
                 Item = (_a.sent()).Item;
                 if (!Item) {
-                    console.error('ChatSpace not found');
-                    return [2 /*return*/, false];
+                    throw new Error('ChatSpace not found');
                 }
-                if (Item.isPublic) {
-                    return [2 /*return*/, true];
-                }
-                return [2 /*return*/, false];
+                return [2 /*return*/, Item];
         }
     });
 }); };

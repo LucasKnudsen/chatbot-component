@@ -4,6 +4,17 @@
     REGION
     STORAGE_FRAIASTORAGE_BUCKETNAME
 Amplify Params - DO NOT EDIT */
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -50,44 +61,50 @@ var ssmClient = new client_ssm_1.SSMClient({ region: process.env.REGION });
 var s3Client = new client_s3_1.S3Client({ region: process.env.REGION });
 var dummyContext = "Lucas is in Thailand until the 25th of march. After that, he will fly to Denmark";
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var responseStatus, responseBody, body, context, _a, evaluationResults, error_1;
-    var _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var responseStatus, responseBody, body, context, _a, _b, evaluationResults, error_1;
+    var _c, _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0:
                 console.time('HANDLER');
                 responseStatus = 200;
-                _c.label = 1;
+                _e.label = 1;
             case 1:
-                _c.trys.push([1, 6, 7, 8]);
+                _e.trys.push([1, 7, 8, 9]);
                 !event.isMock && console.log(event.body);
                 body = JSON.parse(event.body || '');
                 if (!event.isMock) return [3 /*break*/, 2];
                 _a = dummyContext;
-                return [3 /*break*/, 4];
-            case 2: return [4 /*yield*/, getKnowledgeContext(body.channelId)];
+                return [3 /*break*/, 5];
+            case 2:
+                _b = ((_c = body.overrideConfig) === null || _c === void 0 ? void 0 : _c.context);
+                if (_b) return [3 /*break*/, 4];
+                return [4 /*yield*/, getKnowledgeContext(body.channelId)];
             case 3:
-                _a = _c.sent();
-                _c.label = 4;
+                _b = (_e.sent());
+                _e.label = 4;
             case 4:
+                _a = _b;
+                _e.label = 5;
+            case 5:
                 context = _a;
                 return [4 /*yield*/, evaluateAnswers(body.dataset, context, body.overrideConfig)];
-            case 5:
-                evaluationResults = _c.sent();
-                responseBody = evaluationResults;
-                return [3 /*break*/, 8];
             case 6:
-                error_1 = _c.sent();
+                evaluationResults = _e.sent();
+                responseBody = evaluationResults;
+                return [3 /*break*/, 9];
+            case 7:
+                error_1 = _e.sent();
                 console.error('DEFAULT ERROR', error_1);
-                responseStatus = ((_b = error_1.response) === null || _b === void 0 ? void 0 : _b.status) || 500;
+                responseStatus = ((_d = error_1.response) === null || _d === void 0 ? void 0 : _d.status) || 500;
                 responseBody = {
                     message: error_1.message,
                     status: responseStatus,
                     type: error_1.type,
                     stack: error_1.stack
                 };
-                return [3 /*break*/, 8];
-            case 7:
+                return [3 /*break*/, 9];
+            case 8:
                 console.timeEnd('HANDLER');
                 return [2 /*return*/, {
                         statusCode: responseStatus,
@@ -97,7 +114,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                             'Access-Control-Allow-Headers': '*'
                         }
                     }];
-            case 8: return [2 /*return*/];
+            case 9: return [2 /*return*/];
         }
     });
 }); };
@@ -180,15 +197,14 @@ var initiateOpenAI = function () { return __awaiter(void 0, void 0, void 0, func
     });
 }); };
 var evaluateAnswers = function (dataset, context, overrideConfig) { return __awaiter(void 0, void 0, void 0, function () {
-    var openai, model, temperature, max_tokens, openaiResults, evaluations;
+    var openai, model, temperature, openaiResults, evaluationsList;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, initiateOpenAI()];
             case 1:
                 openai = _a.sent();
                 model = (overrideConfig === null || overrideConfig === void 0 ? void 0 : overrideConfig.model) || 'gpt-4';
-                temperature = (overrideConfig === null || overrideConfig === void 0 ? void 0 : overrideConfig.temperature) || 0.7;
-                max_tokens = (overrideConfig === null || overrideConfig === void 0 ? void 0 : overrideConfig.maxTokens) || 100;
+                temperature = (overrideConfig === null || overrideConfig === void 0 ? void 0 : overrideConfig.temperature) || 0.3;
                 return [4 /*yield*/, Promise.all(dataset.map(function (_a) {
                         var question = _a.question, answer = _a.answer;
                         return openai.chat.completions.create({
@@ -201,7 +217,8 @@ var evaluateAnswers = function (dataset, context, overrideConfig) { return __awa
                     }))];
             case 2:
                 openaiResults = _a.sent();
-                evaluations = openaiResults.map(function (result, index) {
+                evaluationsList = openaiResults
+                    .map(function (result, index) {
                     var _a;
                     try {
                         return JSON.parse((_a = result.choices[0].message.tool_calls) === null || _a === void 0 ? void 0 : _a[0]["function"].arguments);
@@ -209,11 +226,16 @@ var evaluateAnswers = function (dataset, context, overrideConfig) { return __awa
                     catch (error) {
                         console.log('shit');
                         return {
+                            evaluations: [],
                             error: 'OpenAI response was parsed incorrectly'
                         };
                     }
+                })
+                    .map(function (evaulationObj, index) {
+                    console.log(evaulationObj.evaluations);
+                    return __assign({ timestamp: dataset[index].timestamp }, evaulationObj);
                 });
-                return [2 /*return*/, evaluations];
+                return [2 /*return*/, evaluationsList];
         }
     });
 }); };

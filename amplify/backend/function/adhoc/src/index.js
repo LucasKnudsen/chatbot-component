@@ -67,6 +67,7 @@ exports.handler = async (event) => {
     channelId,
     userEmail,
     adminEmail,
+    adminUsername,
     studentUserId,
     adminUserId,
   } = event
@@ -77,11 +78,12 @@ exports.handler = async (event) => {
   const chatSpaceAdminGroupName = 'FRAIA-HUB-Admin'
   const includeReadUser = false
 
-  const orgName = 'Fraia Tech'
+  const orgName = 'FRAIA AI'
   const orgLogo =
     'https://assets-global.website-files.com/659e41404eb26f00cd0ae340/659e42ee393ac4ac04c036a5_Layer%201.svg'
 
-  const chatSpaceName = 'Fraia Test'
+  const chatSpaceName = 'Seier Multiverse'
+  const databaseName = 'seier'
   const hostType = 'COMPANY'
 
   const channelName = 'Happy Days'
@@ -92,7 +94,7 @@ exports.handler = async (event) => {
 
   try {
     switch (event.flow) {
-      // This flow creates a new Organization, ChatSpace, Channel, and User
+      // This flow creates a new Organization, ChatSpace, Admin Groups, and Admin User
       case 'COMPANY':
         const [Organization, CognitoUser] = await Promise.all([
           // Create Organization
@@ -124,7 +126,7 @@ exports.handler = async (event) => {
                 },
                 {
                   Name: 'preferred_username',
-                  Value: 'admin',
+                  Value: adminUsername,
                 },
                 {
                   Name: 'custom:userId',
@@ -158,12 +160,13 @@ exports.handler = async (event) => {
 
         console.log('Organization and Admin User Created: ')
 
-        const [ChatSpace, Channel, User] = await Promise.all([
+        await Promise.all([
           // Create Chat Space
           createRecord(process.env.API_DIGITALTWIN_CHATSPACETABLE_NAME, {
             id: chatSpaceId,
             hostId: organizationId,
 
+            database: databaseName,
             hostType: hostType,
             name: chatSpaceName,
 
@@ -179,29 +182,7 @@ exports.handler = async (event) => {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }),
-          // Creates Channel in ChatSpace
-          createRecord(process.env.API_DIGITALTWIN_CHANNELTABLE_NAME, {
-            id: channelId,
-            chatSpaceId: chatSpaceId,
 
-            apiHost: 'https://flowise.testnet.concordium.com',
-            chatflowId: 'f05d64f3-6d58-49d1-8143-d59caa88fd1f',
-
-            name: channelName,
-            description: 'This is knowledge base subject zero. Take good care of it!',
-            initialPrompts: [
-              {
-                display: 'What am I doing here?',
-                prompt: 'Tell me what I can do on the FRAIA portal',
-              },
-            ],
-            isPublic: false,
-
-            // owner: CognitoHubUser.Username,
-            __typename: 'Channel',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          }),
           // Create Admin User record
           createRecord(process.env.API_DIGITALTWIN_USERTABLE_NAME, {
             id: adminUserId,
@@ -210,7 +191,7 @@ exports.handler = async (event) => {
             email: adminEmail,
             cognitoId: CognitoUser.User.Attributes.find((attr) => attr.Name === 'sub').Value,
 
-            name: 'Mr. Admin-san',
+            name: adminUsername,
             status: 'ACTIVE',
             joinedOn: new Date().toISOString(),
 
@@ -219,24 +200,7 @@ exports.handler = async (event) => {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           }),
-          // Creates Access record to Channel for Admin User
-          createRecord(process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME, {
-            accessId: adminUserId,
-            channelId,
-            chatSpaceId,
 
-            channelHostId: organizationId,
-            channelHostType: hostType,
-
-            accessType: 'ADMIN',
-            channelName: channelName,
-            channelDescription: 'This is knowledge base subject zero. Take good care of it!',
-
-            owner: CognitoUser.User.Username,
-            __typename: 'ChannelUserAccess',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          }),
           // Add Admin to Org Group
           cognitoClient.send(
             new AdminAddUserToGroupCommand({
@@ -261,6 +225,7 @@ exports.handler = async (event) => {
               Username: adminUserId,
             })
           ),
+
           // Force changes password here
           // cognitoClient.send(
           //   new AdminSetUserPasswordCommand({
@@ -270,6 +235,49 @@ exports.handler = async (event) => {
           //     Permanent: true,
           //   })
           // ),
+
+          // Creates Channel in ChatSpace
+          // createRecord(process.env.API_DIGITALTWIN_CHANNELTABLE_NAME, {
+          //   id: channelId,
+          //   chatSpaceId: chatSpaceId,
+
+          //   apiHost: 'https://flowise.testnet.concordium.com',
+          //   chatflowId: 'f05d64f3-6d58-49d1-8143-d59caa88fd1f',
+
+          //   name: channelName,
+          //   description: 'This is knowledge base subject zero. Take good care of it!',
+          //   initialPrompts: [
+          //     {
+          //       display: 'What am I doing here?',
+          //       prompt: 'Tell me what I can do on the FRAIA portal',
+          //     },
+          //   ],
+          //   isPublic: false,
+
+          //   // owner: CognitoHubUser.Username,
+          //   __typename: 'Channel',
+          //   createdAt: new Date().toISOString(),
+          //   updatedAt: new Date().toISOString(),
+          // }),
+
+          // Creates Access record to Channel for Admin User
+          // createRecord(process.env.API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME, {
+          //   accessId: adminUserId,
+          //   channelId,
+          //   chatSpaceId,
+
+          //   channelHostId: organizationId,
+          //   channelHostType: hostType,
+
+          //   accessType: 'ADMIN',
+          //   channelName: channelName,
+          //   channelDescription: 'This is knowledge base subject zero. Take good care of it!',
+
+          //   owner: CognitoUser.User.Username,
+          //   __typename: 'ChannelUserAccess',
+          //   createdAt: new Date().toISOString(),
+          //   updatedAt: new Date().toISOString(),
+          // }),
         ])
 
         // IF WE ALSO WANT A READ USER
@@ -359,6 +367,88 @@ exports.handler = async (event) => {
 
         break
 
+      case 'ADMIN':
+        // Create Admin Cognito User
+        const adminCognitoUser = await cognitoClient.send(
+          new AdminCreateUserCommand({
+            UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+            TemporaryPassword: 'Abcd1234',
+            Username: adminUserId,
+            UserAttributes: [
+              {
+                Name: 'email',
+                Value: adminEmail,
+              },
+              {
+                Name: 'email_verified',
+                Value: 'true',
+              },
+              {
+                Name: 'preferred_username',
+                Value: adminUsername,
+              },
+              {
+                Name: 'custom:userId',
+                Value: adminUserId,
+              },
+            ],
+            ClientMetadata: {
+              // This is used to pass data to the Invite Lambda Trigger
+              organizationId: organizationId,
+              chatSpaceId: chatSpaceId,
+              hostType: hostType,
+              userRole: 'ADMIN',
+            },
+          })
+        )
+
+        await Promise.all([
+          // Create Admin User DB record
+          createRecord(process.env.API_DIGITALTWIN_USERTABLE_NAME, {
+            id: adminUserId,
+            organizationId: organizationId,
+
+            email: adminEmail,
+            cognitoId: adminCognitoUser.User.Attributes.find((attr) => attr.Name === 'sub').Value,
+
+            name: adminUsername,
+            status: 'ACTIVE',
+            joinedOn: new Date().toISOString(),
+
+            owner: adminCognitoUser.User.Username,
+            __typename: 'User',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          }),
+
+          // Add Admin to Org Group
+          cognitoClient.send(
+            new AdminAddUserToGroupCommand({
+              GroupName: orgAdminGroupName,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+              Username: adminUserId,
+            })
+          ),
+          // Add Admin to Chat Space Admin Group
+          cognitoClient.send(
+            new AdminAddUserToGroupCommand({
+              GroupName: chatSpaceAdminGroupName,
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+              Username: adminUserId,
+            })
+          ),
+          // All Admins are also added to the Admin Group
+          cognitoClient.send(
+            new AdminAddUserToGroupCommand({
+              GroupName: 'Admin',
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+              Username: adminUserId,
+            })
+          ),
+        ])
+
+        break
+
       case 'PRIVATE':
         // 1. Create Cognito User
         const { User: CognitoHubUser } = await cognitoClient.send(
@@ -429,7 +519,6 @@ exports.handler = async (event) => {
         return {
           CognitoHubUser,
           HubUser,
-          Channel,
           ChannelUserAccess,
         }
 
@@ -439,7 +528,7 @@ exports.handler = async (event) => {
   } catch (error) {
     console.log('FIRST ERROR: ', error)
 
-    switch (event.type) {
+    switch (event.flow) {
       case 'COMPANY':
         // Delete User and USer Group
         await Promise.all([
@@ -463,7 +552,19 @@ exports.handler = async (event) => {
           ),
         ])
           .then(() => console.log('User and Group Deleted'))
-          .catch(console.log)
+          .catch((error) => console.log('Error handling error: ', error))
+        break
+
+      case 'ADMIN':
+        cognitoClient
+          .send(
+            new AdminDeleteUserCommand({
+              UserPoolId: process.env.AUTH_FRAIAAUTH_USERPOOLID,
+              Username: adminEmail,
+            })
+          )
+          .then(() => console.log('User Deleted'))
+          .catch((error) => console.log('Error handling error: ', error))
         break
 
       case 'PRIVATE':
@@ -475,7 +576,7 @@ exports.handler = async (event) => {
             })
           )
           .then(() => console.log('User Deleted'))
-          .catch(console.log)
+          .catch((error) => console.log('Error handling error: ', error))
         break
 
       default:

@@ -72,7 +72,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
             case 0:
                 console.time('HANDLER');
                 isAuthorized = false;
-                responseBody = null;
+                responseBody = [];
                 _d.label = 1;
             case 1:
                 _d.trys.push([1, 9, , 10]);

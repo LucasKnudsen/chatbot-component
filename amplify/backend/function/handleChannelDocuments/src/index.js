@@ -180,7 +180,7 @@ var createChannelDocument = function (data) { return __awaiter(void 0, void 0, v
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                Item = __assign(__assign({}, data), { createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+                Item = __assign(__assign({}, data), { __typename: 'ChannelDocument', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
                 params = {
                     TableName: process.env.API_DIGITALTWIN_CHANNELDOCUMENTTABLE_NAME,
                     Item: Item

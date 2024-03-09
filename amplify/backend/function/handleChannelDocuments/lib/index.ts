@@ -139,6 +139,7 @@ const authorizeAccess = async (
 const createChannelDocument = async (data: Arguments['input']['data']) => {
   const Item = {
     ...data,
+    __typename: 'ChannelDocument',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   }

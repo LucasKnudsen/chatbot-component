@@ -13,19 +13,33 @@ import { getGradingFunction, getGradingPrompt } from './utils'
 const ssmClient = new SSMClient({ region: process.env.REGION })
 const s3Client = new S3Client({ region: process.env.REGION })
 
+type DataRow = {
+  question: string
+  answer: string
+  timestamp?: string
+}
+
 type OverrideConfig = {
-  model: string
-  temperature: number
-  maxTokens: number
-  topP: number
-  frequencyPenalty: number
-  presencePenalty: number
+  model?: string
+  temperature?: number
+  // maxTokens: number
+  // topP: number
+  // frequencyPenalty: number
+  // presencePenalty: number
+  context?: string
 }
 
 type EventBody = {
-  dataset: { question: string; answer: string }[]
+  dataset: DataRow[]
   channelId: string // ID to knowledge base to extract context from
   overrideConfig?: OverrideConfig
+}
+
+type EvaluationObject = {
+  type: 'readability' | 'correctness' | 'comprehensiveness'
+  label: string
+  score: number
+  reasoning?: string
 }
 
 const dummyContext = `Lucas is in Thailand until the 25th of march. After that, he will fly to Denmark`
@@ -43,7 +57,9 @@ export const handler = async (
 
     const body = JSON.parse(event.body || '') as EventBody
 
-    const context = event.isMock ? dummyContext : await getKnowledgeContext(body.channelId)
+    const context = event.isMock
+      ? dummyContext
+      : body.overrideConfig?.context || (await getKnowledgeContext(body.channelId))
 
     const evaluationResults = await evaluateAnswers(body.dataset, context, body.overrideConfig)
 
@@ -126,15 +142,14 @@ const initiateOpenAI = async () => {
 }
 
 const evaluateAnswers = async (
-  dataset: { question: string; answer: string }[],
+  dataset: DataRow[],
   context: string,
   overrideConfig?: OverrideConfig
 ) => {
   const openai = await initiateOpenAI()
 
   let model = overrideConfig?.model || 'gpt-4'
-  let temperature = overrideConfig?.temperature || 0.7
-  let max_tokens = overrideConfig?.maxTokens || 100
+  let temperature = overrideConfig?.temperature || 0.3
 
   const openaiResults = await Promise.all(
     dataset.map(({ question, answer }) => {
@@ -143,22 +158,33 @@ const evaluateAnswers = async (
         tools: [{ type: 'function', function: getGradingFunction(4) }],
         tool_choice: 'auto',
         temperature,
-
         model,
       })
     })
   )
 
-  const evaluations = openaiResults.map((result, index) => {
-    try {
-      return JSON.parse(result.choices[0].message.tool_calls?.[0].function.arguments)
-    } catch (error) {
-      console.log('shit')
-      return {
-        error: 'OpenAI response was parsed incorrectly',
+  const evaluationsList = openaiResults
+    .map((result, index) => {
+      try {
+        return JSON.parse(result.choices[0].message.tool_calls?.[0].function.arguments) as {
+          evaluations: EvaluationObject[]
+          error: null
+        }
+      } catch (error) {
+        console.log('shit')
+        return {
+          evaluations: [],
+          error: 'OpenAI response was parsed incorrectly',
+        }
       }
-    }
-  })
+    })
+    .map((evaulationObj, index) => {
+      console.log(evaulationObj.evaluations)
+      return {
+        timestamp: dataset[index].timestamp,
+        ...evaulationObj,
+      }
+    })
 
-  return evaluations
+  return evaluationsList
 }

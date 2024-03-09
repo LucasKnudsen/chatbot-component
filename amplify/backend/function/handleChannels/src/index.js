@@ -236,12 +236,12 @@ var createChannel = function (data) { return __awaiter(void 0, void 0, void 0, f
             case 0:
                 params = {
                     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
-                    Item: __assign(__assign({}, data), { createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() })
+                    Item: __assign(__assign({}, data), { __typename: 'Channel', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() })
                 };
                 return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.PutCommand(params))];
             case 1:
                 _a.sent();
-                return [2 /*return*/, data];
+                return [2 /*return*/, params.Item];
         }
     });
 }); };
@@ -272,7 +272,7 @@ var createChannelAccess = function (data, identity, chatSpace) { return __awaite
                 return [4 /*yield*/, ddbDocClient.send(new lib_dynamodb_1.PutCommand(params))];
             case 1:
                 _a.sent();
-                return [2 /*return*/, data];
+                return [2 /*return*/, params.Item];
         }
     });
 }); };

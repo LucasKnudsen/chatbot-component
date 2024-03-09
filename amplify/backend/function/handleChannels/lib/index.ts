@@ -203,6 +203,7 @@ const createChannel = async (data: Arguments['input']['data']) => {
     TableName: process.env.API_DIGITALTWIN_CHANNELTABLE_NAME,
     Item: {
       ...data,
+      __typename: 'Channel',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     },
@@ -210,7 +211,7 @@ const createChannel = async (data: Arguments['input']['data']) => {
 
   await ddbDocClient.send(new PutCommand(params))
 
-  return data
+  return params.Item
 }
 
 const createChannelAccess = async (
@@ -243,7 +244,7 @@ const createChannelAccess = async (
 
   await ddbDocClient.send(new PutCommand(params))
 
-  return data
+  return params.Item
 }
 
 const getChatSpace = async (chatSpaceId: string) => {

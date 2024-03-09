@@ -145,7 +145,19 @@
       "name": "/comb/evaluate",
       "lambdaFunction": "combEvaluator",
       "permissions": {
-        "setting": "open"
+        "groups": {
+          "SuperAdmin": [
+            "create",
+            "read",
+            "update"
+          ],
+          "Admin": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        "setting": "private"
       }
     }
   }

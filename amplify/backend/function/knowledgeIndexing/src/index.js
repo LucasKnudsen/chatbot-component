@@ -6,6 +6,8 @@
     API_DIGITALTWIN_CHANNELTABLE_NAME
     API_DIGITALTWIN_CHANNELUSERACCESSTABLE_ARN
     API_DIGITALTWIN_CHANNELUSERACCESSTABLE_NAME
+    API_DIGITALTWIN_CHATSPACETABLE_ARN
+    API_DIGITALTWIN_CHATSPACETABLE_NAME
     API_DIGITALTWIN_GRAPHQLAPIIDOUTPUT
     AUTH_FRAIAAUTH_USERPOOLID
     ENV
@@ -66,14 +68,14 @@ var authorizers_1 = require("./authorizers");
 var parsers_1 = require("./parsers");
 var utils_1 = require("./utils");
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, isMock, input_1, isAuthorized, _b, channel, endpoint, parsedText, formData, database, result, channelDocument, error_1;
+    var _a, isMock, input_1, isAuthorized, _b, channel, chatSpace, endpoint, parsedText, formData, result, channelDocument, error_1;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 console.time('HANDLER');
                 _c.label = 1;
             case 1:
-                _c.trys.push([1, 12, , 13]);
+                _c.trys.push([1, 13, , 14]);
                 _a = event.arguments, isMock = _a.isMock, input_1 = _a.input;
                 !isMock && console.log(event);
                 if (!isMock) return [3 /*break*/, 2];
@@ -95,28 +97,27 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 if (!isAuthorized) {
                     throw new Error('Unauthorized to index knowledge');
                 }
-                return [4 /*yield*/, (0, utils_1.getChannel)(input_1.channelId)
-                    // TODO: Find a way to get the database attribute from ChatSpace
-                    // channel.chatSpaceId
-                ];
+                return [4 /*yield*/, (0, utils_1.getChannel)(input_1.channelId)];
             case 5:
                 channel = _c.sent();
-                endpoint = "".concat(channel.apiHost, "/api/v1/vector/upsert/").concat(channel.chatflowId);
-                if (!(input_1.fileType == 'application/pdf')) return [3 /*break*/, 8];
-                return [4 /*yield*/, (0, parsers_1.parsePDF)(input_1.s3KeyOriginal)];
+                return [4 /*yield*/, (0, utils_1.getChatSpace)(channel.chatSpaceId)];
             case 6:
+                chatSpace = _c.sent();
+                endpoint = "".concat(channel.apiHost, "/api/v1/vector/upsert/").concat(channel.chatflowId);
+                if (!(input_1.fileType == 'application/pdf')) return [3 /*break*/, 9];
+                return [4 /*yield*/, (0, parsers_1.parsePDF)(input_1.s3KeyOriginal)];
+            case 7:
                 parsedText = _c.sent();
                 return [4 /*yield*/, (0, utils_1.uploadRawText)(parsedText, input_1.s3KeyRawText)];
-            case 7:
+            case 8:
                 _c.sent();
-                _c.label = 8;
-            case 8: return [4 /*yield*/, (0, utils_1.generateFormData)(input_1.s3KeyRawText)];
-            case 9:
+                _c.label = 9;
+            case 9: return [4 /*yield*/, (0, utils_1.generateFormData)(input_1.s3KeyRawText)];
+            case 10:
                 formData = _c.sent();
-                database = 'fraia_test';
-                formData.append('database', database);
+                formData.append('database', chatSpace.database);
                 formData.append('tableName', "fraia_".concat(input_1.channelId.replaceAll('-', '_')));
-                console.log('endpoint', endpoint);
+                console.log('endpoint', endpoint, chatSpace.database, input_1.channelId);
                 return [4 /*yield*/, (0, node_fetch_1["default"])(endpoint, {
                         method: 'POST',
                         body: formData,
@@ -124,22 +125,27 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                             Authorization: channel.apiKey
                         }
                     })];
-            case 10:
+            case 11:
                 result = _c.sent();
                 if (!result.ok) {
                     throw new Error("HTTP error! status: ".concat(result.status));
                 }
+                // No need to create a ChannelDocument if local mock
+                if (isMock) {
+                    console.timeEnd('HANDLER');
+                    return [2 /*return*/, 'MOCK SUCCESSFUL RESPONSE'];
+                }
                 return [4 /*yield*/, (0, utils_1.createChannelDocument)(__assign({}, input_1))];
-            case 11:
+            case 12:
                 channelDocument = _c.sent();
                 console.timeEnd('HANDLER');
                 return [2 /*return*/, channelDocument];
-            case 12:
+            case 13:
                 error_1 = _c.sent();
                 console.error('DEFAULT ERROR', error_1);
                 console.timeEnd('HANDLER');
                 throw error_1;
-            case 13: return [2 /*return*/];
+            case 14: return [2 /*return*/];
         }
     });
 }); };

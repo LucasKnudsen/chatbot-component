@@ -2,12 +2,12 @@
 # yarn lockfile v1
 
 
-"@aws-amplify/amplify-category-custom@3.1.14":
-  version "3.1.14"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/amplify-category-custom/-/amplify-category-custom-3.1.14.tgz#99806641c8dc49aa02947a0c99170ef3855a29c6"
-  integrity sha512-8kCvU6QWjiauHIEowt5a/0rCtuD1uxNEbhPIrRUe4HvWCsDWLFZn456+sbnmIrWlpkwgWssdILFuja7NX1wzGw==
+"@aws-amplify/amplify-category-custom@3.1.15":
+  version "3.1.15"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/amplify-category-custom/-/amplify-category-custom-3.1.15.tgz#e0a3f8a8b618cfbaaefd49c2368e48d82a545d03"
+  integrity sha512-t2eZ+U2Hu9UB2c/OmkWRdw/V0TDOmXtevzeLQm0Qv+wCqsCnKU0mNuIjMble5dwcO+ay7zBHNWjs2GW6W0b4tQ==
   dependencies:
-    "@aws-amplify/amplify-cli-core" "4.3.0"
+    "@aws-amplify/amplify-cli-core" "4.3.1"
     "@aws-amplify/amplify-prompts" "2.8.6"
     aws-cdk-lib "~2.80.0"
     execa "^5.1.1"
@@ -16,15 +16,15 @@
     ora "^4.0.3"
     uuid "^8.3.2"
 
-"@aws-amplify/amplify-cli-core@4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/amplify-cli-core/-/amplify-cli-core-4.3.0.tgz#e1ab52857111615ba4da0a839a26dc850d675109"
-  integrity sha512-W0G2jdZBRStmIF7/KnfXgiU+ALGepBdWz6j7OLLbtAn9/S8OgBb9mCIohWCYoa5NGYKSzLZpkl9XQz5K8gZ2rg==
+"@aws-amplify/amplify-cli-core@4.3.1":
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/amplify-cli-core/-/amplify-cli-core-4.3.1.tgz#45ebf3b9e2c9b17e4f46cee663e25ea9dc8678c6"
+  integrity sha512-3YqXk2pGEugnLb2YscvwPxtekSo3w46MMpstbgS8lGf5c2+v0Cmxq47YwjyEeviESclPV5fy0bzB/mSj8ji79A==
   dependencies:
     "@aws-amplify/amplify-cli-logger" "1.3.8"
     "@aws-amplify/amplify-function-plugin-interface" "1.12.1"
     "@aws-amplify/amplify-prompts" "2.8.6"
-    "@aws-amplify/graphql-transformer-interfaces" "^3.3.2"
+    "@aws-amplify/graphql-transformer-interfaces" "^3.3.3"
     "@aws-sdk/util-arn-parser" "^3.310.0"
     "@yarnpkg/lockfile" "^1.1.0"
     ajv "^6.12.6"
@@ -80,15 +80,15 @@
     enquirer "^2.3.6"
 
 "@aws-amplify/cli-extensibility-helper@^3.0.0":
-  version "3.0.24"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/cli-extensibility-helper/-/cli-extensibility-helper-3.0.24.tgz#eddd59363ba58e763c1532b7a5091333852148cf"
-  integrity sha512-2iNkN73O7LwMyoZBpOt0udkj8GhoElW4rKlKaF4fCcSwghUaQkaJKIGDnFloFgJasbp0sAOmFUBgUHP2lA7Now==
+  version "3.0.25"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/cli-extensibility-helper/-/cli-extensibility-helper-3.0.25.tgz#a460ad17f6dd4cae5e62e8caad1d73d1ac10d702"
+  integrity sha512-IIdJ/pJKiiUEv8m1muzqnwPGcxXBezJodSYL/ndBBMBSrd/pWXzV9DkzK5R11bfjut1tqgFDrkrBk9EUm5tH6A==
   dependencies:
-    "@aws-amplify/amplify-category-custom" "3.1.14"
-    "@aws-amplify/amplify-cli-core" "4.3.0"
+    "@aws-amplify/amplify-category-custom" "3.1.15"
+    "@aws-amplify/amplify-cli-core" "4.3.1"
     aws-cdk-lib "~2.80.0"
 
-"@aws-amplify/graphql-transformer-interfaces@^3.3.2":
+"@aws-amplify/graphql-transformer-interfaces@^3.3.3":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@aws-amplify/graphql-transformer-interfaces/-/graphql-transformer-interfaces-3.4.0.tgz#7812017abbe4ea391f69e24dffe4984a6576c154"
   integrity sha512-vnPP/JPm/+oGQQQ3/5k7TSDWy9pF1eNtNPBpO238cNeFsS21FNEHT7x3goFSijRZUVYeDgwT4/B4agjc7D74Aw==
@@ -218,9 +218,9 @@
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
 
 "@types/node@^16.9.2":
-  version "16.18.86"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.86.tgz#87426ce3747a4c135229e15765cbf9c5a18d280c"
-  integrity sha512-QMvdZf+ZTSiv7gspwhqbfB7Y5DmbYgCsUnakS8Ul9uRbJQehDKaM7SL+GbcDS003Lh7VK4YlelHsRm9HCv26eA==
+  version "16.18.87"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.87.tgz#9473038a28bf2d7ef7e4d23ef693a1011981abdf"
+  integrity sha512-+IzfhNirR/MDbXz6Om5eHV54D9mQlEMGag6AgEzlju0xH3M8baCXYwqQ6RKgGMpn9wSTx6Ltya/0y4Z8eSfdLw==
 
 "@types/triple-beam@^1.3.2":
   version "1.3.5"
@@ -1689,9 +1689,9 @@ yaml@1.10.2:
   integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
 
 yaml@^2.2.2:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.4.0.tgz#2376db1083d157f4b3a452995803dbcf43b08140"
-  integrity sha512-j9iR8g+/t0lArF4V6NE/QCfT+CO7iLqrXAHZbJdo+LfjqP1vR8Fg5bSiaq6Q2lOD1AUEVrEVIgABvBFYojJVYQ==
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.4.1.tgz#2e57e0b5e995292c25c75d2658f0664765210eed"
+  integrity sha512-pIXzoImaqmfOrL7teGUBt/T7ZDnyeGBWyXQBvOVhLkWLN37GXv8NMLK406UY6dS51JfcQHsmcW5cJ441bHg6Lg==
 
 yargs-parser@^21.1.1:
   version "21.1.1"

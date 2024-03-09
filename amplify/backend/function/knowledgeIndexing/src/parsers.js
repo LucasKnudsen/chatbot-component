@@ -54,9 +54,16 @@ var parsePDF = function (pdfPath) { return __awaiter(void 0, void 0, void 0, fun
                 Body = (_b.sent()).Body;
                 _a = pdf;
                 return [4 /*yield*/, Body.transformToByteArray()];
-            case 2: return [4 /*yield*/, _a.apply(void 0, [_b.sent()])];
+            case 2: return [4 /*yield*/, _a.apply(void 0, [_b.sent()])
+                // // Split the text into half
+                // const split = Math.floor(data.text.length / 100)
+                // const section = data.text.substr(0, split)
+            ];
             case 3:
                 data = _b.sent();
+                // // Split the text into half
+                // const split = Math.floor(data.text.length / 100)
+                // const section = data.text.substr(0, split)
                 return [2 /*return*/, data.text];
         }
     });
