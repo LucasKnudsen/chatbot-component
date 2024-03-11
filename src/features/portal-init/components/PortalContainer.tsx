@@ -1,6 +1,6 @@
+import { useTheme } from '@/features/theme'
 import { JSX } from 'solid-js'
 import { configStore } from '..'
-import { useTheme } from '@/features/theme'
 
 export const PortalContainer = (props: { children: JSX.Element }) => {
   const { theme } = useTheme()
@@ -16,7 +16,7 @@ export const PortalContainer = (props: { children: JSX.Element }) => {
         transform: configStore.isBotOpened ? 'scale3d(1, 1, 1)' : 'scale3d(0, 0, 1)',
         color: theme().textColor,
         background: `url(${theme().backgroundImageUrl}) no-repeat center center / cover ${
-          theme().backgroundOverlay
+          theme().backgroundColor
         }`,
 
         'z-index': 69420,
