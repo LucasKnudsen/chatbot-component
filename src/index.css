@@ -490,7 +490,6 @@ input {
 }
 
 .menu-card {
-  display: flex;
   flex-direction: column;
   justify-content: space-between;
   border-radius: 15px;
@@ -516,7 +515,7 @@ input {
 @screen sm {
   .menu-card.active,
   .menu-card:hover {
-    background-color: rgba(91, 147, 255, 0.05);
+    background-color: var(--surfaceHoveredBackground);
     border-color: var(--primaryColor);
   }
 
@@ -621,4 +620,19 @@ input {
   z-index: -1;
   font-size: 16px;
   line-height: 25px;
+}
+
+.navigation-prompt {
+  position: relative;
+}
+
+.navigation-prompt::before {
+  content: '';
+  position: absolute;
+  top: -0.1em;
+  left: 16px;
+  width: 60px;
+  height: 2px;
+  background: var(--navigationPromptColor);
+  @apply rounded-full;
 }

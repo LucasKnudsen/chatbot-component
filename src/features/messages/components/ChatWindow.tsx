@@ -1,17 +1,18 @@
-import { Settings, TypingBubble } from '@/components'
+import { For, Show, createEffect, createMemo, on } from 'solid-js'
+import { MenuItem, Settings } from '@/components'
+
 import { Divider } from '@/components/Divider'
-import { MessageIcon } from '@/components/icons'
-import { botStore } from '@/features/bot'
 import { Fact } from '@/features/contextual/components/Fact'
+import Gallery from './Gallery/Gallery'
+import { LinkIcon } from '@/components/icons/LinkIcon'
 import { LinkInline } from '@/features/contextual/components/LinkInline'
+import { Marked } from '@ts-stack/markdown'
+import { MessageIcon } from '@/components/icons'
+import { TypingBubble } from '@/components'
+import { botStore } from '@/features/bot'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
-import { useMediaQuery } from '@/utils/useMediaQuery'
-import { Marked } from '@ts-stack/markdown'
-import { For, Show, createEffect, createMemo, on } from 'solid-js'
-
-import { LinkIcon } from '@/components/icons/LinkIcon'
-import Gallery from './Gallery/Gallery'
 
 export const ChatWindow = () => {
   let botMessageEl: HTMLDivElement | undefined
@@ -83,6 +84,21 @@ export const ChatWindow = () => {
     })
   }
 
+  const menuItems = [
+    {
+      label: text().copyText,
+      onClick: onCopy,
+    },
+    ...(Boolean(navigator.share) // Check if share is supported
+      ? [
+          {
+            label: text().share,
+            onClick: onShare,
+          },
+        ]
+      : []),
+  ]
+
   return (
     <>
       {/* Question */}
@@ -100,23 +116,24 @@ export const ChatWindow = () => {
           {botStore.activeChannel?.activeChat?.question}
         </div>
 
-        <Settings
-          class='pt-1'
-          menuItems={[
-            {
-              label: text().copyText,
-              onClick: onCopy,
-            },
-            ...(Boolean(navigator.share) // Check if share is supported
-              ? [
-                  {
-                    label: text().share,
-                    onClick: onShare,
-                  },
-                ]
-              : []),
-          ]}
-        />
+        <Settings class='pt-1'>
+          <For each={menuItems}>
+            {(item, index) => (
+              <>
+                <MenuItem
+                  {...item}
+                  onClick={async () => {
+                    await item.onClick()
+                  }}
+                />
+
+                <Show when={index() !== menuItems.length - 1}>
+                  <Divider />
+                </Show>
+              </>
+            )}
+          </For>
+        </Settings>
       </div>
 
       <Divider margin={0} />

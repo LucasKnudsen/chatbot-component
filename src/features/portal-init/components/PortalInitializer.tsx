@@ -1,4 +1,3 @@
-import { Show } from 'solid-js'
 import {
   ChatConfig,
   PortalButton,
@@ -10,12 +9,13 @@ import {
 import { BotManager, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
 
 import { TypingBubble } from '@/components'
-import { Nav } from '@/components/Nav'
+import { Nav } from '@/components/nav'
 import { AuthProvider } from '@/features/authentication'
 import { useText } from '@/features/text'
 import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
 import { createQuery } from '@/hooks'
+import { Show } from 'solid-js'
 
 export const PortalInitializer = (props: ChatConfig) => {
   const { initTheme } = useTheme()

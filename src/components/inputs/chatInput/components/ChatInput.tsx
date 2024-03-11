@@ -1,11 +1,12 @@
-import { Divider, IconButton, MicrophoneIcon, SendButton } from '@/components'
-import { botStore } from '@/features/bot'
-import { useTheme } from '@/features/theme/hooks'
-import { useMediaQuery } from '@/utils/useMediaQuery'
 import { API, Storage } from 'aws-amplify'
-import { createEffect, createSignal, onCleanup, onMount } from 'solid-js'
-import { useScrollOnResize } from '../hooks/useScrollOnResize'
+import { IconButton, MicrophoneIcon, SendButton } from '@/components'
+import { Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
+
 import { Textarea } from './ShortTextInput'
+import { botStore } from '@/features/bot'
+import { useMediaQuery } from '@/utils/useMediaQuery'
+import { useScrollOnResize } from '../hooks/useScrollOnResize'
+import { useTheme } from '@/features/theme/hooks'
 
 type Props = {
   placeholder: string
@@ -62,13 +63,14 @@ export const ChatInput = (props: Props) => {
       onKeyDown={submitWhenEnter}
     >
       {/* Additional inputs  */}
-      {device() == 'desktop' && (
-        <div class='flex py-2 pl-2 md:pl-4 items-center gap-1 md:gap-2 md:h-12 md:pt-4 '>
-          <AudioInput onSubmit={props.onSubmit} />
-
-          <Divider vertical />
+      <Show when={device() == 'desktop'}>
+        <div class='flex items-start pl-5 pt-6'>
+          <div class='flex items-center'>
+            <AudioInput onSubmit={props.onSubmit} />
+            <div class='bg-[var(--borderColor)] h-[18px] w-px mx-7' />
+          </div>
         </div>
-      )}
+      </Show>
 
       <Textarea
         ref={inputRef}
@@ -79,7 +81,7 @@ export const ChatInput = (props: Props) => {
         placeholder={props.placeholder}
         rows={props.rows}
         onFocusChange={props.onFocusChange}
-        class='p-2 md:p-4'
+        class='pt-[22px] pb-2 pr-5 focus:h-28 h-[70px] transition-all'
       />
 
       <SendButton
@@ -187,7 +189,7 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
   })
 
   return (
-    <div>
+    <>
       {isLoading() ? (
         <div class='animate-ping rounded-full m-1 h-3 w-3 bg-gray-700' />
       ) : isRecording() ? (
@@ -199,6 +201,6 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
           <MicrophoneIcon height={20} width={20} />
         </IconButton>
       )}
-    </div>
+    </>
   )
 }
