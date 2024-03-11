@@ -7,9 +7,8 @@ import {
   configStoreActions,
   initializeConfig,
 } from '..'
-import { BotManager, SYSTEM_DEFAULT_LANGUAGE, botStore, useLanguage } from '../../bot'
+import { BotManager, FraiaLoading, SYSTEM_DEFAULT_LANGUAGE, botStore, useLanguage } from '../../bot'
 
-import { TypingBubble } from '@/components'
 import { Nav } from '@/components/Nav'
 import { AuthProvider } from '@/features/authentication'
 import { useText } from '@/features/text'
@@ -47,18 +46,12 @@ export const PortalInitializer = (props: ChatConfig) => {
 
   return (
     <>
-      <Show
-        when={configQuery.data()}
-        fallback={
-          <div class='fixed flex justify-between items-center h-full w-full p-10 lg:p-24'>
-            <h1 class='text-[32px] leading-[54px] font-extralight text-[var(--primaryColor)]'>
-              Welcome to <span class='font-medium'>Fraia Twin</span>
-            </h1>
+      {/* Shows loading while the config is being fetched and autoOpen is true as to not just show a blank screen */}
+      <Show when={configQuery.isLoading() && props.config?.autoOpen}>
+        <FraiaLoading />
+      </Show>
 
-            <TypingBubble />
-          </div>
-        }
-      >
+      <Show when={configQuery.data()}>
         <PortalButton />
 
         <PortalContainer>
@@ -71,29 +64,36 @@ export const PortalInitializer = (props: ChatConfig) => {
                   <BotManager />
                 </div>
 
-                <div
-                  class={`h-screen overflow-hidden px-5 transition-all bg-[var(--surfaceHoveredBackground)]
-                  justify-center items-center 
-                  border-l border-[var(--borderColor)]
-                  `}
-                  style={{
-                    width: botStore.activeChannel ? '82px' : '0',
-                  }}
-                >
-                  <div
-                    class={`w-9 h-9 rounded-full`}
-                    style={{
-                      'background-image':
-                        (botStore.activeChannel as Channel)?.avatar ||
-                        'linear-gradient(to right, #ed4264, #ffedbc)',
-                    }}
-                  ></div>
-                </div>
+                <DrawerMenu />
               </div>
             </Show>
           </AuthProvider>
         </PortalContainer>
       </Show>
     </>
+  )
+}
+
+const DrawerMenu = () => {
+  return (
+    <div
+      class={`h-screen overflow-hidden px-5 transition-all ]
+                  justify-center items-center 
+                  border-l border-[var(--borderColor)]
+                  `}
+      style={{
+        width: botStore.activeChannel ? '82px' : '0',
+      }}
+    >
+      <div
+        class={`w-9 h-9 rounded-full hover:cursor-pointer border-white border
+                    hover:outline-4 outline outline-transparent hover:outline-[var(--surfaceHoveredBackground)] transition`}
+        style={{
+          'background-image':
+            (botStore.activeChannel as Channel)?.avatar ||
+            'linear-gradient(to right, #ed4264, #ffedbc)',
+        }}
+      ></div>
+    </div>
   )
 }

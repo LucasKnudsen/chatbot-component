@@ -44,7 +44,7 @@ export const chatflows: Record<string, ChatConfig> = {
   chula: {
     spaceId: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
-      autoOpen: false,
+      autoOpen: true,
     },
   },
   fraia_prod: {

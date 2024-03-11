@@ -29,9 +29,8 @@ export const defaultTheme: Theme = {
   textInputTextColor: 'rgba(128, 114, 166, 1)',
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
   errorColor: 'red',
-  surfaceBackground:
-    'linear-gradient(90deg, rgba(91, 147, 255, 0.08) 0%, rgba(218, 145, 221, 0.08) 100%)',
-  surfaceHoveredBackground: 'rgba(91, 147, 255, 0.05)',
+  surfaceBackground: 'rgba(91, 147, 255, 0.1)',
+  surfaceHoveredBackground: 'rgba(91, 147, 255, 0.2)',
 }
 
 const fraia: Theme = {
