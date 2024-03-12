@@ -113,9 +113,9 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
         </svg>
       </button>
 
-      <div class='text-center text-sm md:text-base font-bold mt-auto underline text-[var(--primaryColor)] pt-10'>
+      {/* <div class='text-center text-sm md:text-base font-bold mt-auto underline text-[var(--primaryColor)] pt-10'>
         Why I have to choose an AI?
-      </div>
+      </div> */}
     </div>
   )
 }

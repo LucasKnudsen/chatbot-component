@@ -6,14 +6,13 @@ import {
   configStoreActions,
   initializeConfig,
 } from '..'
-import { BotManager, FraiaLoading, SYSTEM_DEFAULT_LANGUAGE, botStore, useLanguage } from '../../bot'
+import { BotManager, FraiaLoading, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
 
-import { Nav } from '@/components/nav'
+import { DesktopDrawerContainer, Nav } from '@/components/nav'
 import { AuthProvider } from '@/features/authentication'
 import { useText } from '@/features/text'
 import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
-import { Channel } from '@/graphql'
 import { createQuery } from '@/hooks'
 import { Show } from 'solid-js'
 
@@ -64,36 +63,12 @@ export const PortalInitializer = (props: ChatConfig) => {
                   <BotManager />
                 </div>
 
-                <DrawerMenu />
+                <DesktopDrawerContainer />
               </div>
             </Show>
           </AuthProvider>
         </PortalContainer>
       </Show>
     </>
-  )
-}
-
-const DrawerMenu = () => {
-  return (
-    <div
-      class={`h-screen overflow-hidden px-5 transition-all ]
-                  justify-center items-center 
-                  border-l border-[var(--borderColor)]
-                  `}
-      style={{
-        width: botStore.activeChannel ? '82px' : '0',
-      }}
-    >
-      <div
-        class={`w-9 h-9 rounded-full hover:cursor-pointer border-white border
-                    hover:outline-4 outline outline-transparent hover:outline-[var(--surfaceHoveredBackground)] transition`}
-        style={{
-          'background-image':
-            (botStore.activeChannel as Channel)?.avatar ||
-            'linear-gradient(to right, #ed4264, #ffedbc)',
-        }}
-      ></div>
-    </div>
   )
 }

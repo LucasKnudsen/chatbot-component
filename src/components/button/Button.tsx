@@ -1,6 +1,6 @@
-import { JSX } from 'solid-js'
 import { TypingBubble } from '@/components'
 import { useTheme } from '@/features/theme/hooks'
+import { JSX } from 'solid-js'
 
 // import { Spinner } from '../loaders'
 
@@ -11,6 +11,7 @@ type Props = {
   padding?: string
   class?: string
   type?: 'button' | 'submit' | 'reset' | undefined
+  style?: JSX.CSSProperties
 }
 
 export const Button = (props: Props) => {
@@ -28,12 +29,13 @@ export const Button = (props: Props) => {
         background: theme().primaryColor,
         color: theme().onPrimary,
         padding,
+        ...props?.style,
       }}
       onClick={props.onClick}
     >
       {/* CONTENT   */}
       <div
-        class='flex justify-center items-center transition '
+        class='flex justify-center items-center transition  '
         style={{
           opacity: props.loading ? 0 : 1,
         }}

@@ -4,12 +4,14 @@ import { ChatSpace } from '@/graphql'
 import { createStore } from 'solid-js/store'
 
 type ChatConfigStore = {
-  isBotOpened: boolean
   chatSpaceConfig: ChatSpace
   channels: Channel[] | ChannelUserAccess[]
+  isBotOpened: boolean
+  isDrawerOpened?: boolean
 }
 
 const [configStore, setConfigStore] = createStore<ChatConfigStore>({
+  isDrawerOpened: false,
   isBotOpened: false,
   chatSpaceConfig: {} as any,
   channels: [],
@@ -31,8 +33,13 @@ const toggleBot = () => {
   configStore.isBotOpened ? closeBot() : openBot()
 }
 
+const toggleDrawer = () => {
+  setConfigStore('isDrawerOpened', !configStore.isDrawerOpened)
+}
+
 const configStoreActions = {
   toggleBot,
+  toggleDrawer,
   setConfigStore,
 }
 
