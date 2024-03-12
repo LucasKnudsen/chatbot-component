@@ -1,10 +1,11 @@
 import { Channel, ChannelUserAccess } from '@/graphql'
-import { Menu, MenuItem, Popover, PopoverButton, PopoverPanel } from 'terracotta'
 import { Show, createSignal } from 'solid-js'
+import { Menu, MenuItem, Popover, PopoverButton, PopoverPanel } from 'terracotta'
 
-import { Button } from '..'
+import { botStore } from '@/features/bot'
 import { configStore } from '@/features/portal-init'
 import usePopper from 'solid-popper'
+import { Button } from '..'
 
 function Separator() {
   return (
@@ -48,7 +49,7 @@ export const ChannelMenu = () => {
                   }}
                 ></span>
                 <span class='flex items-center gap-x-3.5 text-sm font-bold text-[var(--primaryColor)]'>
-                  My personal AI{' '}
+                  {botStore.activeChannel?.name}{' '}
                   <svg
                     width='8'
                     height='7'
@@ -75,18 +76,25 @@ export const ChannelMenu = () => {
                     as='button'
                     class='flex items-center text-[var(--primaryColor)] text-[14px] leading-[20px] font-medium'
                   >
-                    My personal AI
+                    {botStore.activeChannel?.name}
                   </MenuItem>
+
                   <Separator />
                   <div class='space-y-2.5'>
-                    {configStore.channels?.map((channel) => (
-                      <MenuItem
-                        as='button'
-                        class='flex items-center text-[var(--primaryColor)] text-[14px] leading-[20px] font-medium'
-                      >
-                        {(channel as Channel).name || (channel as ChannelUserAccess).channelName}
-                      </MenuItem>
-                    ))}
+                    {configStore.channels
+                      ?.filter(
+                        (channel) =>
+                          (channel as Channel).id !== botStore.activeChannel?.id &&
+                          (channel as ChannelUserAccess).channelId !== botStore.activeChannel?.id
+                      )
+                      .map((channel) => (
+                        <MenuItem
+                          as='button'
+                          class='flex items-center text-[var(--primaryColor)] text-[14px] leading-[20px] font-medium'
+                        >
+                          {(channel as Channel).name || (channel as ChannelUserAccess).channelName}
+                        </MenuItem>
+                      ))}
                   </div>
                   <Separator />
                   <Button
