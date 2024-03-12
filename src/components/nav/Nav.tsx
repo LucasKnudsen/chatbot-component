@@ -1,15 +1,15 @@
-import { Match, Show, Switch } from 'solid-js'
 import { botStore, botStoreActions } from '@/features/bot'
+import { Match, Show, Switch } from 'solid-js'
 
+import powerIcon from '@/assets/power-icon.svg'
+import { configStoreActions } from '@/features/portal-init'
+import { suggestedPromptsStoreActions } from '@/features/prompt'
+import { useTheme } from '@/features/theme/hooks'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Button } from '..'
-import { ChannelMenu } from './ChannelMenu'
 import { CircleCloseIcon } from '../icons/CircleCloseIcon'
 import { MenuIcon } from '../icons/MenuIcon'
-import { configStoreActions } from '@/features/portal-init'
-import powerIcon from '@/assets/power-icon.svg'
-import { suggestedPromptsStoreActions } from '@/features/prompt'
-import { useMediaQuery } from '@/utils/useMediaQuery'
-import { useTheme } from '@/features/theme/hooks'
+import { ChannelMenu } from './ChannelMenu'
 
 export const Nav = () => {
   const device = useMediaQuery()
