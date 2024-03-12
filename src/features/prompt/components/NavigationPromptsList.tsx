@@ -1,5 +1,5 @@
-import { InitialPrompt } from '@/graphql/types'
 import { For } from 'solid-js'
+import { InitialPrompt } from '@/graphql/types'
 import { NavigationPrompt } from '.'
 
 type NavigationPromptsProps = {
@@ -11,11 +11,10 @@ type NavigationPromptsProps = {
 
 export const NavigationPromptsList = (props: NavigationPromptsProps) => {
   return (
-    <ul>
+    <ul class='space-y-4'>
       <For each={props.prompts}>
         {(p) => (
           <NavigationPrompt
-            class='w-full mb-4'
             prompt={p}
             onClick={(prompt) => props.onSelect(prompt)}
             disabled={props.disabled}

@@ -23,14 +23,7 @@ export const PortalContainer = (props: { children: JSX.Element }) => {
       }}
       part='bot'
     >
-      <div
-        class='absolute inset-0 w-full h-full'
-        style={{
-          background: theme().backgroundOverlay,
-        }}
-      >
-        {props.children}
-      </div>
+      {props.children}
     </div>
   )
 }

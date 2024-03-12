@@ -1,14 +1,15 @@
-import { Button, ChevronIcon } from '.'
-import { Match, Show, Switch } from 'solid-js'
 import { botStore, botStoreActions } from '@/features/bot'
+import { Match, Show, Switch } from 'solid-js'
 
-import { CircleCloseIcon } from './icons/CircleCloseIcon'
-import { MenuIcon } from './icons/MenuIcon'
-import { configStoreActions } from '@/features/portal-init'
 import powerIcon from '@/assets/power-icon.svg'
+import { configStoreActions } from '@/features/portal-init'
 import { suggestedPromptsStoreActions } from '@/features/prompt'
-import { useMediaQuery } from '@/utils/useMediaQuery'
 import { useTheme } from '@/features/theme/hooks'
+import { useMediaQuery } from '@/utils/useMediaQuery'
+import { Button } from '..'
+import { CircleCloseIcon } from '../icons/CircleCloseIcon'
+import { MenuIcon } from '../icons/MenuIcon'
+import { ChannelMenu } from './ChannelMenu'
 
 export const Nav = () => {
   const device = useMediaQuery()
@@ -30,27 +31,35 @@ export const Nav = () => {
         <div class='flex items-center gap-6 w-full flex-nowrap'>
           <img src={theme().navbarLogoUrl} class='h-6 cursor-pointer' onClick={onClickLogo} />
 
-          {botStore.activeChannel && (
-            <>
-              <ChevronIcon
-                onClick={botStoreActions.resetActiveChannel}
-                class='rotate-90 transform cursor-pointer'
+          <Show when={botStore.activeChannel}>
+            <svg
+              width='2'
+              height='26'
+              viewBox='0 0 2 26'
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <path
+                d='M1 1L1 25'
                 style={{
-                  color: theme().primaryColor,
+                  stroke: theme().primaryColor,
                 }}
+                stroke-linecap='round'
               />
+            </svg>
 
-              <p
+            <ChannelMenu />
+
+            {/* will use if needed */}
+            {/* <p
                 class='font-medium '
                 style={{
                   color: theme().primaryColor,
                 }}
               >
                 {botStore.activeChannel?.name}
-              </p>
-            </>
-          )}
-
+              </p> */}
+          </Show>
           {device() == 'desktop' ? (
             <>
               {/* will use if needed */}

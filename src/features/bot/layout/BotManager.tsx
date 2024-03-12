@@ -1,5 +1,5 @@
 import { SignOutButton, authStore } from '@/features/authentication'
-import { configStore } from '@/features/portal-init'
+import { configStore, configStoreActions } from '@/features/portal-init'
 import { createQuery } from '@/hooks'
 import LayoutDefault from '@/layouts/default'
 import { logDev } from '@/utils'
@@ -13,6 +13,7 @@ import {
   fetchChannelAccesses,
   fetchPublicChannels,
 } from '..'
+
 import { ChannelsOverview } from './ChannelsOverview'
 
 export const BotManager = () => {
@@ -34,6 +35,8 @@ export const BotManager = () => {
           botStoreActions.initBotStore(publicChannels[0])
         }
 
+        configStoreActions.setConfigStore('channels', publicChannels)
+
         return publicChannels
       } else {
         // In this case, we fetch and show a list of access rights of the user
@@ -52,6 +55,8 @@ export const BotManager = () => {
             'You currently do not have access to any knowledge channels. Contact your administrator.'
           )
         }
+
+        configStoreActions.setConfigStore('channels', channelAccesses)
 
         return channelAccesses
       }
