@@ -30,20 +30,19 @@ type BotStore = {
   activeChannel: ActiveChannelType | null
   channels: Channel[]
   isAwaitingAnswer: boolean
-  isSidebarOpen: boolean
+  isKnowledgeBaseOpen: boolean
   readonly localStorageKey: string
   readonly activeHistory: ChannelHistoryItem[]
   readonly activeFacts: ContextualElement[]
   readonly activeContextuals: ContextualElement[]
   readonly activeAnswer: string
-  toggleSidebar: () => void
 }
 
 const [botStore, setBotStore] = createStore<BotStore>({
   activeChannel: null,
   channels: [],
   isAwaitingAnswer: false,
-  isSidebarOpen: false,
+  isKnowledgeBaseOpen: false,
 
   get localStorageKey() {
     if (!this.activeChannel) {
@@ -77,10 +76,6 @@ const [botStore, setBotStore] = createStore<BotStore>({
     if (!chat) return ''
 
     return chat.answer || ''
-  },
-
-  toggleSidebar: () => {
-    setBotStore('isSidebarOpen', (isOpen) => !isOpen)
   },
 })
 
@@ -322,11 +317,16 @@ const clear = () => {
   localStorage.removeItem(botStore.localStorageKey)
 }
 
+const toggleKnowledgeBase = () => {
+  setBotStore('isKnowledgeBaseOpen', !botStore.isKnowledgeBaseOpen)
+}
+
 const botStoreActions = {
   initBotStore,
   updateAnswer,
   addToHistory,
   resetActiveChat,
+  toggleKnowledgeBase,
   setBotStore,
   buildQuestion,
   setActiveChat,

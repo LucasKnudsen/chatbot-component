@@ -12,6 +12,7 @@ export const LockIcon = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
     fill='none'
     stroke-linecap='round'
     stroke-linejoin='round'
+    {...props}
   >
     <path stroke='none' d='M0 0h24v24H0z' fill='none' />
     <path

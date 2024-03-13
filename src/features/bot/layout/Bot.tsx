@@ -1,5 +1,6 @@
 import { LoadingOverlay } from '@/components'
 import { authStore } from '@/features/authentication'
+import { KnowledgeBaseDrawer } from '@/features/knowledge-base'
 import {
   IncomingInput,
   LLMStreamId,
@@ -12,11 +13,8 @@ import { suggestedPromptsStoreActions } from '@/features/prompt'
 import { detectLanguage } from '@/features/text'
 import { clearAllSubscriptionsOfType } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
-import { Match, Show, Switch, createSignal, onCleanup, onMount } from 'solid-js'
+import { Match, Switch, createSignal, onCleanup, onMount } from 'solid-js'
 import { botStore, botStoreActions, createHistoryRecord } from '..'
-import { Sidebar } from '../components'
-import { MenuSettings } from '../components/MenuSettings'
-import { SidebarTabView } from '../components/SidebarTabView'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
 
@@ -91,8 +89,10 @@ export const Bot = () => {
         </Match>
       </Switch>
 
+      <KnowledgeBaseDrawer />
+
       {/* Sidebar drawer */}
-      <Show when={device() == 'mobile' || botStore.activeChannel?.activeChat}>
+      {/* <Show when={device() == 'mobile' || botStore.activeChannel?.activeChat}>
         <Sidebar>
           <div class='h-full flex flex-col'>
             <div class='flex-1 overflow-hidden'>
@@ -112,7 +112,7 @@ export const Bot = () => {
             <MenuSettings />
           </div>
         </Sidebar>
-      </Show>
+      </Show> */}
     </div>
   )
 }

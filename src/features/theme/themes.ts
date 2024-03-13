@@ -30,6 +30,7 @@ export const defaultTheme: Theme = {
   textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
   errorColor: 'red',
   surfaceBackground: 'rgba(91, 147, 255, 0.1)',
+  surfaceSoftBackground: 'rgba(91, 147, 255, 0.05)',
   surfaceHoveredBackground: 'rgba(91, 147, 255, 0.2)',
 }
 
@@ -56,6 +57,7 @@ const fraia: Theme = {
   errorColor: 'red',
 
   surfaceHoveredBackground: 'rgba(255,118,118,0.08)',
+  surfaceSoftBackground: 'rgba(91, 147, 255, 0.05)',
   surfaceBackground: 'rgba(91, 147, 255, 0.1)',
 }
 

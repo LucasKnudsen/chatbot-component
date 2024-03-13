@@ -1,5 +1,5 @@
 import { botStore, botStoreActions } from '@/features/bot'
-import { configStore } from '@/features/portal-init'
+import { configStore, configStoreActions } from '@/features/portal-init'
 import { Channel, ChannelAccessType } from '@/graphql'
 import { Show, createMemo } from 'solid-js'
 import { Divider } from '../../Divider'
@@ -19,6 +19,11 @@ export const DrawerMenu = () => {
       access === ChannelAccessType.WRITE
     )
   })
+
+  const openKnowledgeBase = () => {
+    botStoreActions.toggleKnowledgeBase()
+    configStoreActions.setConfigStore('isDrawerOpened', false)
+  }
 
   return (
     <div class=' flex flex-col grow justify-between '>
@@ -92,8 +97,8 @@ export const DrawerMenu = () => {
         {/* AVATAR BUTTON */}
         <Show when={!hasWriteAccess()}>
           <div
-            overflow-hidden
             class='flex items-center gap-4 cursor-pointer hover:bg-[var(--surfaceHoveredBackground)] rounded-3xl px-4 py-1 '
+            onClick={openKnowledgeBase}
             style={{
               padding: configStore.isDrawerOpened ? '4px 16px' : '4px 0',
             }}
