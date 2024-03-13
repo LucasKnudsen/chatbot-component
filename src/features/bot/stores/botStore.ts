@@ -312,6 +312,10 @@ const resetActiveChannel = () => {
   setBotStore('activeChannel', null)
 }
 
+const resetActiveChat = () => {
+  setBotStore('activeChannel', 'activeChat', null)
+}
+
 const clear = () => {
   // setBotStore('chat', null)
   // setBotStore('history', [])
@@ -322,6 +326,7 @@ const botStoreActions = {
   initBotStore,
   updateAnswer,
   addToHistory,
+  resetActiveChat,
   setBotStore,
   buildQuestion,
   setActiveChat,

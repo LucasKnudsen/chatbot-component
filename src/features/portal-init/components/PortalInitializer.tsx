@@ -8,7 +8,7 @@ import {
 } from '..'
 import { BotManager, FraiaLoading, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
 
-import { DesktopDrawerContainer, Nav } from '@/components/nav'
+import { Nav, NavigationDrawer } from '@/components/nav'
 import { AuthProvider } from '@/features/authentication'
 import { useText } from '@/features/text'
 import { themes } from '@/features/theme'
@@ -63,7 +63,7 @@ export const PortalInitializer = (props: ChatConfig) => {
                   <BotManager />
                 </div>
 
-                <DesktopDrawerContainer />
+                <NavigationDrawer />
               </div>
             </Show>
           </AuthProvider>

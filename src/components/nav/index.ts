@@ -1,4 +1,3 @@
 export * from './ChannelMenu'
-export * from './DesktopDrawerContainer'
-export * from './DrawerMenu'
 export * from './Nav'
+export * from './drawer/NavigationDrawer'

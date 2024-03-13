@@ -1,3 +1,4 @@
+export * from './ChatMessageIcon'
 export * from './ChevronIcon'
 export * from './CircleCloseIcon'
 export * from './Menu2Icon'

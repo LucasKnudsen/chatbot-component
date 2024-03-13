@@ -69,6 +69,29 @@ body {
   --PhoneInput-color--focus: transparent;
 }
 
+.brand-scroll-container {
+  scrollbar-color: var(--primaryColor) var(--borderColor);
+  scrollbar-width: thin;
+}
+
+/* .brand-scroll-container::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+} */
+
+.brand-scroll-container::-webkit-scrollbar-thumb {
+  background-color: var(--primaryColor);
+  width: 4px;
+  height: 4px;
+  border-radius: 10px;
+}
+
+.brand-scroll-container::-webkit-scrollbar-track {
+  background-color: var(--borderColor);
+  width: 1px;
+  height: 1px;
+}
+
 a {
   color: #16bed7;
   font-weight: 500;
