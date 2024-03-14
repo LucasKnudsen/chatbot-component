@@ -1,5 +1,5 @@
-import { useTheme } from '@/features/theme'
 import { InitialPrompt } from '@/graphql/types'
+import { useTheme } from '@/features/theme'
 
 type PromptProps = {
   prompt: InitialPrompt
@@ -14,7 +14,7 @@ export const NavigationPrompt = (props: PromptProps) => {
   return (
     <div
       class={
-        'navigation-prompt flex items-start bg-[rgba(235,235,235,0.5)] hover:bg-[var(--surfaceHoveredBackground)] text-[var(--primaryColor)] border border-[var(--borderColor)] pl-3.5 py-5 pr-5 rounded-[10px]  font-light leading-[22px] transition-colors max-h-[80px] ' +
+        'navigation-prompt flex items-start bg-[var(--backgroundColor)] bg-opacity-25 hover:bg-[var(--surfaceHoveredBackground)] text-[var(--primaryColor)] border border-[var(--borderColor)] pl-3.5 py-5 pr-5 rounded-[10px]  font-light leading-[22px] transition-colors max-h-[80px] ' +
         props.class
       }
       style={{

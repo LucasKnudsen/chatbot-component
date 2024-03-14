@@ -1,10 +1,3 @@
-import { SignOutButton, authStore } from '@/features/authentication'
-import { configStore, configStoreActions } from '@/features/portal-init'
-import { createQuery } from '@/hooks'
-import LayoutDefault from '@/layouts/default'
-import { logDev } from '@/utils'
-import { parseError } from '@/utils/errorHandlers'
-import { Match, Switch } from 'solid-js'
 import {
   Bot,
   FraiaLoading,
@@ -13,8 +6,15 @@ import {
   fetchChannelAccesses,
   fetchPublicChannels,
 } from '..'
+import { Match, Switch } from 'solid-js'
+import { SignOutButton, authStore } from '@/features/authentication'
+import { configStore, configStoreActions } from '@/features/portal-init'
 
 import { ChannelsOverview } from './ChannelsOverview'
+import LayoutDefault from '@/layouts/default'
+import { createQuery } from '@/hooks'
+import { logDev } from '@/utils'
+import { parseError } from '@/utils/errorHandlers'
 
 export const BotManager = () => {
   const openForPublic = configStore.chatSpaceConfig.isPublic
