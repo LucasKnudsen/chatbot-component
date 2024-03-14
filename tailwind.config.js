@@ -2,6 +2,8 @@
 
 import defaultTheme from 'tailwindcss/defaultTheme'
 
+// import { defaultTheme as theme } from './src/features/theme/themes.ts'
+
 function rem2px(input, fontSize = 16) {
   if (input == null) {
     return input
@@ -53,6 +55,14 @@ export default {
           },
         },
       },
+      // colors: theme,
+    },
+    screens: {
+      sm: '576px',
+      md: '768px',
+      lg: '992px',
+      xl: '1200px',
+      xxl: '1400px',
     },
   },
   plugins: [require('@tailwindcss/typography')],
