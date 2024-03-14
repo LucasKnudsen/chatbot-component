@@ -1,11 +1,11 @@
 import { IconButton, MicrophoneIcon } from '@/components'
 import { API, Storage } from 'aws-amplify'
-import { createSignal, onCleanup } from 'solid-js'
+import { Match, Switch, createSignal, onCleanup } from 'solid-js'
 import { KnowledgeBaseTitle, KnowledgeBaseTopBar } from '../../components'
 
 export const AudioRecordingView = (props: { onBack: () => void }) => {
   return (
-    <div>
+    <div class='h-full flex flex-col'>
       <KnowledgeBaseTopBar title='Record Audio' onBack={props.onBack} />
 
       <KnowledgeBaseTitle title='Record audio to train the AI on' />
@@ -19,14 +19,24 @@ const AudioInput = () => {
   const [mediaStream, setMediaStream] = createSignal<MediaStream | null>(null)
   const [mediaRecorder, setMediaRecorder] = createSignal<MediaRecorder | null>(null)
   const [isRecording, setIsRecording] = createSignal<boolean>(false)
-  const [isLoading, setIsLoading] = createSignal<boolean>(false)
+  const [audioBlob, setAudioBlob] = createSignal<Blob | null>(null)
 
   const handleUpload = async (blob: Blob) => {
+    setAudioBlob(blob)
+
     const type = blob.type
     const key = `test.${type.split('/')[1]}`
 
+    const audioUrl = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = audioUrl
+    link.download = `fraia-recording-${Date.now()}.${blob.type.split('/')[1]}`
+    link.click()
+
+    return
+
     try {
-      setIsLoading(true)
       console.time('FULL')
 
       await Storage.put(key, blob, {
@@ -48,8 +58,6 @@ const AudioInput = () => {
     }
 
     console.timeEnd('FULL')
-
-    setIsLoading(false)
   }
 
   // Function to start recording
@@ -105,18 +113,54 @@ const AudioInput = () => {
   })
 
   return (
-    <>
-      {isLoading() ? (
-        <div class='animate-ping rounded-full m-1 h-3 w-3 bg-gray-700' />
-      ) : isRecording() ? (
-        <IconButton onClick={stopRecording}>
-          <div class=' animate-pulse m-1 h-3 w-3  ani  bg-gray-700 opacity-75'></div>
-        </IconButton>
-      ) : (
-        <IconButton onClick={startRecording}>
-          <MicrophoneIcon height={20} width={20} />
-        </IconButton>
-      )}
-    </>
+    <div class='flex flex-col grow justify-center items-center gap-8'>
+      <Switch>
+        <Match when={audioBlob()}>
+          <audio controls src={URL.createObjectURL(audioBlob()!)} />
+        </Match>
+
+        <Match when={!audioBlob()}>
+          <>
+            <MicrophoneIcon class='h-24 w-24' />
+
+            {/* RECORDING BUTTONS  */}
+            <Switch
+              fallback={
+                <IconButton onClick={startRecording}>
+                  <div class='outline-white w-12 h-12 bg-red-400 rounded-full flex justify-center items-center'>
+                    <div class=' w-5 h-5 bg-white rounded-full' />
+                  </div>
+                </IconButton>
+              }
+            >
+              <Match when={isRecording()}>
+                <div class='flex gap-8'>
+                  {/* <IconButton onClick={stopRecording}>
+              <div class='outline-white w-12 h-12 bg-[var(--primaryColor)] rounded-full flex justify-center items-center'>
+                
+              </div>
+            </IconButton> */}
+                  <IconButton onClick={stopRecording}>
+                    <div class='outline-white w-12 h-12 bg-[var(--primaryColor)] rounded-full flex justify-center items-center'>
+                      <div class=' w-5 h-5 bg-white ' />
+                    </div>
+                  </IconButton>
+                </div>
+              </Match>
+            </Switch>
+
+            {/* RECORDING TEXT  */}
+            <p class='italic text-[var(--primaryColor)]'>
+              <Switch fallback={'Please press the button to start recording'}>
+                <Match when={isRecording()}>
+                  Currently recording... End the recording to upload the content to your knowledge
+                  base.
+                </Match>
+              </Switch>
+            </p>
+          </>
+        </Match>
+      </Switch>
+    </div>
   )
 }

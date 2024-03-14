@@ -8,6 +8,7 @@ import { ChatHistory } from './ChatHistory'
 export const DrawerMenu = () => {
   const initiateNewChat = () => {
     botStoreActions.resetActiveChat()
+    botStoreActions.setBotStore('isKnowledgeBaseOpen', false)
   }
 
   const hasWriteAccess = createMemo(() => {

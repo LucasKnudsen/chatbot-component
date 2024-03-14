@@ -37,7 +37,7 @@ export const KnowledgeInputsView = () => {
   const [activeFlow, setActiveFlow] = createSignal<ActiveFlow>('')
 
   return (
-    <div>
+    <div class='h-full'>
       <Switch>
         <Match when={activeFlow() === ''}>
           <KnowledgeBaseTopBar title='Train your AI' />
