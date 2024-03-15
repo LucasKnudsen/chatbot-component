@@ -96,7 +96,7 @@ export const initLLMStream = async (channel: Channel) => {
       logDev('Initiated chat stream', socket!.id)
 
       isInitiatingLLMStream(false)
-      setLLMStreamingId(socket!.id)
+      setLLMStreamingId(socket.id!)
       resolve(socket)
     })
 
