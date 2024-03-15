@@ -132,7 +132,7 @@ const ChannelItem = (props: {
         _channel = await fetchChannelDetails((props.channel as ChannelUserAccess).channelId)
       }
 
-      await botStoreActions.initBotStore(_channel)
+      await botStoreActions.initBotStore(_channel, props.channel as ChannelUserAccess)
 
       return _channel
     },
