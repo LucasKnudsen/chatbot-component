@@ -29,19 +29,18 @@ export const DrawerMenu = () => {
   return (
     <div class=' flex flex-col grow justify-between '>
       {/* NEW BUTTON  */}
-      <div class='flex flex-col items-center'>
+      <div class='flex flex-col items-center gap-2 '>
         <Divider />
 
         <button
           class={`relative rounded-full font-semibold text-sm leading-[17px] active:scale-95
-           
-            bg-[var(--primaryColor)] text-[var(--onPrimary)] h-[32px] my-1.5
+            bg-[var(--primaryColor)] text-[var(--onPrimary)] overflow-hidden
             transition-all hover:brightness-110 flex justify-between items-center
-            overflow-hidden
              disabled:bg-[var(--primaryColor)] disabled:cursor-not-allowed disabled:opacity-50
             `}
           style={{
-            width: configStore.isDrawerOpened ? '100%' : '32px',
+            width: configStore.isDrawerOpened ? '100%' : '30px',
+            height: '30px',
             padding: configStore.isDrawerOpened ? '0 16px' : '0',
           }}
           onClick={initiateNewChat}
@@ -55,8 +54,8 @@ export const DrawerMenu = () => {
             viewBox='0 0 24 24'
             xmlns='http://www.w3.org/2000/svg'
             style={{
-              width: configStore.isDrawerOpened ? '24px' : '32px',
-              height: configStore.isDrawerOpened ? '24px' : '32px',
+              width: configStore.isDrawerOpened ? '24px' : '30px',
+              height: configStore.isDrawerOpened ? '24px' : '30px',
             }}
           >
             <path

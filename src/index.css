@@ -69,9 +69,10 @@ body {
   --PhoneInput-color--focus: transparent;
 }
 
-.brand-scroll-container {
-  scrollbar-color: var(--primaryColor) var(--borderColor);
-  scrollbar-width: thin;
+.brand-scroll-container::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  border-radius: 10px;
 }
 
 /* .brand-scroll-container::-webkit-scrollbar {
@@ -81,15 +82,14 @@ body {
 
 .brand-scroll-container::-webkit-scrollbar-thumb {
   background-color: var(--primaryColor);
-  width: 4px;
-  height: 4px;
+
   border-radius: 10px;
 }
 
 .brand-scroll-container::-webkit-scrollbar-track {
   background-color: var(--borderColor);
-  width: 1px;
-  height: 1px;
+
+  border-radius: 10px;
 }
 
 a {
@@ -538,7 +538,7 @@ input {
 @screen sm {
   .menu-card.active,
   .menu-card:hover {
-    background-color: var(--surfaceHoveredBackground);
+    background-color: var(--surfaceSoftBackground);
     border-color: var(--primaryColor);
   }
 

@@ -15,7 +15,7 @@ export const DesktopDrawerContainer = () => {
         padding: botStore.activeChannel ? '0 20px' : '0',
       }}
     >
-      <div class='min-h-[144px] flex justify-end items-center w-full '>
+      <div class='min-h-[130px] flex justify-end items-center w-full '>
         <div class='cursor-pointer' onClick={configStoreActions.toggleDrawer}>
           <Menu2Icon class='text-[var(--primaryColor)] w-8 ' />
         </div>

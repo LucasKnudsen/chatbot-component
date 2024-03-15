@@ -14,7 +14,7 @@ export const KnowledgeBaseTopBar = (props: { title: string; onBack?: () => void 
           />
         </Show>
 
-        <p class='font-bold text-[var(--textSecondary)]'>{props.title}</p>
+        <p class='font-bold leading-[30px] text-[var(--textSecondary)]'>{props.title}</p>
       </div>
       <Divider />
     </div>

@@ -1,5 +1,4 @@
 import { InitialPrompt } from '@/graphql/types'
-import { useTheme } from '@/features/theme'
 
 type PromptProps = {
   prompt: InitialPrompt
@@ -9,23 +8,25 @@ type PromptProps = {
 }
 
 export const NavigationPrompt = (props: PromptProps) => {
-  const { theme } = useTheme()
+  const handleClick = () => {
+    if (props.disabled) {
+      return
+    }
+
+    props.onClick(typeof props.prompt === 'string' ? props.prompt : props.prompt.prompt)
+  }
 
   return (
     <div
       class={
-        'navigation-prompt flex items-start bg-[var(--backgroundColor)] bg-opacity-25 hover:bg-[var(--surfaceHoveredBackground)] text-[var(--primaryColor)] border border-[var(--borderColor)] pl-3.5 py-5 pr-5 rounded-[10px]  font-light leading-[22px] transition-colors max-h-[80px] ' +
+        'navigation-prompt flex items-start bg-[var(--backgroundColor)] max-w-40 lg:max-w-80 bg-opacity-25 hover:bg-[var(--surfaceSoftBackground)] text-[var(--primaryColor)] border border-[var(--borderColor)] hover:border-[var(--primaryColor)] pl-3.5 py-5 pr-5 rounded-[10px]  font-light leading-[22px] transition-colors' +
         props.class
       }
       style={{
         cursor: props.disabled ? 'not-allowed' : 'pointer',
-        '--navigationPromptColor': theme().primaryColor,
+        width: '311px',
       }}
-      onClick={() =>
-        props.disabled
-          ? null
-          : props.onClick(typeof props.prompt === 'string' ? props.prompt : props.prompt.prompt)
-      }
+      onClick={handleClick}
     >
       <span class='border-r border-[var(--borderColor)] pr-2.5'>
         <svg

@@ -1,15 +1,14 @@
 import { Show, createMemo, createSignal } from 'solid-js'
-import { botStore, botStoreActions } from '..'
+import { botStore } from '..'
 
-import { ChatInput } from '@/components/inputs/chatInput'
-import { ChatWindow } from '@/features/messages'
-import { ContextualContainer } from '@/features/contextual'
 import { Divider } from '@/components/Divider'
-import { ResourcesSidebar } from '../components/ResourcesSidebar'
-import { SidebarTabView } from '../components/SidebarTabView'
-import { SuggestedPrompts } from '@/features/prompt'
-import { sidebarPaddingNum } from '../constants'
+import { ChatInput } from '@/components/inputs/chatInput'
+import { ContextualContainer } from '@/features/contextual'
+import { ChatWindow } from '@/features/messages'
+import { NavigationPromptsList, SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
+import { ResourcesSidebar } from '../components/ResourcesSidebar'
+import { sidebarPaddingNum } from '../constants'
 
 type BotDesktopProps = {
   userInput: string
@@ -33,7 +32,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
     <>
       {/* Main Container */}
       <div
-        class='flex flex-col flex-1 text-base overflow-hidden py-6'
+        class='flex flex-col flex-1 text-base overflow-hidden py-10'
         style={{
           'padding-right': resourcesOpen() ? sidebarPaddingNum + 'px' : '0',
         }}
@@ -51,14 +50,23 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
                 </h1>
               </div>
 
-              <SidebarTabView
-                setQuestion={(chat) => {
-                  botStoreActions.setActiveChat(chat)
-                }}
-                handleSubmit={(question) => {
-                  props.onSubmit(question)
-                }}
-              />
+              <div>
+                <div class='flex flex-col gap-2 pb-4 '>
+                  <Divider />
+                  <p class='font-bold leading-[30px] text-[var(--textSecondary)]'>Navigation</p>
+
+                  <Divider />
+                </div>
+
+                <NavigationPromptsList
+                  prompts={
+                    botStore.activeChannel!.initialPrompts
+                    // botStore.chat?.question ? props.initialPrompts : props.initialPrompts?.slice(0, 3)
+                  }
+                  onSelect={props.onSubmit}
+                  disabled={botStore.isAwaitingAnswer}
+                />
+              </div>
             </div>
           }
         >

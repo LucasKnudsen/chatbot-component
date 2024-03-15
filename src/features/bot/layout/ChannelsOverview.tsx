@@ -51,16 +51,16 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
 
       <div class='flex flex-col lg:flex-row gap-5 md:gap-10 lg:gap-[50px]'>
         <div ref={wrapper} class='relative min-w-0 overflow-hidden'>
-          <div
+          {/* <div
             ref={shadowLeft}
             class='absolute z-10 w-5 h-full top-0 left-0 bottom-0 opacity-0 hidden lg:block'
             style={{
               background: 'rgba(234, 233, 236, 0.14)',
             }}
-          ></div>
+          ></div> */}
           <div
             ref={content}
-            class='flex flex-col sm:flex-row sm:grid sm:grid-cols-2 lg:flex lg:flex-nowrap gap-y-[30px] sm:gap-x-8 lg:gap-[50px] overflow-x-auto overflow-y-hidden channel-item-scrollbar pb-1'
+            class='flex flex-col sm:flex-row sm:grid sm:grid-cols-2 lg:flex lg:flex-nowrap gap-y-[30px] sm:gap-x-8 lg:gap-[50px] overflow-x-auto overflow-y-hidden brand-scroll-container pb-6'
           >
             {props.channels?.map((channel) => (
               <ChannelItem channel={channel} isChatSpacePublic={props.chatSpace.isPublic} />
@@ -69,13 +69,13 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
               <AddChannelItem />
             </Show>
           </div>
-          <div
+          {/* <div
             ref={shadowRight}
             class='absolute z-10 w-5 h-full top-0 right-0 bottom-0 opacity-0 hidden lg:block'
             style={{
               background: 'rgba(234, 233, 236, 0.14)',
             }}
-          ></div>
+          ></div> */}
         </div>
         <Show when={device() == 'desktop'}>
           <AddChannelItem />

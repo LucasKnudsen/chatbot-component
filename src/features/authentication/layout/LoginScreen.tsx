@@ -64,6 +64,7 @@ export const LoginScreen = () => {
         <div class='max-w-[640px] w-full mx-auto lg:ml-0 lg:mr-0'>
           <form>
             <div class='mb-[50px]'>
+              {/* Username  */}
               <div class='auth-input mb-6'>
                 <label for='username' class='auth-input__label'>
                   <UserIcon color={theme().primaryColor} />
@@ -81,9 +82,11 @@ export const LoginScreen = () => {
                     }))
                   }
                   placeholder='Write your user name'
-                  class='auth-input__control'
+                  class='auth-input__control w-full'
                 />
               </div>
+
+              {/* Password  */}
               <div class='auth-input'>
                 <label for='password' class='auth-input__label'>
                   <LockIcon color={theme().primaryColor} />
@@ -91,7 +94,7 @@ export const LoginScreen = () => {
                 </label>
 
                 <span class='auth-input__divider'></span>
-                <div class='relative'>
+                <div class='relative w-full'>
                   <input
                     id='password'
                     type='password'
@@ -103,7 +106,7 @@ export const LoginScreen = () => {
                       }))
                     }
                     placeholder='••••••••'
-                    class='auth-input__control tracking-[1em]'
+                    class='auth-input__control tracking-[1em] w-full'
                   />
                   <span class='absolute top-0 right-0'>
                     <Show when={false}>
