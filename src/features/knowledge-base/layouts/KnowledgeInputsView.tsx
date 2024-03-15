@@ -37,7 +37,7 @@ export const KnowledgeInputsView = () => {
   const [activeFlow, setActiveFlow] = createSignal<ActiveFlow>('')
 
   return (
-    <div class='h-full'>
+    <div class='flex flex-col h-full'>
       <Switch>
         <Match when={activeFlow() === ''}>
           <KnowledgeBaseTopBar title='Train your AI' />
@@ -47,7 +47,7 @@ export const KnowledgeInputsView = () => {
             description='Choose a method to add knowledge'
           />
 
-          <div class='flex flex-col lg:flex-row gap-6 lg:gap-10 mt-10 overflow-y-auto lg:overflow-x-auto brand-scroll-container lg:pb-6'>
+          <div class='flex flex-col lg:flex-row gap-6 lg:gap-10 mt-10 max-lg:pr-1 overflow-y-auto lg:overflow-x-auto brand-scroll-container lg:pb-6'>
             {options.map((option) => (
               <InputOption {...option} onClick={() => setActiveFlow(option.flow)} />
             ))}

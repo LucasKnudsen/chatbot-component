@@ -1,21 +1,17 @@
 import { JSX } from 'solid-js/jsx-runtime'
-const defaultButtonColor = '#3B81F6'
 
 export const ChevronIcon = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
   <svg
-    xmlns='http://www.w3.org/2000/svg'
-    class='icon icon-tabler icon-tabler-chevron-down transition-all duration-300 ease-in-out '
-    viewBox='0 0 24 24'
-    stroke-width='2'
-    stroke='currentColor'
+    width='8'
+    height='7'
+    viewBox='0 0 8 7'
     fill='none'
-    stroke-linecap='round'
-    stroke-linejoin='round'
-    width='19px'
-    style={{ stroke: props.color ?? defaultButtonColor }}
+    xmlns='http://www.w3.org/2000/svg'
     {...props}
   >
-    <path stroke='none' d='M0 0h24v24H0z' fill='none' />
-    <path d='M6 9l6 6l6 -6' />
+    <path
+      d='M5.55543 6.07566C4.75494 7.06601 3.24506 7.06601 2.44457 6.07566L0.570617 3.75724C-0.486531 2.44936 0.444343 0.5 2.12604 0.5L5.87396 0.500001C7.55566 0.500001 8.48653 2.44936 7.42938 3.75724L5.55543 6.07566Z'
+      fill='currentColor'
+    />
   </svg>
 )

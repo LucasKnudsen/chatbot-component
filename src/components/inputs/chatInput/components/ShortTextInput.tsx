@@ -1,5 +1,5 @@
-import { JSX } from 'solid-js/jsx-runtime'
 import { splitProps } from 'solid-js'
+import { JSX } from 'solid-js/jsx-runtime'
 
 type ShortTextInputProps = {
   ref: HTMLTextAreaElement | undefined
@@ -17,7 +17,7 @@ export const Textarea = (props: ShortTextInputProps) => {
       ref={props.ref}
       data-testid='question-input'
       class={
-        'question-input outline-none bg-transparent flex-1 w-full text-input disabled:opacity-50 disabled:cursor-not-allowed disabled:brightness-100 textarea-hide-handle ' +
+        'question-input max-lg:pl-4  outline-none bg-transparent flex-1 w-full text-input disabled:opacity-50 disabled:cursor-not-allowed disabled:brightness-100 textarea-hide-handle ' +
         props.class
       }
       disabled={props.disabled}

@@ -1,9 +1,9 @@
-import { ChatSpaceTheme } from '@/graphql/types'
 import background2 from '@/assets/background-2.png'
 import background3 from '@/assets/background-3.png'
-import logo from '@/assets/logo_final.png'
 import newLogo from '@/assets/logo.svg'
 import newLogo2 from '@/assets/logo2.svg'
+import logo from '@/assets/logo_final.png'
+import { ChatSpaceTheme } from '@/graphql/types'
 
 type NonNullProperties<T> = {
   [P in keyof T]: Exclude<T[P], null>
@@ -57,8 +57,8 @@ const fraia: Theme = {
   errorColor: 'red',
 
   surfaceHoveredBackground: 'rgba(255,118,118,0.08)',
-  surfaceSoftBackground: 'rgba(91, 147, 255, 0.05)',
-  surfaceBackground: 'rgba(91, 147, 255, 0.1)',
+  surfaceSoftBackground: 'rgba(255,118,118, 0.05)',
+  surfaceBackground: 'rgba(255,118,118, 0.1)',
 }
 
 const midnight: Theme = {

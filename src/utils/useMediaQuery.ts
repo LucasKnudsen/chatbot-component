@@ -9,9 +9,9 @@ export const useMediaQuery = () => {
     const width = window.innerWidth
     if (width < 768 && device() !== 'mobile') {
       setDevice('mobile')
-    } else if (width >= 768 && width < 1024 && device() !== 'tablet') {
+    } else if (width >= 768 && width < 992 && device() !== 'tablet') {
       setDevice('tablet')
-    } else if (width >= 1024 && device() !== 'desktop') {
+    } else if (width >= 992 && device() !== 'desktop') {
       setDevice('desktop')
     }
   }

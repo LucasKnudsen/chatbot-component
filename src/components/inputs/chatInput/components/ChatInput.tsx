@@ -1,12 +1,12 @@
-import { API, Storage } from 'aws-amplify'
 import { IconButton, MicrophoneIcon, SendButton } from '@/components'
+import { API, Storage } from 'aws-amplify'
 import { Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 
-import { Textarea } from './ShortTextInput'
 import { botStore } from '@/features/bot'
+import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { useScrollOnResize } from '../hooks/useScrollOnResize'
-import { useTheme } from '@/features/theme/hooks'
+import { Textarea } from './ShortTextInput'
 
 type Props = {
   placeholder: string
@@ -56,7 +56,7 @@ export const ChatInput = (props: Props) => {
 
   return (
     <div
-      class={'flex justify-between rounded-lg ' + props.class}
+      class={'flex justify-between rounded-lg ' + props.class || ''}
       data-testid='input'
       style={{
         'background-color': theme().textInputBackgroundColor,
@@ -116,6 +116,7 @@ export const ChatInput = (props: Props) => {
             </svg>
           </div>
         </Show>
+
         <SendButton
           data-testid='submit-question'
           sendButtonColor={

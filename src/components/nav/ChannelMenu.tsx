@@ -6,7 +6,7 @@ import { botStore } from '@/features/bot'
 import { configStore } from '@/features/portal-init'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import usePopper from 'solid-popper'
-import { Button } from '..'
+import { Button, CheckIcon, ChevronIcon } from '..'
 
 function Separator() {
   return (
@@ -51,23 +51,12 @@ export const ChannelMenu = () => {
                     background: botStore.activeChannel?.avatar || '',
                   }}
                 ></span>
-                <span class='flex items-center gap-x-3.5 text-sm font-bold text-[var(--primaryColor)]'>
+                <span class='flex items-center gap-x-3.5 text-sm font-semibold text-[var(--primaryColor)]'>
                   {/* Name  */}
                   {device() !== 'mobile' && botStore.activeChannel?.name}
 
                   {/* Chevron  */}
-                  <svg
-                    width='8'
-                    height='7'
-                    viewBox='0 0 8 7'
-                    fill='none'
-                    xmlns='http://www.w3.org/2000/svg'
-                  >
-                    <path
-                      d='M5.55543 6.07566C4.75494 7.06601 3.24506 7.06601 2.44457 6.07566L0.570617 3.75724C-0.486531 2.44936 0.444343 0.5 2.12604 0.5L5.87396 0.500001C7.55566 0.500001 8.48653 2.44936 7.42938 3.75724L5.55543 6.07566Z'
-                      fill='#5B93FF'
-                    />
-                  </svg>
+                  <ChevronIcon />
                 </span>
               </div>
             </PopoverButton>
@@ -79,23 +68,16 @@ export const ChannelMenu = () => {
                     Selected
                   </h5>
 
+                  {/* SELECTED ITEM  */}
                   <MenuItem
                     as='button'
                     class='flex items-center text-[var(--primaryColor)] text-[14px] leading-[20px] font-bold w-full'
                   >
                     {botStore.activeChannel?.name}
 
-                    <svg
-                      width='18'
-                      height='18'
-                      viewBox='0 0 18 18'
-                      fill='none'
-                      xmlns='http://www.w3.org/2000/svg'
-                      class='ml-auto'
-                    >
-                      <rect width='18' height='18' rx='9' fill='#5B93FF' />
-                      <path d='M6.5 9.5L7.875 11L11 7.5' stroke='#EAE9EC' stroke-linecap='round' />
-                    </svg>
+                    <div class='bg-[var(--primaryColor)] rounded-full p-1 ml-auto'>
+                      <CheckIcon class='w-3 h-3 text-[var(--onPrimary)]' />
+                    </div>
                   </MenuItem>
 
                   <Separator />
@@ -116,11 +98,8 @@ export const ChannelMenu = () => {
                       ))}
                   </div>
                   <Separator />
-                  <Button
-                    class='relative w-full border border-[rgba(194,194,194,1)] font-bold cursor-pointer'
-                    type='button'
-                    padding='6px 14px'
-                  >
+
+                  <Button class='w-full ' type='button' padding='6px 14px'>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       width='20'
