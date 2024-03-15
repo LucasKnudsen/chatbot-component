@@ -1,10 +1,11 @@
 import { Channel, ChannelUserAccess, ChatSpace } from '@/graphql'
+import { Show, onMount } from 'solid-js'
 import { botStoreActions, fetchChannelDetails } from '..'
 
 import { ArrowRightIcon } from '@/components/icons/ArrowRightIcon'
 import { Spinner } from '@/components/loaders'
 import { createMutation } from '@/hooks'
-import { onMount } from 'solid-js'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 
 type ChannelOverviewProps = {
   chatSpace: ChatSpace
@@ -16,6 +17,8 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
   let content: HTMLDivElement | undefined
   let shadowLeft: HTMLDivElement | undefined
   let shadowRight: HTMLDivElement | undefined
+
+  const device = useMediaQuery()
 
   onMount(() => {
     let contentScrollWidth = content?.scrollWidth ?? 0 - (wrapper?.scrollWidth ?? 0)
@@ -46,55 +49,37 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
         you want to use:
       </h1>
 
-      <div class='flex flex-col sm:flex-row gap-5 md:gap-10 lg:gap-[50px]'>
-        <div ref={wrapper} class='relative min-w-0 rounded-[15px] overflow-hidden'>
+      <div class='flex flex-col lg:flex-row gap-5 md:gap-10 lg:gap-[50px]'>
+        <div ref={wrapper} class='relative min-w-0 overflow-hidden'>
           <div
             ref={shadowLeft}
-            class='absolute z-10 w-5 h-full top-0 -left-5 bottom-0 opacity-0'
+            class='absolute z-10 w-5 h-full top-0 left-0 bottom-0 opacity-0 hidden lg:block'
             style={{
-              'box-shadow': 'rgba(91, 147, 255, 0.45) 15px 0 15px 0',
+              background: 'rgba(234, 233, 236, 0.14)',
             }}
           ></div>
           <div
             ref={content}
-            class='flex flex-col sm:flex-row sm:flex-nowrap gap-y-[30px] sm:gap-x-10 lg:gap-[50px] overflow-x-auto overflow-y-hidden custom-scrollbar pb-1'
+            class='flex flex-col sm:flex-row sm:grid sm:grid-cols-2 lg:flex lg:flex-nowrap gap-y-[30px] sm:gap-x-8 lg:gap-[50px] overflow-x-auto overflow-y-hidden channel-item-scrollbar pb-1'
           >
             {props.channels?.map((channel) => (
               <ChannelItem channel={channel} isChatSpacePublic={props.chatSpace.isPublic} />
             ))}
+            <Show when={device() == 'tablet' || device() == 'mobile'}>
+              <AddChannelItem />
+            </Show>
           </div>
           <div
             ref={shadowRight}
-            class='absolute z-10 w-5 h-full top-0 -right-5 bottom-0 opacity-0'
+            class='absolute z-10 w-5 h-full top-0 right-0 bottom-0 opacity-0 hidden lg:block'
             style={{
-              'box-shadow': 'rgba(91, 147, 255, 0.2) -15px 0 15px 0',
+              background: 'rgba(234, 233, 236, 0.14)',
             }}
           ></div>
         </div>
-        {/* Create new knowledge base button */}
-        <div class='menu-card hidden sm:flex items-center justify-center'>
-          <div class='m-auto text-center'>
-            <div class='flex items-center justify-center w-11 h-11 md:w-[54px] md:h-[54px] mx-auto mb-3 md:mb-[25px] bg-[var(--primaryColor)] rounded-full'>
-              <svg
-                class='w-5 h-5 md:w-6 md:h-6'
-                width='25'
-                height='25'
-                viewBox='0 0 25 25'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  d='M13.584 0V24.48H10.848V0H13.584ZM0 10.992H24.432V13.488H0V10.992Z'
-                  fill='white'
-                />
-              </svg>
-            </div>
-
-            <span class='block text-sm sm:text-base leading-[20px] sm:max-w-[145px] w-full'>
-              Create your own knowledge
-            </span>
-          </div>
-        </div>
+        <Show when={device() == 'desktop'}>
+          <AddChannelItem />
+        </Show>
       </div>
 
       <button class='fixed right-5 bottom-5 flex sm:hidden justify-center items-center shadow-lg rounded-full w-[45px] h-[45px] bg-[var(--primaryColor)]'>
@@ -186,7 +171,7 @@ const ChannelItem = (props: {
           </h1>
         </div>
 
-        <div ref={ref} class='hidden sm:block h-[130px]'>
+        <div ref={ref} class='hidden lg:block h-[130px]'>
           <div class='menu-card__divider'></div>
           <div class='menu-card__description pr-8'>
             <p class='line-clamp-2'>
@@ -200,6 +185,34 @@ const ChannelItem = (props: {
       <span class='menu-card__icon'>
         {channelDetailsMutation.isLoading() ? <Spinner size={24} /> : <ArrowRightIcon />}
       </span>
+    </div>
+  )
+}
+
+const AddChannelItem = () => {
+  return (
+    <div class='menu-card hidden sm:flex items-center justify-center lg:min-w-[146px] lg:max-w-[146px]'>
+      <div class='m-auto text-center'>
+        <div class='flex items-center justify-center w-11 h-11 md:w-[54px] md:h-[54px] mx-auto mb-3 md:mb-[25px] bg-[var(--primaryColor)] rounded-full'>
+          <svg
+            class='w-5 h-5 md:w-6 md:h-6'
+            width='25'
+            height='25'
+            viewBox='0 0 25 25'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
+          >
+            <path
+              d='M13.584 0V24.48H10.848V0H13.584ZM0 10.992H24.432V13.488H0V10.992Z'
+              fill='white'
+            />
+          </svg>
+        </div>
+
+        <span class='block text-sm sm:text-sm leading-[20px] lg:max-w-[145px] w-full'>
+          Create your own knowledge
+        </span>
+      </div>
     </div>
   )
 }

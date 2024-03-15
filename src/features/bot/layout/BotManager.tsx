@@ -1,9 +1,5 @@
 import { SignOutButton, authStore } from '@/features/authentication'
 import { configStore, configStoreActions } from '@/features/portal-init'
-import { createQuery } from '@/hooks'
-import LayoutDefault from '@/layouts/default'
-import { logDev } from '@/utils'
-import { parseError } from '@/utils/errorHandlers'
 import { Match, Switch } from 'solid-js'
 import {
   Bot,
@@ -14,6 +10,10 @@ import {
   fetchPublicChannels,
 } from '..'
 
+import { createQuery } from '@/hooks'
+import LayoutDefault from '@/layouts/default'
+import { logDev } from '@/utils'
+import { parseError } from '@/utils/errorHandlers'
 import { ChannelsOverview } from './ChannelsOverview'
 
 export const BotManager = () => {

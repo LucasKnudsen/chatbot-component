@@ -1,15 +1,15 @@
-import { botStore, botStoreActions } from '@/features/bot'
 import { Match, Show, Switch } from 'solid-js'
+import { botStore, botStoreActions } from '@/features/bot'
 
-import powerIcon from '@/assets/power-icon.svg'
-import { configStoreActions } from '@/features/portal-init'
-import { suggestedPromptsStoreActions } from '@/features/prompt'
-import { useTheme } from '@/features/theme/hooks'
-import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Button } from '..'
+import { ChannelMenu } from './ChannelMenu'
 import { CircleCloseIcon } from '../icons/CircleCloseIcon'
 import { MenuIcon } from '../icons/MenuIcon'
-import { ChannelMenu } from './ChannelMenu'
+import { configStoreActions } from '@/features/portal-init'
+import powerIcon from '@/assets/power-icon.svg'
+import { suggestedPromptsStoreActions } from '@/features/prompt'
+import { useMediaQuery } from '@/utils/useMediaQuery'
+import { useTheme } from '@/features/theme/hooks'
 
 export const Nav = () => {
   const device = useMediaQuery()
@@ -77,7 +77,7 @@ export const Nav = () => {
           ) : (
             <>
               <Show when={!botStore.isSidebarOpen}>
-                <div class='flex-1' />
+                <div class='flex-1 hidden md:block' />
 
                 <Button
                   onClick={configStoreActions.toggleBot}

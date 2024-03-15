@@ -1,12 +1,12 @@
-import { IconButton, MicrophoneIcon, SendButton } from '@/components'
 import { API, Storage } from 'aws-amplify'
+import { IconButton, MicrophoneIcon, SendButton } from '@/components'
 import { Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
 
+import { Textarea } from './ShortTextInput'
 import { botStore } from '@/features/bot'
-import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { useScrollOnResize } from '../hooks/useScrollOnResize'
-import { Textarea } from './ShortTextInput'
+import { useTheme } from '@/features/theme/hooks'
 
 type Props = {
   placeholder: string
@@ -32,12 +32,14 @@ export const ChatInput = (props: Props) => {
 
   const submit = () => {
     if (checkIfInputIsValid()) props.onSubmit(inputValue())
-    setInputValue('')
+    clearInput()
   }
+
+  const clearInput = () => setInputValue('')
 
   const submitWhenEnter = (e: KeyboardEvent) => {
     // Check if IME composition is in progress
-    const isIMEComposition = e.isComposing || e.keyCode === 229
+    const isIMEComposition = e.isComposing || e.shiftKey
     if (e.key === 'Enter' && !isIMEComposition) {
       submit()
       inputRef?.blur()
@@ -81,23 +83,54 @@ export const ChatInput = (props: Props) => {
         placeholder={props.placeholder}
         rows={props.rows}
         onFocusChange={props.onFocusChange}
-        class='pt-[22px] pb-2 pr-5 focus:h-28 h-[70px] transition-all'
+        class={`pt-[22px] pb-2 pl-5 md:pl-0 pr-5 h-[70px] transition-all ${
+          inputValue().length > 0 ? 'active' : ''
+        }`}
       />
 
-      <SendButton
-        data-testid='submit-question'
-        sendButtonColor={
-          botStore.isAwaitingAnswer || inputValue() === ''
-            ? theme().textSecondary
-            : theme().primaryColor
-        }
-        type='button'
-        isDisabled={botStore.isAwaitingAnswer || inputValue() === ''}
-        class='ml-2'
-        on:click={submit}
-      >
-        <span style={{ 'font-family': 'Poppins, sans-serif' }}>Send</span>
-      </SendButton>
+      <div class='relative'>
+        <Show when={inputValue().length > 0}>
+          <div
+            class='absolute top-3 right-[22px] flex items-center text-[var(--primaryColor)] cursor-pointer'
+            onClick={clearInput}
+          >
+            <span class='font-bold text-sm underline'>Clear</span>
+            <svg
+              width='10'
+              height='10'
+              viewBox='0 0 10 10'
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
+              class='w-2.5 h-2.5 ml-1.5'
+            >
+              <rect
+                x='0.789062'
+                y='0.867188'
+                width='8.90385'
+                height='8.74768'
+                rx='4.37384'
+                fill='currentColor'
+              />
+              <path d='M4.08594 4.0625L6.39767 6.41551' stroke='white' stroke-linecap='round' />
+              <path d='M6.43945 4.06335L4.04444 6.41636' stroke='white' stroke-linecap='round' />
+            </svg>
+          </div>
+        </Show>
+        <SendButton
+          data-testid='submit-question'
+          sendButtonColor={
+            botStore.isAwaitingAnswer || inputValue() === ''
+              ? theme().textSecondary
+              : theme().primaryColor
+          }
+          type='button'
+          isDisabled={botStore.isAwaitingAnswer || inputValue() === ''}
+          class='ml-2'
+          on:click={submit}
+        >
+          <span style={{ 'font-family': 'Poppins, sans-serif' }}>Send</span>
+        </SendButton>
+      </div>
     </div>
   )
 }
