@@ -84,7 +84,7 @@ const [botStore, setBotStore] = createStore<BotStore>({
   },
 })
 
-const initBotStore = async (channel: Channel) => {
+const initBotStore = async (channel: Channel, access?: ChannelUserAccess) => {
   let history: ChannelHistoryItem[] = []
 
   if (authStore.userDetails?.id) {
@@ -104,7 +104,7 @@ const initBotStore = async (channel: Channel) => {
     ...channel,
     library: [],
     history,
-    access: undefined,
+    access,
     activeChat: undefined,
   })
 }
