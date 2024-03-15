@@ -20,7 +20,7 @@ export const KnowledgeBaseDrawer = () => {
     >
       <Show when={botStore.isKnowledgeBaseOpen}>
         <div
-          class='absolute -left-4 top-[60px] cursor-pointer'
+          class='absolute left-6 top-11 lg:-left-4 lg:top-[60px] cursor-pointer'
           onClick={botStoreActions.toggleKnowledgeBase}
         >
           <CircleCloseRightIcon class='w-8 h-8' />

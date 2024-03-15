@@ -15,8 +15,6 @@ export const transcribeAudio = async (file: File) => {
   }
   const apiKey = 'hL9cnMRZQr6vC+/6y2AXSWir4xCflOjZcnqR4HdiHXA=' // Sorry mom
 
-  console.log(apiKey)
-
   if (!apiKey) {
     throw new Error('No API key found')
   }
@@ -173,7 +171,7 @@ const handleDocumentStorageOnIndex = async ({
   return [s3KeyOriginal, s3KeyRawText]
 }
 
-const uploadToS3 = async (file: File, path: string, prefix: string = '_/') => {
+export const uploadToS3 = async (file: File, path: string, prefix: string = '_/') => {
   const { key } = await Storage.put(path, file, {
     contentType: file.type,
   })

@@ -2,12 +2,19 @@ import { TrackingProvider } from '@/features/tracking'
 import StyleSheet from '@/styles'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 
-import { Amplify } from 'aws-amplify'
+import { Amplify, Storage } from 'aws-amplify'
 import { ChatConfig, PortalInitializer } from '..'
 import awsconfig from '../../../aws-exports'
 
 Amplify.configure({
   ...awsconfig,
+})
+
+Storage.configure({
+  customPrefix: {
+    public: '_/',
+  },
+  // ...
 })
 
 try {

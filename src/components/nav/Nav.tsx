@@ -62,7 +62,7 @@ export const Nav = () => {
       </div>
 
       <Show when={botStore.activeChannel && device() !== 'desktop'}>
-        <button class='ml-6' onClick={configStoreActions.toggleDrawer}>
+        <button class='ml-6 mt-2' onClick={configStoreActions.toggleDrawer}>
           <Menu2Icon class='text-[var(--primaryColor)]' />
         </button>
       </Show>

@@ -4,6 +4,7 @@ import { Menu, MenuItem, Popover, PopoverButton, PopoverPanel } from 'terracotta
 
 import { botStore } from '@/features/bot'
 import { configStore } from '@/features/portal-init'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 import usePopper from 'solid-popper'
 import { Button } from '..'
 
@@ -18,6 +19,8 @@ function Separator() {
 export const ChannelMenu = () => {
   const [anchor, setAnchor] = createSignal<HTMLButtonElement>()
   const [popper, setPopper] = createSignal<HTMLDivElement>()
+
+  const device = useMediaQuery()
 
   usePopper(anchor, popper, {
     placement: 'bottom',
@@ -49,7 +52,10 @@ export const ChannelMenu = () => {
                   }}
                 ></span>
                 <span class='flex items-center gap-x-3.5 text-sm font-bold text-[var(--primaryColor)]'>
-                  {botStore.activeChannel?.name}{' '}
+                  {/* Name  */}
+                  {device() !== 'mobile' && botStore.activeChannel?.name}
+
+                  {/* Chevron  */}
                   <svg
                     width='8'
                     height='7'
@@ -65,6 +71,7 @@ export const ChannelMenu = () => {
                 </span>
               </div>
             </PopoverButton>
+
             <Show when={isOpen()}>
               <PopoverPanel ref={setPopper} unmount={false} class='z-[100]'>
                 <Menu class='p-6 w-[300px] border border-[var(--borderColor)] bg-[rgba(244,244,244,1)] rounded-[10px]'>

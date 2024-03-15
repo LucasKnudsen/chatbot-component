@@ -1,7 +1,8 @@
 import { Button, IconButton, MicrophoneIcon, TypingBubble } from '@/components'
 import { ChannelDocumentType } from '@/graphql'
 import { createAudioRecorder, createMutation } from '@/hooks'
-import { Match, Show, Switch } from 'solid-js'
+import { logDev } from '@/utils'
+import { Match, Show, Switch, createEffect, createSignal } from 'solid-js'
 import { KnowledgeBaseTitle, KnowledgeBaseTopBar } from '../../components'
 import { indexDocument, mergeTranscriptBySpeaker, transcribeAudio } from '../../services'
 
@@ -10,15 +11,16 @@ export const AudioRecordingView = (props: { onBack: () => void }) => {
     <div class='h-full flex flex-col pb-9 lg:pb-20 '>
       <KnowledgeBaseTopBar title='Record Audio' onBack={props.onBack} />
 
-      <KnowledgeBaseTitle title='Record audio to train the AI on' />
+      <KnowledgeBaseTitle title='Train your AI with a new recording' />
 
-      <AudioInput />
+      <AudioInput onBack={props.onBack} />
     </div>
   )
 }
 
-const AudioInput = () => {
+const AudioInput = (props: { onBack: () => void }) => {
   const audioRecorder = createAudioRecorder()
+  const [loadingStatus, setLoadingStatus] = createSignal('')
 
   const uploadMutation = createMutation({
     mutationFn: async () => {
@@ -28,6 +30,12 @@ const AudioInput = () => {
       }
 
       const audioFile = new File([audioBlob], 'audio.wav', { type: audioBlob.type })
+
+      setLoadingStatus('Uploading audio...')
+
+      setTimeout(() => {
+        setLoadingStatus('Transcribing audio...')
+      }, 2000)
 
       const transcriptionResponse = await transcribeAudio(audioFile)
 
@@ -43,7 +51,9 @@ const AudioInput = () => {
         type: 'text/plain',
       })
 
-      await indexDocument({
+      setLoadingStatus('Integrating new knowledge...')
+
+      return await indexDocument({
         originalFile: audioFile,
         parsedTextFile: textFile,
         documentParams: {
@@ -53,6 +63,22 @@ const AudioInput = () => {
         },
       })
     },
+    onSuccess: () => {
+      logDev('Success!')
+      setLoadingStatus('')
+    },
+    onError: (error) => {
+      console.error('Uploading audio failed: ', error)
+      setLoadingStatus('')
+    },
+  })
+
+  createEffect(() => {
+    if (uploadMutation.isSuccess()) {
+      setTimeout(() => {
+        props.onBack()
+      }, 3000)
+    }
   })
 
   return (
@@ -60,16 +86,15 @@ const AudioInput = () => {
       <div class='flex flex-col grow justify-center items-center gap-16 '>
         <Switch>
           <Match when={uploadMutation.isSuccess()}>
-            <>
-              <p class='italic text-[var(--primaryColor)] text-center'>Complete!</p>
-            </>
+            <p class='text-3xl  italic text-[var(--primaryColor)] text-center'>Complete!</p>
           </Match>
 
           <Match when={uploadMutation.isLoading()}>
             <>
               <TypingBubble />
-              <p class='italic text-[var(--primaryColor)] text-center'>
-                Uploading content to your knowledge base...
+              <p class='italic text-[var(--primaryColor)] text-center'>{loadingStatus()}</p>
+              <p class='italic text-xs text-[var(--primaryColor)] text-center'>
+                (This may take a while.)
               </p>
             </>
           </Match>
@@ -77,7 +102,8 @@ const AudioInput = () => {
           <Match when={audioRecorder.audioBlob()}>
             <audio controls src={URL.createObjectURL(audioRecorder.audioBlob()!)} />
             <p class='italic text-[var(--primaryColor)] text-center'>
-              Recording complete. Press the button to upload the content to your knowledge base.
+              Recording complete. Press the button below to upload the content to your knowledge
+              base.
             </p>
           </Match>
 
@@ -137,7 +163,7 @@ const AudioInput = () => {
         </Switch>
       </div>
 
-      <Show when={!uploadMutation.isLoading()}>
+      <Show when={!uploadMutation.isLoading() && !uploadMutation.isSuccess()}>
         <Button
           class='w-full lg:w-52'
           disabled={!audioRecorder.audioBlob()}
