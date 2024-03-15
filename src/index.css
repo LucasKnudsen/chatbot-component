@@ -666,11 +666,6 @@ input {
   bottom: 16px;
 }
 
-.question-input:focus,
-.question-input.active {
-  @apply h-28;
-}
-
 .question-input:focus + .chatbot-button {
   position: relative;
   bottom: 0;

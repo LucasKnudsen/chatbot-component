@@ -1,4 +1,5 @@
 import { InitialPrompt } from '@/graphql/types'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 
 type PromptProps = {
   prompt: InitialPrompt
@@ -8,6 +9,8 @@ type PromptProps = {
 }
 
 export const NavigationPrompt = (props: PromptProps) => {
+  const device = useMediaQuery()
+
   const handleClick = () => {
     if (props.disabled) {
       return
@@ -19,12 +22,14 @@ export const NavigationPrompt = (props: PromptProps) => {
   return (
     <div
       class={
-        'navigation-prompt flex items-start bg-[var(--backgroundColor)] max-w-40 lg:max-w-80 bg-opacity-25 hover:bg-[var(--surfaceSoftBackground)] text-[var(--primaryColor)] border border-[var(--borderColor)] hover:border-[var(--primaryColor)] pl-3.5 py-5 pr-5 rounded-[10px]  font-light leading-[22px] transition-colors' +
+        'navigation-prompt flex items-start bg-[var(--backgroundColor)]  bg-opacity-25 hover:bg-[var(--surfaceSoftBackground)] text-[var(--primaryColor)] border border-[var(--borderColor)] hover:border-[var(--primaryColor)] pl-3.5 py-3 lg:py-5 pr-5 rounded-[10px] font-light leading-[22px] transition-colors' +
+        'max-lg:h-12 min-w-56 w-56 lg:min-w-80 lg:w-80 ' +
         props.class
       }
       style={{
         cursor: props.disabled ? 'not-allowed' : 'pointer',
-        width: '311px',
+        width: device() === 'desktop' ? '311px' : '224px',
+        'min-width': device() === 'desktop' ? '311px' : '224px',
       }}
       onClick={handleClick}
     >
@@ -48,7 +53,7 @@ export const NavigationPrompt = (props: PromptProps) => {
           <path d='M16 17H8' />
         </svg>
       </span>
-      <span class='pl-5 -mt-1'>
+      <span class='pl-5 -mt-1 max-lg:text-xs max-lg:line-clamp-2 '>
         {typeof props.prompt === 'string' ? props.prompt : props.prompt.display}
       </span>
     </div>

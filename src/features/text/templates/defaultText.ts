@@ -4,7 +4,7 @@ export const defaultText: TextConfig = {
   welcomeMessage: 'Welcome to a new, immersive chatbot experience',
   returnWelcomeMessage: 'Welcome back! What can I do for you?',
   inputPlaceholder: 'Ask me anything...',
-  suggestedPromptsTitle: 'SUGGESTIONS',
+  suggestedPromptsTitle: 'Suggestions',
   viewMedia: 'View media',
   brandName: 'Fraia',
 

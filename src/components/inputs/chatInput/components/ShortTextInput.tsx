@@ -17,7 +17,8 @@ export const Textarea = (props: ShortTextInputProps) => {
       ref={props.ref}
       data-testid='question-input'
       class={
-        'question-input max-lg:pl-4  outline-none bg-transparent flex-1 w-full text-input disabled:opacity-50 disabled:cursor-not-allowed disabled:brightness-100 textarea-hide-handle ' +
+        'question-input outline-none bg-transparent flex-1 w-full text-input disabled:opacity-50 disabled:cursor-not-allowed disabled:brightness-100 textarea-hide-handle ' +
+        'lg:focus:h-28 lg:active:h-28 ' +
         props.class
       }
       disabled={props.disabled}

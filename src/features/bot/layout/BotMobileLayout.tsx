@@ -1,10 +1,9 @@
 import { Collapsible } from '@/components/Collapsible'
 import { ChatInput } from '@/components/inputs/chatInput'
 import { ChatWindow } from '@/features/messages'
-import { SuggestedPrompts } from '@/features/prompt'
+import { NavigationPrompt, SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
-import { useTheme } from '@/features/theme/hooks'
-import { Show, createSignal } from 'solid-js'
+import { For, Show, createSignal } from 'solid-js'
 import { botStore } from '..'
 
 type BotMobileProps = {
@@ -16,7 +15,6 @@ type BotMobileProps = {
 
 export const BotMobileLayout = (props: BotMobileProps) => {
   const [isFocused, setIsFocused] = createSignal(false)
-  const { theme } = useTheme()
   const { text } = useText()
 
   return (
@@ -37,16 +35,10 @@ export const BotMobileLayout = (props: BotMobileProps) => {
           <ChatWindow />
         </Show>
       </div>
-      <div
-        class='w-full py-4'
-        style={{
-          background: theme().backgroundAccent,
-          'border-top': `1px solid ${theme().borderColor}`,
-        }}
-      >
+
+      <div class='w-full pb-4 '>
         <div class='px-6'>
           <ChatInput
-            class='mb-2'
             rows={1}
             defaultValue={props.userInput}
             onSubmit={props.onSubmit}
@@ -55,9 +47,30 @@ export const BotMobileLayout = (props: BotMobileProps) => {
           />
         </div>
 
-        <Collapsible open={isFocused()}>
-          <SuggestedPrompts handleSubmit={props.onSubmit} />
-        </Collapsible>
+        <Show
+          when={botStore.activeChannel?.activeChat}
+          fallback={
+            // Navigation prompts
+            <div class='px-6'>
+              <p class='text-xs py-4 font-semibold text-[var(--textSecondary)]'>Navigation help</p>
+              <div class='flex gap-4 overflow-x-auto brand-scroll-container pb-1'>
+                <For each={botStore.activeChannel?.initialPrompts}>
+                  {(p) => (
+                    <NavigationPrompt
+                      prompt={p}
+                      onClick={(prompt) => props.onSubmit(prompt)}
+                      disabled={botStore.isAwaitingAnswer}
+                    />
+                  )}
+                </For>
+              </div>
+            </div>
+          }
+        >
+          <Collapsible open={isFocused()}>
+            <SuggestedPrompts handleSubmit={props.onSubmit} />
+          </Collapsible>
+        </Show>
       </div>
     </div>
   )

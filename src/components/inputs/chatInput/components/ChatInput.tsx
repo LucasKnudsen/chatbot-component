@@ -65,14 +65,14 @@ export const ChatInput = (props: Props) => {
       onKeyDown={submitWhenEnter}
     >
       {/* Additional inputs  */}
-      <Show when={device() == 'desktop'}>
-        <div class='flex items-start pl-5 pt-6'>
-          <div class='flex items-center'>
-            <AudioInput onSubmit={props.onSubmit} />
-            <div class='bg-[var(--borderColor)] h-[18px] w-px mx-7' />
-          </div>
+      {/* <Show when={device() == 'desktop'}> */}
+      <div class='flex items-start pl-5 pt-6'>
+        <div class='flex items-center'>
+          <AudioInput onSubmit={props.onSubmit} />
+          <div class='bg-[var(--borderColor)] h-[18px] w-px mx-7' />
         </div>
-      </Show>
+      </div>
+      {/* </Show> */}
 
       <Textarea
         ref={inputRef}
