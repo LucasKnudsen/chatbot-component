@@ -1,12 +1,12 @@
 import { Channel, ChannelUserAccess } from '@/graphql'
-import { Menu, MenuItem, Popover, PopoverButton, PopoverPanel } from 'terracotta'
 import { Show, createSignal } from 'solid-js'
+import { Menu, MenuItem, Popover, PopoverButton, PopoverPanel } from 'terracotta'
 
-import { Button } from '..'
 import { botStore } from '@/features/bot'
 import { configStore } from '@/features/portal-init'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import usePopper from 'solid-popper'
+import { Button } from '..'
 
 function Separator() {
   return (
@@ -40,15 +40,15 @@ export const ChannelMenu = () => {
 
   return (
     <Show when={configStore.chatSpaceConfig.isMultiChannel}>
-      <Popover defaultOpen={false} class='hidden md:flex items-center'>
+      <Popover defaultOpen={false} class=' flex items-center'>
         {({ isOpen }) => (
           <>
             <PopoverButton ref={setAnchor}>
               <div class='flex items-center gap-x-2.5'>
                 <span
-                  class='w-6 h-6 rounded-full border border-white'
+                  class='w-6 h-6 rounded-full border border-[var(--onPrimary)]'
                   style={{
-                    background: `radial-gradient(at 52% 24%, rgb(254, 93, 98) 0px, transparent 50%), radial-gradient(at 85% 28%, rgb(154, 188, 244) 0px, transparent 50%), radial-gradient(at 59% 91%, rgb(245, 82, 77) 0px, transparent 50%), radial-gradient(at 61% 59%, rgb(82, 227, 235) 0px, transparent 50%), radial-gradient(at 58% 39%, rgb(140, 227, 169) 0px, transparent 50%), radial-gradient(at 40% 8%, rgb(213, 231, 141) 0px, transparent 50%), radial-gradient(at 80% 36%, rgb(106, 240, 96) 0px, transparent 50%)`,
+                    background: botStore.activeChannel?.avatar || '',
                   }}
                 ></span>
                 <span class='flex items-center gap-x-3.5 text-sm font-bold text-[var(--primaryColor)]'>
