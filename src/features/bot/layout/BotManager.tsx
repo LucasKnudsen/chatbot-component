@@ -14,6 +14,7 @@ import {
   fetchPublicChannels,
 } from '..'
 
+import { AudioRecordingView } from '@/features/knowledge-base/layouts/audio-recording/AudioRecordingView'
 import { ChannelsOverview } from './ChannelsOverview'
 
 export const BotManager = () => {
@@ -65,6 +66,10 @@ export const BotManager = () => {
 
   return (
     <Switch>
+      <Match when={true}>
+        <AudioRecordingView onBack={() => null} />
+      </Match>
+
       {/* Loading  */}
       <Match when={channelsQuery.isLoading()}>
         <FraiaLoading />

@@ -512,6 +512,7 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
       textInputTextColor
       textInputBackgroundColor
       surfaceBackground
+      surfaceSoftBackground
       surfaceHoveredBackground
       __typename
     }
@@ -579,6 +580,7 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
       textInputTextColor
       textInputBackgroundColor
       surfaceBackground
+      surfaceSoftBackground
       surfaceHoveredBackground
       __typename
     }
@@ -646,6 +648,7 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
       textInputTextColor
       textInputBackgroundColor
       surfaceBackground
+      surfaceSoftBackground
       surfaceHoveredBackground
       __typename
     }

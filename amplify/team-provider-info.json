@@ -26,7 +26,7 @@
         },
         "adhoc": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/adhoc-377337494c796d4c6f42-build.zip"
+          "s3Key": "amplify-builds/adhoc-51743854734a72682b76-build.zip"
         },
         "broadcastResolver": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
@@ -82,7 +82,7 @@
         },
         "youtubeScraping": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
-          "s3Key": "amplify-builds/youtubeScraping-4679337a3851744c6539-build.zip"
+          "s3Key": "amplify-builds/youtubeScraping-76463063444c4230315a-build.zip"
         }
       },
       "hosting": {

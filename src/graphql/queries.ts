@@ -594,6 +594,7 @@ export const getChatSpace = /* GraphQL */ `query GetChatSpace($id: ID!) {
       textInputTextColor
       textInputBackgroundColor
       surfaceBackground
+      surfaceSoftBackground
       surfaceHoveredBackground
       __typename
     }
@@ -663,6 +664,7 @@ export const listChatSpaces = /* GraphQL */ `query ListChatSpaces(
         textInputTextColor
         textInputBackgroundColor
         surfaceBackground
+        surfaceSoftBackground
         surfaceHoveredBackground
         __typename
       }
@@ -745,6 +747,7 @@ export const chatSpaceByHostId = /* GraphQL */ `query ChatSpaceByHostId(
         textInputTextColor
         textInputBackgroundColor
         surfaceBackground
+        surfaceSoftBackground
         surfaceHoveredBackground
         __typename
       }

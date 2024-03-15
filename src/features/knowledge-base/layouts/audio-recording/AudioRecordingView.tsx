@@ -1,11 +1,13 @@
-import { IconButton, MicrophoneIcon } from '@/components'
-import { API, Storage } from 'aws-amplify'
-import { Match, Switch, createSignal, onCleanup } from 'solid-js'
+import { Button, IconButton, MicrophoneIcon, TypingBubble } from '@/components'
+import { ChannelDocumentType } from '@/graphql'
+import { createAudioRecorder, createMutation } from '@/hooks'
+import { Match, Show, Switch } from 'solid-js'
 import { KnowledgeBaseTitle, KnowledgeBaseTopBar } from '../../components'
+import { indexDocument, mergeTranscriptBySpeaker, transcribeAudio } from '../../services'
 
 export const AudioRecordingView = (props: { onBack: () => void }) => {
   return (
-    <div class='h-full flex flex-col'>
+    <div class='h-full flex flex-col pb-9 lg:pb-20 '>
       <KnowledgeBaseTopBar title='Record Audio' onBack={props.onBack} />
 
       <KnowledgeBaseTitle title='Record audio to train the AI on' />
@@ -16,151 +18,134 @@ export const AudioRecordingView = (props: { onBack: () => void }) => {
 }
 
 const AudioInput = () => {
-  const [mediaStream, setMediaStream] = createSignal<MediaStream | null>(null)
-  const [mediaRecorder, setMediaRecorder] = createSignal<MediaRecorder | null>(null)
-  const [isRecording, setIsRecording] = createSignal<boolean>(false)
-  const [audioBlob, setAudioBlob] = createSignal<Blob | null>(null)
+  const audioRecorder = createAudioRecorder()
 
-  const handleUpload = async (blob: Blob) => {
-    setAudioBlob(blob)
+  const uploadMutation = createMutation({
+    mutationFn: async () => {
+      const audioBlob = audioRecorder.audioBlob()
+      if (!audioBlob) {
+        throw new Error('No audio blob found')
+      }
 
-    const type = blob.type
-    const key = `test.${type.split('/')[1]}`
+      const audioFile = new File([audioBlob], 'audio.wav', { type: audioBlob.type })
 
-    const audioUrl = URL.createObjectURL(blob)
+      const transcriptionResponse = await transcribeAudio(audioFile)
 
-    const link = document.createElement('a')
-    link.href = audioUrl
-    link.download = `fraia-recording-${Date.now()}.${blob.type.split('/')[1]}`
-    link.click()
+      console.log(transcriptionResponse)
 
-    return
+      const mergedTrascript = mergeTranscriptBySpeaker(transcriptionResponse.transcription)
 
-    try {
-      console.time('FULL')
+      const concatinatedText = mergedTrascript
+        .map((chunk) => `${chunk.speaker}: ${chunk.text}`)
+        .join(' ')
 
-      await Storage.put(key, blob, {
-        contentType: 'audio/webm',
+      const textFile = new File([concatinatedText], 'raw.txt', {
+        type: 'text/plain',
       })
 
-      const transcription = await API.post('digitaltwinRest', '/transcribe', {
-        body: {
-          s3Key: `public/${key}`,
-          type,
+      await indexDocument({
+        originalFile: audioFile,
+        parsedTextFile: textFile,
+        documentParams: {
+          title: `app-recording-${new Date().toISOString()}`,
+          documentType: ChannelDocumentType.TRANSCRIPTION,
+          includeInLibrary: false,
         },
       })
-
-      console.log(transcription)
-
-      //   props.onSubmit(transcription)
-    } catch (error) {
-      console.error('Uploading transcription error', error)
-    }
-
-    console.timeEnd('FULL')
-  }
-
-  // Function to start recording
-  const startRecording = () => {
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        const recorder = new MediaRecorder(stream)
-        const audioChunks: Blob[] = [] // Store audio chunks
-        let type = 'audio/webm'
-
-        recorder.ondataavailable = (event) => {
-          if (event.data.size > 0) {
-            audioChunks.push(event.data)
-            type = event.data.type.split(';')[0]
-          }
-        }
-
-        recorder.onstop = async () => {
-          // Handle the recording stopped event
-          const audioBlob = new Blob(audioChunks, { type })
-
-          handleUpload(audioBlob)
-        }
-
-        setMediaStream(stream)
-        setMediaRecorder(recorder)
-        recorder.start()
-        setIsRecording(true)
-      })
-      .catch((error) => {
-        console.error('Error accessing microphone:', error)
-        alert('Error accessing microphone')
-      })
-  }
-
-  // Function to stop recording
-  const stopRecording = () => {
-    if (mediaRecorder()) {
-      mediaRecorder()?.stop()
-      console.log('Stopped recording.')
-      mediaStream()
-        ?.getTracks()
-        .forEach((track) => track.stop())
-      setMediaRecorder(null)
-      setMediaStream(null)
-      setIsRecording(false)
-    }
-  }
-
-  onCleanup(() => {
-    stopRecording() // Stop recording when the component unmounts
+    },
   })
 
   return (
-    <div class='flex flex-col grow justify-center items-center gap-8'>
-      <Switch>
-        <Match when={audioBlob()}>
-          <audio controls src={URL.createObjectURL(audioBlob()!)} />
-        </Match>
+    <div class='flex flex-col grow'>
+      <div class='flex flex-col grow justify-center items-center gap-16 '>
+        <Switch>
+          <Match when={uploadMutation.isSuccess()}>
+            <>
+              <p class='italic text-[var(--primaryColor)] text-center'>Complete!</p>
+            </>
+          </Match>
 
-        <Match when={!audioBlob()}>
-          <>
-            <MicrophoneIcon class='h-24 w-24' />
+          <Match when={uploadMutation.isLoading()}>
+            <>
+              <TypingBubble />
+              <p class='italic text-[var(--primaryColor)] text-center'>
+                Uploading content to your knowledge base...
+              </p>
+            </>
+          </Match>
 
-            {/* RECORDING BUTTONS  */}
-            <Switch
-              fallback={
-                <IconButton onClick={startRecording}>
-                  <div class='outline-white w-12 h-12 bg-red-400 rounded-full flex justify-center items-center'>
-                    <div class=' w-5 h-5 bg-white rounded-full' />
-                  </div>
-                </IconButton>
-              }
-            >
-              <Match when={isRecording()}>
-                <div class='flex gap-8'>
-                  {/* <IconButton onClick={stopRecording}>
-              <div class='outline-white w-12 h-12 bg-[var(--primaryColor)] rounded-full flex justify-center items-center'>
-                
+          <Match when={audioRecorder.audioBlob()}>
+            <audio controls src={URL.createObjectURL(audioRecorder.audioBlob()!)} />
+            <p class='italic text-[var(--primaryColor)] text-center'>
+              Recording complete. Press the button to upload the content to your knowledge base.
+            </p>
+          </Match>
+
+          <Match when={!audioRecorder.audioBlob()}>
+            <>
+              <div class='relative flex justify-center items-center'>
+                <Show when={audioRecorder.isRecording()}>
+                  <div class='absolute animate-ping border border-[var(--primaryColor)] rounded-full h-20 w-20 '></div>
+                </Show>
+                <MicrophoneIcon class='h-24 w-24 text-[var(--primaryColor)]' />
               </div>
-            </IconButton> */}
-                  <IconButton onClick={stopRecording}>
-                    <div class='outline-white w-12 h-12 bg-[var(--primaryColor)] rounded-full flex justify-center items-center'>
-                      <div class=' w-5 h-5 bg-white ' />
+
+              {/* RECORDING BUTTONS  */}
+              <Switch
+                fallback={
+                  <IconButton onClick={audioRecorder.startRecording}>
+                    <div class='outline-[var(--onPrimary)] w-12 h-12 bg-red-500 rounded-full flex justify-center items-center'>
+                      <div class=' w-5 h-5 bg-[var(--onPrimary)] rounded-full' />
                     </div>
                   </IconButton>
-                </div>
-              </Match>
-            </Switch>
+                }
+              >
+                <Match when={audioRecorder.isRecording()}>
+                  <div class='flex gap-8'>
+                    {/* <IconButton onClick={audioRecorder.pauseRecording()}>
+                    <div class='outline-[var(--onPrimary)] w-12 h-12 bg-[var(--primaryColor)] rounded-full flex justify-center items-center'></div>
+                  </IconButton> */}
 
-            {/* RECORDING TEXT  */}
-            <p class='italic text-[var(--primaryColor)]'>
-              <Switch fallback={'Please press the button to start recording'}>
-                <Match when={isRecording()}>
-                  Currently recording... End the recording to upload the content to your knowledge
-                  base.
+                    <IconButton onClick={audioRecorder.stopRecording}>
+                      <div class='outline-[var(--onPrimary)] w-12 h-12 bg-[var(--primaryColor)] rounded-full flex justify-center items-center'>
+                        <div class=' w-4 h-4 bg-[var(--onPrimary)] ' />
+                      </div>
+                    </IconButton>
+                  </div>
                 </Match>
               </Switch>
-            </p>
-          </>
-        </Match>
-      </Switch>
+
+              {/* RECORDING TEXT  */}
+              <p class='italic text-[var(--primaryColor)] text-center'>
+                <Switch
+                  fallback={
+                    <>
+                      Please press the button to start recording.
+                      <br />
+                    </>
+                  }
+                >
+                  <Match when={audioRecorder.isRecording()}>
+                    Currently recording...
+                    <br />
+                    End the recording to upload the content to your knowledge base.
+                  </Match>
+                </Switch>
+              </p>
+            </>
+          </Match>
+        </Switch>
+      </div>
+
+      <Show when={!uploadMutation.isLoading()}>
+        <Button
+          class='w-full lg:w-52'
+          disabled={!audioRecorder.audioBlob()}
+          onClick={() => uploadMutation.mutate()}
+        >
+          Upload content
+        </Button>
+      </Show>
     </div>
   )
 }

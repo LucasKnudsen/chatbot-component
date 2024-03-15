@@ -52,6 +52,7 @@ type ChatSpaceTheme {
   textInputTextColor: String
   textInputBackgroundColor: String
   surfaceBackground: String
+  surfaceSoftBackground: String
   surfaceHoveredBackground: String
 }
 

@@ -543,6 +543,7 @@ export type ChatSpaceThemeInput = {
   textInputTextColor?: string | null,
   textInputBackgroundColor?: string | null,
   surfaceBackground?: string | null,
+  surfaceSoftBackground?: string | null,
   surfaceHoveredBackground?: string | null,
 };
 
@@ -621,6 +622,7 @@ export type ChatSpaceTheme = {
   textInputTextColor?: string | null,
   textInputBackgroundColor?: string | null,
   surfaceBackground?: string | null,
+  surfaceSoftBackground?: string | null,
   surfaceHoveredBackground?: string | null,
 };
 
@@ -1742,6 +1744,7 @@ export type CreateChatSpaceMutation = {
       textInputTextColor?: string | null,
       textInputBackgroundColor?: string | null,
       surfaceBackground?: string | null,
+      surfaceSoftBackground?: string | null,
       surfaceHoveredBackground?: string | null,
     } | null,
     text?:  {
@@ -1808,6 +1811,7 @@ export type UpdateChatSpaceMutation = {
       textInputTextColor?: string | null,
       textInputBackgroundColor?: string | null,
       surfaceBackground?: string | null,
+      surfaceSoftBackground?: string | null,
       surfaceHoveredBackground?: string | null,
     } | null,
     text?:  {
@@ -1874,6 +1878,7 @@ export type DeleteChatSpaceMutation = {
       textInputTextColor?: string | null,
       textInputBackgroundColor?: string | null,
       surfaceBackground?: string | null,
+      surfaceSoftBackground?: string | null,
       surfaceHoveredBackground?: string | null,
     } | null,
     text?:  {
@@ -2655,6 +2660,7 @@ export type GetChatSpaceQuery = {
       textInputTextColor?: string | null,
       textInputBackgroundColor?: string | null,
       surfaceBackground?: string | null,
+      surfaceSoftBackground?: string | null,
       surfaceHoveredBackground?: string | null,
     } | null,
     text?:  {
@@ -2724,6 +2730,7 @@ export type ListChatSpacesQuery = {
         textInputTextColor?: string | null,
         textInputBackgroundColor?: string | null,
         surfaceBackground?: string | null,
+        surfaceSoftBackground?: string | null,
         surfaceHoveredBackground?: string | null,
       } | null,
       text?:  {
@@ -2798,6 +2805,7 @@ export type ChatSpaceByHostIdQuery = {
         textInputTextColor?: string | null,
         textInputBackgroundColor?: string | null,
         surfaceBackground?: string | null,
+        surfaceSoftBackground?: string | null,
         surfaceHoveredBackground?: string | null,
       } | null,
       text?:  {
@@ -3447,6 +3455,7 @@ export type OnCreateChatSpaceSubscription = {
       textInputTextColor?: string | null,
       textInputBackgroundColor?: string | null,
       surfaceBackground?: string | null,
+      surfaceSoftBackground?: string | null,
       surfaceHoveredBackground?: string | null,
     } | null,
     text?:  {
@@ -3512,6 +3521,7 @@ export type OnUpdateChatSpaceSubscription = {
       textInputTextColor?: string | null,
       textInputBackgroundColor?: string | null,
       surfaceBackground?: string | null,
+      surfaceSoftBackground?: string | null,
       surfaceHoveredBackground?: string | null,
     } | null,
     text?:  {
@@ -3577,6 +3587,7 @@ export type OnDeleteChatSpaceSubscription = {
       textInputTextColor?: string | null,
       textInputBackgroundColor?: string | null,
       surfaceBackground?: string | null,
+      surfaceSoftBackground?: string | null,
       surfaceHoveredBackground?: string | null,
     } | null,
     text?:  {

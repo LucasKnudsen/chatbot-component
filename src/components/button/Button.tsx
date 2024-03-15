@@ -12,6 +12,7 @@ type Props = {
   class?: string
   type?: 'button' | 'submit' | 'reset' | undefined
   style?: JSX.CSSProperties
+  disabled?: boolean
 }
 
 export const Button = (props: Props) => {
@@ -22,7 +23,7 @@ export const Button = (props: Props) => {
     <button
       type={props.type}
       class={
-        'relative rounded-full font-semibold text-sm leading-[17px] active:scale-95 transition hover:brightness-110 ' +
+        'relative rounded-full font-semibold text-sm leading-[17px] !disabled:active:scale-95 transition hover:brightness-110  disabled:opacity-50 disabled:scale-100 ' +
         props.class
       }
       style={{
@@ -31,6 +32,7 @@ export const Button = (props: Props) => {
         padding,
         ...props?.style,
       }}
+      disabled={props.disabled}
       onClick={props.onClick}
     >
       {/* CONTENT   */}

@@ -483,6 +483,7 @@ export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($
       textInputTextColor
       textInputBackgroundColor
       surfaceBackground
+      surfaceSoftBackground
       surfaceHoveredBackground
       __typename
     }
@@ -547,6 +548,7 @@ export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($
       textInputTextColor
       textInputBackgroundColor
       surfaceBackground
+      surfaceSoftBackground
       surfaceHoveredBackground
       __typename
     }
@@ -611,6 +613,7 @@ export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($
       textInputTextColor
       textInputBackgroundColor
       surfaceBackground
+      surfaceSoftBackground
       surfaceHoveredBackground
       __typename
     }
