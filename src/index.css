@@ -518,7 +518,7 @@ input {
   border-radius: 15px;
   padding: 15px;
 
-  @apply w-full h-[150px] sm:h-full md:max-w-[320px] md:min-w-[320px] md:h-[380px];
+  @apply w-full h-[150px] sm:h-56 lg:max-w-[320px] lg:min-w-[320px] lg:h-[380px];
   color: var(--primaryColor);
   background-color: rgba(244, 244, 244, 0.2);
   border-style: solid;
@@ -565,7 +565,7 @@ input {
 }
 
 .menu-card__content {
-  @screen sm {
+  @screen lg {
     transform: translateY(130px);
   }
   /* transform: translateY(var(--hovered-translate-y, 0)); */
@@ -617,7 +617,7 @@ input {
 .menu-card__title {
   font-weight: 300;
   transition: font-weight 200ms ease-in;
-  @apply text-[32px] leading-none sm:text-[48px] sm:leading-[54px] line-clamp-1 sm:line-clamp-3;
+  @apply text-[32px] leading-none sm:leading-9 line-clamp-1 sm:line-clamp-2 lg:text-[48px] lg:leading-[54px] lg:line-clamp-3;
 }
 
 .menu-card__icon {
@@ -658,4 +658,36 @@ input {
   height: 2px;
   background: var(--navigationPromptColor);
   @apply rounded-full;
+}
+
+.chatbot-button {
+  position: absolute;
+  right: 6px;
+  bottom: 16px;
+}
+
+.question-input:focus,
+.question-input.active {
+  @apply h-28;
+}
+
+.question-input:focus + .chatbot-button {
+  position: relative;
+  bottom: 0;
+}
+
+.channel-item-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.channel-item-scrollbar::-webkit-scrollbar-track {
+  background-color: var(--borderColor);
+}
+
+.channel-item-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--primaryColor);
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
 }

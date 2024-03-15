@@ -218,9 +218,15 @@
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
 
 "@types/node@^16.9.2":
+<<<<<<< HEAD
   version "16.18.89"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.89.tgz#264d1b6358c458f89f4e374f2210b58cf130fbab"
   integrity sha512-QlrE8QI5z62nfnkiUZysUsAaxWaTMoGqFVcB3PvK1WxJ0c699bacErV4Fabe9Hki6ZnaHalgzihLbTl2d34XfQ==
+=======
+  version "16.18.88"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.88.tgz#ac7ddc13e0664fa78332f35678a72751c98c3dfc"
+  integrity sha512-Za3eRO5y0UWShynpsbNq/Dtqjc+g3GM9/PnrebiWiU4pYa5dOQbpCGuZ7ICqbiZ0JvLaZZ4eq7t5cSts2IEgkg==
+>>>>>>> dev
 
 "@types/triple-beam@^1.3.2":
   version "1.3.5"

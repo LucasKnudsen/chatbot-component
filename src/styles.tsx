@@ -1,6 +1,5 @@
-import styles from './index.css?inline'
-
 import { onMount } from 'solid-js'
+import styles from './index.css?inline'
 
 const StyleSheet = () => {
   onMount(() => {

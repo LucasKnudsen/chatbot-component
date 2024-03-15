@@ -1,17 +1,17 @@
 import { Channel, ChannelUserAccess } from '@/graphql'
-import { Show, createSignal } from 'solid-js'
 import { Menu, MenuItem, Popover, PopoverButton, PopoverPanel } from 'terracotta'
+import { Show, createSignal } from 'solid-js'
 
+import { Button } from '..'
 import { botStore } from '@/features/bot'
 import { configStore } from '@/features/portal-init'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import usePopper from 'solid-popper'
-import { Button } from '..'
 
 function Separator() {
   return (
     <div class='flex items-center py-5' aria-hidden='true'>
-      <div class='w-full border-t border-[rgba(194,194,194,1)]' />
+      <div class='w-full border-t border-[var(--borderColor)]' />
     </div>
   )
 }
@@ -40,7 +40,7 @@ export const ChannelMenu = () => {
 
   return (
     <Show when={configStore.chatSpaceConfig.isMultiChannel}>
-      <Popover defaultOpen={false} class='flex items-center'>
+      <Popover defaultOpen={false} class='hidden md:flex items-center'>
         {({ isOpen }) => (
           <>
             <PopoverButton ref={setAnchor}>
@@ -74,16 +74,28 @@ export const ChannelMenu = () => {
 
             <Show when={isOpen()}>
               <PopoverPanel ref={setPopper} unmount={false} class='z-[100]'>
-                <Menu class='p-6 w-[300px] border border-[var(--borderColor)] bg-[rgba(244,244,244,1)] rounded-[10px]'>
+                <Menu class='p-6 w-[300px] border border-[var(--borderColor)] bg-[var(--backgroundColor)] bg-backgroundColor rounded-[10px]'>
                   <h5 class='text-[16px] leading-[20px] font-bold text-[rgba(166,166,166,1)] mb-5'>
                     Selected
                   </h5>
 
                   <MenuItem
                     as='button'
-                    class='flex items-center text-[var(--primaryColor)] text-[14px] leading-[20px] font-medium'
+                    class='flex items-center text-[var(--primaryColor)] text-[14px] leading-[20px] font-bold w-full'
                   >
                     {botStore.activeChannel?.name}
+
+                    <svg
+                      width='18'
+                      height='18'
+                      viewBox='0 0 18 18'
+                      fill='none'
+                      xmlns='http://www.w3.org/2000/svg'
+                      class='ml-auto'
+                    >
+                      <rect width='18' height='18' rx='9' fill='#5B93FF' />
+                      <path d='M6.5 9.5L7.875 11L11 7.5' stroke='#EAE9EC' stroke-linecap='round' />
+                    </svg>
                   </MenuItem>
 
                   <Separator />
@@ -97,7 +109,7 @@ export const ChannelMenu = () => {
                       .map((channel) => (
                         <MenuItem
                           as='button'
-                          class='flex items-center text-[var(--primaryColor)] text-[14px] leading-[20px] font-medium'
+                          class='flex items-center text-[var(--primaryColor)] text-[14px] leading-[20px] font-medium w-full'
                         >
                           {(channel as Channel).name || (channel as ChannelUserAccess).channelName}
                         </MenuItem>
