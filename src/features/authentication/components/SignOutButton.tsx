@@ -10,11 +10,12 @@ export const SignOutButton = () => {
     await Auth.signOut()
 
     // TODO: Clear states etc.
+    window.location.reload()
     setLoading(false)
   }
 
   return (
-    <Button onClick={handleSignOut} loading={loading()}>
+    <Button onClick={handleSignOut} loading={loading()} class='w-56'>
       Sign Out
     </Button>
   )

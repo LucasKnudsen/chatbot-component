@@ -96,7 +96,7 @@ export const DrawerMenu = () => {
         <Divider />
 
         {/* AVATAR BUTTON */}
-        <Show when={!hasWriteAccess()}>
+        <Show when={hasWriteAccess()}>
           <div
             class='flex items-center gap-4 cursor-pointer hover:bg-[var(--surfaceHoveredBackground)] rounded-3xl px-4 py-1 '
             onClick={openKnowledgeBase}
