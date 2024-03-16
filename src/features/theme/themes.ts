@@ -27,7 +27,7 @@ export const defaultTheme: Theme = {
   drawerBackground: 'rgba(255, 255, 255, 0.75)',
   borderColor: 'rgba(194, 194, 194, 1)',
   textInputTextColor: 'rgba(128, 114, 166, 1)',
-  textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
+  textInputBackgroundColor: 'rgba(122, 137, 165, 0.07)',
   errorColor: 'red',
   surfaceBackground: 'rgba(91, 147, 255, 0.1)',
   surfaceSoftBackground: 'rgba(91, 147, 255, 0.05)',

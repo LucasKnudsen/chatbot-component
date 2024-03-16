@@ -83,6 +83,10 @@
         "youtubeScraping": {
           "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
           "s3Key": "amplify-builds/youtubeScraping-76463063444c4230315a-build.zip"
+        },
+        "textToSpeech": {
+          "deploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+          "s3Key": "amplify-builds/textToSpeech-566a2b75614555666551-build.zip"
         }
       },
       "hosting": {

@@ -1,18 +1,68 @@
 import { authStore } from '@/features/authentication'
-import { botStoreActions } from '@/features/bot'
+import { botStore, botStoreActions, createHistoryRecord } from '@/features/bot'
 import { suggestedPromptsStoreActions } from '@/features/prompt'
 import { Channel } from '@/graphql'
 import { SubscriptionEvent } from '@/models'
 import { SubscriptionHelper, clearSubscription, logDev } from '@/utils'
 import socketIOClient from 'socket.io-client'
 import {
+  IncomingInput,
+  LLMStreamId,
   LLMStreamSocket,
+  PromptCode,
+  flowiseMessageQuery,
   isInitiatingLLMStream,
   isStreamAvailableQuery,
   setLLMStreamSocket,
   setLLMStreamingId,
 } from '.'
+import { detectLanguage } from '../text'
 import { ChatResponse } from './types'
+
+export const queryLLM = async (message: string) => {
+  if (message.trim() === '') {
+    return
+  }
+
+  botStoreActions.setLoading(true)
+
+  suggestedPromptsStoreActions.clear()
+
+  const memory = botStore.activeHistory.slice(-5).flatMap((chat) => [
+    { type: 'userMessage', message: chat.question },
+    { type: 'apiMessage', message: chat.answer },
+  ]) as { type: 'apiMessage' | 'userMessage'; message: string }[]
+
+  botStoreActions.buildQuestion(message)
+
+  const body: IncomingInput = {
+    question: message,
+    sessionId: authStore.sessionId,
+    channelId: botStore.activeChannel!.id,
+    memory,
+    promptCode: PromptCode.QUESTION,
+    socketIOClientId: LLMStreamId(),
+  }
+
+  // Fires without waiting for response, as the response is handled by a socket connection
+  const [flowiseResponse] = await Promise.allSettled([
+    flowiseMessageQuery(body),
+    detectLanguage(message, true),
+  ])
+
+  botStoreActions.setLoading(false)
+
+  suggestedPromptsStoreActions.fetch()
+
+  setTimeout(() => {
+    createHistoryRecord(botStore.activeChannel?.activeChat!)
+  }, 500)
+
+  const text =
+    flowiseResponse.status === 'fulfilled' ? (await flowiseResponse.value?.json()).text : null
+
+  return text
+}
 
 export const initiateChatConnection = async (channelId: string) => {
   const cacheName = 'chat-listener'

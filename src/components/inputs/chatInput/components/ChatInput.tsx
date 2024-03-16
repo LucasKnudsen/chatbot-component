@@ -61,24 +61,19 @@ export const ChatInput = (props: Props) => {
   // })
 
   return (
+    // Wrapper
     <div
-      class={'flex justify-between rounded-lg ' + props.class || ''}
+      class={
+        'flex  h-full py-3 lg:py-4 relative gap-6 rounded-lg bg-[var(--textInputBackgroundColor)] text-[var(--textInputTextColor)] px-6 ' +
+          props.class || ''
+      }
       data-testid='input'
-      style={{
-        'background-color': theme().textInputBackgroundColor,
-        color: theme().textInputTextColor,
-      }}
       onKeyDown={submitWhenEnter}
     >
-      {/* Additional inputs  */}
-      {/* <Show when={device() == 'desktop'}> */}
-      <div class='flex items-start pl-5 pt-6'>
-        <div class='flex items-center'>
-          <AudioInput onSubmit={props.onSubmit} />
-          <div class='bg-[var(--borderColor)] h-[18px] w-px mx-7' />
-        </div>
+      {/* Additional left inputs  */}
+      <div class='flex items-start h-fit pr-6 border-r border-[var(--borderColor)] lg:mt-2 '>
+        <AudioInput onSubmit={props.onSubmit} />
       </div>
-      {/* </Show> */}
 
       <Textarea
         ref={inputRef}
@@ -89,15 +84,22 @@ export const ChatInput = (props: Props) => {
         placeholder={props.placeholder}
         rows={props.rows}
         onFocusChange={props.onFocusChange}
-        class={`pt-[22px] pb-2 pl-5 md:pl-0 pr-5 h-[70px] transition-all ${
+        class={`lg:h-[38px] lg:focus:h-20  lg:active:h-20  transition-all -mt-0.5 lg:pt-2 ${
           inputValue().length > 0 ? 'active' : ''
         }`}
       />
 
-      <div class='relative'>
+      {/* Right section, send button */}
+      <div
+        class='flex flex-col h-full items-end relative '
+        style={{
+          'justify-content': inputValue().length > 0 ? 'space-between' : 'center',
+        }}
+      >
+        {/* Clear button */}
         <Show when={inputValue().length > 0}>
           <div
-            class='absolute top-3 right-[22px] flex items-center text-[var(--primaryColor)] cursor-pointer'
+            class='animate-fade-in flex items-center text-[var(--primaryColor)] cursor-pointer max-lg:hidden'
             onClick={clearInput}
           >
             <span class='font-bold text-sm underline'>Clear</span>
@@ -132,7 +134,6 @@ export const ChatInput = (props: Props) => {
           }
           type='button'
           isDisabled={botStore.isAwaitingAnswer || inputValue() === ''}
-          class='ml-2'
           on:click={submit}
         >
           <span style={{ 'font-family': 'Poppins, sans-serif' }}>Send</span>

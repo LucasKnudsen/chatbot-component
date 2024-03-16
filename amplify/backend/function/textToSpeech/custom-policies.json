@@ -1,0 +1,10 @@
+[
+  {
+    "Action": ["ssm:GetParameter", "ssm:GetParameters"],
+    "Resource": [
+      {
+        "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/fraia-open-ai-key-1"
+      }
+    ]
+  }
+]

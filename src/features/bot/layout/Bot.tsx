@@ -1,20 +1,11 @@
 import { LoadingOverlay } from '@/components'
-import { authStore } from '@/features/authentication'
 import { KnowledgeBaseDrawer } from '@/features/knowledge-base'
-import {
-  IncomingInput,
-  LLMStreamId,
-  PromptCode,
-  clearLLMStream,
-  flowiseMessageQuery,
-  initiatingLLMStream,
-} from '@/features/messages'
+import { clearLLMStream, initiatingLLMStream, queryLLM } from '@/features/messages'
 import { suggestedPromptsStoreActions } from '@/features/prompt'
-import { detectLanguage } from '@/features/text'
 import { clearAllSubscriptionsOfType } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Match, Switch, createSignal, onCleanup, onMount } from 'solid-js'
-import { botStore, botStoreActions, createHistoryRecord } from '..'
+import { botStore } from '..'
 import { BotDesktopLayout } from './BotDesktopLayout'
 import { BotMobileLayout } from './BotMobileLayout'
 
@@ -26,43 +17,7 @@ export const Bot = () => {
   // Handle form submission
   const handleSubmit = async (value: string) => {
     setUserInput(value)
-
-    if (value.trim() === '') {
-      return
-    }
-
-    botStoreActions.setLoading(true)
-
-    suggestedPromptsStoreActions.clear()
-
-    const memory = botStore.activeHistory.slice(-5).flatMap((chat) => [
-      { type: 'userMessage', message: chat.question },
-      { type: 'apiMessage', message: chat.answer },
-    ]) as { type: 'apiMessage' | 'userMessage'; message: string }[]
-
-    botStoreActions.buildQuestion(value)
-
-    const body: IncomingInput = {
-      question: value,
-      sessionId: authStore.sessionId,
-      channelId: botStore.activeChannel!.id,
-      memory,
-      promptCode: PromptCode.QUESTION,
-      socketIOClientId: LLMStreamId(),
-    }
-
-    // Fires without waiting for response, as the response is handled by a socket connection
-    await Promise.allSettled([flowiseMessageQuery(body), detectLanguage(value, true)])
-
-    setUserInput('')
-
-    botStoreActions.setLoading(false)
-
-    suggestedPromptsStoreActions.fetch()
-
-    setTimeout(() => {
-      createHistoryRecord(botStore.activeChannel?.activeChat!)
-    }, 500)
+    queryLLM(value)
   }
 
   onMount(() => {
@@ -81,11 +36,11 @@ export const Bot = () => {
       <LoadingOverlay isLoading={initiatingLLMStream()} />
 
       <Switch>
-        <Match when={['desktop', 'tablet'].includes(device())}>
+        <Match when={device() === 'desktop'}>
           <BotDesktopLayout userInput={userInput()} onSubmit={handleSubmit} />
         </Match>
 
-        <Match when={device() == 'mobile'}>
+        <Match when={device() !== 'desktop'}>
           <BotMobileLayout userInput={userInput()} onSubmit={handleSubmit} />
         </Match>
       </Switch>

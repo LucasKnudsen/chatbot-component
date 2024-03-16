@@ -8,7 +8,8 @@ import { TranscribeAudioResponse, TranscriptChunk } from './types'
 
 type TranscribeAudioConfig = {
   whisper_model: 'large' | 'medium' | 'small' | 'base'
-  x_toggle: boolean
+  x_toggle?: boolean
+  diarization_toggle?: boolean
 }
 
 export const transcribeAudio = async (

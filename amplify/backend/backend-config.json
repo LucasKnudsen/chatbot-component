@@ -114,6 +114,14 @@
           ],
           "category": "function",
           "resourceName": "combEvaluator"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "textToSpeech"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -436,6 +444,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "textToSpeech": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "transcribeAudio": {
       "build": true,
       "dependsOn": [
@@ -706,6 +719,22 @@
         {
           "category": "function",
           "resourceName": "onChannelUpdate"
+        }
+      ]
+    },
+    "AMPLIFY_function_textToSpeech_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "textToSpeech"
+        }
+      ]
+    },
+    "AMPLIFY_function_textToSpeech_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "textToSpeech"
         }
       ]
     },
