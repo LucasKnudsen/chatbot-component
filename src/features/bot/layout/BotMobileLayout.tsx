@@ -4,7 +4,7 @@ import { ChatWindow } from '@/features/messages'
 import { NavigationPrompt, SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
 import { For, Show, createSignal } from 'solid-js'
-import { botStore } from '..'
+import { InteractionFlowSwitch, botStore } from '..'
 
 type BotMobileProps = {
   userInput: string
@@ -23,8 +23,10 @@ export const BotMobileLayout = (props: BotMobileProps) => {
         <Show
           when={botStore.activeChannel?.activeChat}
           fallback={
-            <div class='flex flex-1 items-end px-6 '>
-              <h1 class='text-4xl md:text-5xl max-w-md h-fit mb-6 font-extralight tracking-wide leading-tight'>
+            <div class='flex flex-col flex-1 justify-end px-6 '>
+              <InteractionFlowSwitch />
+
+              <h1 class='text-4xl md:text-5xl max-w-md h-fit my-6 font-extralight tracking-wide leading-tight'>
                 {botStore.activeHistory.length
                   ? text().returnWelcomeMessage
                   : text().welcomeMessage}
@@ -51,9 +53,12 @@ export const BotMobileLayout = (props: BotMobileProps) => {
           when={botStore.activeChannel?.activeChat}
           fallback={
             // Navigation prompts
-            <div class='px-6'>
-              <p class='text-xs py-4 font-semibold text-[var(--textSecondary)]'>Navigation help</p>
-              <div class='flex gap-4 overflow-x-auto brand-scroll-container pb-1'>
+            <div class=''>
+              <p class='text-xs pl-6 py-4 font-semibold text-[var(--textSecondary)]'>
+                Navigation help
+              </p>
+
+              <div class='flex gap-4 overflow-x-auto pb-1 px-6 no-scrollbar'>
                 <For each={botStore.activeChannel?.initialPrompts}>
                   {(p) => (
                     <NavigationPrompt

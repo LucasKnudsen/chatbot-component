@@ -1,5 +1,6 @@
 export * from './Divider'
 export * from './SendButton'
+export * from './TabSwitch'
 export * from './TypingBubble'
 export * from './button/Button'
 export * from './expandable/Expandable'

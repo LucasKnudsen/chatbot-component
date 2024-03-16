@@ -26,8 +26,11 @@ type ActiveChannelType = Channel & {
   activeChat?: Partial<ChannelHistoryItem> | null
 }
 
+export type ActiveInteractionFlow = 'chat' | 'voice'
+
 type BotStore = {
   activeChannel: ActiveChannelType | null
+  activeInteractionFlow: ActiveInteractionFlow // Specify the way the user is interacting with the AI
   channels: Channel[]
   isAwaitingAnswer: boolean
   isKnowledgeBaseOpen: boolean
@@ -40,6 +43,7 @@ type BotStore = {
 
 const [botStore, setBotStore] = createStore<BotStore>({
   activeChannel: null,
+  activeInteractionFlow: 'chat',
   channels: [],
   isAwaitingAnswer: false,
   isKnowledgeBaseOpen: false,

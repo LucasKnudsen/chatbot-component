@@ -6,12 +6,22 @@ import axios from 'axios'
 import { botStore } from '../bot'
 import { TranscribeAudioResponse, TranscriptChunk } from './types'
 
-export const transcribeAudio = async (file: File) => {
+type TranscribeAudioConfig = {
+  whisper_model: 'large' | 'medium' | 'small' | 'base'
+  x_toggle: boolean
+}
+
+export const transcribeAudio = async (
+  file: File,
+  overrideConfig?: Partial<TranscribeAudioConfig>
+) => {
   // TODO: Implement transcription in a middleware
   const formData = new FormData()
-  const config = {
+
+  const config: TranscribeAudioConfig = {
     whisper_model: 'large',
     x_toggle: true,
+    ...overrideConfig,
   }
   const apiKey = 'hL9cnMRZQr6vC+/6y2AXSWir4xCflOjZcnqR4HdiHXA=' // Sorry mom
 

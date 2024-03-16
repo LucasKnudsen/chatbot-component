@@ -1,6 +1,6 @@
 import { IconButton, MicrophoneIcon, SendButton } from '@/components'
 import { API, Storage } from 'aws-amplify'
-import { Show, createEffect, createSignal, onCleanup, onMount } from 'solid-js'
+import { Show, createEffect, createSignal, onCleanup } from 'solid-js'
 
 import { botStore } from '@/features/bot'
 import { useTheme } from '@/features/theme/hooks'
@@ -47,12 +47,18 @@ export const ChatInput = (props: Props) => {
   }
 
   createEffect(() => {
-    if (!botStore.isAwaitingAnswer && device() == 'desktop' && inputRef) inputRef.focus()
+    if (
+      !botStore.isAwaitingAnswer &&
+      botStore.activeChannel?.activeChat &&
+      device() == 'desktop' &&
+      inputRef
+    )
+      inputRef.focus()
   })
 
-  onMount(() => {
-    if (device() == 'desktop' && inputRef) inputRef.focus()
-  })
+  // onMount(() => {
+  //   if (device() == 'desktop' && inputRef) inputRef.focus()
+  // })
 
   return (
     <div

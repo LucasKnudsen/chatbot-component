@@ -84,6 +84,7 @@ export const Bot = () => {
         <Match when={['desktop', 'tablet'].includes(device())}>
           <BotDesktopLayout userInput={userInput()} onSubmit={handleSubmit} />
         </Match>
+
         <Match when={device() == 'mobile'}>
           <BotMobileLayout userInput={userInput()} onSubmit={handleSubmit} />
         </Match>
