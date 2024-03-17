@@ -1,5 +1,5 @@
 import { TypingBubble } from '@/components'
-import { transcribeAudio } from '@/features/knowledge-base'
+import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
 import { queryLLM } from '@/features/messages'
 import { Channel } from '@/graphql'
 import { createAudioRecorder } from '@/hooks'
@@ -45,21 +45,30 @@ export const VoiceConversationView = () => {
       throw new Error('No audio blob found')
     }
 
-    const audioFile = new File([audioBlob], 'audio.wav', { type: audioBlob.type })
-
     setIsThinking(true)
 
-    const transcriptionResponse = await transcribeAudio(audioFile, {
-      diarization_toggle: false,
-    })
+    let transcribedText = ''
+    console.log('THE TYPE', audioBlob.type)
 
-    console.log('Transcription done: ', transcriptionResponse)
+    if (audioBlob.type.includes('mp4')) {
+      const audioFile = new File([audioBlob], 'audio.webm', { type: audioBlob.type })
 
-    const text = await queryLLM(transcriptionResponse.transcription[0].text)
+      const transcriptionResponse = await transcribeAudio(audioFile, {
+        diarization_toggle: false,
+      })
+
+      transcribedText = transcriptionResponse.transcription[0].text
+    } else {
+      transcribedText = await quickTranscribe(audioBlob)
+    }
+
+    console.log('Transcription done: ', transcribedText)
+
+    const textForTTS = await queryLLM(transcribedText)
 
     const audioBase64 = await API.post('digitaltwinRest', '/ai/tts', {
       body: {
-        text,
+        text: textForTTS,
         voice: 'onyx',
       },
     })

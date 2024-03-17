@@ -72,6 +72,26 @@ export const mergeTranscriptBySpeaker = (transcription: TranscriptChunk[]): Tran
   return mergedTranscriptBySpeaker
 }
 
+export const quickTranscribe = async (audio: Blob) => {
+  const base64Audio = await new Promise<string>((resolve) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(audio)
+    reader.onloadend = () => {
+      const base64data = reader.result?.toString() || ''
+      resolve(base64data.split(',')[1])
+    }
+  })
+
+  const botAudio = await API.post('digitaltwinRest', '/ai/stt', {
+    body: {
+      base64Audio,
+      fileType: audio.type,
+    },
+  })
+
+  return `data:audio/mp3;base64,${botAudio}`
+}
+
 type IndexDocumentInput = {
   originalFile: File
   parsedTextFile?: File
