@@ -17,6 +17,8 @@ export const transcribeAudio = async (
   overrideConfig?: Partial<TranscribeAudioConfig>
 ) => {
   // TODO: Implement transcription in a middleware
+  console.time('Transcription time')
+
   const formData = new FormData()
 
   const config: TranscribeAudioConfig = {
@@ -43,6 +45,7 @@ export const transcribeAudio = async (
       },
     }
   )
+  console.timeEnd('Transcription time')
 
   return data.data
 }
