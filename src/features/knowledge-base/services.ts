@@ -89,7 +89,7 @@ export const quickTranscribe = async (audio: Blob) => {
     },
   })
 
-  return `data:audio/mp3;base64,${botAudio}`
+  return `${botAudio}`
 }
 
 type IndexDocumentInput = {
