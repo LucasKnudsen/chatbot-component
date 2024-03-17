@@ -26,7 +26,13 @@ export const chatflows: Record<string, ChatConfig> = {
   staging: {
     spaceId: 'yy5d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
-      autoOpen: false,
+      autoOpen: true,
+    },
+  },
+  chula: {
+    spaceId: 'zz5d64f3-6d58-49d1-8143-d59caa88fd1f',
+    config: {
+      autoOpen: true,
     },
   },
   test: {
@@ -41,12 +47,7 @@ export const chatflows: Record<string, ChatConfig> = {
       autoOpen: true,
     },
   },
-  chula: {
-    spaceId: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f',
-    config: {
-      autoOpen: true,
-    },
-  },
+
   fraia_prod: {
     spaceId: 'f86f6a13-a58c-44d8-87cd-077f559fc0fc',
     config: {

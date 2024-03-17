@@ -133,7 +133,7 @@ const ChannelItem = (props: {
 
   return (
     <div
-      class={`menu-card flex relative aspect-square ${
+      class={`menu-card group flex relative aspect-square ${
         channelDetailsMutation.isLoading() ? 'active' : ''
       }`}
       onClick={() => channelDetailsMutation.mutate()}
@@ -148,12 +148,7 @@ const ChannelItem = (props: {
           <div class='text-red-500'>{channelDetailsMutation.error().message}</div>
         )}
       </div>
-      <div
-        class='menu-card__content'
-        // style={{
-        //   '--hovered-translate-y': `${height()}px`,
-        // }}
-      >
+      <div class='menu-card__content'>
         <div
           class='menu-card__avatar'
           style={{
@@ -171,9 +166,10 @@ const ChannelItem = (props: {
           </h1>
         </div>
 
-        <div ref={ref} class='hidden lg:block h-[130px]'>
+        <div ref={ref} class='transition-all hidden lg:block h-0 group-hover:h-24 overflow-hidden'>
           <div class='menu-card__divider'></div>
-          <div class='menu-card__description pr-8'>
+
+          <div class='menu-card__description pr-8 pb-12'>
             <p class='line-clamp-2'>
               {(props.channel as Channel).description ||
                 (props.channel as ChannelUserAccess).channelDescription}
@@ -210,7 +206,7 @@ const AddChannelItem = () => {
         </div>
 
         <span class='block text-sm sm:text-sm leading-[20px] lg:max-w-[145px] w-full'>
-          Create your own knowledge
+          Create a new knowledge base
         </span>
       </div>
     </div>

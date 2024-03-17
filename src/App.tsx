@@ -15,7 +15,7 @@ function App() {
           Placeholder <span class='font-medium'>Website</span>
         </h1>
       </div>
-      <FraiaPortal {...chatflows.staging} />
+      <FraiaPortal {...chatflows.chula} />
     </LayoutDefault>
   )
 }
