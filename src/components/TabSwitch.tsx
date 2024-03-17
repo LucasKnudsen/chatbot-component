@@ -29,7 +29,7 @@ export const TabSwitch = <Value extends string>(props: TabSwitchProps<Value>) =>
 
       {props.tabs.map((tab) => (
         <div
-          class={`flex items-center justify-center cursor-pointer px-6 py-1 z-10 transition duration-300  text-[var(--${
+          class={`flex items-center justify-center cursor-pointer px-6 py-1 z-[1] transition duration-300  text-[var(--${
             props.activeTab === tab.value ? 'onPrimary' : 'primaryColor'
           })]`}
           onClick={() => props.onTabChange(tab.value)}

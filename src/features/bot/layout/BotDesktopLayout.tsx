@@ -92,7 +92,7 @@ const InitialBotWindow = (props: { onSubmit: (question: string) => void }) => {
         {/* Welcome message */}
 
         <div class='flex items-end '>
-          <h1 class='text-5xl max-w-md h-fit font-light tracking-wide leading-tight '>
+          <h1 class='text-5xl max-w-lg h-fit font-light tracking-wide leading-tight '>
             {botStore.activeHistory.length ? text().returnWelcomeMessage : text().welcomeMessage}
           </h1>
         </div>

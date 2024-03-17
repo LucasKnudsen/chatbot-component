@@ -24,7 +24,7 @@ export const chatflows: Record<string, ChatConfig> = {
   //   apiHost: 'https://lionbrain.softdesign.dk',
   // },
   staging: {
-    spaceId: 'za5d64f3-6d58-49d1-8143-d59caa88fd1f',
+    spaceId: 'yy5d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
       autoOpen: false,
     },
