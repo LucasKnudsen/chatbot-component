@@ -60,6 +60,7 @@ export const VoiceConversationView = () => {
     const audioBase64 = await API.post('digitaltwinRest', '/ai/tts', {
       body: {
         text,
+        voice: 'onyx',
       },
     })
     setIsThinking(false)

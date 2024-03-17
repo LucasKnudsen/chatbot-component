@@ -48,8 +48,8 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
-                console.time('HANDLER');
                 isAuthorized = false;
+                console.time('HANDLER');
                 _c.label = 1;
             case 1:
                 _c.trys.push([1, 12, , 13]);

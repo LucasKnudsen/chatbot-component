@@ -6,6 +6,7 @@ const ssmClient = new SSMClient({ region: process.env.REGION })
 
 type EventBody = {
   text: string
+  voice?: 'nova' | 'alloy' | 'echo' | 'fable' | 'onyx' | 'shimmer'
 }
 
 export const handler = async (
@@ -32,7 +33,7 @@ export const handler = async (
 
     const audio = await openai.audio.speech.create({
       model: 'tts-1',
-      voice: 'nova',
+      voice: body.voice || 'nova',
       input: body.text,
     })
 

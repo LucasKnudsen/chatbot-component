@@ -64,7 +64,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 });
                 return [4 /*yield*/, openai.audio.speech.create({
                         model: 'tts-1',
-                        voice: 'nova',
+                        voice: body.voice || 'nova',
                         input: body.text
                     })
                     // if (event.isMock) {

@@ -46,10 +46,9 @@ var client_ssm_1 = require("@aws-sdk/client-ssm");
 var fs_1 = require("fs");
 var openai_1 = require("openai");
 var storage_1 = require("./storage");
-var utils_1 = require("./utils");
 var ssmClient = new client_ssm_1.SSMClient({ region: process.env.REGION });
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var responseStatus, responseBody, _a, s3Key, type, channelId, fileName, tempFilePath, path, chunkDurations, audioFormat, pathToConvertedFile, duration, loopIndex, i, secretName, apiKey, openai, fullTranscription_1, transcriptionPromises, i, transcriptions, s3TranscriptionKey, error_1;
+    var responseStatus, responseBody, _a, s3Key, type, channelId, fileName, apiKey, openai, response, chunkDurations, fullTranscription_1, transcriptionPromises, transcriptions, s3TranscriptionKey, error_1;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -58,49 +57,11 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 responseStatus = 200;
                 _c.label = 1;
             case 1:
-                _c.trys.push([1, 15, 16, 17]);
+                _c.trys.push([1, 7, 8, 9]);
                 !event.isMock && console.log("EVENT BODY: ".concat(event.body));
                 _a = JSON.parse(event.body || ''), s3Key = _a.s3Key, type = _a.type, channelId = _a.channelId, fileName = _a.fileName;
-                tempFilePath = "./tmp/file-to-transcribe.mp3";
-                return [4 /*yield*/, (0, storage_1.writeS3Object)(s3Key, tempFilePath)];
+                return [4 /*yield*/, getSecret('fraia-open-ai-key-1')];
             case 2:
-                _c.sent();
-                return [2 /*return*/];
-            case 3:
-                audioFormat = _c.sent();
-                if (!audioFormat.format_name.includes('webm')) return [3 /*break*/, 6];
-                pathToConvertedFile = "./tmp/formatted.mp3";
-                return [4 /*yield*/, (0, utils_1.convertWebmToMp3)(path, pathToConvertedFile)];
-            case 4:
-                _c.sent();
-                path = pathToConvertedFile;
-                return [4 /*yield*/, (0, utils_1.getAudioDuration)(pathToConvertedFile)];
-            case 5:
-                // Gets audio duration of converted file
-                audioFormat = _c.sent();
-                _c.label = 6;
-            case 6:
-                duration = audioFormat.duration;
-                loopIndex = 0;
-                i = 0;
-                _c.label = 7;
-            case 7:
-                if (!(i < duration)) return [3 /*break*/, 10];
-                return [4 /*yield*/, (0, utils_1.splitAudioIntoChunk)(path, i, chunkDurations, loopIndex)];
-            case 8:
-                _c.sent();
-                loopIndex++;
-                _c.label = 9;
-            case 9:
-                i += chunkDurations;
-                return [3 /*break*/, 7];
-            case 10:
-                console.log('Successfully splits audio');
-                secretName = process.env.openai_key;
-                if (!secretName)
-                    throw new TypeError('OPENAI_API_SECRET_NAME_NOT_FOUND');
-                return [4 /*yield*/, getSecret(secretName)];
-            case 11:
                 apiKey = _c.sent();
                 if (!apiKey)
                     throw new TypeError('OPENAI_API_KEY_NOT_FOUND');
@@ -108,19 +69,15 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
                     apiKey: apiKey
                 });
-                console.log('Successfully initiated OpenAI');
-                fullTranscription_1 = '';
-                transcriptionPromises = [];
-                // Builds promises to be fired asynchronously
-                for (i = 0; i < loopIndex; i++) {
-                    console.log("Initiating transcription for file ".concat(i + 1, "."));
-                    transcriptionPromises.push(openai.audio.transcriptions.create({
-                        file: (0, fs_1.createReadStream)("./tmp/chunk-".concat(i + 1, ".mp3")),
+                return [4 /*yield*/, openai.audio.transcriptions.create({
+                        file: (0, fs_1.createReadStream)("tmp/test.mp3"),
                         model: 'whisper-1'
-                    }));
-                }
-                return [4 /*yield*/, Promise.all(transcriptionPromises)];
-            case 12:
+                    })];
+            case 3:
+                response = _c.sent();
+                console.log(response);
+                return [2 /*return*/];
+            case 4:
                 transcriptions = _c.sent();
                 transcriptions.forEach(function (t) {
                     fullTranscription_1 += t.text;
@@ -128,19 +85,19 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                 return [4 /*yield*/, (0, storage_1.saveTextToS3)("_/".concat(channelId, "/transcriptions/").concat(fileName, "-").concat(new Date().toISOString()), fullTranscription_1)
                     // Saves a record in DB to reference to the different documents.
                 ];
-            case 13:
+            case 5:
                 s3TranscriptionKey = _c.sent();
                 // Saves a record in DB to reference to the different documents.
                 return [4 /*yield*/, (0, storage_1.createChannelDocumentRecord)({
                         s3KeyRaw: s3Key,
                         s3KeyTranscription: s3TranscriptionKey
                     })];
-            case 14:
+            case 6:
                 // Saves a record in DB to reference to the different documents.
                 _c.sent();
                 responseBody = fullTranscription_1;
-                return [3 /*break*/, 17];
-            case 15:
+                return [3 /*break*/, 9];
+            case 7:
                 error_1 = _c.sent();
                 console.error('DEFAULT ERROR', error_1);
                 responseStatus = ((_b = error_1.response) === null || _b === void 0 ? void 0 : _b.status) || 500;
@@ -150,8 +107,8 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                     type: error_1.type,
                     stack: error_1.stack
                 };
-                return [3 /*break*/, 17];
-            case 16:
+                return [3 /*break*/, 9];
+            case 8:
                 console.timeEnd('HANDLER');
                 return [2 /*return*/, {
                         statusCode: responseStatus,
@@ -161,7 +118,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                             'Access-Control-Allow-Headers': '*'
                         }
                     }];
-            case 17: return [2 /*return*/];
+            case 9: return [2 /*return*/];
         }
     });
 }); };

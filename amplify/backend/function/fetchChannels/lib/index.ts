@@ -39,9 +39,8 @@ type Arguments = {
 }
 
 export const handler: AppSyncResolverHandler<Arguments, any> = async (event) => {
-  console.time('HANDLER')
-
   let isAuthorized = false
+  console.time('HANDLER')
 
   try {
     const { isMock, input } = event.arguments

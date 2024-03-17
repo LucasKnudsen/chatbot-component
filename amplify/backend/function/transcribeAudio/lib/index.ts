@@ -9,8 +9,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { createReadStream } from 'fs'
 import OpenAI from 'openai'
 
-import { createChannelDocumentRecord, saveTextToS3, writeS3Object } from './storage'
-import { convertWebmToMp3, getAudioDuration, splitAudioIntoChunk } from './utils'
+import { createChannelDocumentRecord, saveTextToS3 } from './storage'
 
 const ssmClient = new SSMClient({ region: process.env.REGION })
 
@@ -43,49 +42,7 @@ export const handler = async (
     // Save to DynamoDB
     // Index in Brain
 
-    const tempFilePath = `./tmp/file-to-transcribe.mp3`
-
-    await writeS3Object(s3Key, tempFilePath)
-
-    return
-
-    let path = tempFilePath
-
-    const chunkDurations = 10 * 60 // 10 minutes
-
-    // Gets audio duration to predetermine chunks
-    let audioFormat = await getAudioDuration(path)
-
-    if (audioFormat.format_name.includes('webm')) {
-      // If the audio format is indeed webm, the system cannot interpret duration. We'll have to convert to Mp3.
-      const pathToConvertedFile = `./tmp/formatted.mp3`
-
-      await convertWebmToMp3(path, pathToConvertedFile)
-
-      path = pathToConvertedFile
-
-      // Gets audio duration of converted file
-      audioFormat = await getAudioDuration(pathToConvertedFile)
-    }
-
-    const { duration } = audioFormat
-
-    // Splits audio into chunks based on duration
-    let loopIndex = 0
-    for (let i = 0; i < duration; i += chunkDurations) {
-      await splitAudioIntoChunk(path, i, chunkDurations, loopIndex)
-      loopIndex++
-    }
-
-    console.log('Successfully splits audio')
-
-    // Initiates OpenAI
-
-    const secretName = process.env.openai_key
-
-    if (!secretName) throw new TypeError('OPENAI_API_SECRET_NAME_NOT_FOUND')
-
-    const apiKey = await getSecret(secretName)
+    const apiKey = await getSecret('fraia-open-ai-key-1')
 
     if (!apiKey) throw new TypeError('OPENAI_API_KEY_NOT_FOUND')
 
@@ -94,21 +51,24 @@ export const handler = async (
       apiKey,
     })
 
+    const response = await openai.audio.transcriptions.create({
+      file: createReadStream(`tmp/test.mp3`),
+      model: 'whisper-1',
+    })
+
+    console.log(response)
+
+    return
+
+    const chunkDurations = 10 * 60 // 10 minutes
+
+    console.log('Successfully splits audio')
+
     console.log('Successfully initiated OpenAI')
 
     let fullTranscription = ''
     const transcriptionPromises = []
     // Builds promises to be fired asynchronously
-    for (let i = 0; i < loopIndex; i++) {
-      console.log(`Initiating transcription for file ${i + 1}.`)
-
-      transcriptionPromises.push(
-        openai.audio.transcriptions.create({
-          file: createReadStream(`./tmp/chunk-${i + 1}.mp3`),
-          model: 'whisper-1',
-        })
-      )
-    }
 
     const transcriptions = await Promise.all(transcriptionPromises)
 

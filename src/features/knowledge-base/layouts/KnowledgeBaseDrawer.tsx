@@ -9,7 +9,7 @@ export const KnowledgeBaseDrawer = () => {
 
   return (
     <div
-      class={`flex absolute top-0 right-0 flex-col h-full   transition-all ]
+      class={`flex absolute top-0 right-0 flex-col h-full z-10   transition-all ]
               border-l border-[var(--borderColor)] duration-300 p-6 lg:p-10
               bg-[var(--backgroundColor)]
               `}

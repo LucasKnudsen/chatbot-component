@@ -134,7 +134,7 @@
         "transcribeAudio": {
           "secretsPathAmplifyAppId": "d1i4jp82axmvxl",
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
-          "s3Key": "amplify-builds/transcribeAudio-4630616b6a5863676f55-build.zip"
+          "s3Key": "amplify-builds/transcribeAudio-382f636246305268566a-build.zip"
         },
         "broadcastResolver": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
@@ -150,7 +150,7 @@
         },
         "fetchChannels": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
-          "s3Key": "amplify-builds/fetchChannels-716369673941474c5656-build.zip"
+          "s3Key": "amplify-builds/fetchChannels-4d797075785941353358-build.zip"
         },
         "flowiseBroadcast": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
@@ -178,7 +178,7 @@
         },
         "knowledgeIndexing": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
-          "s3Key": "amplify-builds/knowledgeIndexing-613141392f4b4b736931-build.zip"
+          "s3Key": "amplify-builds/knowledgeIndexing-4b2f4f65534a61597444-build.zip"
         },
         "onChannelUpdate": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
@@ -190,11 +190,15 @@
         },
         "youtubeScraping": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
-          "s3Key": "amplify-builds/youtubeScraping-4679337a3851744c6539-build.zip"
+          "s3Key": "amplify-builds/youtubeScraping-76463063444c4230315a-build.zip"
         },
         "adhoc": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
-          "s3Key": "amplify-builds/adhoc-377337494c796d4c6f42-build.zip"
+          "s3Key": "amplify-builds/adhoc-51743854734a72682b76-build.zip"
+        },
+        "textToSpeech": {
+          "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
+          "s3Key": "amplify-builds/textToSpeech-74713651686a4d746971-build.zip"
         }
       },
       "hosting": {
