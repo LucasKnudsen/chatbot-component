@@ -1,18 +1,17 @@
 import { For, Show, createEffect, createMemo, on } from 'solid-js'
-import { MenuItem, Settings } from '@/components'
 
-import { Divider } from '@/components/Divider'
-import { Fact } from '@/features/contextual/components/Fact'
-import Gallery from './Gallery/Gallery'
-import { LinkIcon } from '@/components/icons/LinkIcon'
-import { LinkInline } from '@/features/contextual/components/LinkInline'
-import { Marked } from '@ts-stack/markdown'
-import { MessageIcon } from '@/components/icons'
 import { TypingBubble } from '@/components'
+import { Divider } from '@/components/Divider'
+import { MessageIcon } from '@/components/icons'
+import { LinkIcon } from '@/components/icons/LinkIcon'
 import { botStore } from '@/features/bot'
-import { useMediaQuery } from '@/utils/useMediaQuery'
+import { Fact } from '@/features/contextual/components/Fact'
+import { LinkInline } from '@/features/contextual/components/LinkInline'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
+import { useMediaQuery } from '@/utils/useMediaQuery'
+import { Marked } from '@ts-stack/markdown'
+import Gallery from './Gallery/Gallery'
 
 export const ChatWindow = () => {
   let botMessageEl: HTMLDivElement | undefined
@@ -113,10 +112,11 @@ export const ChatWindow = () => {
           <div>
             <MessageIcon width={30} color={theme().primaryColor} />
           </div>
-          {botStore.activeChannel?.activeChat?.question}
+
+          <div class='overflow-y-auto max-h-24'>{botStore.activeChannel?.activeChat?.question}</div>
         </div>
 
-        <Settings class='pt-1'>
+        {/* <Settings>
           <For each={menuItems}>
             {(item, index) => (
               <>
@@ -133,7 +133,7 @@ export const ChatWindow = () => {
               </>
             )}
           </For>
-        </Settings>
+        </Settings> */}
       </div>
 
       <Divider margin={0} />

@@ -32,6 +32,7 @@ export const VoiceConversationView = () => {
     switch (true) {
       case audioRecorder.isRecording():
         audioRecorder.stopRecording()
+        // Handle silent audio trick
 
         break
 
@@ -77,12 +78,16 @@ export const VoiceConversationView = () => {
     setIsAnswering(true)
 
     const audioSrc = `data:audio/mp3;base64,${audioBase64}`
+
     const audio = new Audio(audioSrc)
 
-    audio.addEventListener('ended', () => {
+    const onAudioEnded = () => {
       setIsAnswering(false)
-      audio?.removeEventListener('ended', () => setIsAnswering(false))
-    })
+      audio.removeEventListener('ended', onAudioEnded)
+    }
+
+    audio.addEventListener('ended', onAudioEnded)
+
     audio.play()
   }
 
@@ -131,3 +136,40 @@ export const VoiceConversationView = () => {
     </div>
   )
 }
+
+// const AudioUnlocker = () => {
+//   const unlockAudio = () => {
+//     // Create a new Audio context
+//     const audioCtx = new window.AudioContext()
+
+//     // Create an empty buffer
+//     const buffer = audioCtx.createBuffer(1, 1, 22050) // 1 channel, 1 frame, 22.05kHz sample rate
+//     const source = audioCtx.createBufferSource()
+//     source.buffer = buffer
+
+//     // Connect to the context
+//     source.connect(audioCtx.destination)
+
+//     // Play the sound
+//     if (source.start) {
+//       source.start(0)
+//     } else if (source.play) {
+//       source.play(0)
+//     } else if (source.noteOn) {
+//       source.noteOn(0)
+//     }
+
+//     // Remove the event listeners to ensure this only runs once
+//     document.removeEventListener('touchstart', unlockAudio)
+//     document.removeEventListener('click', unlockAudio)
+//   }
+
+//   onMount(() => {
+//     // Add event listeners to the whole document waiting for the user to interact
+//     // This ensures the audio gets "unlocked" at the first user interaction
+//     document.addEventListener('touchstart', unlockAudio, false)
+//     document.addEventListener('click', unlockAudio, false)
+//   })
+
+//   return null
+// }
