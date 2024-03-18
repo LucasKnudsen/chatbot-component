@@ -7,7 +7,6 @@ import { LinkIcon } from '@/components/icons/LinkIcon'
 import { botStore } from '@/features/bot'
 import { Fact } from '@/features/contextual/components/Fact'
 import { LinkInline } from '@/features/contextual/components/LinkInline'
-import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Marked } from '@ts-stack/markdown'
@@ -21,7 +20,7 @@ export const ChatWindow = () => {
     botStore.activeContextuals.filter((element) => element.type === 'link')
   )
 
-  const { text } = useText()
+  // const { text } = useText()
   const { theme } = useTheme()
   const device = useMediaQuery()
 
@@ -72,31 +71,31 @@ export const ChatWindow = () => {
     )
   )
 
-  const onCopy = () => {
-    navigator.clipboard.writeText(botStore.activeAnswer!)
-  }
+  // const onCopy = () => {
+  //   navigator.clipboard.writeText(botStore.activeAnswer!)
+  // }
 
-  const onShare = () => {
-    navigator.share?.({
-      title: botStore.activeChannel?.activeChat?.question,
-      text: botStore.activeAnswer!,
-    })
-  }
+  // const onShare = () => {
+  //   navigator.share?.({
+  //     title: botStore.activeChannel?.activeChat?.question,
+  //     text: botStore.activeAnswer!,
+  //   })
+  // }
 
-  const menuItems = [
-    {
-      label: text().copyText,
-      onClick: onCopy,
-    },
-    ...(Boolean(navigator.share) // Check if share is supported
-      ? [
-          {
-            label: text().share,
-            onClick: onShare,
-          },
-        ]
-      : []),
-  ]
+  // const menuItems = [
+  //   {
+  //     label: text().copyText,
+  //     onClick: onCopy,
+  //   },
+  //   ...(Boolean(navigator.share) // Check if share is supported
+  //     ? [
+  //         {
+  //           label: text().share,
+  //           onClick: onShare,
+  //         },
+  //       ]
+  //     : []),
+  // ]
 
   return (
     <>
