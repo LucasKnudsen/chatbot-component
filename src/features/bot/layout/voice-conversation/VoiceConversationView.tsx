@@ -1,12 +1,14 @@
-import { TypingBubble } from '@/components'
-import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
-import { queryLLM } from '@/features/messages'
-import { Channel } from '@/graphql'
-import { createAudioRecorder } from '@/hooks'
-import { API } from 'aws-amplify'
 import { Match, Show, Switch, createSignal } from 'solid-js'
+import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
+
+import { API } from 'aws-amplify'
+import { AudioVisualizer } from './AudioVisualizer'
+import { Channel } from '@/graphql'
 import { InteractionFlowSwitch } from '../../components'
+import { TypingBubble } from '@/components'
 import { botStore } from '../../stores'
+import { createAudioRecorder } from '@/hooks'
+import { queryLLM } from '@/features/messages'
 
 export const VoiceConversationView = () => {
   const [isThinking, setIsThinking] = createSignal(false)
@@ -87,7 +89,7 @@ export const VoiceConversationView = () => {
     }
 
     audio.addEventListener('ended', onAudioEnded)
-
+    console.log(audio)
     audio.play()
   }
 
@@ -106,7 +108,7 @@ export const VoiceConversationView = () => {
         <div class='relative flex justify-center items-center'>
           <div
             onClick={handleAvatarClick}
-            class={`w-32 h-32 rounded-full border-white border transition cursor-pointer
+            class={`relative w-32 h-32 rounded-full border-white border transition cursor-pointer
             ${isAnswering() ? 'animate-pulse' : ''}
           `}
             style={{
@@ -116,7 +118,7 @@ export const VoiceConversationView = () => {
             }}
           />
 
-          <Show when={isThinking()}>
+          <Show when={isThinking()} fallback={<AudioVisualizer />}>
             <div class='absolute'>
               <TypingBubble color='white' />
             </div>
