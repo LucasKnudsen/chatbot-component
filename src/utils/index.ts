@@ -56,6 +56,28 @@ export const logDev = (...args: any[]): void => {
 
 export const parseProxy = <T>(proxy: T): T => JSON.parse(JSON.stringify(proxy))
 
+export const base64ToBlob = (
+  base64: string,
+  contentType: string = '',
+  sliceSize: number = 512
+): Blob => {
+  const byteCharacters = atob(base64)
+  const byteArrays: Uint8Array[] = []
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize)
+    const byteNumbers = new Array(slice.length)
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i)
+    }
+    const byteArray = new Uint8Array(byteNumbers)
+    byteArrays.push(byteArray)
+  }
+
+  const blob = new Blob(byteArrays, { type: contentType })
+  return blob
+}
+
 export const sendRequest = async <ResponseData>(
   params:
     | {
