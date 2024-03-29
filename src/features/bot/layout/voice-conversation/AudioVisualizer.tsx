@@ -1,18 +1,23 @@
 import { onMount } from 'solid-js'
 
-export const AudioVisualizer = () => {
+type Props = {
+  color?: string | undefined
+  source?: any
+}
+
+export const AudioVisualizer = (props: Props) => {
   let canvas: any
 
-  function visualize(from: number, source: any) {
+  function visualize(isElement: boolean, source: any) {
     const ctx = canvas.getContext('2d')
     const context = new AudioContext()
     let src: any
 
-    if (0 == from) {
+    if (isElement) {
+      // audio record
       src = context.createMediaElementSource(source)
-    } else if (1 == from) {
-      src = context.createMediaStreamSource(source)
-    } else if (2 == from) {
+    } else {
+      // live record
       src = context.createMediaStreamSource(source)
     }
 
@@ -23,7 +28,7 @@ export const AudioVisualizer = () => {
 
     listen.connect(analyser)
 
-    if (from == 0) analyser.connect(context.destination)
+    if (isElement) analyser.connect(context.destination)
 
     analyser.fftSize = 2 ** 12
 
@@ -53,8 +58,8 @@ export const AudioVisualizer = () => {
       ctx.fillStyle = 'transparent'
       ctx.fillRect(0, 0, WIDTH, HEIGHT)
 
-      ctx.lineWidth = 1
-      ctx.strokeStyle = '#fff'
+      ctx.lineWidth = 2
+      ctx.strokeStyle = props.color ?? '#fff'
       ctx.beginPath()
 
       ctx.stroke()
@@ -64,8 +69,8 @@ export const AudioVisualizer = () => {
       analyser.getByteFrequencyData(dataArray)
       let start = 0 //dataArray.find(a=> Math.max.apply('',dataArray));
       analyser.getByteTimeDomainData(dataArray)
-      ctx.lineWidth = 1
-      ctx.strokeStyle = '#fff'
+      ctx.lineWidth = 2
+      ctx.strokeStyle = props.color ?? '#fff'
       ctx.beginPath()
       x = 0
 
@@ -89,17 +94,18 @@ export const AudioVisualizer = () => {
 
   const openMic = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-    visualize(1, stream)
+    visualize(false, stream)
   }
 
-  onMount(() => openMic())
+  const openAudio = async () => visualize(true, props.source)
+
+  onMount(() => {
+    openMic()
+
+    props.source && openAudio()
+  })
 
   return (
-    <canvas
-      ref={canvas}
-      width='256'
-      height='256'
-      class='absolute inset-0 w-full h-full pointer-events-none'
-    />
+    <canvas ref={canvas} width='256' height='256' class='pointer-events-none overflow-hidden' />
   )
 }
