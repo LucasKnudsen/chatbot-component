@@ -3,6 +3,7 @@ import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
 import { queryLLM } from '@/features/messages'
 import { Channel } from '@/graphql'
 import { createAudioRecorder } from '@/hooks'
+import { logDev } from '@/utils'
 import { API } from 'aws-amplify'
 import { Match, Show, Switch, createSignal } from 'solid-js'
 import { InteractionFlowSwitch } from '../../components'
@@ -18,10 +19,6 @@ export const VoiceConversationView = () => {
       handleBotAnswer(audioBlob)
     },
   })
-  // 1. Make conditional rendering of flow state between awaiting input, listening, thinking, and speaking
-  // 2. Implement voice input through recording
-  // 3. Implement STT into TTS
-  // 4. Play TTS audio
 
   const isIdle = () => !audioRecorder.isRecording() && !isThinking() && !isAnswering()
 
@@ -33,53 +30,12 @@ export const VoiceConversationView = () => {
     switch (true) {
       case audioRecorder.isRecording():
         audioRecorder.stopRecording()
-        // Handle silent audio trick
-        // handleDummyBotAnswer()
-
         break
 
       default:
         audioRecorder.startRecording()
     }
   }
-
-  // const handleDummyBotAnswer = async (audioBlob?: Blob) => {
-  //   setIsThinking(true)
-
-  //   const base64 = await new Promise<string>((resolve) =>
-  //     setTimeout(() => {
-  //       resolve(dummyMp3)
-  //     }, 1000)
-  //   )
-
-  //   const audioSrc = URL.createObjectURL(base64ToBlob(base64, 'audio/mp3'))
-  //   // const audioSrc = URL.createObjectURL(base64ToBlob(base64, audioBlob.type))
-  //   // const audioSrc = URL.createObjectURL(audioBlob)
-
-  //   audioRef.src = audioSrc
-  //   audioRef.muted = false
-  //   const audioAnswer = new Audio(audioSrc)
-
-  //   setIsThinking(false)
-
-  //   setIsAnswering(true)
-
-  //   const onAudioEnded = () => {
-  //     setIsAnswering(false)
-  //     console.log('ended')
-  //     audioRef.removeEventListener('ended', onAudioEnded)
-  //   }
-
-  //   audioRef.addEventListener('ended', onAudioEnded)
-  //   audioRef.addEventListener('canplaythrough', () => {
-  //     console.log('loaded')
-  //     audioRef.play()
-  //   })
-
-  //   audioRef.load()
-
-  //   setIsAnswering(false)
-  // }
 
   const handleBotAnswer = async (audioBlob: Blob) => {
     if (!audioBlob) {
@@ -102,7 +58,7 @@ export const VoiceConversationView = () => {
       transcribedText = await quickTranscribe(audioBlob)
     }
 
-    console.log('Transcription done: ', transcribedText)
+    logDev('Transcription done: ')
 
     const textForTTS = await queryLLM(transcribedText)
 

@@ -15,6 +15,7 @@ import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
 import { createQuery } from '@/hooks'
 import { Show } from 'solid-js'
+import { Toaster } from 'solid-toast'
 
 export const PortalInitializer = (props: ChatConfig) => {
   const { initTheme } = useTheme()
@@ -54,6 +55,8 @@ export const PortalInitializer = (props: ChatConfig) => {
         <PortalButton />
 
         <PortalContainer>
+          <Toaster />
+
           <AuthProvider isPublic={Boolean(configQuery.data()?.isPublic)}>
             <Show when={configStore.isBotOpened}>
               <div class='fixed top-0 left-0 flex flex-row flex-nowrap h-full w-full overflow-hidden animate-fade-in '>

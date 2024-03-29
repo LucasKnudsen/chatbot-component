@@ -6639,6 +6639,11 @@ solid-styled-jsx@^0.27.1:
   dependencies:
     babel-plugin-transform-rename-import "^2.3.0"
 
+solid-toast@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/solid-toast/-/solid-toast-0.5.0.tgz#ed31363aad38434a67c1da1c423fd1492460c6ba"
+  integrity sha512-t770JakjyS2P9b8Qa1zMLOD51KYKWXbTAyJePVUoYex5c5FH5S/HtUBUbZAWFcqRCKmAE8KhyIiCvDZA8bOnxQ==
+
 solid-use@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/solid-use/-/solid-use-0.8.0.tgz#d46258c45edb0f4c621285e0ad1aa6b6a674d79b"

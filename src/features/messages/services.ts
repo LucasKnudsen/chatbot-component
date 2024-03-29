@@ -16,7 +16,6 @@ import {
   setLLMStreamSocket,
   setLLMStreamingId,
 } from '.'
-import { detectLanguage } from '../text'
 import { ChatResponse } from './types'
 
 export const queryLLM = async (message: string) => {
@@ -47,7 +46,7 @@ export const queryLLM = async (message: string) => {
   // Fires without waiting for response, as the response is handled by a socket connection
   const [flowiseResponse] = await Promise.allSettled([
     flowiseMessageQuery(body),
-    detectLanguage(message, true),
+    // detectLanguage(message, true),
   ])
 
   botStoreActions.setLoading(false)
@@ -136,7 +135,7 @@ export const initLLMStream = async (channel: Channel) => {
       apiHost: channel.apiHost!,
     })
 
-    console.log('Streaming available query: ', data)
+    logDev('Streaming available query: ', data)
 
     if (data) {
       socket.id && setLLMStreamingId(socket.id)
