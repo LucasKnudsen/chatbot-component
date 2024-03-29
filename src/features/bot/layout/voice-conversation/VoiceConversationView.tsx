@@ -89,7 +89,6 @@ export const VoiceConversationView = () => {
     setIsThinking(true)
 
     let transcribedText = ''
-    console.log('THE TYPE', audioBlob.type)
 
     if (audioBlob.type.includes('mp4')) {
       const audioFile = new File([audioBlob], 'audio.webm', { type: audioBlob.type })

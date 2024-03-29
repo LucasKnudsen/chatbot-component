@@ -112,8 +112,6 @@ const getLocalHistory = (channelId: string) => {
   const key = `${authStore.sessionId}:${channelId}_HIST`
   const data = localStorage.getItem(key)
 
-  console.log(key, data)
-
   if (data) {
     const questions = JSON.parse(data)
 

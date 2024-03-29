@@ -48,7 +48,7 @@ export const randomUUID = (): string => {
   })
 }
 
-export const logDev = (...args: any[]): void => {
+export const logDev = (...args: any): void => {
   if (import.meta.env.DEV) {
     console.log(...args)
   }

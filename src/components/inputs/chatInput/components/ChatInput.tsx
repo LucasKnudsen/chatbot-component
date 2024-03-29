@@ -1,9 +1,10 @@
 import { IconButton, MicrophoneIcon, SendButton } from '@/components'
-import { API, Storage } from 'aws-amplify'
-import { Show, createEffect, createSignal, onCleanup } from 'solid-js'
+import { Show, createEffect, createSignal } from 'solid-js'
 
 import { botStore } from '@/features/bot'
+import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
 import { useTheme } from '@/features/theme/hooks'
+import { createAudioRecorder } from '@/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { useScrollOnResize } from '../hooks/useScrollOnResize'
 import { Textarea } from './ShortTextInput'
@@ -72,7 +73,7 @@ export const ChatInput = (props: Props) => {
     >
       {/* Additional left inputs  */}
       <div class='flex items-start h-fit pr-6 border-r border-[var(--borderColor)] lg:mt-2 '>
-        <AudioInput onSubmit={props.onSubmit} />
+        <AudioInput onSubmit={setInputValue} />
       </div>
 
       <Textarea
@@ -143,31 +144,32 @@ export const ChatInput = (props: Props) => {
   )
 }
 const AudioInput = (props: { onSubmit: (value: string) => void }) => {
-  const [mediaStream, setMediaStream] = createSignal<MediaStream | null>(null)
-  const [mediaRecorder, setMediaRecorder] = createSignal<MediaRecorder | null>(null)
-  const [isRecording, setIsRecording] = createSignal<boolean>(false)
   const [isLoading, setIsLoading] = createSignal<boolean>(false)
 
-  const handleUpload = async (blob: Blob) => {
-    const type = blob.type
-    const key = `test.${type.split('/')[1]}`
+  const audioRecorder = createAudioRecorder({
+    onStop: (blob) => handleTranscription(blob),
+  })
 
+  const handleTranscription = async (audioBlob: Blob) => {
     try {
       setIsLoading(true)
       console.time('FULL')
 
-      await Storage.put(key, blob, {
-        contentType: 'audio/webm',
-      })
+      let transcribedText = ''
 
-      const transcription = await API.post('digitaltwinRest', '/transcribe', {
-        body: {
-          s3Key: `public/${key}`,
-          type,
-        },
-      })
+      if (audioBlob.type.includes('mp4')) {
+        const audioFile = new File([audioBlob], 'audio.webm', { type: audioBlob.type })
 
-      props.onSubmit(transcription)
+        const transcriptionResponse = await transcribeAudio(audioFile, {
+          diarization_toggle: false,
+        })
+
+        transcribedText = transcriptionResponse.transcription[0].text
+      } else {
+        transcribedText = await quickTranscribe(audioBlob)
+      }
+
+      props.onSubmit(transcribedText)
     } catch (error) {
       console.error('Uploading transcription error', error)
     }
@@ -177,68 +179,16 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
     setIsLoading(false)
   }
 
-  // Function to start recording
-  const startRecording = () => {
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        const recorder = new MediaRecorder(stream)
-        const audioChunks: Blob[] = [] // Store audio chunks
-        let type = 'audio/webm'
-
-        recorder.ondataavailable = (event) => {
-          if (event.data.size > 0) {
-            audioChunks.push(event.data)
-            type = event.data.type.split(';')[0]
-          }
-        }
-
-        recorder.onstop = async () => {
-          // Handle the recording stopped event
-          const audioBlob = new Blob(audioChunks, { type })
-
-          handleUpload(audioBlob)
-        }
-
-        setMediaStream(stream)
-        setMediaRecorder(recorder)
-        recorder.start()
-        setIsRecording(true)
-      })
-      .catch((error) => {
-        console.error('Error accessing microphone:', error)
-        alert('Error accessing microphone')
-      })
-  }
-
-  // Function to stop recording
-  const stopRecording = () => {
-    if (mediaRecorder()) {
-      mediaRecorder()?.stop()
-      console.log('Stopped recording.')
-      mediaStream()
-        ?.getTracks()
-        .forEach((track) => track.stop())
-      setMediaRecorder(null)
-      setMediaStream(null)
-      setIsRecording(false)
-    }
-  }
-
-  onCleanup(() => {
-    stopRecording() // Stop recording when the component unmounts
-  })
-
   return (
     <>
       {isLoading() ? (
         <div class='animate-ping rounded-full m-1 h-3 w-3 bg-gray-700' />
-      ) : isRecording() ? (
-        <IconButton onClick={stopRecording}>
+      ) : audioRecorder.isRecording() ? (
+        <IconButton onClick={audioRecorder.stopRecording}>
           <div class=' animate-pulse m-1 h-3 w-3  ani  bg-gray-700 opacity-75'></div>
         </IconButton>
       ) : (
-        <IconButton onClick={startRecording}>
+        <IconButton onClick={audioRecorder.startRecording}>
           <MicrophoneIcon height={20} width={20} />
         </IconButton>
       )}
