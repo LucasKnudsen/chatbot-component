@@ -15,8 +15,9 @@ import {
 import { logDev, removeTypenameFromInput } from '@/utils'
 
 import { GraphQLQuery } from '@aws-amplify/api'
-import { API, Auth } from 'aws-amplify'
+import { API } from 'aws-amplify'
 import { botStoreActions } from '.'
+import { getAuthMode } from '../authentication'
 
 export async function fetchPublicChannels(chatSpaceId: string): Promise<Channel[]> {
   const { data } = await API.graphql<GraphQLQuery<FetchChannelsQuery>>({
@@ -27,7 +28,7 @@ export async function fetchPublicChannels(chatSpaceId: string): Promise<Channel[
         chatSpaceId,
       },
     },
-    authMode: 'AWS_IAM',
+    authMode: await getAuthMode(),
   })
 
   return (data?.fetchChannels as Channel[]) || []
@@ -109,20 +110,12 @@ export async function createHistoryRecord(
 
   logDev('createHistoryRecord', input)
 
-  let authMode: 'AMAZON_COGNITO_USER_POOLS' | 'AWS_IAM' = 'AMAZON_COGNITO_USER_POOLS'
-
-  try {
-    await Auth.currentAuthenticatedUser()
-  } catch (error) {
-    authMode = 'AWS_IAM'
-  }
-
   const { data } = await API.graphql<GraphQLQuery<CreateChannelHistoryItemMutation>>({
     query: mutations.createChannelHistoryItem,
     variables: {
       input,
     },
-    authMode,
+    authMode: await getAuthMode(),
   })
 
   const history = (data?.createChannelHistoryItem as ChannelHistoryItem) || null

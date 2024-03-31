@@ -1,8 +1,8 @@
 import { JSX } from 'solid-js'
 
 type TabProps<V> = {
-  label: string
   value: V
+  label?: string
   leftSection?: string | JSX.Element
 }
 

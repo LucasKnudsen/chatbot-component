@@ -6,6 +6,7 @@ import { ArrowRightIcon } from '@/components/icons/ArrowRightIcon'
 import { Spinner } from '@/components/loaders'
 import { createMutation } from '@/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
+import { getAvatarStyle } from '../utils'
 
 type ChannelOverviewProps = {
   chatSpace: ChatSpace
@@ -131,6 +132,8 @@ const ChannelItem = (props: {
   //   setHeight(() => ref?.offsetHeight ?? (null as any))
   // })
 
+  console.log(props.channel)
+
   return (
     <div
       class={`menu-card group flex relative aspect-square ${
@@ -152,10 +155,11 @@ const ChannelItem = (props: {
         <div
           class='menu-card__avatar'
           style={{
-            'background-image':
+            'background-size': 'contain',
+            'background-image': getAvatarStyle(
               (props.channel as Channel).avatar ||
-              (props.channel as ChannelUserAccess).channelAvatar ||
-              'linear-gradient(to right, #ed4264, #ffedbc)',
+                (props.channel as ChannelUserAccess).channelAvatar
+            ),
           }}
         ></div>
 

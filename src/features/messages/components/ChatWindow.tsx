@@ -1,8 +1,7 @@
-import { For, Show, createEffect, createMemo, on } from 'solid-js'
+import { createEffect, createMemo, For, on, Show } from 'solid-js'
 
-import { TypingBubble } from '@/components'
+import { MessageIcon, TypingBubble } from '@/components'
 import { Divider } from '@/components/Divider'
-import { MessageIcon } from '@/components/icons'
 import { LinkIcon } from '@/components/icons/LinkIcon'
 import { botStore } from '@/features/bot'
 import { Fact } from '@/features/contextual/components/Fact'

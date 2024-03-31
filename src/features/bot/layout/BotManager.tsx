@@ -32,7 +32,7 @@ export const BotManager = () => {
 
         if (!configStore.chatSpaceConfig.isMultiChannel) {
           // If there is only one channel, initialize the bot with it
-          botStoreActions.initBotStore(publicChannels[0])
+          await botStoreActions.initBotStore(publicChannels[0])
         }
 
         configStoreActions.setConfigStore('channels', publicChannels)

@@ -1,13 +1,13 @@
 import { TypingBubble } from '@/components'
 import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
 import { queryLLM } from '@/features/messages'
-import { Channel } from '@/graphql'
 import { createAudioRecorder } from '@/hooks'
 import { logDev } from '@/utils'
 import { API } from 'aws-amplify'
 import { Match, Show, Switch, createSignal } from 'solid-js'
 import { InteractionFlowSwitch } from '../../components'
 import { botStore } from '../../stores'
+import { getAvatarStyle } from '../../utils'
 
 export const VoiceConversationView = () => {
   const [isThinking, setIsThinking] = createSignal(false)
@@ -104,9 +104,8 @@ export const VoiceConversationView = () => {
             ${isAnswering() ? 'animate-pulse' : ''}
           `}
             style={{
-              'background-image':
-                (botStore.activeChannel as Channel)?.avatar ||
-                'linear-gradient(to right, #ed4264, #ffedbc)',
+              'background-size': 'contain',
+              'background-image': getAvatarStyle(botStore.activeChannel?.avatar),
             }}
           />
 

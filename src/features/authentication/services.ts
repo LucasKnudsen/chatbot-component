@@ -46,3 +46,15 @@ export const getUserDetails = async (id: string) => {
     logDev(error)
   }
 }
+
+export const getAuthMode = async () => {
+  let authMode: 'AMAZON_COGNITO_USER_POOLS' | 'AWS_IAM' = 'AMAZON_COGNITO_USER_POOLS'
+
+  try {
+    await Auth.currentAuthenticatedUser()
+  } catch (error) {
+    authMode = 'AWS_IAM'
+  }
+
+  return authMode
+}

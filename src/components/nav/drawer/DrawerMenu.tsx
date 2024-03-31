@@ -1,7 +1,8 @@
-import { botStore, botStoreActions } from '@/features/bot'
+import { botStore, botStoreActions, InteractionFlowSwitch } from '@/features/bot'
+import { getAvatarStyle } from '@/features/bot/utils'
 import { configStore, configStoreActions } from '@/features/portal-init'
-import { Channel, ChannelAccessType } from '@/graphql'
-import { Show, createMemo } from 'solid-js'
+import { ChannelAccessType } from '@/graphql'
+import { createMemo, Show } from 'solid-js'
 import { Divider } from '../../Divider'
 import { ChatHistory } from './ChatHistory'
 
@@ -82,7 +83,7 @@ export const DrawerMenu = () => {
 
       {/* HISTORY */}
       <div
-        class='brand-scroll-container flex grow overflow-y-auto  '
+        class='brand-scroll-container flex grow overflow-y-auto overflow-x-hidden '
         style={{
           opacity: configStore.isDrawerOpened ? 1 : 0,
           width: configStore.isDrawerOpened ? '100%' : '0',
@@ -92,10 +93,41 @@ export const DrawerMenu = () => {
       </div>
 
       <div class=''>
-        <Divider />
+        {/* Switch between CHAT and VOICE flow  */}
+        <Show when={configStore.isDrawerOpened}>
+          <div class=' animate-fade-in '>
+            <InteractionFlowSwitch onlyIcon />
+          </div>
+        </Show>
+
+        {/* <Switch>
+          <Match when={botStore.activeInteractionFlow === 'chat'}>
+            <div>
+              <MicrophoneIcon
+                class='cursor-pointer hover:bg-[var(--surfaceHoveredBackground)] rounded-3xl px-4 py-1 w-12 h-12'
+                onClick={() => {
+                  botStoreActions.setBotStore('activeInteractionFlow', 'voice')
+                }}
+              />
+            </div>
+          </Match>
+
+          <Match when={botStore.activeInteractionFlow === 'voice'}>
+            <div>
+              <MessageIcon
+                class='cursor-pointer hover:bg-[var(--surfaceHoveredBackground)] rounded-3xl px-4 py-1 w-12 h-12'
+                onClick={() => {
+                  botStoreActions.setBotStore('activeInteractionFlow', 'chat')
+                }}
+              />
+            </div>
+          </Match>
+        </Switch> */}
 
         {/* AVATAR BUTTON */}
         <Show when={hasWriteAccess()}>
+          <Divider />
+
           <div
             class='flex items-center gap-4 cursor-pointer hover:bg-[var(--surfaceHoveredBackground)] rounded-3xl px-4 py-1 '
             onClick={openKnowledgeBase}
@@ -106,9 +138,8 @@ export const DrawerMenu = () => {
             <div
               class={`w-9 h-9 rounded-full  border-white border transition`}
               style={{
-                'background-image':
-                  (botStore.activeChannel as Channel)?.avatar ||
-                  'linear-gradient(to right, #ed4264, #ffedbc)',
+                'background-image': getAvatarStyle(botStore.activeChannel?.avatar),
+                'background-size': 'contain',
               }}
             ></div>
 

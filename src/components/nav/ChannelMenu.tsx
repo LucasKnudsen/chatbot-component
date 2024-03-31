@@ -3,6 +3,7 @@ import { Show, createSignal } from 'solid-js'
 import { Menu, MenuItem, Popover, PopoverButton, PopoverPanel } from 'terracotta'
 
 import { botStore } from '@/features/bot'
+import { getAvatarStyle } from '@/features/bot/utils'
 import { configStore } from '@/features/portal-init'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import usePopper from 'solid-popper'
@@ -48,7 +49,8 @@ export const ChannelMenu = () => {
                 <span
                   class='w-6 h-6 rounded-full border border-[var(--onPrimary)]'
                   style={{
-                    background: botStore.activeChannel?.avatar || '',
+                    'background-size': 'contain',
+                    'background-image': getAvatarStyle(botStore.activeChannel?.avatar),
                   }}
                 ></span>
                 <span class='flex items-center gap-x-3.5 text-sm font-semibold text-[var(--primaryColor)]'>
