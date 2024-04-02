@@ -58,7 +58,7 @@ export async function flowiseMessageQuery(body: IncomingInput) {
       body: JSON.stringify({
         overrideConfig: {
           database,
-          tableName: `fraia_${(id as any).replaceAll('-', '_')}`,
+          tableName: `fraia_${(id as any).replaceAll('-', '_')}`, // This should be documented
           returnSourceDocuments: true,
         },
         chatflowid: botStore.activeChannel.chatflowId,
