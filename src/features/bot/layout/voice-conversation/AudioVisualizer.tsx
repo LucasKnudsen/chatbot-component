@@ -3,6 +3,8 @@ import { onMount } from 'solid-js'
 type Props = {
   color?: string | undefined
   source?: any
+  height?: number
+  width?: number
 }
 
 export const AudioVisualizer = (props: Props) => {
@@ -48,17 +50,17 @@ export const AudioVisualizer = (props: Props) => {
       // const WIDTH = (canvas.width = window.innerWidth)
       // const HEIGHT = (canvas.height = window.innerHeight)
 
-      const WIDTH = (canvas.width = 128)
-      const HEIGHT = (canvas.height = 128)
+      const WIDTH = (canvas.width = props.width || 128)
+      const HEIGHT = (canvas.height = props.height || 128)
 
-      const sliceWidth = (WIDTH * 1.0) / bufferLength
+      const sliceWidth = (WIDTH * 1) / bufferLength
 
       let x = 0
 
       ctx.fillStyle = 'transparent'
       ctx.fillRect(0, 0, WIDTH, HEIGHT)
 
-      ctx.lineWidth = 2
+      ctx.lineWidth = 1
       ctx.strokeStyle = props.color ?? '#fff'
       ctx.beginPath()
 

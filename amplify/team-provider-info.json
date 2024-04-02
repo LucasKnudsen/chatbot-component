@@ -204,7 +204,8 @@
         "textToSpeech": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
           "s3Key": "amplify-builds/textToSpeech-74713651686a4d746971-build.zip"
-        }
+        },
+        "createNewHub": {}
       },
       "hosting": {
         "amplifyhosting": {

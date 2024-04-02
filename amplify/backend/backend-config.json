@@ -560,22 +560,6 @@
         }
       ]
     },
-    "AMPLIFY_function_createNewHub_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "createNewHub"
-        }
-      ]
-    },
-    "AMPLIFY_function_createNewHub_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "createNewHub"
-        }
-      ]
-    },
     "AMPLIFY_function_detectLanguage_deploymentBucketName": {
       "usedBy": [
         {
@@ -769,14 +753,6 @@
       ]
     },
     "AMPLIFY_function_textToSpeech_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "textToSpeech"
-        }
-      ]
-    },
-    "AMPLIFY_function_textToSpeech_secretsPathAmplifyAppId": {
       "usedBy": [
         {
           "category": "function",

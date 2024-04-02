@@ -144,9 +144,11 @@ export const VoiceConversationView = () => {
                 <TypingBubble color='white' />
               </div>
             </Match>
-            <Match when={audioRecorder.isRecording()}>
+
+            {/* <Match when={audioRecorder.isRecording()}>
               <AudioVisualizer color={theme().primaryColor} />
-            </Match>
+            </Match> */}
+
             <Match when={isAnswering()}>
               <audio
                 ref={audioRef}
@@ -156,7 +158,12 @@ export const VoiceConversationView = () => {
                 class='hidden'
               ></audio>
               <div class='absolute inset-0'>
-                <AudioVisualizer source={audioRef} color={theme().onPrimary} />
+                <AudioVisualizer
+                  source={audioRef}
+                  color={theme().onPrimary}
+                  width={160}
+                  height={160}
+                />
               </div>
             </Match>
           </Switch>
