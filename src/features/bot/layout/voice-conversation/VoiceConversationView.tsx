@@ -132,7 +132,7 @@ export const VoiceConversationView = () => {
         <div class='relative flex flex-col justify-center items-center'>
           <div
             onClick={handleAvatarClick}
-            class={`relative w-32 h-32 rounded-full border-white border transition cursor-pointer overflow-hidden`}
+            class={`relative w-40 h-40 rounded-full border-white border transition cursor-pointer overflow-hidden`}
             style={{
               'background-size': 'contain',
               'background-image': getAvatarStyle(botStore.activeChannel?.avatar),

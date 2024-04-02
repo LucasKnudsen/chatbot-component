@@ -310,6 +310,38 @@
       "DependsOn": [
         "LambdaExecutionRole"
       ]
+    },
+    "CustomLambdaExecutionPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "custom-lambda-execution-policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": [
+                "ssm:GetParameter",
+                "ssm:GetParameters"
+              ],
+              "Resource": [
+                {
+                  "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/fraia-open-ai-key-1"
+                },
+                {
+                  "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/fraia-openai-org-1"
+                }
+              ],
+              "Effect": "Allow"
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ]
+      },
+      "DependsOn": "LambdaExecutionRole"
     }
   },
   "Outputs": {

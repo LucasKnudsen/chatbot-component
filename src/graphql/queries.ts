@@ -146,6 +146,16 @@ export const getChannel = /* GraphQL */ `query GetChannel($id: ID!) {
       prompt
       __typename
     }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
+      __typename
+    }
     isPublic
     createdAt
     updatedAt
@@ -176,6 +186,16 @@ export const listChannels = /* GraphQL */ `query ListChannels(
       initialPrompts {
         display
         prompt
+        __typename
+      }
+      overrideConfig {
+        chatflowId
+        apiHost
+        apiKey
+        topK
+        responsePrompt
+        rephrasePrompt
+        temperature
         __typename
       }
       isPublic
@@ -219,6 +239,16 @@ export const channelsByChatSpaceId = /* GraphQL */ `query ChannelsByChatSpaceId(
       initialPrompts {
         display
         prompt
+        __typename
+      }
+      overrideConfig {
+        chatflowId
+        apiHost
+        apiKey
+        topK
+        responsePrompt
+        rephrasePrompt
+        temperature
         __typename
       }
       isPublic
@@ -832,12 +862,12 @@ export const getUser = /* GraphQL */ `query GetUser($id: String!) {
     email
     cognitoId
     name
+    owner
     invitedOn
     joinedOn
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -863,12 +893,12 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       email
       cognitoId
       name
+      owner
       invitedOn
       joinedOn
       status
       createdAt
       updatedAt
-      owner
       __typename
     }
     nextToken
@@ -897,12 +927,12 @@ export const userByOrganizationId = /* GraphQL */ `query UserByOrganizationId(
       email
       cognitoId
       name
+      owner
       invitedOn
       joinedOn
       status
       createdAt
       updatedAt
-      owner
       __typename
     }
     nextToken
@@ -927,6 +957,16 @@ export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchCha
     initialPrompts {
       display
       prompt
+      __typename
+    }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
       __typename
     }
     isPublic

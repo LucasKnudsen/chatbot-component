@@ -11,12 +11,22 @@ type Channel @model @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }, { a
   description: String
 
   initialPrompts: [InitialPrompt!]
+  overrideConfig: OverrideConfig # For overriding the default config of Flowise
   isPublic: Boolean! @default(value: "false")
 }
 
 type InitialPrompt {
   display: String
   prompt: String!
+}
+
+type OverrideConfig {
+  chatflowId: String
+  apiHost: String
+  apiKey: String
+  topK: Int
+  responsePrompt: String
+  rephrasePrompt: String
 }
 
 type ChannelUserAccess @model @auth(rules: [{ allow: owner }]) {

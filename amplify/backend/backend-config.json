@@ -44,14 +44,6 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "detectLanguage"
-        },
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
           "resourceName": "handleUsers"
         },
         {
@@ -122,6 +114,14 @@
           ],
           "category": "function",
           "resourceName": "textToSpeech"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "detectLanguage"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -208,6 +208,27 @@
           ],
           "category": "storage",
           "resourceName": "fraiastorage"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "createNewHub": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fraiaauth"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "digitaltwin"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -446,6 +467,7 @@
     },
     "textToSpeech": {
       "build": true,
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -535,6 +557,22 @@
         {
           "category": "function",
           "resourceName": "combEvaluator"
+        }
+      ]
+    },
+    "AMPLIFY_function_createNewHub_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createNewHub"
+        }
+      ]
+    },
+    "AMPLIFY_function_createNewHub_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createNewHub"
         }
       ]
     },
@@ -731,6 +769,14 @@
       ]
     },
     "AMPLIFY_function_textToSpeech_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "textToSpeech"
+        }
+      ]
+    },
+    "AMPLIFY_function_textToSpeech_secretsPathAmplifyAppId": {
       "usedBy": [
         {
           "category": "function",

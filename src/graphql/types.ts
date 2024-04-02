@@ -160,12 +160,23 @@ export type CreateChannelInput = {
   avatar?: string | null,
   description?: string | null,
   initialPrompts?: Array< InitialPromptInput > | null,
+  overrideConfig?: OverrideConfigInput | null,
   isPublic: boolean,
 };
 
 export type InitialPromptInput = {
   display?: string | null,
   prompt: string,
+};
+
+export type OverrideConfigInput = {
+  chatflowId?: string | null,
+  apiHost?: string | null,
+  apiKey?: string | null,
+  topK?: number | null,
+  responsePrompt?: string | null,
+  rephrasePrompt?: string | null,
+  temperature?: number | null,
 };
 
 export type ModelChannelConditionInput = {
@@ -211,6 +222,7 @@ export type Channel = {
   avatar?: string | null,
   description?: string | null,
   initialPrompts?:  Array<InitialPrompt > | null,
+  overrideConfig?: OverrideConfig | null,
   isPublic: boolean,
   createdAt: string,
   updatedAt: string,
@@ -221,6 +233,17 @@ export type InitialPrompt = {
   __typename: "InitialPrompt",
   display?: string | null,
   prompt: string,
+};
+
+export type OverrideConfig = {
+  __typename: "OverrideConfig",
+  chatflowId?: string | null,
+  apiHost?: string | null,
+  apiKey?: string | null,
+  topK?: number | null,
+  responsePrompt?: string | null,
+  rephrasePrompt?: string | null,
+  temperature?: number | null,
 };
 
 export type UpdateChannelInput = {
@@ -234,6 +257,7 @@ export type UpdateChannelInput = {
   avatar?: string | null,
   description?: string | null,
   initialPrompts?: Array< InitialPromptInput > | null,
+  overrideConfig?: OverrideConfigInput | null,
   isPublic?: boolean | null,
 };
 
@@ -714,6 +738,7 @@ export type CreateUserInput = {
   email: string,
   cognitoId: string,
   name?: string | null,
+  owner: string,
   invitedOn?: string | null,
   joinedOn?: string | null,
   status?: UserStatus | null,
@@ -732,6 +757,7 @@ export type ModelUserConditionInput = {
   email?: ModelStringInput | null,
   cognitoId?: ModelStringInput | null,
   name?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
   invitedOn?: ModelStringInput | null,
   joinedOn?: ModelStringInput | null,
   status?: ModelUserStatusInput | null,
@@ -753,12 +779,12 @@ export type User = {
   email: string,
   cognitoId: string,
   name?: string | null,
+  owner: string,
   invitedOn?: string | null,
   joinedOn?: string | null,
   status?: UserStatus | null,
   createdAt: string,
   updatedAt: string,
-  owner?: string | null,
 };
 
 export type UpdateUserInput = {
@@ -768,6 +794,7 @@ export type UpdateUserInput = {
   email?: string | null,
   cognitoId?: string | null,
   name?: string | null,
+  owner?: string | null,
   invitedOn?: string | null,
   joinedOn?: string | null,
   status?: UserStatus | null,
@@ -813,6 +840,15 @@ export type HandleStorageInput = {
 export type HandleStorageOutput = {
   __typename: "HandleStorageOutput",
   signedUrls?: Array< string > | null,
+};
+
+export type HandleNewHubInput = {
+  flow: string,
+  adminId: string,
+  adminEmail: string,
+  organizationId: string,
+  chatSpaceId: string,
+  hostType: HostType,
 };
 
 export type ModelCodeItemPrimaryCompositeKeyConditionInput = {
@@ -1058,6 +1094,7 @@ export type ModelUserFilterInput = {
   email?: ModelStringInput | null,
   cognitoId?: ModelStringInput | null,
   name?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
   invitedOn?: ModelStringInput | null,
   joinedOn?: ModelStringInput | null,
   status?: ModelUserStatusInput | null,
@@ -1404,6 +1441,16 @@ export type CreateChannelMutation = {
       display?: string | null,
       prompt: string,
     } > | null,
+    overrideConfig?:  {
+      __typename: "OverrideConfig",
+      chatflowId?: string | null,
+      apiHost?: string | null,
+      apiKey?: string | null,
+      topK?: number | null,
+      responsePrompt?: string | null,
+      rephrasePrompt?: string | null,
+      temperature?: number | null,
+    } | null,
     isPublic: boolean,
     createdAt: string,
     updatedAt: string,
@@ -1433,6 +1480,16 @@ export type UpdateChannelMutation = {
       display?: string | null,
       prompt: string,
     } > | null,
+    overrideConfig?:  {
+      __typename: "OverrideConfig",
+      chatflowId?: string | null,
+      apiHost?: string | null,
+      apiKey?: string | null,
+      topK?: number | null,
+      responsePrompt?: string | null,
+      rephrasePrompt?: string | null,
+      temperature?: number | null,
+    } | null,
     isPublic: boolean,
     createdAt: string,
     updatedAt: string,
@@ -1462,6 +1519,16 @@ export type DeleteChannelMutation = {
       display?: string | null,
       prompt: string,
     } > | null,
+    overrideConfig?:  {
+      __typename: "OverrideConfig",
+      chatflowId?: string | null,
+      apiHost?: string | null,
+      apiKey?: string | null,
+      topK?: number | null,
+      responsePrompt?: string | null,
+      rephrasePrompt?: string | null,
+      temperature?: number | null,
+    } | null,
     isPublic: boolean,
     createdAt: string,
     updatedAt: string,
@@ -1975,12 +2042,12 @@ export type CreateUserMutation = {
     email: string,
     cognitoId: string,
     name?: string | null,
+    owner: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -1998,12 +2065,12 @@ export type UpdateUserMutation = {
     email: string,
     cognitoId: string,
     name?: string | null,
+    owner: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -2021,12 +2088,12 @@ export type DeleteUserMutation = {
     email: string,
     cognitoId: string,
     name?: string | null,
+    owner: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -2051,6 +2118,16 @@ export type HandleChannelsMutation = {
       display?: string | null,
       prompt: string,
     } > | null,
+    overrideConfig?:  {
+      __typename: "OverrideConfig",
+      chatflowId?: string | null,
+      apiHost?: string | null,
+      apiKey?: string | null,
+      topK?: number | null,
+      responsePrompt?: string | null,
+      rephrasePrompt?: string | null,
+      temperature?: number | null,
+    } | null,
     isPublic: boolean,
     createdAt: string,
     updatedAt: string,
@@ -2146,6 +2223,14 @@ export type IndexKnowledgeMutation = {
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type HandleNewHubMutationVariables = {
+  input: HandleNewHubInput,
+};
+
+export type HandleNewHubMutation = {
+  handleNewHub: string,
 };
 
 export type GetCodeItemQueryVariables = {
@@ -2265,6 +2350,16 @@ export type GetChannelQuery = {
       display?: string | null,
       prompt: string,
     } > | null,
+    overrideConfig?:  {
+      __typename: "OverrideConfig",
+      chatflowId?: string | null,
+      apiHost?: string | null,
+      apiKey?: string | null,
+      topK?: number | null,
+      responsePrompt?: string | null,
+      rephrasePrompt?: string | null,
+      temperature?: number | null,
+    } | null,
     isPublic: boolean,
     createdAt: string,
     updatedAt: string,
@@ -2297,6 +2392,16 @@ export type ListChannelsQuery = {
         display?: string | null,
         prompt: string,
       } > | null,
+      overrideConfig?:  {
+        __typename: "OverrideConfig",
+        chatflowId?: string | null,
+        apiHost?: string | null,
+        apiKey?: string | null,
+        topK?: number | null,
+        responsePrompt?: string | null,
+        rephrasePrompt?: string | null,
+        temperature?: number | null,
+      } | null,
       isPublic: boolean,
       createdAt: string,
       updatedAt: string,
@@ -2333,6 +2438,16 @@ export type ChannelsByChatSpaceIdQuery = {
         display?: string | null,
         prompt: string,
       } > | null,
+      overrideConfig?:  {
+        __typename: "OverrideConfig",
+        chatflowId?: string | null,
+        apiHost?: string | null,
+        apiKey?: string | null,
+        topK?: number | null,
+        responsePrompt?: string | null,
+        rephrasePrompt?: string | null,
+        temperature?: number | null,
+      } | null,
       isPublic: boolean,
       createdAt: string,
       updatedAt: string,
@@ -2889,12 +3004,12 @@ export type GetUserQuery = {
     email: string,
     cognitoId: string,
     name?: string | null,
+    owner: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -2917,12 +3032,12 @@ export type ListUsersQuery = {
       email: string,
       cognitoId: string,
       name?: string | null,
+      owner: string,
       invitedOn?: string | null,
       joinedOn?: string | null,
       status?: UserStatus | null,
       createdAt: string,
       updatedAt: string,
-      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2947,12 +3062,12 @@ export type UserByOrganizationIdQuery = {
       email: string,
       cognitoId: string,
       name?: string | null,
+      owner: string,
       invitedOn?: string | null,
       joinedOn?: string | null,
       status?: UserStatus | null,
       createdAt: string,
       updatedAt: string,
-      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2979,6 +3094,16 @@ export type FetchChannelsQuery = {
       display?: string | null,
       prompt: string,
     } > | null,
+    overrideConfig?:  {
+      __typename: "OverrideConfig",
+      chatflowId?: string | null,
+      apiHost?: string | null,
+      apiKey?: string | null,
+      topK?: number | null,
+      responsePrompt?: string | null,
+      rephrasePrompt?: string | null,
+      temperature?: number | null,
+    } | null,
     isPublic: boolean,
     createdAt: string,
     updatedAt: string,
@@ -3119,6 +3244,16 @@ export type OnCreateChannelSubscription = {
       display?: string | null,
       prompt: string,
     } > | null,
+    overrideConfig?:  {
+      __typename: "OverrideConfig",
+      chatflowId?: string | null,
+      apiHost?: string | null,
+      apiKey?: string | null,
+      topK?: number | null,
+      responsePrompt?: string | null,
+      rephrasePrompt?: string | null,
+      temperature?: number | null,
+    } | null,
     isPublic: boolean,
     createdAt: string,
     updatedAt: string,
@@ -3148,6 +3283,16 @@ export type OnUpdateChannelSubscription = {
       display?: string | null,
       prompt: string,
     } > | null,
+    overrideConfig?:  {
+      __typename: "OverrideConfig",
+      chatflowId?: string | null,
+      apiHost?: string | null,
+      apiKey?: string | null,
+      topK?: number | null,
+      responsePrompt?: string | null,
+      rephrasePrompt?: string | null,
+      temperature?: number | null,
+    } | null,
     isPublic: boolean,
     createdAt: string,
     updatedAt: string,
@@ -3177,6 +3322,16 @@ export type OnDeleteChannelSubscription = {
       display?: string | null,
       prompt: string,
     } > | null,
+    overrideConfig?:  {
+      __typename: "OverrideConfig",
+      chatflowId?: string | null,
+      apiHost?: string | null,
+      apiKey?: string | null,
+      topK?: number | null,
+      responsePrompt?: string | null,
+      rephrasePrompt?: string | null,
+      temperature?: number | null,
+    } | null,
     isPublic: boolean,
     createdAt: string,
     updatedAt: string,
@@ -3681,12 +3836,12 @@ export type OnCreateUserSubscription = {
     email: string,
     cognitoId: string,
     name?: string | null,
+    owner: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -3704,12 +3859,12 @@ export type OnUpdateUserSubscription = {
     email: string,
     cognitoId: string,
     name?: string | null,
+    owner: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -3727,12 +3882,12 @@ export type OnDeleteUserSubscription = {
     email: string,
     cognitoId: string,
     name?: string | null,
+    owner: string,
     invitedOn?: string | null,
     joinedOn?: string | null,
     status?: UserStatus | null,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 

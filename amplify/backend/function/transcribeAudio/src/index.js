@@ -45,62 +45,54 @@ exports.handler = void 0;
 var client_ssm_1 = require("@aws-sdk/client-ssm");
 var fs_1 = require("fs");
 var openai_1 = require("openai");
-var storage_1 = require("./storage");
+var promises_1 = require("fs/promises");
 var ssmClient = new client_ssm_1.SSMClient({ region: process.env.REGION });
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var responseStatus, responseBody, _a, s3Key, type, channelId, fileName, apiKey, openai, response, chunkDurations, fullTranscription_1, transcriptionPromises, transcriptions, s3TranscriptionKey, error_1;
-    var _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var responseBody, responseStatus, body, _a, apiKey, orgId, _b, _c, _d, openai, response, error_1;
+    var _e;
+    return __generator(this, function (_f) {
+        switch (_f.label) {
             case 0:
                 console.time('HANDLER');
                 responseStatus = 200;
-                _c.label = 1;
+                _f.label = 1;
             case 1:
-                _c.trys.push([1, 7, 8, 9]);
+                _f.trys.push([1, 7, 8, 9]);
                 !event.isMock && console.log("EVENT BODY: ".concat(event.body));
-                _a = JSON.parse(event.body || ''), s3Key = _a.s3Key, type = _a.type, channelId = _a.channelId, fileName = _a.fileName;
+                body = JSON.parse(event.body || '');
+                _c = (_b = Promise).all;
                 return [4 /*yield*/, getSecret('fraia-open-ai-key-1')];
             case 2:
-                apiKey = _c.sent();
+                _d = [
+                    _f.sent()
+                ];
+                return [4 /*yield*/, getSecret('fraia-openai-org-1')];
+            case 3: return [4 /*yield*/, _c.apply(_b, [_d.concat([
+                        _f.sent()
+                    ])])];
+            case 4:
+                _a = _f.sent(), apiKey = _a[0], orgId = _a[1];
                 if (!apiKey)
                     throw new TypeError('OPENAI_API_KEY_NOT_FOUND');
                 openai = new openai_1["default"]({
-                    organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
+                    organization: orgId,
                     apiKey: apiKey
                 });
+                return [4 /*yield*/, (0, promises_1.writeFile)('/tmp/tmp.webm', Buffer.from(body.base64Audio, 'base64'))];
+            case 5:
+                _f.sent();
                 return [4 /*yield*/, openai.audio.transcriptions.create({
-                        file: (0, fs_1.createReadStream)("tmp/test.mp3"),
+                        file: (0, fs_1.createReadStream)('/tmp/tmp.webm'),
                         model: 'whisper-1'
                     })];
-            case 3:
-                response = _c.sent();
-                console.log(response);
-                return [2 /*return*/];
-            case 4:
-                transcriptions = _c.sent();
-                transcriptions.forEach(function (t) {
-                    fullTranscription_1 += t.text;
-                });
-                return [4 /*yield*/, (0, storage_1.saveTextToS3)("_/".concat(channelId, "/transcriptions/").concat(fileName, "-").concat(new Date().toISOString()), fullTranscription_1)
-                    // Saves a record in DB to reference to the different documents.
-                ];
-            case 5:
-                s3TranscriptionKey = _c.sent();
-                // Saves a record in DB to reference to the different documents.
-                return [4 /*yield*/, (0, storage_1.createChannelDocumentRecord)({
-                        s3KeyRaw: s3Key,
-                        s3KeyTranscription: s3TranscriptionKey
-                    })];
             case 6:
-                // Saves a record in DB to reference to the different documents.
-                _c.sent();
-                responseBody = fullTranscription_1;
+                response = _f.sent();
+                responseBody = response.text;
                 return [3 /*break*/, 9];
             case 7:
-                error_1 = _c.sent();
+                error_1 = _f.sent();
                 console.error('DEFAULT ERROR', error_1);
-                responseStatus = ((_b = error_1.response) === null || _b === void 0 ? void 0 : _b.status) || 500;
+                responseStatus = ((_e = error_1.response) === null || _e === void 0 ? void 0 : _e.status) || 500;
                 responseBody = {
                     message: error_1.message || error_1,
                     status: responseStatus,

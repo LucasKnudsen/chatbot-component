@@ -38,6 +38,15 @@ type HandleStorageOutput {
   signedUrls: [String!]
 }
 
+input HandleNewHubInput {
+  flow: String!
+  adminId: String!
+  adminEmail: String!
+  organizationId: String!
+  chatSpaceId: String!
+  hostType: HostType!
+}
+
 type Mutation {
   publish2channel(sessionId: String!, data: AWSJSON!): SubscriptionEvent
     @function(name: "broadcastResolver-${env}")
@@ -62,4 +71,8 @@ type Mutation {
   indexKnowledge(input: AWSJSON!): ChannelDocument
     @function(name: "knowledgeIndexing-${env}")
     @auth(rules: [{ allow: private }])
+
+  handleNewHub(input: HandleNewHubInput!): String!
+    @function(name: "createNewHub-${env}")
+    @auth(rules: [{ allow: groups, groups: ["SuperAdmin"] }])
 }

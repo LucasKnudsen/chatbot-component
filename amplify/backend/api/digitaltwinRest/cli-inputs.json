@@ -8,23 +8,6 @@
         "setting": "open"
       }
     },
-    "/detect-language": {
-      "name": "/detect-language",
-      "lambdaFunction": "detectLanguage",
-      "permissions": {
-        "setting": "protected",
-        "auth": [
-          "create",
-          "read",
-          "update"
-        ],
-        "guest": [
-          "create",
-          "read",
-          "update"
-        ]
-      }
-    },
     "/users": {
       "name": "/users",
       "lambdaFunction": "handleUsers",
@@ -163,6 +146,64 @@
     "/ai/tts": {
       "name": "/ai/tts",
       "lambdaFunction": "textToSpeech",
+      "permissions": {
+        "setting": "protected",
+        "auth": [
+          "create",
+          "read",
+          "update"
+        ],
+        "guest": [
+          "create",
+          "read",
+          "update"
+        ],
+        "groups": {
+          "SuperAdmin": [
+            "create",
+            "read",
+            "update"
+          ],
+          "Admin": [
+            "create",
+            "read",
+            "update"
+          ]
+        }
+      }
+    },
+    "/ai/stt": {
+      "name": "/ai/stt",
+      "lambdaFunction": "transcribeAudio",
+      "permissions": {
+        "setting": "protected",
+        "auth": [
+          "create",
+          "read",
+          "update"
+        ],
+        "guest": [
+          "create",
+          "read",
+          "update"
+        ],
+        "groups": {
+          "SuperAdmin": [
+            "create",
+            "read",
+            "update"
+          ],
+          "Admin": [
+            "create",
+            "read",
+            "update"
+          ]
+        }
+      }
+    },
+    "/detect-language": {
+      "name": "/detect-language",
+      "lambdaFunction": "detectLanguage",
       "permissions": {
         "setting": "protected",
         "auth": [

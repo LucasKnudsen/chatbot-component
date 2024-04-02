@@ -1,4 +1,8 @@
 "use strict";
+/* Amplify Params - DO NOT EDIT
+    ENV
+    REGION
+Amplify Params - DO NOT EDIT */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,60 +43,39 @@ exports.__esModule = true;
 exports.handler = void 0;
 var openai_1 = require("openai");
 var client_ssm_1 = require("@aws-sdk/client-ssm");
+var fs_1 = require("fs");
+var promises_1 = require("fs/promises");
 var ssmClient = new client_ssm_1.SSMClient({ region: process.env.REGION });
 var handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var responseStatus, responseBody, body, apiKey, openai, audio, buffer, _a, _b, base64body, error_1;
-    var _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var responseStatus, responseBody, body, botResponse, error_1;
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 console.time('HANDLER');
                 responseStatus = 200;
-                _d.label = 1;
+                _b.label = 1;
             case 1:
-                _d.trys.push([1, 5, 6, 7]);
+                _b.trys.push([1, 3, 4, 5]);
                 !event.isMock && console.log(event.body);
                 body = JSON.parse(event.body || '');
-                return [4 /*yield*/, getSecret('fraia-open-ai-key-1')];
+                return [4 /*yield*/, elevenLabsTTS(body)];
             case 2:
-                apiKey = _d.sent();
-                if (!apiKey)
-                    throw new TypeError('OPENAI_API_KEY_NOT_FOUND');
-                openai = new openai_1["default"]({
-                    organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
-                    apiKey: apiKey
-                });
-                return [4 /*yield*/, openai.audio.speech.create({
-                        model: 'tts-1',
-                        voice: body.voice || 'nova',
-                        input: body.text
-                    })
-                    // if (event.isMock) {
-                    //   const buffer = Buffer.from(await audio.arrayBuffer())
-                    //   await writeFile('tmp/test.mp3', buffer)
-                    // }
-                ];
+                botResponse = _b.sent();
+                responseBody = botResponse;
+                return [3 /*break*/, 5];
             case 3:
-                audio = _d.sent();
-                _b = (_a = Buffer).from;
-                return [4 /*yield*/, audio.arrayBuffer()];
-            case 4:
-                buffer = _b.apply(_a, [_d.sent()]);
-                base64body = buffer.toString('base64');
-                responseBody = base64body;
-                return [3 /*break*/, 7];
-            case 5:
-                error_1 = _d.sent();
+                error_1 = _b.sent();
                 console.error('DEFAULT ERROR', error_1);
-                responseStatus = ((_c = error_1.response) === null || _c === void 0 ? void 0 : _c.status) || 500;
+                responseStatus = ((_a = error_1.response) === null || _a === void 0 ? void 0 : _a.status) || 500;
                 responseBody = {
                     message: error_1.message,
                     status: responseStatus,
                     type: error_1.type,
                     stack: error_1.stack
                 };
-                return [3 /*break*/, 7];
-            case 6:
+                return [3 /*break*/, 5];
+            case 4:
                 console.timeEnd('HANDLER');
                 return [2 /*return*/, {
                         statusCode: responseStatus,
@@ -104,7 +87,7 @@ var handler = function (event) { return __awaiter(void 0, void 0, void 0, functi
                             'Content-Type': 'audio/mp3'
                         }
                     }];
-            case 7: return [2 /*return*/];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
@@ -119,6 +102,88 @@ var getSecret = function (secretName) { return __awaiter(void 0, void 0, void 0,
             case 1:
                 Parameter = (_a.sent()).Parameter;
                 return [2 /*return*/, Parameter.Value];
+        }
+    });
+}); };
+var openAITTS = function (body) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, apiKey, orgId, _b, _c, _d, openai, response, audio, buffer, _e, _f, base64body;
+    return __generator(this, function (_g) {
+        switch (_g.label) {
+            case 0:
+                _c = (_b = Promise).all;
+                return [4 /*yield*/, getSecret('fraia-open-ai-key-1')];
+            case 1:
+                _d = [
+                    _g.sent()
+                ];
+                return [4 /*yield*/, getSecret('fraia-openai-org-1')];
+            case 2: return [4 /*yield*/, _c.apply(_b, [_d.concat([
+                        _g.sent()
+                    ])])];
+            case 3:
+                _a = _g.sent(), apiKey = _a[0], orgId = _a[1];
+                if (!apiKey)
+                    throw new TypeError('OPENAI_API_KEY_NOT_FOUND');
+                openai = new openai_1["default"]({
+                    organization: orgId,
+                    apiKey: apiKey
+                });
+                if (!(body.base64Audio && body.fileType)) return [3 /*break*/, 6];
+                return [4 /*yield*/, (0, promises_1.writeFile)('/tmp/tmp.webm', Buffer.from(body.base64Audio, 'base64'))];
+            case 4:
+                _g.sent();
+                return [4 /*yield*/, openai.audio.transcriptions.create({
+                        file: (0, fs_1.createReadStream)('/tmp/tmp.webm'),
+                        model: 'whisper-1'
+                    })];
+            case 5:
+                response = _g.sent();
+                body.text = response.text;
+                _g.label = 6;
+            case 6: return [4 /*yield*/, openai.audio.speech.create({
+                    model: 'tts-1',
+                    voice: body.voice || 'nova',
+                    input: body.text
+                })];
+            case 7:
+                audio = _g.sent();
+                _f = (_e = Buffer).from;
+                return [4 /*yield*/, audio.arrayBuffer()];
+            case 8:
+                buffer = _f.apply(_e, [_g.sent()]);
+                base64body = buffer.toString('base64');
+                return [2 /*return*/, base64body];
+        }
+    });
+}); };
+var elevenLabsTTS = function (body) { return __awaiter(void 0, void 0, void 0, function () {
+    var apiKey, voiceId, requestBody, options, audio, buffer, _a, _b, base64body;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0: return [4 /*yield*/, getSecret(process.env['elevenLabsAPI'])];
+            case 1:
+                apiKey = _c.sent();
+                voiceId = body.elevenLabsVoiceId || 'DyotsAaSDZ0tNCxwh6lH';
+                requestBody = {
+                    text: body.text
+                };
+                options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'xi-api-key': apiKey
+                    },
+                    body: JSON.stringify(requestBody)
+                };
+                return [4 /*yield*/, fetch("https://api.elevenlabs.io/v1/text-to-speech/".concat(voiceId), options)];
+            case 2:
+                audio = _c.sent();
+                _b = (_a = Buffer).from;
+                return [4 /*yield*/, audio.arrayBuffer()];
+            case 3:
+                buffer = _b.apply(_a, [_c.sent()]);
+                base64body = buffer.toString('base64');
+                return [2 /*return*/, base64body];
         }
     });
 }); };

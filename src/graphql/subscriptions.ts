@@ -138,6 +138,16 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
       prompt
       __typename
     }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
+      __typename
+    }
     isPublic
     createdAt
     updatedAt
@@ -168,6 +178,16 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
       prompt
       __typename
     }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
+      __typename
+    }
     isPublic
     createdAt
     updatedAt
@@ -196,6 +216,16 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
     initialPrompts {
       display
       prompt
+      __typename
+    }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
       __typename
     }
     isPublic
@@ -712,12 +742,12 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     email
     cognitoId
     name
+    owner
     invitedOn
     joinedOn
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -736,12 +766,12 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     email
     cognitoId
     name
+    owner
     invitedOn
     joinedOn
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -760,12 +790,12 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     email
     cognitoId
     name
+    owner
     invitedOn
     joinedOn
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }

@@ -131,12 +131,15 @@ const getSecret = async (secretName: string) => {
 }
 
 const initiateOpenAI = async () => {
-  const apiKey = await getSecret('fraia-open-ai-key-1')
+  const [apiKey, orgId] = await Promise.all([
+    await getSecret('fraia-open-ai-key-1'),
+    await getSecret('fraia-openai-org-1'),
+  ])
 
   if (!apiKey) throw new TypeError('OPENAI_API_KEY_NOT_FOUND')
 
   return new OpenAI({
-    organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
+    organization: orgId,
     apiKey,
   })
 }

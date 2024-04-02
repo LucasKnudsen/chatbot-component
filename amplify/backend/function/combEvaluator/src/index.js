@@ -181,16 +181,26 @@ var getSecret = function (secretName) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 var initiateOpenAI = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var apiKey;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, getSecret('fraia-open-ai-key-1')];
+    var _a, apiKey, orgId, _b, _c, _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
+            case 0:
+                _c = (_b = Promise).all;
+                return [4 /*yield*/, getSecret('fraia-open-ai-key-1')];
             case 1:
-                apiKey = _a.sent();
+                _d = [
+                    _e.sent()
+                ];
+                return [4 /*yield*/, getSecret('fraia-openai-org-1')];
+            case 2: return [4 /*yield*/, _c.apply(_b, [_d.concat([
+                        _e.sent()
+                    ])])];
+            case 3:
+                _a = _e.sent(), apiKey = _a[0], orgId = _a[1];
                 if (!apiKey)
                     throw new TypeError('OPENAI_API_KEY_NOT_FOUND');
                 return [2 /*return*/, new openai_1["default"]({
-                        organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
+                        organization: orgId,
                         apiKey: apiKey
                     })];
         }

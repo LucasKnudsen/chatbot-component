@@ -1,4 +1,8 @@
-type Organization @model @auth(rules: [{ allow: groups, groupsField: "admin" }]) {
+type Organization
+  @model
+  @auth(
+    rules: [{ allow: groups, groupsField: "admin" }, { allow: groups, groups: ["SuperAdmin"] }]
+  ) {
   id: ID!
   name: String!
 
@@ -8,7 +12,7 @@ type Organization @model @auth(rules: [{ allow: groups, groupsField: "admin" }])
   admin: String!
 }
 
-type User @model @auth(rules: [{ allow: owner }]) {
+type User @model @auth(rules: [{ allow: owner }, { allow: groups, groups: ["SuperAdmin"] }]) {
   id: String! @primaryKey
 
   organizationId: ID @index(name: "byOrganization", queryField: "userByOrganizationId")
@@ -18,6 +22,7 @@ type User @model @auth(rules: [{ allow: owner }]) {
   cognitoId: String!
   name: String
 
+  owner: String!
   invitedOn: AWSDateTime
   joinedOn: AWSDateTime
   status: UserStatus

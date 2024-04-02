@@ -9,16 +9,16 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { createReadStream } from 'fs'
 import OpenAI from 'openai'
 
-import { createChannelDocumentRecord, saveTextToS3 } from './storage'
+import { writeFile } from 'fs/promises'
 
 const ssmClient = new SSMClient({ region: process.env.REGION })
 
 type ParsedEventBody = {
   s3Key: string
-  type: string
+  fileType: string
   fileName: string
   channelId: string
-  base64?: string
+  base64Audio?: string
 }
 
 export const handler = async (
@@ -26,13 +26,13 @@ export const handler = async (
 ): Promise<APIGatewayProxyResult> => {
   console.time('HANDLER')
 
-  let responseStatus = 200
   let responseBody
+  let responseStatus = 200
 
   try {
     !event.isMock && console.log(`EVENT BODY: ${event.body}`)
 
-    const { s3Key, type, channelId, fileName } = JSON.parse(event.body || '') as ParsedEventBody
+    const body = JSON.parse(event.body || '') as ParsedEventBody
 
     // Get file from S3
     // Chunk file into 10 minute parts
@@ -42,53 +42,58 @@ export const handler = async (
     // Save to DynamoDB
     // Index in Brain
 
-    const apiKey = await getSecret('fraia-open-ai-key-1')
+    const [apiKey, orgId] = await Promise.all([
+      await getSecret('fraia-open-ai-key-1'),
+      await getSecret('fraia-openai-org-1'),
+    ])
 
     if (!apiKey) throw new TypeError('OPENAI_API_KEY_NOT_FOUND')
 
     const openai = new OpenAI({
-      organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
+      organization: orgId,
       apiKey,
     })
 
+    await writeFile('/tmp/tmp.webm', Buffer.from(body.base64Audio, 'base64'))
+
     const response = await openai.audio.transcriptions.create({
-      file: createReadStream(`tmp/test.mp3`),
+      file: createReadStream('/tmp/tmp.webm'),
       model: 'whisper-1',
     })
 
-    console.log(response)
+    responseBody = response.text
 
-    return
+    // return
 
-    const chunkDurations = 10 * 60 // 10 minutes
+    // const chunkDurations = 10 * 60 // 10 minutes
 
-    console.log('Successfully splits audio')
+    // console.log('Successfully splits audio')
 
-    console.log('Successfully initiated OpenAI')
+    // console.log('Successfully initiated OpenAI')
 
-    let fullTranscription = ''
-    const transcriptionPromises = []
-    // Builds promises to be fired asynchronously
+    // let fullTranscription = ''
+    // const transcriptionPromises = []
+    // // Builds promises to be fired asynchronously
 
-    const transcriptions = await Promise.all(transcriptionPromises)
+    // const transcriptions = await Promise.all(transcriptionPromises)
 
-    transcriptions.forEach((t) => {
-      fullTranscription += t.text
-    })
+    // transcriptions.forEach((t) => {
+    //   fullTranscription += t.text
+    // })
 
-    // Saves full transcription in S3
-    const s3TranscriptionKey = await saveTextToS3(
-      `_/${channelId}/transcriptions/${fileName}-${new Date().toISOString()}`,
-      fullTranscription
-    )
+    // // Saves full transcription in S3
+    // const s3TranscriptionKey = await saveTextToS3(
+    //   `_/${channelId}/transcriptions/${fileName}-${new Date().toISOString()}`,
+    //   fullTranscription
+    // )
 
-    // Saves a record in DB to reference to the different documents.
-    await createChannelDocumentRecord({
-      s3KeyRaw: s3Key,
-      s3KeyTranscription: s3TranscriptionKey,
-    })
+    // // Saves a record in DB to reference to the different documents.
+    // await createChannelDocumentRecord({
+    //   s3KeyRaw: s3Key,
+    //   s3KeyTranscription: s3TranscriptionKey,
+    // })
 
-    responseBody = fullTranscription
+    // responseBody = fullTranscription
   } catch (error: any) {
     console.error('DEFAULT ERROR', error)
 

@@ -213,20 +213,26 @@ var handleFlowiseRequest = function (body) { return __awaiter(void 0, void 0, vo
     });
 }); };
 var initiateOpenAI = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var secretName, apiKey;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a, apiKey, orgId, _b, _c, _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0:
-                secretName = process.env.openai_key;
-                if (!secretName)
-                    throw new TypeError('OPENAI_API_SECRET_NAME_NOT_FOUND');
-                return [4 /*yield*/, getSecret(secretName)];
+                _c = (_b = Promise).all;
+                return [4 /*yield*/, getSecret('fraia-open-ai-key-1')];
             case 1:
-                apiKey = _a.sent();
+                _d = [
+                    _e.sent()
+                ];
+                return [4 /*yield*/, getSecret('fraia-openai-org-1')];
+            case 2: return [4 /*yield*/, _c.apply(_b, [_d.concat([
+                        _e.sent()
+                    ])])];
+            case 3:
+                _a = _e.sent(), apiKey = _a[0], orgId = _a[1];
                 if (!apiKey)
                     throw new TypeError('OPENAI_API_KEY_NOT_FOUND');
                 return [2 /*return*/, new openai_1["default"]({
-                        organization: 'org-cdS1ohucS9d5A2uul80UYyxT',
+                        organization: orgId,
                         apiKey: apiKey
                     })];
         }

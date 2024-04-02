@@ -43,7 +43,7 @@ export async function sendMessageQuery(body: IncomingInput) {
 export async function flowiseMessageQuery(body: IncomingInput) {
   if (!botStore.activeChannel) throw new Error('No active channel')
 
-  const { apiHost, chatflowId, apiKey, id } = botStore.activeChannel
+  const { apiHost, chatflowId, apiKey, id, overrideConfig } = botStore.activeChannel
   const { database } = configStore.chatSpaceConfig
 
   try {
@@ -60,6 +60,10 @@ export async function flowiseMessageQuery(body: IncomingInput) {
           database,
           tableName: `fraia_${(id as any).replaceAll('-', '_')}`, // This should be documented
           returnSourceDocuments: true,
+
+          responsePrompt: overrideConfig?.responsePrompt || undefined,
+          topK: overrideConfig?.topK || 4,
+          rephrasePrompt: overrideConfig?.rephrasePrompt || undefined,
         },
         chatflowid: botStore.activeChannel.chatflowId,
         apiHost: botStore.activeChannel.apiHost,

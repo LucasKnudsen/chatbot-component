@@ -1,6 +1,6 @@
 {
   "isMock": true,
-  "body": "{\"promptCode\":\"question\",\"channelId\":\"0c7ab27e-8634-44cf-adab-0773f4249e10\",\"s3Key\":\"_/Lucas.txt\",\"question\":\"How old is Lucas\",\"history\":[],\"chatId\":\"1f5b2099-f133-4fdf-a83b-0aad0b30dfe5\",\"previousQuestions\":[\"Give me a detailed description of Lion Brain\",\"Hvor er i fra\",\"Hvad med Soft Design\"],\"language\":\"da\"}",
+  "body": "{\"promptCode\":\"suggestedPrompts\",\"channelId\":\"0c7ab27e-8634-44cf-adab-0773f4249e10\",\"s3Key\":\"_/Lucas.txt\",\"question\":\"How old is Lucas\",\"history\":[],\"chatId\":\"1f5b2099-f133-4fdf-a83b-0aad0b30dfe5\",\"previousQuestions\":[\"Give me a detailed description of Lion Brain\",\"Hvor er i fra\",\"Hvad med Soft Design\"],\"language\":\"da\"}",
   "resource": "/flowise/middleware",
   "path": "/flowise/middleware",
   "httpMethod": "POST",

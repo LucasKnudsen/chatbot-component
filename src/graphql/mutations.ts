@@ -161,6 +161,16 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
       prompt
       __typename
     }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
+      __typename
+    }
     isPublic
     createdAt
     updatedAt
@@ -191,6 +201,16 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
       prompt
       __typename
     }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
+      __typename
+    }
     isPublic
     createdAt
     updatedAt
@@ -219,6 +239,16 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
     initialPrompts {
       display
       prompt
+      __typename
+    }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
       __typename
     }
     isPublic
@@ -750,12 +780,12 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     email
     cognitoId
     name
+    owner
     invitedOn
     joinedOn
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -774,12 +804,12 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     email
     cognitoId
     name
+    owner
     invitedOn
     joinedOn
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -798,12 +828,12 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     email
     cognitoId
     name
+    owner
     invitedOn
     joinedOn
     status
     createdAt
     updatedAt
-    owner
     __typename
   }
 }
@@ -825,6 +855,16 @@ export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: Han
     initialPrompts {
       display
       prompt
+      __typename
+    }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
       __typename
     }
     isPublic
@@ -923,4 +963,11 @@ export const indexKnowledge = /* GraphQL */ `mutation IndexKnowledge($input: AWS
 ` as GeneratedMutation<
   APITypes.IndexKnowledgeMutationVariables,
   APITypes.IndexKnowledgeMutation
+>;
+export const handleNewHub = /* GraphQL */ `mutation HandleNewHub($input: HandleNewHubInput!) {
+  handleNewHub(input: $input)
+}
+` as GeneratedMutation<
+  APITypes.HandleNewHubMutationVariables,
+  APITypes.HandleNewHubMutation
 >;
