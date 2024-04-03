@@ -150,13 +150,6 @@ export const VoiceConversationView = () => {
             </Match> */}
 
             <Match when={isAnswering()}>
-              <audio
-                ref={audioRef}
-                controls
-                autoplay
-                crossorigin='anonymous'
-                class='hidden'
-              ></audio>
               <div class='absolute inset-0'>
                 <AudioVisualizer
                   source={audioRef}
