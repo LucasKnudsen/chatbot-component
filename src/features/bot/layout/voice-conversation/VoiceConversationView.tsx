@@ -20,7 +20,7 @@ export const VoiceConversationView = () => {
 
   const audioRecorder = createAudioRecorder({
     onStop(audioBlob) {
-      testAudio(audioBlob)
+      handleBotAnswer(audioBlob)
     },
   })
 
@@ -90,32 +90,32 @@ export const VoiceConversationView = () => {
     audioRef.play()
   }
 
-  const testAudio = async (props: any) => {
-    setIsThinking(true)
+  // const testAudio = async (props: any) => {
+  //   setIsThinking(true)
 
-    const audioBase64 = await API.post('digitaltwinRest', '/ai/tts', {
-      body: {
-        text: 'Yes, this is a test audio. I can speak, and I am audible',
-        voice: 'onyx',
-      },
-    })
+  //   const audioBase64 = await API.post('digitaltwinRest', '/ai/tts', {
+  //     body: {
+  //       text: 'Yes, this is a test audio. I can speak, and I am audible',
+  //       voice: 'onyx',
+  //     },
+  //   })
 
-    setIsThinking(false)
+  //   setIsThinking(false)
 
-    setIsAnswering(true)
+  //   setIsAnswering(true)
 
-    const audioSrc = `data:audio/mp3;base64,${audioBase64}`
-    audioRef.src = audioSrc
+  //   const audioSrc = `data:audio/mp3;base64,${audioBase64}`
+  //   audioRef.src = audioSrc
 
-    const onAudioEnded = () => {
-      setIsAnswering(false)
-      audioRef.removeEventListener('ended', onAudioEnded)
-    }
+  //   const onAudioEnded = () => {
+  //     setIsAnswering(false)
+  //     audioRef.removeEventListener('ended', onAudioEnded)
+  //   }
 
-    audioRef.addEventListener('ended', onAudioEnded)
+  //   audioRef.addEventListener('ended', onAudioEnded)
 
-    audioRef.play()
-  }
+  //   audioRef.play()
+  // }
 
   return (
     <div class='flex flex-col grow animate-fade-in'>
