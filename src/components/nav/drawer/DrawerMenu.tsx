@@ -1,8 +1,10 @@
+import { LoginScreen } from '@/features/authentication'
 import { botStore, botStoreActions, InteractionFlowSwitch } from '@/features/bot'
 import { getAvatarStyle } from '@/features/bot/utils'
 import { configStore, configStoreActions } from '@/features/portal-init'
 import { ChannelAccessType } from '@/graphql'
-import { createMemo, Show } from 'solid-js'
+import { createMemo, createSignal, Show } from 'solid-js'
+import { Dialog } from 'terracotta'
 import { Divider } from '../../Divider'
 import { ChatHistory } from './ChatHistory'
 
@@ -95,7 +97,7 @@ export const DrawerMenu = () => {
       <div class=''>
         {/* Switch between CHAT and VOICE flow  */}
         <Show when={configStore.isDrawerOpened}>
-          <div class=' animate-fade-in '>
+          <div class=' animate-fade-in py-1 flex justify-center '>
             <InteractionFlowSwitch onlyIcon />
           </div>
         </Show>
@@ -125,7 +127,7 @@ export const DrawerMenu = () => {
         </Switch> */}
 
         {/* AVATAR BUTTON */}
-        <Show when={hasWriteAccess()}>
+        <Show when={hasWriteAccess()} fallback={<LoginModal />}>
           <Divider />
 
           <div
@@ -156,5 +158,17 @@ export const DrawerMenu = () => {
         </Show>
       </div>
     </div>
+  )
+}
+
+const LoginModal = () => {
+  const [isOpen, setIsOpen] = createSignal(false)
+
+  return (
+    <>
+      <Dialog isOpen={isOpen()} onClose={() => setIsOpen(false)}>
+        <LoginScreen />
+      </Dialog>
+    </>
   )
 }

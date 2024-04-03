@@ -134,12 +134,12 @@
         "flowiseMiddleware": {
           "secretsPathAmplifyAppId": "d1i4jp82axmvxl",
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
-          "s3Key": "amplify-builds/flowiseMiddleware-3556492b30312b4a3763-build.zip"
+          "s3Key": "amplify-builds/flowiseMiddleware-3231736a65316a366e62-build.zip"
         },
         "transcribeAudio": {
           "secretsPathAmplifyAppId": "d1i4jp82axmvxl",
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
-          "s3Key": "amplify-builds/transcribeAudio-382f636246305268566a-build.zip"
+          "s3Key": "amplify-builds/transcribeAudio-6e725759703948665349-build.zip"
         },
         "broadcastResolver": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
@@ -147,7 +147,7 @@
         },
         "combEvaluator": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
-          "s3Key": "amplify-builds/combEvaluator-4967783067594249772b-build.zip"
+          "s3Key": "amplify-builds/combEvaluator-3870444d4c4d5032382b-build.zip"
         },
         "detectLanguage": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
@@ -203,7 +203,8 @@
         },
         "textToSpeech": {
           "deploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
-          "s3Key": "amplify-builds/textToSpeech-74713651686a4d746971-build.zip"
+          "s3Key": "amplify-builds/textToSpeech-4a4845767079714d704b-build.zip",
+          "secretsPathAmplifyAppId": "d1i4jp82axmvxl"
         },
         "createNewHub": {}
       },
