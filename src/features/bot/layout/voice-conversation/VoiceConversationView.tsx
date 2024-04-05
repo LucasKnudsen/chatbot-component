@@ -1,7 +1,6 @@
 import { TypingBubble } from '@/components'
 import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
 import { queryLLM } from '@/features/messages'
-import { useTheme } from '@/features/theme'
 import { createAudioRecorder } from '@/hooks'
 import { logDev } from '@/utils'
 import { API } from 'aws-amplify'
@@ -9,12 +8,10 @@ import { Match, Switch, createSignal } from 'solid-js'
 import { InteractionFlowSwitch } from '../../components'
 import { botStore } from '../../stores'
 import { getAvatarStyle } from '../../utils'
-import { AudioVisualizer } from './AudioVisualizer'
 
 export const VoiceConversationView = () => {
   const [isThinking, setIsThinking] = createSignal(false)
   const [isAnswering, setIsAnswering] = createSignal(false)
-  const { theme } = useTheme()
 
   let audioRef: any
 
@@ -32,6 +29,14 @@ export const VoiceConversationView = () => {
     }
 
     switch (true) {
+      case isThinking():
+        return
+
+      case isAnswering():
+        audioRef.pause()
+        setIsAnswering(false)
+        break
+
       case audioRecorder.isRecording():
         audioRecorder.stopRecording()
         break
@@ -122,7 +127,7 @@ export const VoiceConversationView = () => {
       <InteractionFlowSwitch />
 
       <div class='flex flex-col grow justify-center items-center gap-8'>
-        <div class='relative flex flex-col justify-center items-center'>
+        <div class='relative flex flex-col justify-center items-center hover:brightness-90 transition-all hover:scale-105'>
           <div
             onClick={handleAvatarClick}
             class={`relative w-40 h-40 rounded-full border-white border transition cursor-pointer overflow-hidden`}
@@ -131,6 +136,7 @@ export const VoiceConversationView = () => {
               'background-image': getAvatarStyle(botStore.activeChannel?.avatar),
             }}
           />
+
           <Switch>
             <Match when={isThinking()}>
               <div class='absolute'>
@@ -142,7 +148,7 @@ export const VoiceConversationView = () => {
               <AudioVisualizer color={theme().primaryColor} />
             </Match> */}
 
-            <Match when={isAnswering()}>
+            {/* <Match when={isAnswering()}>
               <div class='absolute inset-0'>
                 <AudioVisualizer
                   source={audioRef}
@@ -151,16 +157,18 @@ export const VoiceConversationView = () => {
                   height={160}
                 />
               </div>
-            </Match>
+            </Match> */}
           </Switch>
         </div>
 
         <p class='italic text-[var(--primaryColor)]'>
           <Switch>
             <Match when={isIdle()}>Click me to start talking</Match>
+
             <Match when={audioRecorder.isRecording()}>
               I'm listening... Click on me again when you're ready.
             </Match>
+
             <Match when={isThinking()}>Let me think...</Match>
           </Switch>
         </p>
