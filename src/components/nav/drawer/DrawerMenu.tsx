@@ -12,6 +12,7 @@ export const DrawerMenu = () => {
   const initiateNewChat = () => {
     botStoreActions.resetActiveChat()
     botStoreActions.setBotStore('isKnowledgeBaseOpen', false)
+    configStoreActions.setConfigStore('isDrawerOpened', false)
   }
 
   const hasWriteAccess = createMemo(() => {

@@ -19,16 +19,16 @@ export const BotMobileLayout = (props: BotMobileProps) => {
   const { text } = useText()
 
   return (
-    <div class='flex flex-col grow h-full overflow-hidden'>
+    <div data-testid='BotMobileLayout' class='flex flex-col h-full '>
       <Switch>
         {/* Interface for text chats */}
         <Match when={botStore.activeInteractionFlow === 'chat'}>
-          <div class='flex flex-col grow animate-fade-in'>
-            <div class='flex flex-col flex-1 overflow-hidden text-base pt-6'>
+          <div class='flex flex-col grow animate-fade-in max-lg:max-h-[calc(100vh-66px)]'>
+            <div class='flex flex-col grow overflow-hidden text-base pt-6'>
               <Show
                 when={botStore.activeChannel?.activeChat}
                 fallback={
-                  <div class='flex flex-col flex-1 justify-end px-6 '>
+                  <div class='flex flex-col  justify-end px-6 '>
                     <InteractionFlowSwitch />
 
                     <h1 class='text-4xl md:text-5xl max-w-md h-fit my-6 font-extralight tracking-wide leading-tight'>

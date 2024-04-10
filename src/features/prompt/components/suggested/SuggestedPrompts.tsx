@@ -3,8 +3,8 @@ import { botStore } from '@/features/bot'
 import { useText } from '@/features/text'
 import { useTheme } from '@/features/theme/hooks'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { For, Show } from 'solid-js'
-import { suggestedPromptsStore } from '../..'
+import { createEffect, For, Show } from 'solid-js'
+import { suggestedPromptsStore, suggestedPromptsStoreActions } from '../..'
 import { Prompt } from './Prompt'
 
 type Props = {
@@ -18,6 +18,11 @@ export const SuggestedPrompts = (props: Props) => {
   const { surfaceBackground, surfaceHoveredBackground } = theme()
 
   const { text } = useText()
+
+  createEffect(() => {
+    botStore.activeChannel?.activeChat?.question && suggestedPromptsStoreActions.clear()
+  })
+
   return (
     <>
       <style>

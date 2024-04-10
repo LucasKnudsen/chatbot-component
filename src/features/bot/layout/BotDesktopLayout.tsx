@@ -30,7 +30,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
   )
 
   return (
-    <div class='flex grow overflow-hidden py-10'>
+    <div class='flex grow overflow-hidden py-10 '>
       <Switch>
         {/* Interface for text chats */}
         <Match when={botStore.activeInteractionFlow === 'chat'}>
@@ -59,7 +59,7 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
             </div>
 
             {/* Suggested Prompt Container */}
-            <SuggestedPrompts handleSubmit={props.onSubmit} />
+            {botStore.activeAnswer && <SuggestedPrompts handleSubmit={props.onSubmit} />}
           </div>
 
           {/* Contextual Resources Sidebar */}

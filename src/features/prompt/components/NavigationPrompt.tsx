@@ -2,7 +2,7 @@ import { InitialPrompt } from '@/graphql/types'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 
 type PromptProps = {
-  prompt: InitialPrompt
+  prompt: Omit<InitialPrompt, '__typename'>
   onClick: (prompt: string) => void
   disabled?: boolean
   class?: string
@@ -16,13 +16,13 @@ export const NavigationPrompt = (props: PromptProps) => {
       return
     }
 
-    props.onClick(typeof props.prompt === 'string' ? props.prompt : props.prompt.prompt)
+    props.onClick(props.prompt.prompt)
   }
 
   return (
     <div
       class={
-        'navigation-prompt flex items-start bg-[var(--backgroundColor)]  bg-opacity-25 hover:bg-[var(--surfaceSoftBackground)] text-[var(--primaryColor)] border border-[var(--borderColor)] hover:border-[var(--primaryColor)] pl-3.5 py-3 lg:py-5 pr-5 rounded-[10px] font-light leading-[22px] transition-colors' +
+        'navigation-prompt flex items-start bg-[var(--backgroundColor)] bg-opacity-25 hover:bg-[var(--surfaceSoftBackground)] text-[var(--primaryColor)] border border-[var(--borderColor)] hover:border-[var(--primaryColor)] pl-3.5 py-3 lg:py-5 pr-5 rounded-[10px] font-light leading-[22px] transition-colors' +
         'max-lg:h-12 min-w-56 w-56 lg:min-w-80 lg:w-80 ' +
         props.class
       }
@@ -53,8 +53,9 @@ export const NavigationPrompt = (props: PromptProps) => {
           <path d='M16 17H8' />
         </svg>
       </span>
-      <span class='pl-5 -mt-1 max-lg:text-xs max-lg:line-clamp-2 '>
-        {typeof props.prompt === 'string' ? props.prompt : props.prompt.display}
+
+      <span class='pl-5 -mt-1 max-lg:text-xs max-lg:line-clamp-2 w-full '>
+        {props.prompt.display}
       </span>
     </div>
   )
