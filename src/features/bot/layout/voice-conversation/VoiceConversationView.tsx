@@ -74,7 +74,7 @@ export const VoiceConversationView = () => {
     const audioBase64 = await API.post('digitaltwinRest', '/ai/tts', {
       body: {
         text: textForTTS,
-        voice: 'onyx',
+        elevenLabsVoiceId: botStore.activeChannel?.overrideConfig?.elevenLabsVoiceId,
       },
     })
 

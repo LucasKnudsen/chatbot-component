@@ -169,6 +169,7 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
       responsePrompt
       rephrasePrompt
       temperature
+      elevenLabsVoiceId
       __typename
     }
     isPublic
@@ -209,6 +210,7 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
       responsePrompt
       rephrasePrompt
       temperature
+      elevenLabsVoiceId
       __typename
     }
     isPublic
@@ -249,6 +251,7 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
       responsePrompt
       rephrasePrompt
       temperature
+      elevenLabsVoiceId
       __typename
     }
     isPublic
@@ -865,6 +868,7 @@ export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: Han
       responsePrompt
       rephrasePrompt
       temperature
+      elevenLabsVoiceId
       __typename
     }
     isPublic

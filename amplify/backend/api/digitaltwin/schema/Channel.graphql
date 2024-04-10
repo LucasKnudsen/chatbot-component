@@ -27,6 +27,8 @@ type OverrideConfig {
   topK: Int
   responsePrompt: String
   rephrasePrompt: String
+  temperature: Int
+  elevenLabsVoiceId: String
 }
 
 type ChannelUserAccess @model @auth(rules: [{ allow: owner }]) {
