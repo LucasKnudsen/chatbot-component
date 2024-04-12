@@ -1,16 +1,23 @@
 import { botStore } from '@/features/bot'
 import { configStore, configStoreActions } from '@/features/portal-init'
+import { createMemo } from 'solid-js'
 import { Menu2Icon } from '../../icons'
+import { NAVIGATION_DRAWER_WIDTH_CLOSED, NAVIGATION_DRAWER_WIDTH_OPENED } from '../constants'
 import { DrawerMenu } from './DrawerMenu'
 
 export const DesktopDrawerContainer = () => {
+  const width = createMemo(() =>
+    configStore.isDrawerOpened ? NAVIGATION_DRAWER_WIDTH_OPENED : NAVIGATION_DRAWER_WIDTH_CLOSED
+  )
+
   return (
     <div
-      class={`flex flex-col w-full h-full  overflow-hidden  transition-all ]
+      class={`flex flex-col h-full  overflow-hidden  transition-all ]
               border-l border-[var(--borderColor)]
               `}
       style={{
-        width: botStore.activeChannel ? (configStore.isDrawerOpened ? '272px' : '82px') : '0',
+        width: width() || '0',
+        'min-width': width() || '0',
         'transition-duration': '0.25s',
         padding: botStore.activeChannel ? '0 20px' : '0',
       }}

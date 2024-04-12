@@ -32,10 +32,7 @@ export const Bot = () => {
   })
 
   return (
-    <div
-      data-testid='Bot'
-      class={`relative md:flex md:px-16 flex-1 overflow-hidden animate-fade-in max-lg:max-h-[calc(100vh-66px)]`}
-    >
+    <div data-testid='Bot' class={`relative flex grow lg:px-16 animate-fade-in overflow-hidden`}>
       <LoadingOverlay isLoading={initiatingLLMStream()} />
 
       <Switch>

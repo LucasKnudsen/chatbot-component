@@ -97,12 +97,12 @@ export const ChatWindow = () => {
   // ]
 
   return (
-    <>
+    <div data-testid='ChatWindow' class='flex flex-col grow overflow-hidden'>
       {/* Question */}
       <div class='flex justify-between px-6 md:px-0 pb-4'>
         <div
           data-testid='chatbot-question'
-          class='mb-1 text-lg md:text-2xl font-light flex flex-row gap-x-4 items-start animate-fade-in '
+          class='mb-1 text-lg md:text-2xl font-light flex gap-x-4 items-start animate-fade-in '
           style={{
             color: theme().textSecondary,
           }}
@@ -139,8 +139,8 @@ export const ChatWindow = () => {
       {/* Answer */}
       <div
         ref={chatWindowEl}
-        id='chat-window'
-        class='flex flex-1 py-4 flex-col overflow-y-scroll scrollable-container scroll-smooth relative gap-y-8'
+        data-id='ChatbotAnswerContainer'
+        class='flex py-4 flex-col  overflow-y-scroll scrollable-container scroll-smooth relative gap-y-8 w-full '
       >
         {/* Loading  */}
         <Show when={botStore.isAwaitingAnswer && !botStore.activeAnswer}>
@@ -149,9 +149,9 @@ export const ChatWindow = () => {
           </div>
         </Show>
 
-        {/* Chatbot answer  */}
+        {/* Chatbot text  */}
         <div
-          data-testid='chatbot-answer'
+          data-testid='ChatbotAnswer'
           ref={botMessageEl}
           class={'px-6 md:px-0 prose ' + (theme().isDark && 'prose-invert')}
         />
@@ -188,6 +188,6 @@ export const ChatWindow = () => {
           </div>
         </Show>
       </div>
-    </>
+    </div>
   )
 }

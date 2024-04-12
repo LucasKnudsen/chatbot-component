@@ -30,23 +30,26 @@ export const BotDesktopLayout = (props: BotDesktopProps) => {
   )
 
   return (
-    <div class='flex grow overflow-hidden py-10 '>
+    <div data-testid='BotDesktopLayout' class='flex grow overflow-hidden py-10 '>
       <Switch>
         {/* Interface for text chats */}
         <Match when={botStore.activeInteractionFlow === 'chat'}>
           {/* Main Container */}
           <div
-            class='flex flex-col flex-1 text-base animate-fade-in'
+            class='flex flex-col grow text-base animate-fade-in'
             style={{
               'padding-right': resourcesOpen() ? sidebarPaddingNum + 'px' : '0',
             }}
           >
-            <Show
-              when={botStore.activeChannel?.activeChat}
-              fallback={<InitialBotWindow onSubmit={props.onSubmit} />}
-            >
-              <ChatWindow />
-            </Show>
+            <Switch>
+              <Match when={botStore.activeChannel?.activeChat}>
+                <ChatWindow />
+              </Match>
+
+              <Match when={!botStore.activeChannel?.activeChat}>
+                <InitialBotWindow onSubmit={props.onSubmit} />
+              </Match>
+            </Switch>
 
             {/* Input Container */}
             <div class='pb-1 pt-5 '>
@@ -86,7 +89,7 @@ const InitialBotWindow = (props: { onSubmit: (question: string) => void }) => {
   const { text } = useText()
 
   return (
-    <div class='flex flex-1 overflow-hidden  mb-6 '>
+    <div data-testid='InitialBotWindow' class='flex grow overflow-hidden  mb-6 '>
       <div class='flex grow flex-col justify-end gap-4'>
         <InteractionFlowSwitch />
 

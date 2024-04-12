@@ -61,9 +61,9 @@ export const PortalInitializer = (props: ChatConfig) => {
             <Show when={configStore.isBotOpened}>
               <div
                 data-testid='PortalInitializer'
-                class='fixed top-0 left-0 flex flex-row flex-nowrap h-full w-full overflow-hidden animate-fade-in max-lg:max-h-screen'
+                class='fixed top-0 left-0 flex flex-nowrap h-full w-full overflow-hidden animate-fade-in '
               >
-                <div class='flex flex-col w-full h-full max-lg:max-h-screen'>
+                <div class='flex flex-col grow'>
                   <Nav />
 
                   <BotManager />

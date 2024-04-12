@@ -1,3 +1,4 @@
+import { BorderFade } from '@/components'
 import { Collapsible } from '@/components/Collapsible'
 import { ChatInput } from '@/components/inputs/chatInput'
 import { ChatWindow } from '@/features/messages'
@@ -19,19 +20,19 @@ export const BotMobileLayout = (props: BotMobileProps) => {
   const { text } = useText()
 
   return (
-    <div data-testid='BotMobileLayout' class='flex flex-col h-full '>
+    <div data-testid='BotMobileLayout' class='flex flex-col grow w-full overflow-hidden'>
       <Switch>
         {/* Interface for text chats */}
         <Match when={botStore.activeInteractionFlow === 'chat'}>
-          <div class='flex flex-col grow animate-fade-in max-lg:max-h-[calc(100vh-66px)]'>
-            <div class='flex flex-col grow overflow-hidden text-base pt-6'>
+          <div class='flex flex-col grow animate-fade-in overflow-hidden'>
+            <div class='flex flex-col grow text-base pt-6 overflow-hidden'>
               <Show
                 when={botStore.activeChannel?.activeChat}
                 fallback={
-                  <div class='flex flex-col  justify-end px-6 '>
+                  <div class='flex flex-col justify-end px-6 '>
                     <InteractionFlowSwitch />
 
-                    <h1 class='text-4xl md:text-5xl max-w-md h-fit my-6 font-extralight tracking-wide leading-tight'>
+                    <h1 class='text-4xl lg:text-5xl max-w-md h-fit my-6 font-extralight tracking-wide leading-tight'>
                       {botStore.activeHistory.length
                         ? text().returnWelcomeMessage
                         : text().welcomeMessage}
@@ -43,7 +44,9 @@ export const BotMobileLayout = (props: BotMobileProps) => {
               </Show>
             </div>
 
-            <div class='w-full pb-4 '>
+            <div class='relative flex flex-col w-full py-4 border-solid border-t-[1px] border-[var(--borderColor)] '>
+              <BorderFade height={40} />
+
               <div class='px-6'>
                 <ChatInput
                   rows={1}
@@ -54,10 +57,15 @@ export const BotMobileLayout = (props: BotMobileProps) => {
                 />
               </div>
 
-              <Show
-                when={botStore.activeChannel?.activeChat}
-                fallback={
-                  // Navigation prompts
+              {/* Bottom prompts  */}
+              <Switch>
+                <Match when={botStore.activeChannel?.activeChat}>
+                  <Collapsible open={isFocused()}>
+                    <SuggestedPrompts handleSubmit={props.onSubmit} />
+                  </Collapsible>
+                </Match>
+
+                <Match when={botStore.activeChannel?.initialPrompts?.length !== 0}>
                   <div class=''>
                     <p class='text-xs pl-6 py-4 font-semibold text-[var(--textSecondary)]'>
                       Navigation help
@@ -75,12 +83,8 @@ export const BotMobileLayout = (props: BotMobileProps) => {
                       </For>
                     </div>
                   </div>
-                }
-              >
-                <Collapsible open={isFocused()}>
-                  <SuggestedPrompts handleSubmit={props.onSubmit} />
-                </Collapsible>
-              </Show>
+                </Match>
+              </Switch>
             </div>
           </div>
         </Match>

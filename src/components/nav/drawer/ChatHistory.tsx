@@ -65,7 +65,7 @@ const HistorySection = (props: { title: string; chats: ChannelHistoryItem[] }) =
               <div>
                 <ChatMessageIcon class='w-5 h-5' />
               </div>
-              <span class='line-clamp-1'>{chat.question}</span>
+              <span class='line-clamp-2'>{chat.question}</span>
             </div>
           )}
         </For>
