@@ -12,12 +12,12 @@ export const DesktopDrawerContainer = () => {
 
   return (
     <div
-      class={`flex flex-col h-full  overflow-hidden  transition-all ]
+      class={`flex flex-col h-full overflow-hidden  transition-all ]
               border-l border-[var(--borderColor)]
               `}
       style={{
-        width: width() || '0',
-        'min-width': width() || '0',
+        width: width(),
+        'min-width': width(),
         'transition-duration': '0.25s',
         padding: botStore.activeChannel ? '0 20px' : '0',
       }}

@@ -25,7 +25,7 @@ export const BotMobileLayout = (props: BotMobileProps) => {
         {/* Interface for text chats */}
         <Match when={botStore.activeInteractionFlow === 'chat'}>
           <div class='flex flex-col grow animate-fade-in overflow-hidden'>
-            <div class='flex flex-col grow text-base pt-6 overflow-hidden'>
+            <div class=' flex flex-col grow text-base pt-6 overflow-hidden'>
               <Show
                 when={botStore.activeChannel?.activeChat}
                 fallback={
@@ -44,7 +44,7 @@ export const BotMobileLayout = (props: BotMobileProps) => {
               </Show>
             </div>
 
-            <div class='relative flex flex-col w-full py-4 border-solid border-t-[1px] border-[var(--borderColor)] '>
+            <div class='relative flex flex-col w-full py-4 border-solid border-t-[1px] border-[var(--borderColor)]'>
               <BorderFade height={40} />
 
               <div class='px-6'>

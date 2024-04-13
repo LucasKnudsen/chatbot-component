@@ -1,6 +1,6 @@
 import { createEffect, createMemo, For, on, Show } from 'solid-js'
 
-import { MessageIcon, TypingBubble } from '@/components'
+import { BorderFade, MessageIcon, TypingBubble } from '@/components'
 import { Divider } from '@/components/Divider'
 import { LinkIcon } from '@/components/icons/LinkIcon'
 import { botStore } from '@/features/bot'
@@ -99,7 +99,7 @@ export const ChatWindow = () => {
   return (
     <div data-testid='ChatWindow' class='flex flex-col grow overflow-hidden'>
       {/* Question */}
-      <div class='flex justify-between px-6 md:px-0 pb-4'>
+      <div class='relative flex justify-between px-6 md:px-0 pb-4'>
         <div
           data-testid='chatbot-question'
           class='mb-1 text-lg md:text-2xl font-light flex gap-x-4 items-start animate-fade-in '
@@ -113,6 +113,7 @@ export const ChatWindow = () => {
 
           <div class='overflow-y-auto max-h-24'>{botStore.activeChannel?.activeChat?.question}</div>
         </div>
+        <BorderFade height={40} position='bottom' />
 
         {/* <Settings>
           <For each={menuItems}>

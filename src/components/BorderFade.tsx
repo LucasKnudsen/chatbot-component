@@ -12,14 +12,16 @@ export const BorderFade = (props: {
   return (
     <div
       class='absolute w-full '
-      style={
-        props.position === 'top'
-          ? injectTopStyle(props.height ?? 24, props.endColor ?? theme().backgroundColor ?? 'white')
+      style={{
+        left: 0,
+        right: 0,
+        ...(props.position === 'top'
+          ? injectTopStyle(props.height ?? 40, props.endColor ?? theme().backgroundColor ?? 'white')
           : injectBottomStyle(
-              props.height ?? 24,
+              props.height ?? 40,
               props.endColor ?? theme().backgroundColor ?? 'white'
-            )
-      }
+            )),
+      }}
     />
   )
 }

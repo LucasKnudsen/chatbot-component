@@ -77,7 +77,7 @@ export const BotManager = () => {
       {/* Simplistic error handling */}
       <Match when={channelsQuery.error()}>
         <LayoutDefault>
-          <div class=' h-full flex flex-col justify-center  animate-fade-in gap-4'>
+          <div class='h-full flex flex-col justify-center  animate-fade-in gap-4'>
             <div class='text-lg  text-red-500 text-center'>
               <p class='mb-4'>Error: {parseError(channelsQuery.error())?.message}</p>
             </div>

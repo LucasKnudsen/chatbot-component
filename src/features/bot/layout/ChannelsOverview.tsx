@@ -41,7 +41,10 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
   })
 
   return (
-    <div class='flex flex-col h-screen overflow-y-auto py-[50px] sm:pt-16 sm:pb-10 px-[35px] md:px-[100px] animate-fade-in'>
+    <div
+      data-testid='ChannelsOverview'
+      class='h-screen w-screen overflow-y-auto py-[50px] sm:pt-16 sm:pb-10 px-[35px] md:px-[100px] animate-fade-in'
+    >
       <h1 class='text-4xl sm:text-[64px] sm:leading-[70px] font-light mb-[50px] max-w-[1016px] w-full'>
         Please choose the
         <br />
