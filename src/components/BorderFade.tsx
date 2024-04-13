@@ -11,7 +11,7 @@ export const BorderFade = (props: {
 
   return (
     <div
-      class='absolute w-full '
+      class='absolute w-full z-10 '
       style={{
         left: 0,
         right: 0,

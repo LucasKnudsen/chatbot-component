@@ -44,7 +44,12 @@ export const BotMobileLayout = (props: BotMobileProps) => {
               </Show>
             </div>
 
-            <div class='relative flex flex-col w-full py-4 border-solid border-t-[1px] border-[var(--borderColor)]'>
+            <div
+              class='relative flex flex-col w-full py-4 border-solid  border-[var(--borderColor)]'
+              style={{
+                'border-top-width': botStore.activeChannel?.activeChat ? '1px' : '0',
+              }}
+            >
               <BorderFade height={40} />
 
               <div class='px-6'>

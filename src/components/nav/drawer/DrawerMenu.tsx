@@ -1,3 +1,4 @@
+import { BorderFade } from '@/components/BorderFade'
 import { botStore, botStoreActions, InteractionFlowSwitch } from '@/features/bot'
 import { getAvatarStyle } from '@/features/bot/utils'
 import { configStore, configStoreActions } from '@/features/portal-init'
@@ -84,16 +85,20 @@ export const DrawerMenu = () => {
 
       {/* HISTORY */}
       <div
-        class='brand-scroll-container flex grow overflow-y-auto overflow-x-hidden '
+        class='brand-scroll-container flex flex-col grow overflow-y-auto overflow-x-hidden '
         style={{
           opacity: configStore.isDrawerOpened ? 1 : 0,
           width: configStore.isDrawerOpened ? '100%' : '0',
         }}
       >
         <ChatHistory />
+
+        <div class='min-h-8   w-full' />
       </div>
 
-      <div class=''>
+      <div class='relative'>
+        <BorderFade height={40} />
+
         {/* Switch between CHAT and VOICE flow  */}
         <Show when={configStore.isDrawerOpened}>
           <div class='animate-fade-in py-1 flex justify-center '>

@@ -1,6 +1,6 @@
 import { createEffect, createMemo, For, on, Show } from 'solid-js'
 
-import { BorderFade, MessageIcon, TypingBubble } from '@/components'
+import { MessageIcon, TypingBubble } from '@/components'
 import { Divider } from '@/components/Divider'
 import { LinkIcon } from '@/components/icons/LinkIcon'
 import { botStore } from '@/features/bot'
@@ -113,7 +113,7 @@ export const ChatWindow = () => {
 
           <div class='overflow-y-auto max-h-24'>{botStore.activeChannel?.activeChat?.question}</div>
         </div>
-        <BorderFade height={40} position='bottom' />
+        {/* <BorderFade height={32} position='bottom' /> */}
 
         {/* <Settings>
           <For each={menuItems}>
