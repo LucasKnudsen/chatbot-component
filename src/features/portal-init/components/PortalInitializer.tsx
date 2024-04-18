@@ -63,7 +63,7 @@ export const PortalInitializer = (props: ChatConfig) => {
                 data-testid='PortalInitializer'
                 class='fixed top-0 left-0 flex flex-nowrap h-full w-full overflow-hidden animate-fade-in '
               >
-                <div class='flex flex-col grow overflow-hidden'>
+                <div class='flex flex-col grow max-lg:overflow-hidden '>
                   <Nav />
 
                   <BotManager />

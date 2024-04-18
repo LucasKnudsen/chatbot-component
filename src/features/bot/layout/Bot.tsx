@@ -1,8 +1,7 @@
 import { LoadingOverlay } from '@/components'
 import { KnowledgeBaseDrawer } from '@/features/knowledge-base'
-import { clearLLMStream, initiatingLLMStream, queryLLM } from '@/features/messages'
+import { clearChannelConnection, initiatingLLMStream, queryLLM } from '@/features/messages'
 import { suggestedPromptsStoreActions } from '@/features/prompt'
-import { clearAllSubscriptionsOfType } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Match, Switch, createSignal, onCleanup, onMount } from 'solid-js'
 import { botStore } from '..'
@@ -27,8 +26,7 @@ export const Bot = () => {
   })
 
   onCleanup(() => {
-    clearAllSubscriptionsOfType('chat-listener')
-    clearLLMStream()
+    clearChannelConnection()
   })
 
   return (

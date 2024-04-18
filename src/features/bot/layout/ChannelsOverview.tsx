@@ -1,15 +1,13 @@
-import { Channel, ChannelUserAccess, ChatSpace } from '@/graphql'
+import { Channel, ChannelUserAccess } from '@/graphql'
 import { Show, onMount } from 'solid-js'
-import { botStoreActions, fetchChannelDetails } from '..'
 
 import { ArrowRightIcon } from '@/components/icons/ArrowRightIcon'
 import { Spinner } from '@/components/loaders'
 import { createMutation } from '@/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
-import { getAvatarStyle } from '../utils'
+import { getAvatarStyle, selectActiveChannel } from '../utils'
 
 type ChannelOverviewProps = {
-  chatSpace: ChatSpace
   channels: Channel[] | ChannelUserAccess[] | undefined
 }
 
@@ -67,7 +65,7 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
             class='flex flex-col sm:flex-row sm:grid sm:grid-cols-2 lg:flex lg:flex-nowrap gap-y-[30px] sm:gap-x-8 lg:gap-[50px] overflow-x-auto overflow-y-hidden brand-scroll-container pb-6'
           >
             {props.channels?.map((channel) => (
-              <ChannelItem channel={channel} isChatSpacePublic={props.chatSpace.isPublic} />
+              <ChannelItem channel={channel} />
             ))}
             <Show when={device() == 'tablet' || device() == 'mobile'}>
               <AddChannelItem />
@@ -109,23 +107,22 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
   )
 }
 
-const ChannelItem = (props: {
-  channel: Channel | ChannelUserAccess
-  isChatSpacePublic: boolean
-}) => {
+const ChannelItem = (props: { channel: Channel | ChannelUserAccess }) => {
   const channelDetailsMutation = createMutation({
-    mutationFn: async () => {
-      let _channel = props.channel as Channel
-
-      if (!props.isChatSpacePublic) {
-        _channel = await fetchChannelDetails((props.channel as ChannelUserAccess).channelId)
-      }
-
-      await botStoreActions.initBotStore(_channel, props.channel as ChannelUserAccess)
-
-      return _channel
-    },
+    mutationFn: async () => selectActiveChannel(props.channel),
   })
+
+  // const selectChannel = async () => {
+  //    let _channel = props.channel as Channel
+
+  //    if (!props.isChatSpacePublic) {
+  //      _channel = await fetchChannelDetails((props.channel as ChannelUserAccess).channelId)
+  //    }
+
+  //    await botStoreActions.initBotStore(_channel, props.channel as ChannelUserAccess)
+
+  //    return _channel
+  // }
 
   let ref: HTMLDivElement | undefined
 
@@ -134,8 +131,6 @@ const ChannelItem = (props: {
   // onMount(() => {
   //   setHeight(() => ref?.offsetHeight ?? (null as any))
   // })
-
-  console.log(props.channel)
 
   return (
     <div

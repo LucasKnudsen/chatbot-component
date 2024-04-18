@@ -94,10 +94,7 @@ export const BotManager = () => {
 
       {/* Overview over all the Channels  */}
       <Match when={Boolean(!botStore.activeChannel)}>
-        <ChannelsOverview
-          chatSpace={configStore.chatSpaceConfig}
-          channels={channelsQuery.data() || []}
-        />
+        <ChannelsOverview channels={channelsQuery.data() || []} />
       </Match>
     </Switch>
   )

@@ -1,4 +1,8 @@
+import { Channel, ChannelUserAccess } from '@/graphql'
 import { isValidURL } from '@/utils/isValidUrl'
+import { configStore } from '../portal-init'
+import { fetchChannelDetails } from './services'
+import { botStoreActions } from './stores'
 
 export const getAvatarStyle = (avatar?: string | null) => {
   if (!avatar) return 'linear-gradient(to right, #ed4264, #ffedbc)'
@@ -9,4 +13,17 @@ export const getAvatarStyle = (avatar?: string | null) => {
   } else if (avatar) {
     return avatar
   }
+}
+
+export const selectActiveChannel = async (channel: Channel | ChannelUserAccess) => {
+  const isChatSpacePublic = configStore.chatSpaceConfig.isPublic
+  let _channel = channel as Channel
+
+  if (!isChatSpacePublic) {
+    _channel = await fetchChannelDetails((channel as ChannelUserAccess).channelId)
+  }
+
+  await botStoreActions.initBotStore(_channel, channel as ChannelUserAccess)
+
+  return _channel
 }

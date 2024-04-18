@@ -3,7 +3,7 @@ import { botStore, botStoreActions, createHistoryRecord } from '@/features/bot'
 import { suggestedPromptsStoreActions } from '@/features/prompt'
 import { Channel } from '@/graphql'
 import { SubscriptionEvent } from '@/models'
-import { SubscriptionHelper, clearSubscription, logDev } from '@/utils'
+import { SubscriptionHelper, clearAllSubscriptionsOfType, clearSubscription, logDev } from '@/utils'
 import socketIOClient from 'socket.io-client'
 import {
   IncomingInput,
@@ -27,6 +27,7 @@ export const queryLLM = async (message: string) => {
 
   suggestedPromptsStoreActions.clear()
 
+  // Get the last 5 messages from the chat history
   const memory = botStore.activeHistory.slice(-5).flatMap((chat) => [
     { type: 'userMessage', message: chat.question },
     { type: 'apiMessage', message: chat.answer },
@@ -176,4 +177,9 @@ export const clearLLMStream = () => {
   }
 
   socket.disconnect()
+}
+
+export const clearChannelConnection = () => {
+  clearAllSubscriptionsOfType('chat-listener')
+  clearLLMStream()
 }

@@ -1,13 +1,14 @@
 import { Channel, ChannelUserAccess } from '@/graphql'
-import { Show, createSignal } from 'solid-js'
+import { For, Show, createMemo, createSignal } from 'solid-js'
 import { Menu, MenuItem, Popover, PopoverButton, PopoverPanel } from 'terracotta'
 
 import { botStore } from '@/features/bot'
-import { getAvatarStyle } from '@/features/bot/utils'
+import { getAvatarStyle, selectActiveChannel } from '@/features/bot/utils'
+import { clearChannelConnection } from '@/features/messages'
 import { configStore } from '@/features/portal-init'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import usePopper from 'solid-popper'
-import { Button, CheckIcon, ChevronIcon } from '..'
+import { Button, CheckIcon, ChevronIcon, Spinner } from '..'
 
 function Separator() {
   return (
@@ -20,6 +21,14 @@ function Separator() {
 export const ChannelMenu = () => {
   const [anchor, setAnchor] = createSignal<HTMLButtonElement>()
   const [popper, setPopper] = createSignal<HTMLDivElement>()
+
+  const unselectedChannels = createMemo(() => {
+    return configStore.channels?.filter(
+      (channel) =>
+        (channel as Channel).id !== botStore.activeChannel?.id &&
+        (channel as ChannelUserAccess).channelId !== botStore.activeChannel?.id
+    )
+  })
 
   const device = useMediaQuery()
 
@@ -41,11 +50,11 @@ export const ChannelMenu = () => {
 
   return (
     <Show when={configStore.chatSpaceConfig.isMultiChannel}>
-      <Popover defaultOpen={false} class=' flex items-center'>
-        {({ isOpen }) => (
+      <Popover defaultOpen={false} class='flex items-center'>
+        {({ isOpen, setState }) => (
           <>
             <PopoverButton ref={setAnchor}>
-              <div class='flex items-center gap-x-2.5'>
+              <div class='flex items-center gap-x-2.5 group'>
                 <span
                   class='w-6 h-6 rounded-full border border-[var(--onPrimary)]'
                   style={{
@@ -58,7 +67,7 @@ export const ChannelMenu = () => {
                   {device() !== 'mobile' && botStore.activeChannel?.name}
 
                   {/* Chevron  */}
-                  <ChevronIcon />
+                  <ChevronIcon class='transition-all -rotate-90 group-hover:rotate-0 duration-300' />
                 </span>
               </div>
             </PopoverButton>
@@ -83,25 +92,18 @@ export const ChannelMenu = () => {
                   </MenuItem>
 
                   <Separator />
+
                   <div class='space-y-2.5'>
-                    {configStore.channels
-                      ?.filter(
-                        (channel) =>
-                          (channel as Channel).id !== botStore.activeChannel?.id &&
-                          (channel as ChannelUserAccess).channelId !== botStore.activeChannel?.id
-                      )
-                      .map((channel) => (
-                        <MenuItem
-                          as='button'
-                          class='flex items-center text-[var(--primaryColor)] text-[14px] leading-[20px] font-medium w-full'
-                        >
-                          {(channel as Channel).name || (channel as ChannelUserAccess).channelName}
-                        </MenuItem>
-                      ))}
+                    <For each={unselectedChannels()}>
+                      {(channel) => (
+                        <UnselectedChannel channel={channel} closePopup={() => setState(false)} />
+                      )}
+                    </For>
                   </div>
+
                   <Separator />
 
-                  <Button class='w-full ' type='button' padding='6px 14px'>
+                  <Button class='w-full ' type='button' padding='6px 14px' disabled>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       width='20'
@@ -126,5 +128,36 @@ export const ChannelMenu = () => {
         )}
       </Popover>
     </Show>
+  )
+}
+
+const UnselectedChannel = (props: {
+  channel: Channel | ChannelUserAccess
+  closePopup: () => void
+}) => {
+  const [loading, setLoading] = createSignal(false)
+
+  const handleChannelChange = async () => {
+    setLoading(true)
+    clearChannelConnection()
+
+    await new Promise((resolve) => setTimeout(resolve, 250))
+
+    await selectActiveChannel(props.channel)
+    setLoading(false)
+    props.closePopup()
+  }
+  return (
+    <MenuItem
+      as='button'
+      onClick={() => handleChannelChange()}
+      class='flex items-center justify-between p-1 text-[var(--primaryColor)] text-[14px] leading-[20px] font-medium w-full rounded-[10px] hover:bg-[var(--surfaceBackground)] hover:pl-2 transition-all'
+    >
+      {(props.channel as Channel).name || (props.channel as ChannelUserAccess).channelName}
+
+      <Show when={loading()}>
+        <Spinner size={20} />
+      </Show>
+    </MenuItem>
   )
 }
