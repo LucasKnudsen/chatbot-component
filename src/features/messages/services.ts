@@ -27,8 +27,8 @@ export const queryLLM = async (message: string) => {
 
   suggestedPromptsStoreActions.clear()
 
-  // Get the last 5 messages from the chat history
-  const memory = botStore.activeHistory.slice(-5).flatMap((chat) => [
+  // Get the last 20 messages from the chat history
+  const memory = botStore.activeHistory.slice(-15).flatMap((chat) => [
     { type: 'userMessage', message: chat.question },
     { type: 'apiMessage', message: chat.answer },
   ]) as { type: 'apiMessage' | 'userMessage'; message: string }[]
