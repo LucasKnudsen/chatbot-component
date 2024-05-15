@@ -10,9 +10,9 @@ import {
   LLMStreamId,
   LLMStreamSocket,
   PromptCode,
-  flowiseMessageQuery,
   isInitiatingLLMStream,
   isStreamAvailableQuery,
+  sendMessageQuery,
   setLLMStreamSocket,
   setLLMStreamingId,
 } from '.'
@@ -27,7 +27,7 @@ export const queryLLM = async (message: string) => {
 
   suggestedPromptsStoreActions.clear()
 
-  // Get the last 20 messages from the chat history
+  // Get the last 15 messages from the chat history
   const memory = botStore.activeHistory.slice(-15).flatMap((chat) => [
     { type: 'userMessage', message: chat.question },
     { type: 'apiMessage', message: chat.answer },
@@ -46,7 +46,7 @@ export const queryLLM = async (message: string) => {
 
   // Fires without waiting for response, as the response is handled by a socket connection
   const [flowiseResponse] = await Promise.allSettled([
-    flowiseMessageQuery(body),
+    sendMessageQuery(body),
     // detectLanguage(message, true),
   ])
 
@@ -58,8 +58,7 @@ export const queryLLM = async (message: string) => {
     createHistoryRecord(botStore.activeChannel?.activeChat!)
   }, 500)
 
-  const text =
-    flowiseResponse.status === 'fulfilled' ? (await flowiseResponse.value?.json()).text : null
+  const text = flowiseResponse.status === 'fulfilled' ? flowiseResponse.value : null
 
   return text
 }

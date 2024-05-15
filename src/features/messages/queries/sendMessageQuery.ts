@@ -1,3 +1,4 @@
+import { PROMPT_IDS } from '@/constants/ai/prompting'
 import { botStore } from '@/features/bot'
 import { configStore } from '@/features/portal-init'
 import { sendRequest } from '@/utils/index'
@@ -27,13 +28,24 @@ export type IncomingInput = {
 }
 
 export async function sendMessageQuery(body: IncomingInput) {
+  if (!botStore.activeChannel) throw new Error('No active channel')
+
+  const { id } = botStore.activeChannel
+  const { database } = configStore.chatSpaceConfig
+
   try {
-    const answer = await API.post('digitaltwinRest', '/flowise/middleware', {
-      body,
-    })
+    const response = (await API.post('digitaltwinRest', '/ai/llm', {
+      body: {
+        knowledgeBaseId: id,
+        promptId: PROMPT_IDS.DEFAULT_RESPONSE,
+        database,
+
+        ...body,
+      },
+    })) as { text: string }
 
     return {
-      data: answer,
+      data: response.text,
     }
   } catch (error) {
     return { error: error as Error }

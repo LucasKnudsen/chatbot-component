@@ -1,0 +1,726 @@
+# this is an auto generated file. This will be overwritten
+
+subscription OnCreateCodeItem($filter: ModelSubscriptionCodeItemFilterInput) {
+  onCreateCodeItem(filter: $filter) {
+    tenantCode
+    tableCode
+    itemCode
+    internalName
+    internalDescription
+    isEditable
+    isActive
+    isDisplayed
+    isExtended
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnUpdateCodeItem($filter: ModelSubscriptionCodeItemFilterInput) {
+  onUpdateCodeItem(filter: $filter) {
+    tenantCode
+    tableCode
+    itemCode
+    internalName
+    internalDescription
+    isEditable
+    isActive
+    isDisplayed
+    isExtended
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnDeleteCodeItem($filter: ModelSubscriptionCodeItemFilterInput) {
+  onDeleteCodeItem(filter: $filter) {
+    tenantCode
+    tableCode
+    itemCode
+    internalName
+    internalDescription
+    isEditable
+    isActive
+    isDisplayed
+    isExtended
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnCreateLanguageItem(
+  $filter: ModelSubscriptionLanguageItemFilterInput
+) {
+  onCreateLanguageItem(filter: $filter) {
+    languageCode
+    tableCode
+    itemCode
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnUpdateLanguageItem(
+  $filter: ModelSubscriptionLanguageItemFilterInput
+) {
+  onUpdateLanguageItem(filter: $filter) {
+    languageCode
+    tableCode
+    itemCode
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnDeleteLanguageItem(
+  $filter: ModelSubscriptionLanguageItemFilterInput
+) {
+  onDeleteLanguageItem(filter: $filter) {
+    languageCode
+    tableCode
+    itemCode
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnCreateChannel(
+  $filter: ModelSubscriptionChannelFilterInput
+  $owner: String
+) {
+  onCreateChannel(filter: $filter, owner: $owner) {
+    id
+    chatSpaceId
+    apiHost
+    chatflowId
+    apiKey
+    name
+    subtitle
+    avatar
+    description
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
+      elevenLabsVoiceId
+      __typename
+    }
+    isPublic
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+subscription OnUpdateChannel(
+  $filter: ModelSubscriptionChannelFilterInput
+  $owner: String
+) {
+  onUpdateChannel(filter: $filter, owner: $owner) {
+    id
+    chatSpaceId
+    apiHost
+    chatflowId
+    apiKey
+    name
+    subtitle
+    avatar
+    description
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
+      elevenLabsVoiceId
+      __typename
+    }
+    isPublic
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+subscription OnDeleteChannel(
+  $filter: ModelSubscriptionChannelFilterInput
+  $owner: String
+) {
+  onDeleteChannel(filter: $filter, owner: $owner) {
+    id
+    chatSpaceId
+    apiHost
+    chatflowId
+    apiKey
+    name
+    subtitle
+    avatar
+    description
+    initialPrompts {
+      display
+      prompt
+      __typename
+    }
+    overrideConfig {
+      chatflowId
+      apiHost
+      apiKey
+      topK
+      responsePrompt
+      rephrasePrompt
+      temperature
+      elevenLabsVoiceId
+      __typename
+    }
+    isPublic
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+subscription OnCreateChannelUserAccess(
+  $filter: ModelSubscriptionChannelUserAccessFilterInput
+  $owner: String
+) {
+  onCreateChannelUserAccess(filter: $filter, owner: $owner) {
+    accessId
+    channelId
+    chatSpaceId
+    channelHostId
+    channelHostType
+    accessType
+    channelName
+    channelDescription
+    channelSubtitle
+    channelAvatar
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+subscription OnUpdateChannelUserAccess(
+  $filter: ModelSubscriptionChannelUserAccessFilterInput
+  $owner: String
+) {
+  onUpdateChannelUserAccess(filter: $filter, owner: $owner) {
+    accessId
+    channelId
+    chatSpaceId
+    channelHostId
+    channelHostType
+    accessType
+    channelName
+    channelDescription
+    channelSubtitle
+    channelAvatar
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+subscription OnDeleteChannelUserAccess(
+  $filter: ModelSubscriptionChannelUserAccessFilterInput
+  $owner: String
+) {
+  onDeleteChannelUserAccess(filter: $filter, owner: $owner) {
+    accessId
+    channelId
+    chatSpaceId
+    channelHostId
+    channelHostType
+    accessType
+    channelName
+    channelDescription
+    channelSubtitle
+    channelAvatar
+    createdAt
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+subscription OnCreateChannelDocument(
+  $filter: ModelSubscriptionChannelDocumentFilterInput
+) {
+  onCreateChannelDocument(filter: $filter) {
+    channelId
+    id
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
+    fileName
+    fileType
+    fileSuffix
+    fileSize
+    uploadedBy
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnUpdateChannelDocument(
+  $filter: ModelSubscriptionChannelDocumentFilterInput
+) {
+  onUpdateChannelDocument(filter: $filter) {
+    channelId
+    id
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
+    fileName
+    fileType
+    fileSuffix
+    fileSize
+    uploadedBy
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnDeleteChannelDocument(
+  $filter: ModelSubscriptionChannelDocumentFilterInput
+) {
+  onDeleteChannelDocument(filter: $filter) {
+    channelId
+    id
+    title
+    s3KeyRawText
+    s3KeyOriginal
+    description
+    includeInLibrary
+    documentType
+    source
+    fileName
+    fileType
+    fileSuffix
+    fileSize
+    uploadedBy
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnCreateChannelHistoryItem(
+  $filter: ModelSubscriptionChannelHistoryItemFilterInput
+  $owner: String
+) {
+  onCreateChannelHistoryItem(filter: $filter, owner: $owner) {
+    ownerId
+    channelId
+    timestamp
+    question
+    answer
+    resources {
+      id
+      source
+      type
+      value
+      header
+      description
+      thumbnail
+      __typename
+    }
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+subscription OnUpdateChannelHistoryItem(
+  $filter: ModelSubscriptionChannelHistoryItemFilterInput
+  $owner: String
+) {
+  onUpdateChannelHistoryItem(filter: $filter, owner: $owner) {
+    ownerId
+    channelId
+    timestamp
+    question
+    answer
+    resources {
+      id
+      source
+      type
+      value
+      header
+      description
+      thumbnail
+      __typename
+    }
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+subscription OnDeleteChannelHistoryItem(
+  $filter: ModelSubscriptionChannelHistoryItemFilterInput
+  $owner: String
+) {
+  onDeleteChannelHistoryItem(filter: $filter, owner: $owner) {
+    ownerId
+    channelId
+    timestamp
+    question
+    answer
+    resources {
+      id
+      source
+      type
+      value
+      header
+      description
+      thumbnail
+      __typename
+    }
+    updatedAt
+    owner
+    __typename
+  }
+}
+
+subscription OnCreateChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
+  onCreateChatSpace(filter: $filter) {
+    id
+    hostId
+    hostType
+    name
+    isPublic
+    isMultiChannel
+    defaultChannelId
+    themeId
+    defaultLanguage
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      errorColor
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      backgroundOverlay
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceSoftBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
+      __typename
+    }
+    admin
+    database
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnUpdateChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
+  onUpdateChatSpace(filter: $filter) {
+    id
+    hostId
+    hostType
+    name
+    isPublic
+    isMultiChannel
+    defaultChannelId
+    themeId
+    defaultLanguage
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      errorColor
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      backgroundOverlay
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceSoftBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
+      __typename
+    }
+    admin
+    database
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnDeleteChatSpace($filter: ModelSubscriptionChatSpaceFilterInput) {
+  onDeleteChatSpace(filter: $filter) {
+    id
+    hostId
+    hostType
+    name
+    isPublic
+    isMultiChannel
+    defaultChannelId
+    themeId
+    defaultLanguage
+    theme {
+      isDark
+      navbarLogoUrl
+      primaryColor
+      primaryAccent
+      textColor
+      textSecondary
+      onPrimary
+      errorColor
+      backgroundColor
+      backgroundAccent
+      backgroundImageUrl
+      backgroundOverlay
+      bubbleButtonColor
+      bubbleButtonLogoUrl
+      drawerBackground
+      borderColor
+      textInputTextColor
+      textInputBackgroundColor
+      surfaceBackground
+      surfaceSoftBackground
+      surfaceHoveredBackground
+      __typename
+    }
+    text {
+      welcomeMessage
+      returnWelcomeMessage
+      brandName
+      inputPlaceholder
+      suggestedPromptsTitle
+      viewMedia
+      close
+      copyText
+      copyTextSuccess
+      share
+      historyTabTitle
+      navigationTabTitle
+      today
+      yesterday
+      previous
+      noHistory
+      __typename
+    }
+    admin
+    database
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnCreateOrganization(
+  $filter: ModelSubscriptionOrganizationFilterInput
+) {
+  onCreateOrganization(filter: $filter) {
+    id
+    name
+    logo
+    email
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnUpdateOrganization(
+  $filter: ModelSubscriptionOrganizationFilterInput
+) {
+  onUpdateOrganization(filter: $filter) {
+    id
+    name
+    logo
+    email
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnDeleteOrganization(
+  $filter: ModelSubscriptionOrganizationFilterInput
+) {
+  onDeleteOrganization(filter: $filter) {
+    id
+    name
+    logo
+    email
+    admin
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnCreateUser(
+  $filter: ModelSubscriptionUserFilterInput
+  $owner: String
+) {
+  onCreateUser(filter: $filter, owner: $owner) {
+    id
+    organizationId
+    chatSpaceId
+    email
+    cognitoId
+    name
+    owner
+    invitedOn
+    joinedOn
+    status
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnUpdateUser(
+  $filter: ModelSubscriptionUserFilterInput
+  $owner: String
+) {
+  onUpdateUser(filter: $filter, owner: $owner) {
+    id
+    organizationId
+    chatSpaceId
+    email
+    cognitoId
+    name
+    owner
+    invitedOn
+    joinedOn
+    status
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnDeleteUser(
+  $filter: ModelSubscriptionUserFilterInput
+  $owner: String
+) {
+  onDeleteUser(filter: $filter, owner: $owner) {
+    id
+    organizationId
+    chatSpaceId
+    email
+    cognitoId
+    name
+    owner
+    invitedOn
+    joinedOn
+    status
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription Subscribe2channel($sessionId: String!) {
+  subscribe2channel(sessionId: $sessionId) {
+    sessionId
+    data
+    __typename
+  }
+}

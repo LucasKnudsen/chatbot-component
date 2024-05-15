@@ -1,6 +1,0 @@
-[
-  {
-    "Action": ["comprehend:DetectDominantLanguage"],
-    "Resource": ["*"]
-  }
-]
