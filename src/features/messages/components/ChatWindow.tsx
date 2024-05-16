@@ -6,6 +6,7 @@ import { LinkIcon } from '@/components/icons/LinkIcon'
 import { botStore } from '@/features/bot'
 import { Fact } from '@/features/contextual/components/Fact'
 import { LinkInline } from '@/features/contextual/components/LinkInline'
+import { suggestedPromptsStoreActions } from '@/features/prompt'
 import { useTheme } from '@/features/theme/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Marked } from '@ts-stack/markdown'
@@ -108,7 +109,14 @@ export const ChatWindow = () => {
           }}
         >
           <div>
-            <MessageIcon width={30} color={theme().primaryColor} />
+            <MessageIcon
+              onClick={() => {
+                console.log('Clicked')
+                suggestedPromptsStoreActions.fetch()
+              }}
+              width={30}
+              color={theme().primaryColor}
+            />
           </div>
 
           <div class='overflow-y-auto max-h-24'>{botStore.activeChannel?.activeChat?.question}</div>

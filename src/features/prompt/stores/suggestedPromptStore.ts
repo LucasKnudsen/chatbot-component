@@ -1,10 +1,7 @@
 import { botStore, currentLanguage } from '@/features/bot'
-import {
-  IncomingInput,
-  PromptCode,
-  extractChatbotResponse,
-  sendMessageQuery,
-} from '@/features/messages'
+import { IncomingInput, PromptCode, extractChatbotResponse } from '@/features/messages'
+import { logDev } from '@/utils'
+import { API } from 'aws-amplify'
 import { createStore } from 'solid-js/store'
 import { extractSuggestedPrompts } from '../utils'
 
@@ -47,14 +44,22 @@ const fetch = async (language?: string) => {
   }
 
   setSuggestedPromptsStore({ isFetching: true })
-  const response = await sendMessageQuery(body)
-  setSuggestedPromptsStore({ isFetching: false })
 
-  if (response.data) {
-    const text = extractChatbotResponse(response.data)
-    const newPrompts = extractSuggestedPrompts(text)
+  try {
+    const response = await API.post('digitaltwinRest', '/flowise/middleware', {
+      body,
+    })
 
-    setSuggestedPromptsStore({ prompts: newPrompts })
+    if (response) {
+      const text = extractChatbotResponse(response)
+      const newPrompts = extractSuggestedPrompts(text)
+
+      setSuggestedPromptsStore({ prompts: newPrompts })
+    }
+  } catch (error) {
+    logDev('Error fetching suggested prompts', error)
+  } finally {
+    setSuggestedPromptsStore({ isFetching: false })
   }
 }
 
