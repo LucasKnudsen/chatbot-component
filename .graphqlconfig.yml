@@ -1,18 +1,18 @@
 projects:
-  digitaltwin:
-    schemaPath: src/graphql/schema.json
+  Codegen Project:
+    schemaPath: schema.json
     includes:
       - src/graphql/**/*.ts
     excludes:
       - ./amplify/**
       - src/graphql/types.ts
-      - src/graphql/API.ts
     extensions:
       amplify:
         codeGenTarget: typescript
         generatedFileName: src/graphql/types.ts
         docsFilePath: src/graphql
+        region: ap-southeast-1
+        apiId: 4qb6tinm4vaslpyhkmrvvwormu
+        frontend: javascript
+        framework: none
         maxDepth: 5
-extensions:
-  amplify:
-    version: 3

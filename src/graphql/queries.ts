@@ -946,6 +946,121 @@ export const userByOrganizationId = /* GraphQL */ `query UserByOrganizationId(
   APITypes.UserByOrganizationIdQueryVariables,
   APITypes.UserByOrganizationIdQuery
 >;
+export const getPrompt = /* GraphQL */ `query GetPrompt($associationId: ID!, $promptId: String!) {
+  getPrompt(associationId: $associationId, promptId: $promptId) {
+    associationId
+    promptId
+    prompt
+    variables
+    strategy {
+      topK
+      temperature
+      model
+      __typename
+    }
+    settings {
+      chatflowId
+      apiHost
+      apiKey
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetPromptQueryVariables, APITypes.GetPromptQuery>;
+export const listPrompts = /* GraphQL */ `query ListPrompts(
+  $associationId: ID
+  $promptId: ModelStringKeyConditionInput
+  $filter: ModelPromptFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listPrompts(
+    associationId: $associationId
+    promptId: $promptId
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      associationId
+      promptId
+      prompt
+      variables
+      strategy {
+        topK
+        temperature
+        model
+        __typename
+      }
+      settings {
+        chatflowId
+        apiHost
+        apiKey
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListPromptsQueryVariables,
+  APITypes.ListPromptsQuery
+>;
+export const getPromptVariable = /* GraphQL */ `query GetPromptVariable($promptId: String!, $variableId: String!) {
+  getPromptVariable(promptId: $promptId, variableId: $variableId) {
+    promptId
+    variableId
+    value
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetPromptVariableQueryVariables,
+  APITypes.GetPromptVariableQuery
+>;
+export const listPromptVariables = /* GraphQL */ `query ListPromptVariables(
+  $promptId: String
+  $variableId: ModelStringKeyConditionInput
+  $filter: ModelPromptVariableFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listPromptVariables(
+    promptId: $promptId
+    variableId: $variableId
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      promptId
+      variableId
+      value
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListPromptVariablesQueryVariables,
+  APITypes.ListPromptVariablesQuery
+>;
 export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchChannelsInput!) {
   fetchChannels(input: $input) {
     id

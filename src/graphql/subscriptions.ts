@@ -806,6 +806,135 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
   APITypes.OnDeleteUserSubscriptionVariables,
   APITypes.OnDeleteUserSubscription
 >;
+export const onCreatePrompt = /* GraphQL */ `subscription OnCreatePrompt($filter: ModelSubscriptionPromptFilterInput) {
+  onCreatePrompt(filter: $filter) {
+    associationId
+    promptId
+    prompt
+    variables
+    strategy {
+      topK
+      temperature
+      model
+      __typename
+    }
+    settings {
+      chatflowId
+      apiHost
+      apiKey
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreatePromptSubscriptionVariables,
+  APITypes.OnCreatePromptSubscription
+>;
+export const onUpdatePrompt = /* GraphQL */ `subscription OnUpdatePrompt($filter: ModelSubscriptionPromptFilterInput) {
+  onUpdatePrompt(filter: $filter) {
+    associationId
+    promptId
+    prompt
+    variables
+    strategy {
+      topK
+      temperature
+      model
+      __typename
+    }
+    settings {
+      chatflowId
+      apiHost
+      apiKey
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdatePromptSubscriptionVariables,
+  APITypes.OnUpdatePromptSubscription
+>;
+export const onDeletePrompt = /* GraphQL */ `subscription OnDeletePrompt($filter: ModelSubscriptionPromptFilterInput) {
+  onDeletePrompt(filter: $filter) {
+    associationId
+    promptId
+    prompt
+    variables
+    strategy {
+      topK
+      temperature
+      model
+      __typename
+    }
+    settings {
+      chatflowId
+      apiHost
+      apiKey
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeletePromptSubscriptionVariables,
+  APITypes.OnDeletePromptSubscription
+>;
+export const onCreatePromptVariable = /* GraphQL */ `subscription OnCreatePromptVariable(
+  $filter: ModelSubscriptionPromptVariableFilterInput
+) {
+  onCreatePromptVariable(filter: $filter) {
+    promptId
+    variableId
+    value
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreatePromptVariableSubscriptionVariables,
+  APITypes.OnCreatePromptVariableSubscription
+>;
+export const onUpdatePromptVariable = /* GraphQL */ `subscription OnUpdatePromptVariable(
+  $filter: ModelSubscriptionPromptVariableFilterInput
+) {
+  onUpdatePromptVariable(filter: $filter) {
+    promptId
+    variableId
+    value
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdatePromptVariableSubscriptionVariables,
+  APITypes.OnUpdatePromptVariableSubscription
+>;
+export const onDeletePromptVariable = /* GraphQL */ `subscription OnDeletePromptVariable(
+  $filter: ModelSubscriptionPromptVariableFilterInput
+) {
+  onDeletePromptVariable(filter: $filter) {
+    promptId
+    variableId
+    value
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeletePromptVariableSubscriptionVariables,
+  APITypes.OnDeletePromptVariableSubscription
+>;
 export const subscribe2channel = /* GraphQL */ `subscription Subscribe2channel($sessionId: String!) {
   subscribe2channel(sessionId: $sessionId) {
     sessionId

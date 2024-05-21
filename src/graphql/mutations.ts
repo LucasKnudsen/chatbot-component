@@ -844,6 +844,147 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
   APITypes.DeleteUserMutationVariables,
   APITypes.DeleteUserMutation
 >;
+export const createPrompt = /* GraphQL */ `mutation CreatePrompt(
+  $input: CreatePromptInput!
+  $condition: ModelPromptConditionInput
+) {
+  createPrompt(input: $input, condition: $condition) {
+    associationId
+    promptId
+    prompt
+    variables
+    strategy {
+      topK
+      temperature
+      model
+      __typename
+    }
+    settings {
+      chatflowId
+      apiHost
+      apiKey
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreatePromptMutationVariables,
+  APITypes.CreatePromptMutation
+>;
+export const updatePrompt = /* GraphQL */ `mutation UpdatePrompt(
+  $input: UpdatePromptInput!
+  $condition: ModelPromptConditionInput
+) {
+  updatePrompt(input: $input, condition: $condition) {
+    associationId
+    promptId
+    prompt
+    variables
+    strategy {
+      topK
+      temperature
+      model
+      __typename
+    }
+    settings {
+      chatflowId
+      apiHost
+      apiKey
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdatePromptMutationVariables,
+  APITypes.UpdatePromptMutation
+>;
+export const deletePrompt = /* GraphQL */ `mutation DeletePrompt(
+  $input: DeletePromptInput!
+  $condition: ModelPromptConditionInput
+) {
+  deletePrompt(input: $input, condition: $condition) {
+    associationId
+    promptId
+    prompt
+    variables
+    strategy {
+      topK
+      temperature
+      model
+      __typename
+    }
+    settings {
+      chatflowId
+      apiHost
+      apiKey
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeletePromptMutationVariables,
+  APITypes.DeletePromptMutation
+>;
+export const createPromptVariable = /* GraphQL */ `mutation CreatePromptVariable(
+  $input: CreatePromptVariableInput!
+  $condition: ModelPromptVariableConditionInput
+) {
+  createPromptVariable(input: $input, condition: $condition) {
+    promptId
+    variableId
+    value
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreatePromptVariableMutationVariables,
+  APITypes.CreatePromptVariableMutation
+>;
+export const updatePromptVariable = /* GraphQL */ `mutation UpdatePromptVariable(
+  $input: UpdatePromptVariableInput!
+  $condition: ModelPromptVariableConditionInput
+) {
+  updatePromptVariable(input: $input, condition: $condition) {
+    promptId
+    variableId
+    value
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdatePromptVariableMutationVariables,
+  APITypes.UpdatePromptVariableMutation
+>;
+export const deletePromptVariable = /* GraphQL */ `mutation DeletePromptVariable(
+  $input: DeletePromptVariableInput!
+  $condition: ModelPromptVariableConditionInput
+) {
+  deletePromptVariable(input: $input, condition: $condition) {
+    promptId
+    variableId
+    value
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeletePromptVariableMutationVariables,
+  APITypes.DeletePromptVariableMutation
+>;
 export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: HandleChannelsInput!) {
   handleChannels(input: $input) {
     id
