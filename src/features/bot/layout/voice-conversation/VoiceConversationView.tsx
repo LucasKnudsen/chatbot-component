@@ -2,7 +2,6 @@ import { TypingBubble } from '@/components'
 import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
 import { queryLLM } from '@/features/messages'
 import { createAudioRecorder } from '@/hooks'
-import { logDev } from '@/utils'
 import { API } from 'aws-amplify'
 import { Match, Switch, createSignal } from 'solid-js'
 import { InteractionFlowSwitch } from '../../components'
@@ -47,6 +46,7 @@ export const VoiceConversationView = () => {
   }
 
   const handleBotAnswer = async (audioBlob: Blob) => {
+    console.time('Bot answer')
     if (!audioBlob) {
       throw new Error('No audio blob found')
     }
@@ -55,6 +55,7 @@ export const VoiceConversationView = () => {
 
     let transcribedText = ''
 
+    // Transcribes the text
     if (audioBlob.type.includes('mp4')) {
       const audioFile = new File([audioBlob], 'audio.webm', { type: audioBlob.type })
 
@@ -67,19 +68,22 @@ export const VoiceConversationView = () => {
       transcribedText = await quickTranscribe(audioBlob)
     }
 
-    logDev('Transcription done: ')
+    console.timeLog('Bot answer', 'Transcription done.')
 
+    // Queries the LLM
     const textForTTS = await queryLLM(transcribedText)
 
+    console.timeLog('Bot answer', 'LLM Query done.')
+
+    // Gets the audio from the TTS
     const audioBase64 = await API.post('digitaltwinRest', '/ai/tts', {
       body: {
         text: textForTTS,
-        elevenLabsVoiceId: botStore.activeChannel?.overrideConfig?.elevenLabsVoiceId,
+        voiceId: botStore.activeChannel?.overrideConfig?.elevenLabsVoiceId,
       },
     })
 
     setIsThinking(false)
-
     setIsAnswering(true)
 
     const audioSrc = `data:audio/mp3;base64,${audioBase64}`
@@ -93,6 +97,7 @@ export const VoiceConversationView = () => {
     audioRef.addEventListener('ended', onAudioEnded)
 
     audioRef.play()
+    console.timeEnd('Bot answer')
   }
 
   // const testAudio = async (props: any) => {

@@ -58,7 +58,7 @@ export const queryLLM = async (message: string) => {
     createHistoryRecord(botStore.activeChannel?.activeChat!)
   }, 500)
 
-  const text = flowiseResponse.status === 'fulfilled' ? flowiseResponse.value : null
+  const text = flowiseResponse.status === 'fulfilled' ? flowiseResponse.value?.data : null
 
   return text
 }
