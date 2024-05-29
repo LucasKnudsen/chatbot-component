@@ -6,7 +6,7 @@ import { NavigationPrompt, SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
 import { For, Match, Show, Switch, createSignal } from 'solid-js'
 import { InteractionFlowSwitch, botStore } from '..'
-import { VoiceConversationView } from './voice-conversation/VoiceConversationView'
+import { VoiceConversationView } from '../../avatar/layout/VoiceConversationView'
 
 type BotMobileProps = {
   userInput: string

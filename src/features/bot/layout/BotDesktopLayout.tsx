@@ -7,9 +7,9 @@ import { ContextualContainer } from '@/features/contextual'
 import { ChatWindow } from '@/features/messages'
 import { NavigationPromptsList, SuggestedPrompts } from '@/features/prompt'
 import { useText } from '@/features/text'
+import { VoiceConversationView } from '../../avatar/layout/VoiceConversationView'
 import { ResourcesSidebar } from '../components/ResourcesSidebar'
 import { sidebarPaddingNum } from '../constants'
-import { VoiceConversationView } from './voice-conversation/VoiceConversationView'
 
 type BotDesktopProps = {
   userInput: string

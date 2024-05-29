@@ -1,10 +1,10 @@
 import { IconButton, MicrophoneIcon, SendButton } from '@/components'
 import { Show, createEffect, createSignal } from 'solid-js'
 
+import { createAudioRecorder } from '@/features/avatar'
 import { botStore } from '@/features/bot'
 import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
 import { useTheme } from '@/features/theme/hooks'
-import { createAudioRecorder } from '@/hooks'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { useScrollOnResize } from '../hooks/useScrollOnResize'
 import { Textarea } from './ShortTextInput'

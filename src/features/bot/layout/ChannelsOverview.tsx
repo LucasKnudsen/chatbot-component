@@ -1,10 +1,9 @@
 import { Channel, ChannelUserAccess } from '@/graphql'
-import { Show, onMount } from 'solid-js'
+import { onMount } from 'solid-js'
 
 import { ArrowRightIcon } from '@/components/icons/ArrowRightIcon'
 import { Spinner } from '@/components/loaders'
 import { createMutation } from '@/hooks'
-import { useMediaQuery } from '@/utils/useMediaQuery'
 import { getAvatarStyle, selectActiveChannel } from '../utils'
 
 type ChannelOverviewProps = {
@@ -16,8 +15,6 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
   let content: HTMLDivElement | undefined
   let shadowLeft: HTMLDivElement | undefined
   let shadowRight: HTMLDivElement | undefined
-
-  const device = useMediaQuery()
 
   onMount(() => {
     let contentScrollWidth = content?.scrollWidth ?? 0 - (wrapper?.scrollWidth ?? 0)
@@ -53,13 +50,6 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
 
       <div class='flex flex-col lg:flex-row gap-5 md:gap-10 lg:gap-[50px]'>
         <div ref={wrapper} class='relative min-w-0 overflow-hidden'>
-          {/* <div
-            ref={shadowLeft}
-            class='absolute z-10 w-5 h-full top-0 left-0 bottom-0 opacity-0 hidden lg:block'
-            style={{
-              background: 'rgba(234, 233, 236, 0.14)',
-            }}
-          ></div> */}
           <div
             ref={content}
             class='flex flex-col sm:flex-row sm:grid sm:grid-cols-2 lg:flex lg:flex-nowrap gap-y-[30px] sm:gap-x-8 lg:gap-[50px] overflow-x-auto overflow-y-hidden brand-scroll-container pb-6'
@@ -67,21 +57,16 @@ export const ChannelsOverview = (props: ChannelOverviewProps) => {
             {props.channels?.map((channel) => (
               <ChannelItem channel={channel} />
             ))}
-            <Show when={device() == 'tablet' || device() == 'mobile'}>
+
+            {/* <Show when={device() == 'tablet' || device() == 'mobile'}>
               <AddChannelItem />
-            </Show>
+            </Show> */}
           </div>
-          {/* <div
-            ref={shadowRight}
-            class='absolute z-10 w-5 h-full top-0 right-0 bottom-0 opacity-0 hidden lg:block'
-            style={{
-              background: 'rgba(234, 233, 236, 0.14)',
-            }}
-          ></div> */}
         </div>
-        <Show when={device() == 'desktop'}>
+
+        {/* <Show when={device() == 'desktop'}>
           <AddChannelItem />
-        </Show>
+        </Show> */}
       </div>
 
       <button class='fixed right-5 bottom-5 flex sm:hidden justify-center items-center shadow-lg rounded-full w-[45px] h-[45px] bg-[var(--primaryColor)]'>
@@ -187,30 +172,30 @@ const ChannelItem = (props: { channel: Channel | ChannelUserAccess }) => {
   )
 }
 
-const AddChannelItem = () => {
-  return (
-    <div class='menu-card hidden sm:flex items-center justify-center lg:min-w-[146px] lg:max-w-[146px]'>
-      <div class='m-auto text-center'>
-        <div class='flex items-center justify-center w-11 h-11 md:w-[54px] md:h-[54px] mx-auto mb-3 md:mb-[25px] bg-[var(--primaryColor)] rounded-full'>
-          <svg
-            class='w-5 h-5 md:w-6 md:h-6'
-            width='25'
-            height='25'
-            viewBox='0 0 25 25'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-          >
-            <path
-              d='M13.584 0V24.48H10.848V0H13.584ZM0 10.992H24.432V13.488H0V10.992Z'
-              fill='white'
-            />
-          </svg>
-        </div>
+// const AddChannelItem = () => {
+//   return (
+//     <div class='menu-card hidden sm:flex items-center justify-center lg:min-w-[146px] lg:max-w-[146px]'>
+//       <div class='m-auto text-center'>
+//         <div class='flex items-center justify-center w-11 h-11 md:w-[54px] md:h-[54px] mx-auto mb-3 md:mb-[25px] bg-[var(--primaryColor)] rounded-full'>
+//           <svg
+//             class='w-5 h-5 md:w-6 md:h-6'
+//             width='25'
+//             height='25'
+//             viewBox='0 0 25 25'
+//             fill='none'
+//             xmlns='http://www.w3.org/2000/svg'
+//           >
+//             <path
+//               d='M13.584 0V24.48H10.848V0H13.584ZM0 10.992H24.432V13.488H0V10.992Z'
+//               fill='white'
+//             />
+//           </svg>
+//         </div>
 
-        <span class='block text-sm sm:text-sm leading-[20px] lg:max-w-[145px] w-full'>
-          Create a new knowledge base
-        </span>
-      </div>
-    </div>
-  )
-}
+//         <span class='block text-sm sm:text-sm leading-[20px] lg:max-w-[145px] w-full'>
+//           Create a new knowledge base
+//         </span>
+//       </div>
+//     </div>
+//   )
+// }

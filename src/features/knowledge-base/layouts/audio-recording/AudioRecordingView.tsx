@@ -1,6 +1,7 @@
 import { Button, IconButton, MicrophoneIcon, TypingBubble } from '@/components'
+import { createAudioRecorder } from '@/features/avatar'
 import { ChannelDocumentType } from '@/graphql'
-import { createAudioRecorder, createMutation } from '@/hooks'
+import { createMutation } from '@/hooks'
 import { logDev } from '@/utils'
 import { Match, Show, Switch, createEffect, createSignal } from 'solid-js'
 import { KnowledgeBaseTitle, KnowledgeBaseTopBar } from '../../components'

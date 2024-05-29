@@ -43,7 +43,7 @@ type BotStore = {
 
 const [botStore, setBotStore] = createStore<BotStore>({
   activeChannel: null,
-  activeInteractionFlow: 'chat',
+  activeInteractionFlow: 'voice',
   channels: [],
   isAwaitingAnswer: false,
   isKnowledgeBaseOpen: false,

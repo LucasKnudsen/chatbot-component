@@ -1,12 +1,12 @@
 import { TypingBubble } from '@/components'
 import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
 import { queryLLM } from '@/features/messages'
-import { createAudioRecorder } from '@/hooks'
 import { API } from 'aws-amplify'
 import { Match, Switch, createSignal } from 'solid-js'
-import { InteractionFlowSwitch } from '../../components'
-import { botStore } from '../../stores'
-import { getAvatarStyle } from '../../utils'
+import { InteractionFlowSwitch } from '../../bot/components'
+import { botStore } from '../../bot/stores'
+import { getAvatarStyle } from '../../bot/utils'
+import { createAudioRecorder } from '../hooks/createAudioRecorder'
 
 export const VoiceConversationView = () => {
   const [isThinking, setIsThinking] = createSignal(false)
