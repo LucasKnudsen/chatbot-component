@@ -165,7 +165,7 @@ export const StaticAvatar = (props: StaticAvatarProps) => {
 
   createEffect(async () => {
     if (props.triggerAvatar?.()) {
-      if (isThinking()) {
+      if (isThinking() || audioRecorder.isRecording()) {
         return
       }
 
