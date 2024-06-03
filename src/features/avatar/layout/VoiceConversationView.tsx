@@ -1,185 +1,78 @@
-import { TypingBubble } from '@/components'
-import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
-import { queryLLM } from '@/features/messages'
-import { API } from 'aws-amplify'
-import { Match, Switch, createSignal } from 'solid-js'
+import { Divider } from '@/components'
+import { botStore } from '@/features/bot'
+import { NavigationPrompt, NavigationPromptsList } from '@/features/prompt'
+import { useText } from '@/features/text'
+import { useMediaQuery } from '@/utils/useMediaQuery'
+import { createSignal, For, Show } from 'solid-js'
 import { InteractionFlowSwitch } from '../../bot/components'
-import { botStore } from '../../bot/stores'
-import { getAvatarStyle } from '../../bot/utils'
-import { createAudioRecorder } from '../hooks/createAudioRecorder'
+import { StaticAvatar } from '../components'
 
 export const VoiceConversationView = () => {
-  const [isThinking, setIsThinking] = createSignal(false)
-  const [isAnswering, setIsAnswering] = createSignal(false)
+  const { text } = useText()
+  const device = useMediaQuery()
+  const [activePrompt, setActivePrompt] = createSignal('')
 
   let audioRef: any
 
-  const audioRecorder = createAudioRecorder({
-    onStop(audioBlob) {
-      handleBotAnswer(audioBlob)
-    },
-  })
-
-  const isIdle = () => !audioRecorder.isRecording() && !isThinking() && !isAnswering()
-
-  const handleAvatarClick = async () => {
-    if (audioRecorder.isRecording() && isThinking()) {
-      return
-    }
-
-    switch (true) {
-      case isThinking():
-        return
-
-      case isAnswering():
-        audioRef.pause()
-        setIsAnswering(false)
-        break
-
-      case audioRecorder.isRecording():
-        audioRecorder.stopRecording()
-        break
-
-      default:
-        audioRecorder.startRecording()
-    }
+  const handlePromptClick = async (prompt: string) => {
+    setActivePrompt(prompt)
+    setTimeout(() => {
+      setActivePrompt('')
+    }, 100)
   }
-
-  const handleBotAnswer = async (audioBlob: Blob) => {
-    console.time('Bot answer')
-    if (!audioBlob) {
-      throw new Error('No audio blob found')
-    }
-
-    setIsThinking(true)
-
-    let transcribedText = ''
-
-    // Transcribes the text
-    if (audioBlob.type.includes('mp4')) {
-      const audioFile = new File([audioBlob], 'audio.webm', { type: audioBlob.type })
-
-      const transcriptionResponse = await transcribeAudio(audioFile, {
-        diarization_toggle: false,
-      })
-
-      transcribedText = transcriptionResponse.transcription[0].text
-    } else {
-      transcribedText = await quickTranscribe(audioBlob)
-    }
-
-    console.timeLog('Bot answer', 'Transcription done.')
-
-    // Queries the LLM
-    const textForTTS = await queryLLM(transcribedText)
-
-    console.timeLog('Bot answer', 'LLM Query done.')
-
-    // Gets the audio from the TTS
-    const audioBase64 = await API.post('digitaltwinRest', '/ai/tts', {
-      body: {
-        text: textForTTS,
-        voiceId: botStore.activeChannel?.overrideConfig?.elevenLabsVoiceId,
-      },
-    })
-
-    setIsThinking(false)
-    setIsAnswering(true)
-
-    const audioSrc = `data:audio/mp3;base64,${audioBase64}`
-    audioRef.src = audioSrc
-
-    const onAudioEnded = () => {
-      setIsAnswering(false)
-      audioRef.removeEventListener('ended', onAudioEnded)
-    }
-
-    audioRef.addEventListener('ended', onAudioEnded)
-
-    audioRef.play()
-    console.timeEnd('Bot answer')
-  }
-
-  // const testAudio = async (props: any) => {
-  //   setIsThinking(true)
-
-  //   const audioBase64 = await API.post('digitaltwinRest', '/ai/tts', {
-  //     body: {
-  //       text: 'Yes, this is a test audio. I can speak, and I am audible',
-  //       voice: 'onyx',
-  //     },
-  //   })
-
-  //   setIsThinking(false)
-
-  //   setIsAnswering(true)
-
-  //   const audioSrc = `data:audio/mp3;base64,${audioBase64}`
-  //   audioRef.src = audioSrc
-
-  //   const onAudioEnded = () => {
-  //     setIsAnswering(false)
-  //     audioRef.removeEventListener('ended', onAudioEnded)
-  //   }
-
-  //   audioRef.addEventListener('ended', onAudioEnded)
-
-  //   audioRef.play()
-  // }
 
   return (
-    <div class='flex flex-col grow animate-fade-in'>
-      <InteractionFlowSwitch />
+    <div class='flex grow animate-fade-in flex-col lg:flex-row '>
+      <div class='flex-1 '>
+        <InteractionFlowSwitch />
 
-      <div class='flex flex-col grow justify-center items-center gap-8'>
-        <div class='relative flex flex-col justify-center items-center hover:brightness-90 transition-all hover:scale-105'>
-          <div
-            onClick={handleAvatarClick}
-            class={`relative w-40 h-40 rounded-full border-white border transition cursor-pointer overflow-hidden`}
-            style={{
-              'background-size': 'contain',
-              'background-image': getAvatarStyle(botStore.activeChannel?.avatar),
-            }}
-          />
-
-          <Switch>
-            <Match when={isThinking()}>
-              <div class='absolute'>
-                <TypingBubble color='white' />
-              </div>
-            </Match>
-
-            {/* <Match when={audioRecorder.isRecording()}>
-              <AudioVisualizer color={theme().primaryColor} />
-            </Match> */}
-
-            {/* <Match when={isAnswering()}>
-              <div class='absolute inset-0'>
-                <AudioVisualizer
-                  source={audioRef}
-                  color={theme().onPrimary}
-                  width={160}
-                  height={160}
-                />
-              </div>
-            </Match> */}
-          </Switch>
+        <div class='flex items-end mt-4 '>
+          <h1 class='text-2xl lg:text-5xl h-fit font-light tracking-wide leading-tight '>
+            {botStore.activeHistory.length ? text().returnWelcomeMessage : text().welcomeMessage}
+          </h1>
         </div>
-
-        <p class='italic text-[var(--primaryColor)]'>
-          <Switch>
-            <Match when={isIdle()}>Click me to start talking</Match>
-
-            <Match when={audioRecorder.isRecording()}>
-              I'm listening... Click on me again when you're ready.
-            </Match>
-
-            <Match when={isThinking()}>Let me think...</Match>
-          </Switch>
-        </p>
       </div>
 
-      <audio ref={audioRef} src={audioRef.src} class='hidden'></audio>
+      <StaticAvatar audioRef={audioRef} triggerAvatar={activePrompt} />
+
+      <Show when={device() === 'desktop'}>
+        <div class='flex-1 flex justify-end '>
+          <div class='max-w-[311px]'>
+            <div class='flex flex-col gap-2 pb-4 '>
+              <Divider />
+              <p class='font-bold leading-[30px] text-[var(--textSecondary)]'>Navigation</p>
+              <Divider />
+            </div>
+
+            <NavigationPromptsList
+              prompts={
+                botStore.activeChannel!.initialPrompts
+                // botStore.chat?.question ? props.initialPrompts : props.initialPrompts?.slice(0, 3)
+              }
+              onSelect={handlePromptClick}
+              disabled={botStore.isAwaitingAnswer}
+            />
+          </div>
+        </div>
+      </Show>
+
+      <Show when={device() !== 'desktop'}>
+        <div class='flex flex-col flex-1 mb-4 justify-end'>
+          <p class='text-xs  py-4 font-semibold text-[var(--textSecondary)]'>Navigation help</p>
+
+          <div class='flex gap-4 overflow-x-auto pb-1  no-scrollbar'>
+            <For each={botStore.activeChannel?.initialPrompts}>
+              {(p) => (
+                <NavigationPrompt
+                  prompt={p}
+                  onClick={handlePromptClick}
+                  disabled={botStore.isAwaitingAnswer}
+                />
+              )}
+            </For>
+          </div>
+        </div>
+      </Show>
     </div>
   )
 }

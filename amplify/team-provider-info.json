@@ -1,16 +1,17 @@
 {
-  "staging": {
+  "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-digitaltwin-staging-174824-authRole",
-      "UnauthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-staging-174824-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-staging-174824-authRole",
+      "AuthRoleName": "amplify-digitaltwin-dev-91806-authRole",
+      "UnauthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-dev-91806-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::047845575339:role/amplify-digitaltwin-dev-91806-authRole",
       "Region": "ap-southeast-1",
-      "DeploymentBucketName": "amplify-digitaltwin-staging-174824-deployment",
-      "UnauthRoleName": "amplify-digitaltwin-staging-174824-unauthRole",
-      "StackName": "amplify-digitaltwin-staging-174824",
-      "StackId": "arn:aws:cloudformation:ap-southeast-1:047845575339:stack/amplify-digitaltwin-staging-174824/43b30090-dba7-11ee-a877-0a910649c0a5",
+      "DeploymentBucketName": "amplify-digitaltwin-dev-91806-deployment",
+      "UnauthRoleName": "amplify-digitaltwin-dev-91806-unauthRole",
+      "StackName": "amplify-digitaltwin-dev-91806",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:047845575339:stack/amplify-digitaltwin-dev-91806/fff563b0-8f58-11ee-b66b-0a14b2b25086",
       "AmplifyAppId": "d1i4jp82axmvxl",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-digitaltwin-staging-174824-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-digitaltwin-dev-91806-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-digitaltwin-dev-91806-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     }
   }
 }
