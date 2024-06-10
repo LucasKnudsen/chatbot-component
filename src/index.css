@@ -686,3 +686,17 @@ input {
   height: 10px;
   border-radius: 10px;
 }
+
+.custom-progress {
+  height: 3px;
+}
+.custom-progress[value]::-webkit-progress-bar {
+  border-radius: 10px;
+  background-color: rgba(147, 147, 147, 0.25);
+}
+
+.custom-progress[value]::-webkit-progress-value {
+  background-color: #5B93FF;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}

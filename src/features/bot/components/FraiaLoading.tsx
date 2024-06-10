@@ -1,9 +1,14 @@
-import { TypingBubble } from '@/components'
+import { TypingBubble, ProgressBar } from '@/components'
 import { LogoIcon } from '@/components/icons/LogoIcon'
 import { useTheme } from '@/features/theme'
+import { configStore } from '@/features/portal-init'
 
-export const FraiaLoading = () => {
+type Props = {
+  isLoading?: boolean;
+}
+export const FraiaLoading = (props: Props) => {
   const { theme } = useTheme()
+  const { mode } = configStore
 
   return (
     <div class='h-full w-screen flex flex-col grow justify-center animate-fade-in gap-4 p-10 lg:p-24'>
@@ -11,17 +16,24 @@ export const FraiaLoading = () => {
         <div class='inline-block mb-4'>
           <LogoIcon color={theme().primaryColor} />
         </div>
-        <h4
-          class='text-base leading-[17px] font-light'
-          style={{
-            color: theme().textSecondary,
-          }}
-        >
-          The most personalized AI catchphrase
-        </h4>
+        {mode === 'oneClick' ? (
+          <div class='leading-[17px]'>
+            <ProgressBar isLoading={props.isLoading}  />
+          </div>
+        ) : (
+          <>
+          <h4
+            class='text-base leading-[17px] font-light'
+            style={{
+              color: theme().textSecondary,
+            }}
+          >
+            The most personalized AI catchphrase
+          </h4>
+          </>
+        )}
       </div>
-
-      <TypingBubble />
+      {mode !== 'oneClick' && <TypingBubble />}
     </div>
   )
 }

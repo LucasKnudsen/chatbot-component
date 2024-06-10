@@ -21,6 +21,7 @@ export const PortalInitializer = (props: ChatConfig) => {
   const { initTheme } = useTheme()
   const { initText } = useText()
   const { initLanguage } = useLanguage()
+  const { mode } = configStore
 
   const configQuery = createQuery({
     queryFn: async () => {
@@ -31,7 +32,7 @@ export const PortalInitializer = (props: ChatConfig) => {
       configStoreActions.setConfigStore('chatSpaceConfig', result)
 
       initTheme(
-        import.meta.env.DEV ? 'oneClick' : (themeId as keyof typeof themes),
+        mode === 'oneClick' ? 'oneClick' : (themeId as keyof typeof themes),
         import.meta.env.DEV ? null : theme
       )
       initText(text, defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
