@@ -946,6 +946,43 @@ export const userByOrganizationId = /* GraphQL */ `query UserByOrganizationId(
   APITypes.UserByOrganizationIdQueryVariables,
   APITypes.UserByOrganizationIdQuery
 >;
+export const userByChatSpaceIdId = /* GraphQL */ `query UserByChatSpaceIdId(
+  $chatSpaceId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  userByChatSpaceIdId(
+    chatSpaceId: $chatSpaceId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      organizationId
+      chatSpaceId
+      email
+      cognitoId
+      name
+      owner
+      invitedOn
+      joinedOn
+      status
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.UserByChatSpaceIdIdQueryVariables,
+  APITypes.UserByChatSpaceIdIdQuery
+>;
 export const getPrompt = /* GraphQL */ `query GetPrompt($associationId: ID!, $promptId: String!) {
   getPrompt(associationId: $associationId, promptId: $promptId) {
     associationId

@@ -1,8 +1,11 @@
-import { TypingBubble } from '@/components'
+import { ProgressBar } from '@/components'
 import { LogoIcon } from '@/components/icons/LogoIcon'
 import { useTheme } from '@/features/theme'
 
-export const FraiaLoading = () => {
+type Props = {
+  isLoading?: boolean;
+}
+export const FraiaLoading = (props: Props) => {
   const { theme } = useTheme()
 
   return (
@@ -11,17 +14,10 @@ export const FraiaLoading = () => {
         <div class='inline-block mb-4'>
           <LogoIcon color={theme().primaryColor} />
         </div>
-        <h4
-          class='text-base leading-[17px] font-light'
-          style={{
-            color: theme().textSecondary,
-          }}
-        >
-          The most personalized AI catchphrase
-        </h4>
+          <div class='leading-[17px]'>
+            <ProgressBar isLoading={props.isLoading}  />
+          </div>
       </div>
-
-      <TypingBubble />
     </div>
   )
 }

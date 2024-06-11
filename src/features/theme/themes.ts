@@ -34,6 +34,12 @@ export const defaultTheme: Theme = {
   surfaceHoveredBackground: 'rgba(91, 147, 255, 0.2)',
 }
 
+export const default1ClickTheme: Theme = {
+  ...defaultTheme,
+  surfaceBackground: 'rgba(168, 157, 241, 0.07)',
+  borderColor: 'rgba(147, 147, 147, 0.25)',
+}
+
 const fraia: Theme = {
   isDark: false,
   navbarLogoUrl: logo,
@@ -102,6 +108,7 @@ const ugly: Theme = {
 
 export const themes = {
   bubbles: defaultTheme,
+  oneClick: default1ClickTheme,
   ugly,
   midnight,
   fraia,

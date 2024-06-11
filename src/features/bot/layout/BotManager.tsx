@@ -1,6 +1,6 @@
 import { SignOutButton, authStore } from '@/features/authentication'
 import { configStore, configStoreActions } from '@/features/portal-init'
-import { Match, Switch } from 'solid-js'
+import { Match, Switch, createEffect, createSignal } from 'solid-js'
 import {
   Bot,
   FraiaLoading,
@@ -18,6 +18,9 @@ import { ChannelsOverview } from './ChannelsOverview'
 
 export const BotManager = () => {
   const openForPublic = configStore.chatSpaceConfig.isPublic
+  const [loading, setLoading] = createSignal<boolean>(true)
+
+ 
 
   const channelsQuery = createQuery({
     queryFn: async () => {
@@ -63,6 +66,12 @@ export const BotManager = () => {
     },
   })
 
+  createEffect(() => {
+    setTimeout(() => {
+      setLoading(channelsQuery.isLoading())
+    }, 1000)
+  }, [channelsQuery])
+
   return (
     <Switch>
       {/* TEST UI  */}
@@ -70,8 +79,8 @@ export const BotManager = () => {
       </Match> */}
 
       {/* Loading  */}
-      <Match when={channelsQuery.isLoading()}>
-        <FraiaLoading />
+      <Match when={loading()}>
+        <FraiaLoading isLoading={channelsQuery.isLoading()} />
       </Match>
 
       {/* Simplistic error handling */}
