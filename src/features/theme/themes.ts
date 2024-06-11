@@ -37,6 +37,7 @@ export const defaultTheme: Theme = {
 export const default1ClickTheme: Theme = {
   ...defaultTheme,
   surfaceBackground: 'rgba(168, 157, 241, 0.07)',
+  borderColor: 'rgba(147, 147, 147, 0.25)',
 }
 
 const fraia: Theme = {
