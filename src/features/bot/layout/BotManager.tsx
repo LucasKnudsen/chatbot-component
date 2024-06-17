@@ -15,6 +15,7 @@ import LayoutDefault from '@/layouts/default'
 import { logDev } from '@/utils'
 import { parseError } from '@/utils/errorHandlers'
 import { ChannelsOverview } from './ChannelsOverview'
+import { BotOneClick } from '@/features/oneClick'
 
 export const BotManager = () => {
   const openForPublic = configStore.chatSpaceConfig.isPublic
@@ -95,7 +96,12 @@ export const BotManager = () => {
           </div>
         </LayoutDefault>
       </Match>
-
+      
+      {/* onClick mode */}
+      <Match when={configStore.mode === 'oneClick'}>
+        <BotOneClick />
+      </Match>
+      
       {/* Single Knowledge Base View */}
       <Match when={Boolean(botStore.activeChannel)}>
         <Bot />

@@ -38,6 +38,9 @@ export const default1ClickTheme: Theme = {
   ...defaultTheme,
   surfaceBackground: 'rgba(168, 157, 241, 0.07)',
   borderColor: 'rgba(147, 147, 147, 0.25)',
+  backgroundColor: 'white',
+  bubbleButtonColor: 'rgba(236, 236, 236, 1)',
+  textInputBackgroundColor: 'rgba(122, 137, 165, 0.08)',
 }
 
 const fraia: Theme = {

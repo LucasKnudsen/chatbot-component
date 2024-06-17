@@ -55,6 +55,9 @@ export default {
           },
         },
       },
+      translate: {
+        '-1/2': '-50%',
+      },
       // colors: theme,
     },
     screens: {
