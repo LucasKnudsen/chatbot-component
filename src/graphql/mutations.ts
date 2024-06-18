@@ -519,10 +519,12 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
     id
     hostId
     hostType
+    chatMode
     name
     isPublic
     isMultiChannel
     defaultChannelId
+    isOneClick
     themeId
     defaultLanguage
     theme {
@@ -587,10 +589,12 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
     id
     hostId
     hostType
+    chatMode
     name
     isPublic
     isMultiChannel
     defaultChannelId
+    isOneClick
     themeId
     defaultLanguage
     theme {
@@ -655,10 +659,12 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
     id
     hostId
     hostType
+    chatMode
     name
     isPublic
     isMultiChannel
     defaultChannelId
+    isOneClick
     themeId
     defaultLanguage
     theme {

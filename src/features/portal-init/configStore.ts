@@ -8,7 +8,6 @@ type ChatConfigStore = {
   channels: Channel[] | ChannelUserAccess[]
   isBotOpened: boolean
   isDrawerOpened?: boolean
-  mode: 'oneClick' | 'normal'
 }
 
 const [configStore, setConfigStore] = createStore<ChatConfigStore>({
@@ -16,7 +15,6 @@ const [configStore, setConfigStore] = createStore<ChatConfigStore>({
   isBotOpened: false,
   chatSpaceConfig: {} as any,
   channels: [],
-  mode: 'oneClick'
 })
 
 const openBot = () => {

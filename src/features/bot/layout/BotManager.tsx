@@ -98,7 +98,7 @@ export const BotManager = () => {
       </Match>
       
       {/* onClick mode */}
-      <Match when={configStore.mode === 'oneClick'}>
+      <Match when={configStore.chatSpaceConfig.isOneClick}>
         <BotOneClick />
       </Match>
       

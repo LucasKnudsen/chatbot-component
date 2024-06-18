@@ -601,10 +601,12 @@ export const getChatSpace = /* GraphQL */ `query GetChatSpace($id: ID!) {
     id
     hostId
     hostType
+    chatMode
     name
     isPublic
     isMultiChannel
     defaultChannelId
+    isOneClick
     themeId
     defaultLanguage
     theme {
@@ -671,10 +673,12 @@ export const listChatSpaces = /* GraphQL */ `query ListChatSpaces(
       id
       hostId
       hostType
+      chatMode
       name
       isPublic
       isMultiChannel
       defaultChannelId
+      isOneClick
       themeId
       defaultLanguage
       theme {
@@ -754,10 +758,12 @@ export const chatSpaceByHostId = /* GraphQL */ `query ChatSpaceByHostId(
       id
       hostId
       hostType
+      chatMode
       name
       isPublic
       isMultiChannel
       defaultChannelId
+      isOneClick
       themeId
       defaultLanguage
       theme {

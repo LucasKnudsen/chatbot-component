@@ -490,10 +490,12 @@ export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($
     id
     hostId
     hostType
+    chatMode
     name
     isPublic
     isMultiChannel
     defaultChannelId
+    isOneClick
     themeId
     defaultLanguage
     theme {
@@ -555,10 +557,12 @@ export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($
     id
     hostId
     hostType
+    chatMode
     name
     isPublic
     isMultiChannel
     defaultChannelId
+    isOneClick
     themeId
     defaultLanguage
     theme {
@@ -620,10 +624,12 @@ export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($
     id
     hostId
     hostType
+    chatMode
     name
     isPublic
     isMultiChannel
     defaultChannelId
+    isOneClick
     themeId
     defaultLanguage
     theme {

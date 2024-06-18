@@ -12,7 +12,7 @@ import { ChannelMenu } from './ChannelMenu'
 export const Nav = () => {
   const device = useMediaQuery()
   const { theme } = useTheme()
-  const { mode } = configStore
+  const { chatSpaceConfig } = configStore
 
   const onClickLogo = () => {
     botStoreActions.resetActiveChannel()
@@ -20,7 +20,7 @@ export const Nav = () => {
   }
 
   const handleRenderContentBar = () => {
-    if (mode === 'oneClick') {
+    if (chatSpaceConfig.isOneClick) {
       return <div class='flex items-center w-full justify-center'>
           <img src={theme().navbarLogoUrl} class='h-6 cursor-pointer' onClick={onClickLogo} />
       </div>
@@ -70,7 +70,7 @@ export const Nav = () => {
       >
         {handleRenderContentBar()}
       </div>
-      {mode === 'normal' && (
+      {!chatSpaceConfig.isOneClick && (
         <Show when={botStore.activeChannel && device() !== 'desktop'}>
           <button class='ml-6 mt-2' onClick={configStoreActions.toggleDrawer}>
             <Menu2Icon class='text-[var(--primaryColor)]' />
