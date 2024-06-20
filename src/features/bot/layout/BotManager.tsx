@@ -10,18 +10,16 @@ import {
   fetchPublicChannels,
 } from '..'
 
+import { BotOneClick } from '@/features/oneClick'
 import { createQuery } from '@/hooks'
 import LayoutDefault from '@/layouts/default'
 import { logDev } from '@/utils'
 import { parseError } from '@/utils/errorHandlers'
 import { ChannelsOverview } from './ChannelsOverview'
-import { BotOneClick } from '@/features/oneClick'
 
 export const BotManager = () => {
   const openForPublic = configStore.chatSpaceConfig.isPublic
   const [loading, setLoading] = createSignal<boolean>(true)
-
- 
 
   const channelsQuery = createQuery({
     queryFn: async () => {
@@ -68,10 +66,12 @@ export const BotManager = () => {
   })
 
   createEffect(() => {
-    setTimeout(() => {
-      setLoading(channelsQuery.isLoading())
-    }, 1000)
-  }, [channelsQuery])
+    if (!channelsQuery.isLoading()) {
+      setTimeout(() => {
+        setLoading(false)
+      }, 500)
+    }
+  }, [channelsQuery.isLoading()])
 
   return (
     <Switch>
@@ -96,12 +96,12 @@ export const BotManager = () => {
           </div>
         </LayoutDefault>
       </Match>
-      
+
       {/* onClick mode */}
       <Match when={configStore.chatSpaceConfig.isOneClick}>
         <BotOneClick />
       </Match>
-      
+
       {/* Single Knowledge Base View */}
       <Match when={Boolean(botStore.activeChannel)}>
         <Bot />

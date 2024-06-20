@@ -1,6 +1,5 @@
-import { createEffect, createSignal } from 'solid-js'
-import { Subscription, interval } from 'rxjs'
 import { useTheme } from '@/features/theme'
+import { createEffect, createSignal } from 'solid-js'
 
 type Props = {
   isLoading?: boolean
@@ -8,22 +7,27 @@ type Props = {
 
 export const ProgressBar = (props: Props) => {
   const [progress, setProgress] = createSignal<number>(0)
-  const { theme } = useTheme();
+  const { theme } = useTheme()
 
   createEffect(() => {
-    let subscription: Subscription
-    if (!props.isLoading) {
-      subscription = interval(10).subscribe((value) => {
-        setProgress((value + 1) * 10)
-        if (value === 9) {
-          subscription.unsubscribe()
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev === 100) {
+          clearInterval(interval)
+          return 100
         }
+        return prev + 20
       })
-    }
+    }, 500)
+
     return () => {
-      if (subscription) {
-        subscription.unsubscribe()
-      }
+      clearInterval(interval)
+    }
+  }, [])
+
+  createEffect(() => {
+    if (!props.isLoading) {
+      setProgress(100)
     }
   }, [props.isLoading])
 
@@ -47,7 +51,16 @@ export const ProgressBar = (props: Props) => {
         }
       `}
       </style>
-      <progress class='custom-progress' value={progress()} max='100'></progress>
+      {/* <progress class='custom-progress transition-all' value={progress()} max='100'></progress> */}
+
+      <div class='flex max-w-[180px] m-auto'>
+        <div
+          class='mt-2 transition-all h-[3px] bg-[var(--primaryColor)] rounded-lg '
+          style={{
+            width: `${progress()}%`,
+          }}
+        />
+      </div>
     </>
   )
 }
