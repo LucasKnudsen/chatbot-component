@@ -28,6 +28,7 @@ export const BotOneClick = () => {
   const [inputParent] = createAutoAnimate()
   const [answerParent] = createAutoAnimate()
   const [conversationParent] = createAutoAnimate()
+  
 
   const handleButtonRecord = () => {
     if (!isStart()) {
@@ -91,7 +92,7 @@ export const BotOneClick = () => {
     >
       <div
         ref={AITextStatusParent}
-        class='flex flex-col grow w-full  items-center overflow-hidden px-5'
+        class='flex flex-col grow w-full  items-center overflow-hidden px-5 bg-white'
       >
         <Show
           when={
@@ -107,10 +108,10 @@ export const BotOneClick = () => {
           <div class='absolute h-full left-2 top-2 z-10'>
             {/* Allow MuteAISwith to use auto-animate while changing layout*/}
             <Show when={!isStart() && status() !== BOT_STATUS.NOT_STARTED} keyed>
-              <MuteAISwitch mode='hasAvatar' />
+              <MuteAISwitch />
             </Show>
             <Show when={isStart() && status() !== BOT_STATUS.NOT_STARTED} keyed>
-              <MuteAISwitch mode='hasAvatar' />
+              <MuteAISwitch />
             </Show>
           </div>
           <div class='h-[70%]'>
@@ -157,7 +158,7 @@ export const BotOneClick = () => {
           keyed
         >
           <div class='h-[70px]'>
-            <InputOneClick isStart={isStart} />
+            <InputOneClick />
           </div>
         </Show>
       </div>

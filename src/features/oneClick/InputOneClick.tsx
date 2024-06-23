@@ -1,12 +1,7 @@
-import { Accessor, Component } from 'solid-js'
 import { useTheme } from '../theme'
 import { SendIcon, EditIcon } from '@/components'
 
-interface InputOneClickProps {
-  isStart: Accessor<boolean>
-
-}
-export const InputOneClick: Component<InputOneClickProps> = ({ isStart }) => {
+export const InputOneClick = () => {
   const { theme } = useTheme()
 
   return (

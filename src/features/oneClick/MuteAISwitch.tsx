@@ -1,14 +1,17 @@
 import { MuteIcon, SoundIcon } from '@/components'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Show, createSignal } from 'solid-js'
+import { botStore } from '../bot'
 
-type SwitchMode = 'hasAvatar' | 'noAvatar'
 
-export const MuteAISwitch = (props: { mode?: SwitchMode }) => {
-  const { mode = 'noAvatar' } = props // Add default value for mode
+export const MuteAISwitch = () => {
 
   const [isMuted, setIsMuted] = createSignal(false)
   const [parent] = createAutoAnimate()
+  const [noAvatarParent] = createAutoAnimate()
+  const [noAvatarTextParent] = createAutoAnimate()
+  const { activeChannel} = botStore;
+  const isHasAvatar = !!activeChannel?.avatar 
 
   const handleOnClick = () => {
     setIsMuted(!isMuted())
@@ -20,7 +23,7 @@ export const MuteAISwitch = (props: { mode?: SwitchMode }) => {
         {`
           .toggle {
             position: relative;
-            width: 80px;
+            width: 60px;
             height: 24px;
             display: inline-block;
             cursor: pointer;
@@ -32,7 +35,7 @@ export const MuteAISwitch = (props: { mode?: SwitchMode }) => {
           }
 
           .muted {
-           width: 35px;
+            width: 35px;
             height: 35px;
             border-radius: 50px;
             background-color: white;
@@ -67,7 +70,7 @@ export const MuteAISwitch = (props: { mode?: SwitchMode }) => {
           }
         `}
       </style>
-      <Show when={mode === 'hasAvatar'} keyed>
+      <Show when={isHasAvatar} keyed>
         <div
           ref={parent}
           onClick={handleOnClick}
@@ -94,16 +97,44 @@ export const MuteAISwitch = (props: { mode?: SwitchMode }) => {
           </Show>
         </div>
       </Show>
-      <Show when={mode === 'noAvatar'} keyed>
-        <div class='flex items-center gap-2'>
-          <label class={`toggle ${isMuted() ? 'justify-start' : 'justify-end'}`}>
-            <div>
-              <span onClick={handleOnClick} class={`${isMuted() ? 'muted' : 'sound'}`}>
-                {isMuted() ? <MuteIcon class='text-lg' /> : <SoundIcon class='text-lg' />}
-              </span>
-            </div>
-          </label>
-          <span>{isMuted() ? 'Unmute the AI' : 'Mute the AI'}</span>
+      <Show when={!isHasAvatar} keyed>
+        <div class='flex items-center gap-1'>
+          <div>
+            <label
+              class={`toggle ${isMuted() ? 'justify-start' : 'justify-end'}`}
+              style={{
+                transition: 'all 0.5s ease-in-out',
+              }}
+            >
+              <div ref={noAvatarParent}>
+                <Show when={isMuted()}>
+                  <span
+                    onClick={handleOnClick}
+                    class={`${isMuted() ? 'muted' : 'sound'}  !w-[40px] !h-[40px]`}
+                  >
+                    {isMuted() ? <MuteIcon class='text-lg' /> : <SoundIcon class='text-lg' />}
+                  </span>
+                </Show>
+                <Show when={!isMuted()}>
+                  <span
+                    onClick={handleOnClick}
+                    class={`${isMuted() ? 'muted' : 'sound'}  !w-[40px] !h-[40px]`}
+                  >
+                    {isMuted() ? <MuteIcon class='text-lg' /> : <SoundIcon class='text-lg' />}
+                  </span>
+                </Show>
+              </div>
+            </label>
+          </div>
+
+          <span ref={noAvatarTextParent}>
+            <Show when={isMuted()} keyed>
+              <span>Unmute</span>
+            </Show>
+            <Show when={!isMuted()} keyed>
+              <span>Mute</span>
+            </Show>
+          </span>
         </div>
       </Show>
     </>

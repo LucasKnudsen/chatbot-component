@@ -1,19 +1,18 @@
-import { Component } from 'solid-js'
 import { BrainAIOneClick, UserIconOneClick } from '@/components'
 
-interface ConversationProps {
+interface Props {
   message: string
   role: 'bot' | 'user'
 }
-export const Conversation: Component<ConversationProps> = ({ message, role }) => {
-  if (role === 'user') {
+export const Conversation = (props: Props) => {
+  if (props.role === 'user') {
     return (
       <div class='flex flex-col gap-1'>
         <div class='flex items-center gap-2'>
           <UserIconOneClick />
           <div class='font-bold'>You</div>
         </div>
-        <div>{message}</div>
+        <div>{props.message}</div>
       </div>
     )
   }
@@ -24,7 +23,7 @@ export const Conversation: Component<ConversationProps> = ({ message, role }) =>
         <BrainAIOneClick />
         <div class='font-bold'>AI</div>
       </div>
-      <div class='text-[var(--primaryColor)]'>{message}</div>
+      <div class='text-[var(--primaryColor)]'>{props.message}</div>
     </div>
   )
 }

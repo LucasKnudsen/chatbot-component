@@ -3,23 +3,23 @@ import buttonStartBg from '@/assets/buttonStartBg.png';
 import { useTheme } from '../theme';
 import { BOT_STATUS } from './BotOneClick';
 
-interface ButtonStartProps {
+interface Props {
   onStart: () => void,
   isStart: Accessor<boolean>
   status: Accessor<string>
 }
-export const ButtonStart: Component<ButtonStartProps> = ({ onStart, isStart, status }) => {
+export const ButtonStart = (props: Props ) => {
   const handleRenderButtonContent = () => {
-    if (!isStart()) {
+    if (!props.isStart()) {
       return 'START';
     }
-    if (status() === BOT_STATUS.THINKING || status() === BOT_STATUS.ANSWERING) {
+    if (props.status() === BOT_STATUS.THINKING || props.status() === BOT_STATUS.ANSWERING) {
       return 'STOP'
     }
     return <StopIcon />
   }
   return (
-    <div onClick={onStart} class='flex w-52 h-52 items-center justify-center relative' 
+    <div onClick={props.onStart} class='flex w-52 h-52 items-center justify-center relative' 
       style={{ 
         'background-image': `url(${buttonStartBg})`, 
         'background-repeat': 'no-repeat',

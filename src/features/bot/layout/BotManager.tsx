@@ -31,8 +31,7 @@ export const BotManager = () => {
         if (publicChannels?.length === 0) {
           throw new Error('No public channels found')
         }
-
-        if (!configStore.chatSpaceConfig.isMultiChannel) {
+        if (!configStore.chatSpaceConfig.isMultiChannel || configStore.chatSpaceConfig.isOneClick) {
           // If there is only one channel, initialize the bot with it
           await botStoreActions.initBotStore(publicChannels[0])
         }
