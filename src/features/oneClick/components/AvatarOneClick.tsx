@@ -1,8 +1,8 @@
-import { botStore } from '../../bot'
 import { getAvatarStyleOneClickMode } from '../../bot/utils'
+import { oneClickStore } from '../store/oneClickStore'
 
 export const AvatarOneClick = () => {
-  const { activeChannel } = botStore
+  const { activeChannel } = oneClickStore
   const { type, source } = getAvatarStyleOneClickMode(activeChannel?.avatar)
 
   return (

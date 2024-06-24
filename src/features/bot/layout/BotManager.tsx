@@ -10,7 +10,7 @@ import {
   fetchPublicChannels,
 } from '..'
 
-import { BotOneClick } from '@/features/oneClick'
+import { BotOneClick, oneClickActions } from '@/features/oneClick'
 import { createQuery } from '@/hooks'
 import LayoutDefault from '@/layouts/default'
 import { logDev } from '@/utils'
@@ -31,7 +31,13 @@ export const BotManager = () => {
         if (publicChannels?.length === 0) {
           throw new Error('No public channels found')
         }
-        if (!configStore.chatSpaceConfig.isMultiChannel || configStore.chatSpaceConfig.isOneClick) {
+
+        if (configStore.chatSpaceConfig.isOneClick) {
+          // If one-click mode is enabled, initialize the bot with the first channel
+          await oneClickActions.initOneClickStore(publicChannels[0])
+        }
+
+        if (!configStore.chatSpaceConfig.isMultiChannel) {
           // If there is only one channel, initialize the bot with it
           await botStoreActions.initBotStore(publicChannels[0])
         }
