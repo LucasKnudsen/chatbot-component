@@ -1,71 +1,59 @@
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Show, createEffect, createSignal } from 'solid-js'
-import { AITextStatus } from './AITextStatus'
-import { AvatarOneClick } from './AvatarOneClick'
-import { ButtonStart } from './ButtonStart'
+import {
+  AITextStatus,
+  AvatarOneClick,
+  ButtonStart,
+  InputOneClick,
+  MuteAISwitch,
+} from './components'
 import { Conversation } from './Conversation'
-import { InputOneClick } from './InputOneClick'
-import { MuteAISwitch } from './MuteAISwitch'
-
-export const BOT_STATUS = {
-  NOT_STARTED: 'not_started',
-  IDLE: 'idle',
-  LISTENING: 'listening',
-  THINKING: 'thinking',
-  ANSWERING: 'answering',
-}
-type ConversationType = {
-  message: string
-  role: 'bot' | 'user'
-}
+import { oneClickActions, oneClickStore } from './store/oneClickStore'
+import { BotStatus, ChatMessage } from './types'
 
 export const BotOneClick = () => {
   const [isStart, setIsStart] = createSignal<boolean>(false)
-  const [status, setStatus] = createSignal<string>(BOT_STATUS.NOT_STARTED)
-  const [conversation, setConversation] = createSignal<ConversationType[]>([])
+  const [conversation, setConversation] = createSignal<ChatMessage[]>([])
 
-  const [AITextStatusParent] = createAutoAnimate()
-  const [inputParent] = createAutoAnimate()
-  const [answerParent] = createAutoAnimate()
-  const [conversationParent] = createAutoAnimate()
-  
+  const [TopContainerParent] = createAutoAnimate()
 
   const handleButtonRecord = () => {
     if (!isStart()) {
       setIsStart(true)
-      setStatus(BOT_STATUS.LISTENING)
+      oneClickActions.setStatus(BotStatus.LISTENING)
       return
     }
-    if (isStart() && status() === BOT_STATUS.LISTENING) {
-      setStatus(BOT_STATUS.THINKING)
+    if (isStart() && oneClickStore.botStatus === BotStatus.LISTENING) {
+      oneClickActions.setStatus(BotStatus.THINKING)
       return
     }
-    if (isStart() && status() === BOT_STATUS.ANSWERING) {
-      setStatus(BOT_STATUS.IDLE)
+    if (isStart() && oneClickStore.botStatus === BotStatus.ANSWERING) {
+      oneClickActions.setStatus(BotStatus.IDLE)
       setIsStart(false)
       return
     }
   }
 
   const handleSwitchBotStatus = () => {
-    switch (status()) {
-      case BOT_STATUS.THINKING:
-        const userConversation: ConversationType = {
+    switch (oneClickStore.botStatus) {
+      case BotStatus.THINKING:
+        const userConversation: ChatMessage = {
           message: 'Tell me about the Author Neil Gaiman..',
           role: 'user',
         }
         setConversation((prev) => [...prev, userConversation])
         setTimeout(() => {
-          setStatus(BOT_STATUS.ANSWERING)
+          oneClickActions.setStatus(BotStatus.ANSWERING)
         }, 3000)
         break
-      case BOT_STATUS.ANSWERING:
+
+      case BotStatus.ANSWERING:
         setTimeout(() => {
-          setStatus(BOT_STATUS.IDLE)
+          oneClickActions.setStatus(BotStatus.IDLE)
           setIsStart(false)
-          const botConversation: ConversationType = {
+          const botConversation: ChatMessage = {
             message: 'Lorem ipsum dolor sit amet consectetur. Enim integer iaculis dictum metus',
-            role: 'bot',
+            role: 'assistant',
           }
           setConversation((prev) => [...prev, botConversation])
         }, 4000)
@@ -78,7 +66,7 @@ export const BotOneClick = () => {
   createEffect(() => {
     if (!isStart()) {
       setTimeout(() => {
-        setStatus(BOT_STATUS.IDLE)
+        oneClickActions.setStatus(BotStatus.IDLE)
       }, 2000)
       return
     }
@@ -88,80 +76,48 @@ export const BotOneClick = () => {
   return (
     <div
       data-testid='BotOneClick'
-      class='block md:hidden relative flex flex-col grow lg:px-16 animate-fade-in mt-4 overflow-hidden'
+      class='md:hidden relative flex flex-col grow lg:px-16 animate-fade-in mt-4 overflow-hidden'
     >
       <div
-        ref={AITextStatusParent}
+        ref={TopContainerParent}
         class='flex flex-col grow w-full  items-center overflow-hidden px-5 bg-white'
       >
         <Show
           when={
-            status() === BOT_STATUS.NOT_STARTED ||
-            status() === BOT_STATUS.THINKING ||
-            status() === BOT_STATUS.ANSWERING
+            oneClickStore.botStatus === BotStatus.NOT_STARTED ||
+            oneClickStore.botStatus === BotStatus.THINKING ||
+            oneClickStore.botStatus === BotStatus.ANSWERING
           }
           keyed
         >
-          <AITextStatus status={status} />
+          <AITextStatus />
         </Show>
+
         <div class='relative w-full h-full'>
           <div class='absolute h-full left-2 top-2 z-10'>
             {/* Allow MuteAISwith to use auto-animate while changing layout*/}
-            <Show when={!isStart() && status() !== BOT_STATUS.NOT_STARTED} keyed>
+            <Show when={!isStart() && oneClickStore.botStatus !== BotStatus.NOT_STARTED} keyed>
               <MuteAISwitch />
             </Show>
-            <Show when={isStart() && status() !== BOT_STATUS.NOT_STARTED} keyed>
+            <Show when={isStart() && oneClickStore.botStatus !== BotStatus.NOT_STARTED} keyed>
               <MuteAISwitch />
             </Show>
           </div>
+
           <div class='h-[70%]'>
             <AvatarOneClick />
           </div>
+
           <div class='absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
-            <ButtonStart onStart={handleButtonRecord} isStart={isStart} status={status} />
+            <ButtonStart onStart={handleButtonRecord} isStart={isStart} />
           </div>
         </div>
       </div>
-      <div ref={answerParent} class='overflow-scroll pt-2.5 pb-3.5'>
-        <Show
-          when={
-            status() === BOT_STATUS.IDLE ||
-            status() === BOT_STATUS.THINKING ||
-            status() === BOT_STATUS.ANSWERING
-          }
-        >
-          <div
-            id='conversations'
-            ref={conversationParent}
-            class={`${
-              status() === BOT_STATUS.IDLE ? 'h-[90px]' : ' h-[64px]'
-            } px-5 flex flex-col gap-2 overflow-scroll`}
-          >
-            {conversation().map((item) => (
-              <Conversation message={item.message} role={item.role} />
-            ))}
-          </div>
-        </Show>
-      </div>
-      <div
-        ref={inputParent}
-      >
-        <Show when={status() === BOT_STATUS.NOT_STARTED}>
-            <div class='flex text-center justify-center gap-1 text-[var(--primaryColor)] mb-2'>
-              <span>Please tap the </span>
-              <span class='font-semibold'>START</span>
-              <span>button to start the AI</span>
-            </div>
-        </Show>
-        <Show
-          when={status() === BOT_STATUS.IDLE}
-          keyed
-        >
-          <div class='h-[70px]'>
-            <InputOneClick />
-          </div>
-        </Show>
-      </div>
+
+      <Conversation messages={conversation()} />
+
+      {/* Text Input  */}
+      <InputOneClick />
     </div>
   )
 }
