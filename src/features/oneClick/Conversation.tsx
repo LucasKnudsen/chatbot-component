@@ -9,7 +9,7 @@ export const Conversation = (props: { messages: ChatMessage[] }) => {
   const [conversationParent] = createAutoAnimate()
 
   return (
-    <div ref={answerParent} class='overflow-scroll pt-2.5 pb-3.5'>
+    <div ref={answerParent} class='overflow-scroll md:overflow-auto pt-2.5 pb-3.5'>
       <Show
         when={
           oneClickStore.botStatus === BotStatus.IDLE ||
@@ -20,9 +20,9 @@ export const Conversation = (props: { messages: ChatMessage[] }) => {
         <div
           id='conversations'
           ref={conversationParent}
-          class={`px-5 flex flex-col gap-2 overflow-scroll`}
+          class={`px-5 flex flex-col gap-2 overflow-scroll md:overflow-auto`}
           style={{
-            height: oneClickStore.botStatus === BotStatus.IDLE ? '90px' : '64px',
+            height: oneClickStore.botStatus === BotStatus.IDLE ? '90px md:h-auto' : '64px md:h-auto',
           }}
         >
           <div class='flex flex-col gap-2'>

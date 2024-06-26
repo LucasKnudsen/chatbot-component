@@ -22,19 +22,20 @@ export const ButtonStart = (props: Props) => {
     return <StopIcon />
   }
   return (
-    <div
+    <button
       onClick={props.onStart}
-      class='flex w-52 h-52 items-center justify-center relative'
+      class='all-unset flex w-52 h-52 items-center justify-center relative'
       style={{
         'background-image': `url(${buttonStartBg})`,
         'background-repeat': 'no-repeat',
         'background-size': 'cover',
+        cursor: oneClickStore.botStatus === BotStatus.NOT_STARTED ? 'not-allowed' : 'pointer',
       }}
     >
-      <div class='text-white h-full w-full flex items-center justify-center rounded-full cursor-pointer'>
+      <div class='text-white h-full w-full flex items-center justify-center rounded-full'>
         {handleRenderButtonContent()}
       </div>
-    </div>
+    </button>
   )
 }
 

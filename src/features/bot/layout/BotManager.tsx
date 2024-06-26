@@ -10,7 +10,7 @@ import {
   fetchPublicChannels,
 } from '..'
 
-import { BotOneClick, oneClickActions } from '@/features/oneClick'
+import { oneClickActions } from '@/features/oneClick'
 import { createQuery } from '@/hooks'
 import LayoutDefault from '@/layouts/default'
 import { logDev } from '@/utils'
@@ -31,11 +31,7 @@ export const BotManager = () => {
         if (publicChannels?.length === 0) {
           throw new Error('No public channels found')
         }
-
-        if (configStore.chatSpaceConfig.isOneClick) {
-          // If one-click mode is enabled, initialize the bot with the first channel
-          await oneClickActions.initOneClickStore(publicChannels[0])
-        }
+ 
 
         if (!configStore.chatSpaceConfig.isMultiChannel) {
           // If there is only one channel, initialize the bot with it
@@ -93,18 +89,13 @@ export const BotManager = () => {
       <Match when={channelsQuery.error()}>
         <LayoutDefault>
           <div class='h-full flex flex-col justify-center  animate-fade-in gap-4'>
-            <div class='text-lg  text-red-500 text-center'>
+            <div class='text-lg text-red-500 text-center'>
               <p class='mb-4'>Error: {parseError(channelsQuery.error())?.message}</p>
             </div>
 
             <SignOutButton />
           </div>
         </LayoutDefault>
-      </Match>
-
-      {/* onClick mode */}
-      <Match when={configStore.chatSpaceConfig.isOneClick}>
-        <BotOneClick />
       </Match>
 
       {/* Single Knowledge Base View */}

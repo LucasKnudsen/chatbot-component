@@ -11,7 +11,7 @@ export const InputOneClick = () => {
   const { theme } = useTheme()
 
   return (
-    <div ref={inputParent}>
+    <div ref={inputParent} class="md:w-full">
       <Show when={oneClickStore.botStatus === BotStatus.NOT_STARTED}>
         <div class='flex text-center justify-center gap-1 text-[var(--primaryColor)] mb-2'>
           <span>Please tap the </span>
@@ -21,9 +21,9 @@ export const InputOneClick = () => {
       </Show>
 
       <Show when={oneClickStore.botStatus === BotStatus.IDLE} keyed>
-        <div class='h-[70px]'>
-          <div class={`py-3 border-t border-[${theme().borderColor}] w-full`}>
-            <div class='flex items-center justify-between mx-5 border border-[var(--bubbleButtonColor)] px-3 py-0 rounded-lg bg-[var(--textInputBackgroundColor)]'>
+        <div class='h-[70px] md:h-auto'>
+          <div class={`py-3 md:py-5 border-t border-[${theme().borderColor}] w-full`}>
+            <div class='flex items-center justify-between mx-0 border border-[var(--bubbleButtonColor)] px-3 py-0 rounded-lg bg-[var(--textInputBackgroundColor)]'>
               <EditIcon />
               <input class='w-4/5 h-4/5 tex-[15px]' placeholder='Text with the AI' />
               <SendIcon color={'rgb(170, 170, 170)'} />

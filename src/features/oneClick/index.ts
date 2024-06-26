@@ -1,4 +1,6 @@
 export * from './BotOneClick'
 export * from './components/MuteAISwitch'
+export * from './OneClickContainer'
+export * from './OneClickManager'
 export * from './store/oneClickStore'
 export * from './types'

@@ -11,14 +11,11 @@ export const AvatarOneClick = () => {
         <img class='object-cover h-full w-full' src={source} alt='avatarOneClick' />
       ) : (
         <video
-          class='w-full h-full object-cover'
+          class='w-full h-full object-cover scale-[2] md:scale-[1.7] lg:scale-[1.8]'
           autoplay={true}
           loop
           muted
           src={source}
-          style={{
-            transform: 'scale(2)',
-          }}
         />
       )}
     </div>

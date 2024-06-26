@@ -29,7 +29,38 @@ export const BotOneClick = () => {
     // }, 
   })
 
+  const handleSwitchBotStatus = () => {
+    switch (oneClickStore.botStatus) {
+      case BotStatus.THINKING:
+        const userConversation: ChatMessage = {
+          message: 'Tell me about the Author Neil Gaiman..',
+          role: 'user',
+        }
+        setConversation((prev) => [...prev, userConversation])
+        setTimeout(() => {
+          oneClickActions.setStatus(BotStatus.ANSWERING)
+        }, 3000)
+        break
+
+      case BotStatus.ANSWERING:
+        setTimeout(() => {
+          oneClickActions.setStatus(BotStatus.IDLE)
+          setIsStart(false)
+          const botConversation: ChatMessage = {
+            message: 'Lorem ipsum dolor sit amet consectetur. Enim integer iaculis dictum metus',
+            role: 'assistant',
+          }
+          setConversation((prev) => [...prev, botConversation])
+        }, 4000)
+        break
+      default:
+        break
+      }
+    }
+
   const handleButtonRecord = () => {
+    if (oneClickStore.botStatus === BotStatus.NOT_STARTED) return;
+
     if (!isStart()) {
       setIsStart(true)
       oneClickActions.setStatus(BotStatus.LISTENING)
@@ -139,16 +170,18 @@ export const BotOneClick = () => {
       }, 2000)
       return
     }
+    // for mock testing when the bot works and return the answer
+    handleSwitchBotStatus()
   })
 
   return (
     <div
       data-testid='BotOneClick'
-      class='md:hidden relative flex flex-col grow lg:px-16 animate-fade-in mt-4 overflow-hidden'
+      class='relative flex flex-col w-full h-full lg:px-7 xl:px-3 xxl:px-0 animate-fade-in mt-4 overflow-hidden'
     >
       <div
         ref={TopContainerParent}
-        class='flex flex-col grow w-full  items-center overflow-hidden px-5 bg-white'
+        class='flex flex-col grow md:grow-0 w-full md:h-[80%] xxl:h-[70%] items-center overflow-hidden px-5 bg-white'
       >
         <Show
           when={
@@ -172,7 +205,7 @@ export const BotOneClick = () => {
             </Show>
           </div>
 
-          <div class='h-[70%]'>
+          <div class='h-[60%] md:h-[65%] xl:h-[70%] xxl:h-[75%]'>
             <AvatarOneClick />
           </div>
 
@@ -181,13 +214,16 @@ export const BotOneClick = () => {
           </div>
         </div>
       </div>
-
-      <Conversation messages={conversation()} />
+      <div class="md:h-[20%] xxl:h-[30%] w-full flex flex-col justify-end px-5">
+      <Show when={conversation().length > 0}>
+        <Conversation messages={conversation()} />
+      </Show>
 
       <audio ref={audioRef} crossOrigin='anonymous' src={audioRef.src} class='hidden'></audio>
 
       {/* Text Input  */}
       <InputOneClick />
+      </div>
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import { OneClickContainer, OneClickManager } from '@/features/oneClick'
 import {
   ChatConfig,
   PortalButton,
@@ -50,31 +51,55 @@ export const PortalInitializer = (props: ChatConfig) => {
       {/* Shows loading while the config is being fetched and autoOpen is true as to not just show a blank screen */}
       <Show when={configQuery.isLoading() && props.config?.autoOpen}>
         <FraiaLoading />
-      </Show>
+      </Show> 
 
       <Show when={configQuery.data()}>
+      {/* <Show when={false}> */}
         <PortalButton />
 
-        <PortalContainer>
-          <Toaster />
+        {/* OneClickManager goes here  */}
+        <Show when={chatSpaceConfig.isOneClick}>
+          <OneClickContainer>
+            <Toaster />
 
-          <AuthProvider isPublic={Boolean(configQuery.data()?.isPublic)}>
-            <Show when={configStore.isBotOpened}>
+            <AuthProvider isPublic={Boolean(configQuery.data()?.isPublic)}>
               <div
                 data-testid='PortalInitializer'
-                class='fixed top-0 left-0 flex flex-nowrap h-full w-full overflow-hidden animate-fade-in '
+                class='fixed top-0 left-0 flex flex-nowrap h-full w-full justify-center overflow-hidden animate-fade-in '
               >
-                <div class='flex flex-col grow max-lg:overflow-hidden '>
+                <div class='flex flex-col max-lg:overflow-hidden w-full h-full shadow-xl'>
                   <Nav />
 
-                  <BotManager />
+                  <OneClickManager />
                 </div>
-
-                <NavigationDrawer />
               </div>
-            </Show>
-          </AuthProvider>
-        </PortalContainer>
+            </AuthProvider>
+          </OneClickContainer>
+        </Show>
+
+        {/* Traditional BotManager goes here */}
+        <Show when={!chatSpaceConfig.isOneClick}>
+          <PortalContainer>
+            <Toaster />
+
+            <AuthProvider isPublic={Boolean(configQuery.data()?.isPublic)}>
+              <Show when={configStore.isBotOpened}>
+                <div
+                  data-testid='PortalInitializer'
+                  class='fixed top-0 left-0 flex flex-nowrap h-full w-full overflow-hidden animate-fade-in '
+                >
+                  <div class='flex flex-col grow max-lg:overflow-hidden '>
+                    <Nav />
+
+                    <BotManager />
+                  </div>
+
+                  <NavigationDrawer />
+                </div>
+              </Show>
+            </AuthProvider>
+          </PortalContainer>
+        </Show>
       </Show>
     </>
   )
