@@ -33,7 +33,10 @@ export const BotOneClick = () => {
     if (oneClickStore.botStatus === BotStatus.LISTENING) {
       oneClickActions.setStatus(BotStatus.THINKING)
       audioRecorder.stopRecording()
-    } else if (oneClickStore.botStatus === BotStatus.ANSWERING) {
+    } else if (
+      oneClickStore.botStatus === BotStatus.ANSWERING ||
+      oneClickStore.botStatus === BotStatus.THINKING
+    ) {
       oneClickActions.setStatus(BotStatus.IDLE)
     } else {
       oneClickActions.setStatus(BotStatus.LISTENING)

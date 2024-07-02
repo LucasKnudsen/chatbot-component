@@ -40,8 +40,6 @@ export const Conversation = (props: { messages: ChatMessage[] }) => {
         50
       )
     }
-    const element = document.getElementById('bottomEl')
-    element!.scrollIntoView()
   }
 
   return (
@@ -95,7 +93,6 @@ export const Conversation = (props: { messages: ChatMessage[] }) => {
                 <ChatMessageRow content={message.content} role={message.role} />
               ))}
             </div>
-            <div id='bottomEl'></div>
           </div>
         </Show>
       </div>
