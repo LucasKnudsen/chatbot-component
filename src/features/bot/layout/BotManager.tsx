@@ -10,7 +10,6 @@ import {
   fetchPublicChannels,
 } from '..'
 
-import { oneClickActions } from '@/features/oneClick'
 import { createQuery } from '@/hooks'
 import LayoutDefault from '@/layouts/default'
 import { logDev } from '@/utils'
@@ -31,7 +30,6 @@ export const BotManager = () => {
         if (publicChannels?.length === 0) {
           throw new Error('No public channels found')
         }
- 
 
         if (!configStore.chatSpaceConfig.isMultiChannel) {
           // If there is only one channel, initialize the bot with it

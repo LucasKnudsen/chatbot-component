@@ -46,37 +46,42 @@ export function createAudioRecorder(props?: {
   }
 
   const startRecording = () => {
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        const recorder = new MediaRecorder(stream)
-        const audioChunks: Blob[] = []
-        let type = 'audio/webm'
+    try {
+      navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then((stream) => {
+          const recorder = new MediaRecorder(stream)
+          const audioChunks: Blob[] = []
+          let type = 'audio/webm'
 
-        recorder.ondataavailable = (event) => {
-          if (event.data.size > 0) {
-            audioChunks.push(event.data)
-            type = event.data.type.split(';')[0]
+          recorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              audioChunks.push(event.data)
+              type = event.data.type.split(';')[0]
+            }
           }
-        }
 
-        recorder.onstop = async () => {
-          const audioBlob = new Blob(audioChunks, { type })
-          setAudioBlob(audioBlob)
-          props?.onStop?.(audioBlob) // Call the onStop callback with the audioBlob
-          resetTimer()
-        }
+          recorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, { type })
+            setAudioBlob(audioBlob)
+            props?.onStop?.(audioBlob) // Call the onStop callback with the audioBlob
+            resetTimer()
+          }
 
-        setMediaStream(stream)
-        setMediaRecorder(recorder)
-        recorder.start()
-        setIsRecording(true)
-        startTimer()
-      })
-      .catch((error) => {
-        console.error('Error accessing microphone:', error)
-        alert('Error accessing microphone')
-      })
+          setMediaStream(stream)
+          setMediaRecorder(recorder)
+          recorder.start()
+          setIsRecording(true)
+          startTimer()
+        })
+        .catch((error) => {
+          console.error('Error accessing microphone:', error)
+          alert(error)
+        })
+    } catch (error) {
+      console.error('Error starting recording:', error)
+      alert(error)
+    }
   }
 
   const stopRecording = () => {

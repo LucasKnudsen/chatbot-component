@@ -72,7 +72,7 @@ export const Nav = () => {
   }
 
   return (
-    <div class='flex items-center w-full pt-4 lg:pt-10 px-5 lg:px-10 xl:px-5'>
+    <div class='flex items-center w-full pt-5 px-5  xl:px-5'>
       <div
         class='flex flex-wrap items-enter rounded-full p-2.5 sm:pl-6 sm:pr-2 sm:py-2.5 z-50 w-full'
         style={{

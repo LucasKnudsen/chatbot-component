@@ -1,14 +1,15 @@
 import { MuteIcon, SoundIcon } from '@/components'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { Show, createSignal } from 'solid-js'
+import { createSignal, Show } from 'solid-js'
 import { oneClickStore } from '../store/oneClickStore'
 
+export const [isMuted, setIsMuted] = createSignal(false)
+
 export const MuteAISwitch = () => {
-  const [isMuted, setIsMuted] = createSignal(false)
   const [parent] = createAutoAnimate()
   const [noAvatarParent] = createAutoAnimate()
   const [noAvatarTextParent] = createAutoAnimate()
-  const { activeChannel } = oneClickStore 
+  const { activeChannel } = oneClickStore
   const isHasAvatar = !!activeChannel?.avatar
 
   const handleOnClick = () => {
@@ -95,6 +96,7 @@ export const MuteAISwitch = () => {
           </Show>
         </div>
       </Show>
+
       <Show when={!isHasAvatar} keyed>
         <div class='flex items-center gap-1'>
           <div>

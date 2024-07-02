@@ -1,15 +1,17 @@
+import { Channel } from '@/graphql'
 import { createStore } from 'solid-js/store'
 import { BotStatus } from '../types'
-import { Channel } from '@/graphql'
 
 export type OneClickStore = {
   botStatus: BotStatus
   activeChannel?: Channel | null
+  chatMode: 'voice' | 'text'
 }
 
 const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   botStatus: BotStatus.NOT_STARTED,
-  activeChannel: null
+  activeChannel: null,
+  chatMode: 'voice',
 })
 
 const initOneClickStore = (channel: Channel) => {
