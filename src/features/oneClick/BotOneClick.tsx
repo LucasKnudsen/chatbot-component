@@ -2,7 +2,6 @@ import { NEXT_API_ENDPOINTS } from '@/constants/api'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Show, createEffect } from 'solid-js'
 import { createAudioRecorder } from '../avatar'
-import { transcribeAudio } from '../knowledge-base'
 import {
   AITextStatus,
   AvatarOneClick,
@@ -57,20 +56,22 @@ export const BotOneClick = () => {
     const formData = new FormData()
     formData.append('file', audioFile)
 
-    if (audioBlob.type.includes('mp4')) {
-      const transcriptionResponse = await transcribeAudio(audioFile, {
-        diarization_toggle: false,
-      })
+    // if (audioBlob.type.includes('mp4')) {
 
-      transcribedText = transcriptionResponse.transcription[0].text
-    } else {
-      const transcriptionResponse = await fetch(NEXT_API_ENDPOINTS.speechToText, {
-        method: 'POST',
-        body: formData,
-      })
+    // throw new Error('MP4 audio not supported yet')
+    //   const transcriptionResponse = await transcribeAudio(audioFile, {
+    //     diarization_toggle: false,
+    //   })
 
-      transcribedText = (await transcriptionResponse.json()).data.transcription
-    }
+    //   transcribedText = transcriptionResponse.transcription[0].text
+    // } else {
+    const transcriptionResponse = await fetch(NEXT_API_ENDPOINTS.speechToText, {
+      method: 'POST',
+      body: formData,
+    })
+
+    transcribedText = (await transcriptionResponse.json()).data.transcription
+    // }
 
     return transcribedText
   }
@@ -84,6 +85,7 @@ export const BotOneClick = () => {
       submitNewMessage(transcribedText)
     } catch (error) {
       console.error('Error in handleVoiceToVoice', error)
+      alert(error)
     }
   }
 
