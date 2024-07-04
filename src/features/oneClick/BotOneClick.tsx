@@ -8,12 +8,14 @@ import {
   ButtonStart,
   InputOneClick,
   MuteAISwitch,
+  isMuted,
 } from './components'
-import { AIVoice } from './components/AIVoice'
+import { AIVoice, audioRef, setIsPlayingQueue } from './components/AIVoice'
 import { Conversation, expandConversation } from './Conversation'
 import { useLLM } from './hooks'
 import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
+import toast from 'solid-toast'
 
 export const BotOneClick = () => {
   const [TopContainerParent] = createAutoAnimate()
@@ -24,9 +26,23 @@ export const BotOneClick = () => {
     },
   })
 
-  const { messages, audio64, setAudio64, submitNewMessage } = useLLM({
+  const { messages, audio64, setAudio64, submitNewMessage, cancelQuery } = useLLM({
     initialMessages: [],
   })
+
+  const handleTriggerAudio = () => {
+    if (!audioRef) return
+    audioRef.muted = isMuted()
+  }
+
+  const handleStopAnswering = () => {
+    if (audioRef) {
+      audioRef.pause()
+      audioRef.src = ''
+      setAudio64([])
+      setIsPlayingQueue(false)
+    }
+  }
 
   const handleButtonRecord = () => {
     if (oneClickStore.botStatus === BotStatus.LISTENING) {
@@ -36,6 +52,8 @@ export const BotOneClick = () => {
       oneClickStore.botStatus === BotStatus.ANSWERING ||
       oneClickStore.botStatus === BotStatus.THINKING
     ) {
+      cancelQuery()
+      handleStopAnswering()
       oneClickActions.setStatus(BotStatus.IDLE)
     } else {
       oneClickActions.setStatus(BotStatus.LISTENING)
@@ -78,14 +96,14 @@ export const BotOneClick = () => {
 
   const handleVoiceToVoice = async (audioBlob: Blob) => {
     try {
-      console.time('Transcription')
       const transcribedText = await handleTranscription(audioBlob)
-      console.timeEnd('Transcription')
-
       submitNewMessage(transcribedText)
     } catch (error) {
-      console.error('Error in handleVoiceToVoice', error)
-      alert(error)
+      oneClickActions.setStatus(BotStatus.IDLE)
+      toast.error('Error in voice to voice conversion', {
+        position: 'top-center',
+        className: '!text-base',
+      })
     }
   }
 
@@ -96,57 +114,40 @@ export const BotOneClick = () => {
   })
 
   return (
-    <div
-      ref={TopContainerParent}
-      data-testid='BotOneClick'
-      class='relative flex flex-col w-full h-full animate-fade-in mt-4 overflow-hidden'
-    >
-      <AIVoice audioQueue={audio64} setAudioQueue={setAudio64} />
+    <>
+        <div
+          ref={TopContainerParent}
+          data-testid='BotOneClick'
+          class='relative flex flex-col w-full h-full animate-fade-in mt-4 overflow-hidden'
+        >
+          <AIVoice audioQueue={audio64} setAudioQueue={setAudio64} />
 
-      <div class='relative w-full flex flex-col h-1/2  items-center overflow-hidden px-5 bg-white'>
-        <div class='absolute right-6 top-2 z-10 '>
-          <AITextStatus />
+          <div class='relative w-full flex flex-col h-1/2  items-center overflow-hidden px-5 bg-white'>
+            <div class='absolute right-6 top-2 z-10 '>
+              <AITextStatus />
+            </div>
+
+            <div class='absolute  left-4 top-2 z-10 '>
+              <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED} keyed>
+                <MuteAISwitch onMute={handleTriggerAudio} />
+              </Show>
+            </div>
+
+            <div class='h-full'>
+              <AvatarOneClick />
+            </div>
+
+            <ButtonStart onStart={handleButtonRecord} />
+          </div>
+          
+          <div class={`w-full overflow-auto ${expandConversation() ? 'absolute z-[100] bg-[var(--backgroundColor)]' : ''} flex flex-col justify-end px-5 pb-4`}
+          style={{
+            height: expandConversation() ? '100%' : '50%',
+          }}>
+            <Conversation messages={messages()} />
+            <InputOneClick onSubmit={submitNewMessage} />
+          </div>
         </div>
-
-        <div class='absolute  left-4 top-2 z-10 '>
-          <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED} keyed>
-            <MuteAISwitch />
-          </Show>
-        </div>
-
-        <div class='h-full'>
-          <AvatarOneClick />
-        </div>
-
-        <ButtonStart onStart={handleButtonRecord} />
-      </div>
-
-      <div
-        class={`w-full ${
-          expandConversation() ? 'absolute z-30 bg-[var(--drawerBackground)]  ' : ''
-        } flex flex-col justify-end px-5 pb-4 transition-all `}
-        style={{
-          height: expandConversation() ? '100%' : '50%',
-        }}
-      >
-        <Conversation messages={messages()} />
-
-        {/* Text Input  */}
-        <InputOneClick onSubmit={submitNewMessage} />
-      </div>
-
-      {/* <Show when={showAllConversation()}>
-        <div class='flex flex-col grow px-5 overflow-auto pb-2'>
-          <Conversation
-            messages={messages()}
-            showAllConversation={showAllConversation}
-            callbackExpand={handleExpandConversation}
-          />
-        </div>
-        <div class='px-5'>
-          <InputOneClick onSubmit={submitNewMessage} />
-        </div>
-      </Show> */}
-    </div>
+    </>
   )
 }

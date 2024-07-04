@@ -3,9 +3,11 @@ import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { createSignal, Show } from 'solid-js'
 import { oneClickStore } from '../store/oneClickStore'
 
-export const [isMuted, setIsMuted] = createSignal(false)
-
-export const MuteAISwitch = () => {
+export const [isMuted, setIsMuted] = createSignal<boolean>(false)
+interface Props {
+  onMute?: () => void
+}
+export const MuteAISwitch = (props: Props) => {
   const [parent] = createAutoAnimate()
   const [noAvatarParent] = createAutoAnimate()
   const [noAvatarTextParent] = createAutoAnimate()
@@ -14,6 +16,7 @@ export const MuteAISwitch = () => {
 
   const handleOnClick = () => {
     setIsMuted(!isMuted())
+    props.onMute && props.onMute()
   }
 
   return (
@@ -80,7 +83,7 @@ export const MuteAISwitch = () => {
           }}
         >
           <Show when={isMuted()} keyed>
-            <span class='ml-2.5'>Unmute</span>
+            <span class='ml-2.5'>Mute</span>
           </Show>
           <div>
             <span class={`${isMuted() ? 'sound' : 'muted'}`}>
@@ -92,7 +95,7 @@ export const MuteAISwitch = () => {
             </span>
           </div>
           <Show when={!isMuted()} keyed>
-            <span class='mr-2.5'>Mute</span>
+            <span class='mr-2.5'>Unmute</span>
           </Show>
         </div>
       </Show>
@@ -129,10 +132,10 @@ export const MuteAISwitch = () => {
 
           <span ref={noAvatarTextParent}>
             <Show when={isMuted()} keyed>
-              <span>Unmute</span>
+              <span>Mute</span>
             </Show>
             <Show when={!isMuted()} keyed>
-              <span>Mute</span>
+              <span>Unmute</span>
             </Show>
           </span>
         </div>
