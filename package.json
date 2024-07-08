@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
+    "@heygen/streaming-avatar": "^1.0.14",
     "@modular-forms/solid": "^0.20.0",
     "@popperjs/core": "^2.11.8",
     "@ts-stack/markdown": "^1.5.0",

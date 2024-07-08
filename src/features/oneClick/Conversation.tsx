@@ -42,45 +42,46 @@ export const Conversation = (props: { messages: ChatMessage[] }) => {
 
   return (
     <div
-      class={`flex justify-start flex-col relative mt-[20px] ${
-        props.messages?.length > 0 ? 'border-t' : ''
-      } ${expandConversation() ? 'h-[90%] lg:h-[86%]' : 'h-[70%]'}`}
+      class={`flex justify-start flex-col mt-[20px] ${props.messages?.length > 0 ? 'border-t' : ''} ${expandConversation() ? 'h-[90%] lg:h-[86%]' : 'h-[70%]'} relative`}
     >
       <Show when={props.messages?.length > 0}>
         <div class='absolute z-[100] top-[-15px] w-full justify-end'>
           <button class={`flex justify-end gap-2 w-full `} onClick={handleExpandConversation}>
-            <div class='flex items-center gap-2 cursor-pointer hover:shadow-md rounded-full'>
-              <div class='border bg-white border-[var(--primaryColor)] flex items-center px-3 rounded-2xl gap-[15px]'>
-                <span class='text-sm font-semibold text-[var(--primaryColor)]'>
-                  {expandConversation() ? 'Collapse' : 'Expand'}
-                </span>
-
-                <ExpandIcon
-                  width={10}
-                  height={10}
-                  color={theme().primaryColor}
-                  style={{
-                    transform: expandConversation() ? 'rotate(180deg)' : 'rotate(0deg)',
-                  }}
-                />
-              </div>
+            <div class='flex items-center gap-2 cursor-pointer rounded-2xl hover:shadow-md rounded'>
+              <Show
+                when={expandConversation()}
+                fallback={
+                  <div
+                    class='border-2 bg-white border-[var(--primaryColor)] flex items-center px-3 rounded-2xl gap-[15px]'
+                  >
+                    <span class='font-bold text-[var(--primaryColor)]'>Expand</span>
+                    <ExpandIcon width={10} height={10} color={theme().primaryColor} />
+                  </div>
+                }
+              >
+                <div
+                  class='bg-white border-2 border-[var(--primaryColor)] flex items-center px-3 rounded-2xl gap-[15px]'
+                >
+                  <span class='text-[var(--primaryColor)] font-bold'>Collapse</span>
+                  <ExpandIcon width={10} height={10} color={theme().primaryColor} />
+                </div>
+              </Show>
             </div>
           </button>
         </div>
       </Show>
 
-      <div
-        ref={chatWindowEl}
-        class={`flex overflow-auto h-full `}
-        style={{
-          'scrollbar-width': 'none',
-        }}
-      >
+      <div ref={chatWindowEl} class={`flex overflow-auto mb-2 relative ${expandConversation() ? 'pt-5' : 'pt-5'} `} style={{
+        height: expandConversation() ? '95%' : '90%',
+        "scrollbar-width": 'none',
+      }}>
         <div class='absolute left-0 w-full h-8 bg-gradient-to-b from-white to-transparent pointer-events-none z-10' />
         <div class='absolute left-0 bottom-0 w-full h-6 bg-gradient-to-t from-white to-transparent pointer-events-none z-10' />
-
         <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED}>
-          <div id='conversations' class={`py-4 animate-fade-in flex flex-col w-full h-auto gap-2 `}>
+          <div
+            id='conversations'
+            class={`py-4 animate-fade-in flex flex-col w-full h-auto gap-2`}
+          >
             <div class='flex flex-col gap-2 relative animate-fade-in'>
               {props.messages.map((message) => (
                 <ChatMessageRow content={message.content} role={message.role} />

@@ -11,8 +11,8 @@ export const MuteAISwitch = (props: Props) => {
   const [parent] = createAutoAnimate()
   const [noAvatarParent] = createAutoAnimate()
   const [noAvatarTextParent] = createAutoAnimate()
-  const { activeChannel } = oneClickStore
-  const isHasAvatar = !!activeChannel?.avatar
+  const { activeChannel, isHeyGenMode } = oneClickStore
+  const isHasAvatar = !!activeChannel?.avatar || isHeyGenMode
 
   const handleOnClick = () => {
     setIsMuted(!isMuted())
@@ -83,19 +83,19 @@ export const MuteAISwitch = (props: Props) => {
           }}
         >
           <Show when={isMuted()} keyed>
-            <span class='ml-2.5 text-sm'>Muted</span>
+            <span class='ml-2.5'>Mute</span>
           </Show>
           <div>
-            <span class={`${isMuted() ? 'sound' : 'muted'}`}>
+            <span class={`${isMuted() ? 'muted' : 'sound'}`}>
               {isMuted() ? (
-                <SoundIcon onClick={handleOnClick} />
-              ) : (
                 <MuteIcon onClick={handleOnClick} />
+              ) : (
+                <SoundIcon onClick={handleOnClick} />
               )}
             </span>
           </div>
           <Show when={!isMuted()} keyed>
-            <span class='mr-2.5 text-sm'>Unmuted</span>
+            <span class='mr-2.5'>Unmute</span>
           </Show>
         </div>
       </Show>
@@ -132,10 +132,10 @@ export const MuteAISwitch = (props: Props) => {
 
           <span ref={noAvatarTextParent}>
             <Show when={isMuted()} keyed>
-              <span class='text-sm'>Muted</span>
+              <span>Mute</span>
             </Show>
             <Show when={!isMuted()} keyed>
-              <span class='text-sm'>Unmuted</span>
+              <span>Unmute</span>
             </Show>
           </span>
         </div>

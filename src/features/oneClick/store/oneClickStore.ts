@@ -6,12 +6,14 @@ export type OneClickStore = {
   botStatus: BotStatus
   activeChannel?: Channel | null
   chatMode: 'voice' | 'text'
+  isHeyGenMode: boolean
 }
 
 const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   botStatus: BotStatus.NOT_STARTED,
   activeChannel: null,
   chatMode: 'voice',
+  isHeyGenMode: true,
 })
 
 const initOneClickStore = (channel: Channel) => {
