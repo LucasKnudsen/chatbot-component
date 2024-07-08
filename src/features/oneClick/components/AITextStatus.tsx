@@ -1,4 +1,4 @@
-import { SpeakerIcon, TypingBubble } from '@/components'
+import { SpeakerIcon, Spinner } from '@/components'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Match, Switch } from 'solid-js'
 import { oneClickStore } from '../store/oneClickStore'
@@ -12,7 +12,7 @@ export const AITextStatus = () => {
       <Switch>
         <Match when={oneClickStore.botStatus === BotStatus.NOT_STARTED}>
           <div class='mt-2'>
-            <TypingBubble />
+            <Spinner size={24} />
           </div>
         </Match>
 
@@ -22,13 +22,13 @@ export const AITextStatus = () => {
 
         <Match when={oneClickStore.botStatus === BotStatus.THINKING}>
           <div class='mt-2'>
-            <TypingBubble />
+            <Spinner size={24} />
           </div>
         </Match>
 
         <Match when={oneClickStore.botStatus === BotStatus.ANSWERING}>
           <div class='mt-2'>
-            <TypingBubble />
+            <Spinner size={24} />
           </div>
         </Match>
       </Switch>

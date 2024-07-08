@@ -27,9 +27,10 @@ export const BotOneClick = () => {
     },
   })
 
-  const { messages, audio64, setAudio64, submitNewMessage, cancelQuery, loading } = useLLM({
-    initialMessages: [],
-  })
+  const { messages, audio64, setAudio64, setMessages, submitNewMessage, cancelQuery, loading } =
+    useLLM({
+      initialMessages: [],
+    })
 
   const handleTriggerAudio = () => {
     if (!audioRef) return
@@ -95,9 +96,32 @@ export const BotOneClick = () => {
     return transcribedText
   }
 
+  const handleNewMessage = async (input: string) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'user',
+        content: input,
+      },
+    ])
+    submitNewMessage(input)
+  }
+
   const handleVoiceToVoice = async (audioBlob: Blob) => {
     try {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'user',
+          content: '',
+        },
+      ])
       const transcribedText = await handleTranscription(audioBlob)
+
+      setMessages((prev) => {
+        prev[prev.length - 1].content = transcribedText
+        return prev
+      })
       submitNewMessage(transcribedText)
     } catch (error) {
       oneClickActions.setStatus(BotStatus.IDLE)
@@ -135,13 +159,13 @@ export const BotOneClick = () => {
             <AITextStatus />
           </div>
 
-          <div class='absolute left-8 top-2 z-10 '>
+          <div class='absolute left-8 top-4 z-10 '>
             <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED} keyed>
               <MuteAISwitch onMute={handleTriggerAudio} />
             </Show>
           </div>
 
-          <div class='h-full'>
+          <div class='h-full w-full'>
             <AvatarOneClick botResponse={botLastResponse} />
           </div>
 
@@ -157,7 +181,7 @@ export const BotOneClick = () => {
           }}
         >
           <Conversation messages={messages()} />
-          <InputOneClick onSubmit={submitNewMessage} />
+          <InputOneClick onSubmit={handleNewMessage} />
         </div>
       </div>
     </>

@@ -1,4 +1,5 @@
 import { MuteIcon, SoundIcon } from '@/components'
+import { VoiceMode } from '@/graphql'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { createSignal, Show } from 'solid-js'
 import { oneClickStore } from '../store/oneClickStore'
@@ -11,8 +12,9 @@ export const MuteAISwitch = (props: Props) => {
   const [parent] = createAutoAnimate()
   const [noAvatarParent] = createAutoAnimate()
   const [noAvatarTextParent] = createAutoAnimate()
-  const { activeChannel, isHeyGenMode } = oneClickStore
-  const isHasAvatar = !!activeChannel?.avatar || isHeyGenMode
+  const { activeChannel } = oneClickStore
+  const isHasAvatar =
+    !!activeChannel?.avatar || activeChannel?.overrideConfig?.voiceMode === VoiceMode.HEYGEN
 
   const handleOnClick = () => {
     setIsMuted(!isMuted())
@@ -42,7 +44,6 @@ export const MuteAISwitch = (props: Props) => {
             border-radius: 50px;
             background-color: white;
             border-radius: 50%;
-            cursor: pointer;
             border: 1px solid black;
             display: flex;
             align-items: center;
@@ -56,7 +57,6 @@ export const MuteAISwitch = (props: Props) => {
             border-radius: 50px;
             background-color: rgba(91, 147, 255, 1);
             border-radius: 50%;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -76,7 +76,7 @@ export const MuteAISwitch = (props: Props) => {
         <div
           ref={parent}
           onClick={handleOnClick}
-          class='avatar-wrapper flex gap-1 items-center justify-between border-white border rounded-3xl '
+          class='avatar-wrapper cursor-pointer flex gap-1 items-center justify-between border-white border rounded-3xl '
           style={{
             'background-color': 'rgba(228, 228, 228, 0.5)',
             transition: 'all 0.5s ease-in-out',
@@ -109,7 +109,7 @@ export const MuteAISwitch = (props: Props) => {
                 transition: 'all 0.5s ease-in-out',
               }}
             >
-              <div ref={noAvatarParent}>
+              <div ref={noAvatarParent} class='cursor-pointer '>
                 <Show when={isMuted()}>
                   <span
                     onClick={handleOnClick}

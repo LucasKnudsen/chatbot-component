@@ -29,6 +29,9 @@ vite.config.ts.*
 cypress/videos
 cypress/screenshots
 
+
+.env
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -50,5 +53,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-
-.env

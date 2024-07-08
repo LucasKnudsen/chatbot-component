@@ -69,9 +69,9 @@ const handleNewAPI = async (
   setAudio64: Setter<string[]>,
   controller: AbortController
 ) => {
-  const history = setMessages((prev) => [...prev, { content: input, role: 'user' }])
+  const history = setMessages((prev) => prev)
   const returnSpeech =
-    !isMuted() && oneClickStore.activeChannel?.overrideConfig?.voiceMode === VoiceMode.ELEVEN_LABS
+    !isMuted() && oneClickStore.activeChannel?.overrideConfig?.voiceMode !== VoiceMode.HEYGEN
 
   const body = JSON.stringify({
     knowledgeBaseId: oneClickStore.activeChannel?.id,

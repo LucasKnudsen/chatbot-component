@@ -1,4 +1,4 @@
-import { BrainAIOneClick, ExpandIcon, UserIconOneClick } from '@/components'
+import { BrainAIOneClick, ExpandIcon, Spinner, UserIconOneClick } from '@/components'
 import { Marked } from '@ts-stack/markdown'
 import { createEffect, createSignal, on, Show } from 'solid-js'
 import { useTheme } from '../theme'
@@ -80,7 +80,7 @@ export const Conversation = (props: { messages: ChatMessage[] }) => {
         <div class='absolute left-0 bottom-0 w-full h-6 bg-gradient-to-t from-white to-transparent pointer-events-none z-10' />
         <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED}>
           <div id='conversations' class={`py-4 animate-fade-in flex flex-col w-full h-auto gap-2 `}>
-            <div class='flex flex-col gap-2 relative animate-fade-in'>
+            <div class='flex flex-col gap-2 relative '>
               {props.messages.map((message) => (
                 <ChatMessageRow content={message.content} role={message.role} />
               ))}
@@ -109,11 +109,17 @@ const ChatMessageRow = (props: ChatMessage) => {
 
 const HumanMessage = (props: { content: string }) => {
   return (
-    <div class='flex flex-col gap-1'>
+    <div class='flex flex-col gap-1 '>
       <div class='flex items-center gap-2'>
         <UserIconOneClick />
         <div class='font-bold'>You</div>
       </div>
+
+      <Show when={!props.content && oneClickStore.botStatus === BotStatus.THINKING}>
+        <div class='my-3'>
+          <Spinner size={18} />
+        </div>
+      </Show>
       <div>{props.content}</div>
     </div>
   )
@@ -141,11 +147,11 @@ const AssistantMessage = (props: { content: string }) => {
       </div>
       <Show
         when={props.content}
-        // fallback={
-        //   <div class='my-3'>
-        //     <TypingBubble height='6px' width='6px' />
-        //   </div>
-        // }
+        fallback={
+          <div class='my-3'>
+            <Spinner size={18} />
+          </div>
+        }
       >
         <div ref={textEl} class='prose' />
       </Show>

@@ -26,13 +26,13 @@ export const AvatarOneClick = (props: { botResponse?: Accessor<string> }) => {
   )
 
   return (
-    <div class='flex justify-center w-full h-full overflow-hidden rounded-xl z-10'>
+    <div class='flex justify-center w-full overflow-hidden rounded-xl z-10 h-[calc(100%-40px)]'>
       <Switch
         fallback={
           <video
             ref={(el) => (videoRef = el)}
             id='one-click-entity'
-            class='w-auto h-full object-cover scale-[2] md:scale-[1.7] lg:scale-[1.8]'
+            class='w-auto h-full object-cover scale-[2] md:scale-[1.7] lg:scale-[2]'
             autoplay={true}
             playsinline
             loop
