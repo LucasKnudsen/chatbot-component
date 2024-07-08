@@ -78,6 +78,7 @@ export async function fetchChannelDetails(channelId: string): Promise<Channel> {
         channelId,
       },
     },
+    authMode: await getAuthMode(),
   })
 
   if (!data?.fetchChannels?.[0]) {
