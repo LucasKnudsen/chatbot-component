@@ -1,21 +1,26 @@
-import { configStore } from '../portal-init'
 import { createQuery } from '@/hooks'
-import { FraiaLoading, fetchPublicChannels } from '../bot'
-import { oneClickActions } from './store/oneClickStore'
-import { Match, Switch, createSignal, createEffect } from 'solid-js'
 import LayoutDefault from '@/layouts/default'
-import { SignOutButton } from '../authentication'
 import { parseError } from '@/utils/errorHandlers'
+import { Match, Switch, createEffect, createSignal } from 'solid-js'
+import { SignOutButton } from '../authentication'
+import { FraiaLoading, fetchChannelDetails, fetchPublicChannels } from '../bot'
+import { configStore } from '../portal-init'
 import { BotOneClick } from './BotOneClick'
+import { oneClickActions } from './store/oneClickStore'
 
 export const OneClickManager = () => {
-  const [loading, setLoading] = createSignal<boolean>(true);
+  const [loading, setLoading] = createSignal<boolean>(true)
 
   const channelsQuery = createQuery({
     queryFn: async () => {
-      const publicChannels = await fetchPublicChannels(configStore.chatSpaceConfig.id);
-      oneClickActions.initOneClickStore(publicChannels[0]);
-    }
+      if (configStore.chatSpaceConfig.defaultChannelId) {
+        const channel = await fetchChannelDetails(configStore.chatSpaceConfig.defaultChannelId)
+        oneClickActions.initOneClickStore(channel)
+      } else {
+        const publicChannels = await fetchPublicChannels(configStore.chatSpaceConfig.id)
+        oneClickActions.initOneClickStore(publicChannels[0])
+      }
+    },
   })
 
   createEffect(() => {
@@ -41,7 +46,7 @@ export const OneClickManager = () => {
             <SignOutButton />
           </div>
         </LayoutDefault>
-      </Match> 
+      </Match>
       <Match when={channelsQuery.isSuccess()}>
         <BotOneClick />
       </Match>

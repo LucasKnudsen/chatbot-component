@@ -147,6 +147,9 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
       rephrasePrompt
       temperature
       elevenLabsVoiceId
+      heygenVoiceId
+      heygenAvatarId
+      voiceMode
       __typename
     }
     isPublic
@@ -188,6 +191,9 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
       rephrasePrompt
       temperature
       elevenLabsVoiceId
+      heygenVoiceId
+      heygenAvatarId
+      voiceMode
       __typename
     }
     isPublic
@@ -229,6 +235,9 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
       rephrasePrompt
       temperature
       elevenLabsVoiceId
+      heygenVoiceId
+      heygenAvatarId
+      voiceMode
       __typename
     }
     isPublic

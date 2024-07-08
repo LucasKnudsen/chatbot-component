@@ -155,6 +155,9 @@ export const getChannel = /* GraphQL */ `query GetChannel($id: ID!) {
       rephrasePrompt
       temperature
       elevenLabsVoiceId
+      heygenVoiceId
+      heygenAvatarId
+      voiceMode
       __typename
     }
     isPublic
@@ -198,6 +201,9 @@ export const listChannels = /* GraphQL */ `query ListChannels(
         rephrasePrompt
         temperature
         elevenLabsVoiceId
+        heygenVoiceId
+        heygenAvatarId
+        voiceMode
         __typename
       }
       isPublic
@@ -252,6 +258,9 @@ export const channelsByChatSpaceId = /* GraphQL */ `query ChannelsByChatSpaceId(
         rephrasePrompt
         temperature
         elevenLabsVoiceId
+        heygenVoiceId
+        heygenAvatarId
+        voiceMode
         __typename
       }
       isPublic
@@ -1129,6 +1138,9 @@ export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchCha
       rephrasePrompt
       temperature
       elevenLabsVoiceId
+      heygenVoiceId
+      heygenAvatarId
+      voiceMode
       __typename
     }
     isPublic
