@@ -27,40 +27,7 @@ export const BotOneClick = () => {
   })
 
   const { messages, audio64, setAudio64, submitNewMessage, cancelQuery } = useLLM({
-    initialMessages: [
-      {
-        role: 'assistant',
-        content: 'Hello! How can I help you today?',
-      },
-      {
-        role: 'user',
-        content: 'I need help with my order',
-      },
-      {
-        role: 'assistant',
-        content: 'Hello! How can I help you today?',
-      },
-      {
-        role: 'user',
-        content: 'I need help with my order',
-      },
-      {
-        role: 'assistant',
-        content: 'Hello! How can I help you today?',
-      },
-      {
-        role: 'user',
-        content: 'I need help with my order',
-      },
-      {
-        role: 'assistant',
-        content: 'Hello! How can I help you today?',
-      },
-      {
-        role: 'user',
-        content: 'I need help with my order',
-      },
-    ],
+    initialMessages: [],
   })
 
   const handleTriggerAudio = () => {
