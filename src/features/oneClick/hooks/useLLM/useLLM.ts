@@ -1,3 +1,4 @@
+import { VoiceMode } from '@/graphql'
 import { Accessor, createSignal, Setter } from 'solid-js'
 import { isMuted } from '../../components'
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
@@ -25,18 +26,18 @@ export const useLLM = (props: Input): Output => {
   const [audio64, setAudio64] = createSignal<string[]>([])
   const [loading, setLoading] = createSignal(false)
 
-  let controller: AbortController;
+  let controller: AbortController
 
   const cancelQuery = () => {
-    controller?.abort();
+    controller?.abort()
     setLoading(false)
   }
 
-    const queryLLM = async (input: string) => {
+  const queryLLM = async (input: string) => {
     try {
       oneClickActions.setStatus(BotStatus.THINKING)
       controller = new AbortController()
-      return await handleNewAPI(input, setMessages, setAudio64, controller )
+      return await handleNewAPI(input, setMessages, setAudio64, controller)
     } catch (error) {
       oneClickActions.setStatus(BotStatus.IDLE)
     } finally {
@@ -66,16 +67,17 @@ const handleNewAPI = async (
   input: string,
   setMessages: Setter<ChatMessage[]>,
   setAudio64: Setter<string[]>,
-  controller: AbortController,
+  controller: AbortController
 ) => {
   const history = setMessages((prev) => [...prev, { content: input, role: 'user' }])
-  const { isHeyGenMode } = oneClickStore
+  const returnSpeech =
+    !isMuted() && oneClickStore.activeChannel?.overrideConfig?.voiceMode === VoiceMode.ELEVEN_LABS
 
   const body = JSON.stringify({
     knowledgeBaseId: oneClickStore.activeChannel?.id,
     message: input,
     history,
-    returnSpeech: !isHeyGenMode && !isMuted(),
+    returnSpeech,
   })
 
   setMessages((prev) => [...prev, { content: '', role: 'assistant' }])
@@ -101,7 +103,7 @@ const handleNewAPI = async (
     const { value, done } = await reader.read()
 
     if (done) {
-      return botResponse;
+      return botResponse
       break
     }
 

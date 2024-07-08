@@ -83,7 +83,7 @@ export const MuteAISwitch = (props: Props) => {
           }}
         >
           <Show when={isMuted()} keyed>
-            <span class='ml-2.5'>Mute</span>
+            <span class='ml-2.5 text-sm'>Muted</span>
           </Show>
           <div>
             <span class={`${isMuted() ? 'muted' : 'sound'}`}>
@@ -95,7 +95,7 @@ export const MuteAISwitch = (props: Props) => {
             </span>
           </div>
           <Show when={!isMuted()} keyed>
-            <span class='mr-2.5'>Unmute</span>
+            <span class='mr-2.5 text-sm'>Unmuted</span>
           </Show>
         </div>
       </Show>
@@ -132,10 +132,10 @@ export const MuteAISwitch = (props: Props) => {
 
           <span ref={noAvatarTextParent}>
             <Show when={isMuted()} keyed>
-              <span>Mute</span>
+              <span class='text-sm'>Muted</span>
             </Show>
             <Show when={!isMuted()} keyed>
-              <span>Unmute</span>
+              <span class='text-sm'>Unmuted</span>
             </Show>
           </span>
         </div>

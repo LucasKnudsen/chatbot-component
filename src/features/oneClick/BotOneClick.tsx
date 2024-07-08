@@ -1,6 +1,7 @@
 import { NEXT_API_ENDPOINTS } from '@/constants/api'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Show, createEffect, createSignal } from 'solid-js'
+import toast from 'solid-toast'
 import { createAudioRecorder } from '../avatar'
 import {
   AITextStatus,
@@ -15,7 +16,6 @@ import { Conversation, expandConversation } from './Conversation'
 import { useLLM } from './hooks'
 import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
-import toast from 'solid-toast'
 
 export const BotOneClick = () => {
   const [TopContainerParent] = createAutoAnimate()
@@ -28,7 +28,7 @@ export const BotOneClick = () => {
   })
 
   const { messages, audio64, setAudio64, submitNewMessage, cancelQuery, loading } = useLLM({
-    initialMessages: [], 
+    initialMessages: [],
   })
 
   const handleTriggerAudio = () => {
@@ -116,46 +116,50 @@ export const BotOneClick = () => {
 
   createEffect(() => {
     if (!isMuted() && messages().length > 0 && !loading()) {
-      const botResponseMessage = messages()[messages().length - 1]?.content;
+      const botResponseMessage = messages()[messages().length - 1]?.content
       setBotLastResponse(botResponseMessage)
     }
   })
 
   return (
     <>
-        <div
-          ref={TopContainerParent}
-          data-testid='BotOneClick'
-          class='relative flex flex-col w-full h-full animate-fade-in mt-4 overflow-hidden'
-        >
-          <AIVoice audioQueue={audio64} setAudioQueue={setAudio64} />
+      <div
+        ref={TopContainerParent}
+        data-testid='BotOneClick'
+        class='relative flex flex-col w-full h-full animate-fade-in mt-4 overflow-hidden'
+      >
+        <AIVoice audioQueue={audio64} setAudioQueue={setAudio64} />
 
-          <div class='relative w-full flex flex-col h-1/2  items-center overflow-hidden px-5 bg-white'>
-            <div class='absolute right-6 top-2 z-10 '>
-              <AITextStatus />
-            </div>
-
-            <div class='absolute left-8 top-2 z-10 '>
-              <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED} keyed>
-                <MuteAISwitch onMute={handleTriggerAudio} />
-              </Show>
-            </div>
-
-            <div class='h-full'>
-              <AvatarOneClick botResponse={botLastResponse} />
-            </div>
-
-            <ButtonStart onStart={handleButtonRecord} />
+        <div class='relative w-full flex flex-col h-1/2  items-center overflow-hidden px-5 bg-white'>
+          <div class='absolute right-6 top-2 z-10 '>
+            <AITextStatus />
           </div>
-          
-          <div class={`w-full overflow-auto ${expandConversation() ? 'absolute z-[100] bg-[var(--backgroundColor)]' : ''} flex flex-col justify-end px-5 pb-4`}
+
+          <div class='absolute left-8 top-2 z-10 '>
+            <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED} keyed>
+              <MuteAISwitch onMute={handleTriggerAudio} />
+            </Show>
+          </div>
+
+          <div class='h-full'>
+            <AvatarOneClick botResponse={botLastResponse} />
+          </div>
+
+          <ButtonStart onStart={handleButtonRecord} />
+        </div>
+
+        <div
+          class={`w-full overflow-auto ${
+            expandConversation() ? 'absolute z-[100] bg-[var(--backgroundColor)]' : ''
+          } flex flex-col justify-end px-5 pb-4`}
           style={{
             height: expandConversation() ? '100%' : '50%',
-          }}>
-            <Conversation messages={messages()} />
-            <InputOneClick onSubmit={submitNewMessage} />
-          </div>
+          }}
+        >
+          <Conversation messages={messages()} />
+          <InputOneClick onSubmit={submitNewMessage} />
         </div>
+      </div>
     </>
   )
 }
