@@ -1,15 +1,16 @@
 import { Accessor, createEffect, createSignal, on, Setter } from 'solid-js'
 import { oneClickActions } from '../store/oneClickStore'
 import { BotStatus } from '../types'
+import { isMuted } from './MuteAISwitch'
 
 interface AIVoiceProps {
   audioQueue: Accessor<string[]>
   setAudioQueue: Setter<string[]>
 }
 
+export let audioRef: any
+export const [isPlayingQueue, setIsPlayingQueue] = createSignal(false)
 export const AIVoice = (props: AIVoiceProps) => {
-  const [isPlayingQueue, setIsPlayingQueue] = createSignal(false)
-  let audioRef: any
 
   createEffect(
     on(props.audioQueue, () => {
@@ -35,6 +36,7 @@ export const AIVoice = (props: AIVoiceProps) => {
       if (audioRef) {
         audioRef.src = audioSrc
         audioRef.play()
+        audioRef.muted = isMuted()
         audioRef.onerror = (e: any) => {
           console.error('Error playing audio:', e)
           props.setAudioQueue([])
@@ -57,4 +59,5 @@ export const AIVoice = (props: AIVoiceProps) => {
   }
 
   return <audio ref={audioRef} />
+
 }

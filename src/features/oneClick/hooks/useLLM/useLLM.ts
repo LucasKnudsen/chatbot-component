@@ -16,19 +16,25 @@ type Output = {
   submitNewMessage: (message: string) => void
   audio64: Accessor<string[]>
   setAudio64: Setter<string[]>
+  cancelQuery: () => void
 }
 
 export const useLLM = (props: Input): Output => {
   const [messages, setMessages] = createSignal<ChatMessage[]>(props.initialMessages || [])
   const [audio64, setAudio64] = createSignal<string[]>([])
 
+  let controller: AbortController;
+
+  const cancelQuery = () => {
+    controller?.abort();
+  }
+
   const queryLLM = async (input: string) => {
     try {
       oneClickActions.setStatus(BotStatus.THINKING)
-
-      return await handleNewAPI(input, setMessages, setAudio64)
+      controller = new AbortController()
+      return await handleNewAPI(input, setMessages, setAudio64, controller )
     } catch (error) {
-      console.error('Error querying LLM:', error)
       oneClickActions.setStatus(BotStatus.IDLE)
     } finally {
       if (isMuted() && oneClickStore.chatMode === 'text') {
@@ -45,14 +51,15 @@ export const useLLM = (props: Input): Output => {
     props.onSuccess?.(data)
   }
 
-  return { messages, setMessages, submitNewMessage, audio64, setAudio64 }
+  return { messages, setMessages, submitNewMessage, audio64, setAudio64, cancelQuery }
 }
 
 // Util function to handle the new API
 const handleNewAPI = async (
   input: string,
   setMessages: Setter<ChatMessage[]>,
-  setAudio64: Setter<string[]>
+  setAudio64: Setter<string[]>,
+  controller: AbortController,
 ) => {
   const history = setMessages((prev) => [...prev, { content: input, role: 'user' }])
 
@@ -69,6 +76,7 @@ const handleNewAPI = async (
   const endpoint = import.meta.env.VITE_LLM_STREAM_URL
 
   const response = await fetch(endpoint, {
+    signal: controller?.signal,
     method: 'POST',
     headers: {
       'Content-Type': 'text/event-stream',
@@ -80,7 +88,6 @@ const handleNewAPI = async (
 
   // Initiates the response object
   oneClickActions.setStatus(BotStatus.ANSWERING)
-
   while (true) {
     const { value, done } = await reader.read()
 
@@ -123,10 +130,10 @@ const handleNewAPI = async (
         //     }
         //   }
       } catch (error) {
-        console.error('Error parsing response:', error)
         oneClickActions.setStatus(BotStatus.IDLE)
       } finally {
-        isMuted() && oneClickActions.setStatus(BotStatus.IDLE)
+        // isMuted() && oneClickActions.setStatus(BotStatus.IDLE)
+        // oneClickActions.setStatus(BotStatus.IDLE)
       }
     }
   }

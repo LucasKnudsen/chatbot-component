@@ -22,10 +22,16 @@ import { getAuthMode } from '../authentication'
 export async function fetchPublicChannels(chatSpaceId: string): Promise<Channel[]> {
   const { data } = await API.graphql<GraphQLQuery<FetchChannelsQuery>>({
     query: queries.fetchChannels,
+
     variables: {
       input: {
         flow: 'BY_CHAT_SPACE',
         chatSpaceId,
+      },
+      filter: {
+        isPublic: {
+          eq: true,
+        },
       },
     },
     authMode: await getAuthMode(),

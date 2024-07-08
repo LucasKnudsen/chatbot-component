@@ -1,5 +1,4 @@
-import { BrainAIOneClick, ExpandIcon, TypingBubble, UserIconOneClick } from '@/components'
-import { ArrowLeftIcon } from '@/components/icons/ArrowLeftIcon'
+import { BrainAIOneClick, ExpandIcon, UserIconOneClick } from '@/components'
 import { Marked } from '@ts-stack/markdown'
 import { createEffect, createSignal, on, Show } from 'solid-js'
 import { useTheme } from '../theme'
@@ -14,7 +13,6 @@ export const Conversation = (props: { messages: ChatMessage[] }) => {
 
   const handleExpandConversation = () => {
     setExpandConversation((prev) => !prev)
-    // scrollChatWindowToBottom()
   }
 
   createEffect(
@@ -43,60 +41,57 @@ export const Conversation = (props: { messages: ChatMessage[] }) => {
   }
 
   return (
-    <>
-      <div class='w-full  justify-end hidden'>
-        <button class={`flex gap-2 `} onClick={handleExpandConversation}>
-          <div class='flex items-center gap-2 cursor-pointer px-2 hover:shadow-md rounded'>
-            <Show
-              when={expandConversation()}
-              fallback={
-                <>
-                  <ExpandIcon width={10} height={10} color={theme().primaryColor} />
-                  <span
-                    style={{
-                      color: theme().primaryColor,
-                    }}
-                  >
-                    Expand
-                  </span>
-                </>
-              }
-            >
-              <ArrowLeftIcon width={10} height={10} color={theme().primaryColor} />
-              <span
-                style={{
-                  color: theme().primaryColor,
-                }}
-              >
-                Return
-              </span>
-            </Show>
-          </div>
-        </button>
-      </div>
+    <div
+      class={`flex justify-start flex-col relative mt-[20px] ${
+        props.messages?.length > 0 ? 'border-t' : ''
+      } ${expandConversation() ? 'h-[90%] lg:h-[86%]' : 'h-[70%]'}`}
+    >
+      <Show when={props.messages?.length > 0}>
+        <div class='absolute z-[100] top-[-15px] w-full justify-end'>
+          <button class={`flex justify-end gap-2 w-full `} onClick={handleExpandConversation}>
+            <div class='flex items-center gap-2 cursor-pointer hover:shadow-md rounded-full'>
+              <div class='border bg-white border-[var(--primaryColor)] flex items-center px-3 rounded-2xl gap-[15px]'>
+                <span class='text-sm font-semibold text-[var(--primaryColor)]'>
+                  {expandConversation() ? 'Collapse' : 'Expand'}
+                </span>
 
-      <div class='flex relative min-h-24  '>
+                <ExpandIcon
+                  width={10}
+                  height={10}
+                  color={theme().primaryColor}
+                  style={{
+                    transform: expandConversation() ? 'rotate(180deg)' : 'rotate(0deg)',
+                  }}
+                />
+              </div>
+            </div>
+          </button>
+        </div>
+      </Show>
+
+      <div
+        ref={chatWindowEl}
+        class={`flex overflow-auto h-full `}
+        style={{
+          'scrollbar-width': 'none',
+        }}
+      >
         <div class='absolute left-0 w-full h-8 bg-gradient-to-b from-white to-transparent pointer-events-none z-10' />
         <div class='absolute left-0 bottom-0 w-full h-6 bg-gradient-to-t from-white to-transparent pointer-events-none z-10' />
 
         <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED}>
-          <div
-            id='conversations'
-            ref={chatWindowEl}
-            class={`py-3 animate-fade-in flex flex-col w-full h-auto gap-2 overflow-auto`}
-            style={{
-              'scrollbar-width': 'none',
-            }}
-          >
+          <div id='conversations' class={`py-4 animate-fade-in flex flex-col w-full h-auto gap-2 `}>
             <div class='flex flex-col gap-2 relative animate-fade-in'>
               {props.messages.map((message) => (
                 <ChatMessageRow content={message.content} role={message.role} />
               ))}
+
+              <div class='w-full h-2 ' />
             </div>
           </div>
         </Show>
       </div>
-    </>
+    </div>
   )
 }
 
@@ -147,11 +142,11 @@ const AssistantMessage = (props: { content: string }) => {
       </div>
       <Show
         when={props.content}
-        fallback={
-          <div class='my-3'>
-            <TypingBubble height='6px' width='6px' />
-          </div>
-        }
+        // fallback={
+        //   <div class='my-3'>
+        //     <TypingBubble height='6px' width='6px' />
+        //   </div>
+        // }
       >
         <div ref={textEl} class='prose' />
       </Show>
