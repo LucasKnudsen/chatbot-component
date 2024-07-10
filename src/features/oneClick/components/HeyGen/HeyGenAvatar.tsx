@@ -1,56 +1,46 @@
 import { Spinner } from '@/components'
 import { Configuration, NewSessionData, StreamingAvatarApi } from '@heygen/streaming-avatar'
-import axios from 'axios'
-import { Accessor, createEffect, createSignal, onMount, Show } from 'solid-js'
+import { Accessor, createEffect, createSignal, on, onCleanup, onMount, Show } from 'solid-js'
 import toast from 'solid-toast'
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
 import { BotStatus } from '../../types'
-import { isMuted } from '../MuteAISwitch'
+import { fetchAccessToken } from './services'
 
-const HEYGEN_API_KEY = import.meta.env.VITE_HEYGEN_TOKEN
+const DEV_AVATAR_ID = import.meta.env.VITE_DEV_HEYGEN_AVATAR_ID
+const DEV_VOICE_ID = import.meta.env.VITE_DEV_HEYGEN_VOICE_ID
 
-const HeyGenAvatar = (props: { botResponse?: Accessor<string> }) => {
+const HeyGenAvatar = (props: { botResponse: Accessor<string> }) => {
   const [initialized, setInitialized] = createSignal<boolean>(false)
-  const [data, setData] = createSignal<NewSessionData>()
+  const [sessionId, setSessionId] = createSignal<NewSessionData['sessionId']>()
   const [stream, setStream] = createSignal<MediaStream | undefined>(undefined)
   const [loading, setLoading] = createSignal(false)
 
-  let mediaStream: HTMLVideoElement
+  let videoRef: HTMLVideoElement
   let avatar: StreamingAvatarApi
-
-  // async function updateToken() {
-  //   const newToken = await fetchAccessToken()
-  //   console.log('Updating Access Token:', newToken) // Log token for debugging
-  //   avatar = new StreamingAvatarApi(new Configuration({ accessToken: newToken }))
-
-  //   const startTalkCallback = (e: any) => {
-  //     console.log('Avatar started talking', e)
-  //   }
-
-  //   const stopTalkCallback = (e: any) => {
-  //     console.log('Avatar stopped talking', e)
-  //   }
-
-  //   console.log('Adding event handlers:', avatar)
-  //   avatar.addEventHandler('avatar_start_talking', startTalkCallback)
-  //   avatar.addEventHandler('avatar_stop_talking', stopTalkCallback)
-
-  //   setInitialized(true)
-  // }
 
   async function start() {
     if (!avatar) return
     try {
-      setLoading(true)
-      const res = await avatar.createStartAvatar({
+      const heygenResponse = await avatar.createStartAvatar({
         newSessionRequest: {
           quality: 'low',
-          avatarName: oneClickStore.activeChannel?.overrideConfig?.heygenAvatarId!,
-          voice: { voiceId: oneClickStore.activeChannel?.overrideConfig?.heygenVoiceId! },
+          avatarName: import.meta.env.DEV
+            ? DEV_AVATAR_ID
+            : oneClickStore.activeChannel?.overrideConfig?.heygenAvatarId!,
+          voice: {
+            voiceId: import.meta.env.DEV
+              ? DEV_VOICE_ID
+              : oneClickStore.activeChannel?.overrideConfig?.heygenVoiceId!,
+          },
         },
       })
-      setData(res)
-      setLoading(false)
+
+      if (!heygenResponse || !heygenResponse.sessionId) {
+        throw new Error('No session ID returned')
+      }
+
+      setSessionId(heygenResponse.sessionId)
+
       setStream(avatar.mediaStream)
     } catch (error) {
       toast.error('Error starting session. Please reload', {
@@ -63,49 +53,17 @@ const HeyGenAvatar = (props: { botResponse?: Accessor<string> }) => {
     }
   }
 
-  async function fetchAccessToken() {
-    try {
-      const url = 'https://api.heygen.com/v1/streaming.create_token'
-      const response = await axios(url, {
-        method: 'POST',
-        headers: {
-          'x-api-key': HEYGEN_API_KEY,
-        },
-      })
-
-      return response.data?.data?.token || ''
-    } catch (error) {
-      toast.error('Error fetching access token', {
-        position: 'top-center',
-        className: '!text-base',
-      })
-      console.error('Error fetching access token:', error)
-      return ''
-    }
-  }
-
-  // async function closeSession() {
-  //   try {
-  //     const url = `https://api.heygen.com/v1/streaming.stop`
-  //     await axios(url, {
-  //       method: 'POST',
-  //       params: { sessionId: data()?.sessionId },
-  //       headers: {
-  //         'x-api-key': token,
-  //       },
-  //     })
-  //   } catch (err) {
-  //     console.error('Error closing session:', err)
-  //   }
-  // }
-
   async function endSession() {
     if (!initialized() || !avatar) {
       return
     }
-    await avatar.stopAvatar({ stopSessionRequest: { sessionId: data()?.sessionId } })
+    await avatar.stopAvatar({ stopSessionRequest: { sessionId: sessionId() } })
     setStream(undefined)
   }
+
+  onCleanup(() => {
+    endSession()
+  })
 
   onMount(() => {
     async function init() {
@@ -122,80 +80,79 @@ const HeyGenAvatar = (props: { botResponse?: Accessor<string> }) => {
           className: '!text-base',
         })
         console.error(err)
-      } finally {
         setLoading(false)
       }
     }
     init()
-
-    return () => {
-      endSession()
-    }
   })
 
   createEffect(() => {
     if (initialized()) {
       setTimeout(() => {
         start()
-      }, 2000)
+      }, 100)
     }
   })
 
   createEffect(() => {
-    if (stream() && mediaStream) {
-      mediaStream.srcObject = stream() as MediaStream
-      mediaStream.onloadedmetadata = () => {
-        mediaStream!.play()
+    if (stream() && videoRef) {
+      videoRef.srcObject = stream() as MediaStream
+      videoRef.onloadedmetadata = () => {
+        videoRef!.play()
       }
     }
   })
 
   async function handleSpeak(response: string) {
-    if (!initialized() || !avatar || isMuted()) {
+    if (!initialized() || !avatar || response?.length === 0) {
       return
     }
 
-    mediaStream.muted = false
-    await avatar
-      .speak({
+    videoRef.muted = false
+
+    try {
+      await avatar.speak({
         taskRequest: {
           text: response,
-          sessionId: data()?.sessionId,
+          sessionId: sessionId(),
         },
       })
-      .catch(() => {
-        toast.error('Error speaking. Please try again', {
-          position: 'top-center',
-          className: '!text-base',
-        })
+    } catch (error) {
+      toast.error('Error speaking. Please try again', {
+        position: 'top-center',
+        className: '!text-base',
       })
-      .finally(() => {
-        oneClickActions.setStatus(BotStatus.IDLE)
-      })
+      console.error('Error speaking:', error)
+    } finally {
+      oneClickActions.setStatus(BotStatus.IDLE)
+    }
   }
 
-  createEffect(() => {
-    if (props.botResponse && props.botResponse().length > 0 && !isMuted()) {
-      handleSpeak(props.botResponse())
-    }
-  })
+  createEffect(
+    on(props.botResponse, () => {
+      if (props.botResponse().length > 0) {
+        handleSpeak(props.botResponse())
+      }
+    })
+  )
 
   return (
-    <div class='w-full h-full flex flex-col justify-center items-center gap-5'>
+    <div class='w-full relative h-full flex flex-col justify-center items-center gap-5'>
       <Show when={loading() || !initialized() || !stream()}>
-        <Spinner size={60} />
+        <div class='absolute flex justify-center items-center'>
+          <Spinner size={60} />
+        </div>
       </Show>
-      <Show when={!loading() && stream() && initialized()}>
-        <video
-          playsinline
-          class='w-full h-full object-cover'
-          muted
-          autoplay
-          ref={(el) => (mediaStream = el)}
-        >
-          <track kind='captions' />
-        </video>
-      </Show>
+
+      <video
+        playsinline
+        class='w-full h-full object-cover animate-fade-in'
+        muted
+        autoplay
+        ref={(el) => (videoRef = el)}
+      >
+        <track kind='captions' />
+      </video>
     </div>
   )
 }

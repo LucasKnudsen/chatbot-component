@@ -27,10 +27,12 @@ export const BotOneClick = () => {
     },
   })
 
-  const { messages, audio64, setAudio64, setMessages, submitNewMessage, cancelQuery, loading } =
-    useLLM({
-      initialMessages: [],
-    })
+  const { messages, audio64, setAudio64, setMessages, submitNewMessage, cancelQuery } = useLLM({
+    initialMessages: [],
+    onSuccess(data) {
+      setBotLastResponse(isMuted() ? '' : data)
+    },
+  })
 
   const handleTriggerAudio = () => {
     if (!audioRef) return
@@ -138,12 +140,14 @@ export const BotOneClick = () => {
     }, 1000)
   })
 
-  createEffect(() => {
-    if (!isMuted() && messages().length > 0 && !loading()) {
-      const botResponseMessage = messages()[messages().length - 1]?.content
-      setBotLastResponse(botResponseMessage)
-    }
-  })
+  // createEffect(() => {
+  //   if (!isMuted() && messages().length > 0 && !loading()) {
+  //     const lastMessage = messages()[messages().length - 1]
+  //     if (lastMessage.role === 'assistant') {
+  //       setBotLastResponse(lastMessage.content)
+  //     }
+  //   }
+  // })
 
   return (
     <>

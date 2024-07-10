@@ -5,7 +5,7 @@ import { oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 import HeyGenAvatar from './HeyGen/HeyGenAvatar'
 
-export const AvatarOneClick = (props: { botResponse?: Accessor<string> }) => {
+export const AvatarOneClick = (props: { botResponse: Accessor<string> }) => {
   const { activeChannel } = oneClickStore
 
   let videoRef: HTMLVideoElement | null = null
