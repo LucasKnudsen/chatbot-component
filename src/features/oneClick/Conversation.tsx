@@ -42,9 +42,9 @@ export const Conversation = (props: { messages: ChatMessage[] }) => {
 
   return (
     <div
-      class={`flex justify-start flex-col relative mt-[20px] ${
+      class={`flex justify-start flex-col relative h-[91%] mt-[20px] ${
         props.messages?.length > 0 ? 'border-t' : ''
-      } ${expandConversation() ? 'h-[90%] lg:h-[86%]' : 'h-[70%]'}`}
+      }`}
     >
       <Show when={props.messages?.length > 0}>
         <div class='absolute z-[100] top-[-15px] w-full justify-end'>

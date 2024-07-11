@@ -34,6 +34,11 @@ export const BotOneClick = () => {
     },
   })
 
+  const handleResetMessage = () => {
+    setMessages([])
+    setBotLastResponse('')
+  }
+
   const handleTriggerAudio = () => {
     if (!audioRef) return
     audioRef.muted = isMuted()
@@ -170,7 +175,7 @@ export const BotOneClick = () => {
           </div>
 
           <div class='h-full w-full'>
-            <AvatarOneClick botResponse={botLastResponse} />
+            <AvatarOneClick botResponse={botLastResponse} onResetMessage={handleResetMessage} />
           </div>
 
           <ButtonStart onStart={handleButtonRecord} />
@@ -178,13 +183,26 @@ export const BotOneClick = () => {
 
         <div
           class={`w-full overflow-auto ${
-            expandConversation() ? 'absolute z-[100] bg-[var(--backgroundColor)]' : ''
-          } flex flex-col justify-end px-5 pb-4`}
+            expandConversation() ? 'absolute z-[100] end-0 bg-[var(--backgroundColor)]' : ''
+          } flex flex-col grow justify-end px-5 pb-4`}
           style={{
             height: expandConversation() ? '100%' : '50%',
+            transition: '0.4s height ease',
+            bottom: 0,
           }}
         >
-          <Conversation messages={messages()} />
+          <div class='overflow-auto'
+            style={{
+              height:
+                messages().length === 0
+                  ? '10px'
+                  : '100%',
+              transition: '0.4s height ease-in-out',
+              "scrollbar-width": 'none',
+            }}
+          >
+            <Conversation messages={messages()} />
+          </div>
           <InputOneClick onSubmit={handleNewMessage} />
         </div>
       </div>

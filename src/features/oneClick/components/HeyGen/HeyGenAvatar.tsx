@@ -1,15 +1,17 @@
 import { Spinner } from '@/components'
+import { configStore } from '@/features/portal-init'
 import { Configuration, NewSessionData, StreamingAvatarApi } from '@heygen/streaming-avatar'
-import { Accessor, createEffect, createSignal, on, onCleanup, onMount, Show } from 'solid-js'
+import { Accessor, createEffect, createSignal, on, onCleanup, Show } from 'solid-js'
 import toast from 'solid-toast'
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
 import { BotStatus } from '../../types'
+import { isMuted } from '../MuteAISwitch'
 import { fetchAccessToken } from './services'
 
 const DEV_AVATAR_ID = import.meta.env.VITE_DEV_HEYGEN_AVATAR_ID
 const DEV_VOICE_ID = import.meta.env.VITE_DEV_HEYGEN_VOICE_ID
 
-const HeyGenAvatar = (props: { botResponse: Accessor<string> }) => {
+const HeyGenAvatar = (props: { botResponse: Accessor<string>; onResetMessage: () => void }) => {
   const [initialized, setInitialized] = createSignal<boolean>(false)
   const [sessionId, setSessionId] = createSignal<NewSessionData['sessionId']>()
   const [stream, setStream] = createSignal<MediaStream | undefined>(undefined)
@@ -59,31 +61,39 @@ const HeyGenAvatar = (props: { botResponse: Accessor<string> }) => {
     }
     await avatar.stopAvatar({ stopSessionRequest: { sessionId: sessionId() } })
     setStream(undefined)
+    setLoading(false)
+    setInitialized(false)
+    props.onResetMessage()
   }
 
   onCleanup(() => {
     endSession()
   })
 
-  onMount(() => {
-    async function init() {
-      try {
-        setLoading(true)
-        const newToken = await fetchAccessToken()
-        avatar = new StreamingAvatarApi(
-          new Configuration({ accessToken: newToken, jitterBuffer: 200 })
-        )
-        setInitialized(true)
-      } catch (err) {
-        toast.error('Error initializing avatar', {
-          position: 'top-center',
-          className: '!text-base',
-        })
-        console.error(err)
-        setLoading(false)
-      }
+  async function init() {
+    try {
+      setLoading(true)
+      const newToken = await fetchAccessToken()
+      avatar = new StreamingAvatarApi(
+        new Configuration({ accessToken: newToken, jitterBuffer: 200 })
+      )
+      setInitialized(true)
+    } catch (err) {
+      toast.error('Error initializing avatar', {
+        position: 'top-center',
+        className: '!text-base',
+      })
+      console.error(err)
+      setLoading(false)
     }
-    init()
+  }
+
+  createEffect(() => {
+    if (configStore.isBotOpened) {
+      init()
+    } else {
+      endSession()
+    }
   })
 
   createEffect(() => {
@@ -104,7 +114,7 @@ const HeyGenAvatar = (props: { botResponse: Accessor<string> }) => {
   })
 
   async function handleSpeak(response: string) {
-    if (!initialized() || !avatar || response?.length === 0) {
+    if (!initialized() || !avatar || isMuted() || response.length === 0) {
       return
     }
 
