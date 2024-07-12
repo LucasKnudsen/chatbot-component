@@ -1,29 +1,20 @@
 import { Spinner } from '@/components'
 import { configStore } from '@/features/portal-init'
-import { Configuration, NewSessionData, StreamingAvatarApi } from '@heygen/streaming-avatar'
-import { Accessor, createEffect, createSignal, on, onCleanup, Show } from 'solid-js'
+import { Configuration, StreamingAvatarApi } from '@heygen/streaming-avatar'
+import { createEffect, onCleanup, Show } from 'solid-js'
 import toast from 'solid-toast'
-import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
-import { BotStatus } from '../../types'
-import { isMuted } from '../MuteAISwitch'
+import {  oneClickStore } from '../../store/oneClickStore'
 import { fetchAccessToken } from './services'
+import { heyGenStore, heyGenActions } from '../../store/heyGenStore'
 
 const DEV_AVATAR_ID = import.meta.env.VITE_DEV_HEYGEN_AVATAR_ID
 const DEV_VOICE_ID = import.meta.env.VITE_DEV_HEYGEN_VOICE_ID
 
-const HeyGenAvatar = (props: { botResponse: Accessor<string>; onResetMessage: () => void }) => {
-  const [initialized, setInitialized] = createSignal<boolean>(false)
-  const [sessionId, setSessionId] = createSignal<NewSessionData['sessionId']>()
-  const [stream, setStream] = createSignal<MediaStream | undefined>(undefined)
-  const [loading, setLoading] = createSignal(false)
-
-  let videoRef: HTMLVideoElement
-  let avatar: StreamingAvatarApi
-
+const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
   async function start() {
-    if (!avatar) return
+    if (!heyGenStore.avatar) return
     try {
-      const heygenResponse = await avatar.createStartAvatar({
+      const heygenResponse = await heyGenStore.avatar.createStartAvatar({
         newSessionRequest: {
           quality: 'low',
           avatarName: import.meta.env.DEV
@@ -41,9 +32,8 @@ const HeyGenAvatar = (props: { botResponse: Accessor<string>; onResetMessage: ()
         throw new Error('No session ID returned')
       }
 
-      setSessionId(heygenResponse.sessionId)
-
-      setStream(avatar.mediaStream)
+      heyGenActions.setSessionId(heygenResponse.sessionId)
+      heyGenActions.setStream(heyGenStore.avatar.mediaStream)
     } catch (error) {
       toast.error('Error starting session. Please reload', {
         position: 'top-center',
@@ -51,18 +41,18 @@ const HeyGenAvatar = (props: { botResponse: Accessor<string>; onResetMessage: ()
       })
       console.error('Error starting session:', error)
     } finally {
-      setLoading(false)
+      heyGenActions.setLoading(false)
     }
   }
 
   async function endSession() {
-    if (!initialized() || !avatar) {
+    if (!heyGenStore.initialized || !heyGenStore.avatar) {
       return
     }
-    await avatar.stopAvatar({ stopSessionRequest: { sessionId: sessionId() } })
-    setStream(undefined)
-    setLoading(false)
-    setInitialized(false)
+    await heyGenStore.avatar.stopAvatar({ stopSessionRequest: { sessionId: heyGenStore.sessionId } })
+    heyGenActions.setStream(undefined)
+    heyGenActions.setLoading(false)
+    heyGenActions.setInitialized(false)
     props.onResetMessage()
   }
 
@@ -72,19 +62,20 @@ const HeyGenAvatar = (props: { botResponse: Accessor<string>; onResetMessage: ()
 
   async function init() {
     try {
-      setLoading(true)
+      heyGenActions.setLoading(true)
       const newToken = await fetchAccessToken()
-      avatar = new StreamingAvatarApi(
+      const updateAvatar = new StreamingAvatarApi(
         new Configuration({ accessToken: newToken, jitterBuffer: 200 })
       )
-      setInitialized(true)
+      heyGenActions.setAvatar(updateAvatar)
+      heyGenActions.setInitialized(true)
     } catch (err) {
       toast.error('Error initializing avatar', {
         position: 'top-center',
         className: '!text-base',
       })
       console.error(err)
-      setLoading(false)
+      heyGenActions.setLoading(false)
     }
   }
 
@@ -97,7 +88,7 @@ const HeyGenAvatar = (props: { botResponse: Accessor<string>; onResetMessage: ()
   })
 
   createEffect(() => {
-    if (initialized()) {
+    if (heyGenStore.initialized) {
       setTimeout(() => {
         start()
       }, 100)
@@ -105,50 +96,17 @@ const HeyGenAvatar = (props: { botResponse: Accessor<string>; onResetMessage: ()
   })
 
   createEffect(() => {
-    if (stream() && videoRef) {
-      videoRef.srcObject = stream() as MediaStream
-      videoRef.onloadedmetadata = () => {
-        videoRef!.play()
+    if (heyGenStore.stream && heyGenStore.videoRef) {
+      heyGenStore.videoRef.srcObject = heyGenStore.stream as MediaStream
+      heyGenStore.videoRef.onloadedmetadata = () => {
+        heyGenStore.videoRef!.play()
       }
     }
   })
 
-  async function handleSpeak(response: string) {
-    if (!initialized() || !avatar || isMuted() || response.length === 0) {
-      return
-    }
-
-    videoRef.muted = false
-
-    try {
-      await avatar.speak({
-        taskRequest: {
-          text: response,
-          sessionId: sessionId(),
-        },
-      })
-    } catch (error) {
-      toast.error('Error speaking. Please try again', {
-        position: 'top-center',
-        className: '!text-base',
-      })
-      console.error('Error speaking:', error)
-    } finally {
-      oneClickActions.setStatus(BotStatus.IDLE)
-    }
-  }
-
-  createEffect(
-    on(props.botResponse, () => {
-      if (props.botResponse().length > 0) {
-        handleSpeak(props.botResponse())
-      }
-    })
-  )
-
   return (
     <div class='w-full relative h-full flex flex-col justify-center items-center gap-5'>
-      <Show when={loading() || !initialized() || !stream()}>
+      <Show when={heyGenStore.loading || !heyGenStore.initialized || !heyGenStore.stream}>
         <div class='absolute flex justify-center items-center'>
           <Spinner size={60} />
         </div>
@@ -159,7 +117,7 @@ const HeyGenAvatar = (props: { botResponse: Accessor<string>; onResetMessage: ()
         class='w-full h-full object-cover animate-fade-in'
         muted
         autoplay
-        ref={(el) => (videoRef = el)}
+        ref={(el) => (heyGenActions.setVideoRef(el))}
       >
         <track kind='captions' />
       </video>

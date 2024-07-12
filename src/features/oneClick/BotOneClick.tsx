@@ -1,6 +1,6 @@
 import { NEXT_API_ENDPOINTS } from '@/constants/api'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { Show, createEffect, createSignal } from 'solid-js'
+import { Show, createEffect } from 'solid-js'
 import toast from 'solid-toast'
 import { createAudioRecorder } from '../avatar'
 import {
@@ -14,12 +14,12 @@ import {
 import { AIVoice, audioRef, setIsPlayingQueue } from './components/AIVoice'
 import { Conversation, expandConversation } from './Conversation'
 import { useLLM } from './hooks'
+import { heyGenStore } from './store/heyGenStore'
 import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
 
 export const BotOneClick = () => {
   const [TopContainerParent] = createAutoAnimate()
-  const [botLastResponse, setBotLastResponse] = createSignal('')
 
   const audioRecorder = createAudioRecorder({
     onStop(audioBlob) {
@@ -27,16 +27,39 @@ export const BotOneClick = () => {
     },
   })
 
+  const handleHeyGenSpeak = async (response: string) => {
+    if (!heyGenStore.initialized || !heyGenStore.avatar || isMuted() || response.length === 0) {
+      return
+    }
+    if (heyGenStore.videoRef) heyGenStore.videoRef.muted = false
+
+    try {
+      await heyGenStore.avatar.speak({
+        taskRequest: {
+          text: response,
+          sessionId: heyGenStore.sessionId,
+        },
+      })
+    } catch (error) {
+      toast.error('Error speaking. Please try again', {
+        position: 'top-center',
+        className: '!text-base',
+      })
+      console.error('Error speaking:', error)
+    } finally {
+      oneClickActions.setStatus(BotStatus.IDLE)
+    }
+  }
+
   const { messages, audio64, setAudio64, setMessages, submitNewMessage, cancelQuery } = useLLM({
     initialMessages: [],
     onSuccess(data) {
-      setBotLastResponse(isMuted() ? '' : data)
+      handleHeyGenSpeak(isMuted() ? '' : data)
     },
   })
 
   const handleResetMessage = () => {
     setMessages([])
-    setBotLastResponse('')
   }
 
   const handleTriggerAudio = () => {
@@ -159,7 +182,7 @@ export const BotOneClick = () => {
       <div
         ref={TopContainerParent}
         data-testid='BotOneClick'
-        class='relative flex flex-col w-full h-full animate-fade-in mt-4 overflow-hidden'
+        class='relative flex flex-col w-full h-full animate-fade-in mt-[20px] overflow-hidden'
       >
         <AIVoice audioQueue={audio64} setAudioQueue={setAudio64} />
 
@@ -175,7 +198,7 @@ export const BotOneClick = () => {
           </div>
 
           <div class='h-full w-full'>
-            <AvatarOneClick botResponse={botLastResponse} onResetMessage={handleResetMessage} />
+            <AvatarOneClick onResetMessage={handleResetMessage} />
           </div>
 
           <ButtonStart onStart={handleButtonRecord} />
@@ -191,14 +214,12 @@ export const BotOneClick = () => {
             bottom: 0,
           }}
         >
-          <div class='overflow-auto'
+          <div
+            class='overflow-auto'
             style={{
-              height:
-                messages().length === 0
-                  ? '10px'
-                  : '100%',
+              height: messages().length === 0 ? '10px' : '100%',
               transition: '0.4s height ease-in-out',
-              "scrollbar-width": 'none',
+              'scrollbar-width': 'none',
             }}
           >
             <Conversation messages={messages()} />

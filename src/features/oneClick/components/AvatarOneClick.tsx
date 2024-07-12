@@ -1,12 +1,11 @@
 import dynamicVoiceSymbol from '@/assets/oneClick/dynamicVoiceSymbol.mp4'
 import { VoiceMode } from '@/graphql'
-import { Accessor, createEffect, Match, on, Switch } from 'solid-js'
+import { createEffect, Match, on, Switch } from 'solid-js'
 import { oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 import HeyGenAvatar from './HeyGen/HeyGenAvatar'
 
 export const AvatarOneClick = (props: {
-  botResponse: Accessor<string>
   onResetMessage: () => void
 }) => {
   const { activeChannel } = oneClickStore
@@ -46,7 +45,7 @@ export const AvatarOneClick = (props: {
       >
         {/* When the active channel has an overrideConfig with voiceMode set to HEYGEN, render the HeyGenAvatar component */}
         <Match when={activeChannel?.overrideConfig?.voiceMode === VoiceMode.HEYGEN}>
-          <HeyGenAvatar botResponse={props.botResponse} onResetMessage={props.onResetMessage} />
+          <HeyGenAvatar onResetMessage={props.onResetMessage} />
         </Match>
 
         {/* When the active channel has an avatar, render the image */}
