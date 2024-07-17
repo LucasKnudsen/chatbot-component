@@ -141,6 +141,7 @@ export const getChannel = /* GraphQL */ `query GetChannel($id: ID!) {
     subtitle
     avatar
     description
+    botDisplayName
     initialPrompts {
       display
       prompt
@@ -187,6 +188,7 @@ export const listChannels = /* GraphQL */ `query ListChannels(
       subtitle
       avatar
       description
+      botDisplayName
       initialPrompts {
         display
         prompt
@@ -244,6 +246,7 @@ export const channelsByChatSpaceId = /* GraphQL */ `query ChannelsByChatSpaceId(
       subtitle
       avatar
       description
+      botDisplayName
       initialPrompts {
         display
         prompt
@@ -1113,6 +1116,99 @@ export const listPromptVariables = /* GraphQL */ `query ListPromptVariables(
   APITypes.ListPromptVariablesQueryVariables,
   APITypes.ListPromptVariablesQuery
 >;
+export const getAgent = /* GraphQL */ `query GetAgent($associationId: ID!, $agentId: ID!) {
+  getAgent(associationId: $associationId, agentId: $agentId) {
+    associationId
+    agentId
+    name
+    description
+    schema
+    actions {
+      headers {
+        key
+        value
+        __typename
+      }
+      endpoint
+      input {
+        name
+        __typename
+      }
+      output {
+        type
+        fields {
+          name
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    responsePrompt
+    isActive
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetAgentQueryVariables, APITypes.GetAgentQuery>;
+export const listAgents = /* GraphQL */ `query ListAgents(
+  $associationId: ID
+  $agentId: ModelIDKeyConditionInput
+  $filter: ModelAgentFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listAgents(
+    associationId: $associationId
+    agentId: $agentId
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      associationId
+      agentId
+      name
+      description
+      schema
+      actions {
+        headers {
+          key
+          value
+          __typename
+        }
+        endpoint
+        input {
+          name
+          __typename
+        }
+        output {
+          type
+          fields {
+            name
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      responsePrompt
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListAgentsQueryVariables,
+  APITypes.ListAgentsQuery
+>;
 export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchChannelsInput!) {
   fetchChannels(input: $input) {
     id
@@ -1124,6 +1220,7 @@ export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchCha
     subtitle
     avatar
     description
+    botDisplayName
     initialPrompts {
       display
       prompt

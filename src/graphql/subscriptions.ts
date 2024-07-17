@@ -133,6 +133,7 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
     subtitle
     avatar
     description
+    botDisplayName
     initialPrompts {
       display
       prompt
@@ -177,6 +178,7 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
     subtitle
     avatar
     description
+    botDisplayName
     initialPrompts {
       display
       prompt
@@ -221,6 +223,7 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
     subtitle
     avatar
     description
+    botDisplayName
     initialPrompts {
       display
       prompt
@@ -949,6 +952,123 @@ export const onDeletePromptVariable = /* GraphQL */ `subscription OnDeletePrompt
 ` as GeneratedSubscription<
   APITypes.OnDeletePromptVariableSubscriptionVariables,
   APITypes.OnDeletePromptVariableSubscription
+>;
+export const onCreateAgent = /* GraphQL */ `subscription OnCreateAgent($filter: ModelSubscriptionAgentFilterInput) {
+  onCreateAgent(filter: $filter) {
+    associationId
+    agentId
+    name
+    description
+    schema
+    actions {
+      headers {
+        key
+        value
+        __typename
+      }
+      endpoint
+      input {
+        name
+        __typename
+      }
+      output {
+        type
+        fields {
+          name
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    responsePrompt
+    isActive
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateAgentSubscriptionVariables,
+  APITypes.OnCreateAgentSubscription
+>;
+export const onUpdateAgent = /* GraphQL */ `subscription OnUpdateAgent($filter: ModelSubscriptionAgentFilterInput) {
+  onUpdateAgent(filter: $filter) {
+    associationId
+    agentId
+    name
+    description
+    schema
+    actions {
+      headers {
+        key
+        value
+        __typename
+      }
+      endpoint
+      input {
+        name
+        __typename
+      }
+      output {
+        type
+        fields {
+          name
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    responsePrompt
+    isActive
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateAgentSubscriptionVariables,
+  APITypes.OnUpdateAgentSubscription
+>;
+export const onDeleteAgent = /* GraphQL */ `subscription OnDeleteAgent($filter: ModelSubscriptionAgentFilterInput) {
+  onDeleteAgent(filter: $filter) {
+    associationId
+    agentId
+    name
+    description
+    schema
+    actions {
+      headers {
+        key
+        value
+        __typename
+      }
+      endpoint
+      input {
+        name
+        __typename
+      }
+      output {
+        type
+        fields {
+          name
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    responsePrompt
+    isActive
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteAgentSubscriptionVariables,
+  APITypes.OnDeleteAgentSubscription
 >;
 export const subscribe2channel = /* GraphQL */ `subscription Subscribe2channel($sessionId: String!) {
   subscribe2channel(sessionId: $sessionId) {

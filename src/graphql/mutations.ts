@@ -156,6 +156,7 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
     subtitle
     avatar
     description
+    botDisplayName
     initialPrompts {
       display
       prompt
@@ -200,6 +201,7 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
     subtitle
     avatar
     description
+    botDisplayName
     initialPrompts {
       display
       prompt
@@ -244,6 +246,7 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
     subtitle
     avatar
     description
+    botDisplayName
     initialPrompts {
       display
       prompt
@@ -1000,6 +1003,132 @@ export const deletePromptVariable = /* GraphQL */ `mutation DeletePromptVariable
   APITypes.DeletePromptVariableMutationVariables,
   APITypes.DeletePromptVariableMutation
 >;
+export const createAgent = /* GraphQL */ `mutation CreateAgent(
+  $input: CreateAgentInput!
+  $condition: ModelAgentConditionInput
+) {
+  createAgent(input: $input, condition: $condition) {
+    associationId
+    agentId
+    name
+    description
+    schema
+    actions {
+      headers {
+        key
+        value
+        __typename
+      }
+      endpoint
+      input {
+        name
+        __typename
+      }
+      output {
+        type
+        fields {
+          name
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    responsePrompt
+    isActive
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateAgentMutationVariables,
+  APITypes.CreateAgentMutation
+>;
+export const updateAgent = /* GraphQL */ `mutation UpdateAgent(
+  $input: UpdateAgentInput!
+  $condition: ModelAgentConditionInput
+) {
+  updateAgent(input: $input, condition: $condition) {
+    associationId
+    agentId
+    name
+    description
+    schema
+    actions {
+      headers {
+        key
+        value
+        __typename
+      }
+      endpoint
+      input {
+        name
+        __typename
+      }
+      output {
+        type
+        fields {
+          name
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    responsePrompt
+    isActive
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateAgentMutationVariables,
+  APITypes.UpdateAgentMutation
+>;
+export const deleteAgent = /* GraphQL */ `mutation DeleteAgent(
+  $input: DeleteAgentInput!
+  $condition: ModelAgentConditionInput
+) {
+  deleteAgent(input: $input, condition: $condition) {
+    associationId
+    agentId
+    name
+    description
+    schema
+    actions {
+      headers {
+        key
+        value
+        __typename
+      }
+      endpoint
+      input {
+        name
+        __typename
+      }
+      output {
+        type
+        fields {
+          name
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    responsePrompt
+    isActive
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteAgentMutationVariables,
+  APITypes.DeleteAgentMutation
+>;
 export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: HandleChannelsInput!) {
   handleChannels(input: $input) {
     id
@@ -1011,6 +1140,7 @@ export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: Han
     subtitle
     avatar
     description
+    botDisplayName
     initialPrompts {
       display
       prompt

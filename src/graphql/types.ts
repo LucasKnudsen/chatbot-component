@@ -163,6 +163,7 @@ export type CreateChannelInput = {
   subtitle?: string | null,
   avatar?: string | null,
   description?: string | null,
+  botDisplayName?: string | null,
   initialPrompts?: Array< InitialPromptInput > | null,
   overrideConfig?: OverrideConfigInput | null,
   isPublic: boolean,
@@ -202,6 +203,7 @@ export type ModelChannelConditionInput = {
   subtitle?: ModelStringInput | null,
   avatar?: ModelStringInput | null,
   description?: ModelStringInput | null,
+  botDisplayName?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
   and?: Array< ModelChannelConditionInput | null > | null,
   or?: Array< ModelChannelConditionInput | null > | null,
@@ -238,6 +240,7 @@ export type Channel = {
   subtitle?: string | null,
   avatar?: string | null,
   description?: string | null,
+  botDisplayName?: string | null,
   initialPrompts?:  Array<InitialPrompt > | null,
   overrideConfig?: OverrideConfig | null,
   isPublic: boolean,
@@ -277,6 +280,7 @@ export type UpdateChannelInput = {
   subtitle?: string | null,
   avatar?: string | null,
   description?: string | null,
+  botDisplayName?: string | null,
   initialPrompts?: Array< InitialPromptInput > | null,
   overrideConfig?: OverrideConfigInput | null,
   isPublic?: boolean | null,
@@ -962,6 +966,106 @@ export type DeletePromptVariableInput = {
   variableId: string,
 };
 
+export type CreateAgentInput = {
+  associationId: string,
+  agentId: string,
+  name: string,
+  description: string,
+  schema: string,
+  actions: Array< AgentActionInput >,
+  responsePrompt?: string | null,
+  isActive: boolean,
+};
+
+export type AgentActionInput = {
+  headers: Array< AgentActionHeaderInput >,
+  endpoint?: string | null,
+  input: Array< AgentFieldInput >,
+  output: AgentOutputInput,
+};
+
+export type AgentActionHeaderInput = {
+  key: string,
+  value: string,
+};
+
+export type AgentFieldInput = {
+  name: string,
+};
+
+export type AgentOutputInput = {
+  type: string,
+  fields: Array< AgentFieldInput >,
+};
+
+export type ModelAgentConditionInput = {
+  name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  schema?: ModelStringInput | null,
+  responsePrompt?: ModelStringInput | null,
+  isActive?: ModelBooleanInput | null,
+  and?: Array< ModelAgentConditionInput | null > | null,
+  or?: Array< ModelAgentConditionInput | null > | null,
+  not?: ModelAgentConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type Agent = {
+  __typename: "Agent",
+  associationId: string,
+  agentId: string,
+  name: string,
+  description: string,
+  schema: string,
+  actions:  Array<AgentAction >,
+  responsePrompt?: string | null,
+  isActive: boolean,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type AgentAction = {
+  __typename: "AgentAction",
+  headers:  Array<AgentActionHeader >,
+  endpoint?: string | null,
+  input:  Array<AgentField >,
+  output: AgentOutput,
+};
+
+export type AgentActionHeader = {
+  __typename: "AgentActionHeader",
+  key: string,
+  value: string,
+};
+
+export type AgentField = {
+  __typename: "AgentField",
+  name: string,
+};
+
+export type AgentOutput = {
+  __typename: "AgentOutput",
+  type: string,
+  fields:  Array<AgentField >,
+};
+
+export type UpdateAgentInput = {
+  associationId: string,
+  agentId: string,
+  name?: string | null,
+  description?: string | null,
+  schema?: string | null,
+  actions?: Array< AgentActionInput > | null,
+  responsePrompt?: string | null,
+  isActive?: boolean | null,
+};
+
+export type DeleteAgentInput = {
+  associationId: string,
+  agentId: string,
+};
+
 export type HandleChannelsInput = {
   flow: HandleChannelsFlowType,
   data?: string | null,
@@ -1098,6 +1202,7 @@ export type ModelChannelFilterInput = {
   subtitle?: ModelStringInput | null,
   avatar?: ModelStringInput | null,
   description?: ModelStringInput | null,
+  botDisplayName?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
@@ -1329,6 +1434,28 @@ export type ModelPromptVariableConnection = {
   nextToken?: string | null,
 };
 
+export type ModelAgentFilterInput = {
+  associationId?: ModelIDInput | null,
+  agentId?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  schema?: ModelStringInput | null,
+  responsePrompt?: ModelStringInput | null,
+  isActive?: ModelBooleanInput | null,
+  id?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelAgentFilterInput | null > | null,
+  or?: Array< ModelAgentFilterInput | null > | null,
+  not?: ModelAgentFilterInput | null,
+};
+
+export type ModelAgentConnection = {
+  __typename: "ModelAgentConnection",
+  items:  Array<Agent | null >,
+  nextToken?: string | null,
+};
+
 export type FetchChannelsInput = {
   flow: FetchChannelsFlowType,
   channelId?: string | null,
@@ -1415,6 +1542,7 @@ export type ModelSubscriptionChannelFilterInput = {
   subtitle?: ModelSubscriptionStringInput | null,
   avatar?: ModelSubscriptionStringInput | null,
   description?: ModelSubscriptionStringInput | null,
+  botDisplayName?: ModelSubscriptionStringInput | null,
   isPublic?: ModelSubscriptionBooleanInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
@@ -1556,6 +1684,21 @@ export type ModelSubscriptionPromptVariableFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionPromptVariableFilterInput | null > | null,
   or?: Array< ModelSubscriptionPromptVariableFilterInput | null > | null,
+};
+
+export type ModelSubscriptionAgentFilterInput = {
+  associationId?: ModelSubscriptionIDInput | null,
+  agentId?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  schema?: ModelSubscriptionStringInput | null,
+  responsePrompt?: ModelSubscriptionStringInput | null,
+  isActive?: ModelSubscriptionBooleanInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionAgentFilterInput | null > | null,
+  or?: Array< ModelSubscriptionAgentFilterInput | null > | null,
 };
 
 export type Publish2channelMutationVariables = {
@@ -1705,6 +1848,7 @@ export type CreateChannelMutation = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -1748,6 +1892,7 @@ export type UpdateChannelMutation = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -1791,6 +1936,7 @@ export type DeleteChannelMutation = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -2519,6 +2665,129 @@ export type DeletePromptVariableMutation = {
   } | null,
 };
 
+export type CreateAgentMutationVariables = {
+  input: CreateAgentInput,
+  condition?: ModelAgentConditionInput | null,
+};
+
+export type CreateAgentMutation = {
+  createAgent?:  {
+    __typename: "Agent",
+    associationId: string,
+    agentId: string,
+    name: string,
+    description: string,
+    schema: string,
+    actions:  Array< {
+      __typename: "AgentAction",
+      headers:  Array< {
+        __typename: "AgentActionHeader",
+        key: string,
+        value: string,
+      } >,
+      endpoint?: string | null,
+      input:  Array< {
+        __typename: "AgentField",
+        name: string,
+      } >,
+      output:  {
+        __typename: "AgentOutput",
+        type: string,
+        fields:  Array< {
+          __typename: "AgentField",
+          name: string,
+        } >,
+      },
+    } >,
+    responsePrompt?: string | null,
+    isActive: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateAgentMutationVariables = {
+  input: UpdateAgentInput,
+  condition?: ModelAgentConditionInput | null,
+};
+
+export type UpdateAgentMutation = {
+  updateAgent?:  {
+    __typename: "Agent",
+    associationId: string,
+    agentId: string,
+    name: string,
+    description: string,
+    schema: string,
+    actions:  Array< {
+      __typename: "AgentAction",
+      headers:  Array< {
+        __typename: "AgentActionHeader",
+        key: string,
+        value: string,
+      } >,
+      endpoint?: string | null,
+      input:  Array< {
+        __typename: "AgentField",
+        name: string,
+      } >,
+      output:  {
+        __typename: "AgentOutput",
+        type: string,
+        fields:  Array< {
+          __typename: "AgentField",
+          name: string,
+        } >,
+      },
+    } >,
+    responsePrompt?: string | null,
+    isActive: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteAgentMutationVariables = {
+  input: DeleteAgentInput,
+  condition?: ModelAgentConditionInput | null,
+};
+
+export type DeleteAgentMutation = {
+  deleteAgent?:  {
+    __typename: "Agent",
+    associationId: string,
+    agentId: string,
+    name: string,
+    description: string,
+    schema: string,
+    actions:  Array< {
+      __typename: "AgentAction",
+      headers:  Array< {
+        __typename: "AgentActionHeader",
+        key: string,
+        value: string,
+      } >,
+      endpoint?: string | null,
+      input:  Array< {
+        __typename: "AgentField",
+        name: string,
+      } >,
+      output:  {
+        __typename: "AgentOutput",
+        type: string,
+        fields:  Array< {
+          __typename: "AgentField",
+          name: string,
+        } >,
+      },
+    } >,
+    responsePrompt?: string | null,
+    isActive: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type HandleChannelsMutationVariables = {
   input: HandleChannelsInput,
 };
@@ -2535,6 +2804,7 @@ export type HandleChannelsMutation = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -2771,6 +3041,7 @@ export type GetChannelQuery = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -2817,6 +3088,7 @@ export type ListChannelsQuery = {
       subtitle?: string | null,
       avatar?: string | null,
       description?: string | null,
+      botDisplayName?: string | null,
       initialPrompts?:  Array< {
         __typename: "InitialPrompt",
         display?: string | null,
@@ -2867,6 +3139,7 @@ export type ChannelsByChatSpaceIdQuery = {
       subtitle?: string | null,
       avatar?: string | null,
       description?: string | null,
+      botDisplayName?: string | null,
       initialPrompts?:  Array< {
         __typename: "InitialPrompt",
         display?: string | null,
@@ -3653,6 +3926,96 @@ export type ListPromptVariablesQuery = {
   } | null,
 };
 
+export type GetAgentQueryVariables = {
+  associationId: string,
+  agentId: string,
+};
+
+export type GetAgentQuery = {
+  getAgent?:  {
+    __typename: "Agent",
+    associationId: string,
+    agentId: string,
+    name: string,
+    description: string,
+    schema: string,
+    actions:  Array< {
+      __typename: "AgentAction",
+      headers:  Array< {
+        __typename: "AgentActionHeader",
+        key: string,
+        value: string,
+      } >,
+      endpoint?: string | null,
+      input:  Array< {
+        __typename: "AgentField",
+        name: string,
+      } >,
+      output:  {
+        __typename: "AgentOutput",
+        type: string,
+        fields:  Array< {
+          __typename: "AgentField",
+          name: string,
+        } >,
+      },
+    } >,
+    responsePrompt?: string | null,
+    isActive: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListAgentsQueryVariables = {
+  associationId?: string | null,
+  agentId?: ModelIDKeyConditionInput | null,
+  filter?: ModelAgentFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListAgentsQuery = {
+  listAgents?:  {
+    __typename: "ModelAgentConnection",
+    items:  Array< {
+      __typename: "Agent",
+      associationId: string,
+      agentId: string,
+      name: string,
+      description: string,
+      schema: string,
+      actions:  Array< {
+        __typename: "AgentAction",
+        headers:  Array< {
+          __typename: "AgentActionHeader",
+          key: string,
+          value: string,
+        } >,
+        endpoint?: string | null,
+        input:  Array< {
+          __typename: "AgentField",
+          name: string,
+        } >,
+        output:  {
+          __typename: "AgentOutput",
+          type: string,
+          fields:  Array< {
+            __typename: "AgentField",
+            name: string,
+          } >,
+        },
+      } >,
+      responsePrompt?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type FetchChannelsQueryVariables = {
   input: FetchChannelsInput,
 };
@@ -3669,6 +4032,7 @@ export type FetchChannelsQuery = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -3823,6 +4187,7 @@ export type OnCreateChannelSubscription = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -3866,6 +4231,7 @@ export type OnUpdateChannelSubscription = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -3909,6 +4275,7 @@ export type OnDeleteChannelSubscription = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
       display?: string | null,
@@ -4617,6 +4984,126 @@ export type OnDeletePromptVariableSubscription = {
     promptId: string,
     variableId: string,
     value: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateAgentSubscriptionVariables = {
+  filter?: ModelSubscriptionAgentFilterInput | null,
+};
+
+export type OnCreateAgentSubscription = {
+  onCreateAgent?:  {
+    __typename: "Agent",
+    associationId: string,
+    agentId: string,
+    name: string,
+    description: string,
+    schema: string,
+    actions:  Array< {
+      __typename: "AgentAction",
+      headers:  Array< {
+        __typename: "AgentActionHeader",
+        key: string,
+        value: string,
+      } >,
+      endpoint?: string | null,
+      input:  Array< {
+        __typename: "AgentField",
+        name: string,
+      } >,
+      output:  {
+        __typename: "AgentOutput",
+        type: string,
+        fields:  Array< {
+          __typename: "AgentField",
+          name: string,
+        } >,
+      },
+    } >,
+    responsePrompt?: string | null,
+    isActive: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateAgentSubscriptionVariables = {
+  filter?: ModelSubscriptionAgentFilterInput | null,
+};
+
+export type OnUpdateAgentSubscription = {
+  onUpdateAgent?:  {
+    __typename: "Agent",
+    associationId: string,
+    agentId: string,
+    name: string,
+    description: string,
+    schema: string,
+    actions:  Array< {
+      __typename: "AgentAction",
+      headers:  Array< {
+        __typename: "AgentActionHeader",
+        key: string,
+        value: string,
+      } >,
+      endpoint?: string | null,
+      input:  Array< {
+        __typename: "AgentField",
+        name: string,
+      } >,
+      output:  {
+        __typename: "AgentOutput",
+        type: string,
+        fields:  Array< {
+          __typename: "AgentField",
+          name: string,
+        } >,
+      },
+    } >,
+    responsePrompt?: string | null,
+    isActive: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteAgentSubscriptionVariables = {
+  filter?: ModelSubscriptionAgentFilterInput | null,
+};
+
+export type OnDeleteAgentSubscription = {
+  onDeleteAgent?:  {
+    __typename: "Agent",
+    associationId: string,
+    agentId: string,
+    name: string,
+    description: string,
+    schema: string,
+    actions:  Array< {
+      __typename: "AgentAction",
+      headers:  Array< {
+        __typename: "AgentActionHeader",
+        key: string,
+        value: string,
+      } >,
+      endpoint?: string | null,
+      input:  Array< {
+        __typename: "AgentField",
+        name: string,
+      } >,
+      output:  {
+        __typename: "AgentOutput",
+        type: string,
+        fields:  Array< {
+          __typename: "AgentField",
+          name: string,
+        } >,
+      },
+    } >,
+    responsePrompt?: string | null,
+    isActive: boolean,
     createdAt: string,
     updatedAt: string,
   } | null,

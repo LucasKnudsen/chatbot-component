@@ -136,7 +136,7 @@ const HumanMessage = (props: { content: string }) => {
     <div class='flex flex-col gap-1 '>
       <div class='flex items-center gap-2'>
         <UserIconOneClick />
-        <div class='font-bold'>You</div>
+        <div class='font-semibold'>You</div>
       </div>
 
       <Show when={!props.content && oneClickStore.botStatus === BotStatus.THINKING}>
@@ -165,9 +165,11 @@ const AssistantMessage = (props: { content: string }) => {
 
   return (
     <div class='flex flex-col gap-1 '>
-      <div class='flex items-center gap-2'>
+      <div class='flex items-center gap-2 -ml-[1.5px]'>
         <BrainAIOneClick />
-        <div class='font-bold'>AI</div>
+        <div class='font-semibold'>
+          {oneClickStore.activeChannel?.botDisplayName || 'Assistant'}
+        </div>
       </div>
       <Show
         when={props.content}
