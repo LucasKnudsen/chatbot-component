@@ -217,12 +217,12 @@ export const BotOneClick = () => {
           <div
             class='overflow-auto'
             style={{
-              height: messages().length === 0 ? '10px' : '100%',
+              height: '100%',
               transition: '0.4s height ease-in-out',
               'scrollbar-width': 'none',
             }}
           >
-            <Conversation messages={messages()} />
+            <Conversation messages={messages} />
           </div>
           <InputOneClick onSubmit={handleNewMessage} />
         </div>
