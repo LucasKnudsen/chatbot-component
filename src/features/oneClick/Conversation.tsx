@@ -48,33 +48,28 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
       </Show>
 
       <Show when={props.messages().length > 0}>
-        <div
-          class={`flex justify-start flex-col relative h-[91%] mt-[20px] ${
-            props.messages?.length > 0 ? 'border-t' : ''
-          }`}
-        >
-          <Show when={props.messages?.length > 0}>
-            <div class='absolute z-[100] top-[-15px] w-full justify-end'>
-              <button class={`flex justify-end gap-2 w-full `} onClick={handleExpandConversation}>
-                <div class='flex items-center gap-2 cursor-pointer hover:shadow-md rounded-full'>
-                  <div class='border bg-white border-[var(--primaryColor)] flex items-center px-3 rounded-2xl gap-[15px]'>
-                    <span class='text-sm font-semibold text-[var(--primaryColor)]'>
-                      {expandConversation() ? 'Collapse' : 'Expand'}
-                    </span>
+        <div class={`flex justify-start flex-col relative h-[91%] mt-[20px] border-t`}>
+          <div class='absolute z-[100] top-[-15px] w-full justify-end'>
+            {/* Expand button  */}
+            <button class={`flex justify-end gap-2 w-full `} onClick={handleExpandConversation}>
+              <div class='flex items-center gap-2 cursor-pointer hover:shadow-md rounded-full'>
+                <div class='border bg-white border-[var(--primaryColor)] flex items-center px-3 rounded-2xl gap-[15px]'>
+                  <span class='text-sm font-semibold text-[var(--primaryColor)]'>
+                    {expandConversation() ? 'Collapse' : 'Expand'}
+                  </span>
 
-                    <ExpandIcon
-                      width={10}
-                      height={10}
-                      color={theme().primaryColor}
-                      style={{
-                        transform: expandConversation() ? 'rotate(180deg)' : 'rotate(0deg)',
-                      }}
-                    />
-                  </div>
+                  <ExpandIcon
+                    width={10}
+                    height={10}
+                    color={theme().primaryColor}
+                    style={{
+                      transform: expandConversation() ? 'rotate(180deg)' : 'rotate(0deg)',
+                    }}
+                  />
                 </div>
-              </button>
-            </div>
-          </Show>
+              </div>
+            </button>
+          </div>
 
           <div
             ref={chatWindowEl}
