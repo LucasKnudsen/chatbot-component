@@ -17,6 +17,7 @@ import { useLLM } from './hooks'
 import { heyGenStore } from './store/heyGenStore'
 import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
+import { cleanContentForSpeech } from './utils'
 
 export const BotOneClick = () => {
   const [TopContainerParent] = createAutoAnimate()
@@ -33,10 +34,12 @@ export const BotOneClick = () => {
     }
     if (heyGenStore.videoRef) heyGenStore.videoRef.muted = false
 
+    const cleanedResponse = cleanContentForSpeech(response)
+
     try {
       await heyGenStore.avatar.speak({
         taskRequest: {
-          text: response,
+          text: cleanedResponse,
           sessionId: heyGenStore.sessionId,
         },
       })
