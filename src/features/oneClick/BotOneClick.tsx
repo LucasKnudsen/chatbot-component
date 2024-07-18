@@ -1,4 +1,5 @@
 import { NEXT_API_ENDPOINTS } from '@/constants/api'
+import { logDev } from '@/utils'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Show, createEffect } from 'solid-js'
 import toast from 'solid-toast'
@@ -32,6 +33,7 @@ export const BotOneClick = () => {
     if (!heyGenStore.initialized || !heyGenStore.avatar || isMuted() || response.length === 0) {
       return
     }
+
     if (heyGenStore.videoRef) heyGenStore.videoRef.muted = false
 
     const cleanedResponse = cleanContentForSpeech(response)
@@ -41,16 +43,42 @@ export const BotOneClick = () => {
         taskRequest: {
           text: cleanedResponse,
           sessionId: heyGenStore.sessionId,
+          taskMode: 'async',
+          taskType: 'repeat',
         },
       })
     } catch (error) {
-      toast.error('Error speaking. Please try again', {
-        position: 'top-center',
-        className: '!text-base',
-      })
-      console.error('Error speaking:', error)
-    } finally {
       oneClickActions.setStatus(BotStatus.IDLE)
+      console.error('Error speaking:', error)
+    }
+  }
+
+  const handleInterrupt = async (retryLimit: number = 0) => {
+    if (!heyGenStore.initialized && !heyGenStore.avatar) {
+      return
+    }
+    if (heyGenStore.videoRef) heyGenStore.videoRef.muted = true
+
+    try {
+      await heyGenStore.avatar?.interrupt({
+        interruptRequest: {
+          sessionId: heyGenStore.sessionId,
+        },
+      })
+    } catch (error: any) {
+      try {
+        const errorResponse = await error.response.json()
+        logDev(errorResponse)
+        if (errorResponse?.code == 400010) {
+          if (retryLimit < 5) {
+            setTimeout(() => {
+              handleInterrupt(retryLimit++)
+            }, 1000)
+          }
+        }
+      } catch (error2) {
+        logDev('Error interrupting:', error, error2)
+      }
     }
   }
 
@@ -89,6 +117,7 @@ export const BotOneClick = () => {
     ) {
       cancelQuery()
       handleStopAnswering()
+      handleInterrupt()
       oneClickActions.setStatus(BotStatus.IDLE)
     } else {
       oneClickActions.setStatus(BotStatus.LISTENING)

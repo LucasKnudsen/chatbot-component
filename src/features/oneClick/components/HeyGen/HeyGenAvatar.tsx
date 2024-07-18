@@ -3,9 +3,10 @@ import { configStore } from '@/features/portal-init'
 import { Configuration, StreamingAvatarApi } from '@heygen/streaming-avatar'
 import { createEffect, onCleanup, Show } from 'solid-js'
 import toast from 'solid-toast'
-import {  oneClickStore } from '../../store/oneClickStore'
+import {  oneClickActions, oneClickStore } from '../../store/oneClickStore'
 import { fetchAccessToken } from './services'
 import { heyGenStore, heyGenActions } from '../../store/heyGenStore'
+import { BotStatus } from '../../types'
 
 const DEV_AVATAR_ID = import.meta.env.VITE_DEV_HEYGEN_AVATAR_ID
 const DEV_VOICE_ID = import.meta.env.VITE_DEV_HEYGEN_VOICE_ID
@@ -31,6 +32,18 @@ const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
       if (!heygenResponse || !heygenResponse.sessionId) {
         throw new Error('No session ID returned')
       }
+
+      const startTalkCallback = (e: any) => {
+        console.log("Avatar started talking", e);
+      };
+  
+      const stopTalkCallback = (e: any) => {
+        console.log("Avatar stopped talking", e);
+        oneClickActions.setStatus(BotStatus.IDLE)
+      };
+  
+      heyGenStore.avatar.addEventHandler("avatar_start_talking", startTalkCallback);
+      heyGenStore.avatar.addEventHandler("avatar_stop_talking", stopTalkCallback);
 
       heyGenActions.setSessionId(heygenResponse.sessionId)
       heyGenActions.setStream(heyGenStore.avatar.mediaStream)
@@ -111,7 +124,6 @@ const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
           <Spinner size={60} />
         </div>
       </Show>
-
       <video
         playsinline
         class='w-full h-full object-cover animate-fade-in'

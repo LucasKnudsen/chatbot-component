@@ -29,9 +29,17 @@ export const useLLM = (props: Input): Output => {
   let controller: AbortController
 
   const cancelQuery = () => {
-    controller?.abort()
-    setLoading(false)
-  }
+      if (loading()) {
+        controller?.abort()
+        setMessages((prev) => {
+          if (prev[prev.length - 1].role === 'assistant' && prev[prev.length - 1].content === '') {
+            return prev.slice(0, prev.length - 1)
+          }
+          return prev
+        })
+        setLoading(false)
+      }
+    }
 
   const queryLLM = async (input: string) => {
     try {
