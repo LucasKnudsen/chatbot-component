@@ -19,9 +19,11 @@ import { heyGenStore } from './store/heyGenStore'
 import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
 import { cleanContentForSpeech } from './utils'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 
 export const BotOneClick = () => {
   const [TopContainerParent] = createAutoAnimate()
+  const device = useMediaQuery();
 
   const audioRecorder = createAudioRecorder({
     onStop(audioBlob) {
@@ -208,23 +210,34 @@ export const BotOneClick = () => {
   //     }
   //   }
   // })
+  const handelHeyGenMaxWidth = () => {
+    if (!heyGenStore.isExpandAvatar) return 'unset'
+    if (device() === 'tablet') return '95%'
+    if (device() === 'mobile') return '100%'
+    return '100%' 
+  }
 
   return (
     <>
       <div
         ref={TopContainerParent}
         data-testid='BotOneClick'
-        class='relative flex flex-col w-full h-full animate-fade-in mt-[20px] overflow-hidden'
+        class={`relative flex flex-col w-full h-full flex items-center justify-center animate-fade-in ${heyGenStore.isExpandAvatar ? '' : 'mt-[20px]'} overflow-hidden`}
       >
         <AIVoice audioQueue={audio64} setAudioQueue={setAudio64} />
-
-        <div class='relative w-full flex flex-col h-1/2  items-center overflow-hidden px-5 bg-white'>
+        <div
+          class={`relative w-full flex flex-col h-1/2  items-center overflow-hidden ${heyGenStore.isExpandAvatar ? '' : 'px-5'} bg-white`}
+          style={{
+            height: heyGenStore.isExpandAvatar ? '100%' : '50%',
+            'max-width': handelHeyGenMaxWidth(), 
+          }}
+        >
           <div class='absolute right-6 top-2 z-10 '>
             <AITextStatus />
           </div>
 
           <div class='absolute left-8 top-4 z-10 '>
-            <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED} keyed>
+            <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED && !heyGenStore.isExpandAvatar} keyed>
               <MuteAISwitch onMute={handleTriggerAudio} />
             </Show>
           </div>
@@ -232,32 +245,37 @@ export const BotOneClick = () => {
           <div class='h-full w-full'>
             <AvatarOneClick onResetMessage={handleResetMessage} />
           </div>
-
-          <ButtonStart onStart={handleButtonRecord} />
+          <div class={`${heyGenStore.isExpandAvatar ? 'opacity-55 hover:opacity-100':''}`} style={{
+            position: heyGenStore.isExpandAvatar ? 'absolute': 'unset',
+            bottom: heyGenStore.isExpandAvatar ? '20px' : 'unset',
+          }}>
+            <ButtonStart onStart={handleButtonRecord} />
+          </div>
         </div>
-
-        <div
-          class={`w-full overflow-auto ${
-            expandConversation() ? 'absolute z-[100] end-0 bg-[var(--backgroundColor)]' : ''
-          } flex flex-col grow justify-end px-5 pb-4`}
-          style={{
-            height: expandConversation() ? '100%' : '50%',
-            transition: '0.4s height ease',
-            bottom: 0,
-          }}
-        >
+        <Show when={!heyGenStore.isExpandAvatar}>
           <div
-            class='overflow-auto'
+            class={`w-full overflow-auto ${
+              expandConversation() ? 'absolute z-[100] end-0 bg-[var(--backgroundColor)]' : ''
+            } flex flex-col grow justify-end px-5 pb-4`}
             style={{
-              height: '100%',
-              transition: '0.4s height ease-in-out',
-              'scrollbar-width': 'none',
+              height: expandConversation() ? '100%' : '50%',
+              transition: '0.4s height ease',
+              bottom: 0,
             }}
           >
-            <Conversation messages={messages} />
+            <div
+              class='overflow-auto'
+              style={{
+                height: '100%',
+                transition: '0.4s height ease-in-out',
+                'scrollbar-width': 'none',
+              }}
+            >
+              <Conversation messages={messages} />
+            </div>
+            <InputOneClick onSubmit={handleNewMessage} />
           </div>
-          <InputOneClick onSubmit={handleNewMessage} />
-        </div>
+        </Show>
       </div>
     </>
   )

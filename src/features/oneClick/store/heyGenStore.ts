@@ -8,6 +8,7 @@ export type HeyGenStore = {
   loading: boolean,
   videoRef: HTMLVideoElement | null,
   avatar: StreamingAvatarApi | null,
+  isExpandAvatar: boolean
 }
 
 const [heyGenStore, setHeyGenStore] = createStore<HeyGenStore>({
@@ -17,6 +18,7 @@ const [heyGenStore, setHeyGenStore] = createStore<HeyGenStore>({
   loading: false,
   videoRef: null,
   avatar: null, 
+  isExpandAvatar: false
 })
 
 const heyGenActions = {
@@ -37,6 +39,9 @@ const heyGenActions = {
   },
   setAvatar: (avatar: StreamingAvatarApi) => {
     setHeyGenStore('avatar', avatar)
+  },
+  setIsExpandAvatar: (isExpandAvatar: boolean) => {
+    setHeyGenStore('isExpandAvatar', isExpandAvatar)
   }
 }
 

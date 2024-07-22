@@ -17,6 +17,7 @@ import { useTheme } from '@/features/theme/hooks'
 import { createQuery } from '@/hooks'
 import { Show } from 'solid-js'
 import { Toaster } from 'solid-toast'
+import { heyGenStore } from '@/features/oneClick/store/heyGenStore'
 
 export const PortalInitializer = (props: ChatConfig) => {
   const { initTheme } = useTheme()
@@ -68,7 +69,9 @@ export const PortalInitializer = (props: ChatConfig) => {
                 class='fixed top-0 left-0 flex flex-nowrap h-full w-full justify-center overflow-hidden animate-fade-in '
               >
                 <div class='flex flex-col max-lg:overflow-hidden w-full h-full shadow-xl'>
-                  <Nav />
+                  <Show when={!heyGenStore.isExpandAvatar}>
+                    <Nav />
+                  </Show>
 
                   <OneClickManager />
                 </div>

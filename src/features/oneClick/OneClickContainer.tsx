@@ -1,6 +1,7 @@
 import { useTheme } from '@/features/theme'
 import { JSX } from 'solid-js'
 import { configStore } from '../portal-init'
+import { heyGenStore } from './store/heyGenStore';
 
 export const OneClickContainer = (props: { children: JSX.Element }) => {
   // Wrapper for the One Click Bot. This should "open" and "close" the bot depending on configStore.isBotOpened
@@ -19,6 +20,12 @@ export const OneClickContainer = (props: { children: JSX.Element }) => {
         color: theme().textColor,
         background: ` no-repeat center center / cover ${theme().backgroundColor}`,
         'z-index': 69420,
+        width: heyGenStore.isExpandAvatar ? '100vw' : '',
+        height: heyGenStore.isExpandAvatar ? '100vh' : '',
+        bottom: heyGenStore.isExpandAvatar ? 0 : '',
+        right: heyGenStore.isExpandAvatar? 0 : '',
+        "border-radius": heyGenStore.isExpandAvatar ? 0 : '',
+        "max-height": heyGenStore.isExpandAvatar ? '100vh' : '',
       }}
       part='bot'
     >

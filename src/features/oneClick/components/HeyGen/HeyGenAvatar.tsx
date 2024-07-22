@@ -3,15 +3,33 @@ import { configStore } from '@/features/portal-init'
 import { Configuration, StreamingAvatarApi } from '@heygen/streaming-avatar'
 import { createEffect, onCleanup, Show } from 'solid-js'
 import toast from 'solid-toast'
-import {  oneClickActions, oneClickStore } from '../../store/oneClickStore'
+import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
 import { fetchAccessToken } from './services'
 import { heyGenStore, heyGenActions } from '../../store/heyGenStore'
 import { BotStatus } from '../../types'
+import { FullScreenIcon } from '@/components/icons/FullScreenIcon'
+import { ExitFullScreenIcon } from '@/components/icons/ExitFullScreen'
+import { useTheme } from '@/features/theme'
 
 const DEV_AVATAR_ID = import.meta.env.VITE_DEV_HEYGEN_AVATAR_ID
 const DEV_VOICE_ID = import.meta.env.VITE_DEV_HEYGEN_VOICE_ID
 
 const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
+  const { theme } = useTheme()
+
+  createEffect(() => {
+    const handleKeyDown = (event: { key: string }) => {
+      if (event.key === 'Escape' && heyGenStore.isExpandAvatar) {
+        heyGenActions.setIsExpandAvatar(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    onCleanup(() => {
+      window.removeEventListener('keydown', handleKeyDown)
+    })
+  })
   async function start() {
     if (!heyGenStore.avatar) return
     try {
@@ -34,16 +52,16 @@ const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
       }
 
       const startTalkCallback = (e: any) => {
-        console.log("Avatar started talking", e);
-      };
-  
+        console.log('Avatar started talking', e)
+      }
+
       const stopTalkCallback = (e: any) => {
-        console.log("Avatar stopped talking", e);
+        console.log('Avatar stopped talking', e)
         oneClickActions.setStatus(BotStatus.IDLE)
-      };
-  
-      heyGenStore.avatar.addEventHandler("avatar_start_talking", startTalkCallback);
-      heyGenStore.avatar.addEventHandler("avatar_stop_talking", stopTalkCallback);
+      }
+
+      heyGenStore.avatar.addEventHandler('avatar_start_talking', startTalkCallback)
+      heyGenStore.avatar.addEventHandler('avatar_stop_talking', stopTalkCallback)
 
       heyGenActions.setSessionId(heygenResponse.sessionId)
       heyGenActions.setStream(heyGenStore.avatar.mediaStream)
@@ -62,7 +80,9 @@ const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
     if (!heyGenStore.initialized || !heyGenStore.avatar) {
       return
     }
-    await heyGenStore.avatar.stopAvatar({ stopSessionRequest: { sessionId: heyGenStore.sessionId } })
+    await heyGenStore.avatar.stopAvatar({
+      stopSessionRequest: { sessionId: heyGenStore.sessionId },
+    })
     heyGenActions.setStream(undefined)
     heyGenActions.setLoading(false)
     heyGenActions.setInitialized(false)
@@ -117,6 +137,10 @@ const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
     }
   })
 
+  const handleExpandHeyGen = (value: boolean) => {
+    heyGenActions.setIsExpandAvatar(value)
+  }
+
   return (
     <div class='w-full relative h-full flex flex-col justify-center items-center gap-5'>
       <Show when={heyGenStore.loading || !heyGenStore.initialized || !heyGenStore.stream}>
@@ -124,15 +148,41 @@ const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
           <Spinner size={60} />
         </div>
       </Show>
-      <video
-        playsinline
-        class='w-full h-full object-cover animate-fade-in'
-        muted
-        autoplay
-        ref={(el) => (heyGenActions.setVideoRef(el))}
+      <button
+        class='all-unset cursor-pointer flex items-center justify-center'
+        onDblClick={() => {
+          if (heyGenStore.isExpandAvatar) handleExpandHeyGen(false)
+          else handleExpandHeyGen(true)
+        }}
+        style={{
+          width: heyGenStore.isExpandAvatar ? '100%' : '',
+          height: heyGenStore.isExpandAvatar ? '100%' : '',
+        }}
       >
-        <track kind='captions' />
-      </video>
+        <video
+          playsinline
+          class='w-full h-full object-cover animate-fade-in cursor-pointer'
+          muted
+          autoplay
+          ref={(el) => heyGenActions.setVideoRef(el)}
+        >
+          <track kind='captions' />
+        </video>
+      </button>
+      {/* <Show when={heyGenStore.initialized && heyGenStore.avatar && heyGenStore.stream}>
+        <div class='absolute bottom-2 right-2 cursor-pointer'>
+          <Show when={!heyGenStore.isExpandAvatar}>
+            <button class='all-unset' onClick={() => handleExpandHeyGen(true)} >
+              <FullScreenIcon color={theme().primaryColor} />
+            </button>
+          </Show>
+          <Show when={heyGenStore.isExpandAvatar}>
+            <button class='all-unset' onClick={() => handleExpandHeyGen(false)}>
+              <ExitFullScreenIcon color={theme().primaryColor} />
+            </button>
+          </Show>
+        </div>
+      </Show> */}
     </div>
   )
 }

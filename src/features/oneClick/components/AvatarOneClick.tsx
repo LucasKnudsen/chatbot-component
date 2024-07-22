@@ -4,6 +4,7 @@ import { createEffect, Match, on, Switch } from 'solid-js'
 import { oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 import HeyGenAvatar from './HeyGen/HeyGenAvatar'
+import { heyGenStore } from '../store/heyGenStore'
 
 export const AvatarOneClick = (props: {
   onResetMessage: () => void
@@ -28,7 +29,7 @@ export const AvatarOneClick = (props: {
   )
 
   return (
-    <div class='flex justify-center w-full overflow-hidden rounded-xl z-10 h-[calc(100%-40px)]'>
+    <div class={`flex justify-center w-full overflow-hidden z-10 ${heyGenStore.isExpandAvatar ? 'h-full' : 'h-[calc(100%-40px)] rounded-xl'}`}>
       <Switch
         fallback={
           <video
