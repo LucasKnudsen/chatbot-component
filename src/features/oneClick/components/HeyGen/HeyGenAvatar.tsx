@@ -3,20 +3,15 @@ import { configStore } from '@/features/portal-init'
 import { Configuration, StreamingAvatarApi } from '@heygen/streaming-avatar'
 import { createEffect, onCleanup, Show } from 'solid-js'
 import toast from 'solid-toast'
+import { heyGenActions, heyGenStore } from '../../store/heyGenStore'
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
-import { fetchAccessToken } from './services'
-import { heyGenStore, heyGenActions } from '../../store/heyGenStore'
 import { BotStatus } from '../../types'
-import { FullScreenIcon } from '@/components/icons/FullScreenIcon'
-import { ExitFullScreenIcon } from '@/components/icons/ExitFullScreen'
-import { useTheme } from '@/features/theme'
+import { fetchAccessToken } from './services'
 
 const DEV_AVATAR_ID = import.meta.env.VITE_DEV_HEYGEN_AVATAR_ID
 const DEV_VOICE_ID = import.meta.env.VITE_DEV_HEYGEN_VOICE_ID
 
 const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
-  const { theme } = useTheme()
-
   createEffect(() => {
     const handleKeyDown = (event: { key: string }) => {
       if (event.key === 'Escape' && heyGenStore.isExpandAvatar) {
