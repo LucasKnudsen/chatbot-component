@@ -1,8 +1,14 @@
 import { createSignal } from 'solid-js'
 
+type ToolCallStreamObject = {
+  name: string,
+  status: 'processing' | 'done',
+}
+
 export type ParsedAIResponse = {
   text?: string
   audio: string[]
+  toolCall: ToolCallStreamObject
 }
 const [incompleteChunk, setIncompleteChunk] = createSignal('')
 
@@ -42,6 +48,13 @@ export const parseLLMStreamResponse = (value: string): ParsedAIResponse => {
         if (line.audio) {
           console.log('Audio parsed:', line.audio.slice(0, 20))
           acc.audio?.push(line.audio)
+        }
+
+        if (line.toolCall) {
+          acc.toolCall= {
+            name: line.toolCall.name,
+            status: line.toolCall.status
+          } 
         }
 
         return acc

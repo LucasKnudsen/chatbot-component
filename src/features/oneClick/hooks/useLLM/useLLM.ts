@@ -133,21 +133,20 @@ const handleNewAPI = async (
           setAudio64((prev) => [...prev, ...parsedValue.audio!])
         }
 
-        //   if (parsedValue.toolCall) {
-        //     console.log('Tool call:', parsedValue.toolCall)
-        //     switch (parsedValue.toolCall.status) {
-        //       case 'processing':
-        //         processingToolCall.set(true)
-        //         break
+          if (parsedValue.toolCall) {
+            switch (parsedValue.toolCall.status) {
+              case 'processing':
+                  oneClickActions.setOneClickStore('isProcessToolCall', true) 
+                break
 
-        //       case 'done':
-        //         processingToolCall.set(false)
-        //         break
+              case 'done':
+                 oneClickActions.setOneClickStore('isProcessToolCall', false)
+                break
 
-        //       default:
-        //         break
-        //     }
-        //   }
+              default:
+                break
+            }
+          }
       } catch (error) {
         oneClickActions.setStatus(BotStatus.IDLE)
       } finally {

@@ -7,6 +7,7 @@ export type OneClickStore = {
   activeChannel?: Channel | null
   chatMode: 'voice' | 'text'
   isHeyGenMode: boolean
+  isProcessToolCall: boolean
 }
 
 const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
@@ -14,6 +15,7 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   activeChannel: null,
   chatMode: 'voice',
   isHeyGenMode: true,
+  isProcessToolCall: false
 })
 
 const initOneClickStore = (channel: Channel) => {

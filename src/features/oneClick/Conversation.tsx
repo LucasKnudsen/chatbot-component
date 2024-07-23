@@ -1,4 +1,4 @@
-import { BrainAIOneClick, ExpandIcon, Spinner, UserIconOneClick } from '@/components'
+import { BrainAIOneClick, ExpandIcon, Spinner, TextLoading, UserIconOneClick } from '@/components'
 import { Marked } from '@ts-stack/markdown'
 import { Accessor, createEffect, createSignal, on, Show } from 'solid-js'
 import { useTheme } from '../theme'
@@ -174,8 +174,11 @@ const AssistantMessage = (props: { content: string }) => {
       <Show
         when={props.content}
         fallback={
-          <div class='my-3'>
+          <div class='my-3 flex items-center gap-2'>
             <Spinner size={18} />
+            <Show when={oneClickStore.isProcessToolCall}>
+              <TextLoading />
+            </Show>
           </div>
         }
       >
