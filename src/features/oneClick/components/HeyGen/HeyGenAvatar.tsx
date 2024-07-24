@@ -144,14 +144,10 @@ const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
         </div>
       </Show>
       <button
-        class='all-unset cursor-pointer flex items-center justify-center'
+        class='all-unset cursor-pointer flex items-center justify-center h-full w-full'
         onDblClick={() => {
           if (heyGenStore.isExpandAvatar) handleExpandHeyGen(false)
           else handleExpandHeyGen(true)
-        }}
-        style={{
-          width: heyGenStore.isExpandAvatar ? '100%' : '',
-          height: heyGenStore.isExpandAvatar ? '100%' : '',
         }}
       >
         <video
