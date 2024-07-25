@@ -1,4 +1,4 @@
-import { useTheme } from "@/features/theme"
+import { useTheme } from '@/features/theme'
 
 type Props = {
   text?: string
@@ -6,14 +6,14 @@ type Props = {
   durationAnimation?: number
 }
 export const TextLoading = (props: Props) => {
-  const { theme } = useTheme();
+  const { theme } = useTheme()
   return (
     <>
       <style>
         {`
           .text-loading {
             width: fit-content;
-            font-size: ${props.size ||  16}px;
+            font-size: ${props.size || 16}px;
             color: ${theme().primaryColor};
             clip-path: inset(0 100% 0 0);
             animation: l5 ${props.durationAnimation || 1.5}s steps(11) infinite;

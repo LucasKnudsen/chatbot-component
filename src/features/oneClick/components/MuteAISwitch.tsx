@@ -12,6 +12,7 @@ export const MuteAISwitch = (props: Props) => {
   const [parent] = createAutoAnimate()
   const [noAvatarParent] = createAutoAnimate()
   const [noAvatarTextParent] = createAutoAnimate()
+
   const { activeChannel } = oneClickStore
   const isHasAvatar =
     !!activeChannel?.avatar || activeChannel?.overrideConfig?.voiceMode === VoiceMode.HEYGEN
@@ -55,7 +56,7 @@ export const MuteAISwitch = (props: Props) => {
            width: 35px;
             height: 35px;
             border-radius: 50px;
-            background-color: rgba(91, 147, 255, 1);
+            background-color: var(--primaryColor);
             border-radius: 50%;
             display: flex;
             align-items: center;

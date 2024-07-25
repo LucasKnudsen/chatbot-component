@@ -37,7 +37,7 @@ export const InputOneClick = (props: { onSubmit: (input: string) => void }) => {
       <Divider margin={0} />
 
       <div class='flex items-center justify-between border border-[var(--bubbleButtonColor)] mt-3 rounded-lg bg-[var(--textInputBackgroundColor)]'>
-        <EditIcon class='mx-3' />
+        <EditIcon class='mx-3' color={theme().primaryColor} />
 
         <input
           value={input()}

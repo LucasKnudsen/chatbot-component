@@ -11,13 +11,13 @@ import { BotManager, FraiaLoading, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '
 
 import { Nav, NavigationDrawer } from '@/components/nav'
 import { AuthProvider } from '@/features/authentication'
+import { heyGenStore } from '@/features/oneClick/store/heyGenStore'
 import { useText } from '@/features/text'
 import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
 import { createQuery } from '@/hooks'
 import { Show } from 'solid-js'
 import { Toaster } from 'solid-toast'
-import { heyGenStore } from '@/features/oneClick/store/heyGenStore'
 
 export const PortalInitializer = (props: ChatConfig) => {
   const { initTheme } = useTheme()
@@ -52,10 +52,10 @@ export const PortalInitializer = (props: ChatConfig) => {
       {/* Shows loading while the config is being fetched and autoOpen is true as to not just show a blank screen */}
       <Show when={configQuery.isLoading() && props.config?.autoOpen}>
         <FraiaLoading />
-      </Show> 
+      </Show>
 
       <Show when={configQuery.data()}>
-      {/* <Show when={false}> */}
+        {/* <Show when={false}> */}
         <PortalButton />
 
         {/* OneClickManager goes here  */}

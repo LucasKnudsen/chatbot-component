@@ -1,4 +1,4 @@
-import { BrainAIOneClick, ExpandIcon, Spinner, TextLoading, UserIconOneClick } from '@/components'
+import { ExpandIcon, SparklesIcon, Spinner, TextLoading, UserIconOneClick } from '@/components'
 import { Marked } from '@ts-stack/markdown'
 import { Accessor, createEffect, createSignal, on, Show } from 'solid-js'
 import { useTheme } from '../theme'
@@ -85,7 +85,7 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
                 id='conversations'
                 class={`py-4 animate-fade-in flex flex-col w-full h-auto gap-2 `}
               >
-                <div class='flex flex-col gap-2 relative '>
+                <div class='flex flex-col gap-4 relative '>
                   {props.messages().map((message) => (
                     <ChatMessageRow content={message.content} role={message.role} />
                   ))}
@@ -132,25 +132,29 @@ const ChatMessageRow = (props: ChatMessage) => {
 }
 
 const HumanMessage = (props: { content: string }) => {
+  const { theme } = useTheme()
   return (
-    <div class='flex flex-col gap-1 '>
-      <div class='flex items-center gap-2'>
-        <UserIconOneClick />
-        <div class='font-semibold'>You</div>
-      </div>
-
+    <div class='flex gap-2 justify-end '>
       <Show when={!props.content && oneClickStore.botStatus === BotStatus.THINKING}>
         <div class='my-3'>
           <Spinner size={18} />
         </div>
       </Show>
-      <div>{props.content}</div>
+      <div class='flex justify-center items-center px-4 py-2 rounded-lg bg-[var(--surfaceSoftBackground)] shadow-sm'>
+        {props.content}
+      </div>
+
+      <div class='flex items-center gap-2'>
+        <UserIconOneClick color={theme().primaryColor} />
+        {/* <div class='font-semibold'>You</div> */}
+      </div>
     </div>
   )
 }
 
 const AssistantMessage = (props: { content: string }) => {
   let textEl: HTMLDivElement | undefined
+  const { theme } = useTheme()
 
   createEffect(
     on(
@@ -166,7 +170,7 @@ const AssistantMessage = (props: { content: string }) => {
   return (
     <div class='flex flex-col gap-1 '>
       <div class='flex items-center gap-2 -ml-[1.5px]'>
-        <BrainAIOneClick />
+        <SparklesIcon color={theme().primaryColor} />
         <div class='font-semibold'>
           {oneClickStore.activeChannel?.botDisplayName || 'Assistant'}
         </div>
