@@ -1,4 +1,3 @@
-import testButton from '@/assets/test-button.png'
 import { useTheme } from '@/features/theme/hooks'
 import { configStore, configStoreActions } from '..'
 
@@ -50,10 +49,11 @@ import { createSignal, onMount, Show } from 'solid-js'
 
 const CustomPortalButton = () => {
   const [imageSize, setImageSize] = createSignal<{ width: number } | null>(null)
+  const { theme } = useTheme()
 
   onMount(() => {
     const img = new Image()
-    img.src = testButton
+    img.src = theme().overridePortalButtonUrl!
     img.onload = () => {
       setImageSize({ width: img.width, height: img.height })
     }
@@ -74,7 +74,7 @@ const CustomPortalButton = () => {
             `object-contain duration-200 transition ` +
             (configStore.isBotOpened ? 'scale-0 opacity-0' : 'scale-100 opacity-100')
           }
-          src={testButton}
+          src={theme().overridePortalButtonUrl!}
           style={{ width: `${imageSize()?.width}px` }}
         />
       )}
