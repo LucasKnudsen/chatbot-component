@@ -225,12 +225,13 @@ export const BotOneClick = () => {
 
   const onButtonClick = () => {
     if (text().welcomeMessage && messages().length === 0) {
+      const systemInstruction =
+        "Return the exact thing that the user inputted to you. Nothing more, nothing less. This is the input: '{input}'"
       submitNewMessage({
         message: oneClickStore.shouldWelcome
           ? text().welcomeMessage
           : text().returnWelcomeMessage || text().welcomeMessage,
-        overrideSystemInstruction: `Say "{input}".
-        Nothing more, nothing less."`,
+        overrideSystemInstruction: systemInstruction,
       })
     } else {
       handleButtonRecord()

@@ -2,7 +2,6 @@ import background2 from '@/assets/background-2.png'
 import background3 from '@/assets/background-3.png'
 import newLogo from '@/assets/logo.svg'
 import newLogo2 from '@/assets/logo2.svg'
-import logo from '@/assets/logo_final.png'
 import { ChatSpaceTheme } from '@/graphql/types'
 
 type NonNullProperties<T> = {
@@ -24,6 +23,7 @@ export const defaultTheme: Theme = {
   backgroundOverlay: 'transparent',
   backgroundImageUrl: background2,
   bubbleButtonColor: 'rgba(91, 147, 255, 0.2)',
+  bubbleButtonLogoUrl: newLogo2,
   drawerBackground: 'rgba(255, 255, 255, 0.75)',
   borderColor: 'rgba(194, 194, 194, 1)',
   textInputTextColor: 'rgba(128, 114, 166, 1)',
@@ -45,7 +45,7 @@ export const default1ClickTheme: Theme = {
 
 const fraia: Theme = {
   isDark: false,
-  navbarLogoUrl: logo,
+  navbarLogoUrl: newLogo,
 
   primaryColor: 'rgba(255,118,118,255)',
   primaryAccent: 'rgba(255,118,118,0.2)',
@@ -91,7 +91,7 @@ const midnight: Theme = {
 
 const ugly: Theme = {
   isDark: false,
-  navbarLogoUrl: logo,
+  navbarLogoUrl: newLogo,
   primaryColor: 'red',
   primaryAccent: 'orange',
   textColor: 'white',

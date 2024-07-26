@@ -173,6 +173,7 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
       elevenLabsVoiceId
       heygenVoiceId
       heygenAvatarId
+      whisperVoiceId
       voiceMode
       __typename
     }
@@ -218,6 +219,7 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
       elevenLabsVoiceId
       heygenVoiceId
       heygenAvatarId
+      whisperVoiceId
       voiceMode
       __typename
     }
@@ -263,6 +265,7 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
       elevenLabsVoiceId
       heygenVoiceId
       heygenAvatarId
+      whisperVoiceId
       voiceMode
       __typename
     }
@@ -554,6 +557,7 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
       backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
+      overridePortalButtonUrl
       drawerBackground
       borderColor
       textInputTextColor
@@ -624,6 +628,7 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
       backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
+      overridePortalButtonUrl
       drawerBackground
       borderColor
       textInputTextColor
@@ -694,6 +699,7 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
       backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
+      overridePortalButtonUrl
       drawerBackground
       borderColor
       textInputTextColor
@@ -1157,6 +1163,7 @@ export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: Han
       elevenLabsVoiceId
       heygenVoiceId
       heygenAvatarId
+      whisperVoiceId
       voiceMode
       __typename
     }

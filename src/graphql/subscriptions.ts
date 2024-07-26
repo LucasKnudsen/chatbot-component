@@ -150,6 +150,7 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
       elevenLabsVoiceId
       heygenVoiceId
       heygenAvatarId
+      whisperVoiceId
       voiceMode
       __typename
     }
@@ -195,6 +196,7 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
       elevenLabsVoiceId
       heygenVoiceId
       heygenAvatarId
+      whisperVoiceId
       voiceMode
       __typename
     }
@@ -240,6 +242,7 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
       elevenLabsVoiceId
       heygenVoiceId
       heygenAvatarId
+      whisperVoiceId
       voiceMode
       __typename
     }
@@ -525,6 +528,7 @@ export const onCreateChatSpace = /* GraphQL */ `subscription OnCreateChatSpace($
       backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
+      overridePortalButtonUrl
       drawerBackground
       borderColor
       textInputTextColor
@@ -592,6 +596,7 @@ export const onUpdateChatSpace = /* GraphQL */ `subscription OnUpdateChatSpace($
       backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
+      overridePortalButtonUrl
       drawerBackground
       borderColor
       textInputTextColor
@@ -659,6 +664,7 @@ export const onDeleteChatSpace = /* GraphQL */ `subscription OnDeleteChatSpace($
       backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
+      overridePortalButtonUrl
       drawerBackground
       borderColor
       textInputTextColor

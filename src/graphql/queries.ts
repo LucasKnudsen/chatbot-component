@@ -158,6 +158,7 @@ export const getChannel = /* GraphQL */ `query GetChannel($id: ID!) {
       elevenLabsVoiceId
       heygenVoiceId
       heygenAvatarId
+      whisperVoiceId
       voiceMode
       __typename
     }
@@ -205,6 +206,7 @@ export const listChannels = /* GraphQL */ `query ListChannels(
         elevenLabsVoiceId
         heygenVoiceId
         heygenAvatarId
+        whisperVoiceId
         voiceMode
         __typename
       }
@@ -263,6 +265,7 @@ export const channelsByChatSpaceId = /* GraphQL */ `query ChannelsByChatSpaceId(
         elevenLabsVoiceId
         heygenVoiceId
         heygenAvatarId
+        whisperVoiceId
         voiceMode
         __typename
       }
@@ -636,6 +639,7 @@ export const getChatSpace = /* GraphQL */ `query GetChatSpace($id: ID!) {
       backgroundOverlay
       bubbleButtonColor
       bubbleButtonLogoUrl
+      overridePortalButtonUrl
       drawerBackground
       borderColor
       textInputTextColor
@@ -708,6 +712,7 @@ export const listChatSpaces = /* GraphQL */ `query ListChatSpaces(
         backgroundOverlay
         bubbleButtonColor
         bubbleButtonLogoUrl
+        overridePortalButtonUrl
         drawerBackground
         borderColor
         textInputTextColor
@@ -793,6 +798,7 @@ export const chatSpaceByHostId = /* GraphQL */ `query ChatSpaceByHostId(
         backgroundOverlay
         bubbleButtonColor
         bubbleButtonLogoUrl
+        overridePortalButtonUrl
         drawerBackground
         borderColor
         textInputTextColor
@@ -1237,6 +1243,7 @@ export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchCha
       elevenLabsVoiceId
       heygenVoiceId
       heygenAvatarId
+      whisperVoiceId
       voiceMode
       __typename
     }
