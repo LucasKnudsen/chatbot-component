@@ -19,7 +19,7 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
     on(
       () => props.messages()[props.messages().length - 1]?.content,
       () => {
-        requestAnimationFrame(scrollChatWindowToBottom)
+        scrollChatWindowToBottom()
       },
       { defer: true }
     )
@@ -81,10 +81,7 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
             <div class='absolute left-0 w-full h-8 bg-gradient-to-b from-white to-transparent pointer-events-none z-10' />
             <div class='absolute left-0 bottom-0 w-full h-6 bg-gradient-to-t from-white to-transparent pointer-events-none z-10' />
             <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED}>
-              <div
-                id='conversations'
-                class={`py-4 animate-fade-in flex flex-col w-full h-auto gap-2 `}
-              >
+              <div id='conversations' class={`py-4  flex flex-col w-full h-auto gap-2 `}>
                 <div class='flex flex-col gap-4 relative '>
                   {props.messages().map((message) => (
                     <ChatMessageRow content={message.content} role={message.role} />
