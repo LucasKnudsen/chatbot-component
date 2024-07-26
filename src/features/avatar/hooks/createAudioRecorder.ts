@@ -70,7 +70,7 @@ export function createAudioRecorder(props?: {
 
           setMediaStream(stream)
           setMediaRecorder(recorder)
-          recorder.start()
+          recorder.start(1000)
           setIsRecording(true)
           startTimer()
         })

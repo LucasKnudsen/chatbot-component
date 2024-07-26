@@ -135,12 +135,13 @@ const HumanMessage = (props: { content: string }) => {
   const { theme } = useTheme()
   return (
     <div class='flex gap-2 justify-end '>
-      <Show when={!props.content && oneClickStore.botStatus === BotStatus.THINKING}>
-        <div class='my-3'>
-          <Spinner size={18} />
-        </div>
-      </Show>
       <div class='flex justify-center items-center px-4 py-2 rounded-lg bg-[var(--surfaceSoftBackground)] shadow-sm'>
+        <Show when={!props.content && oneClickStore.botStatus === BotStatus.THINKING}>
+          <div>
+            <Spinner size={18} />
+          </div>
+        </Show>
+
         {props.content}
       </div>
 
@@ -180,7 +181,7 @@ const AssistantMessage = (props: { content: string }) => {
         fallback={
           <div class='my-3 flex items-center gap-2'>
             <Spinner size={18} />
-            <Show when={oneClickStore.isProcessToolCall}>
+            <Show when={oneClickStore.isProcessingToolCall}>
               <TextLoading />
             </Show>
           </div>

@@ -1,3 +1,4 @@
+import { logDev } from '@/utils'
 import { Accessor, createEffect, createSignal, on, Setter } from 'solid-js'
 import { oneClickActions } from '../store/oneClickStore'
 import { BotStatus } from '../types'
@@ -11,12 +12,11 @@ interface AIVoiceProps {
 export let audioRef: any
 export const [isPlayingQueue, setIsPlayingQueue] = createSignal(false)
 export const AIVoice = (props: AIVoiceProps) => {
-
   createEffect(
     on(props.audioQueue, () => {
       if (props.audioQueue().length === 0) {
-        console.log('Queue is empty, cleared audio player')
-        oneClickActions.setStatus(BotStatus.IDLE);
+        logDev('Queue is empty, cleared audio player')
+        oneClickActions.setStatus(BotStatus.IDLE)
         setIsPlayingQueue(false)
       }
 
@@ -59,5 +59,4 @@ export const AIVoice = (props: AIVoiceProps) => {
   }
 
   return <audio ref={audioRef} />
-
 }

@@ -7,7 +7,8 @@ export type OneClickStore = {
   activeChannel?: Channel | null
   chatMode: 'voice' | 'text'
   isHeyGenMode: boolean
-  isProcessToolCall: boolean
+  isProcessingToolCall: boolean
+  readonly shouldWelcome: boolean
 }
 
 const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
@@ -15,7 +16,22 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   activeChannel: null,
   chatMode: 'voice',
   isHeyGenMode: true,
-  isProcessToolCall: false
+  isProcessingToolCall: false,
+
+  get shouldWelcome() {
+    const datetime = localStorage.getItem('lastStarted')
+
+    if (!datetime) {
+      return true
+    }
+
+    const lastStarted = new Date(datetime)
+    const now = new Date()
+
+    const diff = now.getTime() - lastStarted.getTime()
+
+    return diff > 1000 * 60 * 60 * 24
+  },
 })
 
 const initOneClickStore = (channel: Channel) => {

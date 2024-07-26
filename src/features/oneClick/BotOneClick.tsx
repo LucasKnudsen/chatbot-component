@@ -1,9 +1,11 @@
 import { NEXT_API_ENDPOINTS } from '@/constants/api'
 import { logDev } from '@/utils'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Show, createEffect } from 'solid-js'
 import toast from 'solid-toast'
 import { createAudioRecorder } from '../avatar'
+import { useText } from '../text'
 import {
   AITextStatus,
   AvatarOneClick,
@@ -19,11 +21,11 @@ import { heyGenStore } from './store/heyGenStore'
 import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
 import { cleanContentForSpeech } from './utils'
-import { useMediaQuery } from '@/utils/useMediaQuery'
 
 export const BotOneClick = () => {
   const [TopContainerParent] = createAutoAnimate()
-  const device = useMediaQuery();
+  const device = useMediaQuery()
+  const { text } = useText()
 
   const audioRecorder = createAudioRecorder({
     onStop(audioBlob) {
@@ -168,7 +170,9 @@ export const BotOneClick = () => {
         content: input,
       },
     ])
-    submitNewMessage(input)
+    submitNewMessage({
+      message: input,
+    })
   }
 
   const handleVoiceToVoice = async (audioBlob: Blob) => {
@@ -186,7 +190,9 @@ export const BotOneClick = () => {
         prev[prev.length - 1].content = transcribedText
         return prev
       })
-      submitNewMessage(transcribedText)
+      submitNewMessage({
+        message: transcribedText,
+      })
     } catch (error) {
       oneClickActions.setStatus(BotStatus.IDLE)
       toast.error('Error in voice to voice conversion', {
@@ -199,7 +205,7 @@ export const BotOneClick = () => {
   createEffect(() => {
     setTimeout(() => {
       oneClickActions.setStatus(BotStatus.IDLE)
-    }, 1000)
+    }, 100)
   })
 
   // createEffect(() => {
@@ -214,7 +220,23 @@ export const BotOneClick = () => {
     if (!heyGenStore.isExpandAvatar) return 'unset'
     if (device() === 'tablet') return '95%'
     if (device() === 'mobile') return '100%'
-    return '100%' 
+    return '100%'
+  }
+
+  const onButtonClick = () => {
+    if (text().welcomeMessage && messages().length === 0) {
+      submitNewMessage({
+        message: oneClickStore.shouldWelcome
+          ? text().welcomeMessage
+          : text().returnWelcomeMessage || text().welcomeMessage,
+        overrideSystemInstruction: `Say "{input}".
+        Nothing more, nothing less."`,
+      })
+    } else {
+      handleButtonRecord()
+    }
+
+    localStorage.setItem('lastStarted', new Date().toISOString())
   }
 
   return (
@@ -222,14 +244,18 @@ export const BotOneClick = () => {
       <div
         ref={TopContainerParent}
         data-testid='BotOneClick'
-        class={`relative flex flex-col w-full h-full flex items-center justify-center animate-fade-in ${heyGenStore.isExpandAvatar ? '' : 'mt-[20px]'} overflow-hidden`}
+        class={`relative flex flex-col w-full h-full items-center justify-center animate-fade-in ${
+          heyGenStore.isExpandAvatar ? '' : 'mt-[20px]'
+        } overflow-hidden`}
       >
         <AIVoice audioQueue={audio64} setAudioQueue={setAudio64} />
         <div
-          class={`relative w-full flex flex-col h-1/2  items-center overflow-hidden ${heyGenStore.isExpandAvatar ? '' : 'px-5'} bg-white`}
+          class={`relative w-full flex flex-col h-1/2  items-center overflow-hidden ${
+            heyGenStore.isExpandAvatar ? '' : 'px-5'
+          } bg-white`}
           style={{
             height: heyGenStore.isExpandAvatar ? '100%' : '50%',
-            'max-width': handelHeyGenMaxWidth(), 
+            'max-width': handelHeyGenMaxWidth(),
           }}
         >
           <div class='absolute right-6 top-2 z-10 '>
@@ -237,7 +263,12 @@ export const BotOneClick = () => {
           </div>
 
           <div class='absolute left-8 top-4 z-10 '>
-            <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED && !heyGenStore.isExpandAvatar} keyed>
+            <Show
+              when={
+                oneClickStore.botStatus !== BotStatus.NOT_STARTED && !heyGenStore.isExpandAvatar
+              }
+              keyed
+            >
               <MuteAISwitch onMute={handleTriggerAudio} />
             </Show>
           </div>
@@ -245,11 +276,14 @@ export const BotOneClick = () => {
           <div class='h-full w-full'>
             <AvatarOneClick onResetMessage={handleResetMessage} />
           </div>
-          <div class={`${heyGenStore.isExpandAvatar ? 'opacity-55 hover:opacity-100':''}`} style={{
-            position: heyGenStore.isExpandAvatar ? 'absolute': 'unset',
-            bottom: heyGenStore.isExpandAvatar ? '20px' : 'unset',
-          }}>
-            <ButtonStart onStart={handleButtonRecord} />
+          <div
+            class={`${heyGenStore.isExpandAvatar ? 'opacity-55 hover:opacity-100' : ''}`}
+            style={{
+              position: heyGenStore.isExpandAvatar ? 'absolute' : 'unset',
+              bottom: heyGenStore.isExpandAvatar ? '20px' : 'unset',
+            }}
+          >
+            <ButtonStart onStart={onButtonClick} />
           </div>
         </div>
         <Show when={!heyGenStore.isExpandAvatar}>
