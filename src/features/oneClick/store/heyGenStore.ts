@@ -1,13 +1,13 @@
-import { createStore } from 'solid-js/store'
 import { NewSessionData, StreamingAvatarApi } from '@heygen/streaming-avatar'
+import { createStore } from 'solid-js/store'
 
 export type HeyGenStore = {
   initialized: boolean
   sessionId: NewSessionData['sessionId']
   stream: MediaStream | undefined
-  loading: boolean,
-  videoRef: HTMLVideoElement | null,
-  avatar: StreamingAvatarApi | null,
+  loading: boolean
+  videoRef: HTMLVideoElement | null
+  avatar: StreamingAvatarApi | null
   isExpandAvatar: boolean
 }
 
@@ -17,8 +17,8 @@ const [heyGenStore, setHeyGenStore] = createStore<HeyGenStore>({
   stream: undefined,
   loading: false,
   videoRef: null,
-  avatar: null, 
-  isExpandAvatar: false
+  avatar: null,
+  isExpandAvatar: false,
 })
 
 const heyGenActions = {
@@ -42,8 +42,7 @@ const heyGenActions = {
   },
   setIsExpandAvatar: (isExpandAvatar: boolean) => {
     setHeyGenStore('isExpandAvatar', isExpandAvatar)
-  }
+  },
 }
 
-
-export { heyGenStore, heyGenActions}
+export { heyGenActions, heyGenStore }
