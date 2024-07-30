@@ -277,11 +277,12 @@ export const BotOneClick = () => {
           <div class='h-full w-full'>
             <AvatarOneClick onResetMessage={handleResetMessage} />
           </div>
+
           <div
-            class={`${heyGenStore.isExpandAvatar ? 'opacity-55 hover:opacity-100' : ''}`}
+            class={`${heyGenStore.isExpandAvatar ? 'opacity-75 hover:opacity-100' : ''}`}
             style={{
               position: heyGenStore.isExpandAvatar ? 'absolute' : 'unset',
-              bottom: heyGenStore.isExpandAvatar ? '20px' : 'unset',
+              bottom: heyGenStore.isExpandAvatar ? '15vh' : 'unset',
             }}
           >
             <ButtonStart onStart={onButtonClick} />
