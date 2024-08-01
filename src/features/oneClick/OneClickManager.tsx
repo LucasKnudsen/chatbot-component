@@ -1,3 +1,4 @@
+import { Channel } from '@/graphql'
 import { createQuery } from '@/hooks'
 import LayoutDefault from '@/layouts/default'
 import { parseError } from '@/utils/errorHandlers'
@@ -13,13 +14,26 @@ export const OneClickManager = () => {
 
   const channelsQuery = createQuery({
     queryFn: async () => {
-      if (configStore.chatSpaceConfig.defaultChannelId) {
-        const channel = await fetchChannelDetails(configStore.chatSpaceConfig.defaultChannelId)
-        oneClickActions.initOneClickStore(channel)
-      } else {
-        const publicChannels = await fetchPublicChannels(configStore.chatSpaceConfig.id)
-        oneClickActions.initOneClickStore(publicChannels[0])
-      }
+      const [channel, conversationId] = await Promise.all([
+        new Promise<Channel>(async (resolve) => {
+          let channel = null
+          if (configStore.chatSpaceConfig.defaultChannelId) {
+            channel = await fetchChannelDetails(configStore.chatSpaceConfig.defaultChannelId)
+          } else {
+            const publicChannels = await fetchPublicChannels(configStore.chatSpaceConfig.id)
+            channel = publicChannels[0]
+          }
+
+          resolve(channel)
+        }),
+        new Promise<string>(async (resolve) => {
+          let conversationId = ''
+
+          resolve(conversationId)
+        }),
+      ])
+
+      oneClickActions.initOneClickStore(channel, conversationId)
     },
   })
 

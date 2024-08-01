@@ -1,5 +1,8 @@
 import { NewSessionData, StreamingAvatarApi } from '@heygen/streaming-avatar'
 import { createStore } from 'solid-js/store'
+import { BotStatus } from '../types'
+import { cleanContentForSpeech } from '../utils'
+import { oneClickActions } from './oneClickStore'
 
 export type HeyGenStore = {
   initialized: boolean
@@ -20,6 +23,29 @@ const [heyGenStore, setHeyGenStore] = createStore<HeyGenStore>({
   avatar: null,
   isExpandAvatar: false,
 })
+
+const handleSpeak = async (response: string) => {
+  if (!heyGenStore.initialized || !heyGenStore.avatar || response.length === 0) {
+    return
+  }
+
+  if (heyGenStore.videoRef) heyGenStore.videoRef.muted = false
+
+  const cleanedResponse = cleanContentForSpeech(response)
+
+  try {
+    return await heyGenStore.avatar.speak({
+      taskRequest: {
+        text: cleanedResponse,
+        sessionId: heyGenStore.sessionId,
+        taskType: 'repeat',
+      },
+    })
+  } catch (error) {
+    oneClickActions.setStatus(BotStatus.IDLE)
+    console.error('Error speaking:', error)
+  }
+}
 
 const heyGenActions = {
   setInitialized: (initialized: boolean) => {
@@ -43,6 +69,7 @@ const heyGenActions = {
   setIsExpandAvatar: (isExpandAvatar: boolean) => {
     setHeyGenStore('isExpandAvatar', isExpandAvatar)
   },
+  handleSpeak,
 }
 
 export { heyGenActions, heyGenStore }

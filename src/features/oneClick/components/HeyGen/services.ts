@@ -6,7 +6,6 @@ const HEYGEN_API_KEY = import.meta.env.VITE_HEYGEN_TOKEN
 export async function fetchAccessToken() {
   try {
     const url = 'https://api.heygen.com/v1/streaming.create_token'
-    console.log('Token:', HEYGEN_API_KEY.slice(0, 15) + '...') // Log token for debugging
     const response = await axios(url, {
       method: 'POST',
       headers: {

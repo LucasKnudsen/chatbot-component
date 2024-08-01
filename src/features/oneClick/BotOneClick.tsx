@@ -20,7 +20,6 @@ import { useLLM } from './hooks'
 import { heyGenStore } from './store/heyGenStore'
 import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
-import { cleanContentForSpeech } from './utils'
 
 export const BotOneClick = () => {
   const [TopContainerParent] = createAutoAnimate()
@@ -32,30 +31,6 @@ export const BotOneClick = () => {
       handleVoiceToVoice(audioBlob)
     },
   })
-
-  const handleHeyGenSpeak = async (response: string) => {
-    if (!heyGenStore.initialized || !heyGenStore.avatar || isMuted() || response.length === 0) {
-      return
-    }
-
-    if (heyGenStore.videoRef) heyGenStore.videoRef.muted = false
-
-    const cleanedResponse = cleanContentForSpeech(response)
-
-    try {
-      await heyGenStore.avatar.speak({
-        taskRequest: {
-          text: cleanedResponse,
-          sessionId: heyGenStore.sessionId,
-          taskMode: 'async',
-          taskType: 'repeat',
-        },
-      })
-    } catch (error) {
-      oneClickActions.setStatus(BotStatus.IDLE)
-      console.error('Error speaking:', error)
-    }
-  }
 
   const handleInterrupt = async (retryLimit: number = 0) => {
     if (!heyGenStore.initialized && !heyGenStore.avatar) {
@@ -88,9 +63,9 @@ export const BotOneClick = () => {
 
   const { messages, audio64, setAudio64, setMessages, submitNewMessage, cancelQuery } = useLLM({
     initialMessages: [],
-    onSuccess(data) {
-      handleHeyGenSpeak(isMuted() ? '' : data)
-    },
+    // onSuccess(data) {
+    //   heyGenActions.handleSpeak(isMuted() ? '' : data)
+    // },
   })
 
   const handleResetMessage = () => {

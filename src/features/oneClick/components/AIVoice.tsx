@@ -46,7 +46,6 @@ export const AIVoice = (props: AIVoiceProps) => {
           props.setAudioQueue((prev) => prev.slice(1))
 
           if (props.audioQueue().length > 0) {
-            console.log('Playing audio bite', props.audioQueue()[0].slice(0, 100))
             requestAnimationFrame(() => playAudio(props.audioQueue()[0]))
           } else {
             setIsPlayingQueue(false)

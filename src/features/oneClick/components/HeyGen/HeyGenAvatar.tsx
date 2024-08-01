@@ -30,7 +30,7 @@ const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
     try {
       const heygenResponse = await heyGenStore.avatar.createStartAvatar({
         newSessionRequest: {
-          quality: 'low',
+          quality: 'high',
           avatarName: import.meta.env.DEV
             ? DEV_AVATAR_ID
             : oneClickStore.activeChannel?.overrideConfig?.heygenAvatarId!,
@@ -46,12 +46,11 @@ const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
         throw new Error('No session ID returned')
       }
 
-      const startTalkCallback = (e: any) => {
-        console.log('Avatar started talking', e)
+      const startTalkCallback = () => {
+        oneClickActions.setStatus(BotStatus.ANSWERING)
       }
 
-      const stopTalkCallback = (e: any) => {
-        console.log('Avatar stopped talking', e)
+      const stopTalkCallback = () => {
         oneClickActions.setStatus(BotStatus.IDLE)
       }
 

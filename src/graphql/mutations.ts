@@ -1135,6 +1135,17 @@ export const deleteAgent = /* GraphQL */ `mutation DeleteAgent(
   APITypes.DeleteAgentMutationVariables,
   APITypes.DeleteAgentMutation
 >;
+export const speechSynthesis = /* GraphQL */ `mutation SpeechSynthesis($input: SpeechSynthesisInput!) {
+  speechSynthesis(input: $input) {
+    audio
+    requestIndex
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.SpeechSynthesisMutationVariables,
+  APITypes.SpeechSynthesisMutation
+>;
 export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: HandleChannelsInput!) {
   handleChannels(input: $input) {
     id

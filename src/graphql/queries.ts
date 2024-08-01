@@ -1258,3 +1258,7 @@ export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchCha
   APITypes.FetchChannelsQueryVariables,
   APITypes.FetchChannelsQuery
 >;
+export const queryPDC = /* GraphQL */ `query QueryPDC($input: QueryPDCInput!) {
+  queryPDC(input: $input)
+}
+` as GeneratedQuery<APITypes.QueryPDCQueryVariables, APITypes.QueryPDCQuery>;

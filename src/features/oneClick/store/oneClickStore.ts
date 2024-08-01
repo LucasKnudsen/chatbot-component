@@ -1,10 +1,11 @@
-import { Channel } from '@/graphql'
+import { Channel, VoiceMode } from '@/graphql'
 import { createStore } from 'solid-js/store'
 import { BotStatus } from '../types'
 
 export type OneClickStore = {
   botStatus: BotStatus
   activeChannel?: Channel | null
+  activeConversationId?: string
   chatMode: 'voice' | 'text'
   isHeyGenMode: boolean
   isProcessingToolCall: boolean
@@ -16,6 +17,7 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   activeChannel: null,
   chatMode: 'voice',
   isHeyGenMode: true,
+  activeConversationId: '',
   isProcessingToolCall: false,
 
   get shouldWelcome() {
@@ -34,9 +36,13 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   },
 })
 
-const initOneClickStore = (channel: Channel) => {
-  setOneClickStore('activeChannel', {
-    ...channel,
+const initOneClickStore = (channel: Channel, conversationId: string) => {
+  const isHeyGenMode = channel.overrideConfig?.voiceMode === VoiceMode.HEYGEN
+
+  setOneClickStore({
+    activeChannel: channel,
+    activeConversationId: conversationId,
+    isHeyGenMode,
   })
 }
 

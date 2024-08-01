@@ -1071,6 +1071,18 @@ export type DeleteAgentInput = {
   agentId: string,
 };
 
+export type SpeechSynthesisInput = {
+  text: string,
+  knowledgeBaseId: string,
+  requestIndex?: number | null,
+};
+
+export type SpeechSynthesisOutput = {
+  __typename: "SpeechSynthesisOutput",
+  audio: string,
+  requestIndex?: number | null,
+};
+
 export type HandleChannelsInput = {
   flow: HandleChannelsFlowType,
   data?: string | null,
@@ -1472,6 +1484,11 @@ export enum FetchChannelsFlowType {
   BY_ID = "BY_ID",
 }
 
+
+export type QueryPDCInput = {
+  message: string,
+  knowledgeBaseId: string,
+};
 
 export type ModelSubscriptionCodeItemFilterInput = {
   tenantCode?: ModelSubscriptionStringInput | null,
@@ -2799,6 +2816,18 @@ export type DeleteAgentMutation = {
   } | null,
 };
 
+export type SpeechSynthesisMutationVariables = {
+  input: SpeechSynthesisInput,
+};
+
+export type SpeechSynthesisMutation = {
+  speechSynthesis:  {
+    __typename: "SpeechSynthesisOutput",
+    audio: string,
+    requestIndex?: number | null,
+  },
+};
+
 export type HandleChannelsMutationVariables = {
   input: HandleChannelsInput,
 };
@@ -4076,6 +4105,14 @@ export type FetchChannelsQuery = {
     updatedAt: string,
     owner?: string | null,
   } | null > | null,
+};
+
+export type QueryPDCQueryVariables = {
+  input: QueryPDCInput,
+};
+
+export type QueryPDCQuery = {
+  queryPDC?: string | null,
 };
 
 export type OnCreateCodeItemSubscriptionVariables = {
