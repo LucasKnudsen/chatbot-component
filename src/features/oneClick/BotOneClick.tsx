@@ -202,6 +202,7 @@ export const BotOneClick = () => {
     if (text().welcomeMessage && messages().length === 0) {
       const systemInstruction =
         "Return the exact thing that the user inputted to you. Nothing more, nothing less. This is the input: '{input}'"
+
       submitNewMessage({
         message: oneClickStore.shouldWelcome
           ? text().welcomeMessage

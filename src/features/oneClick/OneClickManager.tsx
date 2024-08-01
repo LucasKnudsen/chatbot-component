@@ -7,6 +7,7 @@ import { SignOutButton } from '../authentication'
 import { FraiaLoading, fetchChannelDetails, fetchPublicChannels } from '../bot'
 import { configStore } from '../portal-init'
 import { BotOneClick } from './BotOneClick'
+import { initiateConversation } from './services'
 import { oneClickActions } from './store/oneClickStore'
 
 export const OneClickManager = () => {
@@ -14,20 +15,22 @@ export const OneClickManager = () => {
 
   const channelsQuery = createQuery({
     queryFn: async () => {
+      const { chatSpaceConfig } = configStore
+
       const [channel, conversationId] = await Promise.all([
         new Promise<Channel>(async (resolve) => {
           let channel = null
-          if (configStore.chatSpaceConfig.defaultChannelId) {
-            channel = await fetchChannelDetails(configStore.chatSpaceConfig.defaultChannelId)
+          if (chatSpaceConfig.defaultChannelId) {
+            channel = await fetchChannelDetails(chatSpaceConfig.defaultChannelId)
           } else {
-            const publicChannels = await fetchPublicChannels(configStore.chatSpaceConfig.id)
+            const publicChannels = await fetchPublicChannels(chatSpaceConfig.id)
             channel = publicChannels[0]
           }
 
           resolve(channel)
         }),
         new Promise<string>(async (resolve) => {
-          let conversationId = ''
+          let conversationId = await initiateConversation()
 
           resolve(conversationId)
         }),

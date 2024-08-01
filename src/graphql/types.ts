@@ -1130,6 +1130,29 @@ export type HandleNewHubInput = {
   hostType: HostType,
 };
 
+export type HandleFraiaDBInput = {
+  collection: FraiaDBCollections,
+  action: FraiaDBAction,
+  data: string,
+};
+
+export enum FraiaDBCollections {
+  CONVERSATIONS = "CONVERSATIONS",
+  AGENTS = "AGENTS",
+  MESSAGES = "MESSAGES",
+}
+
+
+export enum FraiaDBAction {
+  CREATE = "CREATE",
+  UPDATE = "UPDATE",
+  DELETE = "DELETE",
+  GET = "GET",
+  LIST = "LIST",
+  INITIATE = "INITIATE",
+}
+
+
 export type ModelCodeItemPrimaryCompositeKeyConditionInput = {
   eq?: ModelCodeItemPrimaryCompositeKeyInput | null,
   le?: ModelCodeItemPrimaryCompositeKeyInput | null,
@@ -1484,11 +1507,6 @@ export enum FetchChannelsFlowType {
   BY_ID = "BY_ID",
 }
 
-
-export type QueryPDCInput = {
-  message: string,
-  knowledgeBaseId: string,
-};
 
 export type ModelSubscriptionCodeItemFilterInput = {
   tenantCode?: ModelSubscriptionStringInput | null,
@@ -2970,6 +2988,14 @@ export type HandleNewHubMutation = {
   handleNewHub: string,
 };
 
+export type HandleFraiaDBMutationVariables = {
+  input: HandleFraiaDBInput,
+};
+
+export type HandleFraiaDBMutation = {
+  handleFraiaDB: string,
+};
+
 export type GetCodeItemQueryVariables = {
   tenantCode: string,
   tableCode: string,
@@ -4105,14 +4131,6 @@ export type FetchChannelsQuery = {
     updatedAt: string,
     owner?: string | null,
   } | null > | null,
-};
-
-export type QueryPDCQueryVariables = {
-  input: QueryPDCInput,
-};
-
-export type QueryPDCQuery = {
-  queryPDC?: string | null,
 };
 
 export type OnCreateCodeItemSubscriptionVariables = {

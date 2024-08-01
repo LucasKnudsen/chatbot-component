@@ -1282,3 +1282,10 @@ export const handleNewHub = /* GraphQL */ `mutation HandleNewHub($input: HandleN
   APITypes.HandleNewHubMutationVariables,
   APITypes.HandleNewHubMutation
 >;
+export const handleFraiaDB = /* GraphQL */ `mutation HandleFraiaDB($input: HandleFraiaDBInput!) {
+  handleFraiaDB(input: $input)
+}
+` as GeneratedMutation<
+  APITypes.HandleFraiaDBMutationVariables,
+  APITypes.HandleFraiaDBMutation
+>;
