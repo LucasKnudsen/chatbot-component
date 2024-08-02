@@ -1,7 +1,6 @@
-import { speechSynthesis } from '@/services/speechSynthesis'
 import { Accessor, createSignal, Setter } from 'solid-js'
 import { isMuted } from '../../components'
-import { heyGenActions } from '../../store/heyGenStore'
+import { handleTTS, setTtsRequestsPending } from '../../services'
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
 import { BotStatus, ChatMessage } from '../../types'
 import { parseLLMStreamResponse } from './utils'
@@ -21,20 +20,14 @@ type LLMOutput = {
   messages: Accessor<ChatMessage[]>
   setMessages: Setter<ChatMessage[]>
   submitNewMessage: (input: SubmitInput) => void
-  audio64: Accessor<string[]>
-  setAudio64: Setter<string[]>
   cancelQuery: () => void
   loading: Accessor<boolean>
 }
-type PendingRequest = {
-  status: 'pending' | 'done'
-  index: number
-}
-export const [ttsRequestsPending, setTtsRequestsPending] = createSignal<PendingRequest[]>([])
+
+export const [audio64, setAudio64] = createSignal<string[]>([])
 
 export const useLLM = (props: LLMInput): LLMOutput => {
   const [messages, setMessages] = createSignal<ChatMessage[]>(props.initialMessages || [])
-  const [audio64, setAudio64] = createSignal<string[]>([])
   const [loading, setLoading] = createSignal(false)
 
   let controller: AbortController
@@ -67,6 +60,8 @@ export const useLLM = (props: LLMInput): LLMOutput => {
       message: input.message,
       history,
       returnSpeech: false,
+      callFraiaAI: oneClickStore.activeChannel?.shouldUseFraiaAPI,
+      conversationId: oneClickStore.activeConversationId,
       overrideSystemInstruction: input.overrideSystemInstruction,
     })
 
@@ -96,7 +91,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
         if (done) {
           if (sentence) {
             // handleTTS(sentence)
-            !isMuted() && handleTTS(sentence, setAudio64)
+            !isMuted() && handleTTS(sentence)
             console.log('Is done, fire last sentence', sentence)
             sentence = ''
           }
@@ -108,21 +103,22 @@ export const useLLM = (props: LLMInput): LLMOutput => {
             const parsedValue = parseLLMStreamResponse(value)
 
             if (parsedValue.text) {
-              parsedValue.text.forEach((text) => {
-                botResponse += text
-                sentence += text
+              parsedValue.text.forEach((chunk) => {
+                botResponse += chunk
+                sentence += chunk
 
                 setMessages((prev) => {
-                  prev[prev.length - 1].content += text
+                  prev[prev.length - 1].content += chunk
 
                   return [...prev]
                 })
 
-                const isSentenceEnd = /[.!?]$/.test(text || '')
+                const isSentenceEnd = /[.!?]$/.test(chunk || '')
+                console.log(chunk)
 
                 if (sentence.length > 25 && isSentenceEnd) {
                   // handleTTS(sentence)
-                  !isMuted() && handleTTS(sentence, setAudio64)
+                  !isMuted() && handleTTS(sentence)
                   console.log('Is done, fire sentence', sentence)
                   sentence = ''
                 }
@@ -180,48 +176,5 @@ export const useLLM = (props: LLMInput): LLMOutput => {
     props.onSuccess?.(data || '')
   }
 
-  return { messages, setMessages, submitNewMessage, audio64, setAudio64, cancelQuery, loading }
-}
-
-const handleTTS = async (sentence: string, setAudio64: Setter<string[]>) => {
-  setTtsRequestsPending((prev) => [...prev, { status: 'pending', index: prev.length }])
-  const requestIndex = ttsRequestsPending().length - 1
-
-  if (oneClickStore.isHeyGenMode) {
-    if (requestIndex === 0) {
-      await heyGenActions.handleSpeak(sentence)
-      ttsRequestsPending()[requestIndex].status = 'done'
-      return
-    }
-
-    // Check if the previous request is done before sending the next one
-    const interval = setInterval(async () => {
-      if (ttsRequestsPending()[requestIndex - 1]?.status === 'done') {
-        clearInterval(interval)
-        await heyGenActions.handleSpeak(sentence)
-
-        ttsRequestsPending()[requestIndex].status = 'done'
-      }
-    }, 500)
-  } else {
-    const response = await speechSynthesis(sentence, oneClickStore.activeChannel?.id!, requestIndex)
-
-    if (requestIndex === 0) {
-      setAudio64((prev) => [...prev, response.audio])
-
-      ttsRequestsPending()[requestIndex].status = 'done'
-      return
-    }
-
-    // Check if the previous request is done before sending the next one
-    const interval = setInterval(async () => {
-      if (ttsRequestsPending()[requestIndex - 1]?.status === 'done') {
-        setAudio64((prev) => [...prev, response.audio])
-
-        ttsRequestsPending()[requestIndex].status = 'done'
-
-        clearInterval(interval)
-      }
-    }, 500)
-  }
+  return { messages, setMessages, submitNewMessage, cancelQuery, loading }
 }

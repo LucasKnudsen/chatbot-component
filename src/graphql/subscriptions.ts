@@ -133,6 +133,7 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
     subtitle
     avatar
     description
+    shouldUseFraiaAPI
     botDisplayName
     initialPrompts {
       display
@@ -179,6 +180,7 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
     subtitle
     avatar
     description
+    shouldUseFraiaAPI
     botDisplayName
     initialPrompts {
       display
@@ -225,6 +227,7 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
     subtitle
     avatar
     description
+    shouldUseFraiaAPI
     botDisplayName
     initialPrompts {
       display

@@ -9,13 +9,18 @@ import {
 } from '@/graphql'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { API } from 'aws-amplify'
-import { oneClickStore } from '../store/oneClickStore'
+import { oneClickStore } from '../../store/oneClickStore'
 
 const COLLECTION_ID = FraiaDBCollections.CONVERSATIONS
 
-export const initiateConversation = async () => {
+interface RequestPayload {
+  sessionId: string
+  knowledgeBaseId: string
+  greetingMessage: string
+}
+
+export const initiateConversation = async (knowledgeBaseId: string) => {
   const sessionId = authStore.sessionId
-  const knowledgeBaseId = oneClickStore.activeChannel?.id
   const text = configStore.chatSpaceConfig.text
 
   const greetingMessage =
@@ -23,14 +28,16 @@ export const initiateConversation = async () => {
       ? text.welcomeMessage
       : text!.returnWelcomeMessage || text!.welcomeMessage || ''
 
+  const payload: RequestPayload = {
+    sessionId,
+    knowledgeBaseId,
+    greetingMessage,
+  }
+
   const input: HandleFraiaDBInput = {
     collection: COLLECTION_ID,
     action: FraiaDBAction.INITIATE,
-    data: JSON.stringify({
-      user_id: sessionId,
-      agent_id: knowledgeBaseId,
-      greetingMessage,
-    }),
+    data: JSON.stringify(payload),
   }
 
   const { data } = await API.graphql<GraphQLQuery<HandleFraiaDBMutation>>({

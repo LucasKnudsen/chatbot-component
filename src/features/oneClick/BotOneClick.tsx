@@ -16,7 +16,8 @@ import {
 } from './components'
 import { AIVoice, audioRef, setIsPlayingQueue } from './components/AIVoice'
 import { Conversation, expandConversation } from './Conversation'
-import { useLLM } from './hooks'
+import { setAudio64, useLLM } from './hooks'
+import { handleTTS } from './services'
 import { heyGenStore } from './store/heyGenStore'
 import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
@@ -61,7 +62,7 @@ export const BotOneClick = () => {
     }
   }
 
-  const { messages, audio64, setAudio64, setMessages, submitNewMessage, cancelQuery } = useLLM({
+  const { messages, setMessages, submitNewMessage, cancelQuery } = useLLM({
     initialMessages: [],
     // onSuccess(data) {
     //   heyGenActions.handleSpeak(isMuted() ? '' : data)
@@ -198,17 +199,26 @@ export const BotOneClick = () => {
     return '100%'
   }
 
-  const onButtonClick = () => {
+  const onButtonClick = async () => {
     if (text().welcomeMessage && messages().length === 0) {
-      const systemInstruction =
-        "Return the exact thing that the user inputted to you. Nothing more, nothing less. This is the input: '{input}'"
+      oneClickActions.setStatus(BotStatus.THINKING)
+      setMessages((prev) => [...prev, { content: '', role: 'assistant' }])
 
-      submitNewMessage({
-        message: oneClickStore.shouldWelcome
-          ? text().welcomeMessage
-          : text().returnWelcomeMessage || text().welcomeMessage,
-        overrideSystemInstruction: systemInstruction,
-      })
+      const message = oneClickStore.shouldWelcome
+        ? text().welcomeMessage
+        : text().returnWelcomeMessage || text().welcomeMessage
+
+      await handleTTS(message)
+      // Inject words from welcome message to the conversation as if they were streamed
+      const words = message.split(' ')
+      for (const word of words) {
+        setMessages((prev) => {
+          prev[prev.length - 1].content += word + ' '
+
+          return [...prev]
+        })
+        await new Promise((resolve) => setTimeout(resolve, 70)) // 100ms delay between words
+      }
     } else {
       handleButtonRecord()
     }
@@ -225,7 +235,7 @@ export const BotOneClick = () => {
           heyGenStore.isExpandAvatar ? '' : 'mt-[20px]'
         } overflow-hidden`}
       >
-        <AIVoice audioQueue={audio64} setAudioQueue={setAudio64} />
+        <AIVoice />
         <div
           class={`relative w-full flex flex-col h-1/2  items-center overflow-hidden ${
             heyGenStore.isExpandAvatar ? '' : 'px-5'

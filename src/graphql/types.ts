@@ -163,6 +163,7 @@ export type CreateChannelInput = {
   subtitle?: string | null,
   avatar?: string | null,
   description?: string | null,
+  shouldUseFraiaAPI?: boolean | null,
   botDisplayName?: string | null,
   initialPrompts?: Array< InitialPromptInput > | null,
   overrideConfig?: OverrideConfigInput | null,
@@ -205,6 +206,7 @@ export type ModelChannelConditionInput = {
   subtitle?: ModelStringInput | null,
   avatar?: ModelStringInput | null,
   description?: ModelStringInput | null,
+  shouldUseFraiaAPI?: ModelBooleanInput | null,
   botDisplayName?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
   and?: Array< ModelChannelConditionInput | null > | null,
@@ -242,6 +244,7 @@ export type Channel = {
   subtitle?: string | null,
   avatar?: string | null,
   description?: string | null,
+  shouldUseFraiaAPI?: boolean | null,
   botDisplayName?: string | null,
   initialPrompts?:  Array<InitialPrompt > | null,
   overrideConfig?: OverrideConfig | null,
@@ -283,6 +286,7 @@ export type UpdateChannelInput = {
   subtitle?: string | null,
   avatar?: string | null,
   description?: string | null,
+  shouldUseFraiaAPI?: boolean | null,
   botDisplayName?: string | null,
   initialPrompts?: Array< InitialPromptInput > | null,
   overrideConfig?: OverrideConfigInput | null,
@@ -1242,6 +1246,7 @@ export type ModelChannelFilterInput = {
   subtitle?: ModelStringInput | null,
   avatar?: ModelStringInput | null,
   description?: ModelStringInput | null,
+  shouldUseFraiaAPI?: ModelBooleanInput | null,
   botDisplayName?: ModelStringInput | null,
   isPublic?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
@@ -1582,6 +1587,7 @@ export type ModelSubscriptionChannelFilterInput = {
   subtitle?: ModelSubscriptionStringInput | null,
   avatar?: ModelSubscriptionStringInput | null,
   description?: ModelSubscriptionStringInput | null,
+  shouldUseFraiaAPI?: ModelSubscriptionBooleanInput | null,
   botDisplayName?: ModelSubscriptionStringInput | null,
   isPublic?: ModelSubscriptionBooleanInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
@@ -1888,6 +1894,7 @@ export type CreateChannelMutation = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
@@ -1933,6 +1940,7 @@ export type UpdateChannelMutation = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
@@ -1978,6 +1986,7 @@ export type DeleteChannelMutation = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
@@ -2862,6 +2871,7 @@ export type HandleChannelsMutation = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
@@ -3108,6 +3118,7 @@ export type GetChannelQuery = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
@@ -3156,6 +3167,7 @@ export type ListChannelsQuery = {
       subtitle?: string | null,
       avatar?: string | null,
       description?: string | null,
+      shouldUseFraiaAPI?: boolean | null,
       botDisplayName?: string | null,
       initialPrompts?:  Array< {
         __typename: "InitialPrompt",
@@ -3208,6 +3220,7 @@ export type ChannelsByChatSpaceIdQuery = {
       subtitle?: string | null,
       avatar?: string | null,
       description?: string | null,
+      shouldUseFraiaAPI?: boolean | null,
       botDisplayName?: string | null,
       initialPrompts?:  Array< {
         __typename: "InitialPrompt",
@@ -4105,6 +4118,7 @@ export type FetchChannelsQuery = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
@@ -4261,6 +4275,7 @@ export type OnCreateChannelSubscription = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
@@ -4306,6 +4321,7 @@ export type OnUpdateChannelSubscription = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",
@@ -4351,6 +4367,7 @@ export type OnDeleteChannelSubscription = {
     subtitle?: string | null,
     avatar?: string | null,
     description?: string | null,
+    shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     initialPrompts?:  Array< {
       __typename: "InitialPrompt",

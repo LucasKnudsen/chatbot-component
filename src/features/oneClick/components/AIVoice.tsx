@@ -1,20 +1,16 @@
 import { logDev } from '@/utils'
-import { Accessor, createEffect, createSignal, on, Setter } from 'solid-js'
+import { createEffect, createSignal, on } from 'solid-js'
+import { audio64, setAudio64 } from '../hooks'
 import { oneClickActions } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 import { isMuted } from './MuteAISwitch'
 
-interface AIVoiceProps {
-  audioQueue: Accessor<string[]>
-  setAudioQueue: Setter<string[]>
-}
-
 export let audioRef: any
 export const [isPlayingQueue, setIsPlayingQueue] = createSignal(false)
-export const AIVoice = (props: AIVoiceProps) => {
+export const AIVoice = () => {
   createEffect(
-    on(props.audioQueue, () => {
-      if (props.audioQueue().length === 0) {
+    on(audio64, () => {
+      if (audio64().length === 0) {
         logDev('Queue is empty, cleared audio player')
         oneClickActions.setStatus(BotStatus.IDLE)
         setIsPlayingQueue(false)
@@ -22,8 +18,8 @@ export const AIVoice = (props: AIVoiceProps) => {
 
       if (isPlayingQueue()) return
 
-      if (props.audioQueue().length > 0) {
-        playAudio(props.audioQueue()[0])
+      if (audio64().length > 0) {
+        playAudio(audio64()[0])
         setIsPlayingQueue(true)
       }
     })
@@ -39,14 +35,14 @@ export const AIVoice = (props: AIVoiceProps) => {
         audioRef.muted = isMuted()
         audioRef.onerror = (e: any) => {
           console.error('Error playing audio:', e)
-          props.setAudioQueue([])
+          setAudio64([])
         }
         audioRef.onended = async () => {
           // audioQueue.nested(0).set(none)
-          props.setAudioQueue((prev) => prev.slice(1))
+          setAudio64((prev) => prev.slice(1))
 
-          if (props.audioQueue().length > 0) {
-            requestAnimationFrame(() => playAudio(props.audioQueue()[0]))
+          if (audio64().length > 0) {
+            requestAnimationFrame(() => playAudio(audio64()[0]))
           } else {
             setIsPlayingQueue(false)
           }

@@ -36,7 +36,7 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   },
 })
 
-const initOneClickStore = (channel: Channel, conversationId: string) => {
+const initOneClickStore = (channel: Channel, conversationId?: string) => {
   const isHeyGenMode = channel.overrideConfig?.voiceMode === VoiceMode.HEYGEN
 
   setOneClickStore({

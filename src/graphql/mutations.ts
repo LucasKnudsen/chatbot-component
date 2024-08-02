@@ -156,6 +156,7 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
     subtitle
     avatar
     description
+    shouldUseFraiaAPI
     botDisplayName
     initialPrompts {
       display
@@ -202,6 +203,7 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
     subtitle
     avatar
     description
+    shouldUseFraiaAPI
     botDisplayName
     initialPrompts {
       display
@@ -248,6 +250,7 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
     subtitle
     avatar
     description
+    shouldUseFraiaAPI
     botDisplayName
     initialPrompts {
       display
@@ -1157,6 +1160,7 @@ export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: Han
     subtitle
     avatar
     description
+    shouldUseFraiaAPI
     botDisplayName
     initialPrompts {
       display

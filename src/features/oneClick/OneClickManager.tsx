@@ -17,7 +17,7 @@ export const OneClickManager = () => {
     queryFn: async () => {
       const { chatSpaceConfig } = configStore
 
-      const [channel, conversationId] = await Promise.all([
+      const [channel] = await Promise.all([
         new Promise<Channel>(async (resolve) => {
           let channel = null
           if (chatSpaceConfig.defaultChannelId) {
@@ -29,14 +29,14 @@ export const OneClickManager = () => {
 
           resolve(channel)
         }),
-        new Promise<string>(async (resolve) => {
-          let conversationId = await initiateConversation()
-
-          resolve(conversationId)
-        }),
       ])
 
-      oneClickActions.initOneClickStore(channel, conversationId)
+      if (channel.shouldUseFraiaAPI) {
+        const conversationId = await initiateConversation(channel.id)
+        oneClickActions.initOneClickStore(channel, conversationId)
+      } else {
+        oneClickActions.initOneClickStore(channel)
+      }
     },
   })
 
