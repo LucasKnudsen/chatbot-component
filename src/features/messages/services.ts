@@ -1,8 +1,7 @@
 import { authStore } from '@/features/authentication'
 import { botStore, botStoreActions, createHistoryRecord } from '@/features/bot'
 import { suggestedPromptsStoreActions } from '@/features/prompt'
-import { Channel } from '@/graphql'
-import { SubscriptionEvent } from '@/models'
+import { Channel, SubscriptionEvent } from '@/graphql'
 import { SubscriptionHelper, clearAllSubscriptionsOfType, clearSubscription, logDev } from '@/utils'
 import socketIOClient from 'socket.io-client'
 import {
