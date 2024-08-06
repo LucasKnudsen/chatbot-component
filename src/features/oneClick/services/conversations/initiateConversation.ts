@@ -14,9 +14,9 @@ import { oneClickStore } from '../../store/oneClickStore'
 const COLLECTION_ID = FraiaDBCollections.CONVERSATIONS
 
 interface RequestPayload {
-  sessionId: string
-  knowledgeBaseId: string
-  greetingMessage: string
+  user_id: string
+  knowledge_base_id: string
+  greeting_message: string
 }
 
 export const initiateConversation = async (knowledgeBaseId: string) => {
@@ -29,9 +29,9 @@ export const initiateConversation = async (knowledgeBaseId: string) => {
       : text!.returnWelcomeMessage || text!.welcomeMessage || ''
 
   const payload: RequestPayload = {
-    sessionId,
-    knowledgeBaseId,
-    greetingMessage,
+    user_id: sessionId,
+    knowledge_base_id: knowledgeBaseId,
+    greeting_message: greetingMessage,
   }
 
   const input: HandleFraiaDBInput = {
