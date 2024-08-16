@@ -87,6 +87,9 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
                     <ChatMessageRow content={message.content} role={message.role} />
                   ))}
 
+                  <Show when={oneClickStore.processingToolCall?.status == 'processing'}>
+                    <TextLoading text={oneClickStore.processingToolCall?.processing_message} />
+                  </Show>
                   <div class='w-full h-2 ' />
                 </div>
               </div>
@@ -178,9 +181,6 @@ const AssistantMessage = (props: { content: string }) => {
         fallback={
           <div class='my-3 flex items-center gap-2'>
             <Spinner size={18} />
-            <Show when={oneClickStore.isProcessingToolCall}>
-              <TextLoading />
-            </Show>
           </div>
         }
       >

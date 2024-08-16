@@ -1,15 +1,26 @@
 import { createSignal } from 'solid-js'
 
-type ToolCallStreamObject = {
-  name: string
-  status: 'processing' | 'done'
+export enum EventTypes {
+  TOOL_CALLING = 'TOOL_CALLING',
+  ROUTING = 'ROUTING',
+  ERROR = 'ERROR',
 }
+
+export type ToolCallStreamObject = {
+  name: string
+  processing_message: string
+  status: 'processing' | 'completed'
+}
+
+type EventObject =
+  | { type: EventTypes.TOOL_CALLING; data: ToolCallStreamObject }
+  | { type: EventTypes.ROUTING }
+  | { type: EventTypes.ERROR; data: string }
 
 export type ParsedAIResponse = {
   text: string[]
   audio: string[]
-  toolCall?: ToolCallStreamObject
-  errorMessage?: string
+  event: EventObject
 }
 const [incompleteChunk, setIncompleteChunk] = createSignal('')
 
@@ -51,15 +62,8 @@ export const parseLLMStreamResponse = (value: string): ParsedAIResponse => {
           acc.audio?.push(line.audio)
         }
 
-        if (line.toolCall) {
-          acc.toolCall = {
-            name: line.toolCall.name,
-            status: line.toolCall.status,
-          }
-        }
-
-        if (line.errorMessage) {
-          acc.errorMessage = line.errorMessage
+        if (line.event) {
+          acc.event = line.event
         }
 
         return acc

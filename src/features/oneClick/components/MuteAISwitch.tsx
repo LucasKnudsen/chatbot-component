@@ -18,8 +18,10 @@ export const MuteAISwitch = (props: Props) => {
     !!activeChannel?.avatar || activeChannel?.overrideConfig?.voiceMode === VoiceMode.HEYGEN
 
   const handleOnClick = () => {
-    setIsMuted(!isMuted())
-    props.onMute && props.onMute()
+    setIsMuted((prev) => {
+      props.onMute && props.onMute()
+      return !prev
+    })
   }
 
   return (

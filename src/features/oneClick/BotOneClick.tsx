@@ -1,4 +1,3 @@
-import { NEXT_API_ENDPOINTS } from '@/constants/api'
 import { logDev } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
@@ -14,10 +13,10 @@ import {
   MuteAISwitch,
   isMuted,
 } from './components'
-import { AIVoice, audioRef, setIsPlayingQueue } from './components/AIVoice'
+import { AIVoice, aiAudioRef, setIsPlayingQueue } from './components/AIVoice'
 import { Conversation, expandConversation } from './Conversation'
 import { setAudio64, useLLM } from './hooks'
-import { handleTTS } from './services'
+import { handleTTS, handleTranscription } from './services'
 import { heyGenStore } from './store/heyGenStore'
 import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
@@ -33,7 +32,25 @@ export const BotOneClick = () => {
     },
   })
 
-  const handleInterrupt = async (retryLimit: number = 0) => {
+  const { messages, setMessages, submitNewMessage, cancelQuery } = useLLM({
+    initialMessages: [],
+    // onSuccess(data) {
+    //   heyGenActions.handleSpeak(isMuted() ? '' : data)
+    // },
+  })
+
+  const handleResetMessage = () => {
+    setMessages([])
+  }
+
+  const handleTriggerAudio = () => {
+    if (!aiAudioRef) return
+    aiAudioRef.muted = isMuted()
+
+    handleStopAudio()
+  }
+
+  const handleInterruptHeygen = async (retryLimit: number = 0) => {
     if (!heyGenStore.initialized && !heyGenStore.avatar) {
       return
     }
@@ -52,7 +69,7 @@ export const BotOneClick = () => {
         if (errorResponse?.code == 400010) {
           if (retryLimit < 5) {
             setTimeout(() => {
-              handleInterrupt(retryLimit++)
+              handleInterruptHeygen(retryLimit++)
             }, 1000)
           }
         }
@@ -62,26 +79,12 @@ export const BotOneClick = () => {
     }
   }
 
-  const { messages, setMessages, submitNewMessage, cancelQuery } = useLLM({
-    initialMessages: [],
-    // onSuccess(data) {
-    //   heyGenActions.handleSpeak(isMuted() ? '' : data)
-    // },
-  })
+  const handleStopAudio = () => {
+    if (aiAudioRef) {
+      handleInterruptHeygen()
 
-  const handleResetMessage = () => {
-    setMessages([])
-  }
-
-  const handleTriggerAudio = () => {
-    if (!audioRef) return
-    audioRef.muted = isMuted()
-  }
-
-  const handleStopAnswering = () => {
-    if (audioRef) {
-      audioRef.pause()
-      audioRef.src = ''
+      aiAudioRef.pause()
+      aiAudioRef.src = ''
       setAudio64([])
       setIsPlayingQueue(false)
     }
@@ -96,46 +99,12 @@ export const BotOneClick = () => {
       oneClickStore.botStatus === BotStatus.THINKING
     ) {
       cancelQuery()
-      handleStopAnswering()
-      handleInterrupt()
+      handleStopAudio()
       oneClickActions.setStatus(BotStatus.IDLE)
     } else {
       oneClickActions.setStatus(BotStatus.LISTENING)
       audioRecorder.startRecording()
     }
-  }
-
-  const handleTranscription = async (audioBlob: Blob) => {
-    if (!audioBlob) {
-      throw new Error('No audio blob found')
-    }
-
-    let transcribedText = ''
-    const audioFile = new File([audioBlob], `audio.${audioBlob.type.split('/')[1]}`, {
-      type: audioBlob.type,
-    })
-
-    const formData = new FormData()
-    formData.append('file', audioFile)
-
-    // if (audioBlob.type.includes('mp4')) {
-
-    // throw new Error('MP4 audio not supported yet')
-    //   const transcriptionResponse = await transcribeAudio(audioFile, {
-    //     diarization_toggle: false,
-    //   })
-
-    //   transcribedText = transcriptionResponse.transcription[0].text
-    // } else {
-    const transcriptionResponse = await fetch(NEXT_API_ENDPOINTS.speechToText, {
-      method: 'POST',
-      body: formData,
-    })
-
-    transcribedText = (await transcriptionResponse.json()).data.transcription
-    // }
-
-    return transcribedText
   }
 
   const handleNewMessage = async (input: string) => {
@@ -200,6 +169,7 @@ export const BotOneClick = () => {
   }
 
   const onButtonClick = async () => {
+    // Checks if the Bot should welcome the user
     if (text().welcomeMessage && messages().length === 0) {
       oneClickActions.setStatus(BotStatus.THINKING)
       setMessages((prev) => [...prev, { content: '', role: 'assistant' }])

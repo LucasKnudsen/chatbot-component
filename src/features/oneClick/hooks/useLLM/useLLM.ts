@@ -114,7 +114,6 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                 })
 
                 const isSentenceEnd = /[.!?]$/.test(chunk || '')
-                console.log(chunk)
 
                 if (sentence.length > 25 && isSentenceEnd) {
                   // handleTTS(sentence)
@@ -129,23 +128,22 @@ export const useLLM = (props: LLMInput): LLMOutput => {
               setAudio64((prev) => [...prev, ...parsedValue.audio!])
             }
 
-            if (parsedValue.errorMessage) {
-              console.error(parsedValue.errorMessage)
-            }
+            if (parsedValue.event) {
+              console.log('Event parsed:', parsedValue.event)
+              const { event } = parsedValue
+              if (event.type === 'TOOL_CALLING')
+                switch (event.data.status) {
+                  case 'processing':
+                    oneClickActions.setOneClickStore('processingToolCall', event.data)
+                    break
 
-            if (parsedValue.toolCall) {
-              switch (parsedValue.toolCall.status) {
-                case 'processing':
-                  oneClickActions.setOneClickStore('isProcessingToolCall', true)
-                  break
+                  case 'completed':
+                    oneClickActions.setOneClickStore('processingToolCall', null)
+                    break
 
-                case 'done':
-                  oneClickActions.setOneClickStore('isProcessingToolCall', false)
-                  break
-
-                default:
-                  break
-              }
+                  default:
+                    break
+                }
             }
           } catch (error) {
             oneClickActions.setStatus(BotStatus.IDLE)

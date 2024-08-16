@@ -5,7 +5,7 @@ import { oneClickActions } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 import { isMuted } from './MuteAISwitch'
 
-export let audioRef: any
+export let aiAudioRef: any
 export const [isPlayingQueue, setIsPlayingQueue] = createSignal(false)
 export const AIVoice = () => {
   createEffect(
@@ -29,15 +29,15 @@ export const AIVoice = () => {
     try {
       const audioSrc = `data:audio/mp3;base64,${base64}`
 
-      if (audioRef) {
-        audioRef.src = audioSrc
-        audioRef.play()
-        audioRef.muted = isMuted()
-        audioRef.onerror = (e: any) => {
+      if (aiAudioRef) {
+        aiAudioRef.src = audioSrc
+        aiAudioRef.play()
+        aiAudioRef.muted = isMuted()
+        aiAudioRef.onerror = (e: any) => {
           console.error('Error playing audio:', e)
           setAudio64([])
         }
-        audioRef.onended = async () => {
+        aiAudioRef.onended = async () => {
           // audioQueue.nested(0).set(none)
           setAudio64((prev) => prev.slice(1))
 
@@ -53,5 +53,5 @@ export const AIVoice = () => {
     }
   }
 
-  return <audio ref={audioRef} />
+  return <audio ref={aiAudioRef} />
 }

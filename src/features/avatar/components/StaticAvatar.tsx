@@ -3,6 +3,7 @@ import { NEXT_API_ENDPOINTS } from '@/constants/api'
 import { transcribeAudio } from '@/features/knowledge-base'
 import { queryLLM } from '@/features/messages'
 import { useTheme } from '@/features/theme'
+import { speechSynthesis } from '@/services/speechSynthesis'
 import { Accessor, Match, Switch, createEffect, createSignal } from 'solid-js'
 import { botStore } from '../../bot/stores'
 import { getAvatarStyle } from '../../bot/utils'
@@ -121,17 +122,11 @@ export const StaticAvatar = (props: StaticAvatarProps) => {
   }
 
   const handleVoiceReply = async (text: string) => {
-    const audioStream = await fetch(NEXT_API_ENDPOINTS.textToSpeech, {
-      method: 'POST',
+    const result = await speechSynthesis(text, botStore.activeChannel?.id!)
 
-      body: JSON.stringify({
-        text,
-        voiceId: botStore.activeChannel?.overrideConfig?.elevenLabsVoiceId || '',
-      }),
-    })
-    if (!audioStream.body) return
+    if (!result.audio) return
 
-    const base64String = (await audioStream.json()).data
+    const base64String = result.audio
 
     // const reader = audioStream.body.pipeThrough(new TextDecoderStream()).getReader()
 

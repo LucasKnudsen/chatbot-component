@@ -1,5 +1,6 @@
 import { Channel, VoiceMode } from '@/graphql'
 import { createStore } from 'solid-js/store'
+import { ToolCallStreamObject } from '../hooks/useLLM/utils'
 import { BotStatus } from '../types'
 
 export type OneClickStore = {
@@ -8,7 +9,7 @@ export type OneClickStore = {
   activeConversationId?: string
   chatMode: 'voice' | 'text'
   isHeyGenMode: boolean
-  isProcessingToolCall: boolean
+  processingToolCall: ToolCallStreamObject | null
   readonly shouldWelcome: boolean
 }
 
@@ -18,7 +19,7 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   chatMode: 'voice',
   isHeyGenMode: true,
   activeConversationId: '',
-  isProcessingToolCall: false,
+  processingToolCall: null,
 
   get shouldWelcome() {
     const datetime = localStorage.getItem('lastStarted')
