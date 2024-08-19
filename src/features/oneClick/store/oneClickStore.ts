@@ -52,6 +52,8 @@ const initOneClickStore = (channel: Channel, initiationData?: InitiateConversati
   }
   // Backward compatibility
   else {
+    activeAgent.voice_mode = channel.overrideConfig?.voiceMode
+
     switch (channel.overrideConfig?.voiceMode) {
       case 'HEYGEN':
         activeAgent.voice_id = channel.overrideConfig?.heygenVoiceId
