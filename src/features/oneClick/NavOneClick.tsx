@@ -1,10 +1,11 @@
 import powerIcon from '@/assets/power-icon.svg'
-import { Button, MicrophoneIcon, Spinner, VolumeIcon } from '@/components'
+import { Button, MicrophoneIcon, NewChatIcon, Spinner, VolumeIcon } from '@/components'
 import { configStoreActions } from '@/features/portal-init'
 import { createEffect, createMemo, createSignal, Match, onCleanup, Show, Switch } from 'solid-js'
 import { useTheme } from '../theme'
+import { initiateConversation } from './services'
 import { heyGenStore } from './store/heyGenStore'
-import { oneClickStore } from './store/oneClickStore'
+import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
 
 export const NavOneClick = () => {
@@ -68,8 +69,8 @@ const StatusText = ({ text }: { text: string }) => {
 
 const IdleStatus = () => {
   const { theme } = useTheme()
-
   const [currentIndex, setCurrentIndex] = createSignal(0)
+  const [loading, setLoading] = createSignal(false)
 
   createEffect(() => {
     const interval = setInterval(() => {
@@ -79,15 +80,39 @@ const IdleStatus = () => {
     onCleanup(() => clearInterval(interval))
   })
 
+  const initiateNewConversation = async () => {
+    setLoading(true)
+    try {
+      const initiateData = await initiateConversation(oneClickStore.activeChannel!.id)
+
+      oneClickActions.setOneClickStore('activeConversationId', initiateData.conversationId)
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <Switch>
-      <Match when={currentIndex() === 0}>
-        <img src={theme().navbarLogoUrl} class='h-6 cursor-pointer animate-fade-in-slow' />
-      </Match>
-      <Match when={currentIndex() === 1}>
-        <StatusText text='Press or type to interact..' />
-      </Match>
-    </Switch>
+    <>
+      <div class='absolute left-1'>
+        <Button style={{ background: 'transparent' }} onClick={initiateNewConversation}>
+          {loading() ? (
+            <Spinner size={20} />
+          ) : (
+            <NewChatIcon class=' text-[var(--primaryColor)] w-5 h-auto ' stroke-width={1.5} />
+          )}
+        </Button>
+      </div>
+
+      <Switch>
+        <Match when={currentIndex() === 0}>
+          <img src={theme().navbarLogoUrl} class='h-6 cursor-pointer animate-fade-in-slow' />
+        </Match>
+        <Match when={currentIndex() === 1}>
+          <StatusText text='Press or type to interact..' />
+        </Match>
+      </Switch>
+    </>
   )
 }
 

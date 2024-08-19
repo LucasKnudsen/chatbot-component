@@ -1,5 +1,5 @@
 import { logDev } from '@/utils'
-import { Accessor, createSignal, Setter } from 'solid-js'
+import { Accessor, createEffect, createSignal, on, Setter } from 'solid-js'
 import { isMuted } from '../../components'
 import { handleTTS, setTtsRequestsPending } from '../../services'
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
@@ -32,6 +32,15 @@ export const useLLM = (props: LLMInput): LLMOutput => {
   const [loading, setLoading] = createSignal(false)
 
   let controller: AbortController
+
+  createEffect(
+    on(
+      () => oneClickStore.activeConversationId,
+      () => {
+        setMessages([])
+      }
+    )
+  )
 
   const cancelQuery = () => {
     if (loading()) {
