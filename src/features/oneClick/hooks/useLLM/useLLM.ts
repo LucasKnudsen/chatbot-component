@@ -129,21 +129,32 @@ export const useLLM = (props: LLMInput): LLMOutput => {
             }
 
             if (parsedValue.event) {
-              console.log('Event parsed:', parsedValue.event)
               const { event } = parsedValue
-              if (event.type === 'TOOL_CALLING')
-                switch (event.data.status) {
-                  case 'processing':
-                    oneClickActions.setOneClickStore('processingToolCall', event.data)
-                    break
+              switch (event.type) {
+                case 'ROUTING':
+                  oneClickActions.setOneClickStore('activeAgent', event.data)
+                  break
 
-                  case 'completed':
-                    oneClickActions.setOneClickStore('processingToolCall', null)
-                    break
+                case 'TOOL_CALLING':
+                  switch (event.data.status) {
+                    case 'processing':
+                      console.time('processingToolCall')
+                      oneClickActions.setOneClickStore('processingToolCall', event.data)
+                      break
 
-                  default:
-                    break
-                }
+                    case 'completed':
+                      console.timeEnd('processingToolCall')
+                      oneClickActions.setOneClickStore('processingToolCall', null)
+                      break
+
+                    default:
+                      break
+                  }
+                  break
+
+                default:
+                  break
+              }
             }
           } catch (error) {
             oneClickActions.setStatus(BotStatus.IDLE)

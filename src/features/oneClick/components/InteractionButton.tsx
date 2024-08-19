@@ -1,25 +1,30 @@
-import { Show } from 'solid-js'
+import { MicrophoneIcon } from '@/components'
+import { Accessor, Show } from 'solid-js'
 import { useTheme } from '../../theme'
 import { oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 
 interface Props {
   onStart: () => void
+  shouldInitiateNextMessage: Accessor<boolean>
 }
-export const ButtonStart = (props: Props) => {
+export const InteractionButton = (props: Props) => {
   const handleRenderButtonContent = () => {
     switch (oneClickStore.botStatus) {
       case BotStatus.LISTENING:
         return <StopIcon />
 
       case BotStatus.THINKING:
-        return 'STOP'
+        return 'CANCEL'
 
       case BotStatus.ANSWERING:
         return 'STOP'
-
       default:
-        return 'START'
+        if (props.shouldInitiateNextMessage()) {
+          return 'START'
+        } else {
+          return <MicrophoneIcon height={36} />
+        }
     }
   }
 
@@ -30,7 +35,7 @@ export const ButtonStart = (props: Props) => {
           onClick={props.onStart}
           class='flex h-20 w-20  border-2  border-[var(--onPrimary)] items-center justify-center relative bg-[var(--primaryColor)] rounded-full cursor-pointer'
         >
-          <div class='text-[var(--onPrimary)]'>{handleRenderButtonContent()}</div>
+          <div class='text-[var(--onPrimary)]  font-medium '>{handleRenderButtonContent()}</div>
         </div>
       </div>
     </Show>
@@ -42,8 +47,8 @@ const StopIcon = () => {
   return (
     <div
       style={{
-        width: '30px',
-        height: '30px',
+        width: '28px',
+        height: '28px',
         'border-radius': '5px',
         'background-color': theme().backgroundAccent,
       }}

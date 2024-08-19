@@ -11,7 +11,7 @@ import { fetchAccessToken } from './services'
 const DEV_AVATAR_ID = import.meta.env.VITE_DEV_HEYGEN_AVATAR_ID
 const DEV_VOICE_ID = import.meta.env.VITE_DEV_HEYGEN_VOICE_ID
 
-const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
+const HeyGenAvatar = () => {
   createEffect(() => {
     const handleKeyDown = (event: { key: string }) => {
       if (event.key === 'Escape' && heyGenStore.isExpandAvatar) {
@@ -31,13 +31,9 @@ const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
       const heygenResponse = await heyGenStore.avatar.createStartAvatar({
         newSessionRequest: {
           quality: 'high',
-          avatarName: import.meta.env.DEV
-            ? DEV_AVATAR_ID
-            : oneClickStore.activeChannel?.overrideConfig?.heygenAvatarId!,
+          avatarName: import.meta.env.DEV ? DEV_AVATAR_ID : oneClickStore.activeAgent?.avatar!,
           voice: {
-            voiceId: import.meta.env.DEV
-              ? DEV_VOICE_ID
-              : oneClickStore.activeChannel?.overrideConfig?.heygenVoiceId!,
+            voiceId: import.meta.env.DEV ? DEV_VOICE_ID : oneClickStore.activeAgent?.voice_id!,
           },
         },
       })
@@ -78,9 +74,9 @@ const HeyGenAvatar = (props: { onResetMessage: () => void }) => {
       stopSessionRequest: { sessionId: heyGenStore.sessionId },
     })
     heyGenActions.setStream(undefined)
+    heyGenActions.setSessionId('')
     heyGenActions.setLoading(false)
     heyGenActions.setInitialized(false)
-    props.onResetMessage()
   }
 
   onCleanup(() => {

@@ -32,6 +32,8 @@ export const AIVoice = () => {
       if (aiAudioRef) {
         aiAudioRef.src = audioSrc
         aiAudioRef.play()
+        oneClickActions.setStatus(BotStatus.ANSWERING)
+
         aiAudioRef.muted = isMuted()
         aiAudioRef.onerror = (e: any) => {
           console.error('Error playing audio:', e)
@@ -42,7 +44,7 @@ export const AIVoice = () => {
           setAudio64((prev) => prev.slice(1))
 
           if (audio64().length > 0) {
-            requestAnimationFrame(() => playAudio(audio64()[0]))
+            playAudio(audio64()[0])
           } else {
             setIsPlayingQueue(false)
           }

@@ -1,20 +1,19 @@
 import { logDev } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { Show, createEffect } from 'solid-js'
+import { Show, createEffect, createMemo } from 'solid-js'
 import toast from 'solid-toast'
 import { createAudioRecorder } from '../avatar'
 import { useText } from '../text'
 import {
-  AITextStatus,
   AvatarOneClick,
-  ButtonStart,
   InputOneClick,
+  InteractionButton,
   MuteAISwitch,
   isMuted,
 } from './components'
 import { AIVoice, aiAudioRef, setIsPlayingQueue } from './components/AIVoice'
-import { Conversation, expandConversation } from './Conversation'
+import { Conversation, expandConversation } from './components/Conversation'
 import { setAudio64, useLLM } from './hooks'
 import { handleTTS, handleTranscription } from './services'
 import { heyGenStore } from './store/heyGenStore'
@@ -34,14 +33,11 @@ export const BotOneClick = () => {
 
   const { messages, setMessages, submitNewMessage, cancelQuery } = useLLM({
     initialMessages: [],
-    // onSuccess(data) {
-    //   heyGenActions.handleSpeak(isMuted() ? '' : data)
-    // },
   })
 
-  const handleResetMessage = () => {
-    setMessages([])
-  }
+  const shouldInitiateNextMessage = createMemo(() => {
+    return Boolean(text().welcomeMessage && messages().length === 0)
+  })
 
   const handleTriggerAudio = () => {
     if (!aiAudioRef) return
@@ -168,9 +164,9 @@ export const BotOneClick = () => {
     return '100%'
   }
 
-  const onButtonClick = async () => {
+  const onInteractionButtonClick = async () => {
     // Checks if the Bot should welcome the user
-    if (text().welcomeMessage && messages().length === 0) {
+    if (shouldInitiateNextMessage()) {
       oneClickActions.setStatus(BotStatus.THINKING)
       setMessages((prev) => [...prev, { content: '', role: 'assistant' }])
 
@@ -181,6 +177,8 @@ export const BotOneClick = () => {
       await handleTTS(message)
       // Inject words from welcome message to the conversation as if they were streamed
       const words = message.split(' ')
+      oneClickActions.setStatus(BotStatus.ANSWERING)
+
       for (const word of words) {
         setMessages((prev) => {
           prev[prev.length - 1].content += word + ' '
@@ -205,7 +203,10 @@ export const BotOneClick = () => {
           heyGenStore.isExpandAvatar ? '' : 'mt-[20px]'
         } overflow-hidden`}
       >
+        {/* Voice Only Component */}
         <AIVoice />
+
+        {/* Avatar Component */}
         <div
           class={`relative w-full flex flex-col h-1/2  items-center overflow-hidden ${
             heyGenStore.isExpandAvatar ? '' : 'px-5'
@@ -215,11 +216,7 @@ export const BotOneClick = () => {
             'max-width': handelHeyGenMaxWidth(),
           }}
         >
-          <div class='absolute right-6 top-2 z-10 '>
-            <AITextStatus />
-          </div>
-
-          <div class='absolute left-8 top-4 z-10 '>
+          <div class='absolute left-8 top-4 z-20 '>
             <Show
               when={
                 oneClickStore.botStatus !== BotStatus.NOT_STARTED && !heyGenStore.isExpandAvatar
@@ -231,17 +228,20 @@ export const BotOneClick = () => {
           </div>
 
           <div class='h-full w-full'>
-            <AvatarOneClick onResetMessage={handleResetMessage} />
+            <AvatarOneClick />
           </div>
 
           <div
-            class={`${heyGenStore.isExpandAvatar ? 'opacity-75 hover:opacity-100' : ''}`}
+            class={`${heyGenStore.isExpandAvatar ? 'opacity-75 hover:opacity-100' : ''} z-20`}
             style={{
               position: heyGenStore.isExpandAvatar ? 'absolute' : 'unset',
               bottom: heyGenStore.isExpandAvatar ? '15vh' : 'unset',
             }}
           >
-            <ButtonStart onStart={onButtonClick} />
+            <InteractionButton
+              onStart={onInteractionButtonClick}
+              shouldInitiateNextMessage={shouldInitiateNextMessage}
+            />
           </div>
         </div>
         <Show when={!heyGenStore.isExpandAvatar}>
@@ -263,7 +263,10 @@ export const BotOneClick = () => {
                 'scrollbar-width': 'none',
               }}
             >
-              <Conversation messages={messages} />
+              <Conversation
+                messages={messages}
+                shouldInitiateNextMessage={shouldInitiateNextMessage}
+              />
             </div>
             <InputOneClick onSubmit={handleNewMessage} />
           </div>

@@ -1,13 +1,23 @@
-import { ExpandIcon, SparklesIcon, Spinner, TextLoading, UserIconOneClick } from '@/components'
+import {
+  ExpandIcon,
+  MicrophoneIcon,
+  SparklesIcon,
+  Spinner,
+  TextLoading,
+  UserIconOneClick,
+} from '@/components'
 import { Marked } from '@ts-stack/markdown'
-import { Accessor, createEffect, createSignal, on, Show } from 'solid-js'
-import { useTheme } from '../theme'
-import { oneClickStore } from './store/oneClickStore'
-import { BotStatus, ChatMessage } from './types'
+import { Accessor, createEffect, createSignal, Match, on, Show, Switch } from 'solid-js'
+import { useTheme } from '../../theme'
+import { oneClickStore } from '../store/oneClickStore'
+import { BotStatus, ChatMessage } from '../types'
 
 export const [expandConversation, setExpandConversation] = createSignal<boolean>(false)
 
-export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
+export const Conversation = (props: {
+  messages: Accessor<ChatMessage[]>
+  shouldInitiateNextMessage: Accessor<boolean>
+}) => {
   let chatWindowEl: HTMLDivElement | undefined
   const { theme } = useTheme()
 
@@ -44,7 +54,35 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
     <>
       {/* Starter information for the user when there is no messages yet */}
       <Show when={props.messages().length === 0}>
-        <StarterInfo />
+        <div class='mt-[20px] flex flex-col text-[var(--primaryColor)] justify-center gap-2 opacity-90 '>
+          <div class='text-md font-semibold'>Push to Talk:</div>
+          <Switch>
+            <Match when={props.shouldInitiateNextMessage()}>
+              <div class='text-sm text-[var(--primaryColor)]'>
+                - Press <span class='font-semibold'>"START"</span> to initiate conversation.
+              </div>
+            </Match>
+          </Switch>
+          <div class='text-sm text-[var(--primaryColor)]'>
+            - Press{' '}
+            <span class='font-semibold'>
+              <MicrophoneIcon
+                class='text-[var(--primaryColor)] inline'
+                height={16}
+                width={16}
+                stroke-width={2.2}
+              />
+            </span>{' '}
+            to start talking.
+          </div>
+
+          <div class='text-sm text-[var(--primaryColor)]'>
+            - Press <span class='font-semibold'> ⏹️ </span> when you are done speaking.
+          </div>
+          <div class='text-sm text-[var(--primaryColor)]'>
+            - Press <span class='font-semibold'>"STOP"</span> to interrupt.
+          </div>
+        </div>
       </Show>
 
       <Show when={props.messages().length > 0}>
@@ -80,16 +118,20 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
           >
             <div class='absolute left-0 w-full h-8 bg-gradient-to-b from-white to-transparent pointer-events-none z-10' />
             <div class='absolute left-0 bottom-0 w-full h-6 bg-gradient-to-t from-white to-transparent pointer-events-none z-10' />
+
             <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED}>
               <div id='conversations' class={`py-4  flex flex-col w-full h-auto gap-2 `}>
                 <div class='flex flex-col gap-4 relative '>
+                  {/* Chat Messages */}
                   {props.messages().map((message) => (
                     <ChatMessageRow content={message.content} role={message.role} />
                   ))}
 
+                  {/* Tool Call Loading */}
                   <Show when={oneClickStore.processingToolCall?.status == 'processing'}>
                     <TextLoading text={oneClickStore.processingToolCall?.processing_message} />
                   </Show>
+
                   <div class='w-full h-2 ' />
                 </div>
               </div>
@@ -98,23 +140,6 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
         </div>
       </Show>
     </>
-  )
-}
-
-const StarterInfo = () => {
-  return (
-    <div class='mt-[20px] flex flex-col text-[var(--primaryColor)] justify-center gap-2 opacity-90 '>
-      <div class='text-md font-semibold'>Push to Talk:</div>
-      <div class='text-sm text-[var(--primaryColor)]'>
-        - Press <span class='font-semibold'>"START"</span> to start speaking.
-      </div>
-      <div class='text-sm text-[var(--primaryColor)]'>
-        - Press <span class='font-semibold'>⏹️</span> when you are done speaking.
-      </div>
-      <div class='text-sm text-[var(--primaryColor)]'>
-        - Press <span class='font-semibold'>"STOP"</span> to interrupt.
-      </div>
-    </div>
   )
 }
 

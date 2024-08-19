@@ -12,9 +12,22 @@ export type ToolCallStreamObject = {
   status: 'processing' | 'completed'
 }
 
+export enum VoiceMode {
+  WHISPER = 'WHISPER',
+  ELEVEN_LABS = 'ELEVEN_LABS',
+  HEYGEN = 'HEYGEN',
+}
+
+export type RoutingStreamObject = {
+  agent_id?: string | null
+  avatar?: string | null
+  voice_mode?: VoiceMode | null
+  voice_id?: string | null
+}
+
 type EventObject =
   | { type: EventTypes.TOOL_CALLING; data: ToolCallStreamObject }
-  | { type: EventTypes.ROUTING }
+  | { type: EventTypes.ROUTING; data: RoutingStreamObject }
   | { type: EventTypes.ERROR; data: string }
 
 export type ParsedAIResponse = {
@@ -63,6 +76,7 @@ export const parseLLMStreamResponse = (value: string): ParsedAIResponse => {
         }
 
         if (line.event) {
+          console.log('Event to be parsed:', line.event)
           acc.event = line.event
         }
 

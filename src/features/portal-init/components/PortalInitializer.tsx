@@ -11,7 +11,6 @@ import { BotManager, FraiaLoading, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '
 
 import { Nav, NavigationDrawer } from '@/components/nav'
 import { AuthProvider } from '@/features/authentication'
-import { heyGenStore } from '@/features/oneClick/store/heyGenStore'
 import { useText } from '@/features/text'
 import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
@@ -68,13 +67,7 @@ export const PortalInitializer = (props: ChatConfig) => {
                 data-testid='PortalInitializer'
                 class='fixed top-0 left-0 flex flex-nowrap h-full w-full justify-center overflow-hidden animate-fade-in '
               >
-                <div class='flex flex-col max-lg:overflow-hidden w-full h-full shadow-xl'>
-                  <Show when={!heyGenStore.isExpandAvatar}>
-                    <Nav />
-                  </Show>
-
-                  <OneClickManager />
-                </div>
+                <OneClickManager />
               </div>
             </AuthProvider>
           </OneClickContainer>

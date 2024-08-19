@@ -9,26 +9,36 @@ import {
 } from '@/graphql'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { API } from 'aws-amplify'
+import { RoutingStreamObject } from '../../hooks/useLLM/utils'
 import { oneClickStore } from '../../store/oneClickStore'
 
 const COLLECTION_ID = FraiaDBCollections.CONVERSATIONS
 
-interface RequestPayload {
+interface InitiateConversationPayload {
   user_id: string
   knowledge_base_id: string
   greeting_message: string
 }
 
-export const initiateConversation = async (knowledgeBaseId: string) => {
+export interface InitiateConversationResponse {
+  conversationId: string
+  avatarConfig: RoutingStreamObject
+}
+
+export const initiateConversation = async (
+  knowledgeBaseId: string
+): Promise<InitiateConversationResponse> => {
   const sessionId = authStore.sessionId
   const text = configStore.chatSpaceConfig.text
 
+  // Check if the welcome message should be displayed
   const greetingMessage =
     text?.welcomeMessage && oneClickStore.shouldWelcome
       ? text.welcomeMessage
       : text!.returnWelcomeMessage || text!.welcomeMessage || ''
 
-  const payload: RequestPayload = {
+  // Prepare the payload
+  const payload: InitiateConversationPayload = {
     user_id: sessionId,
     knowledge_base_id: knowledgeBaseId,
     greeting_message: greetingMessage,
@@ -46,9 +56,7 @@ export const initiateConversation = async (knowledgeBaseId: string) => {
     authMode: await getAuthMode(),
   })
 
-  const body: { conversationId: string } = JSON.parse(data?.handleFraiaDB as string)
+  const body: InitiateConversationResponse = JSON.parse(data?.handleFraiaDB as string)
 
-  console.log(body)
-
-  return body.conversationId
+  return body
 }

@@ -24,7 +24,7 @@ export const TextLoading = (props: Props) => {
           @keyframes l5 {to{clip-path: inset(0 -1ch 0 0)}}
         `}
       </style>
-      <div class='text-loading'></div>
+      <div class='text-loading inline'></div>
     </>
   )
 }
