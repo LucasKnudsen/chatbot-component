@@ -129,7 +129,7 @@ const ListeningStatus = () => {
 
   return (
     <>
-      <div class='absolute left-0 animate-pulse'>
+      <div class='absolute left-1 animate-pulse'>
         <MicrophoneIcon class=' text-[var(--primaryColor)] w-5 h-auto ' />
       </div>
 
@@ -158,7 +158,7 @@ const ThinkingStatus = () => {
 
   return (
     <>
-      <div class='absolute left-0 animate-pulse'>
+      <div class='absolute left-1 animate-pulse'>
         <Spinner size={20} />
       </div>
 
@@ -187,7 +187,7 @@ const AnsweringStatus = () => {
 
   return (
     <>
-      <div class='absolute left-0 animate-pulse'>
+      <div class='absolute left-1 animate-pulse'>
         <VolumeIcon class=' text-[var(--primaryColor)] w-5  h-auto ' />
       </div>
       <Switch>
