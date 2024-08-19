@@ -48,7 +48,7 @@ export const NavOneClick = () => {
             <Button
               onClick={configStoreActions.toggleBot}
               padding='6px'
-              class='!absolute top-0 right-0 border border-[var(--onPrimary)] animate-fade-in'
+              class='!absolute -top-0.5 right-0 border border-[var(--onPrimary)] animate-fade-in'
             >
               <img class='m-auto h-3' src={powerIcon} />
             </Button>
@@ -94,7 +94,7 @@ const IdleStatus = () => {
 
   return (
     <>
-      <div class='absolute left-1'>
+      <div class='absolute left-1 -top-0.5'>
         <Button style={{ background: 'transparent' }} onClick={initiateNewConversation}>
           {loading() ? (
             <Spinner size={20} />
