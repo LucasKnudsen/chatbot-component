@@ -138,7 +138,6 @@ export const StaticAvatar = (props: StaticAvatarProps) => {
     //   }
     //   if (value) {
     //     incomingMessage += value
-    //     console.log(value)
     //   }
     // }
 

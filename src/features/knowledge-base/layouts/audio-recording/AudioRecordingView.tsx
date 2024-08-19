@@ -41,8 +41,6 @@ const AudioInput = (props: { onBack: () => void }) => {
 
       const transcriptionResponse = await transcribeAudio(audioFile)
 
-      console.log(transcriptionResponse)
-
       const mergedTrascript = mergeTranscriptBySpeaker(transcriptionResponse.transcription)
 
       const concatinatedText = mergedTrascript

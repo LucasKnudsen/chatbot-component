@@ -72,7 +72,6 @@ const ImageAvatar = (props: { initialUrl: string }) => {
     on(
       () => activeAgent?.avatar,
       (newAvatar, oldAvatar) => {
-        console.log('avatars', newAvatar, oldAvatar)
         if (oldAvatar && newAvatar !== oldAvatar) {
           setShowAvatar(false)
 

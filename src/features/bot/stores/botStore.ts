@@ -297,7 +297,6 @@ const handleSourceDocuments = async (documents: SourceDocument[]) => {
 }
 
 const setActiveChat = (chat: Partial<ChannelHistoryItem> | null) => {
-  console.log('Setting active chat: ', chat)
   setBotStore('activeChannel', 'activeChat', reconcile(parseProxy(chat)))
 }
 

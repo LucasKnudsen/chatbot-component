@@ -1,3 +1,4 @@
+import { logDev } from '@/utils'
 import { createSignal } from 'solid-js'
 
 export enum EventTypes {
@@ -71,12 +72,12 @@ export const parseLLMStreamResponse = (value: string): ParsedAIResponse => {
         }
 
         if (line.audio) {
-          console.log('Audio parsed:', line.audio.slice(0, 20))
+          logDev('Audio parsed:', line.audio.slice(0, 20))
           acc.audio?.push(line.audio)
         }
 
         if (line.event) {
-          console.log('Event to be parsed:', line.event)
+          logDev('Event to be parsed:', line.event)
           acc.event = line.event
         }
 

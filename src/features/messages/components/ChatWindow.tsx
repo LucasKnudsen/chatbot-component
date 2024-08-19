@@ -111,7 +111,6 @@ export const ChatWindow = () => {
           <div>
             <MessageIcon
               onClick={() => {
-                console.log('Clicked')
                 suggestedPromptsStoreActions.fetch()
               }}
               width={30}

@@ -1,3 +1,4 @@
+import { logDev } from '@/utils'
 import { Accessor, createSignal, Setter } from 'solid-js'
 import { isMuted } from '../../components'
 import { handleTTS, setTtsRequestsPending } from '../../services'
@@ -92,7 +93,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
           if (sentence) {
             // handleTTS(sentence)
             !isMuted() && handleTTS(sentence)
-            console.log('Is done, fire last sentence', sentence)
+            logDev('Is done, fire last sentence', sentence)
             sentence = ''
           }
           return botResponse
@@ -118,7 +119,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                 if (sentence.length > 25 && isSentenceEnd) {
                   // handleTTS(sentence)
                   !isMuted() && handleTTS(sentence)
-                  console.log('Is done, fire sentence', sentence)
+                  logDev('Is done, fire sentence', sentence)
                   sentence = ''
                 }
               })
