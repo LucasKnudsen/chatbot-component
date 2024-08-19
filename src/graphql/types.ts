@@ -1079,6 +1079,7 @@ export type SpeechSynthesisInput = {
   text: string,
   knowledgeBaseId: string,
   requestIndex?: number | null,
+  overrideConfig?: string | null,
 };
 
 export type SpeechSynthesisOutput = {
