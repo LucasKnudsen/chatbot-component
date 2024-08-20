@@ -32,33 +32,31 @@ export const AvatarOneClick = () => {
         heyGenStore.isExpandAvatar ? 'h-full' : 'h-[calc(100%-40px)] rounded-xl'
       }`}
     >
-      <Fade>
-        <Switch
-          fallback={
-            // Default blob animation
-            <video
-              ref={(el) => (videoRef = el)}
-              id='one-click-entity'
-              class='w-auto h-full object-cover scale-[2] md:scale-[1.7] lg:scale-[2]'
-              autoplay={true}
-              playsinline
-              loop
-              muted
-              src={dynamicVoiceSymbol}
-            />
-          }
-        >
-          {/* When the active channel has an overrideConfig with voiceMode set to HEYGEN, render the HeyGenAvatar component */}
-          <Match when={oneClickStore.isHeyGenMode}>
-            <HeyGenAvatar />
-          </Match>
+      <Switch
+        fallback={
+          // Default blob animation
+          <video
+            ref={(el) => (videoRef = el)}
+            id='one-click-entity'
+            class='w-auto h-full object-cover scale-[2] md:scale-[1.7] lg:scale-[2]'
+            autoplay={true}
+            playsinline
+            loop
+            muted
+            src={dynamicVoiceSymbol}
+          />
+        }
+      >
+        {/* When the active channel has an overrideConfig with voiceMode set to HEYGEN, render the HeyGenAvatar component */}
+        <Match when={oneClickStore.isHeyGenMode}>
+          <HeyGenAvatar />
+        </Match>
 
-          {/* When the active channel has an avatar, render the image */}
-          <Match when={activeAgent?.avatar}>
-            <ImageAvatar initialUrl={activeAgent!.avatar!} />
-          </Match>
-        </Switch>
-      </Fade>
+        {/* When the active channel has an avatar, render the image */}
+        <Match when={activeAgent?.avatar}>
+          <ImageAvatar initialUrl={activeAgent!.avatar!} />
+        </Match>
+      </Switch>
     </div>
   )
 }
@@ -70,7 +68,7 @@ const ImageAvatar = (props: { initialUrl: string }) => {
 
   createEffect(
     on(
-      () => activeAgent?.avatar,
+      () => activeAgent!.avatar,
       (newAvatar, oldAvatar) => {
         if (oldAvatar && newAvatar !== oldAvatar) {
           setShowAvatar(false)

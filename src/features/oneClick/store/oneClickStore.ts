@@ -4,13 +4,14 @@ import { RoutingStreamObject, ToolCallStreamObject } from '../hooks/useLLM/utils
 import { InitiateConversationResponse } from '../services'
 import { BotStatus } from '../types'
 
-type ActiveAgent = RoutingStreamObject
+type AgentAvatarConfig = RoutingStreamObject
 
 export type OneClickStore = {
   botStatus: BotStatus
   activeChannel?: Channel | null
   activeConversationId?: string
-  activeAgent?: ActiveAgent | null
+  initialAgent?: AgentAvatarConfig | null
+  activeAgent?: AgentAvatarConfig | null
   chatMode: 'voice' | 'text'
   processingToolCall: ToolCallStreamObject | null
   readonly shouldWelcome: boolean
@@ -21,6 +22,7 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   botStatus: BotStatus.NOT_STARTED,
   activeChannel: null,
   activeAgent: null,
+  initialAgent: null,
   chatMode: 'voice',
   activeConversationId: '',
   processingToolCall: null,
@@ -45,7 +47,7 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
 })
 
 const initOneClickStore = (channel: Channel, initiationData?: InitiateConversationResponse) => {
-  let activeAgent: ActiveAgent = {}
+  let activeAgent: AgentAvatarConfig = {}
 
   if (initiationData?.avatarConfig) {
     activeAgent = initiationData.avatarConfig
@@ -77,7 +79,15 @@ const initOneClickStore = (channel: Channel, initiationData?: InitiateConversati
     activeChannel: channel,
     activeConversationId: initiationData?.conversationId,
     activeAgent,
+    initialAgent: { ...activeAgent },
   })
+}
+
+const resetConversation = (conversationId: string) => {
+  const initialAgent = { ...oneClickStore.initialAgent }
+
+  setOneClickStore('activeConversationId', conversationId)
+  setOneClickStore('activeAgent', initialAgent)
 }
 
 const oneClickActions = {
@@ -86,6 +96,7 @@ const oneClickActions = {
   },
   setOneClickStore,
   initOneClickStore,
+  resetConversation,
 }
 
 export { oneClickActions, oneClickStore }

@@ -112,32 +112,6 @@ export const useLLM = (props: LLMInput): LLMOutput => {
           try {
             const parsedValue = parseLLMStreamResponse(value)
 
-            if (parsedValue.text) {
-              parsedValue.text.forEach((chunk) => {
-                botResponse += chunk
-                sentence += chunk
-
-                setMessages((prev) => {
-                  prev[prev.length - 1].content += chunk
-
-                  return [...prev]
-                })
-
-                const isSentenceEnd = /[.!?]$/.test(chunk || '')
-
-                if (sentence.length > 25 && isSentenceEnd) {
-                  // handleTTS(sentence)
-                  !isMuted() && handleTTS(sentence)
-                  logDev('Is done, fire sentence', sentence)
-                  sentence = ''
-                }
-              })
-            }
-
-            if (parsedValue.audio.length > 0) {
-              setAudio64((prev) => [...prev, ...parsedValue.audio!])
-            }
-
             if (parsedValue.event) {
               const { event } = parsedValue
               switch (event.type) {
@@ -166,6 +140,32 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                   break
               }
             }
+
+            if (parsedValue.text) {
+              parsedValue.text.forEach((chunk) => {
+                botResponse += chunk
+                sentence += chunk
+
+                setMessages((prev) => {
+                  prev[prev.length - 1].content += chunk
+
+                  return [...prev]
+                })
+
+                const isSentenceEnd = /[.!?]$/.test(chunk || '')
+
+                if (sentence.length > 25 && isSentenceEnd) {
+                  // handleTTS(sentence)
+                  !isMuted() && handleTTS(sentence)
+                  logDev('Is done, fire sentence', sentence)
+                  sentence = ''
+                }
+              })
+            }
+
+            if (parsedValue.audio.length > 0) {
+              setAudio64((prev) => [...prev, ...parsedValue.audio!])
+            }
           } catch (error) {
             oneClickActions.setStatus(BotStatus.IDLE)
           } finally {
@@ -177,11 +177,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
     } catch (error) {
       oneClickActions.setStatus(BotStatus.IDLE)
     } finally {
-      if (isMuted() && oneClickStore.chatMode === 'text') {
-        oneClickActions.setStatus(BotStatus.IDLE)
-      }
-
-      if (isMuted() && oneClickStore.isHeyGenMode) {
+      if (isMuted()) {
         oneClickActions.setStatus(BotStatus.IDLE)
       }
     }
