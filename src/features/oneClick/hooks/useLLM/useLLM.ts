@@ -90,7 +90,9 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
       const reader = response.body!.pipeThrough(new TextDecoderStream()).getReader()
       let botResponse = ''
-      let sentence = ''
+      let sentenceBuffer = ''
+      let htmlBuffer = ''
+      let isProcessingHtmlTag = false
 
       // Initiates the response object
       oneClickActions.setStatus(BotStatus.ANSWERING)
@@ -99,11 +101,11 @@ export const useLLM = (props: LLMInput): LLMOutput => {
         const { value, done } = await reader.read()
 
         if (done) {
-          if (sentence) {
-            // handleTTS(sentence)
-            !isMuted() && handleTTS(sentence)
-            logDev('Is done, fire last sentence', sentence)
-            sentence = ''
+          if (sentenceBuffer) {
+            !isMuted() && handleTTS(sentenceBuffer)
+            logDev('Is done, fire last sentenceBuffer', sentenceBuffer)
+
+            sentenceBuffer = ''
           }
           return botResponse
         }
@@ -143,8 +145,39 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
             if (parsedValue.text) {
               parsedValue.text.forEach((chunk) => {
+                console.log('chunk', chunk)
+                // HTML tag cleaning
+                if (chunk.startsWith('<') || isProcessingHtmlTag) {
+                  // Check for start HTML tags or if the stream is in the middle of streaming the HTML tag
+                  // If one is true, add chunk to the html buffer and check for end tags
+                  // If no end tag is found, continue to the next index
+                  // If end tag is found, add the html buffer to the bot response and setMessages
+                  htmlBuffer += chunk
+
+                  if (!chunk.endsWith('>')) {
+                    isProcessingHtmlTag = true
+                    oneClickActions.setOneClickStore('processingToolCall', {
+                      status: 'processing',
+                      processing_message: 'Processing HTML..',
+                    })
+                  } else {
+                    oneClickActions.setOneClickStore('processingToolCall', null)
+                    isProcessingHtmlTag = false
+
+                    botResponse += htmlBuffer
+                    setMessages((prev) => {
+                      prev[prev.length - 1].content += htmlBuffer
+
+                      return [...prev]
+                    })
+                    htmlBuffer = ''
+                  }
+
+                  return
+                }
+
                 botResponse += chunk
-                sentence += chunk
+                sentenceBuffer += chunk
 
                 setMessages((prev) => {
                   prev[prev.length - 1].content += chunk
@@ -152,13 +185,12 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                   return [...prev]
                 })
 
-                const isSentenceEnd = /[.!?]$/.test(chunk || '')
+                const issentenceBufferEnd = /[.!?]$/.test(chunk || '')
 
-                if (sentence.length > 25 && isSentenceEnd) {
-                  // handleTTS(sentence)
-                  !isMuted() && handleTTS(sentence)
-                  logDev('Is done, fire sentence', sentence)
-                  sentence = ''
+                if (sentenceBuffer.length > 25 && issentenceBufferEnd) {
+                  !isMuted() && handleTTS(sentenceBuffer)
+                  logDev('Is done, fire sentenceBuffer', sentenceBuffer)
+                  sentenceBuffer = ''
                 }
               })
             }
@@ -183,12 +215,14 @@ export const useLLM = (props: LLMInput): LLMOutput => {
     }
   }
 
-  const submitNewMessage = async (input: SubmitInput) => {
+  const submitNewMessage = async (input: SubmitInput): Promise<string> => {
     props.onSubmit?.(input)
     setLoading(true)
     const data = await queryLLM(input)
     setLoading(false)
     props.onSuccess?.(data || '')
+
+    return data || ''
   }
 
   return { messages, setMessages, submitNewMessage, cancelQuery, loading }

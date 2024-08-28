@@ -268,6 +268,7 @@ export const BotOneClick = () => {
                 shouldInitiateNextMessage={shouldInitiateNextMessage}
               />
             </div>
+
             <InputOneClick onSubmit={handleNewMessage} />
           </div>
         </Show>
