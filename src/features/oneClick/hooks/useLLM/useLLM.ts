@@ -1,7 +1,7 @@
 import { logDev } from '@/utils'
 import { Accessor, createEffect, createSignal, on, Setter } from 'solid-js'
 import { isMuted } from '../../components'
-import { handleTTS, setTtsRequestsPending } from '../../services'
+import { handleTTS, initiateConversation, setTtsRequestsPending } from '../../services'
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
 import { BotStatus, ChatMessage } from '../../types'
 import { parseLLMStreamResponse } from './utils'
@@ -125,17 +125,38 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                   switch (event.data.status) {
                     case 'processing':
                       console.time('processingToolCall')
-                      oneClickActions.setOneClickStore('processingToolCall', event.data)
+                      oneClickActions.setOneClickStore('indicationMessage', {
+                        message: event.data.processing_message,
+                        metadata: {
+                          toolName: event.data.name,
+                        },
+                      })
                       break
 
                     case 'completed':
                       console.timeEnd('processingToolCall')
-                      oneClickActions.setOneClickStore('processingToolCall', null)
+                      oneClickActions.setOneClickStore('indicationMessage', null)
                       break
 
                     default:
                       break
                   }
+                  break
+
+                case 'CONVERSATION_COMPLETE':
+                  // Should initiate a new conversation
+                  oneClickActions.setOneClickStore('indicationMessage', {
+                    message: 'Conversation complete. Initiating new conversation...',
+                    metadata: {
+                      initiatingNewConversation: true,
+                    },
+                  })
+
+                  const initiateData = await initiateConversation(oneClickStore.activeChannel!.id)
+
+                  oneClickActions.resetConversation(initiateData.conversationId)
+                  oneClickActions.setOneClickStore('indicationMessage', null)
+
                   break
 
                 default:
@@ -156,12 +177,11 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
                   if (!chunk.endsWith('>')) {
                     isProcessingHtmlTag = true
-                    oneClickActions.setOneClickStore('processingToolCall', {
-                      status: 'processing',
-                      processing_message: 'Processing HTML..',
+                    oneClickActions.setOneClickStore('indicationMessage', {
+                      message: 'Processing HTML..',
                     })
                   } else {
-                    oneClickActions.setOneClickStore('processingToolCall', null)
+                    oneClickActions.setOneClickStore('indicationMessage', null)
                     isProcessingHtmlTag = false
 
                     botResponse += htmlBuffer

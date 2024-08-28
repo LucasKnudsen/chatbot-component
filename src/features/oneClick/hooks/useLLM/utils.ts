@@ -4,6 +4,7 @@ import { createSignal } from 'solid-js'
 export enum EventTypes {
   TOOL_CALLING = 'TOOL_CALLING',
   ROUTING = 'ROUTING',
+  CONVERSATION_COMPLETE = 'CONVERSATION_COMPLETE',
   ERROR = 'ERROR',
 }
 
@@ -26,10 +27,15 @@ export type RoutingStreamObject = {
   voice_id?: string | null
 }
 
+export type ConversationCompleteStreamObject = {
+  conversation_id: string
+}
+
 type EventObject =
   | { type: EventTypes.TOOL_CALLING; data: ToolCallStreamObject }
   | { type: EventTypes.ROUTING; data: RoutingStreamObject }
   | { type: EventTypes.ERROR; data: string }
+  | { type: EventTypes.CONVERSATION_COMPLETE; data: ConversationCompleteStreamObject }
 
 export type ParsedAIResponse = {
   text: string[]

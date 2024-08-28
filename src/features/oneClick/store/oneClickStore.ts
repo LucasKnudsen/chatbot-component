@@ -1,10 +1,15 @@
 import { Channel, VoiceMode } from '@/graphql'
 import { createStore } from 'solid-js/store'
-import { RoutingStreamObject, ToolCallStreamObject } from '../hooks/useLLM/utils'
+import { RoutingStreamObject } from '../hooks/useLLM/utils'
 import { InitiateConversationResponse } from '../services'
 import { BotStatus } from '../types'
 
 type AgentAvatarConfig = RoutingStreamObject
+
+type IndicationMessage = {
+  message: string
+  metadata: Record<string, any>
+}
 
 export type OneClickStore = {
   botStatus: BotStatus
@@ -13,7 +18,7 @@ export type OneClickStore = {
   initialAgent?: AgentAvatarConfig | null
   activeAgent?: AgentAvatarConfig | null
   chatMode: 'voice' | 'text'
-  processingToolCall: ToolCallStreamObject | null
+  indicationMessage: IndicationMessage | null
   readonly shouldWelcome: boolean
   readonly isHeyGenMode: boolean
 }
@@ -25,7 +30,7 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   initialAgent: null,
   chatMode: 'voice',
   activeConversationId: '',
-  processingToolCall: null,
+  indicationMessage: null,
 
   get shouldWelcome() {
     const datetime = localStorage.getItem('lastStarted')

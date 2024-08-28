@@ -128,8 +128,8 @@ export const Conversation = (props: {
                   ))}
 
                   {/* Tool Call Loading */}
-                  <Show when={oneClickStore.processingToolCall?.status == 'processing'}>
-                    <TextLoading text={oneClickStore.processingToolCall?.processing_message} />
+                  <Show when={oneClickStore.indicationMessage}>
+                    <TextLoading text={oneClickStore.indicationMessage?.message} />
                   </Show>
 
                   <div class='w-full h-2 ' />
