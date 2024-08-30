@@ -1,9 +1,9 @@
 import {
   ExpandIcon,
+  IndicationMessage,
   MicrophoneIcon,
   SparklesIcon,
   Spinner,
-  TextLoading,
   UserIconOneClick,
 } from '@/components'
 import { Marked } from '@ts-stack/markdown'
@@ -28,6 +28,16 @@ export const Conversation = (props: {
   createEffect(
     on(
       () => props.messages()[props.messages().length - 1]?.content,
+      () => {
+        scrollChatWindowToBottom()
+      },
+      { defer: true }
+    )
+  )
+
+  createEffect(
+    on(
+      () => oneClickStore.indicationMessage?.message,
       () => {
         scrollChatWindowToBottom()
       },
@@ -130,7 +140,7 @@ export const Conversation = (props: {
                   {/* Tool Call Loading */}
                   <Show when={oneClickStore.indicationMessage}>
                     <div class='animate-fade-in'>
-                      <TextLoading text={oneClickStore.indicationMessage?.message} />
+                      <IndicationMessage text={oneClickStore.indicationMessage?.message} />
                     </div>
                   </Show>
 
@@ -206,9 +216,11 @@ const AssistantMessage = (props: { content: string }) => {
       <Show
         when={props.content}
         fallback={
-          <div class='my-3 flex items-center gap-2'>
-            <Spinner size={18} />
-          </div>
+          !oneClickStore.indicationMessage && (
+            <div class='my-3 flex items-center gap-2'>
+              <Spinner size={18} />
+            </div>
+          )
         }
       >
         <div ref={textEl} class='prose' />

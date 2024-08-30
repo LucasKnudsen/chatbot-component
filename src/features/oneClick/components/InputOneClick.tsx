@@ -52,7 +52,13 @@ export const InputOneClick = (props: { onSubmit: (input: string) => void }) => {
           onClick={wrapSubmit}
           style={{}}
         >
-          <SendIcon color={input() ? theme().primaryColor : 'rgb(170, 170, 170)'} />
+          <SendIcon
+            color={
+              oneClickStore.botStatus === BotStatus.IDLE
+                ? input() && theme().primaryColor
+                : theme().primaryAccent
+            }
+          />
         </button>
       </div>
     </div>

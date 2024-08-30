@@ -1,8 +1,6 @@
 import { MuteIcon, SoundIcon } from '@/components'
-import { VoiceMode } from '@/graphql'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { createSignal, Show } from 'solid-js'
-import { oneClickStore } from '../store/oneClickStore'
 
 export const [isMuted, setIsMuted] = createSignal<boolean>(false)
 interface Props {
@@ -10,12 +8,6 @@ interface Props {
 }
 export const MuteAISwitch = (props: Props) => {
   const [parent] = createAutoAnimate()
-  const [noAvatarParent] = createAutoAnimate()
-  const [noAvatarTextParent] = createAutoAnimate()
-
-  const { activeChannel } = oneClickStore
-  const isHasAvatar =
-    !!activeChannel?.avatar || activeChannel?.overrideConfig?.voiceMode === VoiceMode.HEYGEN
 
   const handleOnClick = () => {
     setIsMuted((prev) => {
@@ -75,36 +67,33 @@ export const MuteAISwitch = (props: Props) => {
           }
         `}
       </style>
-      <Show when={isHasAvatar} keyed>
-        <div
-          ref={parent}
-          onClick={handleOnClick}
-          class='avatar-wrapper cursor-pointer flex gap-1 items-center justify-between border-white border rounded-3xl '
-          style={{
-            'background-color': 'rgba(228, 228, 228, 0.5)',
-            transition: 'all 0.5s ease-in-out',
-          }}
-        >
-          <Show when={isMuted()} keyed>
-            <span class='ml-2.5 text-sm'>Muted</span>
-          </Show>
-          <div>
-            <span class={`${isMuted() ? 'muted' : 'sound'}`}>
-              {isMuted() ? (
-                <MuteIcon onClick={handleOnClick} />
-              ) : (
-                <SoundIcon onClick={handleOnClick} />
-              )}
-            </span>
-          </div>
-          <Show when={!isMuted()} keyed>
-            <span class='mr-2.5 text-sm'>Unmuted</span>
-          </Show>
+      <div
+        ref={parent}
+        onClick={handleOnClick}
+        class='avatar-wrapper cursor-pointer flex gap-1 items-center justify-between border-white border rounded-3xl '
+        style={{
+          'background-color': 'rgba(228, 228, 228, 0.5)',
+          transition: 'all 0.5s ease-in-out',
+        }}
+      >
+        <Show when={isMuted()} keyed>
+          <span class='ml-2.5 text-sm'>Muted</span>
+        </Show>
+        <div>
+          <span class={`${isMuted() ? 'muted' : 'sound'}`}>
+            {isMuted() ? (
+              <MuteIcon onClick={handleOnClick} />
+            ) : (
+              <SoundIcon onClick={handleOnClick} />
+            )}
+          </span>
         </div>
-      </Show>
+        <Show when={!isMuted()} keyed>
+          <span class='mr-2.5 text-sm'>Unmuted</span>
+        </Show>
+      </div>
 
-      <Show when={!isHasAvatar} keyed>
-        <div class='flex items-center gap-1'>
+      {/* <div class='flex items-center gap-1'>
           <div>
             <label
               class={`toggle ${isMuted() ? 'justify-start' : 'justify-end'}`}
@@ -141,8 +130,7 @@ export const MuteAISwitch = (props: Props) => {
               <span class='text-sm'>Unmuted</span>
             </Show>
           </span>
-        </div>
-      </Show>
+        </div> */}
     </>
   )
 }

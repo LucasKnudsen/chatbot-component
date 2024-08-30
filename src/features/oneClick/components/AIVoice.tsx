@@ -36,7 +36,7 @@ export const AIVoice = () => {
 
         aiAudioRef.muted = isMuted()
         aiAudioRef.onerror = (e: any) => {
-          console.error('Error playing audio:', e)
+          logDev('Error playing audio:', e)
           setAudio64([])
         }
         aiAudioRef.onended = async () => {

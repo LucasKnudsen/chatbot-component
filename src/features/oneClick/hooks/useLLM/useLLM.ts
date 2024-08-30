@@ -127,7 +127,6 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                   case 'TOOL_CALLING':
                     switch (event.data.status) {
                       case 'processing':
-                        console.time('processingToolCall')
                         oneClickActions.setOneClickStore('indicationMessage', {
                           message: event.data.processing_message,
                           metadata: {
@@ -137,7 +136,6 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                         break
 
                       case 'completed':
-                        console.timeEnd('processingToolCall')
                         oneClickActions.setOneClickStore('indicationMessage', null)
                         break
 
@@ -172,7 +170,6 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
             if (parsedValue.text) {
               parsedValue.text.forEach((chunk) => {
-                logDev('Chunk', chunk)
                 // HTML tag cleaning
                 if (chunk.startsWith('<') || isProcessingHtmlTag) {
                   // Check for start HTML tags or if the stream is in the middle of streaming the HTML tag
