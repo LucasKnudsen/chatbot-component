@@ -89,6 +89,8 @@ export const useLLM = (props: LLMInput): LLMOutput => {
       })
 
       const reader = response.body!.pipeThrough(new TextDecoderStream()).getReader()
+
+      // Context variables for sentence building
       let botResponse = ''
       let sentenceBuffer = ''
       let htmlBuffer = ''
@@ -102,8 +104,10 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
         if (done) {
           if (sentenceBuffer) {
-            !isMuted() && handleTTS(sentenceBuffer)
-            logDev('Is done, fire last sentenceBuffer', sentenceBuffer)
+            if (!isMuted()) {
+              handleTTS(sentenceBuffer)
+            }
+            logDev('Is done, fire last sentence: ', sentenceBuffer)
 
             sentenceBuffer = ''
           }
@@ -208,12 +212,19 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                   return [...prev]
                 })
 
-                const issentenceBufferEnd = /[.!?]$/.test(chunk || '')
+                const isSentenceBufferEnd = /[.!?]$/.test(chunk || '')
+                const includesUrlWithQueryParams = /https?:\/\/[^\s]+/g.test(sentenceBuffer || '')
 
-                if (sentenceBuffer.length > 25 && issentenceBufferEnd) {
-                  !isMuted() && handleTTS(sentenceBuffer)
-                  logDev('Is done, fire sentenceBuffer', sentenceBuffer)
-                  sentenceBuffer = ''
+                if (sentenceBuffer.split(' ').length > 2 && isSentenceBufferEnd) {
+                  // This check is to prevent mistaking URLs with query params as the end of a sentence
+                  if (!includesUrlWithQueryParams) {
+                    if (!isMuted()) {
+                      handleTTS(sentenceBuffer)
+                    }
+
+                    logDev('Fire sentence: ', sentenceBuffer)
+                    sentenceBuffer = ''
+                  }
                 }
               })
             }
