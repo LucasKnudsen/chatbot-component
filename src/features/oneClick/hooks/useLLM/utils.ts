@@ -40,7 +40,7 @@ type EventObject =
 export type ParsedAIResponse = {
   text: string[]
   audio: string[]
-  event: EventObject
+  events: EventObject[]
 }
 const [incompleteChunk, setIncompleteChunk] = createSignal('')
 
@@ -83,13 +83,12 @@ export const parseLLMStreamResponse = (value: string): ParsedAIResponse => {
         }
 
         if (line.event) {
-          logDev('Event to be parsed:', line.event)
-          acc.event = line.event
+          acc.events.push(line.event)
         }
 
         return acc
       },
-      { audio: [], text: [] }
+      { audio: [], text: [], events: [] }
     )
 
   return parsedValue

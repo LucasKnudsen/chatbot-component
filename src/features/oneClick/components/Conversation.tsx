@@ -129,7 +129,9 @@ export const Conversation = (props: {
 
                   {/* Tool Call Loading */}
                   <Show when={oneClickStore.indicationMessage}>
-                    <TextLoading text={oneClickStore.indicationMessage?.message} />
+                    <div class='animate-fade-in'>
+                      <TextLoading text={oneClickStore.indicationMessage?.message} />
+                    </div>
                   </Show>
 
                   <div class='w-full h-2 ' />

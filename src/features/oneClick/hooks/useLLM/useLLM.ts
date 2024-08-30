@@ -1,5 +1,5 @@
 import { logDev } from '@/utils'
-import { Accessor, createEffect, createSignal, on, Setter } from 'solid-js'
+import { Accessor, createSignal, Setter } from 'solid-js'
 import { isMuted } from '../../components'
 import { handleTTS, initiateConversation, setTtsRequestsPending } from '../../services'
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
@@ -33,14 +33,14 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
   let controller: AbortController
 
-  createEffect(
-    on(
-      () => oneClickStore.activeConversationId,
-      () => {
-        setMessages([])
-      }
-    )
-  )
+  // createEffect(
+  //   on(
+  //     () => oneClickStore.activeConversationId,
+  //     () => {
+  //       setMessages([])
+  //     }
+  //   )
+  // )
 
   const cancelQuery = () => {
     if (loading()) {
@@ -114,59 +114,65 @@ export const useLLM = (props: LLMInput): LLMOutput => {
           try {
             const parsedValue = parseLLMStreamResponse(value)
 
-            if (parsedValue.event) {
-              const { event } = parsedValue
-              switch (event.type) {
-                case 'ROUTING':
-                  oneClickActions.setOneClickStore('activeAgent', event.data)
-                  break
+            if (parsedValue.events) {
+              const { events } = parsedValue
 
-                case 'TOOL_CALLING':
-                  switch (event.data.status) {
-                    case 'processing':
-                      console.time('processingToolCall')
-                      oneClickActions.setOneClickStore('indicationMessage', {
-                        message: event.data.processing_message,
-                        metadata: {
-                          toolName: event.data.name,
-                        },
-                      })
-                      break
+              events.forEach(async (event) => {
+                switch (event.type) {
+                  case 'ROUTING':
+                    logDev('Routing event', event.data)
+                    oneClickActions.setOneClickStore('activeAgent', event.data)
+                    break
 
-                    case 'completed':
-                      console.timeEnd('processingToolCall')
-                      oneClickActions.setOneClickStore('indicationMessage', null)
-                      break
+                  case 'TOOL_CALLING':
+                    switch (event.data.status) {
+                      case 'processing':
+                        console.time('processingToolCall')
+                        oneClickActions.setOneClickStore('indicationMessage', {
+                          message: event.data.processing_message,
+                          metadata: {
+                            toolName: event.data.name,
+                          },
+                        })
+                        break
 
-                    default:
-                      break
-                  }
-                  break
+                      case 'completed':
+                        console.timeEnd('processingToolCall')
+                        oneClickActions.setOneClickStore('indicationMessage', null)
+                        break
 
-                case 'CONVERSATION_COMPLETE':
-                  // Should initiate a new conversation
-                  oneClickActions.setOneClickStore('indicationMessage', {
-                    message: 'Conversation complete. Initiating new conversation...',
-                    metadata: {
-                      initiatingNewConversation: true,
-                    },
-                  })
+                      default:
+                        break
+                    }
+                    break
 
-                  const initiateData = await initiateConversation(oneClickStore.activeChannel!.id)
+                  case 'CONVERSATION_COMPLETE':
+                    // Should initiate a new conversation
+                    oneClickActions.setOneClickStore('indicationMessage', {
+                      message: 'Flow complete. Initiating new conversation...',
+                      metadata: {
+                        initiatingNewConversation: true,
+                      },
+                    })
 
-                  oneClickActions.resetConversation(initiateData.conversationId)
-                  oneClickActions.setOneClickStore('indicationMessage', null)
+                    const initiateData = await initiateConversation(oneClickStore.activeChannel!.id)
 
-                  break
+                    await new Promise((resolve) => setTimeout(resolve, 2500))
 
-                default:
-                  break
-              }
+                    oneClickActions.resetConversation(initiateData.conversationId)
+                    oneClickActions.setOneClickStore('indicationMessage', null)
+
+                    break
+
+                  default:
+                    break
+                }
+              })
             }
 
             if (parsedValue.text) {
               parsedValue.text.forEach((chunk) => {
-                console.log('chunk', chunk)
+                logDev('Chunk', chunk)
                 // HTML tag cleaning
                 if (chunk.startsWith('<') || isProcessingHtmlTag) {
                   // Check for start HTML tags or if the stream is in the middle of streaming the HTML tag
