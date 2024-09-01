@@ -109,6 +109,7 @@ export const BotOneClick = () => {
       {
         role: 'user',
         content: input,
+        conversationId: oneClickStore.activeConversationId || '',
       },
     ])
     submitNewMessage({
@@ -123,6 +124,7 @@ export const BotOneClick = () => {
         {
           role: 'user',
           content: '',
+          conversationId: oneClickStore.activeConversationId || '',
         },
       ])
       const transcribedText = await handleTranscription(audioBlob)
@@ -168,7 +170,14 @@ export const BotOneClick = () => {
     // Checks if the Bot should welcome the user
     if (shouldInitiateNextMessage()) {
       oneClickActions.setStatus(BotStatus.THINKING)
-      setMessages((prev) => [...prev, { content: '', role: 'assistant' }])
+      setMessages((prev) => [
+        ...prev,
+        {
+          content: '',
+          role: 'assistant',
+          conversationId: oneClickStore.activeConversationId || '',
+        },
+      ])
 
       const message = oneClickStore.shouldWelcome
         ? text().welcomeMessage

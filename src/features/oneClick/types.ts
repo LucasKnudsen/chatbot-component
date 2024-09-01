@@ -1,6 +1,7 @@
 export interface ChatMessage {
   content: string
   role: 'assistant' | 'user'
+  conversationId: string
 }
 
 export enum BotStatus {

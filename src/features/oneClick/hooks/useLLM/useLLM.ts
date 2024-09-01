@@ -75,7 +75,10 @@ export const useLLM = (props: LLMInput): LLMOutput => {
       overrideSystemInstruction: input.overrideSystemInstruction,
     })
 
-    setMessages((prev) => [...prev, { content: '', role: 'assistant' }])
+    setMessages((prev) => [
+      ...prev,
+      { content: '', role: 'assistant', conversationId: oneClickStore.activeConversationId || '' },
+    ])
 
     try {
       const response = await fetch(endpoint, {
