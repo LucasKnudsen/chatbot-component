@@ -131,7 +131,13 @@ export const Conversation = (props: {
                       <>
                         <ChatMessageRow {...message} />
 
-                        <Show when={isStartOfNewConversation && index !== 0}>
+                        <Show
+                          when={
+                            isStartOfNewConversation &&
+                            index !== 0 &&
+                            oneClickStore.activeChannel?.shouldUseFraiaAPI
+                          }
+                        >
                           <div class='flex justify-center items-center gap-2 my-4 opacity-80'>
                             <div class='w-1/2 h-0.5 border-t border-dashed border-[var(--primaryColor)] rounded-full' />
                             <div class='text-xs text-center font-semibold text-[var(--primaryColor)]'>
