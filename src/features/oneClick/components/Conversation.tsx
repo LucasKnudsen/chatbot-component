@@ -25,11 +25,6 @@ export const Conversation = (props: {
     setExpandConversation((prev) => !prev)
   }
 
-  console.log(
-    props.messages()[props.messages().length - 1]?.conversationId !==
-      oneClickStore.activeConversationId
-  )
-
   createEffect(
     on(
       () => props.messages()[props.messages().length - 1]?.content,
