@@ -1,3 +1,4 @@
+import { logErrorToServer } from '@/utils'
 import { NewSessionData, StreamingAvatarApi } from '@heygen/streaming-avatar'
 import { createStore } from 'solid-js/store'
 import { BotStatus } from '../types'
@@ -43,7 +44,12 @@ const handleSpeak = async (response: string) => {
     })
   } catch (error) {
     oneClickActions.setStatus(BotStatus.IDLE)
-    console.error('Error speaking:', error)
+    logErrorToServer({
+      error,
+      context: {
+        description: 'Error in HeyGen speak',
+      },
+    })
   }
 }
 

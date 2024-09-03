@@ -1,3 +1,5 @@
+import { Priority } from '@/graphql'
+import { logErrorToServer } from '@/utils'
 import { Accessor, createSignal, onCleanup } from 'solid-js'
 
 type CreateAudioRecorderReturn = {
@@ -79,7 +81,13 @@ export function createAudioRecorder(props?: {
           alert(error)
         })
     } catch (error) {
-      console.error('Error starting recording:', error)
+      logErrorToServer({
+        error,
+        priority: Priority.MEDIUM,
+        context: {
+          description: 'Error authenticating user',
+        },
+      })
       alert(error)
     }
   }

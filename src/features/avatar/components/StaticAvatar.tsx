@@ -4,6 +4,7 @@ import { transcribeAudio } from '@/features/knowledge-base'
 import { queryLLM } from '@/features/messages'
 import { useTheme } from '@/features/theme'
 import { speechSynthesis } from '@/services/speechSynthesis'
+import { logDev } from '@/utils'
 import { Accessor, Match, Switch, createEffect, createSignal } from 'solid-js'
 import { botStore } from '../../bot/stores'
 import { getAvatarStyle } from '../../bot/utils'
@@ -75,7 +76,7 @@ export const StaticAvatar = (props: StaticAvatarProps) => {
       // Gets the audio from the TTS
       await handleVoiceReply(textForTTS || '')
     } catch (error) {
-      console.error('Error handling voice to voice', error)
+      logDev('Error handling voice to voice', error)
     } finally {
       console.timeEnd('Bot answer')
       setIsThinking(false)
@@ -171,7 +172,7 @@ export const StaticAvatar = (props: StaticAvatarProps) => {
 
         await handleVoiceReply(textForTTS || '')
       } catch (error) {
-        console.error('Error handling voice to voice', error)
+        logDev('Error handling voice to voice', error)
       } finally {
         setIsThinking(false)
       }

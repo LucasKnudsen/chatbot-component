@@ -1138,6 +1138,63 @@ export const deleteAgent = /* GraphQL */ `mutation DeleteAgent(
   APITypes.DeleteAgentMutationVariables,
   APITypes.DeleteAgentMutation
 >;
+export const createClientErrorLog = /* GraphQL */ `mutation CreateClientErrorLog(
+  $input: CreateClientErrorLogInput!
+  $condition: ModelClientErrorLogConditionInput
+) {
+  createClientErrorLog(input: $input, condition: $condition) {
+    logId
+    priority
+    message
+    error
+    timestamp
+    updatedAt
+    context
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateClientErrorLogMutationVariables,
+  APITypes.CreateClientErrorLogMutation
+>;
+export const updateClientErrorLog = /* GraphQL */ `mutation UpdateClientErrorLog(
+  $input: UpdateClientErrorLogInput!
+  $condition: ModelClientErrorLogConditionInput
+) {
+  updateClientErrorLog(input: $input, condition: $condition) {
+    logId
+    priority
+    message
+    error
+    timestamp
+    updatedAt
+    context
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateClientErrorLogMutationVariables,
+  APITypes.UpdateClientErrorLogMutation
+>;
+export const deleteClientErrorLog = /* GraphQL */ `mutation DeleteClientErrorLog(
+  $input: DeleteClientErrorLogInput!
+  $condition: ModelClientErrorLogConditionInput
+) {
+  deleteClientErrorLog(input: $input, condition: $condition) {
+    logId
+    priority
+    message
+    error
+    timestamp
+    updatedAt
+    context
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteClientErrorLogMutationVariables,
+  APITypes.DeleteClientErrorLogMutation
+>;
 export const speechSynthesis = /* GraphQL */ `mutation SpeechSynthesis($input: SpeechSynthesisInput!) {
   speechSynthesis(input: $input) {
     audio

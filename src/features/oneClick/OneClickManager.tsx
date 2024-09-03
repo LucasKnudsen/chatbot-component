@@ -1,7 +1,8 @@
 import { Channel } from '@/graphql'
 import { createQuery } from '@/hooks'
 import LayoutDefault from '@/layouts/default'
-import { parseError } from '@/utils/errorHandlers'
+import { logErrorToServer } from '@/utils'
+import { parseError } from '@/utils/errors/errorHandlers'
 import { Match, Switch, createEffect, createSignal } from 'solid-js'
 import { SignOutButton } from '../authentication'
 import { FraiaLoading, fetchChannelDetails, fetchPublicChannels } from '../bot'
@@ -17,6 +18,8 @@ export const OneClickManager = () => {
   const channelsQuery = createQuery({
     queryFn: async () => {
       const { chatSpaceConfig } = configStore
+
+      // throw new Error('Not implemented')
 
       const [channel] = await Promise.all([
         new Promise<Channel>(async (resolve) => {
@@ -38,6 +41,9 @@ export const OneClickManager = () => {
       } else {
         oneClickActions.initOneClickStore(channel)
       }
+    },
+    onError: (error) => {
+      logErrorToServer({ error })
     },
   })
 

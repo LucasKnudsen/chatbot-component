@@ -1,4 +1,5 @@
-import { logDev } from '@/utils'
+import { Priority } from '@/graphql'
+import { logDev, logErrorToServer } from '@/utils'
 import { Accessor, createSignal, Setter } from 'solid-js'
 import { isMuted } from '../../components'
 import { handleTTS, initiateConversation, setTtsRequestsPending } from '../../services'
@@ -80,6 +81,8 @@ export const useLLM = (props: LLMInput): LLMOutput => {
       { content: '', role: 'assistant', conversationId: oneClickStore.activeConversationId || '' },
     ])
 
+    let botResponse = ''
+
     try {
       const response = await fetch(endpoint, {
         signal: controller?.signal,
@@ -94,7 +97,6 @@ export const useLLM = (props: LLMInput): LLMOutput => {
       const reader = response.body!.pipeThrough(new TextDecoderStream()).getReader()
 
       // Context variables for sentence building
-      let botResponse = ''
       let sentenceBuffer = ''
       let htmlBuffer = ''
       let isProcessingHtmlTag = false
@@ -114,6 +116,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
             sentenceBuffer = ''
           }
+
           return botResponse
         }
 
@@ -236,6 +239,14 @@ export const useLLM = (props: LLMInput): LLMOutput => {
               setAudio64((prev) => [...prev, ...parsedValue.audio!])
             }
           } catch (error) {
+            logErrorToServer({
+              error,
+              priority: Priority.MEDIUM,
+              context: {
+                description: 'Error parsing LLM stream response',
+                component: 'useLLM',
+              },
+            })
             oneClickActions.setStatus(BotStatus.IDLE)
           } finally {
             // isMuted() && oneClickActions.setStatus(BotStatus.IDLE)
@@ -245,7 +256,24 @@ export const useLLM = (props: LLMInput): LLMOutput => {
       }
     } catch (error) {
       oneClickActions.setStatus(BotStatus.IDLE)
+      logErrorToServer({
+        error,
+        priority: Priority.HIGH,
+        context: {
+          description: 'Error fetching LLM stream',
+          component: 'useLLM',
+        },
+      })
     } finally {
+      if (!botResponse) {
+        setMessages((prev) => {
+          prev[prev.length - 1].content =
+            'I am sorry, I am unable to process your request at the moment.'
+
+          return [...prev]
+        })
+      }
+
       if (isMuted()) {
         oneClickActions.setStatus(BotStatus.IDLE)
       }

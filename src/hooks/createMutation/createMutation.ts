@@ -1,3 +1,4 @@
+import { logErrorToServer } from '@/utils'
 import { Accessor, createSignal } from 'solid-js'
 
 // Define types for the mutation function and the hook return value
@@ -39,6 +40,7 @@ const createMutation = <T, R>(options: MutationOptions<T, R>): MutationState<T, 
     } catch (err) {
       setError(err)
       options.onError?.(err)
+      logErrorToServer({ error: err })
     } finally {
       setIsLoading(false)
     }

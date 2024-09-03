@@ -1079,6 +1079,60 @@ export const onDeleteAgent = /* GraphQL */ `subscription OnDeleteAgent($filter: 
   APITypes.OnDeleteAgentSubscriptionVariables,
   APITypes.OnDeleteAgentSubscription
 >;
+export const onCreateClientErrorLog = /* GraphQL */ `subscription OnCreateClientErrorLog(
+  $filter: ModelSubscriptionClientErrorLogFilterInput
+) {
+  onCreateClientErrorLog(filter: $filter) {
+    logId
+    priority
+    message
+    error
+    timestamp
+    updatedAt
+    context
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateClientErrorLogSubscriptionVariables,
+  APITypes.OnCreateClientErrorLogSubscription
+>;
+export const onUpdateClientErrorLog = /* GraphQL */ `subscription OnUpdateClientErrorLog(
+  $filter: ModelSubscriptionClientErrorLogFilterInput
+) {
+  onUpdateClientErrorLog(filter: $filter) {
+    logId
+    priority
+    message
+    error
+    timestamp
+    updatedAt
+    context
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateClientErrorLogSubscriptionVariables,
+  APITypes.OnUpdateClientErrorLogSubscription
+>;
+export const onDeleteClientErrorLog = /* GraphQL */ `subscription OnDeleteClientErrorLog(
+  $filter: ModelSubscriptionClientErrorLogFilterInput
+) {
+  onDeleteClientErrorLog(filter: $filter) {
+    logId
+    priority
+    message
+    error
+    timestamp
+    updatedAt
+    context
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteClientErrorLogSubscriptionVariables,
+  APITypes.OnDeleteClientErrorLogSubscription
+>;
 export const subscribe2channel = /* GraphQL */ `subscription Subscribe2channel($sessionId: String!) {
   subscribe2channel(sessionId: $sessionId) {
     sessionId

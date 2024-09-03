@@ -2,7 +2,13 @@ import { authStore } from '@/features/authentication'
 import { botStore, botStoreActions, createHistoryRecord } from '@/features/bot'
 import { suggestedPromptsStoreActions } from '@/features/prompt'
 import { Channel, SubscriptionEvent } from '@/graphql'
-import { SubscriptionHelper, clearAllSubscriptionsOfType, clearSubscription, logDev } from '@/utils'
+import {
+  SubscriptionHelper,
+  clearAllSubscriptionsOfType,
+  clearSubscription,
+  logDev,
+  logErrorToServer,
+} from '@/utils'
 import socketIOClient from 'socket.io-client'
 import {
   IncomingInput,
@@ -106,7 +112,12 @@ export const initiateChatConnection = async (channelId: string) => {
       onNext,
     })
   } catch (error) {
-    console.log(error)
+    logErrorToServer({
+      error,
+      context: {
+        description: 'Error initiating chat connection',
+      },
+    })
   }
 }
 

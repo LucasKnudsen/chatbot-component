@@ -1075,6 +1075,65 @@ export type DeleteAgentInput = {
   agentId: string,
 };
 
+export type CreateClientErrorLogInput = {
+  logId: string,
+  priority: Priority,
+  message: string,
+  error?: string | null,
+  timestamp?: string | null,
+  updatedAt?: string | null,
+  context?: string | null,
+};
+
+export enum Priority {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+}
+
+
+export type ModelClientErrorLogConditionInput = {
+  priority?: ModelPriorityInput | null,
+  message?: ModelStringInput | null,
+  error?: ModelStringInput | null,
+  timestamp?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  context?: ModelStringInput | null,
+  and?: Array< ModelClientErrorLogConditionInput | null > | null,
+  or?: Array< ModelClientErrorLogConditionInput | null > | null,
+  not?: ModelClientErrorLogConditionInput | null,
+};
+
+export type ModelPriorityInput = {
+  eq?: Priority | null,
+  ne?: Priority | null,
+};
+
+export type ClientErrorLog = {
+  __typename: "ClientErrorLog",
+  logId: string,
+  priority: Priority,
+  message: string,
+  error?: string | null,
+  timestamp: string,
+  updatedAt: string,
+  context?: string | null,
+};
+
+export type UpdateClientErrorLogInput = {
+  logId: string,
+  priority?: Priority | null,
+  message?: string | null,
+  error?: string | null,
+  timestamp?: string | null,
+  updatedAt?: string | null,
+  context?: string | null,
+};
+
+export type DeleteClientErrorLogInput = {
+  logId: string,
+};
+
 export type SpeechSynthesisInput = {
   text: string,
   knowledgeBaseId: string,
@@ -1502,6 +1561,26 @@ export type ModelAgentConnection = {
   nextToken?: string | null,
 };
 
+export type ModelClientErrorLogFilterInput = {
+  logId?: ModelIDInput | null,
+  priority?: ModelPriorityInput | null,
+  message?: ModelStringInput | null,
+  error?: ModelStringInput | null,
+  timestamp?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  context?: ModelStringInput | null,
+  id?: ModelIDInput | null,
+  and?: Array< ModelClientErrorLogFilterInput | null > | null,
+  or?: Array< ModelClientErrorLogFilterInput | null > | null,
+  not?: ModelClientErrorLogFilterInput | null,
+};
+
+export type ModelClientErrorLogConnection = {
+  __typename: "ModelClientErrorLogConnection",
+  items:  Array<ClientErrorLog | null >,
+  nextToken?: string | null,
+};
+
 export type FetchChannelsInput = {
   flow: FetchChannelsFlowType,
   channelId?: string | null,
@@ -1746,6 +1825,19 @@ export type ModelSubscriptionAgentFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionAgentFilterInput | null > | null,
   or?: Array< ModelSubscriptionAgentFilterInput | null > | null,
+};
+
+export type ModelSubscriptionClientErrorLogFilterInput = {
+  logId?: ModelSubscriptionIDInput | null,
+  priority?: ModelSubscriptionStringInput | null,
+  message?: ModelSubscriptionStringInput | null,
+  error?: ModelSubscriptionStringInput | null,
+  timestamp?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  context?: ModelSubscriptionStringInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  and?: Array< ModelSubscriptionClientErrorLogFilterInput | null > | null,
+  or?: Array< ModelSubscriptionClientErrorLogFilterInput | null > | null,
 };
 
 export type Publish2channelMutationVariables = {
@@ -2841,6 +2933,60 @@ export type DeleteAgentMutation = {
     isActive: boolean,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type CreateClientErrorLogMutationVariables = {
+  input: CreateClientErrorLogInput,
+  condition?: ModelClientErrorLogConditionInput | null,
+};
+
+export type CreateClientErrorLogMutation = {
+  createClientErrorLog?:  {
+    __typename: "ClientErrorLog",
+    logId: string,
+    priority: Priority,
+    message: string,
+    error?: string | null,
+    timestamp: string,
+    updatedAt: string,
+    context?: string | null,
+  } | null,
+};
+
+export type UpdateClientErrorLogMutationVariables = {
+  input: UpdateClientErrorLogInput,
+  condition?: ModelClientErrorLogConditionInput | null,
+};
+
+export type UpdateClientErrorLogMutation = {
+  updateClientErrorLog?:  {
+    __typename: "ClientErrorLog",
+    logId: string,
+    priority: Priority,
+    message: string,
+    error?: string | null,
+    timestamp: string,
+    updatedAt: string,
+    context?: string | null,
+  } | null,
+};
+
+export type DeleteClientErrorLogMutationVariables = {
+  input: DeleteClientErrorLogInput,
+  condition?: ModelClientErrorLogConditionInput | null,
+};
+
+export type DeleteClientErrorLogMutation = {
+  deleteClientErrorLog?:  {
+    __typename: "ClientErrorLog",
+    logId: string,
+    priority: Priority,
+    message: string,
+    error?: string | null,
+    timestamp: string,
+    updatedAt: string,
+    context?: string | null,
   } | null,
 };
 
@@ -4103,6 +4249,74 @@ export type ListAgentsQuery = {
   } | null,
 };
 
+export type GetClientErrorLogQueryVariables = {
+  logId: string,
+};
+
+export type GetClientErrorLogQuery = {
+  getClientErrorLog?:  {
+    __typename: "ClientErrorLog",
+    logId: string,
+    priority: Priority,
+    message: string,
+    error?: string | null,
+    timestamp: string,
+    updatedAt: string,
+    context?: string | null,
+  } | null,
+};
+
+export type ListClientErrorLogsQueryVariables = {
+  logId?: string | null,
+  filter?: ModelClientErrorLogFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListClientErrorLogsQuery = {
+  listClientErrorLogs?:  {
+    __typename: "ModelClientErrorLogConnection",
+    items:  Array< {
+      __typename: "ClientErrorLog",
+      logId: string,
+      priority: Priority,
+      message: string,
+      error?: string | null,
+      timestamp: string,
+      updatedAt: string,
+      context?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ClientErrorLogsByPriorityQueryVariables = {
+  priority: Priority,
+  timestamp?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelClientErrorLogFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ClientErrorLogsByPriorityQuery = {
+  clientErrorLogsByPriority?:  {
+    __typename: "ModelClientErrorLogConnection",
+    items:  Array< {
+      __typename: "ClientErrorLog",
+      logId: string,
+      priority: Priority,
+      message: string,
+      error?: string | null,
+      timestamp: string,
+      updatedAt: string,
+      context?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type FetchChannelsQueryVariables = {
   input: FetchChannelsInput,
 };
@@ -5204,6 +5418,57 @@ export type OnDeleteAgentSubscription = {
     isActive: boolean,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type OnCreateClientErrorLogSubscriptionVariables = {
+  filter?: ModelSubscriptionClientErrorLogFilterInput | null,
+};
+
+export type OnCreateClientErrorLogSubscription = {
+  onCreateClientErrorLog?:  {
+    __typename: "ClientErrorLog",
+    logId: string,
+    priority: Priority,
+    message: string,
+    error?: string | null,
+    timestamp: string,
+    updatedAt: string,
+    context?: string | null,
+  } | null,
+};
+
+export type OnUpdateClientErrorLogSubscriptionVariables = {
+  filter?: ModelSubscriptionClientErrorLogFilterInput | null,
+};
+
+export type OnUpdateClientErrorLogSubscription = {
+  onUpdateClientErrorLog?:  {
+    __typename: "ClientErrorLog",
+    logId: string,
+    priority: Priority,
+    message: string,
+    error?: string | null,
+    timestamp: string,
+    updatedAt: string,
+    context?: string | null,
+  } | null,
+};
+
+export type OnDeleteClientErrorLogSubscriptionVariables = {
+  filter?: ModelSubscriptionClientErrorLogFilterInput | null,
+};
+
+export type OnDeleteClientErrorLogSubscription = {
+  onDeleteClientErrorLog?:  {
+    __typename: "ClientErrorLog",
+    logId: string,
+    priority: Priority,
+    message: string,
+    error?: string | null,
+    timestamp: string,
+    updatedAt: string,
+    context?: string | null,
   } | null,
 };
 

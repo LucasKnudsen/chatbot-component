@@ -1,6 +1,7 @@
 import useHovered from './useHovered'
 
 export * from './dateHelpers'
+export * from './errors'
 export * from './subscriptionHelpers'
 export { useHovered }
 

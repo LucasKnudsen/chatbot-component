@@ -5,6 +5,7 @@ import { createAudioRecorder } from '@/features/avatar'
 import { botStore } from '@/features/bot'
 import { quickTranscribe, transcribeAudio } from '@/features/knowledge-base'
 import { useTheme } from '@/features/theme/hooks'
+import { logErrorToServer } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { useScrollOnResize } from '../hooks/useScrollOnResize'
 import { Textarea } from './ShortTextInput'
@@ -171,7 +172,12 @@ const AudioInput = (props: { onSubmit: (value: string) => void }) => {
 
       props.onSubmit(transcribedText)
     } catch (error) {
-      console.error('Uploading transcription error', error)
+      logErrorToServer({
+        error,
+        context: {
+          description: 'Uploading transcription error',
+        },
+      })
     }
 
     console.timeEnd('FULL')

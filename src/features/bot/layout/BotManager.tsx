@@ -13,7 +13,7 @@ import {
 import { createQuery } from '@/hooks'
 import LayoutDefault from '@/layouts/default'
 import { logDev } from '@/utils'
-import { parseError } from '@/utils/errorHandlers'
+import { parseError } from '@/utils/errors/errorHandlers'
 import { ChannelsOverview } from './ChannelsOverview'
 
 export const BotManager = () => {

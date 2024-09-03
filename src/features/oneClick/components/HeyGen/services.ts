@@ -1,5 +1,5 @@
+import { logErrorToServer } from '@/utils'
 import axios from 'axios'
-import toast from 'solid-toast'
 
 const HEYGEN_API_KEY = import.meta.env.VITE_HEYGEN_TOKEN
 
@@ -15,9 +15,11 @@ export async function fetchAccessToken() {
 
     return response.data?.data?.token || ''
   } catch (error) {
-    toast.error('Error fetching access token', {
-      position: 'top-center',
-      className: '!text-base',
+    logErrorToServer({
+      error,
+      context: {
+        description: '',
+      },
     })
     console.error('Error fetching access token:', error)
     return ''

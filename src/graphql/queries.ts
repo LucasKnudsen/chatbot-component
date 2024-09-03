@@ -1218,6 +1218,88 @@ export const listAgents = /* GraphQL */ `query ListAgents(
   APITypes.ListAgentsQueryVariables,
   APITypes.ListAgentsQuery
 >;
+export const getClientErrorLog = /* GraphQL */ `query GetClientErrorLog($logId: ID!) {
+  getClientErrorLog(logId: $logId) {
+    logId
+    priority
+    message
+    error
+    timestamp
+    updatedAt
+    context
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetClientErrorLogQueryVariables,
+  APITypes.GetClientErrorLogQuery
+>;
+export const listClientErrorLogs = /* GraphQL */ `query ListClientErrorLogs(
+  $logId: ID
+  $filter: ModelClientErrorLogFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listClientErrorLogs(
+    logId: $logId
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      logId
+      priority
+      message
+      error
+      timestamp
+      updatedAt
+      context
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListClientErrorLogsQueryVariables,
+  APITypes.ListClientErrorLogsQuery
+>;
+export const clientErrorLogsByPriority = /* GraphQL */ `query ClientErrorLogsByPriority(
+  $priority: Priority!
+  $timestamp: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelClientErrorLogFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  clientErrorLogsByPriority(
+    priority: $priority
+    timestamp: $timestamp
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      logId
+      priority
+      message
+      error
+      timestamp
+      updatedAt
+      context
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ClientErrorLogsByPriorityQueryVariables,
+  APITypes.ClientErrorLogsByPriorityQuery
+>;
 export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchChannelsInput!) {
   fetchChannels(input: $input) {
     id

@@ -1,4 +1,4 @@
-import { logDev } from '@/utils'
+import { logDev, logErrorToServer } from '@/utils'
 import { createEffect, createSignal, on } from 'solid-js'
 import { audio64, setAudio64 } from '../hooks'
 import { oneClickActions } from '../store/oneClickStore'
@@ -51,7 +51,12 @@ export const AIVoice = () => {
         }
       }
     } catch (error) {
-      alert(error)
+      logErrorToServer({
+        error,
+        context: {
+          description: 'Error playing audio in AIVoice',
+        },
+      })
     }
   }
 

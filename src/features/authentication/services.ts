@@ -1,5 +1,5 @@
 import { GetUserQuery, queries } from '@/graphql'
-import { logDev } from '@/utils'
+import { logDev, logErrorToServer } from '@/utils'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { API, Auth } from 'aws-amplify'
 import { authStoreActions } from './authStore'
@@ -17,7 +17,12 @@ export const authenticate = async (user?: any) => {
     authStoreActions.setAuthStore('authenticating', false)
     authStoreActions.setAuthStore('isAuthenticated', true)
   } catch (error) {
-    logDev(error)
+    logErrorToServer({
+      error,
+      context: {
+        description: 'Error authenticating user',
+      },
+    })
   }
 }
 
@@ -43,7 +48,12 @@ export const getUserDetails = async (id: string) => {
       data: data?.getUser,
     }
   } catch (error) {
-    logDev(error)
+    logErrorToServer({
+      error,
+      context: {
+        description: 'Error getting user details',
+      },
+    })
   }
 }
 

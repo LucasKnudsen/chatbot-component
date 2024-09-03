@@ -1,6 +1,7 @@
 import powerIcon from '@/assets/power-icon.svg'
 import { Button, MicrophoneIcon, NewChatIcon, Spinner, VolumeIcon } from '@/components'
 import { configStoreActions } from '@/features/portal-init'
+import { logErrorToServer } from '@/utils'
 import { createEffect, createMemo, createSignal, Match, onCleanup, Show, Switch } from 'solid-js'
 import { useTheme } from '../theme'
 import { initiateConversation } from './services'
@@ -87,6 +88,12 @@ const IdleStatus = () => {
 
       oneClickActions.resetConversation(initiateData.conversationId)
     } catch (error) {
+      logErrorToServer({
+        error,
+        context: {
+          description: 'Error initiating a new conversation',
+        },
+      })
     } finally {
       setLoading(false)
     }
