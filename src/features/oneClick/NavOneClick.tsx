@@ -83,16 +83,6 @@ const IdleStatus = () => {
 
   const initiateNewConversation = async () => {
     setLoading(true)
-    try {
-      throw new Error('Testing out error logging')
-    } catch (error) {
-      logErrorToServer({
-        error,
-        context: {
-          description: 'Error initiating a new conversation',
-        },
-      })
-    }
 
     try {
       const initiateData = await initiateConversation(oneClickStore.activeChannel!.id)
