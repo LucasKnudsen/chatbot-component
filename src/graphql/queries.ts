@@ -1224,6 +1224,7 @@ export const getClientErrorLog = /* GraphQL */ `query GetClientErrorLog($logId: 
     priority
     message
     error
+    stack
     timestamp
     updatedAt
     context
@@ -1253,6 +1254,7 @@ export const listClientErrorLogs = /* GraphQL */ `query ListClientErrorLogs(
       priority
       message
       error
+      stack
       timestamp
       updatedAt
       context
@@ -1287,6 +1289,7 @@ export const clientErrorLogsByPriority = /* GraphQL */ `query ClientErrorLogsByP
       priority
       message
       error
+      stack
       timestamp
       updatedAt
       context

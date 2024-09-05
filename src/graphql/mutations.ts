@@ -1147,6 +1147,7 @@ export const createClientErrorLog = /* GraphQL */ `mutation CreateClientErrorLog
     priority
     message
     error
+    stack
     timestamp
     updatedAt
     context
@@ -1166,6 +1167,7 @@ export const updateClientErrorLog = /* GraphQL */ `mutation UpdateClientErrorLog
     priority
     message
     error
+    stack
     timestamp
     updatedAt
     context
@@ -1185,6 +1187,7 @@ export const deleteClientErrorLog = /* GraphQL */ `mutation DeleteClientErrorLog
     priority
     message
     error
+    stack
     timestamp
     updatedAt
     context

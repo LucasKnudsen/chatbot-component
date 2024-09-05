@@ -25,7 +25,8 @@ export const logErrorToServer = async ({ error, priority, context }: ErrorLogInp
     logId,
     priority: priority || Priority.HIGH,
     message: parsedError.message || 'Something went wrong',
-    error: JSON.stringify(parsedError),
+    error: parsedError.toString(),
+    stack: parsedError.stack,
 
     context: JSON.stringify(context),
     timestamp: new Date().toISOString(),

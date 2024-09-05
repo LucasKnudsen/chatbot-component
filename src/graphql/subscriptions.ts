@@ -1087,6 +1087,7 @@ export const onCreateClientErrorLog = /* GraphQL */ `subscription OnCreateClient
     priority
     message
     error
+    stack
     timestamp
     updatedAt
     context
@@ -1105,6 +1106,7 @@ export const onUpdateClientErrorLog = /* GraphQL */ `subscription OnUpdateClient
     priority
     message
     error
+    stack
     timestamp
     updatedAt
     context
@@ -1123,6 +1125,7 @@ export const onDeleteClientErrorLog = /* GraphQL */ `subscription OnDeleteClient
     priority
     message
     error
+    stack
     timestamp
     updatedAt
     context
