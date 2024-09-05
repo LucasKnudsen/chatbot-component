@@ -2700,6 +2700,13 @@
   dependencies:
     "@solid-primitives/utils" "^6.2.3"
 
+"@solid-primitives/storage@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@solid-primitives/storage/-/storage-4.2.0.tgz#fc3553e7def85c72ac3b539b18e8b4d9aa5fc330"
+  integrity sha512-UoTtfa6CQ7B3SoEa8xwPt576bzkTJpevNYcfFfJbCArSh7ESXOAFKkYobLutNSiPI2NunpZDIfydMm+0jufyDw==
+  dependencies:
+    "@solid-primitives/utils" "^6.2.3"
+
 "@solid-primitives/transition-group@^1.0.2":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@solid-primitives/transition-group/-/transition-group-1.0.5.tgz#f1376c4648d78cb6a22a28d4094c94ab4d902346"

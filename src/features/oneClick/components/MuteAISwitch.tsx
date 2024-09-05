@@ -1,11 +1,16 @@
 import { MuteIcon, SoundIcon } from '@/components'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { createSignal, Show } from 'solid-js'
+import { makePersisted } from '@solid-primitives/storage'
+import { createSignal, Show, Signal } from 'solid-js'
 
-export const [isMuted, setIsMuted] = createSignal<boolean>(false)
+export const [isMuted, setIsMuted] = makePersisted(createSignal<boolean>(false), {
+  name: 'isMuted',
+}) as unknown as Signal<boolean>
+
 interface Props {
   onMute?: () => void
 }
+
 export const MuteAISwitch = (props: Props) => {
   const [parent] = createAutoAnimate()
 
