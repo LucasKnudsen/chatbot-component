@@ -1,8 +1,7 @@
-import { logDev } from '@/utils'
+import { logDev, logErrorToServer } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Show, createEffect, createMemo } from 'solid-js'
-import toast from 'solid-toast'
 import { createAudioRecorder } from '../avatar'
 import { useText } from '../text'
 import {
@@ -137,11 +136,13 @@ export const BotOneClick = () => {
         message: transcribedText,
       })
     } catch (error) {
-      oneClickActions.setStatus(BotStatus.IDLE)
-      toast.error('Error in voice to voice conversion', {
-        position: 'top-center',
-        className: '!text-base',
+      logErrorToServer({
+        error,
+        context: {
+          description: 'Error in voice to voice',
+        },
       })
+      oneClickActions.setStatus(BotStatus.IDLE)
     }
   }
 
