@@ -1,5 +1,4 @@
 import { MicrophoneIcon, MicrophoneOffIcon } from '@/components'
-import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { makePersisted } from '@solid-primitives/storage'
 import { createSignal, Signal } from 'solid-js'
 
@@ -12,8 +11,6 @@ interface Props {
 }
 
 export const MuteAISwitch = (props: Props) => {
-  const [parent] = createAutoAnimate()
-
   const handleOnClick = () => {
     setIsMuted((prev) => {
       props.onMute && props.onMute()
