@@ -56,7 +56,7 @@ export const InputOneClick = (props: { onSubmit: (input: string) => void }) => {
             color={
               oneClickStore.botStatus === BotStatus.IDLE
                 ? input() && theme().primaryColor
-                : theme().primaryAccent
+                : theme().textInputTextColor
             }
           />
         </button>

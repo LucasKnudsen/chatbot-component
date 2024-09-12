@@ -44,7 +44,7 @@ export const chatflows: Record<string, ChatConfig> = {
   test: {
     spaceId: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
-      autoOpen: true,
+      autoOpen: false,
       overrideLogo:
         'https://supertrends-medias.s3.eu-central-1.amazonaws.com/images/supertrends-logo.png',
     },
