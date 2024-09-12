@@ -3,5 +3,6 @@ export type ChatConfig = {
 
   config?: {
     autoOpen?: boolean
+    overrideLogo?: string
   }
 }

@@ -581,6 +581,7 @@ export type CreateChatSpaceInput = {
   isOneClick?: boolean | null,
   themeId?: string | null,
   defaultLanguage?: string | null,
+  settings?: ChatSpaceSettingsInput | null,
   theme?: ChatSpaceThemeInput | null,
   text?: ChatSpaceTextInput | null,
   admin: string,
@@ -592,6 +593,12 @@ export enum ChatMode {
   GUIDED_PROCESS = "GUIDED_PROCESS",
 }
 
+
+export type ChatSpaceSettingsInput = {
+  isSpeechBubbleEnabled?: boolean | null,
+  speechBubbleDelay?: number | null,
+  speechBubbleText?: string | null,
+};
 
 export type ChatSpaceThemeInput = {
   isDark?: boolean | null,
@@ -675,12 +682,20 @@ export type ChatSpace = {
   isOneClick?: boolean | null,
   themeId?: string | null,
   defaultLanguage?: string | null,
+  settings?: ChatSpaceSettings | null,
   theme?: ChatSpaceTheme | null,
   text?: ChatSpaceText | null,
   admin: string,
   database: string,
   createdAt: string,
   updatedAt: string,
+};
+
+export type ChatSpaceSettings = {
+  __typename: "ChatSpaceSettings",
+  isSpeechBubbleEnabled?: boolean | null,
+  speechBubbleDelay?: number | null,
+  speechBubbleText?: string | null,
 };
 
 export type ChatSpaceTheme = {
@@ -741,6 +756,7 @@ export type UpdateChatSpaceInput = {
   isOneClick?: boolean | null,
   themeId?: string | null,
   defaultLanguage?: string | null,
+  settings?: ChatSpaceSettingsInput | null,
   theme?: ChatSpaceThemeInput | null,
   text?: ChatSpaceTextInput | null,
   admin?: string | null,
@@ -2370,6 +2386,12 @@ export type CreateChatSpaceMutation = {
     isOneClick?: boolean | null,
     themeId?: string | null,
     defaultLanguage?: string | null,
+    settings?:  {
+      __typename: "ChatSpaceSettings",
+      isSpeechBubbleEnabled?: boolean | null,
+      speechBubbleDelay?: number | null,
+      speechBubbleText?: string | null,
+    } | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -2440,6 +2462,12 @@ export type UpdateChatSpaceMutation = {
     isOneClick?: boolean | null,
     themeId?: string | null,
     defaultLanguage?: string | null,
+    settings?:  {
+      __typename: "ChatSpaceSettings",
+      isSpeechBubbleEnabled?: boolean | null,
+      speechBubbleDelay?: number | null,
+      speechBubbleText?: string | null,
+    } | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -2510,6 +2538,12 @@ export type DeleteChatSpaceMutation = {
     isOneClick?: boolean | null,
     themeId?: string | null,
     defaultLanguage?: string | null,
+    settings?:  {
+      __typename: "ChatSpaceSettings",
+      isSpeechBubbleEnabled?: boolean | null,
+      speechBubbleDelay?: number | null,
+      speechBubbleText?: string | null,
+    } | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -3706,6 +3740,12 @@ export type GetChatSpaceQuery = {
     isOneClick?: boolean | null,
     themeId?: string | null,
     defaultLanguage?: string | null,
+    settings?:  {
+      __typename: "ChatSpaceSettings",
+      isSpeechBubbleEnabled?: boolean | null,
+      speechBubbleDelay?: number | null,
+      speechBubbleText?: string | null,
+    } | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -3779,6 +3819,12 @@ export type ListChatSpacesQuery = {
       isOneClick?: boolean | null,
       themeId?: string | null,
       defaultLanguage?: string | null,
+      settings?:  {
+        __typename: "ChatSpaceSettings",
+        isSpeechBubbleEnabled?: boolean | null,
+        speechBubbleDelay?: number | null,
+        speechBubbleText?: string | null,
+      } | null,
       theme?:  {
         __typename: "ChatSpaceTheme",
         isDark?: boolean | null,
@@ -3857,6 +3903,12 @@ export type ChatSpaceByHostIdQuery = {
       isOneClick?: boolean | null,
       themeId?: string | null,
       defaultLanguage?: string | null,
+      settings?:  {
+        __typename: "ChatSpaceSettings",
+        isSpeechBubbleEnabled?: boolean | null,
+        speechBubbleDelay?: number | null,
+        speechBubbleText?: string | null,
+      } | null,
       theme?:  {
         __typename: "ChatSpaceTheme",
         isDark?: boolean | null,
@@ -4875,6 +4927,12 @@ export type OnCreateChatSpaceSubscription = {
     isOneClick?: boolean | null,
     themeId?: string | null,
     defaultLanguage?: string | null,
+    settings?:  {
+      __typename: "ChatSpaceSettings",
+      isSpeechBubbleEnabled?: boolean | null,
+      speechBubbleDelay?: number | null,
+      speechBubbleText?: string | null,
+    } | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -4944,6 +5002,12 @@ export type OnUpdateChatSpaceSubscription = {
     isOneClick?: boolean | null,
     themeId?: string | null,
     defaultLanguage?: string | null,
+    settings?:  {
+      __typename: "ChatSpaceSettings",
+      isSpeechBubbleEnabled?: boolean | null,
+      speechBubbleDelay?: number | null,
+      speechBubbleText?: string | null,
+    } | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,
@@ -5013,6 +5077,12 @@ export type OnDeleteChatSpaceSubscription = {
     isOneClick?: boolean | null,
     themeId?: string | null,
     defaultLanguage?: string | null,
+    settings?:  {
+      __typename: "ChatSpaceSettings",
+      isSpeechBubbleEnabled?: boolean | null,
+      speechBubbleDelay?: number | null,
+      speechBubbleText?: string | null,
+    } | null,
     theme?:  {
       __typename: "ChatSpaceTheme",
       isDark?: boolean | null,

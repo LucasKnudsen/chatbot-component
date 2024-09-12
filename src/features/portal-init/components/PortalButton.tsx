@@ -1,4 +1,5 @@
 import { useTheme } from '@/features/theme/hooks'
+import { createSignal, onMount, Show } from 'solid-js'
 import { configStore, configStoreActions } from '..'
 
 export const PortalButton = () => {
@@ -40,12 +41,14 @@ export const PortalButton = () => {
             d='M18.601 8.39897C18.269 8.06702 17.7309 8.06702 17.3989 8.39897L12 13.7979L6.60099 8.39897C6.26904 8.06702 5.73086 8.06702 5.39891 8.39897C5.06696 8.73091 5.06696 9.2691 5.39891 9.60105L11.3989 15.601C11.7309 15.933 12.269 15.933 12.601 15.601L18.601 9.60105C18.9329 9.2691 18.9329 8.73091 18.601 8.39897Z'
           />
         </svg>
+
+        <Show when={configStore.chatSpaceConfig.settings?.isSpeechBubbleEnabled}>
+          <SpeechBubble />
+        </Show>
       </button>
     </Show>
   )
 }
-
-import { createSignal, onMount, Show } from 'solid-js'
 
 const CustomPortalButton = () => {
   const [imageSize, setImageSize] = createSignal<{ width: number } | null>(null)
@@ -79,5 +82,27 @@ const CustomPortalButton = () => {
         />
       )}
     </button>
+  )
+}
+
+const SpeechBubble = () => {
+  const [show, setShow] = createSignal(false)
+
+  const settings = configStore.chatSpaceConfig.settings
+
+  onMount(() => {
+    setTimeout(() => {
+      setShow(true)
+    }, settings?.speechBubbleDelay || 0)
+  })
+
+  // Start a delay to start the animation
+
+  return (
+    <Show when={show()}>
+      <div class='absolute origin-right top-0 left-0 w-24 rounded-md'>
+        <p class='text-xs '>{settings?.speechBubbleText}</p>
+      </div>
+    </Show>
   )
 }

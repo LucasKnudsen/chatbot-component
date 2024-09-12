@@ -77,26 +77,29 @@ export const Conversation = (props: {
       </Show>
 
       <Show when={props.messages().length > 0}>
-        <div class={`flex justify-start flex-col relative h-[91%] mt-[20px] border-t`}>
+        <div
+          class={`flex justify-start flex-col relative h-[91%] mt-[20px] border-t border-[var(--borderColor)]`}
+        >
           {/* Expand button  */}
 
-          <div class='absolute z-[100] top-[-15px] w-full justify-end'>
-            <button class={`flex justify-end gap-2 w-full `} onClick={handleExpandConversation}>
-              <div class='flex items-center gap-2 cursor-pointer hover:shadow-md rounded-full'>
-                <div class='border bg-white border-[var(--primaryColor)] flex items-center px-3 rounded-2xl gap-[15px]'>
-                  <span class='text-sm font-semibold text-[var(--primaryColor)]'>
-                    {expandConversation() ? 'Collapse' : 'Expand'}
-                  </span>
+          <div class='flex absolute z-[100] top-[-13px] w-full items-end justify-end'>
+            <button
+              class={`flex items-center gap-2 cursor-pointer hover:shadow-md rounded-full justify-end `}
+              onClick={handleExpandConversation}
+            >
+              <div class='border bg-[var(--backgroundColor)] border-[var(--primaryColor)] flex items-center px-3 rounded-2xl gap-[15px]'>
+                <span class='text-sm font-semibold text-[var(--primaryColor)]'>
+                  {expandConversation() ? 'Collapse' : 'Expand'}
+                </span>
 
-                  <ExpandIcon
-                    width={10}
-                    height={10}
-                    color={theme().primaryColor}
-                    style={{
-                      transform: expandConversation() ? 'rotate(180deg)' : 'rotate(0deg)',
-                    }}
-                  />
-                </div>
+                <ExpandIcon
+                  width={10}
+                  height={10}
+                  color={theme().primaryColor}
+                  style={{
+                    transform: expandConversation() ? 'rotate(180deg)' : 'rotate(0deg)',
+                  }}
+                />
               </div>
             </button>
           </div>
@@ -108,8 +111,8 @@ export const Conversation = (props: {
               'scrollbar-width': 'none',
             }}
           >
-            <div class='absolute left-0 w-full h-8 bg-gradient-to-b from-white to-transparent pointer-events-none z-10' />
-            <div class='absolute left-0 bottom-0 w-full h-6 bg-gradient-to-t from-white to-transparent pointer-events-none z-10' />
+            <div class='absolute left-0 w-full h-8 bg-gradient-to-b from-[var(--backgroundColor)] to-transparent pointer-events-none z-10' />
+            <div class='absolute left-0 bottom-0 w-full h-6 bg-gradient-to-t from-[var(--backgroundColor)] to-transparent pointer-events-none z-10' />
 
             <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED}>
               <div id='conversations' class={`py-4  flex flex-col w-full h-auto gap-2 `}>
@@ -178,33 +181,30 @@ export const Conversation = (props: {
 
 const StarterInformation = (props: { shouldInitiateNextMessage: Accessor<boolean> }) => {
   return (
-    <div class='mt-[20px] flex flex-col text-[var(--primaryColor)] justify-center gap-2 opacity-90 '>
+    <div class='mt-[20px] flex flex-col  justify-center gap-2 opacity-90 '>
       <div class='text-md font-semibold'>Push to Talk:</div>
       <Switch>
         <Match when={props.shouldInitiateNextMessage()}>
-          <div class='text-sm text-[var(--primaryColor)]'>
-            - Press <span class='font-semibold'>"START"</span> to initiate conversation.
+          <div class='text-sm '>
+            - Press <span class='font-semibold text-[var(--primaryColor)]'>"START"</span> to
+            initiate conversation.
           </div>
         </Match>
       </Switch>
-      <div class='text-sm text-[var(--primaryColor)]'>
+      <div class='text-sm '>
         - Press{' '}
-        <span class='font-semibold'>
-          <MicrophoneIcon
-            class='text-[var(--primaryColor)] inline'
-            height={16}
-            width={16}
-            stroke-width={2.2}
-          />
+        <span class='font-semibold text-[var(--primaryColor)]'>
+          <MicrophoneIcon class=' inline' height={16} width={16} stroke-width={2.2} />
         </span>{' '}
         to start talking.
       </div>
 
-      <div class='text-sm text-[var(--primaryColor)]'>
-        - Press <span class='font-semibold'> ⏹️ </span> when you are done speaking.
+      <div class='text-sm '>
+        - Press <span class='font-semibold text-[var(--primaryColor)]'> ⏹️ </span> when you are done
+        speaking.
       </div>
-      <div class='text-sm text-[var(--primaryColor)]'>
-        - Press <span class='font-semibold'>"STOP"</span> to interrupt.
+      <div class='text-sm '>
+        - Press <span class='font-semibold text-[var(--primaryColor)]'>"STOP"</span> to interrupt.
       </div>
     </div>
   )
@@ -232,7 +232,7 @@ const HumanMessage = (props: ChatMessage) => {
         opacity: oneClickStore.activeConversationId !== props.conversationId ? 0.5 : 1,
       }}
     >
-      <div class='flex justify-center items-center px-4 py-2 rounded-lg bg-[var(--surfaceSoftBackground)] shadow-sm'>
+      <div class='flex justify-center items-center px-4 py-2 rounded-lg bg-[var(--surfaceSoftBackground)] shadow-sm text-[var(--textColor)]'>
         <Show when={!props.content && oneClickStore.botStatus === BotStatus.THINKING}>
           <div>
             <Spinner size={18} />
@@ -288,7 +288,7 @@ const AssistantMessage = (props: ChatMessage) => {
           )
         }
       >
-        <div ref={textEl} class='prose' />
+        <div ref={textEl} class='prose text-[var(--textColor)]' />
       </Show>
     </div>
   )

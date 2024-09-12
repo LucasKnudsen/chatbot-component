@@ -627,6 +627,12 @@ export const getChatSpace = /* GraphQL */ `query GetChatSpace($id: ID!) {
     isOneClick
     themeId
     defaultLanguage
+    settings {
+      isSpeechBubbleEnabled
+      speechBubbleDelay
+      speechBubbleText
+      __typename
+    }
     theme {
       isDark
       navbarLogoUrl
@@ -700,6 +706,12 @@ export const listChatSpaces = /* GraphQL */ `query ListChatSpaces(
       isOneClick
       themeId
       defaultLanguage
+      settings {
+        isSpeechBubbleEnabled
+        speechBubbleDelay
+        speechBubbleText
+        __typename
+      }
       theme {
         isDark
         navbarLogoUrl
@@ -786,6 +798,12 @@ export const chatSpaceByHostId = /* GraphQL */ `query ChatSpaceByHostId(
       isOneClick
       themeId
       defaultLanguage
+      settings {
+        isSpeechBubbleEnabled
+        speechBubbleDelay
+        speechBubbleText
+        __typename
+      }
       theme {
         isDark
         navbarLogoUrl

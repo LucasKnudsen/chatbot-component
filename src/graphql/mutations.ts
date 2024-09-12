@@ -545,6 +545,12 @@ export const createChatSpace = /* GraphQL */ `mutation CreateChatSpace(
     isOneClick
     themeId
     defaultLanguage
+    settings {
+      isSpeechBubbleEnabled
+      speechBubbleDelay
+      speechBubbleText
+      __typename
+    }
     theme {
       isDark
       navbarLogoUrl
@@ -616,6 +622,12 @@ export const updateChatSpace = /* GraphQL */ `mutation UpdateChatSpace(
     isOneClick
     themeId
     defaultLanguage
+    settings {
+      isSpeechBubbleEnabled
+      speechBubbleDelay
+      speechBubbleText
+      __typename
+    }
     theme {
       isDark
       navbarLogoUrl
@@ -687,6 +699,12 @@ export const deleteChatSpace = /* GraphQL */ `mutation DeleteChatSpace(
     isOneClick
     themeId
     defaultLanguage
+    settings {
+      isSpeechBubbleEnabled
+      speechBubbleDelay
+      speechBubbleText
+      __typename
+    }
     theme {
       isDark
       navbarLogoUrl

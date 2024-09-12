@@ -12,7 +12,7 @@ import { NavOneClick } from './NavOneClick'
 import { initiateConversation } from './services'
 import { oneClickActions } from './store/oneClickStore'
 
-export const OneClickManager = () => {
+export const OneClickManager = (props: { overrideLogo?: string }) => {
   const [loading, setLoading] = createSignal<boolean>(true)
 
   const channelsQuery = createQuery({
@@ -62,7 +62,7 @@ export const OneClickManager = () => {
 
         <Switch>
           <Match when={loading()}>
-            <FraiaLoading isLoading={channelsQuery.isLoading()} />
+            <FraiaLoading isLoading={channelsQuery.isLoading()} overrideLogo={props.overrideLogo} />
           </Match>
           {/* Simplistic error handling */}
           <Match when={channelsQuery.error()}>

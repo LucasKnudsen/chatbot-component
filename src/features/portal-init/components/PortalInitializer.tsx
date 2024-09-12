@@ -32,10 +32,7 @@ export const PortalInitializer = (props: ChatConfig) => {
 
       configStoreActions.setConfigStore('chatSpaceConfig', result)
 
-      initTheme(
-        chatSpaceConfig.isOneClick ? 'oneClick' : (themeId as keyof typeof themes),
-        import.meta.env.DEV ? null : theme
-      )
+      initTheme(chatSpaceConfig.isOneClick ? 'oneClick' : (themeId as keyof typeof themes), theme)
       initText(text, defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
       initLanguage(defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
 
@@ -50,7 +47,7 @@ export const PortalInitializer = (props: ChatConfig) => {
     <>
       {/* Shows loading while the config is being fetched and autoOpen is true as to not just show a blank screen */}
       <Show when={configQuery.isLoading() && props.config?.autoOpen}>
-        <FraiaLoading />
+        <FraiaLoading overrideLogo={props.config?.overrideLogo} />
       </Show>
 
       <Show when={configQuery.data()}>
@@ -67,7 +64,7 @@ export const PortalInitializer = (props: ChatConfig) => {
                 data-testid='PortalInitializer'
                 class='fixed top-0 left-0 flex flex-nowrap h-full w-full justify-center overflow-hidden animate-fade-in '
               >
-                <OneClickManager />
+                <OneClickManager overrideLogo={props.config?.overrideLogo} />
               </div>
             </AuthProvider>
           </OneClickContainer>

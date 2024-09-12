@@ -50,6 +50,7 @@ export const NavOneClick = () => {
               onClick={configStoreActions.toggleBot}
               padding='6px'
               class='!absolute -top-0.5 right-0 border border-[var(--onPrimary)] animate-fade-in'
+              style={{ 'outline-color': 'transparent' }}
             >
               <img class='m-auto h-3' src={powerIcon} />
             </Button>
@@ -103,11 +104,17 @@ const IdleStatus = () => {
   return (
     <>
       <div class='absolute left-1 -top-0.5'>
-        <Button style={{ background: 'transparent' }} onClick={initiateNewConversation}>
+        <Button
+          style={{ background: 'transparent', 'outline-color': 'transparent' }}
+          onClick={initiateNewConversation}
+        >
           {loading() ? (
             <Spinner size={20} />
           ) : (
-            <NewChatIcon class=' text-[var(--primaryColor)] w-5 h-auto ' stroke-width={1.5} />
+            <NewChatIcon
+              class=' text-[var(--primaryColor)] w-6 h-auto -mt-0.5'
+              stroke-width={1.8}
+            />
           )}
         </Button>
       </div>

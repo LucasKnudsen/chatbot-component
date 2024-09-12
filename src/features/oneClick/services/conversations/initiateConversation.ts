@@ -17,7 +17,7 @@ const COLLECTION_ID = FraiaDBCollections.CONVERSATIONS
 interface InitiateConversationPayload {
   user_id: string
   knowledge_base_id: string
-  greeting_message: string
+  greeting_message?: string
 }
 
 export interface InitiateConversationResponse {

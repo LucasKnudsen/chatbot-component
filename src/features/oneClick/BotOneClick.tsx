@@ -220,7 +220,7 @@ export const BotOneClick = () => {
         <div
           class={`relative w-full flex flex-col h-1/2  items-center overflow-hidden ${
             heyGenStore.isExpandAvatar ? '' : 'px-5'
-          } bg-white`}
+          } `}
           style={{
             height: heyGenStore.isExpandAvatar ? '100%' : '50%',
             'max-width': handelHeyGenMaxWidth(),
