@@ -52,7 +52,12 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   },
 
   get botDisplayName() {
-    return this.activeAgent?.display_name || this.initialAgent?.display_name || this.activeAgent?.display_name || 'Assistant'
+    return (
+      this.activeAgent?.display_name ||
+      this.initialAgent?.display_name ||
+      this.activeChannel?.botDisplayName ||
+      'Assistant'
+    )
   },
 })
 
