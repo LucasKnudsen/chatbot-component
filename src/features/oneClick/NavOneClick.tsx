@@ -103,7 +103,7 @@ const IdleStatus = () => {
 
   return (
     <>
-      <div class='absolute left-1 -top-0.5'>
+      <div class='absolute left-0.5 -top-0.5'>
         <Button
           style={{ background: 'transparent', 'outline-color': 'transparent' }}
           onClick={initiateNewConversation}
