@@ -25,6 +25,7 @@ export type RoutingStreamObject = {
   avatar?: string | null
   voice_mode?: VoiceMode | null
   voice_id?: string | null
+  display_name?: string | null
 }
 
 export type ConversationCompleteStreamObject = {

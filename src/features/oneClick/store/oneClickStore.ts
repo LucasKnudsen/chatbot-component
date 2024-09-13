@@ -52,7 +52,7 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   },
 
   get botDisplayName() {
-    return '' // TODO
+    return this.activeAgent?.display_name || this.initialAgent?.display_name || this.activeAgent?.display_name || 'Assistant'
   },
 })
 
