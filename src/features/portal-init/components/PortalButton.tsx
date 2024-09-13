@@ -113,7 +113,7 @@ const SpeechBubble = () => {
 
   return (
     <Show when={show() && !hasBeenOpened()}>
-      <div class='relative z-10 animate-fade-in-slow origin-right -top-7 right-8 rounded-md bg-[var(--backgroundColor)] text-[var(--textColor)] py-2 px-4 shadow-2xl'>
+      <div class='relative z-10 animate-fade-in-slow origin-right -top-7 right-10 rounded-md bg-[var(--backgroundColor)] text-[var(--textColor)] py-2 px-4 shadow-2xl'>
         <p class='text-sm whitespace-pre-line text-left '>{settings?.speechBubbleText}</p>
       </div>
     </Show>
