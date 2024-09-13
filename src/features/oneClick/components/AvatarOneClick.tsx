@@ -83,7 +83,7 @@ const ImageAvatar = (props: { initialUrl: string }) => {
   )
 
   return (
-    <Fade>
+    <Fade duration={600}>
       {showAvatar() && <img class='object-cover h-full w-full' src={url()} alt='avatarOneClick' />}
     </Fade>
   )
