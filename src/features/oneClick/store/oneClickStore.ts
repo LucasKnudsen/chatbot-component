@@ -21,6 +21,7 @@ export type OneClickStore = {
   indicationMessage: IndicationMessage | null
   readonly shouldWelcome: boolean
   readonly isHeyGenMode: boolean
+  readonly botDisplayName: string
 }
 
 const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
@@ -48,6 +49,10 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   },
   get isHeyGenMode() {
     return this.activeAgent?.voice_mode === VoiceMode.HEYGEN
+  },
+
+  get botDisplayName() {
+    return '' // TODO
   },
 })
 

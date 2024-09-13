@@ -274,9 +274,7 @@ const AssistantMessage = (props: ChatMessage) => {
     >
       <div class='flex items-center gap-2 -ml-[1.5px]'>
         <SparklesIcon color={theme().primaryColor} />
-        <div class='font-semibold'>
-          {oneClickStore.activeChannel?.botDisplayName || 'Assistant'}
-        </div>
+        <div class='font-semibold'>{props.displayName}</div>
       </div>
       <Show
         when={props.content}

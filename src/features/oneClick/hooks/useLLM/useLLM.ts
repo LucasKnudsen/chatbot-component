@@ -78,7 +78,12 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
     setMessages((prev) => [
       ...prev,
-      { content: '', role: 'assistant', conversationId: oneClickStore.activeConversationId || '' },
+      {
+        content: '',
+        role: 'assistant',
+        conversationId: oneClickStore.activeConversationId || '',
+        displayName: oneClickStore.botDisplayName,
+      },
     ])
 
     let botResponse = ''
@@ -132,6 +137,12 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                   case 'ROUTING':
                     logDev('Routing event', event.data)
                     oneClickActions.setOneClickStore('activeAgent', event.data)
+                    // Potentially, we have to update the displayName field of the latest message
+                    setMessages((prev) => {
+                      prev[prev.length - 1].displayName = oneClickStore.botDisplayName
+
+                      return [...prev]
+                    })
                     break
 
                   case 'TOOL_CALLING':
