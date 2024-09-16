@@ -43,7 +43,7 @@ export const InputOneClick = (props: { onSubmit: (input: string) => void }) => {
           value={input()}
           onChange={(e) => setInput(e.currentTarget.value)}
           onKeyDown={handleKeyDown}
-          class='grow h-[45px] text-[16px]'
+          class='grow h-[45px] text-[16px] text-[var(--textInputTextColor)]'
           placeholder='Message'
         />
 
@@ -56,7 +56,7 @@ export const InputOneClick = (props: { onSubmit: (input: string) => void }) => {
             color={
               oneClickStore.botStatus === BotStatus.IDLE
                 ? input() && theme().primaryColor
-                : theme().textInputTextColor
+                : theme().surfaceBackground
             }
           />
         </button>

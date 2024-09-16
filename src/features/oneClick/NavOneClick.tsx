@@ -1,5 +1,4 @@
-import powerIcon from '@/assets/power-icon.svg'
-import { Button, MicrophoneIcon, NewChatIcon, Spinner, VolumeIcon } from '@/components'
+import { Button, MicrophoneIcon, NewChatIcon, PowerIcon, Spinner, VolumeIcon } from '@/components'
 import { configStoreActions } from '@/features/portal-init'
 import { logErrorToServer } from '@/utils'
 import { createEffect, createMemo, createSignal, Match, onCleanup, Show, Switch } from 'solid-js'
@@ -52,7 +51,7 @@ export const NavOneClick = () => {
               class='!absolute -top-0.5 right-0 border border-[var(--onPrimary)] animate-fade-in'
               style={{ 'outline-color': 'transparent' }}
             >
-              <img class='m-auto h-3' src={powerIcon} />
+              <PowerIcon class='text-[var(--onPrimary)]' />
             </Button>
           </div>
         </div>
