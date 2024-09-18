@@ -11,4 +11,5 @@ export enum BotStatus {
   LISTENING = 'listening',
   THINKING = 'thinking',
   ANSWERING = 'answering',
+  INITIATING = 'initiating',
 }

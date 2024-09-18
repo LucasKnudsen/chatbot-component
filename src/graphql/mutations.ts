@@ -158,6 +158,8 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
     description
     shouldUseFraiaAPI
     botDisplayName
+    welcomeText
+    welcomeBackText
     initialPrompts {
       display
       prompt
@@ -205,6 +207,8 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
     description
     shouldUseFraiaAPI
     botDisplayName
+    welcomeText
+    welcomeBackText
     initialPrompts {
       display
       prompt
@@ -252,6 +256,8 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
     description
     shouldUseFraiaAPI
     botDisplayName
+    welcomeText
+    welcomeBackText
     initialPrompts {
       display
       prompt
@@ -1240,6 +1246,8 @@ export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: Han
     description
     shouldUseFraiaAPI
     botDisplayName
+    welcomeText
+    welcomeBackText
     initialPrompts {
       display
       prompt

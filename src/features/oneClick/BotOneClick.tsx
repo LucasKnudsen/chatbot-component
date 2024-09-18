@@ -1,9 +1,9 @@
 import { logDev, logErrorToServer } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { createAutoAnimate } from '@formkit/auto-animate/solid'
-import { Show, createEffect, createMemo } from 'solid-js'
+import { Show, createEffect, on } from 'solid-js'
 import { createAudioRecorder } from '../avatar'
-import { useText } from '../text'
+import { configStore } from '../portal-init'
 import {
   AvatarOneClick,
   InputOneClick,
@@ -22,7 +22,6 @@ import { BotStatus } from './types'
 export const BotOneClick = () => {
   const [TopContainerParent] = createAutoAnimate()
   const device = useMediaQuery()
-  const { text } = useText()
 
   const audioRecorder = createAudioRecorder({
     onStop(audioBlob) {
@@ -32,10 +31,6 @@ export const BotOneClick = () => {
 
   const { messages, setMessages, submitNewMessage, cancelQuery } = useLLM({
     initialMessages: [],
-  })
-
-  const shouldInitiateNextMessage = createMemo(() => {
-    return Boolean(text().welcomeMessage && messages().length === 0)
   })
 
   const handleTriggerAudio = () => {
@@ -146,20 +141,6 @@ export const BotOneClick = () => {
     }
   }
 
-  createEffect(() => {
-    setTimeout(() => {
-      oneClickActions.setStatus(BotStatus.IDLE)
-    }, 100)
-  })
-
-  // createEffect(() => {
-  //   if (!isMuted() && messages().length > 0 && !loading()) {
-  //     const lastMessage = messages()[messages().length - 1]
-  //     if (lastMessage.role === 'assistant') {
-  //       setBotLastResponse(lastMessage.content)
-  //     }
-  //   }
-  // })
   const handelHeyGenMaxWidth = () => {
     if (!heyGenStore.isExpandAvatar) return 'unset'
     if (device() === 'tablet') return '95%'
@@ -167,10 +148,20 @@ export const BotOneClick = () => {
     return '100%'
   }
 
-  const onInteractionButtonClick = async () => {
-    // Checks if the Bot should welcome the user
-    if (shouldInitiateNextMessage()) {
-      oneClickActions.setStatus(BotStatus.THINKING)
+  const handleInitiateConversation = async () => {
+    if (messages().length > 0) return
+
+    const message = oneClickStore.getChatInitiationMessage
+
+    if (!message) return
+
+    oneClickActions.setStatus(BotStatus.INITIATING)
+
+    // Sends the text to the TTS service
+    !isMuted() && (await handleTTS(message))
+
+    // Inject words from welcome message to the conversation as if they were streamed
+    setTimeout(async () => {
       setMessages((prev) => [
         ...prev,
         {
@@ -180,29 +171,32 @@ export const BotOneClick = () => {
         },
       ])
 
-      const message = oneClickStore.shouldWelcome
-        ? text().welcomeMessage
-        : text().returnWelcomeMessage || text().welcomeMessage
+      const characters = message.split('')
 
-      await handleTTS(message)
-      // Inject words from welcome message to the conversation as if they were streamed
-      const words = message.split(' ')
-      oneClickActions.setStatus(BotStatus.ANSWERING)
-
-      for (const word of words) {
+      for (const char of characters) {
         setMessages((prev) => {
-          prev[prev.length - 1].content += word + ' '
+          prev[prev.length - 1].content += char
 
           return [...prev]
         })
-        await new Promise((resolve) => setTimeout(resolve, 70)) // 100ms delay between words
+        await new Promise((resolve) => setTimeout(resolve, 20)) // 100ms delay between words
       }
-    } else {
-      handleButtonRecord()
-    }
 
-    localStorage.setItem('lastStarted', new Date().toISOString())
+      // If the user is muted, we need to manually set the bot status to idle
+      isMuted() && oneClickActions.setStatus(BotStatus.IDLE)
+
+      localStorage.setItem('lastStarted', new Date().toISOString())
+    }, 1000)
   }
+
+  createEffect(
+    on(
+      () => configStore.isBotOpened,
+      () => {
+        configStore.isBotOpened && handleInitiateConversation()
+      }
+    )
+  )
 
   return (
     <>
@@ -248,10 +242,7 @@ export const BotOneClick = () => {
               bottom: heyGenStore.isExpandAvatar ? '15vh' : 'unset',
             }}
           >
-            <InteractionButton
-              onStart={onInteractionButtonClick}
-              shouldInitiateNextMessage={shouldInitiateNextMessage}
-            />
+            <InteractionButton onStart={handleButtonRecord} />
           </div>
         </div>
         <Show when={!heyGenStore.isExpandAvatar}>
@@ -273,10 +264,7 @@ export const BotOneClick = () => {
                 'scrollbar-width': 'none',
               }}
             >
-              <Conversation
-                messages={messages}
-                shouldInitiateNextMessage={shouldInitiateNextMessage}
-              />
+              <Conversation messages={messages} />
             </div>
 
             <InputOneClick onSubmit={handleNewMessage} />

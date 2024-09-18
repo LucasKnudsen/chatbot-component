@@ -143,6 +143,8 @@ export const getChannel = /* GraphQL */ `query GetChannel($id: ID!) {
     description
     shouldUseFraiaAPI
     botDisplayName
+    welcomeText
+    welcomeBackText
     initialPrompts {
       display
       prompt
@@ -192,6 +194,8 @@ export const listChannels = /* GraphQL */ `query ListChannels(
       description
       shouldUseFraiaAPI
       botDisplayName
+      welcomeText
+      welcomeBackText
       initialPrompts {
         display
         prompt
@@ -252,6 +256,8 @@ export const channelsByChatSpaceId = /* GraphQL */ `query ChannelsByChatSpaceId(
       description
       shouldUseFraiaAPI
       botDisplayName
+      welcomeText
+      welcomeBackText
       initialPrompts {
         display
         prompt
@@ -1334,6 +1340,8 @@ export const fetchChannels = /* GraphQL */ `query FetchChannels($input: FetchCha
     description
     shouldUseFraiaAPI
     botDisplayName
+    welcomeText
+    welcomeBackText
     initialPrompts {
       display
       prompt

@@ -135,6 +135,8 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
     description
     shouldUseFraiaAPI
     botDisplayName
+    welcomeText
+    welcomeBackText
     initialPrompts {
       display
       prompt
@@ -182,6 +184,8 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
     description
     shouldUseFraiaAPI
     botDisplayName
+    welcomeText
+    welcomeBackText
     initialPrompts {
       display
       prompt
@@ -229,6 +233,8 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
     description
     shouldUseFraiaAPI
     botDisplayName
+    welcomeText
+    welcomeBackText
     initialPrompts {
       display
       prompt

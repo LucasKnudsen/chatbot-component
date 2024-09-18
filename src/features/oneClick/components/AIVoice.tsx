@@ -1,7 +1,7 @@
 import { logDev, logErrorToServer } from '@/utils'
 import { createEffect, createSignal, on } from 'solid-js'
 import { audio64, setAudio64 } from '../hooks'
-import { oneClickActions } from '../store/oneClickStore'
+import { oneClickActions, oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 import { isMuted } from './MuteAISwitch'
 
@@ -12,7 +12,8 @@ export const AIVoice = () => {
     on(audio64, () => {
       if (audio64().length === 0) {
         logDev('Queue is empty, cleared audio player')
-        oneClickActions.setStatus(BotStatus.IDLE)
+        oneClickStore.botStatus !== BotStatus.INITIATING &&
+          oneClickActions.setStatus(BotStatus.IDLE)
         setIsPlayingQueue(false)
       }
 

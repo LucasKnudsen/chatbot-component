@@ -29,7 +29,7 @@ export const NavOneClick = () => {
         return <AnsweringStatus />
 
       default:
-        return
+        return <IdleStatus />
     }
   }, [oneClickStore.botStatus])
 
@@ -181,7 +181,7 @@ const ThinkingStatus = () => {
           <StatusText text='Thinking..' />
         </Match>
         <Match when={currentIndex() === 1}>
-          <StatusText text='Press to cancel..' />
+          <StatusText text='Tab to cancel..' />
         </Match>
       </Switch>
     </>
@@ -209,7 +209,7 @@ const AnsweringStatus = () => {
           <StatusText text='Answering..' />
         </Match>
         <Match when={currentIndex() === 1}>
-          <StatusText text='Press to interrupt..' />
+          <StatusText text='Tab to interrupt..' />
         </Match>
       </Switch>
     </>

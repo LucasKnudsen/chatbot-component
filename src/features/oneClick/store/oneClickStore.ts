@@ -19,7 +19,7 @@ export type OneClickStore = {
   activeAgent?: AgentAvatarConfig | null
   chatMode: 'voice' | 'text'
   indicationMessage: IndicationMessage | null
-  readonly shouldWelcome: boolean
+  readonly getChatInitiationMessage: string | null
   readonly isHeyGenMode: boolean
   readonly botDisplayName: string
 }
@@ -33,11 +33,15 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   activeConversationId: '',
   indicationMessage: null,
 
-  get shouldWelcome() {
+  get getChatInitiationMessage() {
+    if (!this.activeChannel?.welcomeText) {
+      return null
+    }
+
     const datetime = localStorage.getItem('lastStarted')
 
     if (!datetime) {
-      return true
+      return this.activeChannel.welcomeText
     }
 
     const lastStarted = new Date(datetime)
@@ -45,7 +49,11 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
 
     const diff = now.getTime() - lastStarted.getTime()
 
-    return diff > 1000 * 60 * 60 * 24
+    if (diff < 1000 * 60 * 60 * 24) {
+      return this.activeChannel.welcomeBackText || this.activeChannel.welcomeText
+    } else {
+      return this.activeChannel.welcomeText
+    }
   },
   get isHeyGenMode() {
     return this.activeAgent?.voice_mode === VoiceMode.HEYGEN

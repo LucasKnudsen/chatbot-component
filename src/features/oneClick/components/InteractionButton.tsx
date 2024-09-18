@@ -1,30 +1,30 @@
-import { MicrophoneIcon } from '@/components'
-import { Accessor, Show } from 'solid-js'
+import { MicrophoneIcon, Spinner } from '@/components'
+import { Show } from 'solid-js'
 import { useTheme } from '../../theme'
 import { oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 
 interface Props {
   onStart: () => void
-  shouldInitiateNextMessage: Accessor<boolean>
 }
 export const InteractionButton = (props: Props) => {
+  const { theme } = useTheme()
+
   const handleRenderButtonContent = () => {
     switch (oneClickStore.botStatus) {
+      case BotStatus.INITIATING:
+        return <Spinner size={28} indicatorColor={theme().onPrimary} />
+
       case BotStatus.LISTENING:
         return <StopIcon />
 
       case BotStatus.THINKING:
-        return 'CANCEL'
+        return <Spinner size={28} indicatorColor={theme().onPrimary} />
 
-      case BotStatus.ANSWERING:
-        return 'STOP'
+      // case BotStatus.ANSWERING:
+      //   return 'STOP'
       default:
-        if (props.shouldInitiateNextMessage()) {
-          return 'START'
-        } else {
-          return <MicrophoneIcon height={36} />
-        }
+        return <MicrophoneIcon height={36} />
     }
   }
 
