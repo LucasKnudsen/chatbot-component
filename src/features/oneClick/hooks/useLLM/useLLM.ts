@@ -23,42 +23,41 @@ type LLMOutput = {
   setMessages: Setter<ChatMessage[]>
   submitNewMessage: (input: SubmitInput) => void
   cancelQuery: () => void
-  loading: Accessor<boolean>
 }
 
 export const [audio64, setAudio64] = createSignal<string[]>([])
+export const [isCanceled, setIsCanceled] = createSignal(false)
 
 export const useLLM = (props: LLMInput): LLMOutput => {
   const [messages, setMessages] = createSignal<ChatMessage[]>(props.initialMessages || [])
-  const [loading, setLoading] = createSignal(false)
 
   let controller: AbortController
 
-  // createEffect(
-  //   on(
-  //     () => oneClickStore.activeConversationId,
-  //     () => {
-  //       setMessages([])
-  //     }
-  //   )
-  // )
-
   const cancelQuery = () => {
-    if (loading()) {
-      controller?.abort()
-      setMessages((prev) => {
-        if (prev[prev.length - 1].role === 'assistant' && prev[prev.length - 1].content === '') {
-          return prev.slice(0, prev.length - 1)
-        }
-        return prev
-      })
-      setLoading(false)
+    if (oneClickStore.isBotProcessing) {
+      try {
+        controller?.abort('QUERY_CANCELLED')
+      } catch (error) {
+        logDev('Error cancelling query', error)
+      } finally {
+        setIsCanceled(true)
+
+        // setMessages((prev) => {
+        //   if (prev[prev.length - 1].role === 'assistant' && prev[prev.length - 1].content === '') {
+        //     return prev.slice(0, prev.length - 1)
+        //   }
+
+        //   return prev
+        // })
+      }
     }
   }
 
   const queryLLM = async (input: SubmitInput) => {
     // Reset the requests queue
     setTtsRequestsPending([])
+    setIsCanceled(false)
+
     controller = new AbortController()
     const endpoint = import.meta.env.VITE_LLM_STREAM_URL
 
@@ -265,23 +264,37 @@ export const useLLM = (props: LLMInput): LLMOutput => {
           }
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       oneClickActions.setStatus(BotStatus.IDLE)
-      logErrorToServer({
-        error,
-        priority: Priority.HIGH,
-        context: {
-          description: 'Error fetching LLM stream',
-          component: 'useLLM',
-        },
-      })
+
+      if (error === 'QUERY_CANCELLED') {
+        logDev('Query aborted')
+        setMessages((prev) => {
+          prev[prev.length - 1].content = ' '
+          return prev
+        })
+      } else {
+        logErrorToServer({
+          error,
+          priority: Priority.HIGH,
+          context: {
+            description: 'Error fetching LLM stream',
+            component: 'useLLM',
+          },
+          showToast: false,
+        })
+      }
     } finally {
+      // If the bot response is empty, set a default message
       if (!botResponse) {
         setMessages((prev) => {
-          prev[prev.length - 1].content =
-            'I am sorry, I am unable to process your request at the moment.'
+          // Only set the default message if the last message is from the assistant and is empty
+          if (prev[prev.length - 1].role === 'assistant' && prev[prev.length - 1].content === '') {
+            prev[prev.length - 1].content =
+              'I am sorry, I am unable to process your request at the moment.'
+          }
 
-          return [...prev]
+          return prev
         })
       }
 
@@ -293,13 +306,11 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
   const submitNewMessage = async (input: SubmitInput): Promise<string> => {
     props.onSubmit?.(input)
-    setLoading(true)
     const data = await queryLLM(input)
-    setLoading(false)
     props.onSuccess?.(data || '')
 
     return data || ''
   }
 
-  return { messages, setMessages, submitNewMessage, cancelQuery, loading }
+  return { messages, setMessages, submitNewMessage, cancelQuery }
 }

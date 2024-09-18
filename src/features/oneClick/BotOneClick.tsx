@@ -33,7 +33,7 @@ export const BotOneClick = () => {
     initialMessages: [],
   })
 
-  const handleTriggerAudio = () => {
+  const handleMuteAudio = () => {
     if (!aiAudioRef) return
     aiAudioRef.muted = isMuted()
 
@@ -75,25 +75,33 @@ export const BotOneClick = () => {
 
       aiAudioRef.pause()
       aiAudioRef.src = ''
+      aiAudioRef.currentTime = 0
       setAudio64([])
       setIsPlayingQueue(false)
     }
   }
 
   const handleButtonRecord = () => {
-    if (oneClickStore.botStatus === BotStatus.LISTENING) {
-      oneClickActions.setStatus(BotStatus.THINKING)
-      audioRecorder.stopRecording()
-    } else if (
-      oneClickStore.botStatus === BotStatus.ANSWERING ||
-      oneClickStore.botStatus === BotStatus.THINKING
-    ) {
-      cancelQuery()
-      handleStopAudio()
-      oneClickActions.setStatus(BotStatus.IDLE)
-    } else {
-      oneClickActions.setStatus(BotStatus.LISTENING)
-      audioRecorder.startRecording()
+    switch (oneClickStore.botStatus) {
+      case BotStatus.LISTENING:
+        oneClickActions.setStatus(BotStatus.THINKING)
+        audioRecorder.stopRecording()
+        break
+
+      case BotStatus.THINKING:
+        cancelQuery()
+        break
+
+      default:
+        cancelQuery()
+        handleStopAudio()
+
+        oneClickActions.setStatus(BotStatus.LISTENING)
+
+        setTimeout(() => {
+          audioRecorder.startRecording()
+        }, 100)
+        break
     }
   }
 
@@ -227,7 +235,7 @@ export const BotOneClick = () => {
               }
               keyed
             >
-              <MuteAISwitch onMute={handleTriggerAudio} />
+              <MuteAISwitch onMute={handleMuteAudio} />
             </Show>
           </div>
 
@@ -267,7 +275,13 @@ export const BotOneClick = () => {
               <Conversation messages={messages} />
             </div>
 
-            <InputOneClick onSubmit={handleNewMessage} />
+            <InputOneClick
+              onSubmit={handleNewMessage}
+              cancelQuery={() => {
+                cancelQuery()
+                handleStopAudio()
+              }}
+            />
           </div>
         </Show>
       </div>

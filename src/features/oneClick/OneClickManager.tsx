@@ -11,6 +11,7 @@ import { BotOneClick } from './BotOneClick'
 import { NavOneClick } from './NavOneClick'
 import { initiateConversation } from './services'
 import { oneClickActions } from './store/oneClickStore'
+import { BotStatus } from './types'
 
 export const OneClickManager = (props: { overrideLogo?: string }) => {
   const [loading, setLoading] = createSignal<boolean>(true)
@@ -44,6 +45,9 @@ export const OneClickManager = (props: { overrideLogo?: string }) => {
     },
     onError: (error) => {
       logErrorToServer({ error })
+    },
+    onSuccess: () => {
+      oneClickActions.setStatus(BotStatus.IDLE)
     },
   })
 

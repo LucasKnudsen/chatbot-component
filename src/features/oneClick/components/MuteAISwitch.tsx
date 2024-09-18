@@ -22,7 +22,7 @@ export const MuteAISwitch = (props: Props) => {
     <>
       <div
         class={`flex justify-center items-center h-8 w-8 transition-all rounded-full ml-2 cursor-pointer  ${
-          isMuted() ? 'bg-[var(--onPrimary)]' : 'bg-[var(--primaryColor)]'
+          isMuted() ? 'bg-[var(--primaryColor)]' : 'bg-[var(--onPrimary)]'
         }`}
         onClick={handleOnClick}
       >
@@ -31,14 +31,14 @@ export const MuteAISwitch = (props: Props) => {
             width={20}
             height={20}
             stroke-width={1.7}
-            class='text-[var(--primaryColor)]'
+            class='text-[var(--onPrimary)]'
           />
         ) : (
           <MicrophoneIcon
             width={20}
             height={20}
             stroke-width={1.7}
-            class='text-[var(--onPrimary)]'
+            class='text-[var(--primaryColor)]'
           />
         )}
       </div>

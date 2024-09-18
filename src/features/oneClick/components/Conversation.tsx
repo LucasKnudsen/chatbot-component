@@ -6,7 +6,7 @@ import {
   UserIconOneClick,
 } from '@/components'
 import { Marked } from '@ts-stack/markdown'
-import { Accessor, createEffect, createSignal, on, Show } from 'solid-js'
+import { Accessor, createEffect, createSignal, Match, on, Show, Switch } from 'solid-js'
 import { useTheme } from '../../theme'
 import { oneClickStore } from '../store/oneClickStore'
 import { BotStatus, ChatMessage } from '../types'
@@ -272,8 +272,20 @@ const AssistantMessage = (props: ChatMessage) => {
         <SparklesIcon color={theme().primaryColor} />
         <div class='font-semibold'>{props.displayName}</div>
       </div>
-      <Show
-        when={props.content}
+
+      <Switch>
+        <Match when={props.content}>
+          <div ref={textEl} class='prose text-[var(--textColor)]' />
+        </Match>
+
+        <Match when={oneClickStore.botStatus === BotStatus.THINKING}>
+          <div class='my-3 flex items-center gap-2'>
+            <Spinner size={18} />
+          </div>
+        </Match>
+      </Switch>
+      {/* <Show
+        when={oneClickStore.botStatus !== BotStatus.THINKING && props.content}
         fallback={
           !oneClickStore.indicationMessage && (
             <div class='my-3 flex items-center gap-2'>
@@ -281,9 +293,7 @@ const AssistantMessage = (props: ChatMessage) => {
             </div>
           )
         }
-      >
-        <div ref={textEl} class='prose text-[var(--textColor)]' />
-      </Show>
+      ></Show> */}
     </div>
   )
 }

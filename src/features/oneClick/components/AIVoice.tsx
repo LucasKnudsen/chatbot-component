@@ -1,19 +1,25 @@
 import { logDev, logErrorToServer } from '@/utils'
 import { createEffect, createSignal, on } from 'solid-js'
-import { audio64, setAudio64 } from '../hooks'
+import { audio64, isCanceled, setAudio64 } from '../hooks'
 import { oneClickActions, oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 import { isMuted } from './MuteAISwitch'
 
-export let aiAudioRef: any
+export let aiAudioRef: HTMLAudioElement
 export const [isPlayingQueue, setIsPlayingQueue] = createSignal(false)
+
 export const AIVoice = () => {
   createEffect(
     on(audio64, () => {
+      logDev('Audio Queue:', audio64().length)
+
       if (audio64().length === 0) {
         logDev('Queue is empty, cleared audio player')
-        oneClickStore.botStatus !== BotStatus.INITIATING &&
+
+        if (oneClickStore.isBotProcessing) {
           oneClickActions.setStatus(BotStatus.IDLE)
+        }
+
         setIsPlayingQueue(false)
       }
 
@@ -27,6 +33,13 @@ export const AIVoice = () => {
   )
 
   const playAudio = (base64: string) => {
+    logDev('Is Canceled:', isCanceled())
+
+    if (isCanceled()) {
+      setAudio64((prev) => prev.slice(1))
+      return
+    }
+
     try {
       const audioSrc = `data:audio/mp3;base64,${base64}`
 

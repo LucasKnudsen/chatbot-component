@@ -9,13 +9,19 @@ export type ErrorLogInput = {
   error: any
   priority?: Priority
   context?: Record<string, any>
+  showToast?: boolean
 }
 
-export const logErrorToServer = async ({ error, priority, context }: ErrorLogInput) => {
+export const logErrorToServer = async ({
+  error,
+  priority,
+  context,
+  showToast = true,
+}: ErrorLogInput) => {
   const parsedError = parseError(error)
   const logId = randomUUID()
 
-  toast.error(parsedError.message || 'Something went wrong')
+  showToast && toast.error(parsedError.message || 'Something went wrong')
 
   if (import.meta.env.DEV || !error) {
     return

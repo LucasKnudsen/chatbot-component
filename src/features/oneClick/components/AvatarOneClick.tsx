@@ -17,10 +17,22 @@ export const AvatarOneClick = () => {
       () => {
         if (!videoRef) return
 
-        if (oneClickStore.botStatus === BotStatus.ANSWERING) {
-          videoRef.playbackRate = 2.5
-        } else {
-          videoRef.playbackRate = 0.8
+        switch (oneClickStore.botStatus) {
+          case BotStatus.ANSWERING:
+            videoRef.playbackRate = 2.2
+            videoRef.classList.remove('animate-pulse')
+
+            break
+
+          case BotStatus.THINKING:
+            videoRef.classList.add('animate-pulse')
+            videoRef.playbackRate = 1.5
+
+            break
+          default:
+            videoRef.playbackRate = 0.8
+            videoRef.classList.remove('animate-pulse')
+            break
         }
       }
     )
@@ -28,7 +40,7 @@ export const AvatarOneClick = () => {
 
   return (
     <div
-      class={`flex justify-center w-full overflow-hidden z-10 ${
+      class={`flex justify-center w-full overflow-hidden z-10  ${
         heyGenStore.isExpandAvatar ? 'h-full' : 'h-[calc(100%-40px)] rounded-xl'
       }`}
     >
@@ -38,12 +50,15 @@ export const AvatarOneClick = () => {
           <video
             ref={(el) => (videoRef = el)}
             id='one-click-entity'
-            class='w-auto h-full object-cover scale-[2] md:scale-[1.7] lg:scale-[2]'
+            class='w-auto h-full object-cover  transition-all duration-1000 '
             autoplay={true}
             playsinline
             loop
             muted
             src={dynamicVoiceSymbol}
+            style={{
+              scale: oneClickStore.botStatus === BotStatus.ANSWERING ? 2.5 : 2,
+            }}
           />
         }
       >

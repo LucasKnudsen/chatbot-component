@@ -1,10 +1,15 @@
 import { Divider, EditIcon, SendIcon } from '@/components'
 import { useTheme } from '@/features/theme'
-import { createSignal } from 'solid-js'
+import { createSignal, Show } from 'solid-js'
 import { oneClickActions, oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 
-export const InputOneClick = (props: { onSubmit: (input: string) => void }) => {
+type InputProps = {
+  onSubmit: (input: string) => void
+  cancelQuery: () => void
+}
+
+export const InputOneClick = (props: InputProps) => {
   const [input, setInput] = createSignal('')
   const { theme } = useTheme()
 
@@ -21,45 +26,50 @@ export const InputOneClick = (props: { onSubmit: (input: string) => void }) => {
 
     if (e.key === 'Enter' && e.shiftKey === false) {
       wrapSubmit()
+      e.preventDefault()
     }
   }
 
   return (
     <div>
-      {/* <Show when={oneClickStore.botStatus === BotStatus.NOT_STARTED}>
-        <div class='flex text-center justify-center gap-1 text-[var(--primaryColor)] mb-2'>
-          <span>Please tap the </span>
-          <span class='font-semibold'>START</span>
-          <span>button to start the AI</span>
-        </div>
-      </Show> */}
-
       <Divider margin={0} />
 
       <div class='flex items-center justify-between border border-[var(--bubbleButtonColor)] mt-3 rounded-lg bg-[var(--textInputBackgroundColor)]'>
         <EditIcon class='mx-3' color={theme().primaryColor} />
 
-        <input
+        <textarea
           value={input()}
           onChange={(e) => setInput(e.currentTarget.value)}
           onKeyDown={handleKeyDown}
-          class='grow h-[45px] text-[16px] text-[var(--textInputTextColor)]'
+          class='grow h-[45px] text-[16px] text-[var(--textInputTextColor)] bg-transparent px-3 py-2 resize-none'
           placeholder='Message'
+          rows={1}
         />
 
-        <button
-          class='all-unset mx-3 flex items-center justify-center h-[45px]'
-          onClick={wrapSubmit}
-          style={{}}
+        <Show
+          when={!oneClickStore.isBotProcessing}
+          fallback={
+            // Cancel button when bot is thinking or answering
+            <button
+              class='all-unset mx-3 flex items-center justify-center h-[45px]'
+              onClick={props.cancelQuery}
+            >
+              <div class='w-3.5 h-3.5 rounded-sm bg-[var(--primaryColor)] ' />
+            </button>
+          }
         >
-          <SendIcon
-            color={
-              oneClickStore.botStatus === BotStatus.IDLE
-                ? input() && theme().primaryColor
-                : theme().surfaceBackground
-            }
-          />
-        </button>
+          <button
+            class='all-unset mx-3 flex items-center justify-center h-[45px]'
+            onClick={wrapSubmit}
+          >
+            <SendIcon
+              style={{
+                opacity: oneClickStore.botStatus === BotStatus.IDLE && input() ? 1 : 0.5,
+                fill: theme().primaryColor,
+              }}
+            />
+          </button>
+        </Show>
       </div>
     </div>
   )

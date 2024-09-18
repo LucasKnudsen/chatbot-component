@@ -22,6 +22,7 @@ export type OneClickStore = {
   readonly getChatInitiationMessage: string | null
   readonly isHeyGenMode: boolean
   readonly botDisplayName: string
+  readonly isBotProcessing: boolean
 }
 
 const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
@@ -66,6 +67,10 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
       this.activeChannel?.botDisplayName ||
       'Assistant'
     )
+  },
+
+  get isBotProcessing() {
+    return this.botStatus === BotStatus.ANSWERING || this.botStatus === BotStatus.THINKING
   },
 })
 
