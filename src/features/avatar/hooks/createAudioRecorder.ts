@@ -1,6 +1,6 @@
 import { useTheme } from '@/features/theme'
 import { Priority } from '@/graphql'
-import { logErrorToServer } from '@/utils'
+import { logErrorToServer, shadowQuerySelector } from '@/utils'
 import AudioMotionAnalyzer from 'audiomotion-analyzer'
 import { Accessor, createSignal, onCleanup } from 'solid-js'
 
@@ -40,9 +40,7 @@ export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudi
         radial: true,
         useCanvas: false,
         onCanvasDraw: (instance) => {
-          const container = document.getElementById(props.visualizerElementId!)
-
-          console.log('Setting up audio motion', container)
+          const container = shadowQuerySelector(`#${props.visualizerElementId}`)
 
           if (!container) return
 

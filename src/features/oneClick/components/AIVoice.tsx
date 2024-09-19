@@ -1,5 +1,5 @@
 import { useTheme } from '@/features/theme'
-import { logDev, logErrorToServer } from '@/utils'
+import { logDev, logErrorToServer, shadowQuerySelector } from '@/utils'
 import AudioMotionAnalyzer from 'audiomotion-analyzer'
 import { createEffect, createSignal, on } from 'solid-js'
 import { audio64, isCanceled, setAudio64 } from '../hooks'
@@ -26,8 +26,7 @@ export const AIVoice = () => {
         radial: true,
         useCanvas: false,
         onCanvasDraw: (instance) => {
-          const container = document.getElementById(AI_VOICE_VISUALIZER_ID)
-          console.log('Setting up audio motion', container)
+          const container = shadowQuerySelector(`#${AI_VOICE_VISUALIZER_ID}`)
 
           if (!container) return
 
