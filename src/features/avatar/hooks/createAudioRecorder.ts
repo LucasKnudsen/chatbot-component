@@ -35,12 +35,14 @@ export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudi
 
   const setupAudioMotion = () => {
     if (!audioMotion && props.visualizerElementId) {
-      return (audioMotion = new AudioMotionAnalyzer(undefined, {
+      audioMotion = new AudioMotionAnalyzer(undefined, {
         mode: 10,
         radial: true,
         useCanvas: false,
         onCanvasDraw: (instance) => {
           const container = document.getElementById(props.visualizerElementId!)
+
+          console.log('Setting up audio motion', container)
 
           if (!container) return
 
@@ -58,7 +60,7 @@ export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudi
           container.style.top = `calc(50% - ${dynamicSize / 2}px)`
           container.style.left = `calc(50% - ${dynamicSize / 2}px)`
         },
-      }))
+      })
     }
   }
 
@@ -92,7 +94,6 @@ export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudi
         .getUserMedia({ audio: true, video: false })
         .then((stream) => {
           if (props.visualizerElementId) {
-            console.log('Setting up audio motion')
             setupAudioMotion()
             const micStream = audioMotion!.audioCtx!.createMediaStreamSource(stream)
             // connect microphone stream to analyzer

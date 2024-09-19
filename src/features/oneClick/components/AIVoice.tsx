@@ -8,8 +8,6 @@ import { BotStatus } from '../types'
 import { AI_VOICE_VISUALIZER_ID } from './InteractionButton'
 import { isMuted } from './MuteAISwitch'
 
-export const AI_VOICE_AUDIO_ID = 'ai-voice-audio'
-
 export let aiAudioRef: HTMLAudioElement
 
 export const [isPlayingQueue, setIsPlayingQueue] = createSignal(false)
@@ -29,6 +27,7 @@ export const AIVoice = () => {
         useCanvas: false,
         onCanvasDraw: (instance) => {
           const container = document.getElementById(AI_VOICE_VISUALIZER_ID)
+          console.log('Setting up audio motion', container)
 
           if (!container) return
 
@@ -122,5 +121,5 @@ export const AIVoice = () => {
     }
   }
 
-  return <audio id={AI_VOICE_AUDIO_ID} ref={aiAudioRef} crossorigin='anonymous' />
+  return <audio ref={aiAudioRef} crossorigin='anonymous' />
 }
