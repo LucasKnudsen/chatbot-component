@@ -5,6 +5,7 @@ import { oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 
 export const MIC_VISUALIZER_ID = 'mic-audio-visualizer'
+export const AI_VOICE_VISUALIZER_ID = 'ai-voice-visualizer'
 interface Props {
   onStart: () => void
 }
@@ -42,6 +43,8 @@ export const InteractionButton = (props: Props) => {
         </div>
 
         <div id={MIC_VISUALIZER_ID} class='absolute z-10  h-20 w-20 top-0 rounded-full' />
+
+        <div id={AI_VOICE_VISUALIZER_ID} class='absolute z-10  h-20 w-20 top-0 rounded-full' />
         {/* <Show when={oneClickStore.botStatus === BotStatus.LISTENING}>
         </Show> */}
       </div>

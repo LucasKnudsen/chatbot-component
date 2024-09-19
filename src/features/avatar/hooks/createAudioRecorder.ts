@@ -46,13 +46,13 @@ export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudi
           const avgFrequency = totalFrequency / bars.length
 
           // Set the dynamic size of the circle based on the average frequency
-          const dynamicSize = 80 + avgFrequency * 400 // Adjust factor to exaggerate effect
+          const dynamicSize = 80 + avgFrequency * 500 // Adjust factor to exaggerate effect
 
           container!.style.width = `${dynamicSize}px`
           container!.style.height = `${dynamicSize}px`
 
           // Apply the theme color as background
-          container!.style.backgroundColor = theme().surfaceBackground!
+          container!.style.backgroundColor = theme().surfaceHoveredBackground!
 
           // Adjust position to keep the circle centered
           container!.style.top = `calc(50% - ${dynamicSize / 2}px)`
