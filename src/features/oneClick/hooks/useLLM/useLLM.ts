@@ -199,7 +199,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                   // If end tag is found, add the html buffer to the bot response and setMessages
                   htmlBuffer += chunk
 
-                  if (!chunk.endsWith('>')) {
+                  if (!chunk.trim().endsWith('>')) {
                     isProcessingHtmlTag = true
                     oneClickActions.setOneClickStore('indicationMessage', {
                       message: 'Processing HTML..',
