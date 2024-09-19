@@ -29,6 +29,7 @@ export const AIVoice = () => {
         useCanvas: false,
         onCanvasDraw: (instance) => {
           const container = document.getElementById(AI_VOICE_VISUALIZER_ID)
+
           if (!container) return
 
           // Get frequency bars data
@@ -52,6 +53,8 @@ export const AIVoice = () => {
       })
     }
   }
+
+  createEffect(on(() => aiAudioRef, setupAudioMotion))
 
   createEffect(
     on(audio64, () => {
@@ -88,7 +91,6 @@ export const AIVoice = () => {
       const audioSrc = `data:audio/mp3;base64,${base64}`
 
       if (aiAudioRef) {
-        setupAudioMotion()
         aiAudioRef.src = audioSrc
         aiAudioRef.play()
         oneClickActions.setStatus(BotStatus.ANSWERING)

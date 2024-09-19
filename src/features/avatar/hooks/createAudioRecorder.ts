@@ -31,35 +31,66 @@ export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudi
 
   const { theme } = useTheme()
 
-  const audioMotion = props.visualizerElementId
-    ? new AudioMotionAnalyzer(undefined, {
+  let audioMotion: AudioMotionAnalyzer | null = null
+
+  const setupAudioMotion = () => {
+    if (!audioMotion && props.visualizerElementId) {
+      return (audioMotion = new AudioMotionAnalyzer(undefined, {
         mode: 10,
         radial: true,
         useCanvas: false,
         onCanvasDraw: (instance) => {
-          if (!props.visualizerElementId) return
+          const container = document.getElementById(props.visualizerElementId!)
 
-          const container = document.getElementById(props.visualizerElementId)
-          // Get frequency bars data
+          if (!container) return
+
           const bars = instance.getBars()
           const totalFrequency = bars.reduce((sum, bar) => sum + bar.value[0], 0)
           const avgFrequency = totalFrequency / bars.length
 
-          // Set the dynamic size of the circle based on the average frequency
-          const dynamicSize = 80 + avgFrequency * 500 // Adjust factor to exaggerate effect
+          const dynamicSize = 80 + avgFrequency * 500
 
-          container!.style.width = `${dynamicSize}px`
-          container!.style.height = `${dynamicSize}px`
+          container.style.width = `${dynamicSize}px`
+          container.style.height = `${dynamicSize}px`
 
-          // Apply the theme color as background
-          container!.style.backgroundColor = theme().surfaceHoveredBackground!
+          container.style.backgroundColor = theme().surfaceHoveredBackground!
 
-          // Adjust position to keep the circle centered
-          container!.style.top = `calc(50% - ${dynamicSize / 2}px)`
-          container!.style.left = `calc(50% - ${dynamicSize / 2}px)`
+          container.style.top = `calc(50% - ${dynamicSize / 2}px)`
+          container.style.left = `calc(50% - ${dynamicSize / 2}px)`
         },
-      })
-    : null
+      }))
+    }
+  }
+
+  // const audioMotion = props.visualizerElementId
+  //   ? new AudioMotionAnalyzer(undefined, {
+  //       mode: 10,
+  //       radial: true,
+  //       useCanvas: false,
+  //       onCanvasDraw: (instance) => {
+  //         if (!props.visualizerElementId) return
+
+  //         const container = document.getElementById(props.visualizerElementId)
+  //         // Get frequency bars data
+  //         const bars = instance.getBars()
+  //         const totalFrequency = bars.reduce((sum, bar) => sum + bar.value[0], 0)
+  //         const avgFrequency = totalFrequency / bars.length
+
+  //         // Set the dynamic size of the circle based on the average frequency
+  //         const dynamicSize = 80 + avgFrequency * 500 // Adjust factor to exaggerate effect
+
+  //         container!.style.width = `${dynamicSize}px`
+  //         container!.style.height = `${dynamicSize}px`
+
+  //         // Apply the theme color as background
+  //         container!.style.backgroundColor = theme().surfaceHoveredBackground!
+
+  //         // Adjust position to keep the circle centered
+  //         container!.style.top = `calc(50% - ${dynamicSize / 2}px)`
+  //         container!.style.left = `calc(50% - ${dynamicSize / 2}px)`
+  //       },
+  //     })
+  //   : null
 
   let intervalId: number | null = null
 
@@ -91,6 +122,7 @@ export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudi
         .getUserMedia({ audio: true, video: false })
         .then((stream) => {
           if (props.visualizerElementId) {
+            setupAudioMotion()
             const micStream = audioMotion!.audioCtx!.createMediaStreamSource(stream)
             // connect microphone stream to analyzer
             audioMotion!.connectInput(micStream)
