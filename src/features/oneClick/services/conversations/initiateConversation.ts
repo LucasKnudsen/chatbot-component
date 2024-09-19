@@ -1,5 +1,4 @@
 import { authStore, getAuthMode } from '@/features/authentication'
-import { configStore } from '@/features/portal-init'
 import {
   FraiaDBAction,
   FraiaDBCollections,
@@ -29,19 +28,15 @@ export const initiateConversation = async (
   knowledgeBaseId: string
 ): Promise<InitiateConversationResponse> => {
   const sessionId = authStore.sessionId
-  const text = configStore.chatSpaceConfig.text
 
   // Check if the welcome message should be displayed
-  const greetingMessage =
-    text?.welcomeMessage && oneClickStore.shouldWelcome
-      ? text.welcomeMessage
-      : text!.returnWelcomeMessage || text!.welcomeMessage || ''
+  const greetingMessage = oneClickStore.getChatInitiationMessage
 
   // Prepare the payload
   const payload: InitiateConversationPayload = {
     user_id: sessionId,
     knowledge_base_id: knowledgeBaseId,
-    greeting_message: greetingMessage,
+    greeting_message: greetingMessage || undefined,
   }
 
   const input: HandleFraiaDBInput = {
