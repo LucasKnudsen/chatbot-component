@@ -75,7 +75,7 @@ export const AIVoice = () => {
     })
   )
 
-  const playAudio = (base64: string) => {
+  const playAudio = async (base64: string) => {
     logDev('Is Canceled:', isCanceled())
 
     if (isCanceled()) {
@@ -89,7 +89,7 @@ export const AIVoice = () => {
       if (aiAudioRef) {
         setupAudioMotion()
         aiAudioRef.src = audioSrc
-        aiAudioRef.play()
+        await aiAudioRef.play()
         oneClickActions.setStatus(BotStatus.ANSWERING)
 
         aiAudioRef.muted = isMuted()
@@ -110,13 +110,20 @@ export const AIVoice = () => {
           }
         }
       }
-    } catch (error) {
-      logErrorToServer({
-        error,
-        context: {
-          description: 'Error playing audio in AIVoice',
-        },
-      })
+    } catch (error: any) {
+      console.log(error)
+
+      oneClickActions.setStatus(BotStatus.IDLE)
+      setIsPlayingQueue(false)
+
+      if (error?.name !== 'NotAllowedError') {
+        logErrorToServer({
+          error,
+          context: {
+            description: 'Error playing audio in AIVoice',
+          },
+        })
+      }
     }
   }
 

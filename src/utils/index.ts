@@ -131,9 +131,10 @@ export const sendRequest = async <ResponseData>(
 }
 
 export const shadowQuerySelector = (selector: string): HTMLElement | null => {
-  const shadowRoot = document.querySelector('fraia-chatbot')
-  if (shadowRoot) {
-    return shadowRoot.shadowRoot?.querySelector(selector) || null
+  const shadowHost = document.querySelector('fraia-chatbot')
+
+  if (shadowHost) {
+    return shadowHost.shadowRoot?.querySelector(selector) || null
   } else {
     return document.querySelector(selector)
   }
