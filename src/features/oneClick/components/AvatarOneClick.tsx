@@ -57,7 +57,7 @@ export const AvatarOneClick = () => {
             muted
             src={dynamicVoiceSymbol}
             style={{
-              scale: oneClickStore.botStatus === BotStatus.ANSWERING ? 2.5 : 2,
+              scale: oneClickStore.botStatus === BotStatus.ANSWERING ? 2.3 : 2,
             }}
           />
         }

@@ -112,7 +112,7 @@ const IdleStatus = () => {
           ) : (
             <NewChatIcon
               class=' text-[var(--primaryColor)] w-6 h-auto -mt-0.5'
-              stroke-width={1.8}
+              stroke-width={1.5}
             />
           )}
         </Button>
