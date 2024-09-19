@@ -181,15 +181,15 @@ export const BotOneClick = () => {
         },
       ])
 
-      const characters = message.split('')
+      const words = message.split(' ')
 
-      for (const char of characters) {
+      for (const word of words) {
         setMessages((prev) => {
-          prev[prev.length - 1].content += char
+          prev[prev.length - 1].content += word + ' '
 
           return [...prev]
         })
-        await new Promise((resolve) => setTimeout(resolve, 20)) // 100ms delay between words
+        await new Promise((resolve) => setTimeout(resolve, 50)) // 100ms delay between words
       }
 
       // If the user is muted, we need to manually set the bot status to idle
