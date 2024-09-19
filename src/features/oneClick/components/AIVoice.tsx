@@ -98,6 +98,8 @@ export const AIVoice = () => {
         aiAudioRef.onerror = (e: any) => {
           logDev('Error playing audio:', e)
           setAudio64([])
+          oneClickActions.setStatus(BotStatus.IDLE)
+          setIsPlayingQueue(false)
         }
         aiAudioRef.onended = async () => {
           // audioQueue.nested(0).set(none)
