@@ -54,8 +54,6 @@ export const AIVoice = () => {
     }
   }
 
-  createEffect(on(() => aiAudioRef, setupAudioMotion))
-
   createEffect(
     on(audio64, () => {
       logDev('Audio Queue:', audio64().length)
@@ -93,6 +91,7 @@ export const AIVoice = () => {
       if (aiAudioRef) {
         aiAudioRef.src = audioSrc
         aiAudioRef.play()
+        setupAudioMotion()
         oneClickActions.setStatus(BotStatus.ANSWERING)
 
         aiAudioRef.muted = isMuted()

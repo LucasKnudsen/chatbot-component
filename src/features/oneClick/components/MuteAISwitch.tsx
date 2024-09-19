@@ -12,9 +12,10 @@ interface Props {
 
 export const MuteAISwitch = (props: Props) => {
   const handleOnClick = () => {
-    setIsMuted((prev) => {
-      props.onMute && props.onMute()
-      return !prev
+    setIsMuted((wasMuted) => {
+      !wasMuted && props.onMute?.()
+
+      return !wasMuted
     })
   }
 

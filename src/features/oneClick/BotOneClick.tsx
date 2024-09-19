@@ -14,7 +14,7 @@ import {
 } from './components'
 import { AIVoice, aiAudioRef, setIsPlayingQueue } from './components/AIVoice'
 import { Conversation, expandConversation } from './components/Conversation'
-import { setAudio64, useLLM } from './hooks'
+import { isCanceled, setAudio64, setIsCanceled, useLLM } from './hooks'
 import { handleTTS, handleTranscription } from './services'
 import { heyGenStore } from './store/heyGenStore'
 import { oneClickActions, oneClickStore } from './store/oneClickStore'
@@ -98,10 +98,9 @@ export const BotOneClick = () => {
         cancelQuery()
         handleStopAudio()
 
-        oneClickActions.setStatus(BotStatus.LISTENING)
-
         setTimeout(() => {
           audioRecorder.startRecording()
+          oneClickActions.setStatus(BotStatus.LISTENING)
         }, 100)
         break
     }
@@ -133,13 +132,26 @@ export const BotOneClick = () => {
       ])
       const transcribedText = await handleTranscription(audioBlob)
 
-      setMessages((prev) => {
-        prev[prev.length - 1].content = transcribedText
-        return prev
-      })
-      submitNewMessage({
-        message: transcribedText,
-      })
+      // If the user cancels the recording, we don't want to send the message
+      if (!isCanceled()) {
+        setMessages((prev) => {
+          prev[prev.length - 1].content = transcribedText
+          return prev
+        })
+        submitNewMessage({
+          message: transcribedText,
+        })
+      } else {
+        // If the user cancels the recording, we need to remove the message
+        setMessages((prev) => {
+          if (prev[prev.length - 1].role === 'user') {
+            prev.pop()
+            return prev
+          }
+          return prev
+        })
+        setIsCanceled(false)
+      }
     } catch (error) {
       logErrorToServer({
         error,

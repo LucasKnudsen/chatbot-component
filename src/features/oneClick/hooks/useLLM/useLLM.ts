@@ -113,9 +113,24 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
         if (done) {
           if (sentenceBuffer) {
+            if (isProcessingHtmlTag) {
+              logDev('Handling incomplete HTML buffering')
+
+              setMessages((prev) => {
+                prev[prev.length - 1].content += htmlBuffer
+
+                return [...prev]
+              })
+
+              htmlBuffer = ''
+              isProcessingHtmlTag = false
+              oneClickActions.setOneClickStore('indicationMessage', null)
+            }
+
             if (!isMuted()) {
               handleTTS(sentenceBuffer)
             }
+
             logDev('Is done, fire last sentence: ', sentenceBuffer)
 
             sentenceBuffer = ''
@@ -198,7 +213,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                   // If end tag is found, add the html buffer to the bot response and setMessages
                   htmlBuffer += chunk
 
-                  if (!chunk.endsWith('>')) {
+                  if (!chunk.trim().endsWith('>')) {
                     isProcessingHtmlTag = true
                     oneClickActions.setOneClickStore('indicationMessage', {
                       message: 'Processing HTML..',

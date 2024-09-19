@@ -284,16 +284,6 @@ const AssistantMessage = (props: ChatMessage) => {
           </div>
         </Match>
       </Switch>
-      {/* <Show
-        when={oneClickStore.botStatus !== BotStatus.THINKING && props.content}
-        fallback={
-          !oneClickStore.indicationMessage && (
-            <div class='my-3 flex items-center gap-2'>
-              <Spinner size={18} />
-            </div>
-          )
-        }
-      ></Show> */}
     </div>
   )
 }
