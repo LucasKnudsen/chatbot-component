@@ -8,6 +8,7 @@ import {
   AvatarOneClick,
   InputOneClick,
   InteractionButton,
+  MIC_VISUALIZER_ID,
   MuteAISwitch,
   isMuted,
 } from './components'
@@ -24,6 +25,7 @@ export const BotOneClick = () => {
   const device = useMediaQuery()
 
   const audioRecorder = createAudioRecorder({
+    visualizerElementId: MIC_VISUALIZER_ID,
     onStop(audioBlob) {
       handleVoiceToVoice(audioBlob)
     },
@@ -216,11 +218,12 @@ export const BotOneClick = () => {
         } overflow-hidden`}
       >
         {/* Voice Only Component */}
+
         <AIVoice />
 
         {/* Avatar Component */}
         <div
-          class={`relative w-full flex flex-col h-1/2  items-center overflow-hidden ${
+          class={`relative w-full flex flex-col h-1/2  items-center  ${
             heyGenStore.isExpandAvatar ? '' : 'px-5'
           } `}
           style={{

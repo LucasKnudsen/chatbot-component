@@ -4,6 +4,7 @@ import { useTheme } from '../../theme'
 import { oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 
+export const MIC_VISUALIZER_ID = 'mic-audio-visualizer'
 interface Props {
   onStart: () => void
 }
@@ -30,13 +31,19 @@ export const InteractionButton = (props: Props) => {
 
   return (
     <Show when={oneClickStore.botStatus !== BotStatus.NOT_STARTED}>
-      <div class='absolute z-20 left-1/2 transform -translate-x-1/2 bottom-0 hover:brightness-105 transition-all hover:scale-105'>
-        <div
-          onClick={props.onStart}
-          class='flex h-20 w-20  border-2  border-[var(--onPrimary)] items-center justify-center relative bg-[var(--primaryColor)] rounded-full cursor-pointer'
-        >
-          <div class='text-[var(--onPrimary)]  font-medium '>{handleRenderButtonContent()}</div>
+      <div class='absolute z-20 left-1/2 transform -translate-x-1/2 bottom-0'>
+        <div class='relative top-0 hover:brightness-105 transition-all hover:scale-105 z-20'>
+          <div
+            onClick={props.onStart}
+            class='flex h-20 w-20  border-2  border-[var(--onPrimary)] items-center justify-center relative bg-[var(--primaryColor)] rounded-full cursor-pointer'
+          >
+            <div class='text-[var(--onPrimary)]  font-medium '>{handleRenderButtonContent()}</div>
+          </div>
         </div>
+
+        <div id={MIC_VISUALIZER_ID} class='absolute z-10  h-20 w-20 top-0 rounded-full' />
+        {/* <Show when={oneClickStore.botStatus === BotStatus.LISTENING}>
+        </Show> */}
       </div>
     </Show>
   )

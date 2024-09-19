@@ -43,6 +43,11 @@ body {
   }
 }
 
+canvas {
+  display: block;
+  width: 100%;
+}
+
 /* Styles from fraia Embed */
 
 :host {
@@ -686,4 +691,3 @@ input {
   height: 10px;
   border-radius: 10px;
 }
-

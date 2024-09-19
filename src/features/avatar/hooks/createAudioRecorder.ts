@@ -1,6 +1,13 @@
+import { useTheme } from '@/features/theme'
 import { Priority } from '@/graphql'
 import { logErrorToServer } from '@/utils'
+import AudioMotionAnalyzer from 'audiomotion-analyzer'
 import { Accessor, createSignal, onCleanup } from 'solid-js'
+
+type CreateAudioRecorderProps = {
+  onStop?: (audioBlob: Blob) => void
+  visualizerElementId?: string
+}
 
 type CreateAudioRecorderReturn = {
   startRecording: () => void
@@ -13,15 +20,46 @@ type CreateAudioRecorderReturn = {
   seconds: Accessor<number>
 }
 
-export function createAudioRecorder(props?: {
-  onStop?: (audioBlob: Blob) => void
-}): CreateAudioRecorderReturn {
+export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudioRecorderReturn {
   const [mediaStream, setMediaStream] = createSignal<MediaStream | null>(null)
+  const [micStream, setMicStream] = createSignal<MediaStreamAudioSourceNode | null>(null)
   const [mediaRecorder, setMediaRecorder] = createSignal<MediaRecorder | null>(null)
   const [isRecording, setIsRecording] = createSignal<boolean>(false)
   const [isPaused, setIsPaused] = createSignal<boolean>(false)
   const [audioBlob, setAudioBlob] = createSignal<Blob | null>(null)
   const [seconds, setSeconds] = createSignal(0)
+
+  const { theme } = useTheme()
+
+  const audioMotion = props.visualizerElementId
+    ? new AudioMotionAnalyzer(undefined, {
+        mode: 10,
+        radial: true,
+        useCanvas: false,
+        onCanvasDraw: (instance) => {
+          if (!props.visualizerElementId) return
+
+          const container = document.getElementById(props.visualizerElementId)
+          // Get frequency bars data
+          const bars = instance.getBars()
+          const totalFrequency = bars.reduce((sum, bar) => sum + bar.value[0], 0)
+          const avgFrequency = totalFrequency / bars.length
+
+          // Set the dynamic size of the circle based on the average frequency
+          const dynamicSize = 80 + avgFrequency * 400 // Adjust factor to exaggerate effect
+
+          container!.style.width = `${dynamicSize}px`
+          container!.style.height = `${dynamicSize}px`
+
+          // Apply the theme color as background
+          container!.style.backgroundColor = theme().surfaceBackground!
+
+          // Adjust position to keep the circle centered
+          container!.style.top = `calc(50% - ${dynamicSize / 2}px)`
+          container!.style.left = `calc(50% - ${dynamicSize / 2}px)`
+        },
+      })
+    : null
 
   let intervalId: number | null = null
 
@@ -50,8 +88,19 @@ export function createAudioRecorder(props?: {
   const startRecording = () => {
     try {
       navigator.mediaDevices
-        .getUserMedia({ audio: true })
+        .getUserMedia({ audio: true, video: false })
         .then((stream) => {
+          if (props.visualizerElementId) {
+            const micStream = audioMotion!.audioCtx!.createMediaStreamSource(stream)
+            // connect microphone stream to analyzer
+            audioMotion!.connectInput(micStream)
+            // mute output to prevent feedback loops from the speakers
+            audioMotion!.volume = 0
+
+            setMicStream(micStream)
+          } else {
+          }
+
           const recorder = new MediaRecorder(stream)
           const audioChunks: Blob[] = []
           let type = 'audio/webm'
@@ -66,7 +115,7 @@ export function createAudioRecorder(props?: {
           recorder.onstop = async () => {
             const audioBlob = new Blob(audioChunks, { type })
             setAudioBlob(audioBlob)
-            props?.onStop?.(audioBlob) // Call the onStop callback with the audioBlob
+            props.onStop?.(audioBlob) // Call the onStop callback with the audioBlob
             resetTimer()
           }
 
@@ -98,8 +147,10 @@ export function createAudioRecorder(props?: {
       mediaStream()
         ?.getTracks()
         .forEach((track) => track.stop())
+      audioMotion?.disconnectInput(micStream(), true)
       setMediaRecorder(null)
       setMediaStream(null)
+      setMicStream(null)
       setIsRecording(false)
       setIsPaused(false) // Reset paused state
       pauseTimer()
