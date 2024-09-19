@@ -89,9 +89,9 @@ export const AIVoice = () => {
       const audioSrc = `data:audio/mp3;base64,${base64}`
 
       if (aiAudioRef) {
+        setupAudioMotion()
         aiAudioRef.src = audioSrc
         aiAudioRef.play()
-        setupAudioMotion()
         oneClickActions.setStatus(BotStatus.ANSWERING)
 
         aiAudioRef.muted = isMuted()
@@ -120,5 +120,5 @@ export const AIVoice = () => {
     }
   }
 
-  return <audio id={AI_VOICE_AUDIO_ID} ref={aiAudioRef} />
+  return <audio id={AI_VOICE_AUDIO_ID} ref={aiAudioRef} crossorigin='anonymous' />
 }

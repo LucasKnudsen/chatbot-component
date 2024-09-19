@@ -121,6 +121,8 @@ export const BotOneClick = () => {
   }
 
   const handleVoiceToVoice = async (audioBlob: Blob) => {
+    setIsCanceled(false)
+
     try {
       setMessages((prev) => [
         ...prev,
@@ -190,6 +192,7 @@ export const BotOneClick = () => {
           content: '',
           role: 'assistant',
           conversationId: oneClickStore.activeConversationId || '',
+          displayName: oneClickStore.botDisplayName,
         },
       ])
 
