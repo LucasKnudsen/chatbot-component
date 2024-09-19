@@ -22,7 +22,7 @@ export const AudioRecordingView = (props: { onBack: () => void }) => {
 const AudioInput = (props: { onBack: () => void }) => {
   const [loadingStatus, setLoadingStatus] = createSignal('')
 
-  const audioRecorder = createAudioRecorder()
+  const audioRecorder = createAudioRecorder({})
 
   const uploadMutation = createMutation({
     mutationFn: async () => {
