@@ -14,9 +14,9 @@ export type ChatMessage =
 
 export enum BotStatus {
   NOT_STARTED = 'not_started',
+  INITIATING = 'initiating',
   IDLE = 'idle',
   LISTENING = 'listening',
   THINKING = 'thinking',
   ANSWERING = 'answering',
-  INITIATING = 'initiating',
 }

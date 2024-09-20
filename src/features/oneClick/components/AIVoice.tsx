@@ -89,7 +89,6 @@ export const AIVoice = () => {
       if (aiAudioRef) {
         setupAudioMotion()
         aiAudioRef.src = audioSrc
-        await aiAudioRef.play()
         oneClickActions.setStatus(BotStatus.ANSWERING)
 
         aiAudioRef.muted = isMuted()
@@ -109,12 +108,13 @@ export const AIVoice = () => {
             setIsPlayingQueue(false)
           }
         }
+
+        await aiAudioRef.play()
       }
     } catch (error: any) {
-      console.log(error)
-
       oneClickActions.setStatus(BotStatus.IDLE)
       setIsPlayingQueue(false)
+      setAudio64([])
 
       if (error?.name !== 'NotAllowedError') {
         logErrorToServer({
