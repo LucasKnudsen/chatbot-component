@@ -85,7 +85,7 @@ const IdleStatus = () => {
     setLoading(true)
 
     try {
-      const initiateData = await initiateConversation(oneClickStore.activeChannel!.id)
+      const initiateData = await initiateConversation(oneClickStore.activeChannel!)
 
       oneClickActions.resetConversation(initiateData.conversationId)
     } catch (error) {

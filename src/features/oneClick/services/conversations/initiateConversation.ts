@@ -1,5 +1,6 @@
 import { authStore, getAuthMode } from '@/features/authentication'
 import {
+  Channel,
   FraiaDBAction,
   FraiaDBCollections,
   HandleFraiaDBInput,
@@ -9,7 +10,7 @@ import {
 import { GraphQLQuery } from '@aws-amplify/api'
 import { API } from 'aws-amplify'
 import { RoutingStreamObject } from '../../hooks/useLLM/utils'
-import { oneClickStore } from '../../store/oneClickStore'
+import { oneClickActions } from '../../store/oneClickStore'
 
 const COLLECTION_ID = FraiaDBCollections.CONVERSATIONS
 
@@ -25,17 +26,17 @@ export interface InitiateConversationResponse {
 }
 
 export const initiateConversation = async (
-  knowledgeBaseId: string
+  knowledgeBase: Channel
 ): Promise<InitiateConversationResponse> => {
   const sessionId = authStore.sessionId
 
   // Check if the welcome message should be displayed
-  const greetingMessage = oneClickStore.getChatInitiationMessage
+  const greetingMessage = oneClickActions.getChatInitiationMessage(knowledgeBase)
 
   // Prepare the payload
   const payload: InitiateConversationPayload = {
     user_id: sessionId,
-    knowledge_base_id: knowledgeBaseId,
+    knowledge_base_id: knowledgeBase.id,
     greeting_message: greetingMessage || undefined,
   }
 

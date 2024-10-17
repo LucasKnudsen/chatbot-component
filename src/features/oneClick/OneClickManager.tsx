@@ -37,7 +37,7 @@ export const OneClickManager = (props: { overrideLogo?: string }) => {
       ])
 
       if (channel.shouldUseFraiaAPI) {
-        const initiationData = await initiateConversation(channel.id)
+        const initiationData = await initiateConversation(channel)
         oneClickActions.initOneClickStore(channel, initiationData)
       } else {
         oneClickActions.initOneClickStore(channel)

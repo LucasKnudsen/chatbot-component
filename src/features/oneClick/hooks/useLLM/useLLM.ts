@@ -113,6 +113,9 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
         if (done) {
           if (sentenceBuffer) {
+            // If the sentence buffer is not empty, fire the last sentence
+            logDev('Is done, fire last sentence: ', sentenceBuffer)
+
             if (isProcessingHtmlTag) {
               logDev('Handling incomplete HTML buffering')
 
@@ -130,8 +133,6 @@ export const useLLM = (props: LLMInput): LLMOutput => {
             if (!isMuted()) {
               handleTTS(sentenceBuffer)
             }
-
-            logDev('Is done, fire last sentence: ', sentenceBuffer)
 
             sentenceBuffer = ''
           }
@@ -188,7 +189,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                       },
                     })
 
-                    const initiateData = await initiateConversation(oneClickStore.activeChannel!.id)
+                    const initiateData = await initiateConversation(oneClickStore.activeChannel!)
 
                     await new Promise((resolve) => setTimeout(resolve, 2500))
 

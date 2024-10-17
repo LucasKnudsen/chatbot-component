@@ -118,6 +118,31 @@ const resetConversation = (conversationId: string) => {
   setOneClickStore('activeAgent', initialAgent)
 }
 
+const getChatInitiationMessage = (channel?: Channel) => {
+  const currentChannel = channel || oneClickStore.activeChannel
+
+  if (!currentChannel?.welcomeText) {
+    return null
+  }
+
+  const datetime = localStorage.getItem('lastStarted')
+
+  if (!datetime) {
+    return currentChannel.welcomeText
+  }
+
+  const lastStarted = new Date(datetime)
+  const now = new Date()
+
+  const diff = now.getTime() - lastStarted.getTime()
+
+  if (diff < 1000 * 60 * 60 * 24) {
+    return currentChannel.welcomeBackText || currentChannel.welcomeText
+  } else {
+    return currentChannel.welcomeText
+  }
+}
+
 const oneClickActions = {
   setStatus: (status: BotStatus) => {
     setOneClickStore('botStatus', status)
@@ -125,6 +150,7 @@ const oneClickActions = {
   setOneClickStore,
   initOneClickStore,
   resetConversation,
+  getChatInitiationMessage,
 }
 
 export { oneClickActions, oneClickStore }
