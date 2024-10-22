@@ -14,7 +14,7 @@ export const isDefined = <T>(value: T | undefined | null): value is NonNullable<
 export const isEmpty = (value: string | undefined | null): value is undefined =>
   value === undefined || value === null || value === ''
 
-export const isNotEmpty = (value: string | undefined | null): value is string =>
+export const isNotEmpty = <T>(value: T | undefined | null): value is T =>
   value !== undefined && value !== null && value !== ''
 
 export const removeTypenameFromInput = <T>(input: T): T => {

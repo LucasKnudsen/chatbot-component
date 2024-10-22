@@ -275,7 +275,12 @@ const AssistantMessage = (props: ChatMessage) => {
 
       <Switch>
         <Match when={props.content}>
-          <div ref={textEl} class='prose text-[var(--textColor)]' />
+          <div
+            ref={textEl}
+            class={`${
+              theme().isDark ? 'prose-invert' : 'prose'
+            } prose-a:text-[var(--primaryColor)] text-[var(--textColor)]`}
+          />
         </Match>
 
         <Match when={oneClickStore.botStatus === BotStatus.THINKING}>

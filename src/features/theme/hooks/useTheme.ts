@@ -1,5 +1,5 @@
 import { ChatSpaceTheme } from '@/graphql/types'
-import { isEmpty } from 'lodash'
+import { isNotEmpty } from '@/utils'
 import { createSignal } from 'solid-js'
 import { Theme, defaultTheme } from '..'
 import { themes } from '../themes' // Direct import to mitigate init error
@@ -20,7 +20,7 @@ export const useTheme = () => {
     if (themeOverrides) {
       const nonEmptyThemeOverrides = Object.entries<any>(themeOverrides).reduce(
         (acc, [key, value]) => {
-          if (!isEmpty(value)) {
+          if (isNotEmpty(value)) {
             acc[key as keyof Theme] = value
           }
           return acc
