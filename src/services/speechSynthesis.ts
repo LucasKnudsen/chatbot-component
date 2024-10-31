@@ -1,5 +1,5 @@
 import { getAuthMode } from '@/features/authentication'
-import { cleanContentForSpeech, oneClickStore } from '@/features/oneClick'
+import { oneClickStore } from '@/features/oneClick'
 import { mutations, SpeechSynthesisInput, SpeechSynthesisMutation } from '@/graphql'
 import { GraphQLQuery } from '@aws-amplify/api'
 
@@ -11,10 +11,10 @@ export const speechSynthesis = async (
   requestIndex?: number
 ) => {
   const { activeAgent } = oneClickStore
-  const cleanedText = cleanContentForSpeech(text)
+  // const cleanedText = cleanContentForSpeech(text)
 
   const input: SpeechSynthesisInput = {
-    text: cleanedText,
+    text,
     knowledgeBaseId,
     requestIndex,
     overrideConfig: activeAgent ? JSON.stringify(activeAgent) : undefined,

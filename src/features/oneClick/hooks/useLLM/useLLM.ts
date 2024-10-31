@@ -116,7 +116,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
             // If the sentence buffer is not empty, fire the last sentence
             logDev('Is done, fire last sentence: ', sentenceBuffer)
 
-            if (isProcessingHtmlTag) {
+            if (htmlBuffer || isProcessingHtmlTag) {
               logDev('Handling incomplete HTML buffering')
 
               setMessages((prev) => {
@@ -245,11 +245,13 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                 })
 
                 const isSentenceBufferEnd = /[.!?]$/.test(chunk || '')
-                const includesUrlWithQueryParams = /https?:\/\/[^\s]+/g.test(sentenceBuffer || '')
+
+                // Check if the sentence includes a URL pattern
+                const sentenceIncludesURL = /https?:\/\/[^\s]+/g.test(sentenceBuffer || '')
 
                 if (sentenceBuffer.split(' ').length > 2 && isSentenceBufferEnd) {
-                  // This check is to prevent mistaking URLs with query params as the end of a sentence
-                  if (!includesUrlWithQueryParams) {
+                  // This check is to prevent breaking up a URL with a period or question mark
+                  if (!sentenceIncludesURL) {
                     if (!isMuted()) {
                       handleTTS(sentenceBuffer)
                     }

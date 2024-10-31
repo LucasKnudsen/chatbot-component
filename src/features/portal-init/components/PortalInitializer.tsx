@@ -39,6 +39,7 @@ export const PortalInitializer = (props: ChatConfig) => {
       if (props.config?.autoOpen) {
         configStoreActions.toggleBot()
       }
+
       return result
     },
   })

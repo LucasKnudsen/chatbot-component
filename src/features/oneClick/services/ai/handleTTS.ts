@@ -3,6 +3,7 @@ import { createSignal } from 'solid-js'
 import { setAudio64 } from '../../hooks'
 import { heyGenActions, heyGenStore } from '../../store/heyGenStore'
 import { oneClickStore } from '../../store/oneClickStore'
+import { cleanContentForSpeech } from '../../utils'
 
 type PendingRequest = {
   status: 'pending' | 'done'
@@ -14,6 +15,8 @@ export const [ttsRequestsPending, setTtsRequestsPending] = createSignal<PendingR
 export const handleTTS = async (sentence: string) => {
   setTtsRequestsPending((prev) => [...prev, { status: 'pending', index: prev.length }])
   const requestIndex = ttsRequestsPending().length - 1
+
+  sentence = cleanContentForSpeech(sentence)
 
   if (oneClickStore.isHeyGenMode) {
     handleHeyGenTTS(sentence, requestIndex)
