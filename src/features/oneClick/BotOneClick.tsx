@@ -4,18 +4,11 @@ import { createAutoAnimate } from '@formkit/auto-animate/solid'
 import { Show, createEffect, on } from 'solid-js'
 import { createAudioRecorder } from '../avatar'
 import { configStore } from '../portal-init'
-import {
-  AvatarOneClick,
-  InputOneClick,
-  InteractionButton,
-  MIC_VISUALIZER_ID,
-  MuteAISwitch,
-  isMuted,
-} from './components'
+import { AvatarOneClick, InputOneClick, InteractionButton, MIC_VISUALIZER_ID } from './components'
 import { AIVoice, aiAudioRef, setIsPlayingQueue } from './components/AIVoice'
 import { Conversation, expandConversation } from './components/Conversation'
-import { isCanceled, setAudio64, setIsCanceled, useLLM } from './hooks'
-import { handleTTS, handleTranscription } from './services'
+import { isCanceled, messages, setAudio64, setIsCanceled, setMessages, useLLM } from './hooks'
+import { handleTranscription } from './services'
 import { heyGenStore } from './store/heyGenStore'
 import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
@@ -31,16 +24,14 @@ export const BotOneClick = () => {
     },
   })
 
-  const { messages, setMessages, submitNewMessage, cancelQuery } = useLLM({
-    initialMessages: [],
-  })
+  const { submitNewMessage, cancelQuery } = useLLM({})
 
-  const handleMuteAudio = () => {
-    if (!aiAudioRef) return
-    aiAudioRef.muted = isMuted()
+  // const handleMuteAudio = () => {
+  //   if (!aiAudioRef) return
+  //   aiAudioRef.muted = isMuted()
 
-    handleStopAudio()
-  }
+  //   handleStopAudio()
+  // }
 
   const handleInterruptHeygen = async (retryLimit: number = 0) => {
     if (!heyGenStore.initialized && !heyGenStore.avatar) {
@@ -182,7 +173,7 @@ export const BotOneClick = () => {
     oneClickActions.setStatus(BotStatus.INITIATING)
 
     // Sends the text to the TTS service
-    !isMuted() && (await handleTTS(message))
+    // !isMuted() && (await handleTTS(message))
 
     // Inject words from welcome message to the conversation as if they were streamed
     setTimeout(async () => {
@@ -208,7 +199,7 @@ export const BotOneClick = () => {
       }
 
       // If the user is muted, we need to manually set the bot status to idle
-      isMuted() && oneClickActions.setStatus(BotStatus.IDLE)
+      oneClickActions.setStatus(BotStatus.IDLE)
 
       localStorage.setItem('lastStarted', new Date().toISOString())
     }, 1000)
@@ -246,7 +237,7 @@ export const BotOneClick = () => {
             'max-width': handelHeyGenMaxWidth(),
           }}
         >
-          <div class='absolute left-8 top-4 z-20 '>
+          {/* <div class='absolute left-8 top-4 z-20 '>
             <Show
               when={
                 oneClickStore.botStatus !== BotStatus.NOT_STARTED && !heyGenStore.isExpandAvatar
@@ -255,7 +246,7 @@ export const BotOneClick = () => {
             >
               <MuteAISwitch onMute={handleMuteAudio} />
             </Show>
-          </div>
+          </div> */}
 
           <div class='h-full w-full'>
             <AvatarOneClick />
@@ -290,7 +281,7 @@ export const BotOneClick = () => {
                 'scrollbar-width': 'none',
               }}
             >
-              <Conversation messages={messages} />
+              <Conversation />
             </div>
 
             <InputOneClick

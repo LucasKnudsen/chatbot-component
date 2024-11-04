@@ -1,7 +1,6 @@
 import { Priority } from '@/graphql'
 import { logDev, logErrorToServer } from '@/utils'
-import { Accessor, createSignal, Setter } from 'solid-js'
-import { isMuted } from '../../components'
+import { createSignal } from 'solid-js'
 import { handleTTS, initiateConversation, setTtsRequestsPending } from '../../services'
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
 import { BotStatus, ChatMessage } from '../../types'
@@ -10,27 +9,24 @@ import { parseLLMStreamResponse } from './utils'
 type SubmitInput = {
   message: string
   overrideSystemInstruction?: string
+  withSpeech?: boolean
 }
 
 type LLMInput = {
-  initialMessages?: ChatMessage[]
   onSubmit?: (input?: SubmitInput) => void
   onSuccess?: (data: string) => void
 }
 
 type LLMOutput = {
-  messages: Accessor<ChatMessage[]>
-  setMessages: Setter<ChatMessage[]>
   submitNewMessage: (input: SubmitInput) => void
   cancelQuery: () => void
 }
 
+export const [messages, setMessages] = createSignal<ChatMessage[]>([])
 export const [audio64, setAudio64] = createSignal<string[]>([])
 export const [isCanceled, setIsCanceled] = createSignal(false)
 
 export const useLLM = (props: LLMInput): LLMOutput => {
-  const [messages, setMessages] = createSignal<ChatMessage[]>(props.initialMessages || [])
-
   let controller: AbortController
 
   const cancelQuery = () => {
@@ -63,7 +59,6 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
     oneClickActions.setStatus(BotStatus.THINKING)
     const history = setMessages((prev) => prev)
-    // !isMuted() && oneClickStore.activeChannel?.overrideConfig?.voiceMode !== VoiceMode.HEYGEN
 
     const body = JSON.stringify({
       knowledgeBaseId: oneClickStore.activeChannel?.id,
@@ -108,6 +103,26 @@ export const useLLM = (props: LLMInput): LLMOutput => {
       // Initiates the response object
       oneClickActions.setStatus(BotStatus.ANSWERING)
 
+      // Function to handle sentences for TTS
+      const handleSentencesForTTS = async (chunk: string) => {
+        const isSentenceBufferEnd = /[.!?]$/.test(chunk || '')
+
+        // Check if the sentence includes a URL pattern
+        const sentenceIncludesURL = /https?:\/\/[^\s]+/g.test(sentenceBuffer || '')
+
+        if (sentenceBuffer.split(' ').length > 2 && isSentenceBufferEnd) {
+          // This check is to prevent breaking up a URL with a period or question mark
+          if (!sentenceIncludesURL) {
+            if (input.withSpeech) {
+              handleTTS(sentenceBuffer)
+            }
+
+            logDev('Fire sentence: ', sentenceBuffer)
+            sentenceBuffer = ''
+          }
+        }
+      }
+
       while (true) {
         const { value, done } = await reader.read()
 
@@ -130,7 +145,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
               oneClickActions.setOneClickStore('indicationMessage', null)
             }
 
-            if (!isMuted()) {
+            if (input.withSpeech) {
               handleTTS(sentenceBuffer)
             }
 
@@ -244,22 +259,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
                   return [...prev]
                 })
 
-                const isSentenceBufferEnd = /[.!?]$/.test(chunk || '')
-
-                // Check if the sentence includes a URL pattern
-                const sentenceIncludesURL = /https?:\/\/[^\s]+/g.test(sentenceBuffer || '')
-
-                if (sentenceBuffer.split(' ').length > 2 && isSentenceBufferEnd) {
-                  // This check is to prevent breaking up a URL with a period or question mark
-                  if (!sentenceIncludesURL) {
-                    if (!isMuted()) {
-                      handleTTS(sentenceBuffer)
-                    }
-
-                    logDev('Fire sentence: ', sentenceBuffer)
-                    sentenceBuffer = ''
-                  }
-                }
+                input.withSpeech && handleSentencesForTTS(chunk)
               })
             }
 
@@ -277,8 +277,6 @@ export const useLLM = (props: LLMInput): LLMOutput => {
             })
             oneClickActions.setStatus(BotStatus.IDLE)
           } finally {
-            // isMuted() && oneClickActions.setStatus(BotStatus.IDLE)
-            // oneClickActions.setStatus(BotStatus.IDLE)
           }
         }
       }
@@ -316,7 +314,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
         })
       }
 
-      if (isMuted()) {
+      if (!input.withSpeech) {
         oneClickActions.setStatus(BotStatus.IDLE)
       }
     }
@@ -330,5 +328,5 @@ export const useLLM = (props: LLMInput): LLMOutput => {
     return data || ''
   }
 
-  return { messages, setMessages, submitNewMessage, cancelQuery }
+  return { submitNewMessage, cancelQuery }
 }

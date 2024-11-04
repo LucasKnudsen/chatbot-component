@@ -6,14 +6,15 @@ import {
   UserIconOneClick,
 } from '@/components'
 import { Marked } from '@ts-stack/markdown'
-import { Accessor, createEffect, createSignal, Match, on, Show, Switch } from 'solid-js'
+import { createEffect, createSignal, Match, on, Show, Switch } from 'solid-js'
 import { useTheme } from '../../theme'
+import { messages } from '../hooks'
 import { oneClickStore } from '../store/oneClickStore'
 import { BotStatus, ChatMessage } from '../types'
 
 export const [expandConversation, setExpandConversation] = createSignal<boolean>(false)
 
-export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
+export const Conversation = () => {
   let chatWindowEl: HTMLDivElement | undefined
   const { theme } = useTheme()
 
@@ -23,7 +24,7 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
 
   createEffect(
     on(
-      () => props.messages()[props.messages().length - 1]?.content,
+      () => messages()[messages().length - 1]?.content,
       () => {
         scrollChatWindowToBottom()
       },
@@ -68,11 +69,11 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
   return (
     <>
       {/* Starter information for the user when there is no messages yet */}
-      {/* <Show when={props.messages().length === 0}>
+      {/* <Show when={messages().length === 0}>
         <StarterInformation />
       </Show> */}
 
-      <Show when={props.messages().length > 0}>
+      <Show when={messages().length > 0}>
         <div
           class={`flex justify-start flex-col relative h-[91%] mt-[20px] border-t border-[var(--borderColor)]`}
         >
@@ -114,12 +115,11 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
               <div id='conversations' class={`py-4  flex flex-col w-full h-auto gap-2 `}>
                 <div class='flex flex-col gap-4 relative '>
                   {/* Chat Messages */}
-                  {props.messages().map((message, index) => {
+                  {messages().map((message, index) => {
                     const isStartOfNewConversation =
                       message.conversationId !== oneClickStore.activeConversationId &&
-                      (index === props.messages().length - 1 ||
-                        props.messages()[index + 1].conversationId ===
-                          oneClickStore.activeConversationId)
+                      (index === messages().length - 1 ||
+                        messages()[index + 1].conversationId === oneClickStore.activeConversationId)
 
                     return (
                       <>
@@ -142,7 +142,7 @@ export const Conversation = (props: { messages: Accessor<ChatMessage[]> }) => {
 
                           <Show
                             when={
-                              props.messages()[props.messages().length - 1].conversationId !==
+                              messages()[messages().length - 1].conversationId !==
                               oneClickStore.activeConversationId
                             }
                           >

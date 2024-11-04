@@ -6,7 +6,6 @@ import { audio64, isCanceled, setAudio64 } from '../hooks'
 import { oneClickActions, oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 import { AI_VOICE_VISUALIZER_ID } from './InteractionButton'
-import { isMuted } from './MuteAISwitch'
 
 export let aiAudioRef: HTMLAudioElement
 
@@ -91,7 +90,6 @@ export const AIVoice = () => {
         aiAudioRef.src = audioSrc
         oneClickActions.setStatus(BotStatus.ANSWERING)
 
-        aiAudioRef.muted = isMuted()
         aiAudioRef.onerror = (e: any) => {
           logDev('Error playing audio:', e)
           setAudio64([])
