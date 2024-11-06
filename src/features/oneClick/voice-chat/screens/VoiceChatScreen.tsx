@@ -1,13 +1,16 @@
-import { Button, KeyboardIcon } from '@/components'
+import { Button, KeyboardIcon, XIcon } from '@/components'
 import { createAudioRecorder } from '@/features/avatar'
+import { configStore } from '@/features/portal-init'
 import { BaseChatMode } from '@/graphql'
 import { logDev, logErrorToServer } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
+import { createEffect, on } from 'solid-js'
 import { isCanceled, setAudio64, setIsCanceled, setMessages, useLLM } from '../../hooks'
 import { handleTranscription } from '../../services'
 import { heyGenStore } from '../../store/heyGenStore'
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
 import { BotStatus } from '../../types'
+import { handleInitiateConversation } from '../../utils'
 import { aiAudioRef, AIVoice, setIsPlayingQueue } from '../components/AIVoice'
 import { AvatarOneClick } from '../components/AvatarOneClick'
 import { InteractionButton, MIC_VISUALIZER_ID } from '../components/InteractionButton'
@@ -76,14 +79,14 @@ export const VoiceChatScreen = () => {
         cancelQuery()
         break
 
-      default:
+      case BotStatus.ANSWERING:
         cancelQuery()
         handleStopAudio()
+        break
 
-        setTimeout(() => {
-          audioRecorder.startRecording()
-          oneClickActions.setStatus(BotStatus.LISTENING)
-        }, 100)
+      default:
+        audioRecorder.startRecording()
+        oneClickActions.setStatus(BotStatus.LISTENING)
         break
     }
   }
@@ -141,6 +144,36 @@ export const VoiceChatScreen = () => {
     return '100%'
   }
 
+  const handleCancelInteraction = () => {
+    switch (oneClickStore.botStatus) {
+      case BotStatus.LISTENING:
+        oneClickActions.setStatus(BotStatus.THINKING)
+        audioRecorder.stopRecording()
+        break
+
+      case BotStatus.THINKING:
+        cancelQuery()
+        break
+
+      case BotStatus.ANSWERING:
+        cancelQuery()
+        handleStopAudio()
+        break
+
+      default:
+        break
+    }
+  }
+
+  createEffect(
+    on(
+      () => configStore.isBotOpened,
+      () => {
+        configStore.isBotOpened && handleInitiateConversation()
+      }
+    )
+  )
+
   return (
     <>
       <AIVoice />
@@ -179,6 +212,7 @@ export const VoiceChatScreen = () => {
           <div class='flex flex-row items-center justify-evenly w-full '>
             <div>
               <Button
+                disabled={oneClickStore.botStatus !== BotStatus.IDLE}
                 onClick={() => {
                   oneClickActions.setOneClickStore({
                     chatMode: BaseChatMode.TEXT,
@@ -195,10 +229,12 @@ export const VoiceChatScreen = () => {
 
             <div>
               <Button
+                onClick={handleCancelInteraction}
+                disabled={!oneClickStore.isBotProcessing}
                 style={{ background: 'transparent', padding: '12px' }}
                 class='outline-1 outline-[var(--primaryColor)] '
               >
-                <div class='w-5 h-5 rounded-md bg-[var(--primaryColor)]' />
+                <XIcon class='text-[var(--primaryColor)]' />
               </Button>
             </div>
           </div>

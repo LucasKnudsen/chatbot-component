@@ -18,7 +18,7 @@ export const AvatarOneClick = () => {
 
         switch (oneClickStore.botStatus) {
           case BotStatus.ANSWERING:
-            videoRef.playbackRate = 2.2
+            videoRef.playbackRate = 2
             videoRef.classList.remove('animate-pulse')
 
             break
@@ -38,13 +38,13 @@ export const AvatarOneClick = () => {
   )
 
   return (
-    <div class={`flex justify-center w-full overflow-hidden z-10 max-h-[340px] `}>
+    <div class={`flex justify-center w-full z-10 max-h-[340px] `}>
       <Switch
         fallback={
           // Default blob animation
           <video
             ref={(el) => (videoRef = el)}
-            id='one-click-entity'
+            // id={AI_VOICE_VISUALIZER_ID}
             class='w-auto h-full object-cover  transition-all duration-1000 '
             autoplay={true}
             playsinline
@@ -52,7 +52,7 @@ export const AvatarOneClick = () => {
             muted
             src={dynamicVoiceSymbol}
             style={{
-              scale: oneClickStore.botStatus === BotStatus.ANSWERING ? 2.5 : 2,
+              scale: oneClickStore.botStatus === BotStatus.ANSWERING ? 2.3 : 2,
             }}
           />
         }

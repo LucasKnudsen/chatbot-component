@@ -20,7 +20,7 @@ export const InteractionButton = (props: Props) => {
         return <Spinner size={28} indicatorColor={theme().onPrimary} />
 
       case BotStatus.LISTENING:
-        return <StopIcon />
+        return <div class='w-7 h-7 rounded-md bg-[var(--onPrimary)]' />
 
       case BotStatus.THINKING:
         return <Spinner size={28} indicatorColor={theme().onPrimary} />

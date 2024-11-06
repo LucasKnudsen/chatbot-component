@@ -1,4 +1,4 @@
-import { Button, Divider, MicrophoneIcon, SendIcon } from '@/components'
+import { Button, Divider, HeadsetIcon, SendIcon } from '@/components'
 import { useTheme } from '@/features/theme'
 import { BaseChatMode } from '@/graphql'
 import { createSignal, Show } from 'solid-js'
@@ -36,11 +36,12 @@ export const InputOneClick = (props: InputProps) => {
 
       <div class='flex items-center justify-between border border-[var(--bubbleButtonColor)] mt-3 rounded-lg bg-[var(--textInputBackgroundColor)]'>
         <Button
+          disabled={oneClickStore.botStatus !== BotStatus.IDLE}
           onClick={() => oneClickActions.setOneClickStore({ chatMode: BaseChatMode.VOICE })}
           class='animate-fade-in'
           style={{ background: 'transparent', 'outline-color': 'transparent' }}
         >
-          <MicrophoneIcon class='text-[var(--primaryColor)] w-6 h-auto' />
+          <HeadsetIcon class='text-[var(--primaryColor)] w-6 h-auto' />
         </Button>
 
         <textarea

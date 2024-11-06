@@ -1,4 +1,5 @@
 import { IndicationMessage, SparklesIcon, Spinner, UserIconOneClick } from '@/components'
+import { BaseChatMode } from '@/graphql'
 import { Marked } from '@ts-stack/markdown'
 import { createEffect, Match, on, Show, Switch } from 'solid-js'
 import { useTheme } from '../../../theme'
@@ -8,7 +9,6 @@ import { BotStatus, ChatMessage } from '../../types'
 
 export const Conversation = () => {
   let chatWindowEl: HTMLDivElement | undefined
-  const { theme } = useTheme()
 
   createEffect(
     on(
@@ -34,6 +34,17 @@ export const Conversation = () => {
       () => oneClickStore.indicationMessage?.message,
       () => {
         scrollChatWindowToBottom(50)
+      },
+      { defer: true }
+    )
+  )
+
+  createEffect(
+    on(
+      () => oneClickStore.chatMode,
+      () => {
+        console.log('scrolling to bottom')
+        oneClickStore.chatMode === BaseChatMode.TEXT && scrollChatWindowToBottom()
       },
       { defer: true }
     )
