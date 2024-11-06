@@ -4,5 +4,6 @@ export type ChatConfig = {
   config?: {
     autoOpen?: boolean
     overrideLogo?: string
+    clientData?: Record<string, any>
   }
 }
