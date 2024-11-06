@@ -5,6 +5,7 @@ import { handleTTS, initiateConversation, setTtsRequestsPending } from '../../se
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
 import { BotStatus, ChatMessage } from '../../types'
 import { parseLLMStreamResponse } from './utils'
+import { configStore } from '@/features/portal-init'
 
 type SubmitInput = {
   message: string
@@ -52,7 +53,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
   const queryLLM = async (input: SubmitInput) => {
     // Reset the requests queue
     setTtsRequestsPending([])
-    setIsCanceled(false)
+    setIsCanceled(false)    
 
     controller = new AbortController()
     const endpoint = import.meta.env.VITE_LLM_STREAM_URL
@@ -68,6 +69,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
       callFraiaAI: oneClickStore.activeChannel?.shouldUseFraiaAPI,
       conversationId: oneClickStore.activeConversationId,
       overrideSystemInstruction: input.overrideSystemInstruction,
+      clientData: configStore?.clientData
     })
 
     setMessages((prev) => [

@@ -8,6 +8,7 @@ type ChatConfigStore = {
   channels: Channel[] | ChannelUserAccess[]
   isBotOpened: boolean
   isDrawerOpened?: boolean
+  clientData?: Record<string, any>
 }
 
 const [configStore, setConfigStore] = createStore<ChatConfigStore>({
@@ -15,6 +16,7 @@ const [configStore, setConfigStore] = createStore<ChatConfigStore>({
   isBotOpened: false,
   chatSpaceConfig: {} as any,
   channels: [],
+  clientData: {},
 })
 
 const openBot = () => {
