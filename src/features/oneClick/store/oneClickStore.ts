@@ -1,4 +1,4 @@
-import { Channel, VoiceMode } from '@/graphql'
+import { BaseChatMode, Channel, VoiceMode } from '@/graphql'
 import { createStore } from 'solid-js/store'
 import { RoutingStreamObject } from '../hooks/useLLM/utils'
 import { InitiateConversationResponse } from '../services'
@@ -17,7 +17,7 @@ export type OneClickStore = {
   activeConversationId?: string
   initialAgent?: AgentAvatarConfig | null
   activeAgent?: AgentAvatarConfig | null
-  chatMode: 'voice' | 'text'
+  chatMode: BaseChatMode | null
   indicationMessage: IndicationMessage | null
   readonly getChatInitiationMessage: string | null
   readonly isHeyGenMode: boolean
@@ -30,7 +30,7 @@ const [oneClickStore, setOneClickStore] = createStore<OneClickStore>({
   activeChannel: null,
   activeAgent: null,
   initialAgent: null,
-  chatMode: 'voice',
+  chatMode: null,
   activeConversationId: '',
   indicationMessage: null,
 
@@ -107,6 +107,7 @@ const initOneClickStore = (channel: Channel, initiationData?: InitiateConversati
     activeChannel: channel,
     activeConversationId: initiationData?.conversationId,
     activeAgent,
+    chatMode: channel.defaultChatMode || BaseChatMode.TEXT,
     initialAgent: { ...activeAgent },
   })
 }

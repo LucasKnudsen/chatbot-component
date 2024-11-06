@@ -2,11 +2,11 @@ import { Button, MicrophoneIcon, NewChatIcon, PowerIcon, Spinner, VolumeIcon } f
 import { configStoreActions } from '@/features/portal-init'
 import { logErrorToServer } from '@/utils'
 import { createEffect, createMemo, createSignal, Match, onCleanup, Show, Switch } from 'solid-js'
-import { useTheme } from '../theme'
-import { initiateConversation } from './services'
-import { heyGenStore } from './store/heyGenStore'
-import { oneClickActions, oneClickStore } from './store/oneClickStore'
-import { BotStatus } from './types'
+import { useTheme } from '../../theme'
+import { initiateConversation } from '../services'
+import { heyGenStore } from '../store/heyGenStore'
+import { oneClickActions, oneClickStore } from '../store/oneClickStore'
+import { BotStatus } from '../types'
 
 export const NavOneClick = () => {
   const { theme } = useTheme()

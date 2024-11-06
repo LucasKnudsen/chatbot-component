@@ -2,9 +2,9 @@ import { useTheme } from '@/features/theme'
 import { logDev, logErrorToServer, shadowQuerySelector } from '@/utils'
 import AudioMotionAnalyzer from 'audiomotion-analyzer'
 import { createEffect, createSignal, on } from 'solid-js'
-import { audio64, isCanceled, setAudio64 } from '../hooks'
-import { oneClickActions, oneClickStore } from '../store/oneClickStore'
-import { BotStatus } from '../types'
+import { audio64, isCanceled, setAudio64 } from '../../hooks'
+import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
+import { BotStatus } from '../../types'
 import { AI_VOICE_VISUALIZER_ID } from './InteractionButton'
 
 export let aiAudioRef: HTMLAudioElement

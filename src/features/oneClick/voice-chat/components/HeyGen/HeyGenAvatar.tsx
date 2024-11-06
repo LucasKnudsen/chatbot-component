@@ -3,9 +3,9 @@ import { configStore } from '@/features/portal-init'
 import { Configuration, StreamingAvatarApi } from '@heygen/streaming-avatar'
 import { createEffect, onCleanup, Show } from 'solid-js'
 import toast from 'solid-toast'
-import { heyGenActions, heyGenStore } from '../../store/heyGenStore'
-import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
-import { BotStatus } from '../../types'
+import { heyGenActions, heyGenStore } from '../../../store/heyGenStore'
+import { oneClickActions, oneClickStore } from '../../../store/oneClickStore'
+import { BotStatus } from '../../../types'
 import { fetchAccessToken } from './services'
 
 const DEV_AVATAR_ID = import.meta.env.VITE_DEV_HEYGEN_AVATAR_ID

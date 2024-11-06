@@ -1,9 +1,8 @@
 import dynamicVoiceSymbol from '@/assets/oneClick/dynamicVoiceSymbol.mp4'
 import { Fade } from '@/components'
 import { createEffect, createSignal, Match, on, Switch } from 'solid-js'
-import { heyGenStore } from '../store/heyGenStore'
-import { oneClickStore } from '../store/oneClickStore'
-import { BotStatus } from '../types'
+import { oneClickStore } from '../../store/oneClickStore'
+import { BotStatus } from '../../types'
 import HeyGenAvatar from './HeyGen/HeyGenAvatar'
 
 export const AvatarOneClick = () => {
@@ -39,11 +38,7 @@ export const AvatarOneClick = () => {
   )
 
   return (
-    <div
-      class={`flex justify-center w-full overflow-hidden z-10  ${
-        heyGenStore.isExpandAvatar ? 'h-full' : 'h-[calc(100%-40px)] rounded-xl'
-      }`}
-    >
+    <div class={`flex justify-center w-full overflow-hidden z-10 max-h-[340px] `}>
       <Switch
         fallback={
           // Default blob animation

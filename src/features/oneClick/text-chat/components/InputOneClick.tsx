@@ -1,8 +1,9 @@
-import { Divider, EditIcon, SendIcon } from '@/components'
+import { Button, Divider, MicrophoneIcon, SendIcon } from '@/components'
 import { useTheme } from '@/features/theme'
+import { BaseChatMode } from '@/graphql'
 import { createSignal, Show } from 'solid-js'
-import { oneClickActions, oneClickStore } from '../store/oneClickStore'
-import { BotStatus } from '../types'
+import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
+import { BotStatus } from '../../types'
 
 type InputProps = {
   onSubmit: (input: string) => void
@@ -16,7 +17,6 @@ export const InputOneClick = (props: InputProps) => {
   const wrapSubmit = () => {
     if (!input() || oneClickStore.botStatus !== BotStatus.IDLE) return
 
-    oneClickActions.setOneClickStore('chatMode', 'text')
     props.onSubmit(input())
     setInput('')
   }
@@ -35,13 +35,19 @@ export const InputOneClick = (props: InputProps) => {
       <Divider margin={0} />
 
       <div class='flex items-center justify-between border border-[var(--bubbleButtonColor)] mt-3 rounded-lg bg-[var(--textInputBackgroundColor)]'>
-        <EditIcon class='mx-3' color={theme().primaryColor} />
+        <Button
+          onClick={() => oneClickActions.setOneClickStore({ chatMode: BaseChatMode.VOICE })}
+          class='animate-fade-in'
+          style={{ background: 'transparent', 'outline-color': 'transparent' }}
+        >
+          <MicrophoneIcon class='text-[var(--primaryColor)] w-6 h-auto' />
+        </Button>
 
         <textarea
           value={input()}
           onChange={(e) => setInput(e.currentTarget.value)}
           onKeyDown={handleKeyDown}
-          class='grow h-[45px] text-[16px] text-[var(--textInputTextColor)] bg-transparent px-3 py-2 resize-none'
+          class='grow h-[45px] text-[16px] text-[var(--textInputTextColor)] bg-transparent px-3 pt-2.5 resize-none'
           placeholder='Message'
           rows={1}
         />

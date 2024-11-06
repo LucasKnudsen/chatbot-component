@@ -1,26 +1,14 @@
-import {
-  ExpandIcon,
-  IndicationMessage,
-  SparklesIcon,
-  Spinner,
-  UserIconOneClick,
-} from '@/components'
+import { IndicationMessage, SparklesIcon, Spinner, UserIconOneClick } from '@/components'
 import { Marked } from '@ts-stack/markdown'
-import { createEffect, createSignal, Match, on, Show, Switch } from 'solid-js'
-import { useTheme } from '../../theme'
-import { messages } from '../hooks'
-import { oneClickStore } from '../store/oneClickStore'
-import { BotStatus, ChatMessage } from '../types'
-
-export const [expandConversation, setExpandConversation] = createSignal<boolean>(false)
+import { createEffect, Match, on, Show, Switch } from 'solid-js'
+import { useTheme } from '../../../theme'
+import { messages } from '../../hooks'
+import { oneClickStore } from '../../store/oneClickStore'
+import { BotStatus, ChatMessage } from '../../types'
 
 export const Conversation = () => {
   let chatWindowEl: HTMLDivElement | undefined
   const { theme } = useTheme()
-
-  const handleExpandConversation = () => {
-    setExpandConversation((prev) => !prev)
-  }
 
   createEffect(
     on(
@@ -79,7 +67,7 @@ export const Conversation = () => {
         >
           {/* Expand button  */}
 
-          <div class='flex absolute z-[100] top-[-13px] w-full items-end justify-end'>
+          {/* <div class='flex absolute z-[100] top-[-13px] w-full items-end justify-end'>
             <button
               class={`flex items-center gap-2 cursor-pointer hover:shadow-md rounded-full justify-end `}
               onClick={handleExpandConversation}
@@ -99,7 +87,7 @@ export const Conversation = () => {
                 />
               </div>
             </button>
-          </div>
+          </div> */}
 
           <div
             ref={chatWindowEl}
