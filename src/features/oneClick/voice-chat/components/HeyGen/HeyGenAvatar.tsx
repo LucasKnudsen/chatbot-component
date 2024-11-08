@@ -147,7 +147,7 @@ const HeyGenAvatar = () => {
       >
         <video
           playsinline
-          class='w-full h-full object-cover animate-fade-in cursor-pointer'
+          class='w-full h-full object-cover animate-fade-in cursor-pointer rounded-xl'
           muted
           autoplay
           ref={(el) => heyGenActions.setVideoRef(el)}

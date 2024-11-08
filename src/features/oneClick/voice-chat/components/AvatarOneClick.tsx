@@ -38,14 +38,14 @@ export const AvatarOneClick = () => {
   )
 
   return (
-    <div class={`flex justify-center w-full z-10 max-h-[340px] `}>
+    <div class={`h-full w-full flex items-center justify-center my-4 overflow-hidden rounded-xl`}>
       <Switch
         fallback={
           // Default blob animation
           <video
             ref={(el) => (videoRef = el)}
             // id={AI_VOICE_VISUALIZER_ID}
-            class='w-auto h-full object-cover  transition-all duration-1000 '
+            class='w-auto h-full object-cover transition-all duration-1000 max-h-[340px]'
             autoplay={true}
             playsinline
             loop
@@ -94,7 +94,9 @@ const ImageAvatar = (props: { initialUrl: string }) => {
 
   return (
     <Fade duration={600}>
-      {showAvatar() && <img class='object-cover h-full w-full' src={url()} alt='avatarOneClick' />}
+      {showAvatar() && (
+        <img class='object-cover h-full w-full rounded-xl' src={url()} alt='avatarOneClick' />
+      )}
     </Fade>
   )
 }

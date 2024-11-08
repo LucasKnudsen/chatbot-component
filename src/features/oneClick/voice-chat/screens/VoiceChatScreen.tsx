@@ -196,12 +196,10 @@ export const VoiceChatScreen = () => {
             </Show>
           </div> */}
 
-        <div class='h-2/3 w-full flex items-center'>
-          <AvatarOneClick />
-        </div>
+        <AvatarOneClick />
 
         <div
-          class={`flex w-full grow ${
+          class={` w-full grow ${
             heyGenStore.isExpandAvatar ? 'opacity-75 hover:opacity-100' : ''
           } z-20`}
           style={{
@@ -209,7 +207,7 @@ export const VoiceChatScreen = () => {
             bottom: heyGenStore.isExpandAvatar ? '15vh' : 'unset',
           }}
         >
-          <div class='flex flex-row items-center justify-evenly w-full '>
+          <div class='flex flex-row items-center justify-evenly w-full h-[150px] '>
             <div>
               <Button
                 disabled={oneClickStore.botStatus !== BotStatus.IDLE}

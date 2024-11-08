@@ -1,4 +1,3 @@
-import { TrackingProvider } from '@/features/tracking'
 import StyleSheet from '@/styles'
 import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/predictions'
 
@@ -27,7 +26,7 @@ export const FraiaPortal = (props: ChatConfig) => {
     <>
       <StyleSheet />
 
-      <TrackingProvider />
+      {/* <TrackingProvider /> */}
 
       <PortalInitializer {...props} />
     </>
