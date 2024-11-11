@@ -11,7 +11,8 @@
     "lint-fix": "eslint --fix \"src/**/*.ts*\"",
     "test": "cypress open",
     "test:run": "cypress run",
-    "allow-backend": "jq '.noUpdateBackend = false' ./amplify/.config/local-env-info.json > tmp.$$.json && mv tmp.$$.json ./amplify/.config/local-env-info.json && cd amplify && mkdir -p backend && echo '{}' > backend/backend-config.json && cd../"
+    "allow-backend": "jq '.noUpdateBackend = false' ./amplify/.config/local-env-info.json > tmp.$$.json && mv tmp.$$.json ./amplify/.config/local-env-info.json && cd amplify && mkdir -p backend && echo '{}' > backend/backend-config.json && cd../",
+    "quick-push": "git push upstream dev && git checkout testing && git merge dev && git push upstream testing && git checkout staging && git merge testing && git push upstream staging && git checkout dev"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
