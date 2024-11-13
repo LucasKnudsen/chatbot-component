@@ -32,6 +32,7 @@ export const PortalInitializer = (props: ChatConfig) => {
 
       configStoreActions.setConfigStore('chatSpaceConfig', result)
       configStoreActions.setConfigStore('clientData', props.config?.clientData || {})
+      configStoreActions.setConfigStore('styleConfig', props.config?.styleConfig || {})
 
       initTheme(chatSpaceConfig.isOneClick ? 'oneClick' : (themeId as keyof typeof themes), theme)
       initText(text, defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
@@ -43,7 +44,7 @@ export const PortalInitializer = (props: ChatConfig) => {
 
       return result
     },
-  })  
+  })
 
   return (
     <>

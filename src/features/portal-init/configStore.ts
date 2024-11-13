@@ -2,6 +2,7 @@ import { Channel, ChannelUserAccess } from '@/graphql'
 
 import { ChatSpace } from '@/graphql'
 import { createStore } from 'solid-js/store'
+import { ChatStyleConfig } from './types'
 
 type ChatConfigStore = {
   chatSpaceConfig: ChatSpace
@@ -9,6 +10,7 @@ type ChatConfigStore = {
   isBotOpened: boolean
   isDrawerOpened?: boolean
   clientData?: Record<string, any>
+  styleConfig?: ChatStyleConfig
 }
 
 const [configStore, setConfigStore] = createStore<ChatConfigStore>({
@@ -17,6 +19,7 @@ const [configStore, setConfigStore] = createStore<ChatConfigStore>({
   chatSpaceConfig: {} as any,
   channels: [],
   clientData: {},
+  styleConfig: {},
 })
 
 const openBot = () => {

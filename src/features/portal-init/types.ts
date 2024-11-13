@@ -1,4 +1,4 @@
-type ChatStyleConfig = {
+export type ChatStyleConfig = {
   containerWidth?: string
   containerHeight?: string
 }
