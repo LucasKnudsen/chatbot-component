@@ -1,3 +1,8 @@
+type ChatStyleConfig = {
+  containerWidth?: string
+  containerHeight?: string
+}
+
 export type ChatConfig = {
   spaceId: string
 
@@ -5,5 +10,6 @@ export type ChatConfig = {
     autoOpen?: boolean
     overrideLogo?: string
     clientData?: Record<string, any>
+    styleConfig?: ChatStyleConfig
   }
 }

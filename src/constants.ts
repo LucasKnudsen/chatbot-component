@@ -48,7 +48,11 @@ export const chatflows: Record<string, ChatConfig> = {
       overrideLogo: 'https://fraia-test-bucket.s3.ap-southeast-1.amazonaws.com/logo.svg',
       clientData: {
         access_group_id: 'test',
-      }
+      },
+      styleConfig: {
+        containerWidth: '400px',
+        containerHeight: '600px',
+      },
     },
   },
   private: {

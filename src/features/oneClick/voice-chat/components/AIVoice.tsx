@@ -53,8 +53,6 @@ export const AIVoice = () => {
 
   createEffect(() => {
     if (aiAudioRef) {
-      setupAudioMotion()
-
       // Play some initial audio to trigger the browser to allow audio playback
       aiAudioRef.muted = true
       aiAudioRef.volume = 0
@@ -98,6 +96,8 @@ export const AIVoice = () => {
       const audioSrc = `data:audio/mp3;base64,${base64}`
 
       if (aiAudioRef) {
+        setupAudioMotion()
+
         aiAudioRef.src = audioSrc
         aiAudioRef.muted = false
         aiAudioRef.volume = 1
