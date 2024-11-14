@@ -50,8 +50,8 @@ export const chatflows: Record<string, ChatConfig> = {
         access_group_id: 'test',
       },
       styleConfig: {
-        containerWidth: '400px',
-        containerHeight: '600px',
+        containerWidth: '800px',
+        containerHeight: '700px',
       },
     },
   },

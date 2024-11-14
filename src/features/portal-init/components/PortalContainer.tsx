@@ -18,7 +18,8 @@ export const PortalContainer = (props: { children: JSX.Element }) => {
         background: `url(${theme().backgroundImageUrl}) no-repeat center center / cover ${
           theme().backgroundColor
         }`,
-
+        width: configStore.styleConfig?.containerWidth ? `${configStore.styleConfig.containerWidth}` : '', 
+        height: configStore.styleConfig?.containerHeight ? `${configStore.styleConfig.containerHeight}` : '',
         'z-index': 69420,
       }}
       part='bot'
