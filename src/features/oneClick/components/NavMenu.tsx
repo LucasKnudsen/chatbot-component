@@ -10,7 +10,7 @@ import { initiateConversation } from '../services'
 import { oneClickActions, oneClickStore } from '../store/oneClickStore'
 
 const MenuItem = ({ Icon, text, onClick }: { text: string; Icon: any; onClick?: () => void }) => {
-  const handleOnClick = (e: any) => {
+  const handleOnClick = () => {
     onClick?.()
   }
 
