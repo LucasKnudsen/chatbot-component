@@ -3,6 +3,7 @@ import { ExitFullScreenIcon } from '@/components/icons/ExitFullScreen'
 import { FullScreenIcon } from '@/components/icons/FullScreenIcon'
 import { configStore, configStoreActions } from '@/features/portal-init'
 import { logErrorToServer } from '@/utils'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 import { createSignal, Show } from 'solid-js'
 import { Popover, PopoverButton, PopoverPanel } from 'terracotta'
 import { initiateConversation } from '../services'
@@ -30,6 +31,7 @@ const MenuItem = ({ Icon, text, onClick }: { text: string; Icon: any; onClick?: 
 export const NavMenu = () => {
   const [isPopoverOpen, setIsPopoverOpen] = createSignal(false)
   const [loading, setLoading] = createSignal(false)
+  const device = useMediaQuery()
 
   const handleFullScreen = () => {
     configStoreActions.setConfigStore('isInFullScreenMode', !configStore.isInFullScreenMode)
@@ -87,11 +89,13 @@ export const NavMenu = () => {
           <MenuItem text='New Conversation' Icon={<Spinner size={24} />} />
         </Show>
 
-        <MenuItem
-          text={configStore.isInFullScreenMode ? 'Exit Fullscreen' : 'Enter Fullscreen'}
-          Icon={configStore.isInFullScreenMode ? ExitFullScreenIcon : FullScreenIcon}
-          onClick={handleFullScreen}
-        />
+        <Show when={device() === 'desktop'}>
+          <MenuItem
+            text={configStore.isInFullScreenMode ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+            Icon={configStore.isInFullScreenMode ? ExitFullScreenIcon : FullScreenIcon}
+            onClick={handleFullScreen}
+          />
+        </Show>
       </PopoverPanel>
     </Popover>
   )

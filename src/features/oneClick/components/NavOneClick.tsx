@@ -1,11 +1,9 @@
-import { Button, MicrophoneIcon, NewChatIcon, PowerIcon, Spinner, VolumeIcon } from '@/components'
-import { configStore, configStoreActions } from '@/features/portal-init'
-import { logErrorToServer } from '@/utils'
+import { Button, MicrophoneIcon, PowerIcon, Spinner, VolumeIcon } from '@/components'
+import { configStoreActions } from '@/features/portal-init'
 import { createEffect, createMemo, createSignal, Match, onCleanup, Show, Switch } from 'solid-js'
 import { useTheme } from '../../theme'
-import { initiateConversation } from '../services'
 import { heyGenStore } from '../store/heyGenStore'
-import { oneClickActions, oneClickStore } from '../store/oneClickStore'
+import { oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
 import { NavMenu } from './NavMenu'
 
@@ -72,28 +70,6 @@ const StatusText = ({ text }: { text: string }) => {
 const IdleStatus = () => {
   const { theme } = useTheme()
   const [currentIndex, setCurrentIndex] = createSignal(0)
-  const { allowFullScreen } = configStore
-  const [loading, setLoading] = createSignal(false)
-  const screenWidth = window.innerWidth
-
-  const initiateNewConversation = async () => {
-    setLoading(true)
-
-    try {
-      const initiateData = await initiateConversation(oneClickStore.activeChannel!)
-
-      oneClickActions.resetConversation(initiateData.conversationId)
-    } catch (error) {
-      logErrorToServer({
-        error,
-        context: {
-          description: 'Error initiating a new conversation',
-        },
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
 
   createEffect(() => {
     const interval = setInterval(() => {
@@ -106,24 +82,7 @@ const IdleStatus = () => {
   return (
     <>
       <div class='absolute left-0.5 -top-0.5 z-100'>
-        {allowFullScreen &&
-        screenWidth > parseInt(configStore.styleConfig?.containerWidth || '0') ? (
-          <NavMenu />
-        ) : (
-          <Button
-            style={{ background: 'transparent', 'outline-color': 'transparent' }}
-            onClick={initiateNewConversation}
-          >
-            {loading() ? (
-              <Spinner size={20} />
-            ) : (
-              <NewChatIcon
-                class=' text-[var(--primaryColor)] w-6 h-auto -mt-0.5'
-                stroke-width={1.5}
-              />
-            )}
-          </Button>
-        )}
+        <NavMenu />
       </div>
 
       <Switch>

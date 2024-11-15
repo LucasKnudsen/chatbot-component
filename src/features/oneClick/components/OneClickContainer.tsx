@@ -1,4 +1,5 @@
 import { useTheme } from '@/features/theme'
+import { useMediaQuery } from '@/utils/useMediaQuery'
 import { JSX } from 'solid-js'
 import { configStore } from '../../portal-init'
 import { heyGenStore } from '../store/heyGenStore'
@@ -7,6 +8,7 @@ export const OneClickContainer = (props: { children: JSX.Element }) => {
   // Wrapper for the One Click Bot. This should "open" and "close" the bot depending on configStore.isBotOpened
   // Look in PortalContainer for inspo
   const { theme } = useTheme()
+  const device = useMediaQuery()
 
   return (
     <div
@@ -20,8 +22,18 @@ export const OneClickContainer = (props: { children: JSX.Element }) => {
         color: theme().textColor,
         background: ` no-repeat center center / cover ${theme().backgroundColor}`,
         'z-index': 69420,
-        width: heyGenStore.isExpandAvatar || configStore.isInFullScreenMode ? '100vw' : configStore.styleConfig?.containerWidth ? `${configStore.styleConfig.containerWidth}` : '',
-        height: heyGenStore.isExpandAvatar || configStore.isInFullScreenMode ? '100vh' : configStore.styleConfig?.containerHeight ? `${configStore.styleConfig.containerHeight}` : '',
+        width:
+          heyGenStore.isExpandAvatar || configStore.isInFullScreenMode || device() !== 'desktop'
+            ? '100vw'
+            : configStore.styleConfig?.containerWidth
+            ? `${configStore.styleConfig.containerWidth}`
+            : '',
+        height:
+          heyGenStore.isExpandAvatar || configStore.isInFullScreenMode || device() !== 'desktop'
+            ? '100vh'
+            : configStore.styleConfig?.containerHeight
+            ? `${configStore.styleConfig.containerHeight}`
+            : '',
         bottom: heyGenStore.isExpandAvatar || configStore.isInFullScreenMode ? 0 : '',
         right: heyGenStore.isExpandAvatar || configStore.isInFullScreenMode ? 0 : '',
         'border-radius': heyGenStore.isExpandAvatar || configStore.isInFullScreenMode ? 0 : '',
