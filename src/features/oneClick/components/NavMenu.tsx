@@ -10,10 +10,14 @@ import { initiateConversation } from '../services'
 import { oneClickActions, oneClickStore } from '../store/oneClickStore'
 
 const MenuItem = ({ Icon, text, onClick }: { text: string; Icon: any; onClick?: () => void }) => {
+  const handleOnClick = () => {
+    onClick?.()
+  }
+
   return (
     <button
       class='flex items-center justify-start gap-3 px-4 py-2  bg-[var(--surfaceBackground)] hover:bg-[var(--surfaceHoveredBackground)]'
-      onClick={onClick}
+      onClick={handleOnClick}
     >
       <Icon class='text-[var(--primaryColor)] w-6 h-6 -mt-0.5' stroke-width={1.5} />
 
