@@ -69,7 +69,7 @@ export const PortalInitializer = (props: ChatConfig) => {
             <AuthProvider isPublic={Boolean(configQuery.data()?.isPublic)}>
               <div
                 data-testid='PortalInitializer'
-                class='fixed top-0 left-0 flex flex-nowrap h-full w-full justify-center overflow-hidden animate-fade-in '
+                class='fixed top-0 left-0 rounded-xl flex flex-nowrap h-full w-full justify-center overflow-hidden animate-fade-in '
               >
                 <OneClickManager overrideLogo={props.config?.overrideLogo} />
               </div>
