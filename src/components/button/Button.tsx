@@ -5,7 +5,7 @@ import { JSX } from 'solid-js'
 // import { Spinner } from '../loaders'
 
 type Props = {
-  onClick?: () => void | Promise<void>
+  onClick?: () => any | Promise<any>
   loading?: boolean
   children: JSX.Element
   padding?: string
