@@ -1,4 +1,4 @@
-import { Button, MoreIcon, NewChatIcon, Spinner } from '@/components'
+import { Button, Menu2Icon, NewChatIcon, Spinner } from '@/components'
 import { ExitFullScreenIcon } from '@/components/icons/ExitFullScreen'
 import { FullScreenIcon } from '@/components/icons/FullScreenIcon'
 import { configStore, configStoreActions } from '@/features/portal-init'
@@ -21,9 +21,9 @@ const MenuItem = ({ Icon, text, onClick }: { text: string; Icon: any; onClick?: 
       class='flex items-center justify-start gap-3 px-4 py-2  bg-[var(--surfaceBackground)] hover:bg-[var(--surfaceHoveredBackground)]'
       onClick={handleOnClick}
     >
-      <Icon class=' text-[var(--primaryColor)] w-6 h-6 -mt-0.5' stroke-width={1.5} />
+      <Icon class='text-[var(--primaryColor)] w-6 h-6 -mt-0.5' stroke-width={1.5} />
 
-      <p class='font-semibold text-sm opacity-50'>{text}</p>
+      <p class='font-semibold text-sm text-[var(--textColor)] opacity-80'>{text}</p>
     </button>
   )
 }
@@ -68,10 +68,11 @@ export const NavMenu = () => {
       <PopoverButton>
         <Button
           style={{
+            outline: 'none',
             background: 'transparent',
           }}
         >
-          <MoreIcon class='text-[var(--primaryColor)] w-6 h-auto' stroke-width={1.5} />
+          <Menu2Icon class='text-[var(--primaryColor)] w-6 h-auto' />
         </Button>
       </PopoverButton>
 
