@@ -11,5 +11,7 @@ export type ChatConfig = {
     overrideLogo?: string
     clientData?: Record<string, any>
     styleConfig?: ChatStyleConfig
+    isInFullScreenMode?: boolean
+    allowFullScreen?: boolean
   }
 }

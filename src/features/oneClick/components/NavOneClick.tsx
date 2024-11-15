@@ -1,5 +1,5 @@
 import { Button, MicrophoneIcon, NewChatIcon, PowerIcon, Spinner, VolumeIcon } from '@/components'
-import { configStoreActions } from '@/features/portal-init'
+import { configStore, configStoreActions } from '@/features/portal-init'
 import { logErrorToServer } from '@/utils'
 import { createEffect, createMemo, createSignal, Match, onCleanup, Show, Switch } from 'solid-js'
 import { useTheme } from '../../theme'
@@ -7,6 +7,7 @@ import { initiateConversation } from '../services'
 import { heyGenStore } from '../store/heyGenStore'
 import { oneClickActions, oneClickStore } from '../store/oneClickStore'
 import { BotStatus } from '../types'
+import { NavMenu } from './NavMenu'
 
 export const NavOneClick = () => {
   const { theme } = useTheme()
@@ -35,7 +36,7 @@ export const NavOneClick = () => {
 
   return (
     <Show when={!heyGenStore.isExpandAvatar}>
-      <div class='flex items-center w-full pt-5 px-5'>
+      <div class='flex items-center w-full pt-5 px-5 relative'>
         <div
           class='flex flex-wrap items-enter rounded-full p-2.5 z-50 w-full'
           style={{
@@ -71,15 +72,9 @@ const StatusText = ({ text }: { text: string }) => {
 const IdleStatus = () => {
   const { theme } = useTheme()
   const [currentIndex, setCurrentIndex] = createSignal(0)
+  const { allowFullScreen } = configStore
   const [loading, setLoading] = createSignal(false)
-
-  createEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex == 0 ? 1 : 0))
-    }, 5000)
-
-    onCleanup(() => clearInterval(interval))
-  })
+  const screenWidth = window.innerWidth
 
   const initiateNewConversation = async () => {
     setLoading(true)
@@ -100,22 +95,35 @@ const IdleStatus = () => {
     }
   }
 
+  createEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex == 0 ? 1 : 0))
+    }, 5000)
+
+    onCleanup(() => clearInterval(interval))
+  })
+
   return (
     <>
-      <div class='absolute left-0.5 -top-0.5'>
-        <Button
-          style={{ background: 'transparent', 'outline-color': 'transparent' }}
-          onClick={initiateNewConversation}
-        >
-          {loading() ? (
-            <Spinner size={20} />
-          ) : (
-            <NewChatIcon
-              class=' text-[var(--primaryColor)] w-6 h-auto -mt-0.5'
-              stroke-width={1.5}
-            />
-          )}
-        </Button>
+      <div class='absolute left-0.5 -top-0.5 z-100'>
+        {allowFullScreen &&
+        screenWidth > parseInt(configStore.styleConfig?.containerWidth || '0') ? (
+          <NavMenu />
+        ) : (
+          <Button
+            style={{ background: 'transparent', 'outline-color': 'transparent' }}
+            onClick={initiateNewConversation}
+          >
+            {loading() ? (
+              <Spinner size={20} />
+            ) : (
+              <NewChatIcon
+                class=' text-[var(--primaryColor)] w-6 h-auto -mt-0.5'
+                stroke-width={1.5}
+              />
+            )}
+          </Button>
+        )}
       </div>
 
       <Switch>

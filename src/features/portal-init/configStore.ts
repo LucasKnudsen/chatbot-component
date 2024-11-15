@@ -11,6 +11,8 @@ type ChatConfigStore = {
   isDrawerOpened?: boolean
   clientData?: Record<string, any>
   styleConfig?: ChatStyleConfig
+  isInFullScreenMode?: boolean
+  allowFullScreen?: boolean
 }
 
 const [configStore, setConfigStore] = createStore<ChatConfigStore>({
@@ -20,6 +22,8 @@ const [configStore, setConfigStore] = createStore<ChatConfigStore>({
   channels: [],
   clientData: {},
   styleConfig: {},
+  isInFullScreenMode: false,
+  allowFullScreen: false
 })
 
 const openBot = () => {

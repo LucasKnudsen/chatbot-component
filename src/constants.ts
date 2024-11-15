@@ -45,13 +45,15 @@ export const chatflows: Record<string, ChatConfig> = {
     spaceId: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
       autoOpen: false,
+      isInFullScreenMode: false,
+      allowFullScreen: true,
       overrideLogo: 'https://fraia-test-bucket.s3.ap-southeast-1.amazonaws.com/logo.svg',
       clientData: {
         access_group_id: 'test',
       },
       styleConfig: {
-        containerWidth: '800px',
-        containerHeight: '700px',
+        containerWidth: '500px',
+        containerHeight: '680px',
       },
     },
   },

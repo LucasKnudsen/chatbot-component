@@ -33,6 +33,8 @@ export const PortalInitializer = (props: ChatConfig) => {
       configStoreActions.setConfigStore('chatSpaceConfig', result)
       configStoreActions.setConfigStore('clientData', props.config?.clientData || {})
       configStoreActions.setConfigStore('styleConfig', props.config?.styleConfig || {})
+      configStoreActions.setConfigStore('isInFullScreenMode', props?.config?.isInFullScreenMode || false)
+      configStoreActions.setConfigStore('allowFullScreen', props?.config?.allowFullScreen || false)
 
       initTheme(chatSpaceConfig.isOneClick ? 'oneClick' : (themeId as keyof typeof themes), theme)
       initText(text, defaultLanguage || SYSTEM_DEFAULT_LANGUAGE)
