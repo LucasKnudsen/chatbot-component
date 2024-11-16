@@ -43,6 +43,8 @@ export const NavMenu = () => {
   }
 
   const initiateNewConversation = async () => {
+    if (loading()) return
+
     setLoading(true)
 
     try {
@@ -82,7 +84,15 @@ export const NavMenu = () => {
           class='flex flex-col op rounded-lg overflow-hidden shadow-lg mt-3 bg-[var(--backgroundColor)]'
         >
           <MenuItem text='New Conversation' Icon={<Spinner size={24} />} />
+
           <MenuItem text='New Conversation' Icon={NewChatIcon} onClick={initiateNewConversation} />
+
+          <MenuItem
+            text='New Conversation'
+            Icon={loading() ? <Spinner size={24} /> : <NewChatIcon />}
+            onClick={initiateNewConversation}
+          />
+
           <Show when={device() === 'desktop'}>
             <MenuItem
               text={configStore.isInFullScreenMode ? 'Exit Fullscreen' : 'Enter Fullscreen'}
