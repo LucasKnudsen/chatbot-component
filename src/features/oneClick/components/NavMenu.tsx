@@ -81,19 +81,8 @@ export const NavMenu = () => {
           ref={setPopper}
           class='flex flex-col op rounded-lg overflow-hidden shadow-lg mt-3 bg-[var(--backgroundColor)]'
         >
-          <Show
-            when={loading()}
-            fallback={
-              <MenuItem
-                text='New Conversation'
-                Icon={NewChatIcon}
-                onClick={initiateNewConversation}
-              />
-            }
-          >
-            <MenuItem text='New Conversation' Icon={<Spinner size={24} />} />
-          </Show>
-
+          <MenuItem text='New Conversation' Icon={<Spinner size={24} />} />
+          <MenuItem text='New Conversation' Icon={NewChatIcon} onClick={initiateNewConversation} />
           <Show when={device() === 'desktop'}>
             <MenuItem
               text={configStore.isInFullScreenMode ? 'Exit Fullscreen' : 'Enter Fullscreen'}
