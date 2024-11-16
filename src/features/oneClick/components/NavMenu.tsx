@@ -4,12 +4,20 @@ import { FullScreenIcon } from '@/components/icons/FullScreenIcon'
 import { configStore, configStoreActions } from '@/features/portal-init'
 import { logErrorToServer } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
-import { createSignal, Show } from 'solid-js'
+import { createSignal, JSX, Show } from 'solid-js'
 import usePopper from 'solid-popper'
 import { initiateConversation } from '../services'
 import { oneClickActions, oneClickStore } from '../store/oneClickStore'
 
-const MenuItem = ({ Icon, text, onClick }: { text: string; Icon: any; onClick?: () => void }) => {
+const MenuItem = ({
+  Icon,
+  text,
+  onClick,
+}: {
+  text: string
+  Icon: JSX.Element | ((props: any) => JSX.Element)
+  onClick?: () => void
+}) => {
   const handleOnClick = () => {
     onClick?.()
   }
@@ -19,7 +27,11 @@ const MenuItem = ({ Icon, text, onClick }: { text: string; Icon: any; onClick?: 
       class='flex items-center justify-start gap-3 px-4 py-2  bg-[var(--surfaceBackground)] hover:bg-[var(--surfaceHoveredBackground)]'
       onClick={handleOnClick}
     >
-      <Icon class='text-[var(--primaryColor)] w-6 h-6 -mt-0.5' stroke-width={1.5} />
+      {typeof Icon === 'function' ? (
+        <Icon class='text-[var(--primaryColor)] w-6 h-6 -mt-0.5' stroke-width={1.5} />
+      ) : (
+        Icon
+      )}
 
       <p class='font-semibold text-sm text-[var(--textColor)] opacity-80'>{text}</p>
     </button>
@@ -83,15 +95,18 @@ export const NavMenu = () => {
           ref={setPopper}
           class='flex flex-col op rounded-lg overflow-hidden shadow-lg mt-3 bg-[var(--backgroundColor)]'
         >
-          <MenuItem text='New Conversation' Icon={<Spinner size={24} />} />
-
-          <MenuItem text='New Conversation' Icon={NewChatIcon} onClick={initiateNewConversation} />
-
-          <MenuItem
-            text='New Conversation'
-            Icon={loading() ? <Spinner size={24} /> : <NewChatIcon />}
-            onClick={initiateNewConversation}
-          />
+          <Show
+            when={loading()}
+            fallback={
+              <MenuItem
+                text='New Conversation'
+                Icon={NewChatIcon}
+                onClick={initiateNewConversation}
+              />
+            }
+          >
+            <MenuItem text='New Conversation' Icon={<Spinner size={24} />} />
+          </Show>
 
           <Show when={device() === 'desktop'}>
             <MenuItem
