@@ -5,9 +5,11 @@ import { oneClickActions, oneClickStore } from './store/oneClickStore'
 import { BotStatus } from './types'
 
 export function cleanContentForSpeech(content: string): string {
-  // Removing markdown headers and other unwanted characters
-  let cleanedContent = content.replace(/[#_*~`>+\=\[\]\(\)]/g, '').replace(/\n/g, ' ')
 
+  // removing HTML tags
+  let cleanedContent = content.replace(/\[(!)?html\]/g, '');
+  // Removing markdown headers and other unwanted characters
+  cleanedContent = cleanedContent.replace(/[#_*~`>+\=\[\]\(\)]/g, '').replace(/\n/g, ' ')
   // Removing URLs
   cleanedContent = cleanedContent.replace(/https?:\/\/[^\s]+/g, '')
 

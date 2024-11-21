@@ -94,3 +94,12 @@ export const parseLLMStreamResponse = (value: string): ParsedAIResponse => {
 
   return parsedValue
 }
+
+
+export const cleanHTMLTags = (content: string): string => {
+  if (content.includes("[html]") || content.includes("[!html]")) {
+    return content.replace(/\[(!)?html\]/g, '');
+  }
+  return content;
+  
+}
