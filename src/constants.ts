@@ -15,33 +15,24 @@ export const defaultBotProps: ChatConfig = {
 }
 
 export const chatflows: Record<string, ChatConfig> = {
-  // concordium: {
-  //   chatflowid: 'e8ce12e8-1c2c-40c4-9c4d-70ab337caee9',
-  //   apiHost: 'http://aiassistant.lionbrain.ai:3000',
-  // },
-  // fraia_test: {
-  //   chatflowid: 'ac2aa23a-5c82-4f50-8b7a-76f87887fc38',
-  //   apiHost: 'https://lionbrain.softdesign.dk',
-  // },
-  seier: {
-    spaceId: 'yy5d64f3-6d58-49d1-8143-d59caa88fd1f',
-    config: {
-      autoOpen: true,
-    },
-  },
-  chula: {
-    spaceId: 'zz5d64f3-6d58-49d1-8143-d59caa88fd1f',
-    config: {
-      autoOpen: true,
-    },
-  },
   staging: {
     spaceId: 'za5d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
       autoOpen: true,
     },
   },
-  test: {
+  testing: {
+    spaceId: 'd52a53f0-d497-4e0a-b17d-d1d1eee4d16b',
+    config: {
+      autoOpen: false,
+      startInFullscreen: false,
+      overrideLogo: 'https://fraia-test-bucket.s3.ap-southeast-1.amazonaws.com/logo.svg',
+      clientData: {
+        name: 'John',
+      },
+    },
+  },
+  dev: {
     spaceId: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
       autoOpen: false,
@@ -49,30 +40,12 @@ export const chatflows: Record<string, ChatConfig> = {
       overrideLogo: 'https://fraia-test-bucket.s3.ap-southeast-1.amazonaws.com/logo.svg',
       clientData: {
         access_group_id: 'test',
+        name: 'John',
       },
       styleConfig: {
         containerWidth: '500px',
         containerHeight: '680px',
       },
-    },
-  },
-  private: {
-    spaceId: 'f05d64f3-6d58-49d1-8143-d59caa88fd1f',
-    config: {
-      autoOpen: true,
-    },
-  },
-
-  fraia_prod: {
-    spaceId: 'f86f6a13-a58c-44d8-87cd-077f559fc0fc',
-    config: {
-      autoOpen: false,
-    },
-  },
-  fraia_dev: {
-    spaceId: 'f86f6a13-a58c-44d8-87cd-077f559fc0fc',
-    config: {
-      autoOpen: false,
     },
   },
 }
