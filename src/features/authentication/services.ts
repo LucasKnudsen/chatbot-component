@@ -12,9 +12,6 @@ export const authenticate = async (user?: any) => {
 
     await Promise.all([getUserDetails(user.username)])
 
-    // TODO: IF hostType is COMPANY, check if user is a member of the company
-
-    authStoreActions.setAuthStore('authenticating', false)
     authStoreActions.setAuthStore('isAuthenticated', true)
   } catch (error) {
     logErrorToServer({
@@ -23,6 +20,8 @@ export const authenticate = async (user?: any) => {
         description: 'Error authenticating user',
       },
     })
+  } finally {
+    authStoreActions.setAuthStore('authenticating', false)
   }
 }
 
@@ -65,6 +64,10 @@ export const getAuthMode = async () => {
   } catch (error) {
     authMode = 'AWS_IAM'
   }
+
+  authStoreActions.setAuthStore({
+    authMode,
+  })
 
   return authMode
 }

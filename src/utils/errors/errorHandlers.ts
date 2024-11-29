@@ -1,4 +1,5 @@
 import { logDev } from '..'
+import { logMessageToServer, LogType } from '../logging/serverLogging'
 
 export const parseError = (error: any): Error => {
   let parsedError = error
@@ -30,4 +31,19 @@ export const parseError = (error: any): Error => {
   logDev('Parsed error: ', parsedError)
 
   return parsedError
+}
+
+/** Logs an error message to the server and returns the logId
+ * @param error The error object to log
+ * @param tag An optional tag to identify the source of the error
+ * @returns The logId of the logged error
+ * */
+export function logErrorMessage(error: any, tag?: string) {
+  const parsedError = parseError(error)
+
+  return logMessageToServer({
+    message: parsedError.message,
+    tag: tag,
+    type: LogType.ERROR,
+  })
 }

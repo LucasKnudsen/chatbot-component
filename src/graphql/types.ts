@@ -1247,6 +1247,7 @@ export enum FraiaDBCollections {
   CONVERSATIONS = "CONVERSATIONS",
   AGENTS = "AGENTS",
   MESSAGES = "MESSAGES",
+  ADHOC = "ADHOC",
 }
 
 
@@ -3235,6 +3236,14 @@ export type HandleFraiaDBMutationVariables = {
 
 export type HandleFraiaDBMutation = {
   handleFraiaDB: string,
+};
+
+export type LogMessageMutationVariables = {
+  log: string,
+};
+
+export type LogMessageMutation = {
+  logMessage: number,
 };
 
 export type GetCodeItemQueryVariables = {

@@ -12,6 +12,8 @@ export const useAuth = () => {
     Hub.listen('auth', (data) => {
       const { payload } = data
 
+      console.log(data)
+
       if (payload.event === 'signIn') {
         authenticate(payload.data)
       }

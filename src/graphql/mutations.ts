@@ -1383,3 +1383,10 @@ export const handleFraiaDB = /* GraphQL */ `mutation HandleFraiaDB($input: Handl
   APITypes.HandleFraiaDBMutationVariables,
   APITypes.HandleFraiaDBMutation
 >;
+export const logMessage = /* GraphQL */ `mutation LogMessage($log: AWSJSON!) {
+  logMessage(log: $log)
+}
+` as GeneratedMutation<
+  APITypes.LogMessageMutationVariables,
+  APITypes.LogMessageMutation
+>;

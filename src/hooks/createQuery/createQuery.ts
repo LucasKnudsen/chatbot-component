@@ -1,4 +1,3 @@
-import { logDev, logErrorToServer } from '@/utils'
 import { Accessor, createSignal, onMount } from 'solid-js'
 
 // Define types for the query function and the hook return value
@@ -43,12 +42,8 @@ const createQuery = <T, R>(options: QueryOptions<T, R>): QueryState<R> => {
       options.onSuccess?.(result)
       setIsSuccess(true)
     } catch (err) {
-      logDev('Error in query', err)
       setError(err)
       options.onError?.(err)
-      logErrorToServer({
-        error: err,
-      })
     } finally {
       setIsLoading(false)
     }

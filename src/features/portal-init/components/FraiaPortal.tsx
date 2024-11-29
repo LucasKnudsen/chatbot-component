@@ -22,15 +22,10 @@ try {
 
 export const FraiaPortal = (props: ChatConfig) => {
   return (
-    // <QueryClientProvider client={queryClient}>
     <>
       <StyleSheet />
 
-      {/* <TrackingProvider /> */}
-
       <PortalInitializer {...props} />
     </>
-
-    // </QueryClientProvider>
   )
 }

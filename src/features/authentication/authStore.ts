@@ -2,18 +2,29 @@ import { User } from '@/graphql'
 import { randomUUID } from '@/utils'
 import { createStore } from 'solid-js/store'
 
+type Subject = {
+  user_id?: String
+}
+
 type AuthStore = {
+  shouldAuthenticate: boolean
   isAuthenticated: boolean
   authenticating: boolean
+  authMode: 'AMAZON_COGNITO_USER_POOLS' | 'AWS_IAM'
+  sub: Subject | null
   userDetails?: User
 
   readonly sessionId: string
 }
 
 const [authStore, setAuthStore] = createStore<AuthStore>({
+  shouldAuthenticate: true,
   isAuthenticated: false,
   authenticating: false,
+  authMode: 'AMAZON_COGNITO_USER_POOLS',
+  sub: null,
   userDetails: undefined,
+
   get sessionId() {
     switch (true) {
       case this.userDetails?.id != null:

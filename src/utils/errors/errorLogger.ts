@@ -1,3 +1,5 @@
+// DEPRECATED
+// Use logErrorMessage instead from errorHandlers.ts
 import { getAuthMode } from '@/features/authentication'
 import { CreateClientErrorLogInput, mutations, Priority } from '@/graphql'
 import { API } from 'aws-amplify'
