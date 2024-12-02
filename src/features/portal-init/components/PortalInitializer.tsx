@@ -1,6 +1,6 @@
 import { OneClickContainer, OneClickManager } from '@/features/oneClick'
 import { ChatConfig, PortalButton, configStore, configStoreActions, initializeConfig } from '..'
-import { FraiaLoading, SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
+import { SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
 
 import { AuthProvider, authStoreActions, getAuthMode } from '@/features/authentication'
 import { useText } from '@/features/text'
@@ -33,6 +33,7 @@ export const PortalInitializer = (props: ChatConfig) => {
         props?.config?.startInFullscreen || false
       )
 
+      // If the chat is public, we don't need to authenticate the user
       authStoreActions.setAuthStore('shouldAuthenticate', !isPublic)
 
       initTheme(chatSpaceConfig.isOneClick ? 'oneClick' : (themeId as keyof typeof themes), theme)
@@ -53,9 +54,9 @@ export const PortalInitializer = (props: ChatConfig) => {
   return (
     <>
       {/* Shows loading while the config is being fetched and autoOpen is true as to not just show a blank screen */}
-      <Show when={chatConfig.isLoading() && props.config?.autoOpen}>
+      {/* <Show when={chatConfig.isLoading() && props.config?.autoOpen}>
         <FraiaLoading overrideLogo={props.config?.overrideLogo} />
-      </Show>
+      </Show> */}
 
       <Show when={chatConfig.data()}>
         {/* <Show when={false}> */}
@@ -65,7 +66,7 @@ export const PortalInitializer = (props: ChatConfig) => {
         <OneClickContainer>
           <Toaster />
 
-          <AuthProvider isPublic={Boolean(chatConfig.data()?.isPublic)}>
+          <AuthProvider>
             <div
               data-testid='PortalInitializer'
               class='fixed top-0 left-0 rounded-xl flex flex-nowrap h-full w-full justify-center overflow-hidden animate-fade-in '

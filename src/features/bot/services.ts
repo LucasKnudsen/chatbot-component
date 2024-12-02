@@ -17,7 +17,7 @@ import { logDev, removeTypenameFromInput } from '@/utils'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { API } from 'aws-amplify'
 import { botStoreActions } from '.'
-import { getAuthMode } from '../authentication'
+import { authStore, getAuthMode } from '../authentication'
 
 export async function fetchPublicChannels(chatSpaceId: string): Promise<Channel[]> {
   const { data } = await API.graphql<GraphQLQuery<FetchChannelsQuery>>({
@@ -34,7 +34,7 @@ export async function fetchPublicChannels(chatSpaceId: string): Promise<Channel[
         },
       },
     },
-    authMode: await getAuthMode(),
+    authMode: authStore.authMode,
   })
 
   return (data?.fetchChannels as Channel[]) || []

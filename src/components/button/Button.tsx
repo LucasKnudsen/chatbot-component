@@ -40,6 +40,7 @@ export const Button = (props: Props) => {
         class='flex justify-center items-center transition  '
         style={{
           opacity: props.loading ? 0 : 1,
+          color: theme().onPrimary,
         }}
       >
         {props.children}

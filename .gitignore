@@ -32,8 +32,7 @@ cypress/screenshots
 
 .env
 .env*
-amplify/
-amplify/
+amplify
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend

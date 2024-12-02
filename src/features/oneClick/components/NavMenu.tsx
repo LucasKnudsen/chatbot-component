@@ -1,9 +1,12 @@
-import { Button, Menu2Icon, NewChatIcon, Spinner } from '@/components'
+import { Button, LogoutIcon, Menu2Icon, NewChatIcon, Spinner } from '@/components'
 import { ExitFullScreenIcon } from '@/components/icons/ExitFullScreen'
 import { FullScreenIcon } from '@/components/icons/FullScreenIcon'
+import { authStore, authStoreActions } from '@/features/authentication'
 import { configStore, configStoreActions } from '@/features/portal-init'
+import { createMutation } from '@/hooks'
 import { logErrorToServer } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
+import { Auth } from 'aws-amplify'
 import { createSignal, JSX, Show } from 'solid-js'
 import usePopper from 'solid-popper'
 import { initiateConversation } from '../services'
@@ -115,8 +118,33 @@ export const NavMenu = () => {
               onClick={handleFullScreen}
             />
           </Show>
+
+          <Show when={authStore.isAuthenticated}>
+            <LogoutButton />
+          </Show>
         </div>
       </Show>
     </>
+  )
+}
+
+const LogoutButton = () => {
+  const logoutMutation = createMutation({
+    mutationFn: async () => {
+      await Auth.signOut()
+
+      authStoreActions.setAuthStore({
+        isAuthenticated: false,
+        sub: null,
+      })
+    },
+  })
+
+  return (
+    <MenuItem
+      text='Log out'
+      Icon={logoutMutation.isLoading() ? <Spinner size={24} /> : LogoutIcon}
+      onClick={() => logoutMutation.mutate()}
+    />
   )
 }

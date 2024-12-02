@@ -1,4 +1,3 @@
-import { useTheme } from '@/features/theme'
 import { createEffect, createSignal } from 'solid-js'
 
 type Props = {
@@ -7,7 +6,6 @@ type Props = {
 
 export const ProgressBar = (props: Props) => {
   const [progress, setProgress] = createSignal<number>(0)
-  const { theme } = useTheme()
 
   createEffect(() => {
     const interval = setInterval(() => {
@@ -41,11 +39,11 @@ export const ProgressBar = (props: Props) => {
 
         .custom-progress[value]::-webkit-progress-bar {
           border-radius: 10px;
-          background-color: ${theme().borderColor};
+          background-color: var(--borderColor);
         }
 
         .custom-progress[value]::-webkit-progress-value {
-          background-color: ${theme().primaryColor};
+          background-color: var(--primaryColor);
           border-top-left-radius: 10px;
           border-bottom-left-radius: 10px;
         }

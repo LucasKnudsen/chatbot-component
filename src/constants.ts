@@ -32,10 +32,19 @@ export const chatflows: Record<string, ChatConfig> = {
       },
     },
   },
+  private: {
+    spaceId: 'ec07d218-acda-4dc0-95c2-ec0e584ea20c',
+    config: {
+      autoOpen: true,
+      clientData: {
+        env: 'dev',
+      },
+    },
+  },
   dev: {
     spaceId: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
-      autoOpen: false,
+      autoOpen: true,
       startInFullscreen: false,
       overrideLogo: 'https://fraia-test-bucket.s3.ap-southeast-1.amazonaws.com/logo.svg',
       clientData: {

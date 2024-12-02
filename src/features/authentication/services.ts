@@ -2,6 +2,7 @@ import { GetUserQuery, queries } from '@/graphql'
 import { logDev, logErrorToServer } from '@/utils'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { API, Auth } from 'aws-amplify'
+import { configStoreActions } from '../portal-init'
 import { authStoreActions } from './authStore'
 
 export const authenticate = async (user?: any) => {
@@ -10,16 +11,15 @@ export const authenticate = async (user?: any) => {
 
     user ||= await Auth.currentAuthenticatedUser()
 
-    await Promise.all([getUserDetails(user.username)])
+    logDev('User authenticated', user)
+
+    configStoreActions.setConfigStore('clientData', {
+      fraia_user_id: user.username,
+      fraia_user_email: user.attributes?.email,
+    })
 
     authStoreActions.setAuthStore('isAuthenticated', true)
   } catch (error) {
-    logErrorToServer({
-      error,
-      context: {
-        description: 'Error authenticating user',
-      },
-    })
   } finally {
     authStoreActions.setAuthStore('authenticating', false)
   }
