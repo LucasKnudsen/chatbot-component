@@ -2,7 +2,7 @@ import { ChatSpace, GetChatSpaceQuery, queries } from '@/graphql'
 import { GraphQLQuery } from '@aws-amplify/api'
 
 import { API } from 'aws-amplify'
-import { authStore } from '../authentication'
+import { getAuthMode } from '../authentication'
 
 export async function initializeConfig(spaceId: string): Promise<ChatSpace> {
   const result = await API.graphql<GraphQLQuery<GetChatSpaceQuery>>({
@@ -10,7 +10,7 @@ export async function initializeConfig(spaceId: string): Promise<ChatSpace> {
     variables: {
       id: spaceId,
     },
-    authMode: authStore.authMode,
+    authMode: await getAuthMode(),
   })
 
   const data = result.data?.getChatSpace

@@ -17,9 +17,11 @@ import { logDev, removeTypenameFromInput } from '@/utils'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { API } from 'aws-amplify'
 import { botStoreActions } from '.'
-import { authStore, getAuthMode } from '../authentication'
+import { authStore } from '../authentication'
 
 export async function fetchPublicChannels(chatSpaceId: string): Promise<Channel[]> {
+  logDev('fetchPublicChannels', authStore.authMode)
+
   const { data } = await API.graphql<GraphQLQuery<FetchChannelsQuery>>({
     query: queries.fetchChannels,
 
@@ -78,7 +80,7 @@ export async function fetchChannelDetails(channelId: string): Promise<Channel> {
         channelId,
       },
     },
-    authMode: await getAuthMode(),
+    authMode: authStore.authMode,
   })
 
   if (!data?.fetchChannels?.[0]) {
@@ -122,7 +124,7 @@ export async function createHistoryRecord(
     variables: {
       input,
     },
-    authMode: await getAuthMode(),
+    authMode: authStore.authMode,
   })
 
   const history = (data?.createChannelHistoryItem as ChannelHistoryItem) || null

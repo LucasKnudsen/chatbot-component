@@ -10,18 +10,17 @@ type AuthStore = {
   shouldAuthenticate: boolean
   isAuthenticated: boolean
   authenticating: boolean
-  authMode: 'AMAZON_COGNITO_USER_POOLS' | 'AWS_IAM'
   sub: Subject | null
   userDetails?: User
 
   readonly sessionId: string
+  readonly authMode: 'AMAZON_COGNITO_USER_POOLS' | 'AWS_IAM'
 }
 
 const [authStore, setAuthStore] = createStore<AuthStore>({
   shouldAuthenticate: true,
   isAuthenticated: false,
   authenticating: false,
-  authMode: 'AMAZON_COGNITO_USER_POOLS',
   sub: null,
   userDetails: undefined,
 
@@ -43,6 +42,10 @@ const [authStore, setAuthStore] = createStore<AuthStore>({
 
         return sessionId
     }
+  },
+
+  get authMode() {
+    return this.shouldAuthenticate ? 'AMAZON_COGNITO_USER_POOLS' : 'AWS_IAM'
   },
 })
 

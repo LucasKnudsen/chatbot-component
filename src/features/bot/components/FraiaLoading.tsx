@@ -18,6 +18,7 @@ export const FraiaLoading = (props: Props) => {
             <img src={props.overrideLogo} />
           </Show>
         </div>
+
         <div class='leading-[17px]'>
           <ProgressBar isLoading={props.isLoading} />
         </div>

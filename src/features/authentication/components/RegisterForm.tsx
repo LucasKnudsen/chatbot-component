@@ -5,7 +5,7 @@ import { LockIcon } from '@/components/icons/LockIcon'
 import { UserIcon } from '@/components/icons/UserIcon'
 import { configStore } from '@/features/portal-init'
 import { createMutation } from '@/hooks'
-import { logDev, randomUUID } from '@/utils'
+import { randomUUID } from '@/utils'
 import { Auth } from 'aws-amplify'
 import { ActiveAuthScreen } from '../layout'
 import { AuthInputField } from './AuthInputField'
@@ -23,7 +23,7 @@ export const RegisterForm = (props: {
     mutationFn: async () => {
       const UUID = randomUUID()
 
-      const result = await Auth.signUp({
+      await Auth.signUp({
         username: UUID,
         password: input().password,
         attributes: {
@@ -37,8 +37,6 @@ export const RegisterForm = (props: {
           enabled: true,
         },
       })
-
-      logDev(result)
 
       props.setUsername(UUID)
     },

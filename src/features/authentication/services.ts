@@ -7,11 +7,15 @@ import { authStoreActions } from './authStore'
 
 export const authenticate = async (user?: any) => {
   try {
-    authStoreActions.setAuthStore('authenticating', true)
-
     user ||= await Auth.currentAuthenticatedUser()
 
+    if (!user) {
+      throw new Error('User not authenticated')
+    }
+
     logDev('User authenticated', user)
+    // Fetch the user details
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     configStoreActions.setConfigStore('clientData', {
       fraia_user_id: user.username,
@@ -19,10 +23,7 @@ export const authenticate = async (user?: any) => {
     })
 
     authStoreActions.setAuthStore('isAuthenticated', true)
-  } catch (error) {
-  } finally {
-    authStoreActions.setAuthStore('authenticating', false)
-  }
+  } catch (error) {}
 }
 
 export const getUserDetails = async (id: string) => {
@@ -64,10 +65,6 @@ export const getAuthMode = async () => {
   } catch (error) {
     authMode = 'AWS_IAM'
   }
-
-  authStoreActions.setAuthStore({
-    authMode,
-  })
 
   return authMode
 }

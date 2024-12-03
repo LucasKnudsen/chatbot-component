@@ -5,6 +5,7 @@ import { LockIcon } from '@/components/icons/LockIcon'
 import { createMutation } from '@/hooks'
 import { logErrorMessage } from '@/utils'
 import { Auth } from 'aws-amplify'
+import toast from 'solid-toast'
 import { ActiveAuthScreen } from '../layout'
 import { AuthInputField } from './AuthInputField'
 
@@ -21,6 +22,9 @@ export const VerifyForm = (props: {
       return await Auth.confirmSignUp(props.username(), input().code, {
         forceAliasCreation: false,
       })
+    },
+    onSuccess: () => {
+      toast.success('Email verified')
     },
     onError: (error) => {
       logErrorMessage(error, 'VerifyForm.confirmSignUp')

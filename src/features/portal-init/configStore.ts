@@ -1,5 +1,6 @@
 import { Channel, ChannelUserAccess } from '@/graphql'
 
+import { ClientDataKeys } from '@/constants/ClientData'
 import { ChatSpace } from '@/graphql'
 import { createStore } from 'solid-js/store'
 import { ChatStyleConfig } from './types'
@@ -9,7 +10,7 @@ type ChatConfigStore = {
   channels: Channel[] | ChannelUserAccess[]
   isBotOpened: boolean
   isDrawerOpened?: boolean
-  clientData?: Record<string, any>
+  clientData?: Record<ClientDataKeys & string, any> & Record<string, any>
   styleConfig?: ChatStyleConfig
   isInFullScreenMode?: boolean
   allowFullScreen?: boolean
@@ -20,10 +21,13 @@ const [configStore, setConfigStore] = createStore<ChatConfigStore>({
   isBotOpened: false,
   chatSpaceConfig: {} as any,
   channels: [],
-  clientData: {},
+  clientData: {
+    fraia_user_id: '',
+    fraia_user_email: '',
+  },
   styleConfig: {},
   isInFullScreenMode: false,
-  allowFullScreen: false
+  allowFullScreen: false,
 })
 
 const openBot = () => {

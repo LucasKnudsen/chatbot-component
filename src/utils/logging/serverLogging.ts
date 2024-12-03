@@ -38,7 +38,7 @@ export const logMessageToServer = async (logContent: Omit<LogItem, 'logId' | 'ti
     ...logContent,
     logId,
     timestamp: new Date().toISOString(),
-    domain: Domain.MOBILE,
+    domain: `[${Domain.EMBED}]`,
   }
 
   try {
@@ -52,5 +52,6 @@ export const logMessageToServer = async (logContent: Omit<LogItem, 'logId' | 'ti
   } catch (error) {
     logDev('logMessage error:', error)
   }
+
   return logId
 }
