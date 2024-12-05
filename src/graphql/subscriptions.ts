@@ -134,6 +134,7 @@ export const onCreateChannel = /* GraphQL */ `subscription OnCreateChannel(
     avatar
     description
     defaultChatMode
+    defaultVoiceMode
     shouldUseFraiaAPI
     botDisplayName
     welcomeText
@@ -184,6 +185,7 @@ export const onUpdateChannel = /* GraphQL */ `subscription OnUpdateChannel(
     avatar
     description
     defaultChatMode
+    defaultVoiceMode
     shouldUseFraiaAPI
     botDisplayName
     welcomeText
@@ -234,6 +236,7 @@ export const onDeleteChannel = /* GraphQL */ `subscription OnDeleteChannel(
     avatar
     description
     defaultChatMode
+    defaultVoiceMode
     shouldUseFraiaAPI
     botDisplayName
     welcomeText

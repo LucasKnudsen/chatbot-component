@@ -164,6 +164,7 @@ export type CreateChannelInput = {
   avatar?: string | null,
   description?: string | null,
   defaultChatMode?: BaseChatMode | null,
+  defaultVoiceMode?: BaseVoiceMode | null,
   shouldUseFraiaAPI?: boolean | null,
   botDisplayName?: string | null,
   welcomeText?: string | null,
@@ -176,6 +177,12 @@ export type CreateChannelInput = {
 export enum BaseChatMode {
   TEXT = "TEXT",
   VOICE = "VOICE",
+}
+
+
+export enum BaseVoiceMode {
+  STANDARD = "STANDARD",
+  PREMIUM = "PREMIUM",
 }
 
 
@@ -216,6 +223,7 @@ export type ModelChannelConditionInput = {
   avatar?: ModelStringInput | null,
   description?: ModelStringInput | null,
   defaultChatMode?: ModelBaseChatModeInput | null,
+  defaultVoiceMode?: ModelBaseVoiceModeInput | null,
   shouldUseFraiaAPI?: ModelBooleanInput | null,
   botDisplayName?: ModelStringInput | null,
   welcomeText?: ModelStringInput | null,
@@ -250,6 +258,11 @@ export type ModelBaseChatModeInput = {
   ne?: BaseChatMode | null,
 };
 
+export type ModelBaseVoiceModeInput = {
+  eq?: BaseVoiceMode | null,
+  ne?: BaseVoiceMode | null,
+};
+
 export type Channel = {
   __typename: "Channel",
   id: string,
@@ -262,6 +275,7 @@ export type Channel = {
   avatar?: string | null,
   description?: string | null,
   defaultChatMode?: BaseChatMode | null,
+  defaultVoiceMode?: BaseVoiceMode | null,
   shouldUseFraiaAPI?: boolean | null,
   botDisplayName?: string | null,
   welcomeText?: string | null,
@@ -307,6 +321,7 @@ export type UpdateChannelInput = {
   avatar?: string | null,
   description?: string | null,
   defaultChatMode?: BaseChatMode | null,
+  defaultVoiceMode?: BaseVoiceMode | null,
   shouldUseFraiaAPI?: boolean | null,
   botDisplayName?: string | null,
   welcomeText?: string | null,
@@ -1351,6 +1366,7 @@ export type ModelChannelFilterInput = {
   avatar?: ModelStringInput | null,
   description?: ModelStringInput | null,
   defaultChatMode?: ModelBaseChatModeInput | null,
+  defaultVoiceMode?: ModelBaseVoiceModeInput | null,
   shouldUseFraiaAPI?: ModelBooleanInput | null,
   botDisplayName?: ModelStringInput | null,
   welcomeText?: ModelStringInput | null,
@@ -1716,6 +1732,7 @@ export type ModelSubscriptionChannelFilterInput = {
   avatar?: ModelSubscriptionStringInput | null,
   description?: ModelSubscriptionStringInput | null,
   defaultChatMode?: ModelSubscriptionStringInput | null,
+  defaultVoiceMode?: ModelSubscriptionStringInput | null,
   shouldUseFraiaAPI?: ModelSubscriptionBooleanInput | null,
   botDisplayName?: ModelSubscriptionStringInput | null,
   welcomeText?: ModelSubscriptionStringInput | null,
@@ -2040,6 +2057,7 @@ export type CreateChannelMutation = {
     avatar?: string | null,
     description?: string | null,
     defaultChatMode?: BaseChatMode | null,
+    defaultVoiceMode?: BaseVoiceMode | null,
     shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     welcomeText?: string | null,
@@ -2089,6 +2107,7 @@ export type UpdateChannelMutation = {
     avatar?: string | null,
     description?: string | null,
     defaultChatMode?: BaseChatMode | null,
+    defaultVoiceMode?: BaseVoiceMode | null,
     shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     welcomeText?: string | null,
@@ -2138,6 +2157,7 @@ export type DeleteChannelMutation = {
     avatar?: string | null,
     description?: string | null,
     defaultChatMode?: BaseChatMode | null,
+    defaultVoiceMode?: BaseVoiceMode | null,
     shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     welcomeText?: string | null,
@@ -3101,6 +3121,7 @@ export type HandleChannelsMutation = {
     avatar?: string | null,
     description?: string | null,
     defaultChatMode?: BaseChatMode | null,
+    defaultVoiceMode?: BaseVoiceMode | null,
     shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     welcomeText?: string | null,
@@ -3359,6 +3380,7 @@ export type GetChannelQuery = {
     avatar?: string | null,
     description?: string | null,
     defaultChatMode?: BaseChatMode | null,
+    defaultVoiceMode?: BaseVoiceMode | null,
     shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     welcomeText?: string | null,
@@ -3411,6 +3433,7 @@ export type ListChannelsQuery = {
       avatar?: string | null,
       description?: string | null,
       defaultChatMode?: BaseChatMode | null,
+      defaultVoiceMode?: BaseVoiceMode | null,
       shouldUseFraiaAPI?: boolean | null,
       botDisplayName?: string | null,
       welcomeText?: string | null,
@@ -3467,6 +3490,7 @@ export type ChannelsByChatSpaceIdQuery = {
       avatar?: string | null,
       description?: string | null,
       defaultChatMode?: BaseChatMode | null,
+      defaultVoiceMode?: BaseVoiceMode | null,
       shouldUseFraiaAPI?: boolean | null,
       botDisplayName?: string | null,
       welcomeText?: string | null,
@@ -4457,6 +4481,7 @@ export type FetchChannelsQuery = {
     avatar?: string | null,
     description?: string | null,
     defaultChatMode?: BaseChatMode | null,
+    defaultVoiceMode?: BaseVoiceMode | null,
     shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     welcomeText?: string | null,
@@ -4617,6 +4642,7 @@ export type OnCreateChannelSubscription = {
     avatar?: string | null,
     description?: string | null,
     defaultChatMode?: BaseChatMode | null,
+    defaultVoiceMode?: BaseVoiceMode | null,
     shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     welcomeText?: string | null,
@@ -4666,6 +4692,7 @@ export type OnUpdateChannelSubscription = {
     avatar?: string | null,
     description?: string | null,
     defaultChatMode?: BaseChatMode | null,
+    defaultVoiceMode?: BaseVoiceMode | null,
     shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     welcomeText?: string | null,
@@ -4715,6 +4742,7 @@ export type OnDeleteChannelSubscription = {
     avatar?: string | null,
     description?: string | null,
     defaultChatMode?: BaseChatMode | null,
+    defaultVoiceMode?: BaseVoiceMode | null,
     shouldUseFraiaAPI?: boolean | null,
     botDisplayName?: string | null,
     welcomeText?: string | null,

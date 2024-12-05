@@ -157,6 +157,7 @@ export const createChannel = /* GraphQL */ `mutation CreateChannel(
     avatar
     description
     defaultChatMode
+    defaultVoiceMode
     shouldUseFraiaAPI
     botDisplayName
     welcomeText
@@ -207,6 +208,7 @@ export const updateChannel = /* GraphQL */ `mutation UpdateChannel(
     avatar
     description
     defaultChatMode
+    defaultVoiceMode
     shouldUseFraiaAPI
     botDisplayName
     welcomeText
@@ -257,6 +259,7 @@ export const deleteChannel = /* GraphQL */ `mutation DeleteChannel(
     avatar
     description
     defaultChatMode
+    defaultVoiceMode
     shouldUseFraiaAPI
     botDisplayName
     welcomeText
@@ -1248,6 +1251,7 @@ export const handleChannels = /* GraphQL */ `mutation HandleChannels($input: Han
     avatar
     description
     defaultChatMode
+    defaultVoiceMode
     shouldUseFraiaAPI
     botDisplayName
     welcomeText
