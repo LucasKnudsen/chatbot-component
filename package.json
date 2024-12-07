@@ -11,6 +11,7 @@
     "lint-fix": "eslint --fix \"src/**/*.ts*\"",
     "test": "cypress open",
     "test:run": "cypress run",
+    "fraia:codegen": "./scripts/fraia-codegen/codegen.sh",
     "allow-backend": "jq '.noUpdateBackend = false' ./amplify/.config/local-env-info.json > tmp.$$.json && mv tmp.$$.json ./amplify/.config/local-env-info.json && cd amplify && mkdir -p backend && echo '{}' > backend/backend-config.json && cd../",
     "quick-push": "git push upstream dev && git checkout testing && git merge dev && git push upstream testing && git checkout staging && git merge testing && git push upstream staging && git checkout dev"
   },
@@ -54,6 +55,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-solid": "0.12.0",
+    "json-schema-to-typescript": "^15.0.3",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.0.2",
