@@ -1,4 +1,4 @@
-import { getAuthMode } from '@/features/authentication'
+import { authStore } from '@/features/authentication'
 import { oneClickStore } from '@/features/oneClick'
 import { mutations, SpeechSynthesisInput, SpeechSynthesisMutation } from '@/graphql'
 import { GraphQLQuery } from '@aws-amplify/api'
@@ -8,7 +8,7 @@ import { API } from 'aws-amplify'
 export const speechSynthesis = async (
   text: string,
   knowledgeBaseId: string,
-  requestIndex?: number
+  requestIndex?: number,
 ) => {
   const { activeAgent } = oneClickStore
   // const cleanedText = cleanContentForSpeech(text)
@@ -25,7 +25,7 @@ export const speechSynthesis = async (
     variables: {
       input,
     },
-    authMode: await getAuthMode(),
+    authMode: authStore.authMode,
   })
 
   return data!.speechSynthesis

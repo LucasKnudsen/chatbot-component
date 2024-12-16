@@ -1,6 +1,6 @@
 import { botStore, currentLanguage } from '@/features/bot'
 import { IncomingInput, PromptCode, extractChatbotResponse } from '@/features/messages'
-import { logErrorToServer } from '@/utils'
+import { logErrorMessage } from '@/utils'
 import { API } from 'aws-amplify'
 import { createStore } from 'solid-js/store'
 import { extractSuggestedPrompts } from '../utils'
@@ -57,12 +57,7 @@ const fetch = async (language?: string) => {
       setSuggestedPromptsStore({ prompts: newPrompts })
     }
   } catch (error) {
-    logErrorToServer({
-      error,
-      context: {
-        description: 'Error fetching suggested prompts',
-      },
-    })
+    logErrorMessage(error, 'SuggestedPromptStore.fetch')
   } finally {
     setSuggestedPromptsStore({ isFetching: false })
   }

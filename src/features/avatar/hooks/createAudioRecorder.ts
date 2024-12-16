@@ -1,6 +1,5 @@
 import { useTheme } from '@/features/theme'
-import { Priority } from '@/graphql'
-import { logErrorToServer, shadowQuerySelector } from '@/utils'
+import { logErrorMessage, shadowQuerySelector } from '@/utils'
 import AudioMotionAnalyzer from 'audiomotion-analyzer'
 import { Accessor, createSignal, onCleanup } from 'solid-js'
 
@@ -132,13 +131,7 @@ export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudi
           alert(error)
         })
     } catch (error) {
-      logErrorToServer({
-        error,
-        priority: Priority.MEDIUM,
-        context: {
-          description: 'Error authenticating user',
-        },
-      })
+      logErrorMessage(error, 'createAudioRecorder.startRecording')
       alert(error)
     }
   }

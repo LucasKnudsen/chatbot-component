@@ -4,7 +4,7 @@ import { FullScreenIcon } from '@/components/icons/FullScreenIcon'
 import { authStore, authStoreActions } from '@/features/authentication'
 import { configStore, configStoreActions } from '@/features/portal-init'
 import { createMutation } from '@/hooks'
-import { logErrorToServer } from '@/utils'
+import { logErrorMessage } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { Auth } from 'aws-amplify'
 import { createSignal, JSX, Show } from 'solid-js'
@@ -67,12 +67,7 @@ export const NavMenu = () => {
 
       oneClickActions.resetConversation(initiateData.conversationId)
     } catch (error) {
-      logErrorToServer({
-        error,
-        context: {
-          description: 'Error initiating a new conversation',
-        },
-      })
+      logErrorMessage(error, 'NavMenu.initiateNewConversation')
     } finally {
       setIsPopoverOpen(false)
 

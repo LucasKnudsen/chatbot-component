@@ -2,7 +2,7 @@ import { Button, KeyboardIcon, XIcon } from '@/components'
 import { createAudioRecorder } from '@/features/avatar'
 import { configStore } from '@/features/portal-init'
 import { BaseChatMode } from '@/graphql'
-import { logDev, logErrorToServer } from '@/utils'
+import { logDev, logErrorMessage } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { createEffect, on } from 'solid-js'
 import { isCanceled, setAudio64, setIsCanceled, setMessages, useLLM } from '../../hooks'
@@ -127,12 +127,7 @@ export const VoiceChatScreen = () => {
         setIsCanceled(false)
       }
     } catch (error) {
-      logErrorToServer({
-        error,
-        context: {
-          description: 'Error in voice to voice',
-        },
-      })
+      logErrorMessage(error, 'VoiceChatScreen.handleVoiceToVoice')
       oneClickActions.setStatus(BotStatus.IDLE)
     }
   }
@@ -170,8 +165,8 @@ export const VoiceChatScreen = () => {
       () => configStore.isBotOpened,
       () => {
         configStore.isBotOpened && handleInitiateConversation()
-      }
-    )
+      },
+    ),
   )
 
   return (

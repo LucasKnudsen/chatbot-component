@@ -1,11 +1,10 @@
-import { Priority } from '@/graphql'
-import { logDev, logErrorToServer } from '@/utils'
+import { configStore } from '@/features/portal-init'
+import { logDev, logErrorMessage } from '@/utils'
 import { createSignal } from 'solid-js'
 import { handleTTS, initiateConversation, setTtsRequestsPending } from '../../services'
 import { oneClickActions, oneClickStore } from '../../store/oneClickStore'
 import { BotStatus, ChatMessage } from '../../types'
-import { parseLLMStreamResponse, cleanHTMLTags } from './utils'
-import { configStore } from '@/features/portal-init'
+import { cleanHTMLTags, parseLLMStreamResponse } from './utils'
 
 type SubmitInput = {
   message: string
@@ -69,7 +68,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
       callFraiaAI: oneClickStore.activeChannel?.shouldUseFraiaAPI,
       conversationId: oneClickStore.activeConversationId,
       overrideSystemInstruction: input.overrideSystemInstruction,
-      clientData: configStore?.clientData
+      clientData: configStore?.clientData,
     })
 
     setMessages((prev) => [
@@ -107,18 +106,18 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
       // Function to handle sentences for TTS
       const handleSentencesForTTS = async (chunk: string) => {
-        // trims out white spaces, unicode aware regex        
+        // trims out white spaces, unicode aware regex
         const isSentenceBufferEnd = /[.!?](?:\s|$)/gu.test(chunk || '')
 
         // Check if the sentence includes a URL pattern
-        const sentenceIncludesURL = /https?:\/\/[^\s]+/g.test(sentenceBuffer || '')        
-        
+        const sentenceIncludesURL = /https?:\/\/[^\s]+/g.test(sentenceBuffer || '')
+
         if (sentenceBuffer.split(' ').length > 2 && isSentenceBufferEnd) {
           // This check is to prevent breaking up a URL with a period or question mark
           if (!sentenceIncludesURL) {
             if (input.withSpeech) {
               // Clean up the sentence buffer for html tags
-              sentenceBuffer = cleanHTMLTags(sentenceBuffer)              
+              sentenceBuffer = cleanHTMLTags(sentenceBuffer)
               handleTTS(sentenceBuffer)
             }
 
@@ -129,21 +128,20 @@ export const useLLM = (props: LLMInput): LLMOutput => {
       }
 
       while (true) {
-        const { value, done } = await reader.read()        
+        const { value, done } = await reader.read()
         if (done) {
           if (sentenceBuffer) {
             // If the sentence buffer is not empty, fire the last sentence
             logDev('Is done, fire last sentence: ', sentenceBuffer)
 
             if (htmlBuffer || isProcessingHtmlTag) {
-              logDev('Handling incomplete HTML buffering')              
+              logDev('Handling incomplete HTML buffering')
               setMessages((prev) => {
                 prev[prev.length - 1].content += htmlBuffer
                 //clean up html tag
-                let lastMsg = prev[prev.length - 1].content                
-                prev[prev.length - 1].content = cleanHTMLTags(lastMsg);
-                
-                
+                let lastMsg = prev[prev.length - 1].content
+                prev[prev.length - 1].content = cleanHTMLTags(lastMsg)
+
                 return [...prev]
               })
 
@@ -152,7 +150,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
               oneClickActions.setOneClickStore('indicationMessage', null)
             }
 
-            if (input.withSpeech) {              
+            if (input.withSpeech) {
               handleTTS(sentenceBuffer)
             }
 
@@ -228,49 +226,42 @@ export const useLLM = (props: LLMInput): LLMOutput => {
 
             if (parsedValue.text) {
               parsedValue.text.forEach((chunk) => {
-                
-                
                 // HTML tag cleaning
-                if (sentenceBuffer.includes("[html]") || isProcessingHtmlTag) {
-                                    
-                  htmlBuffer += chunk                  
-                  if (htmlBuffer.includes("[!html]")) {                    
-                    
+                if (sentenceBuffer.includes('[html]') || isProcessingHtmlTag) {
+                  htmlBuffer += chunk
+                  if (htmlBuffer.includes('[!html]')) {
                     oneClickActions.setOneClickStore('indicationMessage', null)
                     isProcessingHtmlTag = false
 
                     botResponse += htmlBuffer
-                                        
+
                     setMessages((prev) => {
                       prev[prev.length - 1].content += htmlBuffer
                       //clean up html tag
                       let lastMsg = prev[prev.length - 1].content
-                      prev[prev.length - 1].content = cleanHTMLTags(lastMsg);
+                      prev[prev.length - 1].content = cleanHTMLTags(lastMsg)
                       return [...prev]
                     })
                     htmlBuffer = ''
                     sentenceBuffer = '' // Reset sentence buffer to start a new sentence stream again
-
                   } else {
                     isProcessingHtmlTag = true
                     oneClickActions.setOneClickStore('indicationMessage', {
                       message: 'Building Elements...',
-                    })                    
+                    })
                   }
                   return
-                }              
-                                
+                }
+
                 botResponse += chunk
                 sentenceBuffer += chunk
-                
-                
-                setMessages((prev) => {                  
+
+                setMessages((prev) => {
                   prev[prev.length - 1].content += chunk
                   //clean up html tag
-                  let lastMsg = prev[prev.length - 1].content                  
-                  prev[prev.length - 1].content = cleanHTMLTags(lastMsg);
-                  
-                  
+                  let lastMsg = prev[prev.length - 1].content
+                  prev[prev.length - 1].content = cleanHTMLTags(lastMsg)
+
                   return [...prev]
                 })
 
@@ -282,14 +273,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
               setAudio64((prev) => [...prev, ...parsedValue.audio!])
             }
           } catch (error) {
-            logErrorToServer({
-              error,
-              priority: Priority.MEDIUM,
-              context: {
-                description: 'Error parsing LLM stream response',
-                component: 'useLLM',
-              },
-            })
+            logErrorMessage(error, 'useLLM.queryLLM')
             oneClickActions.setStatus(BotStatus.IDLE)
           } finally {
           }
@@ -305,15 +289,7 @@ export const useLLM = (props: LLMInput): LLMOutput => {
           return prev
         })
       } else {
-        logErrorToServer({
-          error,
-          priority: Priority.HIGH,
-          context: {
-            description: 'Error fetching LLM stream',
-            component: 'useLLM',
-          },
-          showToast: false,
-        })
+        logErrorMessage(error, 'useLLM.queryLLM')
       }
     } finally {
       // If the bot response is empty, set a default message

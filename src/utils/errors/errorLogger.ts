@@ -1,6 +1,6 @@
 // DEPRECATED
 // Use logErrorMessage instead from errorHandlers.ts
-import { getAuthMode } from '@/features/authentication'
+import { authStore } from '@/features/authentication'
 import { CreateClientErrorLogInput, mutations, Priority } from '@/graphql'
 import { API } from 'aws-amplify'
 import toast from 'solid-toast'
@@ -44,7 +44,7 @@ export const logErrorToServer = async ({
   await API.graphql({
     query: mutations.createClientErrorLog,
     variables: { input },
-    authMode: await getAuthMode(),
+    authMode: authStore.authMode,
   })
 
   return { parsedError, logId }

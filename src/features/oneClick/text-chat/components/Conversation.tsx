@@ -16,8 +16,8 @@ export const Conversation = () => {
       () => {
         scrollChatWindowToBottom()
       },
-      { defer: true }
-    )
+      { defer: true },
+    ),
   )
   createEffect(
     on(
@@ -25,8 +25,8 @@ export const Conversation = () => {
       () => {
         scrollChatWindowToBottom(50)
       },
-      { defer: true }
-    )
+      { defer: true },
+    ),
   )
 
   createEffect(
@@ -35,8 +35,8 @@ export const Conversation = () => {
       () => {
         scrollChatWindowToBottom(50)
       },
-      { defer: true }
-    )
+      { defer: true },
+    ),
   )
 
   createEffect(
@@ -46,8 +46,8 @@ export const Conversation = () => {
         console.log('scrolling to bottom')
         oneClickStore.chatMode === BaseChatMode.TEXT && scrollChatWindowToBottom()
       },
-      { defer: true }
-    )
+      { defer: true },
+    ),
   )
 
   const scrollChatWindowToBottom = (by: number = 0) => {
@@ -60,7 +60,7 @@ export const Conversation = () => {
                 behavior: 'smooth',
               })
             : chatWindowEl!.scrollTo(0, chatWindowEl!.scrollHeight),
-        50
+        50,
       )
     }
   }
@@ -256,8 +256,8 @@ const AssistantMessage = (props: ChatMessage) => {
         if (textEl) {
           textEl.innerHTML = Marked.parse(props.content)
         }
-      }
-    )
+      },
+    ),
   )
 
   return (
@@ -278,7 +278,7 @@ const AssistantMessage = (props: ChatMessage) => {
             ref={textEl}
             class={`${
               theme().isDark ? 'prose-invert' : 'prose'
-            } prose-a:text-[var(--primaryColor)] text-[var(--textColor)]`}
+            } prose-a:text-[var(--primaryColor)] text-[var(--textColor)] prose-strong:text-[var(--primaryColor)]`}
           />
         </Match>
 

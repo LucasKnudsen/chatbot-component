@@ -1,4 +1,4 @@
-import { logErrorToServer } from '@/utils'
+import { logErrorMessage } from '@/utils'
 import axios from 'axios'
 
 const HEYGEN_API_KEY = import.meta.env.VITE_HEYGEN_TOKEN
@@ -15,13 +15,7 @@ export async function fetchAccessToken() {
 
     return response.data?.data?.token || ''
   } catch (error) {
-    logErrorToServer({
-      error,
-      context: {
-        description: '',
-      },
-    })
-    console.error('Error fetching access token:', error)
+    logErrorMessage(error, 'HeyGen.fetchAccessToken')
     return ''
   }
 }

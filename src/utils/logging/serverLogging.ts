@@ -41,6 +41,8 @@ export const logMessageToServer = async (logContent: Omit<LogItem, 'logId' | 'ti
     domain: `[${Domain.EMBED}]`,
   }
 
+  console.error(`Error reference ID: ${logId}. Timestamp: ${new Date().toTimeString()}`)
+
   try {
     API.graphql({
       query: mutations.logMessage,

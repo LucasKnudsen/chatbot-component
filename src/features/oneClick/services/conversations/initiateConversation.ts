@@ -1,4 +1,4 @@
-import { authStore, getAuthMode } from '@/features/authentication'
+import { authStore } from '@/features/authentication'
 import {
   Channel,
   FraiaDBAction,
@@ -26,7 +26,7 @@ export interface InitiateConversationResponse {
 }
 
 export const initiateConversation = async (
-  knowledgeBase: Channel
+  knowledgeBase: Channel,
 ): Promise<InitiateConversationResponse> => {
   const sessionId = authStore.sessionId
 
@@ -49,7 +49,7 @@ export const initiateConversation = async (
   const { data } = await API.graphql<GraphQLQuery<HandleFraiaDBMutation>>({
     query: mutations.handleFraiaDB,
     variables: { input },
-    authMode: await getAuthMode(),
+    authMode: authStore.authMode,
   })
 
   const body: InitiateConversationResponse = JSON.parse(data?.handleFraiaDB as string)

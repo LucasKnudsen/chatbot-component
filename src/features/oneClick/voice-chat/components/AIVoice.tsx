@@ -1,5 +1,5 @@
 import { useTheme } from '@/features/theme'
-import { logDev, logErrorToServer, shadowQuerySelector } from '@/utils'
+import { logDev, logErrorMessage, shadowQuerySelector } from '@/utils'
 import AudioMotionAnalyzer from 'audiomotion-analyzer'
 import { createEffect, createSignal, on } from 'solid-js'
 import { audio64, isCanceled, setAudio64 } from '../../hooks'
@@ -55,9 +55,9 @@ export const AIVoice = () => {
     if (aiAudioRef) {
       // Play some initial audio to trigger the browser to allow audio playback
       aiAudioRef.muted = true
-      aiAudioRef.volume = 0
       aiAudioRef.src = `data:audio/mp3;base64,${initialBase64}`
       aiAudioRef.play()
+      logDev('Playing initial audio')
     }
   })
 
@@ -81,7 +81,7 @@ export const AIVoice = () => {
         playAudio(audio64()[0])
         setIsPlayingQueue(true)
       }
-    })
+    }),
   )
 
   const playAudio = async (base64: string) => {
@@ -100,7 +100,6 @@ export const AIVoice = () => {
 
         aiAudioRef.src = audioSrc
         aiAudioRef.muted = false
-        aiAudioRef.volume = 1
         oneClickActions.setStatus(BotStatus.ANSWERING)
 
         aiAudioRef.onerror = (e: any) => {
@@ -133,12 +132,7 @@ export const AIVoice = () => {
       setAudio64([])
 
       if (error?.name !== 'NotAllowedError') {
-        logErrorToServer({
-          error,
-          context: {
-            description: 'Error playing audio in AIVoice',
-          },
-        })
+        logErrorMessage(error, 'AIVoice.playAudio')
       }
     }
   }

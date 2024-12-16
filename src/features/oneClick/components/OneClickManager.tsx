@@ -1,8 +1,7 @@
 import { Channel } from '@/graphql'
 import { createQuery } from '@/hooks'
 import LayoutDefault from '@/layouts/default'
-import { logErrorToServer } from '@/utils'
-import { parseError } from '@/utils/errors/errorHandlers'
+import { logErrorMessage, parseError } from '@/utils/errors/errorHandlers'
 import { Match, Switch, createEffect, createSignal } from 'solid-js'
 import { SignOutButton } from '../../authentication'
 import { FraiaLoading, fetchChannelDetails, fetchPublicChannels } from '../../bot'
@@ -44,7 +43,7 @@ export const OneClickManager = (props: { overrideLogo?: string }) => {
       }
     },
     onError: (error) => {
-      logErrorToServer({ error })
+      logErrorMessage(error, 'OneClickManager.channelsQuery')
     },
     onSuccess: () => {
       oneClickActions.setStatus(BotStatus.IDLE)

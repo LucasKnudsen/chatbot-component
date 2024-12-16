@@ -1,5 +1,5 @@
 import { GetUserQuery, queries } from '@/graphql'
-import { logDev, logErrorToServer } from '@/utils'
+import { logDev, logErrorMessage } from '@/utils'
 import { GraphQLQuery } from '@aws-amplify/api'
 import { API, Auth } from 'aws-amplify'
 import { configStoreActions } from '../portal-init'
@@ -48,12 +48,7 @@ export const getUserDetails = async (id: string) => {
       data: data?.getUser,
     }
   } catch (error) {
-    logErrorToServer({
-      error,
-      context: {
-        description: 'Error getting user details',
-      },
-    })
+    logErrorMessage(error, 'getUserDetails')
   }
 }
 

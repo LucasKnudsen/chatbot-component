@@ -7,7 +7,7 @@ import {
   clearAllSubscriptionsOfType,
   clearSubscription,
   logDev,
-  logErrorToServer,
+  logErrorMessage,
 } from '@/utils'
 import socketIOClient from 'socket.io-client'
 import {
@@ -112,12 +112,7 @@ export const initiateChatConnection = async (channelId: string) => {
       onNext,
     })
   } catch (error) {
-    logErrorToServer({
-      error,
-      context: {
-        description: 'Error initiating chat connection',
-      },
-    })
+    logErrorMessage(error, 'initiateChatConnection')
   }
 }
 

@@ -2,7 +2,7 @@ import { OneClickContainer, OneClickManager } from '@/features/oneClick'
 import { ChatConfig, PortalButton, configStore, configStoreActions, initializeConfig } from '..'
 import { SYSTEM_DEFAULT_LANGUAGE, useLanguage } from '../../bot'
 
-import { AuthProvider, authStoreActions, getAuthMode } from '@/features/authentication'
+import { AuthProvider, authStoreActions } from '@/features/authentication'
 import { useText } from '@/features/text'
 import { themes } from '@/features/theme'
 import { useTheme } from '@/features/theme/hooks'
@@ -19,8 +19,6 @@ export const PortalInitializer = (props: ChatConfig) => {
 
   const chatConfig = createQuery({
     queryFn: async () => {
-      await getAuthMode()
-
       const result = await initializeConfig(props.spaceId)
 
       const { themeId, theme, defaultLanguage, text, isPublic } = result
@@ -30,7 +28,7 @@ export const PortalInitializer = (props: ChatConfig) => {
       configStoreActions.setConfigStore('styleConfig', props.config?.styleConfig || {})
       configStoreActions.setConfigStore(
         'isInFullScreenMode',
-        props?.config?.startInFullscreen || false
+        props?.config?.startInFullscreen || false,
       )
 
       // If the chat is public, we don't need to authenticate the user
