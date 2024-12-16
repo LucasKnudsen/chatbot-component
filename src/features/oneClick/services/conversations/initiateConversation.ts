@@ -18,6 +18,7 @@ interface InitiateConversationPayload {
   user_id: string
   knowledge_base_id: string
   greeting_message?: string
+  initial_agent?: string
 }
 
 export interface InitiateConversationResponse {
@@ -38,6 +39,7 @@ export const initiateConversation = async (
     user_id: sessionId,
     knowledge_base_id: knowledgeBase.id,
     greeting_message: greetingMessage || undefined,
+    initial_agent: knowledgeBase.defaultEntryAgentId || undefined,
   }
 
   const input: HandleFraiaDBInput = {
