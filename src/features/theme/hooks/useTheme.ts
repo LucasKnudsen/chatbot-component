@@ -9,7 +9,7 @@ const [theme, setTheme] = createSignal<Theme>(themes.bubbles)
 export const useTheme = () => {
   const initTheme = (
     themeKey?: keyof typeof themes | null,
-    themeOverrides?: ChatSpaceTheme | null
+    themeOverrides?: ChatSpaceTheme | null,
   ) => {
     let theme = defaultTheme
 
@@ -25,7 +25,7 @@ export const useTheme = () => {
           }
           return acc
         },
-        {} as Partial<Theme>
+        {} as Partial<Theme>,
       )
 
       theme = { ...theme, ...nonEmptyThemeOverrides }

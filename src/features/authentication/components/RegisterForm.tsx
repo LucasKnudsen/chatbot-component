@@ -7,6 +7,7 @@ import { configStore } from '@/features/portal-init'
 import { createMutation } from '@/hooks'
 import { randomUUID } from '@/utils'
 import { Auth } from 'aws-amplify'
+import toast from 'solid-toast'
 import { ActiveAuthScreen } from '../layout'
 import { AuthInputField } from './AuthInputField'
 
@@ -30,6 +31,9 @@ export const RegisterForm = (props: {
           email: input().email,
           'custom:userId': UUID,
         },
+        validationData: {
+          email: input().email,
+        },
         clientMetadata: {
           account_id: configStore.chatSpaceConfig.hostId,
         },
@@ -41,6 +45,8 @@ export const RegisterForm = (props: {
       props.setUsername(UUID)
     },
     onSuccess: () => {
+      toast.success('User registered! Check your email for verification.')
+
       props.setActiveAuthScreen('verify')
     },
     onError: (error) => {
@@ -74,7 +80,7 @@ export const RegisterForm = (props: {
 
           {signInMutation.error()?.message ? (
             <div class='text-sm pt-4 text-[var(--errorColor)]'>
-              {signInMutation.error()?.message}
+              {errorParser(signInMutation.error()?.message)}
             </div>
           ) : null}
         </div>
@@ -101,4 +107,8 @@ export const RegisterForm = (props: {
       </div>
     </div>
   )
+}
+
+const errorParser = (errorMessage: string) => {
+  return errorMessage.replace('PreSignUp failed with error ', '')
 }

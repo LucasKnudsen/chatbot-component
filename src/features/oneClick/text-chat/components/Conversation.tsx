@@ -276,9 +276,7 @@ const AssistantMessage = (props: ChatMessage) => {
         <Match when={props.content}>
           <div
             ref={textEl}
-            class={`${
-              theme().isDark ? 'prose-invert' : 'prose'
-            } prose-a:text-[var(--primaryColor)] text-[var(--textColor)] prose-strong:text-[var(--primaryColor)]`}
+            class={`prose prose-a:text-[var(--primaryColor)] text-[var(--textColor)] prose-strong:text-[var(--primaryColor)] prose-li:marker:text-[var(--textColor)] `}
           />
         </Match>
 

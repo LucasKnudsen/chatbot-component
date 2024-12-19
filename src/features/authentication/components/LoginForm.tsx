@@ -3,6 +3,7 @@ import { Setter, createSignal } from 'solid-js'
 
 import { LockIcon } from '@/components/icons/LockIcon'
 import { UserIcon } from '@/components/icons/UserIcon'
+import { configStore } from '@/features/portal-init'
 import { createMutation } from '@/hooks'
 import { logErrorMessage } from '@/utils'
 import { Auth } from 'aws-amplify'
@@ -17,9 +18,8 @@ export const LoginForm = (props: { setActiveAuthScreen: Setter<ActiveAuthScreen>
 
   const signInMutation = createMutation({
     mutationFn: async () => {
-      return await Auth.signIn({
-        username: input().username,
-        password: input().password,
+      return await Auth.signIn(input().username, input().password, {
+        account_id: configStore.chatSpaceConfig.hostId,
       })
     },
     onError: (error) => {

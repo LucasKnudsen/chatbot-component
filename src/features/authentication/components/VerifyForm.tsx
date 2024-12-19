@@ -1,11 +1,12 @@
-import { ArrowRightIcon, Button } from '@/components'
+import { Auth } from 'aws-amplify'
 import { Accessor, Setter, createSignal } from 'solid-js'
+import toast from 'solid-toast'
 
+import { ArrowRightIcon, Button } from '@/components'
 import { LockIcon } from '@/components/icons/LockIcon'
+import { configStore } from '@/features/portal-init/configStore'
 import { createMutation } from '@/hooks'
 import { logErrorMessage } from '@/utils'
-import { Auth } from 'aws-amplify'
-import toast from 'solid-toast'
 import { ActiveAuthScreen } from '../layout'
 import { AuthInputField } from './AuthInputField'
 
@@ -20,6 +21,9 @@ export const VerifyForm = (props: {
   const verifyMutation = createMutation({
     mutationFn: async () => {
       return await Auth.confirmSignUp(props.username(), input().code, {
+        clientMetadata: {
+          account_id: configStore.chatSpaceConfig.hostId,
+        },
         forceAliasCreation: false,
       })
     },

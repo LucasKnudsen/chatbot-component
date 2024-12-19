@@ -14,7 +14,7 @@ export const defaultBotProps: ChatConfig = {
   // settings: undefined,
 }
 
-export const chatflows: Record<string, ChatConfig> = {
+export const chatflows = {
   staging: {
     spaceId: 'za5d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
@@ -57,4 +57,4 @@ export const chatflows: Record<string, ChatConfig> = {
       },
     },
   },
-}
+} as const

@@ -3,7 +3,7 @@ import { AmazonAIConvertPredictionsProvider, Predictions } from '@aws-amplify/pr
 
 import { Amplify, Storage } from 'aws-amplify'
 import { ChatConfig, PortalInitializer } from '..'
-import awsconfig from '../../../aws-exports'
+import awsconfig from '../../../amplifyconfiguration.json'
 
 Amplify.configure({
   ...awsconfig,
