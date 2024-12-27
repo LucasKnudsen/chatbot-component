@@ -1,11 +1,13 @@
 import { useTheme } from '@/features/theme'
-import { logErrorMessage, shadowQuerySelector } from '@/utils'
+import { logErrorMessage, shadowQuerySelector} from '@/utils'
 import AudioMotionAnalyzer from 'audiomotion-analyzer'
 import { Accessor, createSignal, onCleanup } from 'solid-js'
+import { createWaveform } from './createWaveform'
 
 type CreateAudioRecorderProps = {
   onStop?: (audioBlob: Blob) => void
   visualizerElementId?: string
+  visualizerType?: 'circle' | 'waveform'
 }
 
 type CreateAudioRecorderReturn = {
@@ -19,7 +21,9 @@ type CreateAudioRecorderReturn = {
   seconds: Accessor<number>
 }
 
-export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudioRecorderReturn {
+export function createAudioRecorder(
+  props: CreateAudioRecorderProps = { visualizerType: 'circle' }
+): CreateAudioRecorderReturn {
   const [mediaStream, setMediaStream] = createSignal<MediaStream | null>(null)
   const [micStream, setMicStream] = createSignal<MediaStreamAudioSourceNode | null>(null)
   const [mediaRecorder, setMediaRecorder] = createSignal<MediaRecorder | null>(null)
@@ -35,8 +39,8 @@ export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudi
   const setupAudioMotion = () => {
     if (!audioMotion && props.visualizerElementId) {
       audioMotion = new AudioMotionAnalyzer(undefined, {
-        mode: 10,
-        radial: true,
+        mode: props.visualizerType === 'waveform' ? 1 : 10,
+        radial: props.visualizerType === 'circle',
         useCanvas: false,
         onCanvasDraw: (instance) => {
           const container = shadowQuerySelector(`#${props.visualizerElementId}`)
@@ -46,16 +50,24 @@ export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudi
           const bars = instance.getBars()
           const totalFrequency = bars.reduce((sum, bar) => sum + bar.value[0], 0)
           const avgFrequency = totalFrequency / bars.length
+          if (avgFrequency === 0) return
 
-          const dynamicSize = 80 + avgFrequency * 500
+          if (props.visualizerType === 'circle') {
+            container.style.transform = `scale(${1 + avgFrequency * 0.2})`
+            container.style.opacity = '1'
+          } else {
+            let waveformInstance = (container as any)._waveform
+            if (!waveformInstance) {
+              waveformInstance = createWaveform({
+                container,
+                primaryColor: theme().primaryColor || 'black'
+              });
+              (container as any)._waveform = waveformInstance
+            }
 
-          container.style.width = `${dynamicSize}px`
-          container.style.height = `${dynamicSize}px`
-
-          container.style.backgroundColor = theme().surfaceHoveredBackground!
-
-          container.style.top = `calc(50% - ${dynamicSize / 2}px)`
-          container.style.left = `calc(50% - ${dynamicSize / 2}px)`
+            waveformInstance.updateWaveform(bars)
+          }
+          container.style.opacity = '1'
         },
       })
     }
@@ -136,13 +148,21 @@ export function createAudioRecorder(props: CreateAudioRecorderProps): CreateAudi
     }
   }
 
+  const cleanupAudioMotion = () => {
+    if (audioMotion) {
+      audioMotion.disconnectInput(micStream(), true)
+      audioMotion.destroy()
+      audioMotion = null
+    }
+  }
+
   const stopRecording = () => {
     if (mediaRecorder()) {
       mediaRecorder()?.stop()
       mediaStream()
         ?.getTracks()
         .forEach((track) => track.stop())
-      audioMotion?.disconnectInput(micStream(), true)
+      cleanupAudioMotion()
       setMediaRecorder(null)
       setMediaStream(null)
       setMicStream(null)

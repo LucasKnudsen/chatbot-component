@@ -29,7 +29,6 @@ export const RegisterForm = (props: {
         password: input().password,
         attributes: {
           email: input().email,
-          'custom:userId': UUID,
         },
         validationData: {
           email: input().email,

@@ -104,6 +104,7 @@ export const VoiceChatScreen = () => {
         },
       ])
       const transcribedText = await handleTranscription(audioBlob)
+      console.log('transcribedText', transcribedText)
 
       // If the user cancels the recording, we don't want to send the message
       if (!isCanceled()) {
