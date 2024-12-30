@@ -22,9 +22,12 @@ function rem2px(input, fontSize = 16) {
     case 'string':
       return input.replace(/(\d*\.?\d+)rem$/, (_, val) => `${parseFloat(val) * fontSize}px`)
     case 'function':
-      return eval(
-        input.toString().replace(/(\d*\.?\d+)rem/g, (_, val) => `${parseFloat(val) * fontSize}px`)
+      const inputString = input.toString()
+      const remToPxString = inputString.replace(
+        /(\d*\.?\d+)rem/g,
+        (_, val) => `${parseFloat(val) * fontSize}px`,
       )
+      return new Function(`return ${remToPxString}`)()
     default:
       return input
   }
