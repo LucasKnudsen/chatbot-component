@@ -1,42 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 
-import defaultTheme from 'tailwindcss/defaultTheme'
-
 // import { defaultTheme as theme } from './src/features/theme/themes.ts'
-
-function rem2px(input, fontSize = 16) {
-  if (input == null) {
-    return input
-  }
-  switch (typeof input) {
-    case 'object':
-      if (Array.isArray(input)) {
-        return input.map((val) => rem2px(val, fontSize))
-      }
-      // eslint-disable-next-line no-case-declarations
-      const ret = {}
-      for (const key in input) {
-        ret[key] = rem2px(input[key], fontSize)
-      }
-      return ret
-    case 'string':
-      return input.replace(/(\d*\.?\d+)rem$/, (_, val) => `${parseFloat(val) * fontSize}px`)
-    case 'function':
-      const inputString = input.toString()
-      const remToPxString = inputString.replace(
-        /(\d*\.?\d+)rem/g,
-        (_, val) => `${parseFloat(val) * fontSize}px`,
-      )
-      return new Function(`return ${remToPxString}`)()
-    default:
-      return input
-  }
-}
 
 export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    ...rem2px(defaultTheme),
+    // ...rem2px(defaultTheme),
     extend: {
       keyframes: {
         'fade-in': {
