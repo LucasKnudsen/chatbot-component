@@ -20,6 +20,7 @@ export const VoiceChatScreen = () => {
 
   const audioRecorder = createAudioRecorder({
     visualizerElementId: MIC_VISUALIZER_ID,
+    visualizerType: 'circle',
     onStop(audioBlob) {
       handleVoiceToVoice(audioBlob)
     },
