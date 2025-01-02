@@ -51,6 +51,7 @@ export const Button = (props: Props) => {
         class='absolute transition top-0.5 inset-0 flex justify-center items-center'
         style={{
           opacity: props.loading ? 1 : 0,
+          display: props.loading ? 'flex' : 'none',
         }}
       >
         <TypingBubble color={theme().backgroundColor} />

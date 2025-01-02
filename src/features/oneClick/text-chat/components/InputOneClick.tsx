@@ -1,6 +1,7 @@
 import { Button, Divider, HeadsetIcon, MicIcon, SendIcon, Spinner } from '@/components'
 import { ExitIcon } from '@/components/icons/ExitIcon'
 import { TickIcon } from '@/components/icons/TickIcon'
+import { Popover } from '@/components/popover/Popover'
 import { createAudioRecorder } from '@/features/avatar'
 import { quickTranscribe } from '@/features/knowledge-base'
 import { useTheme } from '@/features/theme'
@@ -32,6 +33,7 @@ export const InputOneClick = (props: InputProps) => {
 
   const handleContainerClick = (e: MouseEvent) => {
     const target = e.target as HTMLElement
+    if (target.tagName === 'svg' || target.tagName === 'path') return
     if (!target.closest('textarea')) {
       textareaRef?.focus()
     }
@@ -166,9 +168,13 @@ export const InputOneClick = (props: InputProps) => {
                   background: 'transparent',
                   'outline-color': 'transparent',
                   padding: '0px 5px',
+                  'margin-right': '5px',
+                  position: 'relative',
                 }}
               >
-                <HeadsetIcon class='text-[var(--primaryColor)] w-5 h-auto' />
+                <Popover content='Use voice mode' position='top' offset={8}>
+                  <HeadsetIcon class='text-[var(--primaryColor)] w-5 h-auto' />
+                </Popover>
               </Button>
 
               <Button
@@ -178,16 +184,12 @@ export const InputOneClick = (props: InputProps) => {
                 style={{
                   background: 'transparent',
                   'outline-color': 'transparent',
-                  padding: '0px 5px',
+                  padding: '0px',
                 }}
               >
-                <MicIcon
-                  class='text-[var(--primaryColor)] w-5 h-auto'
-                  stroke={theme().primaryColor}
-                  style={{
-                    'transform-origin': 'center',
-                  }}
-                />
+                <Popover content='Send audio messages' position='top' offset={8}>
+                  <MicIcon class='text-[var(--primaryColor)] w-5 h-auto' />
+                </Popover>
               </Button>
             </Show>
           </div>

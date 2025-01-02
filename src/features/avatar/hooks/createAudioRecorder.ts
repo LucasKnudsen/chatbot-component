@@ -73,13 +73,13 @@ export function createAudioRecorder(
     }
   }
 
-  let intervalId: number | null = null
+  let intervalId: ReturnType<typeof setInterval> | null = null
 
   const startTimer = () => {
     if (intervalId !== null) return // Prevent multiple intervals
     intervalId = setInterval(() => {
       setSeconds((prev) => prev + 1)
-    }, 1000) as any
+    }, 1000)
   }
 
   const pauseTimer = () => {
@@ -99,19 +99,24 @@ export function createAudioRecorder(
 
   const startRecording = () => {
     try {
+      if (!window.MediaRecorder) {
+        throw new Error('MediaRecorder is not supported in this browser');
+      }
       navigator.mediaDevices
         .getUserMedia({ audio: true, video: false })
         .then((stream) => {
           if (props.visualizerElementId) {
             setupAudioMotion()
-            const micStream = audioMotion!.audioCtx!.createMediaStreamSource(stream)
+            if (!audioMotion || !audioMotion.audioCtx) {
+              throw new Error('Failed to initialize audio visualizer')
+            }
+            const micStream = audioMotion.audioCtx.createMediaStreamSource(stream)
             // connect microphone stream to analyzer
-            audioMotion!.connectInput(micStream)
+            audioMotion.connectInput(micStream)
             // mute output to prevent feedback loops from the speakers
-            audioMotion!.volume = 0
+            audioMotion.volume = 0
 
             setMicStream(micStream)
-          } else {
           }
 
           const recorder = new MediaRecorder(stream)
@@ -140,11 +145,10 @@ export function createAudioRecorder(
         })
         .catch((error) => {
           console.error('Error accessing microphone:', error)
-          alert(error)
+          logErrorMessage(error, 'createAudioRecorder.startRecording')
         })
     } catch (error) {
       logErrorMessage(error, 'createAudioRecorder.startRecording')
-      alert(error)
     }
   }
 
