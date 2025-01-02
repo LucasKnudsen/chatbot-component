@@ -19,7 +19,7 @@ export const PortalButton = () => {
         <div class='absolute right-0 bottom-0 bg-[var(--bubbleButtonColor)] shadow-lg  rounded-full w-14 h-14 flex justify-center items-center z-20'>
           <img
             class={
-              `stroke-2  absolute duration-200 transition w-7 ` +
+              `stroke-2  absolute duration-200 transition w-9 ` +
               (configStore.isBotOpened ? 'scale-0 opacity-0' : 'scale-100 opacity-100')
             }
             src={theme().bubbleButtonLogoUrl || theme().navbarLogoUrl}
@@ -99,14 +99,17 @@ const SpeechBubble = () => {
         if (isOpen) {
           setHasBeenOpened(true)
         }
-      }
-    )
+      },
+    ),
   )
 
   onMount(() => {
-    setTimeout(() => {
-      !hasBeenOpened() && setShow(true)
-    }, (settings?.speechBubbleDelay || 0) * 1000)
+    setTimeout(
+      () => {
+        !hasBeenOpened() && setShow(true)
+      },
+      (settings?.speechBubbleDelay || 0) * 1000,
+    )
   })
 
   // Start a delay to start the animation
