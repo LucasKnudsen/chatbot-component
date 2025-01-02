@@ -20,7 +20,7 @@ export type ActiveAuthScreen = 'start' | 'login' | 'signup' | 'verify'
 
 export const LoginScreen = () => {
   const { theme } = useTheme()
-  const [activeAuthScreen, setActiveAuthScreen] = createSignal<ActiveAuthScreen>('login')
+  const [activeAuthScreen, setActiveAuthScreen] = createSignal<ActiveAuthScreen>('signup')
   const [username, setUsername] = createSignal('')
 
   return (
