@@ -74,7 +74,6 @@ export const PortalInitializer = (props: ChatConfig) => {
           </AuthProvider>
         </OneClickContainer>
 
-        {/* Traditional BotManager goes here */}
         {/* <Show when={!chatSpaceConfig.isOneClick}>
           <PortalContainer>
             <Toaster />
