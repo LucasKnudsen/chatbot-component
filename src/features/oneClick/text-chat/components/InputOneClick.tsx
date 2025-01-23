@@ -87,6 +87,27 @@ export const InputOneClick = (props: InputProps) => {
     audioRecorder.stopRecording()
   }
 
+  const handlePaste = (e: ClipboardEvent) => {
+    e.preventDefault()
+
+    const pastedText = e.clipboardData?.getData('text')
+
+    if (pastedText && textareaRef) {
+      const start = textareaRef.selectionStart
+      const end = textareaRef.selectionEnd
+      const currentValue = input()
+      const newValue = currentValue.substring(0, start) + pastedText + currentValue.substring(end)
+      setInput(newValue)
+      // Set cursor position after pasted text
+      setTimeout(() => {
+        if (textareaRef) {
+          textareaRef.selectionStart = textareaRef.selectionEnd = start + pastedText.length
+        }
+      }, 0)
+    }
+  }
+
+  // Calculate the height of the textarea based on the input length
   createEffect(() => {
     const text = input()
     if (text.length === 0) setTextareaHeight('40px')
@@ -122,23 +143,7 @@ export const InputOneClick = (props: InputProps) => {
             ref={textareaRef}
             value={input()}
             onChange={(e) => setInput(e.currentTarget.value)}
-            onPaste={(e) => {
-              e.preventDefault()
-              const text = e.clipboardData?.getData('text/plain')
-              if (text && textareaRef) {
-                const start = textareaRef.selectionStart
-                const end = textareaRef.selectionEnd
-                const currentValue = input()
-                const newValue = currentValue.substring(0, start) + text + currentValue.substring(end)
-                setInput(newValue)
-                // Set cursor position after pasted text
-                setTimeout(() => {
-                  if (textareaRef) {
-                    textareaRef.selectionStart = textareaRef.selectionEnd = start + text.length
-                  }
-                }, 0)
-              }
-            }}
+            onPaste={handlePaste}
             onKeyDown={handleKeyDown}
             class='grow w-full py-2 text-[16px] text-[var(--textInputTextColor)] bg-transparent px-3 resize-none outline-none'
             placeholder='Message'
