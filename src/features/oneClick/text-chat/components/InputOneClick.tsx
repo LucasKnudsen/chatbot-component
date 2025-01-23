@@ -125,8 +125,18 @@ export const InputOneClick = (props: InputProps) => {
             onPaste={(e) => {
               e.preventDefault()
               const text = e.clipboardData?.getData('text/plain')
-              if (text) {
-                setInput(text)
+              if (text && textareaRef) {
+                const start = textareaRef.selectionStart
+                const end = textareaRef.selectionEnd
+                const currentValue = input()
+                const newValue = currentValue.substring(0, start) + text + currentValue.substring(end)
+                setInput(newValue)
+                // Set cursor position after pasted text
+                setTimeout(() => {
+                  if (textareaRef) {
+                    textareaRef.selectionStart = textareaRef.selectionEnd = start + text.length
+                  }
+                }, 0)
               }
             }}
             onKeyDown={handleKeyDown}
