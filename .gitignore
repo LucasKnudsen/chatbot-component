@@ -29,7 +29,7 @@ vite.config.ts.*
 cypress/videos
 cypress/screenshots
 
-
+.archive
 .env
 .env*
 amplify
