@@ -1,5 +1,5 @@
 import { authStore } from '@/features/authentication'
-import { oneClickStore } from '@/features/oneClick'
+import { oneClickStore } from '@/features/bot'
 import { mutations, SpeechSynthesisInput, SpeechSynthesisMutation } from '@/graphql'
 import { GraphQLQuery } from '@aws-amplify/api'
 

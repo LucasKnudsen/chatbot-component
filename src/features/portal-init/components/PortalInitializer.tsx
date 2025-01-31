@@ -1,4 +1,4 @@
-import { OneClickContainer, OneClickManager } from '@/features/oneClick'
+import { OneClickContainer, OneClickManager } from '@/features/bot'
 import { ChatConfig, PortalButton, configStore, configStoreActions, initializeConfig } from '..'
 
 import { AuthProvider, authStoreActions } from '@/features/authentication'
