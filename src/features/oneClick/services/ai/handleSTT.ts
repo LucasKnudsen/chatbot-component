@@ -1,4 +1,25 @@
 import { NEXT_API_ENDPOINTS } from '@/constants/api'
+import { API } from 'aws-amplify'
+
+export const quickTranscribe = async (audio: Blob) => {
+  const base64Audio = await new Promise<string>((resolve) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(audio)
+    reader.onloadend = () => {
+      const base64data = reader.result?.toString() || ''
+      resolve(base64data.split(',')[1])
+    }
+  })
+
+  const botAudio = await API.post('digitaltwinRest', '/ai/stt', {
+    body: {
+      base64Audio,
+      fileType: audio.type,
+    },
+  })
+
+  return `${botAudio}`
+}
 
 export const handleTranscription = async (audioBlob: Blob) => {
   if (!audioBlob) {

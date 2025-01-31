@@ -1,10 +1,11 @@
+import { createEffect, on } from 'solid-js'
+
 import { Button, KeyboardIcon, XIcon } from '@/components'
 import { createAudioRecorder } from '@/features/avatar'
 import { configStore } from '@/features/portal-init'
 import { BaseChatMode } from '@/graphql'
 import { logDev, logErrorMessage } from '@/utils'
 import { useMediaQuery } from '@/utils/useMediaQuery'
-import { createEffect, on } from 'solid-js'
 import { isCanceled, setAudio64, setIsCanceled, setMessages, useLLM } from '../../hooks'
 import { handleTranscription } from '../../services'
 import { heyGenStore } from '../../store/heyGenStore'

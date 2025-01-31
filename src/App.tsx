@@ -1,7 +1,7 @@
 import './dev.css'
 
 import { chatflows } from './constants'
-import { FraiaPortal } from './features/portal-init'
+import { FraiaMain } from './features/portal-init'
 import LayoutDefault from './layouts/default'
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
           Placeholder <span class='font-medium'>Website</span>
         </h1>
       </div>
-      <FraiaPortal {...chatflows.private} />
+      <FraiaMain {...chatflows.private} />
     </LayoutDefault>
   )
 }

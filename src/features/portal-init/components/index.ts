@@ -1,4 +1,3 @@
-export * from './FraiaPortal'
+export * from './FraiaMain'
 export * from './PortalButton'
-export * from './PortalContainer'
 export * from './PortalInitializer'
