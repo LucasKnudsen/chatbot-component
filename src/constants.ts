@@ -1,5 +1,7 @@
 import { ChatConfig } from './features/portal-init'
 
+type ChatflowKeys = 'staging' | 'testing' | 'private' | 'dev'
+
 // The props needs to be instantiated with the default values, otherwise it won't be filled from the Object.assign
 export const defaultBotProps: ChatConfig = {
   spaceId: '',
@@ -14,7 +16,7 @@ export const defaultBotProps: ChatConfig = {
   // settings: undefined,
 }
 
-export const chatflows = {
+export const chatflows: Record<ChatflowKeys, ChatConfig> = {
   staging: {
     spaceId: 'za5d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
@@ -36,6 +38,7 @@ export const chatflows = {
     spaceId: 'ec07d218-acda-4dc0-95c2-ec0e584ea20c',
     config: {
       autoOpen: true,
+      startInFullscreen: false,
       clientData: {
         env: 'dev',
       },
@@ -45,7 +48,7 @@ export const chatflows = {
     spaceId: 'a05d64f3-6d58-49d1-8143-d59caa88fd1f',
     config: {
       autoOpen: true,
-      startInFullscreen: false,
+      startInFullscreen: true,
       overrideLogo: 'https://fraia-test-bucket.s3.ap-southeast-1.amazonaws.com/logo.svg',
       clientData: {
         access_group_id: 'test',
