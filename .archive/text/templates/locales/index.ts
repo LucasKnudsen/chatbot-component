@@ -1,1 +1,0 @@
-export { da } from './da'
